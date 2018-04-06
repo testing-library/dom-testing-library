@@ -81,6 +81,7 @@ when a real user uses it.
   * [`toBeInTheDOM`](#tobeinthedom)
   * [`toHaveTextContent`](#tohavetextcontent)
   * [`toHaveAttribute`](#tohaveattribute)
+  * [`toHaveClass`](#tohaveclass)
   * [Custom Jest Matchers - Typescript](#custom-jest-matchers---typescript)
 * [`TextMatch`](#textmatch)
 * [`query` APIs](#query-apis)
@@ -361,6 +362,25 @@ expect(getByTestId(container, 'ok-button')).not.toHaveAttribute(
   'type',
   'button',
 )
+// ...
+```
+
+### `toHaveClass`
+
+This allows you to check wether the given element has certain classes within its
+`class` attribute.
+
+```javascript
+// add the custom expect matchers
+import 'dom-testing-library/extend-expect'
+
+// ...
+// <button data-testid="delete-button" class="btn extra btn-danger">
+//   Delete item
+// </button>
+expect(getByTestId(container, 'delete-button')).toHaveClass('extra')
+expect(getByTestId(container, 'delete-button')).toHaveClass('btn-danger btn')
+expect(getByTestId(container, 'delete-button')).not.toHaveClass('btn-link')
 // ...
 ```
 
