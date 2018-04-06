@@ -1,12 +1,23 @@
 {
   "name": "dom-testing-library",
-  "version": "0.0.0-development",
-  "description":
-    "Simple and complete DOM testing utilities that encourage good testing practices.",
+  "version": "0.0.0-semantically-released",
+  "description": "Simple and complete DOM testing utilities that encourage good testing practices.",
   "main": "dist/index.js",
+  "keywords": [
+    "testing",
+    "ui",
+    "dom",
+    "jsdom",
+    "unit",
+    "integration",
+    "functional",
+    "end-to-end",
+    "e2e"
+  ],
+  "author": "Kent C. Dodds <kent@doddsfamily.us> (http://kentcdodds.com/)",
+  "license": "MIT",
   "engines": {
-    "node": "> 4",
-    "npm": "> 3"
+    "node": "> 6"
   },
   "scripts": {
     "add-contributor": "kcd-scripts contributors add",
@@ -16,21 +27,19 @@
     "test:update": "npm test -- --updateSnapshot --coverage",
     "validate": "kcd-scripts validate",
     "setup": "npm install && npm run validate -s",
-    "precommit": "kcd-scripts precommit",
-    "semantic-release": "semantic-release"
+    "precommit": "kcd-scripts precommit"
   },
-  "files": ["dist", "extend-expect.js"],
-  "keywords": [],
-  "author": "Kent C. Dodds <kent@doddsfamily.us> (http://kentcdodds.com/)",
-  "license": "MIT",
+  "files": [
+    "dist",
+    "extend-expect.js"
+  ],
   "dependencies": {
-    "jest-matcher-utils": "^22.4.3"
+    "jest-matcher-utils": "^22.4.3",
+    "wait-for-expect": "^0.4.0"
   },
   "devDependencies": {
     "jest-in-case": "^1.0.2",
-    "kcd-scripts": "^0.36.1",
-    "wait-for-expect": "^0.4.0",
-    "semantic-release": "^15.1.5"
+    "kcd-scripts": "^0.36.1"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",
@@ -39,10 +48,14 @@
       "import/no-unassigned-import": "off"
     }
   },
-  "eslintIgnore": ["node_modules", "coverage", "dist"],
+  "eslintIgnore": [
+    "node_modules",
+    "coverage",
+    "dist"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/kentcdodds/dom-testing-library.git"
+    "url": "git+https://github.com/kentcdodds/dom-testing-library.git"
   },
   "bugs": {
     "url": "https://github.com/kentcdodds/dom-testing-library/issues"
