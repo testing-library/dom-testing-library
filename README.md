@@ -415,7 +415,7 @@ getByText(container, (content, element) => {
 
 ## `query` APIs
 
-Each of the `get` APIs listed in [the `render`](#render) section above have a
+Each of the `get` APIs listed in [the 'Usage'](#usage) section above have a
 complimentary `query` API. The `get` APIs will throw errors if a proper node
 cannot be found. This is normally the desired effect. However, if you want to
 make an assertion that an element is _not_ present in the DOM, then you can use
