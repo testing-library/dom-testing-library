@@ -50,6 +50,9 @@ function getAttributeComment(name, value) {
 }
 
 function splitClassNames(str) {
+  if (!str) {
+    return []
+  }
   return str.split(/\s+/).filter(s => s.length > 0)
 }
 

@@ -152,9 +152,14 @@ test('using jest helpers to check element attributes', () => {
 
 test('using jest helpers to check element class names', () => {
   const {getByTestId} = render(`
-    <button data-testid="delete-button" class="btn extra btn-danger">
-      Delete item
-    </button>
+    <div>
+      <button data-testid="delete-button" class="btn extra btn-danger">
+        Delete item
+      </button>
+      <button data-testid="cancel-button">
+        Cancel
+      </button>
+    </div>
   `)
 
   expect(getByTestId('delete-button')).toHaveClass('btn')
@@ -163,6 +168,7 @@ test('using jest helpers to check element class names', () => {
   expect(getByTestId('delete-button')).not.toHaveClass('xtra')
   expect(getByTestId('delete-button')).toHaveClass('btn btn-danger')
   expect(getByTestId('delete-button')).not.toHaveClass('btn-link')
+  expect(getByTestId('cancel-button')).not.toHaveClass('btn-danger')
 
   expect(() =>
     expect(getByTestId('delete-button')).not.toHaveClass('btn'),
@@ -181,6 +187,9 @@ test('using jest helpers to check element class names', () => {
   ).toThrowError()
   expect(() =>
     expect(getByTestId('delete-button')).toHaveClass('btn-link'),
+  ).toThrowError()
+  expect(() =>
+    expect(getByTestId('cancel-button')).toHaveClass('btn-danger'),
   ).toThrowError()
 })
 
