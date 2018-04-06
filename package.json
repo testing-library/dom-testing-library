@@ -1,0 +1,51 @@
+{
+  "name": "dom-testing-library",
+  "version": "0.0.0-development",
+  "description":
+    "Simple and complete DOM testing utilities that encourage good testing practices.",
+  "main": "dist/index.js",
+  "engines": {
+    "node": "> 4",
+    "npm": "> 3"
+  },
+  "scripts": {
+    "add-contributor": "kcd-scripts contributors add",
+    "build": "kcd-scripts build",
+    "lint": "kcd-scripts lint",
+    "test": "kcd-scripts test",
+    "test:update": "npm test -- --updateSnapshot --coverage",
+    "validate": "kcd-scripts validate",
+    "setup": "npm install && npm run validate -s",
+    "precommit": "kcd-scripts precommit",
+    "semantic-release": "semantic-release"
+  },
+  "files": ["dist", "extend-expect.js"],
+  "keywords": [],
+  "author": "Kent C. Dodds <kent@doddsfamily.us> (http://kentcdodds.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "jest-matcher-utils": "^22.4.3"
+  },
+  "devDependencies": {
+    "jest-in-case": "^1.0.2",
+    "kcd-scripts": "^0.36.1",
+    "wait-for-expect": "^0.4.0",
+    "semantic-release": "^15.1.5"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/kcd-scripts/eslint.js",
+    "rules": {
+      "import/prefer-default-export": "off",
+      "import/no-unassigned-import": "off"
+    }
+  },
+  "eslintIgnore": ["node_modules", "coverage", "dist"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kentcdodds/dom-testing-library.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kentcdodds/dom-testing-library/issues"
+  },
+  "homepage": "https://github.com/kentcdodds/dom-testing-library#readme"
+}

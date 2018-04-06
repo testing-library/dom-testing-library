@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`examples of some things 1`] = `
+<div>
+  
+    
+  <label
+    for="username"
+  >
+    Username
+  </label>
+  
+    
+  <input
+    id="username"
+  />
+  
+    
+  <button>
+    Print Username
+  </button>
+  
+  
+  <div>
+    
+        
+    <div
+      data-testid="printed-username"
+    >
+      Ada Lovelace
+    </div>
+    
+      
+  </div>
+</div>
+`;

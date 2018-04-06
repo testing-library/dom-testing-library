@@ -1,0 +1,620 @@
+<div align="center">
+<h1>dom-testing-library</h1>
+
+<a href="https://www.emojione.com/emoji/1f419">
+<img height="80" width="80" alt="octopus" src="https://raw.githubusercontent.com/kentcdodds/dom-testing-library/master/other/octopus.png" />
+</a>
+
+<p>Simple and complete DOM testing utilities that encourage good testing practices.</p>
+</div>
+
+<hr />
+
+[![Build Status][build-badge]][build]
+[![Code Coverage][coverage-badge]][coverage]
+[![version][version-badge]][package]
+[![downloads][downloads-badge]][npmtrends]
+[![MIT License][license-badge]][license]
+
+[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors)
+[![PRs Welcome][prs-badge]][prs]
+[![Code of Conduct][coc-badge]][coc]
+
+[![Watch on GitHub][github-watch-badge]][github-watch]
+[![Star on GitHub][github-star-badge]][github-star]
+[![Tweet][twitter-badge]][twitter]
+
+## The problem
+
+You want to write maintainable tests for your Web UI. As a part of
+this goal, you want your tests to avoid including implementation details of
+your components and rather focus on making your tests give you the confidence
+for which they are intended. As part of this, you want your testbase to be
+maintainable in the long run so refactors of your components (changes to
+implementation but not functionality) don't break your tests and slow you and
+your team down.
+
+## This solution
+
+The `dom-testing-library` is a very light-weight solution for testing DOM nodes
+(whether simulated with [`JSDOM`](https://github.com/jsdom/jsdom) as provided by
+default with [jest](https://facebook.github.io/jest) or in the browser). The
+main utilities it provides involve querying the DOM for nodes in a way that's
+similar to how the user finds elements on the page. In this way, the library
+helps ensure your tests give you confidence in your UI code. The
+`dom-testing-library`'s primary guiding principle is:
+
+> [The more your tests resemble the way your software is used, the more confidence they can give you.][guiding-principle]
+
+As part of this goal, the utilities this library provides facilitate querying
+the DOM in the same way the user would. Finding for elements by their label text
+(just like a user would), finding links and buttons from their text
+(like a user would), and more. It also exposes a recommended way to find
+elements by a `data-testid` as an "escape hatch" for elements where the text
+content and label do not make sense or is not practical.
+
+This library encourages your applications to be more accessible and allows you
+to get your tests closer to using your components the way a user will, which
+allows your tests to give you more confidence that your application will work
+when a real user uses it.
+
+**What this library is not**:
+
+1.  A test runner or framework
+2.  Specific to a testing framework (though we recommend Jest as our
+    preference, the library works with any framework)
+
+## Table of Contents
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+* [Installation](#installation)
+* [Usage](#usage)
+  * [`getByLabelText(container: HTMLElement, text: TextMatch, options: {selector: string = '*'}): HTMLElement`](#getbylabeltextcontainer-htmlelement-text-textmatch-options-selector-string---htmlelement)
+  * [`getByPlaceholderText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbyplaceholdertextcontainer-htmlelement-text-textmatch-htmlelement)
+  * [`getByText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbytextcontainer-htmlelement-text-textmatch-htmlelement)
+  * [`getByAltText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbyalttextcontainer-htmlelement-text-textmatch-htmlelement)
+  * [`wait`](#wait)
+* [Custom Jest Matchers](#custom-jest-matchers)
+  * [`toBeInTheDOM`](#tobeinthedom)
+  * [`toHaveTextContent`](#tohavetextcontent)
+  * [`toHaveAttribute`](#tohaveattribute)
+  * [Custom Jest Matchers - Typescript](#custom-jest-matchers---typescript)
+* [`TextMatch`](#textmatch)
+* [`query` APIs](#query-apis)
+* [Implementations](#implementations)
+* [FAQ](#faq)
+* [Other Solutions](#other-solutions)
+* [Guiding Principles](#guiding-principles)
+* [Contributors](#contributors)
+* [LICENSE](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Installation
+
+This module is distributed via [npm][npm] which is bundled with [node][node] and
+should be installed as one of your project's `devDependencies`:
+
+```
+npm install --save-dev dom-testing-library
+```
+
+## Usage
+
+```javascript
+// src/__tests__/example.js
+// query utilities:
+import {
+  getByLabelText,
+  getByText,
+  getByTestId,
+  queryByTestId,
+  // Tip: all queries are also exposed on an object
+  // called "queries" which you could import here as well
+  wait,
+} from 'dom-testing-library'
+// adds special assertions like toHaveTextContent and toBeInTheDOM
+import 'dom-testing-library/extend-expect'
+
+function getExampleDOM() {
+  // This is just a raw example of setting up some DOM
+  // that we can interact with. Swap this with your UI
+  // framework of choice 😉
+  const div = document.createElement('div')
+  div.innerHTML = `
+    <label for="username">Username</label>
+    <input id="username" />
+    <button>Print Username</button>
+  `
+  const button = div.querySelector('button')
+  const input = div.querySelector('input')
+  button.addEventListener('click', () => {
+    // let's pretend this is making a server request, so it's async
+    // (you'd want to mock this imaginary request in your unit tests)...
+    setTimeout(() => {
+      const printedUsernameContainer = document.createElement('div')
+      printedUsernameContainer.innerHTML = `
+        <div data-testid="printed-username">${input.value}</div>
+      `
+      div.appendChild(printedUsernameContainer)
+    }, Math.floor(Math.random() * 200))
+  })
+  return div
+}
+
+test('examples of some things', async () => {
+  const famousWomanInHistory = 'Ada Lovelace'
+  const container = getExampleDOM()
+
+  // Get form elements by their label text.
+  // An error will be thrown if one cannot be found (accessibility FTW!)
+  const input = getByLabelText(container, 'Username')
+  input.value = famousWomanInHistory
+
+  // Get elements by their text, just like a real user does.
+  getByText(container, 'Print Username').click()
+
+  await wait(() =>
+    expect(queryByTestId(container, 'printed-username')).toBeInTheDOM(),
+  )
+
+  // getByTestId and queryByTestId are an escape hatch to get elements
+  // by a test id (could also attempt to get this element by it's text)
+  expect(getByTestId(container, 'printed-username')).toHaveTextContent(
+    famousWomanInHistory,
+  )
+  // jest snapshots work great with regular DOM nodes!
+  expect(container).toMatchSnapshot()
+})
+```
+
+### `getByLabelText(container: HTMLElement, text: TextMatch, options: {selector: string = '*'}): HTMLElement`
+
+This will search for the label that matches the given [`TextMatch`](#textmatch),
+then find the element associated with that label.
+
+```javascript
+const inputNode = getByLabelText(container, 'Username')
+
+// this would find the input node for the following DOM structures:
+// The "for" attribute (NOTE: in JSX with React you'll write "htmlFor" rather than "for")
+// <label for="username-input">Username</label>
+// <input id="username-input" />
+//
+// The aria-labelledby attribute
+// <label id="username-label">Username</label>
+// <input aria-labelledby="username-label" />
+//
+// Wrapper labels
+// <label>Username <input /></label>
+//
+// It will NOT find the input node for this:
+// <label><span>Username</span> <input /></label>
+//
+// For this case, you can provide a `selector` in the options:
+const inputNode = getByLabelText(container, 'username', {selector: 'input'})
+// and that would work
+// Note that <input aria-label="username" /> will also work, but take
+// care because this is not a label that users can see on the page. So
+// the purpose of your input should be obvious for those users.
+```
+
+> Note: This method will throw an error if it cannot find the node. If you don't
+> want this behavior (for example you wish to assert that it doesn't exist),
+> then use `queryByLabelText` instead.
+
+### `getByPlaceholderText(container: HTMLElement, text: TextMatch): HTMLElement`
+
+This will search for all elements with a placeholder attribute and find one
+that matches the given [`TextMatch`](#textmatch).
+
+```javascript
+// <input placeholder="Username" />
+const inputNode = getByPlaceholderText(container, 'Username')
+```
+
+> NOTE: a placeholder is not a good substitute for a label so you should
+> generally use `getByLabelText` instead.
+
+### `getByText(container: HTMLElement, text: TextMatch): HTMLElement`
+
+This will search for all elements that have a text node with `textContent`
+matching the given [`TextMatch`](#textmatch).
+
+```javascript
+// <a href="/about">About ℹ️</a>
+const aboutAnchorNode = getByText(container, 'about')
+```
+
+### `getByAltText(container: HTMLElement, text: TextMatch): HTMLElement`
+
+This will return the element (normally an `<img>`) that has the given `alt`
+text. Note that it only supports elements which accept an `alt` attribute:
+[`<img>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img),
+[`<input>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input),
+and [`<area>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area)
+(intentionally excluding [`<applet>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/applet) as it's deprecated).
+
+```javascript
+// <img alt="Incredibles 2 Poster" src="/incredibles-2.png" />
+const incrediblesPosterImg = getByAltText(container, /incredibles.*poster$/i)
+```
+
+#### `getByTestId(container: HTMLElement, text: TextMatch): HTMLElement`
+
+A shortcut to `` container.querySelector(`[data-testid="${yourId}"]`) `` (and it
+also accepts a [`TextMatch`](#textmatch)).
+
+```javascript
+// <input data-testid="username-input" />
+const usernameInputElement = getByTestId(container, 'username-input')
+```
+
+> In the spirit of [the guiding principles](#guiding-principles), it is
+> recommended to use this only after the other queries don't work for your use
+> case. Using data-testid attributes do not resemble how your software is used
+> and should be avoided if possible. That said, they are _way_ better than
+> querying based on DOM structure or styling css class names. Learn more about
+> `data-testid`s from the blog post
+> ["Making your UI tests resilient to change"][data-testid-blog-post]
+
+### `wait`
+
+Defined as:
+
+```typescript
+function wait(
+  callback?: () => void,
+  options?: {
+    timeout?: number
+    interval?: number
+  },
+): Promise<void>
+```
+
+When in need to wait for non-deterministic periods of time you can use `wait`,
+to wait for your expectations to pass. The `wait` function is a small wrapper
+around the
+[`wait-for-expect`](https://github.com/TheBrainFamily/wait-for-expect) module.
+Here's a simple example:
+
+```javascript
+// ...
+// wait until the callback does not throw an error. In this case, that means
+// it'll wait until we can get a form control with a label that matches "username"
+await wait(() => getByLabelText(container, 'username'))
+getByLabelText(container, 'username').value = 'chucknorris'
+// ...
+```
+
+This can be useful if you have a unit test that mocks API calls and you need
+to wait for your mock promises to all resolve.
+
+The default `callback` is a no-op function (used like `await wait()`). This can
+be helpful if you only need to wait for one tick of the event loop (in the case
+of mocked API calls with promises that resolve immediately).
+
+The default `timeout` is `4500ms` which will keep you under
+[Jest's default timeout of `5000ms`](https://facebook.github.io/jest/docs/en/jest-object.html#jestsettimeouttimeout).
+
+The default `interval` is `50ms`. However it will run your callback immediately
+on the next tick of the event loop (in a `setTimeout`) before starting the
+intervals.
+
+## Custom Jest Matchers
+
+There are two simple API which extend the `expect` API of jest for making assertions easier.
+
+### `toBeInTheDOM`
+
+This allows you to assert whether an element present in the DOM or not.
+
+```javascript
+// add the custom expect matchers
+import 'dom-testing-library/extend-expect'
+
+// ...
+// <span data-testid="count-value">2</span>
+expect(queryByTestId(container, 'count-value')).toBeInTheDOM()
+expect(queryByTestId(container, 'count-value1')).not.toBeInTheDOM()
+// ...
+```
+
+> Note: when using `toBeInTheDOM`, make sure you use a query function
+> (like `queryByTestId`) rather than a get function (like `getByTestId`).
+> Otherwise the `get*` function could throw an error before your assertion.
+
+### `toHaveTextContent`
+
+This API allows you to check whether the given element has a text content or not.
+
+```javascript
+// add the custom expect matchers
+import 'dom-testing-library/extend-expect'
+
+// ...
+// <span data-testid="count-value">2</span>
+expect(getByTestId(container, 'count-value')).toHaveTextContent('2')
+expect(getByTestId(container, 'count-value')).not.toHaveTextContent('21')
+// ...
+```
+
+### `toHaveAttribute`
+
+This allows you to check wether the given element has an attribute or not. You
+can also optionally check that the attribute has a specific expected value.
+
+```javascript
+// add the custom expect matchers
+import 'dom-testing-library/extend-expect'
+
+// ...
+// <button data-testid="ok-button" type="submit" disabled>
+//   OK
+// </button>
+expect(getByTestId(container, 'ok-button')).toHaveAttribute('disabled')
+expect(getByTestId(container, 'ok-button')).toHaveAttribute('type', 'submit')
+expect(getByTestId(container, 'ok-button')).not.toHaveAttribute(
+  'type',
+  'button',
+)
+// ...
+```
+
+### Custom Jest Matchers - Typescript
+
+When you use custom Jest Matchers with Typescript, you will need to extend the
+type signature of `jest.Matchers<void>`, then cast the result of `expect`
+accordingly. Here's a handy usage example:
+
+```typescript
+import {getByTestId} from 'dom-testing-library'
+// this adds custom expect matchers
+import 'dom-testing-library/extend-expect'
+interface ExtendedMatchers extends jest.Matchers<void> {
+  toHaveTextContent: (htmlElement: string) => object
+  toBeInTheDOM: () => void
+}
+test('renders the tooltip as expected', async () => {
+  // however you render it:
+  // render(`<div><span data-testid="greeting">hello world</span></div>`)
+  ;(expect(
+    container,
+    getByTestId('greeting'),
+  ) as ExtendedMatchers).toHaveTextContent('hello world')
+})
+```
+
+## `TextMatch`
+
+Several APIs accept a `TextMatch` which can be a `string`, `regex` or a
+`function` which returns `true` for a match and `false` for a mismatch.
+
+Here's an example
+
+```javascript
+// <div>Hello World</div>
+// all of the following will find the div
+getByText(container, 'Hello World') // full match
+getByText(container, 'llo worl') // substring match
+getByText(container, 'hello world') // strings ignore case
+getByText(container, /Hello W?oRlD/i) // regex
+getByText(container, (content, element) => content.startsWith('Hello')) // function
+
+// all of the following will NOT find the div
+getByText(container, 'Goodbye World') // non-string match
+getByText(container, /hello world/) // case-sensitive regex with different case
+// function looking for a span when it's actually a div
+getByText(container, (content, element) => {
+  return element.tagName.toLowerCase() === 'span' && content.startsWith('Hello')
+})
+```
+
+## `query` APIs
+
+Each of the `get` APIs listed in [the `render`](#render) section above have a
+complimentary `query` API. The `get` APIs will throw errors if a proper node
+cannot be found. This is normally the desired effect. However, if you want to
+make an assertion that an element is _not_ present in the DOM, then you can use
+the `query` API instead:
+
+```javascript
+const submitButton = queryByText(container, 'submit')
+expect(submitButton).toBeNull() // it doesn't exist
+// or if you're using the custom matchers:
+expect(submitButton).not.toBeInTheDOM()
+```
+
+## Implementations
+
+This library was not built to be used on its own. The original implementation
+of these utilities was in the `react-testing-library`.
+
+Implementations include:
+
+* [`react-testing-library`](https://github.com/kentcdodds/react-testing-library)
+
+## FAQ
+
+<details>
+
+<summary>Which get method should I use?</summary>
+
+Based on [the Guiding Principles](#guiding-principles), your test should
+resemble how your code (component, page, etc.) as much as possible. With this
+in mind, we recommend this order of priority:
+
+1.  `getByLabelText`: Only really good for form fields, but this is the number 1
+    method a user finds those elements, so it should be your top preference.
+2.  `getByPlaceholderText`: [A placeholder is not a substitute for a label](https://www.nngroup.com/articles/form-design-placeholders/).
+    But if that's all you have, then it's better than alternatives.
+3.  `getByText`: Not useful for forms, but this is the number 1 method a user
+    finds other elements (like buttons to click), so it should be your top
+    preference for non-form elements.
+4.  `getByAltText`: If your element is one which supports `alt` text
+    (`img`, `area`, and `input`), then you can use this to find that element.
+5.  `getByTestId`: The user cannot see (or hear) these, so this is only
+    recommended for cases where you can't match by text or it doesn't make sense
+    (the text is dynamic).
+
+Other than that, you can also use the `container` to query the rendered
+component as well (using the regular
+[`querySelector` API](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector)).
+
+</details>
+
+<details>
+
+<summary>Can I write unit tests with this library?</summary>
+
+Definitely yes! You can write unit, integration, functional, and end-to-end
+tests with this library.
+
+</details>
+
+<details>
+
+<summary>What if my app is localized and I don't have access to the text in test?</summary>
+
+This is fairly common. Our first bit of advice is to try to get the default
+text used in your tests. That will make everything much easier (more than just
+using this utility). If that's not possible, then you're probably best
+to just stick with `data-testid`s (which is not too bad anyway).
+
+</details>
+
+<details>
+
+<summary>I really don't like data-testids, but none of the other queries make sense. Do I have to use a data-testid?</summary>
+
+Definitely not. That said, a common reason people don't like the `data-testid`
+attribute is they're concerned about shipping that to production. I'd suggest
+that you probably want some simple E2E tests that run in production on occasion
+to make certain that things are working smoothly. In that case the `data-testid`
+attributes will be very useful. Even if you don't run these in production, you
+may want to run some E2E tests that run on the same code you're about to ship to
+production. In that case, the `data-testid` attributes will be valuable there as
+well.
+
+All that said, if you really don't want to ship `data-testid` attributes, then you
+can use
+[this simple babel plugin](https://www.npmjs.com/package/babel-plugin-react-remove-properties)
+to remove them.
+
+If you don't want to use them at all, then you can simply use regular DOM
+methods and properties to query elements off your container.
+
+```javascript
+const firstLiInDiv = container.querySelector('div li')
+const allLisInDiv = container.querySelectorAll('div li')
+const rootElement = container.firstChild
+```
+
+</details>
+
+<details>
+
+<summary>What if I’m iterating over a list of items that I want to put the data-testid="item" attribute on. How do I distinguish them from each other?</summary>
+
+You can make your selector just choose the one you want by including :nth-child in the selector.
+
+```javascript
+const thirdLiInUl = container.querySelector('ul > li:nth-child(3)')
+```
+
+Or you could include the index or an ID in your attribute:
+
+```javascript
+;`<li data-testid="item-${item.id}">{item.text}</li>`
+```
+
+And then you could use the `getByTestId` utility:
+
+```javascript
+const items = [
+  /* your items */
+]
+const container = render(/* however you render this stuff */)
+const thirdItem = getByTestId(container, `item-${items[2].id}`)
+```
+
+</details>
+
+## Other Solutions
+
+I'm not aware of any! Please feel free to make a pull request to add any here.
+
+## Guiding Principles
+
+> [The more your tests resemble the way your software is used, the more confidence they can give you.][guiding-principle]
+
+We try to only expose methods and utilities that encourage you to write tests
+that closely resemble how your react components are used.
+
+Utilities are included in this project based on the following guiding
+principles:
+
+1.  If it relates to rendering components, it deals with DOM nodes rather than
+    component instances, nor should it encourage dealing with component
+    instances.
+2.  It should be generally useful for testing the application components in the
+    way the user would use it. We _are_ making some trade-offs here because
+    we're using a computer and often a simulated browser environment, but in
+    general, utilities should encourage tests that use the components the way
+    they're intended to be used.
+3.  Utility implementations and APIs should be simple and flexible.
+
+At the end of the day, what we want is for this library to be pretty
+light-weight, simple, and understandable.
+
+## Contributors
+
+Thanks goes to these people ([emoji key][emojis]):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+
+<!-- prettier-ignore -->
+| [<img src="https://avatars.githubusercontent.com/u/1500684?v=3" width="100px;"/><br /><sub><b>Kent C. Dodds</b></sub>](https://kentcdodds.com)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=kentcdodds "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=kentcdodds "Documentation") [🚇](#infra-kentcdodds "Infrastructure (Hosting, Build-Tools, etc)") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=kentcdodds "Tests") | [<img src="https://avatars1.githubusercontent.com/u/2430381?v=4" width="100px;"/><br /><sub><b>Ryan Castner</b></sub>](http://audiolion.github.io)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=audiolion "Documentation") | [<img src="https://avatars0.githubusercontent.com/u/8008023?v=4" width="100px;"/><br /><sub><b>Daniel Sandiego</b></sub>](https://www.dnlsandiego.com)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=dnlsandiego "Code") | [<img src="https://avatars2.githubusercontent.com/u/12592677?v=4" width="100px;"/><br /><sub><b>Paweł Mikołajczyk</b></sub>](https://github.com/Miklet)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=Miklet "Code") | [<img src="https://avatars3.githubusercontent.com/u/464978?v=4" width="100px;"/><br /><sub><b>Alejandro Ñáñez Ortiz</b></sub>](http://co.linkedin.com/in/alejandronanez/)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=alejandronanez "Documentation") | [<img src="https://avatars0.githubusercontent.com/u/1402095?v=4" width="100px;"/><br /><sub><b>Matt Parrish</b></sub>](https://github.com/pbomb)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Apbomb "Bug reports") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=pbomb "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=pbomb "Documentation") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=pbomb "Tests") | [<img src="https://avatars1.githubusercontent.com/u/1288694?v=4" width="100px;"/><br /><sub><b>Justin Hall</b></sub>](https://github.com/wKovacs64)<br />[📦](#platform-wKovacs64 "Packaging/porting to new platform") |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| [<img src="https://avatars1.githubusercontent.com/u/1241511?s=460&v=4" width="100px;"/><br /><sub><b>Anto Aravinth</b></sub>](https://github.com/antoaravinth)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Tests") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/3462296?v=4" width="100px;"/><br /><sub><b>Jonah Moses</b></sub>](https://github.com/JonahMoses)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=JonahMoses "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/4002543?v=4" width="100px;"/><br /><sub><b>Łukasz Gandecki</b></sub>](http://team.thebrain.pro)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Tests") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/498274?v=4" width="100px;"/><br /><sub><b>Ivan Babak</b></sub>](https://sompylasar.github.io)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Asompylasar "Bug reports") [🤔](#ideas-sompylasar "Ideas, Planning, & Feedback") | [<img src="https://avatars3.githubusercontent.com/u/4439618?v=4" width="100px;"/><br /><sub><b>Jesse Day</b></sub>](https://github.com/jday3)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=jday3 "Code") | [<img src="https://avatars0.githubusercontent.com/u/15199?v=4" width="100px;"/><br /><sub><b>Ernesto García</b></sub>](http://gnapse.github.io)<br />[💬](#question-gnapse "Answering Questions") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=gnapse "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=gnapse "Documentation") |
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors][all-contributors] specification.
+Contributions of any kind welcome!
+
+## LICENSE
+
+MIT
+
+[npm]: https://www.npmjs.com/
+[node]: https://nodejs.org
+[build-badge]: https://img.shields.io/travis/kentcdodds/dom-testing-library.svg?style=flat-square
+[build]: https://travis-ci.org/kentcdodds/dom-testing-library
+[coverage-badge]: https://img.shields.io/codecov/c/github/kentcdodds/dom-testing-library.svg?style=flat-square
+[coverage]: https://codecov.io/github/kentcdodds/dom-testing-library
+[version-badge]: https://img.shields.io/npm/v/dom-testing-library.svg?style=flat-square
+[package]: https://www.npmjs.com/package/dom-testing-library
+[downloads-badge]: https://img.shields.io/npm/dm/dom-testing-library.svg?style=flat-square
+[npmtrends]: http://www.npmtrends.com/dom-testing-library
+[license-badge]: https://img.shields.io/npm/l/dom-testing-library.svg?style=flat-square
+[license]: https://github.com/kentcdodds/dom-testing-library/blob/master/LICENSE
+[prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+[prs]: http://makeapullrequest.com
+[donate-badge]: https://img.shields.io/badge/$-support-green.svg?style=flat-square
+[coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
+[coc]: https://github.com/kentcdodds/dom-testing-library/blob/master/CODE_OF_CONDUCT.md
+[github-watch-badge]: https://img.shields.io/github/watchers/kentcdodds/dom-testing-library.svg?style=social
+[github-watch]: https://github.com/kentcdodds/dom-testing-library/watchers
+[github-star-badge]: https://img.shields.io/github/stars/kentcdodds/dom-testing-library.svg?style=social
+[github-star]: https://github.com/kentcdodds/dom-testing-library/stargazers
+[twitter]: https://twitter.com/intent/tweet?text=Check%20out%20dom-testing-library%20by%20%40kentcdodds%20https%3A%2F%2Fgithub.com%2Fkentcdodds%2Fdom-testing-library%20%F0%9F%91%8D
+[twitter-badge]: https://img.shields.io/twitter/url/https/github.com/kentcdodds/dom-testing-library.svg?style=social
+[emojis]: https://github.com/kentcdodds/all-contributors#emoji-key
+[all-contributors]: https://github.com/kentcdodds/all-contributors
+[set-immediate]: https://developer.mozilla.org/en-US/docs/Web/API/Window/setImmediate
+[guiding-principle]: https://twitter.com/kentcdodds/status/977018512689455106
+[data-testid-blog-post]: https://blog.kentcdodds.com/making-your-ui-tests-resilient-to-change-d37a6ee37269
