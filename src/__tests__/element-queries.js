@@ -150,4 +150,47 @@ test('using jest helpers to check element attributes', () => {
   ).toThrowError()
 })
 
+test('using jest helpers to check element class names', () => {
+  const {getByTestId} = render(`
+    <div>
+      <button data-testid="delete-button" class="btn extra btn-danger">
+        Delete item
+      </button>
+      <button data-testid="cancel-button">
+        Cancel
+      </button>
+    </div>
+  `)
+
+  expect(getByTestId('delete-button')).toHaveClass('btn')
+  expect(getByTestId('delete-button')).toHaveClass('btn-danger')
+  expect(getByTestId('delete-button')).toHaveClass('extra')
+  expect(getByTestId('delete-button')).not.toHaveClass('xtra')
+  expect(getByTestId('delete-button')).toHaveClass('btn btn-danger')
+  expect(getByTestId('delete-button')).not.toHaveClass('btn-link')
+  expect(getByTestId('cancel-button')).not.toHaveClass('btn-danger')
+
+  expect(() =>
+    expect(getByTestId('delete-button')).not.toHaveClass('btn'),
+  ).toThrowError()
+  expect(() =>
+    expect(getByTestId('delete-button')).not.toHaveClass('btn-danger'),
+  ).toThrowError()
+  expect(() =>
+    expect(getByTestId('delete-button')).not.toHaveClass('extra'),
+  ).toThrowError()
+  expect(() =>
+    expect(getByTestId('delete-button')).toHaveClass('xtra'),
+  ).toThrowError()
+  expect(() =>
+    expect(getByTestId('delete-button')).not.toHaveClass('btn btn-danger'),
+  ).toThrowError()
+  expect(() =>
+    expect(getByTestId('delete-button')).toHaveClass('btn-link'),
+  ).toThrowError()
+  expect(() =>
+    expect(getByTestId('cancel-button')).toHaveClass('btn-danger'),
+  ).toThrowError()
+})
+
 /* eslint jsx-a11y/label-has-for:0 */
