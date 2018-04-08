@@ -77,7 +77,7 @@ when a real user uses it.
   * [`getByText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbytextcontainer-htmlelement-text-textmatch-htmlelement)
   * [`getByAltText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbyalttextcontainer-htmlelement-text-textmatch-htmlelement)
   * [`wait`](#wait)
-  * [`waitForElements`](#waitforelements)
+  * [`waitForElement`](#waitforelement)
 * [Custom Jest Matchers](#custom-jest-matchers)
   * [`toBeInTheDOM`](#tobeinthedom)
   * [`toHaveTextContent`](#tohavetextcontent)
@@ -306,12 +306,12 @@ The default `interval` is `50ms`. However it will run your callback immediately
 on the next tick of the event loop (in a `setTimeout`) before starting the
 intervals.
 
-### `waitForElements`
+### `waitForElement`
 
 Defined as:
 
 ```typescript
-function waitForElements<T>(
+function waitForElement<T>(
   callback?: () => T | null | undefined,
   options?: {
     container?: HTMLElement
@@ -321,8 +321,8 @@ function waitForElements<T>(
 ): Promise<T>
 ```
 
-When in need to wait for DOM elements to appear, disappear, or change you can use `waitForElements`.
-The `waitForElements` function is a small wrapper
+When in need to wait for DOM elements to appear, disappear, or change you can use `waitForElement`.
+The `waitForElement` function is a small wrapper
 around the
 [`MutationObserver`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver).
 Here's a simple example:
@@ -331,22 +331,34 @@ Here's a simple example:
 // ...
 // wait until the callback does not throw an error and returns a truthy value. In this case, that means
 // it'll wait until we can get a form control with a label that matches "username"
-// the difference from `wait` is that it reacts to DOM changes in the container
+// the difference from `wait` is that rather than running your callback on
+// an interval, it's run as soon as there are DOM changes in the container
 // and returns the value returned by the callback
-const element = await waitForElements(() => getByLabelText(container, 'username'))
-element.value = 'chucknorris'
+const usernameElement = await waitForElement(() => getByLabelText(container, 'username'))
+usernameElement.value = 'chucknorris'
 // ...
 ```
 
-Using `MutationObserver` is more efficient than polling the DOM at regular intervals with `wait`.
+You can also wait for multiple elements at once:
 
-The default `callback` is a no-op function (used like `await waitForElements()`). This can
-be helpful if you only need to wait for the next DOM change (see `mutationObserverOptions` to learn which changes are detected).
+```javascript
+const [usernameElement, passwordElement] = waitForElement(() => [
+  getByLabelText(container, 'username'),
+  getByLabelText(container, 'password'),
+])
+```
+
+Using [`MutationObserver`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver) is more efficient than polling the DOM at regular intervals with `wait`. This library sets up a [`'mutationobserver-shim'`](https://github.com/megawac/MutationObserver.js) on the global `window` object for cross-platform compatibility with older browsers and the [`jsdom`](https://github.com/jsdom/jsdom/issues/639) that is usually used in Node-based tests.
+
+The default `callback` is a no-op function (used like `await waitForElement()`). This can
+be helpful if you only need to wait for the next DOM change (see [`mutationObserverOptions`](#mutationobserveroptions) to learn which changes are detected).
+
+The default `container` is the global `document`. Make sure the elements you wait for will be attached to it, or set a different `container`.
 
 The default `timeout` is `4500ms` which will keep you under
 [Jest's default timeout of `5000ms`](https://facebook.github.io/jest/docs/en/jest-object.html#jestsettimeouttimeout).
 
-The default `mutationObserverOptions` is `{subtree: true, childList: true}` which will detect
+<a name="mutationobserveroptions"></a>The default `mutationObserverOptions` is `{subtree: true, childList: true}` which will detect
 additions and removals of child elements (including text nodes) in the `container` and any of its descendants.
 It won't detect attribute changes unless you add `attributes: true` to the options.
 

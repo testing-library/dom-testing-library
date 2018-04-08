@@ -1,4 +1,6 @@
-function waitForElements(
+import 'mutationobserver-shim'
+
+function waitForElement(
   callback = () => {},
   {
     container = document,
@@ -32,12 +34,13 @@ function waitForElements(
       }
     }
     function onTimeout() {
-      onDone(lastError || new Error('Timed out in waitForElements.'), null)
+      onDone(lastError || new Error('Timed out in waitForElement.'), null)
     }
     timer = setTimeout(onTimeout, timeout)
     observer = new MutationObserver(onMutation)
     observer.observe(container, mutationObserverOptions)
+    onMutation()
   })
 }
 
-export {waitForElements}
+export {waitForElement}

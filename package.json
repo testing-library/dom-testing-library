@@ -35,12 +35,12 @@
   ],
   "dependencies": {
     "jest-matcher-utils": "^22.4.3",
-    "wait-for-expect": "^0.4.0"
+    "wait-for-expect": "^0.4.0",
+    "mutationobserver-shim": "^0.3.2"
   },
   "devDependencies": {
     "jest-in-case": "^1.0.2",
-    "kcd-scripts": "^0.36.1",
-    "mutationobserver-shim": "^0.3.2"
+    "kcd-scripts": "^0.37.0"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",

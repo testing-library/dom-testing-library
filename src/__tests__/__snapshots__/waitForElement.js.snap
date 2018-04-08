@@ -1,8 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`it returns immediately if the callback returns the value before any mutations 1`] = `
+<div
+  data-test-attribute="something changed once"
+>
+  <div
+    data-testid="initial-element"
+  />
+</div>
+`;
+
 exports[`it throws if timeout is exceeded 1`] = `
 Array [
-  [Error: Timed out in waitForElements.],
+  [Error: Timed out in waitForElement.],
 ]
 `;
 
