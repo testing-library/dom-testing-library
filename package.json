@@ -39,7 +39,8 @@
   },
   "devDependencies": {
     "jest-in-case": "^1.0.2",
-    "kcd-scripts": "^0.36.1"
+    "kcd-scripts": "^0.36.1",
+    "mutationobserver-shim": "^0.3.2"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",
