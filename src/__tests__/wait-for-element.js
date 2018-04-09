@@ -97,7 +97,7 @@ test('it waits for the callback to return a value and only reacts to DOM mutatio
   expect(container).toMatchSnapshot()
   expect(testEl.parentNode).toBe(container)
 
-  await promise
+  return promise
 })
 
 test('it waits for the next DOM mutation with default callback', async () => {
@@ -126,7 +126,7 @@ test('it waits for the next DOM mutation with default callback', async () => {
   expect(errorHandler).toHaveBeenCalledTimes(0)
   expect(document.body).toMatchSnapshot()
 
-  await promise
+  return promise
 })
 
 test('it waits for the attributes mutation if configured', async () => {
@@ -161,7 +161,7 @@ test('it waits for the attributes mutation if configured', async () => {
   expect(successHandler).toHaveBeenCalledWith('PASSED')
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
-  await promise
+  return promise
 })
 
 test('it throws if timeout is exceeded', async () => {
@@ -197,7 +197,7 @@ test('it throws if timeout is exceeded', async () => {
   expect(errorHandler.mock.calls[0]).toMatchSnapshot()
   expect(container).toMatchSnapshot()
 
-  await promise
+  return promise
 })
 
 test('it throws the same error that the callback has thrown if timeout is exceeded', async () => {
@@ -233,7 +233,7 @@ test('it throws the same error that the callback has thrown if timeout is exceed
   expect(errorHandler.mock.calls[0]).toMatchSnapshot()
   expect(container).toMatchSnapshot()
 
-  await promise
+  return promise
 })
 
 test('it returns immediately if the callback returns the value before any mutations', async () => {
@@ -274,5 +274,5 @@ test('it returns immediately if the callback returns the value before any mutati
 
   expect(container).toMatchSnapshot()
 
-  await promise
+  return promise
 })
