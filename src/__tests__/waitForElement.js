@@ -100,6 +100,35 @@ test('it waits for the callback to return a value and only reacts to DOM mutatio
   await promise
 })
 
+test('it waits for the next DOM mutation with default callback', async () => {
+  const successHandler = jest.fn().mockName('successHandler')
+  const errorHandler = jest.fn().mockName('errorHandler')
+
+  const promise = waitForElement().then(successHandler, errorHandler)
+
+  // Promise callbacks are always asynchronous.
+  expect(successHandler).toHaveBeenCalledTimes(0)
+  expect(errorHandler).toHaveBeenCalledTimes(0)
+
+  await skipSomeTimeForMutationObserver()
+
+  // No more expected calls without DOM mutations.
+  expect(successHandler).toHaveBeenCalledTimes(0)
+  expect(errorHandler).toHaveBeenCalledTimes(0)
+
+  document.body.appendChild(document.createElement('div'))
+  expect(document.body).toMatchSnapshot()
+
+  await skipSomeTimeForMutationObserver()
+
+  expect(successHandler).toHaveBeenCalledTimes(1)
+  expect(successHandler).toHaveBeenCalledWith(undefined)
+  expect(errorHandler).toHaveBeenCalledTimes(0)
+  expect(document.body).toMatchSnapshot()
+
+  await promise
+})
+
 test('it waits for the attributes mutation if configured', async () => {
   const {container} = render(``)
 

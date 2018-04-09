@@ -1,7 +1,7 @@
 import 'mutationobserver-shim'
 
 function waitForElement(
-  callback = () => {},
+  callback = undefined,
   {
     container = document,
     timeout = 4500,
@@ -21,6 +21,10 @@ function waitForElement(
       }
     }
     function onMutation() {
+      if (callback === undefined) {
+        onDone(null, undefined)
+        return
+      }
       try {
         const result = callback()
         if (result) {
@@ -39,7 +43,9 @@ function waitForElement(
     timer = setTimeout(onTimeout, timeout)
     observer = new MutationObserver(onMutation)
     observer.observe(container, mutationObserverOptions)
-    onMutation()
+    if (callback !== undefined) {
+      onMutation()
+    }
   })
 }
 
