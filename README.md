@@ -77,6 +77,7 @@ when a real user uses it.
   * [`getByText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbytextcontainer-htmlelement-text-textmatch-htmlelement)
   * [`getByAltText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbyalttextcontainer-htmlelement-text-textmatch-htmlelement)
   * [`wait`](#wait)
+  * [`waitForElement`](#waitforelement)
 * [Custom Jest Matchers](#custom-jest-matchers)
   * [`toBeInTheDOM`](#tobeinthedom)
   * [`toHaveTextContent`](#tohavetextcontent)
@@ -284,8 +285,8 @@ Here's a simple example:
 
 ```javascript
 // ...
-// wait until the callback does not throw an error. In this case, that means
-// it'll wait until we can get a form control with a label that matches "username"
+// Wait until the callback does not throw an error. In this case, that means
+// it'll wait until we can get a form control with a label that matches "username".
 await wait(() => getByLabelText(container, 'username'))
 getByLabelText(container, 'username').value = 'chucknorris'
 // ...
@@ -304,6 +305,68 @@ The default `timeout` is `4500ms` which will keep you under
 The default `interval` is `50ms`. However it will run your callback immediately
 on the next tick of the event loop (in a `setTimeout`) before starting the
 intervals.
+
+### `waitForElement`
+
+Defined as:
+
+```typescript
+function waitForElement<T>(
+  callback?: () => T | null | undefined,
+  options?: {
+    container?: HTMLElement
+    timeout?: number
+    mutationObserverOptions?: MutationObserverInit
+  },
+): Promise<T>
+```
+
+When in need to wait for DOM elements to appear, disappear, or change you can use `waitForElement`.
+The `waitForElement` function is a small wrapper
+around the
+[`MutationObserver`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver).
+Here's a simple example:
+
+```javascript
+// ...
+// Wait until the callback does not throw an error and returns a truthy value. In this case, that means
+// it'll wait until we can get a form control with a label that matches "username".
+// The difference from `wait` is that rather than running your callback on
+// an interval, it's run as soon as there are DOM changes in the container
+// and returns the value returned by the callback.
+const usernameElement = await waitForElement(
+  () => getByLabelText(container, 'username'),
+  {container},
+)
+usernameElement.value = 'chucknorris'
+// ...
+```
+
+You can also wait for multiple elements at once:
+
+```javascript
+const [usernameElement, passwordElement] = waitForElement(
+  () => [
+    getByLabelText(container, 'username'),
+    getByLabelText(container, 'password'),
+  ],
+  {container},
+)
+```
+
+Using [`MutationObserver`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver) is more efficient than polling the DOM at regular intervals with `wait`. This library sets up a [`'mutationobserver-shim'`](https://github.com/megawac/MutationObserver.js) on the global `window` object for cross-platform compatibility with older browsers and the [`jsdom`](https://github.com/jsdom/jsdom/issues/639) that is usually used in Node-based tests.
+
+The default `callback` is a no-op function (used like `await waitForElement()`). This can
+be helpful if you only need to wait for the next DOM change (see [`mutationObserverOptions`](#mutationobserveroptions) to learn which changes are detected).
+
+The default `container` is the global `document`. Make sure the elements you wait for will be attached to it, or set a different `container`.
+
+The default `timeout` is `4500ms` which will keep you under
+[Jest's default timeout of `5000ms`](https://facebook.github.io/jest/docs/en/jest-object.html#jestsettimeouttimeout).
+
+<a name="mutationobserveroptions"></a>The default `mutationObserverOptions` is `{subtree: true, childList: true}` which will detect
+additions and removals of child elements (including text nodes) in the `container` and any of its descendants.
+It won't detect attribute changes unless you add `attributes: true` to the options.
 
 ## Custom Jest Matchers
 
@@ -599,7 +662,7 @@ Thanks goes to these people ([emoji key][emojis]):
 <!-- prettier-ignore -->
 | [<img src="https://avatars.githubusercontent.com/u/1500684?v=3" width="100px;"/><br /><sub><b>Kent C. Dodds</b></sub>](https://kentcdodds.com)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=kentcdodds "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=kentcdodds "Documentation") [🚇](#infra-kentcdodds "Infrastructure (Hosting, Build-Tools, etc)") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=kentcdodds "Tests") | [<img src="https://avatars1.githubusercontent.com/u/2430381?v=4" width="100px;"/><br /><sub><b>Ryan Castner</b></sub>](http://audiolion.github.io)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=audiolion "Documentation") | [<img src="https://avatars0.githubusercontent.com/u/8008023?v=4" width="100px;"/><br /><sub><b>Daniel Sandiego</b></sub>](https://www.dnlsandiego.com)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=dnlsandiego "Code") | [<img src="https://avatars2.githubusercontent.com/u/12592677?v=4" width="100px;"/><br /><sub><b>Paweł Mikołajczyk</b></sub>](https://github.com/Miklet)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=Miklet "Code") | [<img src="https://avatars3.githubusercontent.com/u/464978?v=4" width="100px;"/><br /><sub><b>Alejandro Ñáñez Ortiz</b></sub>](http://co.linkedin.com/in/alejandronanez/)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=alejandronanez "Documentation") | [<img src="https://avatars0.githubusercontent.com/u/1402095?v=4" width="100px;"/><br /><sub><b>Matt Parrish</b></sub>](https://github.com/pbomb)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Apbomb "Bug reports") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=pbomb "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=pbomb "Documentation") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=pbomb "Tests") | [<img src="https://avatars1.githubusercontent.com/u/1288694?v=4" width="100px;"/><br /><sub><b>Justin Hall</b></sub>](https://github.com/wKovacs64)<br />[📦](#platform-wKovacs64 "Packaging/porting to new platform") |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| [<img src="https://avatars1.githubusercontent.com/u/1241511?s=460&v=4" width="100px;"/><br /><sub><b>Anto Aravinth</b></sub>](https://github.com/antoaravinth)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Tests") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/3462296?v=4" width="100px;"/><br /><sub><b>Jonah Moses</b></sub>](https://github.com/JonahMoses)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=JonahMoses "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/4002543?v=4" width="100px;"/><br /><sub><b>Łukasz Gandecki</b></sub>](http://team.thebrain.pro)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Tests") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/498274?v=4" width="100px;"/><br /><sub><b>Ivan Babak</b></sub>](https://sompylasar.github.io)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Asompylasar "Bug reports") [🤔](#ideas-sompylasar "Ideas, Planning, & Feedback") | [<img src="https://avatars3.githubusercontent.com/u/4439618?v=4" width="100px;"/><br /><sub><b>Jesse Day</b></sub>](https://github.com/jday3)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=jday3 "Code") | [<img src="https://avatars0.githubusercontent.com/u/15199?v=4" width="100px;"/><br /><sub><b>Ernesto García</b></sub>](http://gnapse.github.io)<br />[💬](#question-gnapse "Answering Questions") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=gnapse "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=gnapse "Documentation") |
+| [<img src="https://avatars1.githubusercontent.com/u/1241511?s=460&v=4" width="100px;"/><br /><sub><b>Anto Aravinth</b></sub>](https://github.com/antoaravinth)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Tests") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/3462296?v=4" width="100px;"/><br /><sub><b>Jonah Moses</b></sub>](https://github.com/JonahMoses)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=JonahMoses "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/4002543?v=4" width="100px;"/><br /><sub><b>Łukasz Gandecki</b></sub>](http://team.thebrain.pro)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Tests") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/498274?v=4" width="100px;"/><br /><sub><b>Ivan Babak</b></sub>](https://sompylasar.github.io)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Asompylasar "Bug reports") [🤔](#ideas-sompylasar "Ideas, Planning, & Feedback") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=sompylasar "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=sompylasar "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/4439618?v=4" width="100px;"/><br /><sub><b>Jesse Day</b></sub>](https://github.com/jday3)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=jday3 "Code") | [<img src="https://avatars0.githubusercontent.com/u/15199?v=4" width="100px;"/><br /><sub><b>Ernesto García</b></sub>](http://gnapse.github.io)<br />[💬](#question-gnapse "Answering Questions") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=gnapse "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=gnapse "Documentation") |
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 

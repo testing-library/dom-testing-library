@@ -6,4 +6,5 @@ export {queries}
 
 export * from './queries'
 export * from './wait'
+export * from './wait-for-element'
 export * from './matches'
