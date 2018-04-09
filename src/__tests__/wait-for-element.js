@@ -173,7 +173,7 @@ test('it throws if timeout is exceeded', async () => {
 
   const promise = waitForElement(callback, {
     container,
-    timeout: 300,
+    timeout: 70,
     mutationObserverOptions: {attributes: true},
   }).then(successHandler, errorHandler)
 
@@ -182,14 +182,14 @@ test('it throws if timeout is exceeded', async () => {
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
   container.setAttribute('data-test-attribute', 'something changed once')
-  await skipSomeTimeForMutationObserver(200)
+  await skipSomeTimeForMutationObserver(50)
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
   container.setAttribute('data-test-attribute', 'something changed twice')
-  await skipSomeTimeForMutationObserver(150)
+  await skipSomeTimeForMutationObserver(50)
 
   expect(callback).toHaveBeenCalledTimes(3)
   expect(successHandler).toHaveBeenCalledTimes(0)
@@ -209,7 +209,7 @@ test('it throws the same error that the callback has thrown if timeout is exceed
 
   const promise = waitForElement(callback, {
     container,
-    timeout: 300,
+    timeout: 70,
     mutationObserverOptions: {attributes: true},
   }).then(successHandler, errorHandler)
 
@@ -218,14 +218,14 @@ test('it throws the same error that the callback has thrown if timeout is exceed
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
   container.setAttribute('data-test-attribute', 'something changed once')
-  await skipSomeTimeForMutationObserver(200)
+  await skipSomeTimeForMutationObserver(50)
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
   container.setAttribute('data-test-attribute', 'something changed twice')
-  await skipSomeTimeForMutationObserver(150)
+  await skipSomeTimeForMutationObserver(50)
 
   expect(callback).toHaveBeenCalledTimes(3)
   expect(successHandler).toHaveBeenCalledTimes(0)
@@ -249,7 +249,7 @@ test('it returns immediately if the callback returns the value before any mutati
 
   const promise = waitForElement(callback, {
     container,
-    timeout: 300,
+    timeout: 70,
     mutationObserverOptions: {attributes: true},
   }).then(successHandler, errorHandler)
 
@@ -265,7 +265,7 @@ test('it returns immediately if the callback returns the value before any mutati
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
   container.setAttribute('data-test-attribute', 'something changed once')
-  await skipSomeTimeForMutationObserver(200)
+  await skipSomeTimeForMutationObserver(50)
 
   // No more calls are expected.
   expect(callback).toHaveBeenCalledTimes(1)
