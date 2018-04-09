@@ -40,7 +40,9 @@
   },
   "devDependencies": {
     "jest-in-case": "^1.0.2",
-    "kcd-scripts": "^0.37.0"
+    "kcd-scripts": "^0.37.0",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",
