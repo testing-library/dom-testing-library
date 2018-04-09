@@ -1,5 +1,6 @@
+import prettyFormat from 'pretty-format'
 import {matches} from './matches'
-import prettyFormat from 'pretty-format' // eslint-disable-line
+
 const {DOMElement} = prettyFormat.plugins
 
 // Here are the queries for the library.
