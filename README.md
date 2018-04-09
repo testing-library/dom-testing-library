@@ -81,6 +81,7 @@ when a real user uses it.
   * [`toBeInTheDOM`](#tobeinthedom)
   * [`toHaveTextContent`](#tohavetextcontent)
   * [`toHaveAttribute`](#tohaveattribute)
+  * [`toHaveClass`](#tohaveclass)
   * [Custom Jest Matchers - Typescript](#custom-jest-matchers---typescript)
 * [`TextMatch`](#textmatch)
 * [`query` APIs](#query-apis)
@@ -365,6 +366,25 @@ expect(getByTestId(container, 'ok-button')).not.toHaveAttribute(
 // ...
 ```
 
+### `toHaveClass`
+
+This allows you to check wether the given element has certain classes within its
+`class` attribute.
+
+```javascript
+// add the custom expect matchers
+import 'dom-testing-library/extend-expect'
+
+// ...
+// <button data-testid="delete-button" class="btn extra btn-danger">
+//   Delete item
+// </button>
+expect(getByTestId(container, 'delete-button')).toHaveClass('extra')
+expect(getByTestId(container, 'delete-button')).toHaveClass('btn-danger btn')
+expect(getByTestId(container, 'delete-button')).not.toHaveClass('btn-link')
+// ...
+```
+
 ### Custom Jest Matchers - Typescript
 
 When you use custom Jest Matchers with Typescript, you will need to extend the
@@ -416,7 +436,7 @@ getByText(container, (content, element) => {
 
 ## `query` APIs
 
-Each of the `get` APIs listed in [the `render`](#render) section above have a
+Each of the `get` APIs listed in [the 'Usage'](#usage) section above have a
 complimentary `query` API. The `get` APIs will throw errors if a proper node
 cannot be found. This is normally the desired effect. However, if you want to
 make an assertion that an element is _not_ present in the DOM, then you can use

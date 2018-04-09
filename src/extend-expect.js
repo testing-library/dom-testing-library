@@ -1,4 +1,9 @@
 import extensions from './jest-extensions'
 
-const {toBeInTheDOM, toHaveTextContent, toHaveAttribute} = extensions
-expect.extend({toBeInTheDOM, toHaveTextContent, toHaveAttribute})
+const {
+  toBeInTheDOM,
+  toHaveTextContent,
+  toHaveAttribute,
+  toHaveClass,
+} = extensions
+expect.extend({toBeInTheDOM, toHaveTextContent, toHaveAttribute, toHaveClass})
