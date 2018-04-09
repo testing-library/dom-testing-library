@@ -285,8 +285,8 @@ Here's a simple example:
 
 ```javascript
 // ...
-// wait until the callback does not throw an error. In this case, that means
-// it'll wait until we can get a form control with a label that matches "username"
+// Wait until the callback does not throw an error. In this case, that means
+// it'll wait until we can get a form control with a label that matches "username".
 await wait(() => getByLabelText(container, 'username'))
 getByLabelText(container, 'username').value = 'chucknorris'
 // ...
@@ -329,12 +329,15 @@ Here's a simple example:
 
 ```javascript
 // ...
-// wait until the callback does not throw an error and returns a truthy value. In this case, that means
-// it'll wait until we can get a form control with a label that matches "username"
-// the difference from `wait` is that rather than running your callback on
+// Wait until the callback does not throw an error and returns a truthy value. In this case, that means
+// it'll wait until we can get a form control with a label that matches "username".
+// The difference from `wait` is that rather than running your callback on
 // an interval, it's run as soon as there are DOM changes in the container
-// and returns the value returned by the callback
-const usernameElement = await waitForElement(() => getByLabelText(container, 'username'))
+// and returns the value returned by the callback.
+const usernameElement = await waitForElement(
+  () => getByLabelText(container, 'username'),
+  {container},
+)
 usernameElement.value = 'chucknorris'
 // ...
 ```
@@ -342,10 +345,13 @@ usernameElement.value = 'chucknorris'
 You can also wait for multiple elements at once:
 
 ```javascript
-const [usernameElement, passwordElement] = waitForElement(() => [
-  getByLabelText(container, 'username'),
-  getByLabelText(container, 'password'),
-])
+const [usernameElement, passwordElement] = waitForElement(
+  () => [
+    getByLabelText(container, 'username'),
+    getByLabelText(container, 'password'),
+  ],
+  {container},
+)
 ```
 
 Using [`MutationObserver`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver) is more efficient than polling the DOM at regular intervals with `wait`. This library sets up a [`'mutationobserver-shim'`](https://github.com/megawac/MutationObserver.js) on the global `window` object for cross-platform compatibility with older browsers and the [`jsdom`](https://github.com/jsdom/jsdom/issues/639) that is usually used in Node-based tests.
