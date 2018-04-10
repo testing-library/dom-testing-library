@@ -14,7 +14,7 @@ const {
   UIEvent,
   WheelEvent,
 } =
-  typeof window === 'undefined' ? global : window
+  typeof window === 'undefined' ? /* istanbul ignore next */ global : window
 
 const eventMap = {
   // Clipboard Events
