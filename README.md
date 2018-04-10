@@ -377,7 +377,7 @@ Fire DOM events.
 ```javascript
 // <button>Submit</button>
 fireEvent(
-  getByText('Submit'),
+  getByText(container, 'Submit'),
   new MouseEvent('click', {
     bubbles: true,
     cancelable: true,
