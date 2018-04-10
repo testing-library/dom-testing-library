@@ -455,29 +455,23 @@ When you use any `get` calls in your test cases, the current state of the `conta
 For example:
 
 ```javascript
-;`<div data-testid="debugging" data-otherid="debugging">
-  Hello World!
-</div>`
-
-expect(getByText('Test value.')).toBeInTheDOM() // will fail by throwing error
+// <div>Hello world</div>
+getByText(container, 'Goodbye world') // will fail by throwing error
 ```
 
 The above test case will fail, however it prints the state of your DOM under test, so you will get to see:
 
 ```
-Unable to find an element with the text: Test value.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+Unable to find an element with the text: Goodbye world. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 Here is the state of your container:
 <div>
-	<div
-		data-otherid="debugging"
-		data-testid="debugging"
-	>
+	<div>
 		Hello World!
 	</div>
 </div>
 ```
 
-Note: Since the DOM size can go really large, you can set the limit of DOM content to be printed via environment variable `DEBUG_PRINT_LIMIT`.
+Note: Since the DOM size can get really large, you can set the limit of DOM content to be printed via environment variable `DEBUG_PRINT_LIMIT`.
 The default value is `7000`. You will see `. . .` in the console, when the DOM content is stripped off, because of the length you have set or due to
 default size limit. Please use the `DEBUG_PRINT_LIMIT` according to your needs.
 
