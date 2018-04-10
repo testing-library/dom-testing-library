@@ -384,13 +384,17 @@ fireEvent(
 )
 ```
 
-#### `fireEvent[eventName](node: HTMLElement, eventInit)`
+#### `fireEvent[eventName](node: HTMLElement, eventProperties: Object)`
 
-Convenience methods for firing DOM events. Look [here](./src/events.js) for full list.
+Convenience methods for firing DOM events. Check out
+[src/events.js](https://github.com/kentcdodds/dom-testing-library/blob/master/src/events.js)
+for a full list as well as default `eventProperties`.
 
 ```javascript
 // <button>Submit</button>
-fireEvent.click(getElementByText('Submit'))
+const rightClick = {button: 2}
+fireEvent.click(getElementByText('Submit'), rightClick)
+// default `button` property for click events is set to `0` which is a left click.
 ```
 
 ## Custom Jest Matchers
