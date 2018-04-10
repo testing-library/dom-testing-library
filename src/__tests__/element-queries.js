@@ -210,13 +210,13 @@ test('test the debug helper prints the dom state here', () => {
         Hello World!
     </div>`
   const {getByTestId} = render(Hello)
-  process.env.DEBUG_PRINT_LIMIT = 5 // user should see `. . .`
+  process.env.DEBUG_PRINT_LIMIT = 5 // user should see `...`
   expect(() => expect(getByTestId('not present')).toBeInTheDOM()).toThrowError(
     /\.\.\./,
   )
 
   const {getByLabelText} = render(Hello)
-  process.env.DEBUG_PRINT_LIMIT = 10000 // user shouldn't see `. . .`
+  process.env.DEBUG_PRINT_LIMIT = 10000 // user shouldn't see `...`
   expect(() =>
     expect(getByLabelText('not present')).toBeInTheDOM(/^((?!\.\.\.).)*$/),
   ).toThrowError()
