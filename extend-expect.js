@@ -1,2 +1,2 @@
 // eslint-disable-next-line
-require('./dist/extend-expect')
+require('jest-dom/extend-expect')

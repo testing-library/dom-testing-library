@@ -1,4 +1,4 @@
-import '../extend-expect'
+import 'jest-dom/extend-expect'
 import {render} from './helpers/test-utils'
 
 test('query can return null', () => {
