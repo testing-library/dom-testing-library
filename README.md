@@ -38,11 +38,11 @@ your team down.
 
 The `dom-testing-library` is a very light-weight solution for testing DOM nodes
 (whether simulated with [`JSDOM`](https://github.com/jsdom/jsdom) as provided by
-default with [jest](https://facebook.github.io/jest) or in the browser). The
-main utilities it provides involve querying the DOM for nodes in a way that's
-similar to how the user finds elements on the page. In this way, the library
-helps ensure your tests give you confidence in your UI code. The
-`dom-testing-library`'s primary guiding principle is:
+default with [jest][] or in the browser). The main utilities it provides involve
+querying the DOM for nodes in a way that's similar to how the user finds
+elements on the page. In this way, the library helps ensure your tests give you
+confidence in your UI code. The `dom-testing-library`'s primary guiding
+principle is:
 
 > [The more your tests resemble the way your software is used, the more confidence they can give you.][guiding-principle]
 
@@ -80,11 +80,7 @@ when a real user uses it.
   * [`waitForElement`](#waitforelement)
   * [`fireEvent(node: HTMLElement, event: Event)`](#fireeventnode-htmlelement-event-event)
 * [Custom Jest Matchers](#custom-jest-matchers)
-  * [`toBeInTheDOM`](#tobeinthedom)
-  * [`toHaveTextContent`](#tohavetextcontent)
-  * [`toHaveAttribute`](#tohaveattribute)
-  * [`toHaveClass`](#tohaveclass)
-  * [Custom Jest Matchers - Typescript](#custom-jest-matchers---typescript)
+  * [Using other assertion libraries](#using-other-assertion-libraries)
 * [`TextMatch`](#textmatch)
 * [`query` APIs](#query-apis)
 * [Debugging](#debugging)
@@ -400,106 +396,37 @@ fireEvent.click(getElementByText('Submit'), rightClick)
 
 ## Custom Jest Matchers
 
-There are two simple API which extend the `expect` API of jest for making assertions easier.
-
-### `toBeInTheDOM`
-
-This allows you to assert whether an element present in the DOM or not.
+When using [jest][], we recommend that you import a set of custom matchers that
+make it easier to check several aspects of the state of a DOM element. These are
+provided by [jest-dom](https://github.com/gnapse/jest-dom), but are also
+included for convenience to be imported from this library directly:
 
 ```javascript
-// add the custom expect matchers
 import 'dom-testing-library/extend-expect'
 
+// <span data-testid="greetings">Hello World</span>
+expect(queryByText(container, 'greetings')).toBeInTheDOM()
+expect(queryByText(container, 'greetings')).not.toHaveTextContent('Bye bye')
 // ...
-// <span data-testid="count-value">2</span>
-expect(queryByTestId(container, 'count-value')).toBeInTheDOM()
-expect(queryByTestId(container, 'count-value1')).not.toBeInTheDOM()
-// ...
-```
 
 > Note: when using `toBeInTheDOM`, make sure you use a query function
 > (like `queryByTestId`) rather than a get function (like `getByTestId`).
 > Otherwise the `get*` function could throw an error before your assertion.
-
-### `toHaveTextContent`
-
-This API allows you to check whether the given element has a text content or not.
-
-```javascript
-// add the custom expect matchers
-import 'dom-testing-library/extend-expect'
-
-// ...
-// <span data-testid="count-value">2</span>
-expect(getByTestId(container, 'count-value')).toHaveTextContent('2')
-expect(getByTestId(container, 'count-value')).not.toHaveTextContent('21')
-// ...
 ```
 
-### `toHaveAttribute`
+Check out [jest-dom's documentation](https://github.com/gnapse/jest-dom#readme)
+for a full list of available matchers.
 
-This allows you to check wether the given element has an attribute or not. You
-can also optionally check that the attribute has a specific expected value.
+### Using other assertion libraries
 
-```javascript
-// add the custom expect matchers
-import 'dom-testing-library/extend-expect'
+If you're not using jest, you may be able to find a similar set of custom
+assertions for your library of choice. Here's a list of alternatives to jest-dom
+for other popular assertion libraries:
 
-// ...
-// <button data-testid="ok-button" type="submit" disabled>
-//   OK
-// </button>
-expect(getByTestId(container, 'ok-button')).toHaveAttribute('disabled')
-expect(getByTestId(container, 'ok-button')).toHaveAttribute('type', 'submit')
-expect(getByTestId(container, 'ok-button')).not.toHaveAttribute(
-  'type',
-  'button',
-)
-// ...
-```
+* [chai-dom](https://github.com/nathanboktae/chai-dom)
 
-### `toHaveClass`
-
-This allows you to check wether the given element has certain classes within its
-`class` attribute.
-
-```javascript
-// add the custom expect matchers
-import 'dom-testing-library/extend-expect'
-
-// ...
-// <button data-testid="delete-button" class="btn extra btn-danger">
-//   Delete item
-// </button>
-expect(getByTestId(container, 'delete-button')).toHaveClass('extra')
-expect(getByTestId(container, 'delete-button')).toHaveClass('btn-danger btn')
-expect(getByTestId(container, 'delete-button')).not.toHaveClass('btn-link')
-// ...
-```
-
-### Custom Jest Matchers - Typescript
-
-When you use custom Jest Matchers with Typescript, you will need to extend the
-type signature of `jest.Matchers<void>`, then cast the result of `expect`
-accordingly. Here's a handy usage example:
-
-```typescript
-import {getByTestId} from 'dom-testing-library'
-// this adds custom expect matchers
-import 'dom-testing-library/extend-expect'
-interface ExtendedMatchers extends jest.Matchers<void> {
-  toHaveTextContent: (htmlElement: string) => object
-  toBeInTheDOM: () => void
-}
-test('renders the tooltip as expected', async () => {
-  // however you render it:
-  // render(`<div><span data-testid="greeting">hello world</span></div>`)
-  ;(expect(
-    container,
-    getByTestId('greeting'),
-  ) as ExtendedMatchers).toHaveTextContent('hello world')
-})
-```
+If you're aware of some other alternatives, please [make a pull request][prs]
+and add it here!
 
 ## `TextMatch`
 
@@ -768,3 +695,4 @@ MIT
 [set-immediate]: https://developer.mozilla.org/en-US/docs/Web/API/Window/setImmediate
 [guiding-principle]: https://twitter.com/kentcdodds/status/977018512689455106
 [data-testid-blog-post]: https://blog.kentcdodds.com/making-your-ui-tests-resilient-to-change-d37a6ee37269
+[jest]: https://facebook.github.io/jest
