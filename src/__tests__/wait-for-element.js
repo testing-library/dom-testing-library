@@ -1,6 +1,6 @@
 import {waitForElement, wait} from '../'
 // adds special assertions like toBeInTheDOM
-import '../extend-expect'
+import 'jest-dom/extend-expect'
 import {render} from './helpers/test-utils'
 
 async function skipSomeTime(delayMs) {
