@@ -150,6 +150,16 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "alecook",
+      "name": "Alex Cook",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/725236?v=4",
+      "profile": "https://github.com/alecook",
+      "contributions": [
+        "doc",
+        "example"
+      ]
     }
   ]
 }
