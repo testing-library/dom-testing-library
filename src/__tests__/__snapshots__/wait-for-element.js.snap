@@ -1,8 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[
-  `it returns immediately if the callback returns the value before any mutations 1`
-] = `
+exports[`it returns immediately if the callback returns the value before any mutations 1`] = `
 <div
   data-test-attribute="something changed once"
 >
@@ -10,39 +8,37 @@ exports[
     data-testid="initial-element"
   />
 </div>
-`
+`;
 
 exports[`it throws if timeout is exceeded 1`] = `
 Array [
   [Error: Timed out in waitForElement.],
 ]
-`
+`;
 
 exports[`it throws if timeout is exceeded 2`] = `
 <div
   data-test-attribute="something changed twice"
 />
-`
+`;
 
-exports[
-  `it throws the same error that the callback has thrown if timeout is exceeded 1`
-] = `
+exports[`it throws the same error that the callback has thrown if timeout is exceeded 1`] = `
 Array [
-  [Error: Unable to find an element by: [data-testid="test"]],
-]
-`
+  [Error: Unable to find an element by: [data-testid="test"] 
 
-exports[
-  `it throws the same error that the callback has thrown if timeout is exceeded 2`
-] = `
+[36m<div[39m
+  [33mdata-test-attribute[39m=[32m"something changed twice"[39m
+[36m/>[39m],
+]
+`;
+
+exports[`it throws the same error that the callback has thrown if timeout is exceeded 2`] = `
 <div
   data-test-attribute="something changed twice"
 />
-`
+`;
 
-exports[
-  `it waits for the callback to return a value and only reacts to DOM mutations 1`
-] = `
+exports[`it waits for the callback to return a value and only reacts to DOM mutations 1`] = `
 <div>
   <div
     data-testid="initial-element"
@@ -66,16 +62,16 @@ exports[
     data-testid="the-element-we-are-looking-for"
   />
 </div>
-`
+`;
 
 exports[`it waits for the next DOM mutation with default callback 1`] = `
 <body>
   <div />
 </body>
-`
+`;
 
 exports[`it waits for the next DOM mutation with default callback 2`] = `
 <body>
   <div />
 </body>
-`
+`;

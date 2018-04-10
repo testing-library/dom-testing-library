@@ -193,4 +193,36 @@ test('using jest helpers to check element class names', () => {
   ).toThrowError()
 })
 
+test('test the debug helper prints the dom state here', () => {
+  const originalDebugPrintLimit = process.env.DEBUG_PRINT_LIMIT
+  const Large = `<div>
+        ${Array.from({length: 7000}, (v, key) => key).map(() => {
+          return `<div data-testid="debugging" data-otherid="debugging">
+                Hello World!
+            </div>`
+        })}
+    </div>`
+
+  const {getByText} = render(Large) // render large DOM which exceeds 7000 limit
+  expect(() => expect(getByText('not present')).toBeInTheDOM()).toThrowError()
+
+  const Hello = `<div data-testid="debugging" data-otherid="debugging">
+        Hello World!
+    </div>`
+  const {getByTestId} = render(Hello)
+  process.env.DEBUG_PRINT_LIMIT = 5 // user should see `...`
+  expect(() => expect(getByTestId('not present')).toBeInTheDOM()).toThrowError(
+    /\.\.\./,
+  )
+
+  const {getByLabelText} = render(Hello)
+  process.env.DEBUG_PRINT_LIMIT = 10000 // user shouldn't see `...`
+  expect(() =>
+    expect(getByLabelText('not present')).toBeInTheDOM(/^((?!\.\.\.).)*$/),
+  ).toThrowError()
+
+  //all good replacing it with old value
+  process.env.DEBUG_PRINT_LIMIT = originalDebugPrintLimit
+})
+
 /* eslint jsx-a11y/label-has-for:0 */
