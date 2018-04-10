@@ -1,24 +1,23 @@
-// fallback to Event
-const AnimationEvent = global.AnimationEvent || Event
-const ClipboardEvent = global.ClipboardEvent || Event
-const CompositionEvent = global.CompositionEvent || Event
-const DragEvent = global.DragEvent || Event
-const FocusEvent = global.FocusEvent || Event
-const InputEvent = global.InputEvent || Event
-const KeyboardEvent = global.KeyboardEvent || Event
-const MouseEvent = global.MouseEvent || Event
-const ProgressEvent = global.ProgressEvent || Event
-const TouchEvent = global.TouchEvent || Event
-const TransitionEvent = global.TransitionEvent || Event
-const UIEvent = global.UIEvent || Event
-const WheelEvent = global.WheelEvent || Event
+const {
+  AnimationEvent,
+  ClipboardEvent,
+  CompositionEvent,
+  DragEvent,
+  Event,
+  FocusEvent,
+  InputEvent,
+  KeyboardEvent,
+  MouseEvent,
+  ProgressEvent,
+  TouchEvent,
+  TransitionEvent,
+  UIEvent,
+  WheelEvent,
+} =
+  typeof window === 'undefined' ? global : window
 
-/**
- * Include convenience methods for all events supported in React.
- * https://reactjs.org/docs/events.html#supported-events
- */
 const eventMap = {
-  // https://reactjs.org/docs/events.html#clipboard-events
+  // Clipboard Events
   copy: {
     EventType: CompositionEvent,
     defaultInit: {bubbles: true, cancelable: true},
@@ -31,7 +30,7 @@ const eventMap = {
     EventType: ClipboardEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
-  // https://reactjs.org/docs/events.html#composition-events
+  // Composition Events
   compositionEnd: {
     EventType: CompositionEvent,
     defaultInit: {bubbles: true, cancelable: true},
@@ -44,7 +43,7 @@ const eventMap = {
     EventType: CompositionEvent,
     defaultInit: {bubbles: true, cancelable: false},
   },
-  // https://reactjs.org/docs/events.html#keyboard-events
+  // Keyboard Events
   keyDown: {
     EventType: KeyboardEvent,
     defaultInit: {bubbles: true, cancelable: true},
@@ -57,7 +56,7 @@ const eventMap = {
     EventType: KeyboardEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
-  // https://reactjs.org/docs/events.html#focus-events
+  // Focus Events
   focus: {
     EventType: FocusEvent,
     defaultInit: {bubbles: false, cancelable: false},
@@ -66,14 +65,10 @@ const eventMap = {
     EventType: FocusEvent,
     defaultInit: {bubbles: false, cancelable: false},
   },
-  // https://reactjs.org/docs/events.html#form-events
+  // Form Events
   change: {
     EventType: InputEvent,
     defaultInit: {bubbles: true, cancelable: true},
-    before(node) {
-      // input event will trigger onChange for React
-      fireEvent.input(node)
-    },
   },
   input: {
     EventType: InputEvent,
@@ -87,7 +82,7 @@ const eventMap = {
     EventType: Event,
     defaultInit: {bubbles: true, cancelable: true},
   },
-  // https://reactjs.org/docs/events.html#mouse-events
+  // Mouse Events
   click: {
     EventType: MouseEvent,
     defaultInit: {bubbles: true, cancelable: true, button: 0},
@@ -139,18 +134,10 @@ const eventMap = {
   mouseEnter: {
     EventType: MouseEvent,
     defaultInit: {bubbles: true, cancelable: true},
-    after(node) {
-      // mouseover event will trigger onMouseEnter for React
-      fireEvent.mouseOver(node)
-    },
   },
   mouseLeave: {
     EventType: MouseEvent,
     defaultInit: {bubbles: true, cancelable: true},
-    after(node) {
-      // mouseout event will trigger onMouseLeave for React
-      fireEvent.mouseOut(node)
-    },
   },
   mouseMove: {
     EventType: MouseEvent,
@@ -168,12 +155,12 @@ const eventMap = {
     EventType: MouseEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
-  // https://reactjs.org/docs/events.html#selection-events
+  // Selection Events
   select: {
     EventType: Event,
     defaultInit: {bubbles: true, cancelable: false},
   },
-  // https://reactjs.org/docs/events.html#touch-events
+  // Touch Events
   touchCancel: {
     EventType: TouchEvent,
     defaultInit: {bubbles: true, cancelable: false},
@@ -190,17 +177,17 @@ const eventMap = {
     EventType: TouchEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
-  // https://reactjs.org/docs/events.html#ui-events
+  // UI Events
   scroll: {
     EventType: UIEvent,
     defaultInit: {bubbles: false, cancelable: false},
   },
-  // https://reactjs.org/docs/events.html#wheel-events
+  // Wheel Events
   wheel: {
     EventType: WheelEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
-  // https://reactjs.org/docs/events.html#media-events
+  // Media Events
   abort: {
     EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
@@ -293,7 +280,7 @@ const eventMap = {
     EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
-  // https://reactjs.org/docs/events.html#image-events
+  // Image Events
   load: {
     EventType: UIEvent,
     defaultInit: {bubbles: false, cancelable: false},
@@ -302,7 +289,7 @@ const eventMap = {
     EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
-  // https://reactjs.org/docs/events.html#animation-events
+  // Animation Events
   animationStart: {
     EventType: AnimationEvent,
     defaultInit: {bubbles: true, cancelable: false},
@@ -315,7 +302,7 @@ const eventMap = {
     EventType: AnimationEvent,
     defaultInit: {bubbles: true, cancelable: false},
   },
-  // https://reactjs.org/docs/events.html#transition-events
+  // Transition Events
   transitionEnd: {
     EventType: TransitionEvent,
     defaultInit: {bubbles: true, cancelable: true},
@@ -330,20 +317,15 @@ function fireEvent(element, event) {
   return element.dispatchEvent(event)
 }
 
-Object.entries(eventMap).forEach(
-  ([key, {EventType, defaultInit, before, after}]) => {
-    const eventName = key.toLowerCase()
+Object.entries(eventMap).forEach(([key, {EventType = Event, defaultInit}]) => {
+  const eventName = key.toLowerCase()
 
-    fireEvent[key] = (node, init) => {
-      const eventInit = Object.assign({}, defaultInit, init)
-      const event = new EventType(eventName, eventInit)
-      if (before) before(node, event)
-      const ret = fireEvent(node, event)
-      if (after) after(node, event)
-      return ret
-    }
-  },
-)
+  fireEvent[key] = (node, init) => {
+    const eventInit = Object.assign({}, defaultInit, init)
+    const event = new EventType(eventName, eventInit)
+    return fireEvent(node, event)
+  }
+})
 
 Object.entries(eventAliasMap).forEach(([aliasKey, key]) => {
   fireEvent[aliasKey] = (...args) => fireEvent[key](...args)

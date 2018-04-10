@@ -78,6 +78,7 @@ when a real user uses it.
   * [`getByAltText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbyalttextcontainer-htmlelement-text-textmatch-htmlelement)
   * [`wait`](#wait)
   * [`waitForElement`](#waitforelement)
+  * [`fireEvent(node: HTMLElement, event: Event)`](#fireeventnode-htmlelement-event-event)
 * [Custom Jest Matchers](#custom-jest-matchers)
   * [`toBeInTheDOM`](#tobeinthedom)
   * [`toHaveTextContent`](#tohavetextcontent)
@@ -367,6 +368,30 @@ The default `timeout` is `4500ms` which will keep you under
 <a name="mutationobserveroptions"></a>The default `mutationObserverOptions` is `{subtree: true, childList: true}` which will detect
 additions and removals of child elements (including text nodes) in the `container` and any of its descendants.
 It won't detect attribute changes unless you add `attributes: true` to the options.
+
+### `fireEvent(node: HTMLElement, event: Event)`
+
+Fire DOM events.
+
+```javascript
+// <button>Submit</button>
+fireEvent(
+  getElementByText('Submit'),
+  new MouseEvent('click', {
+    bubbles: true,
+    cancelable: true,
+  }),
+)
+```
+
+#### `fireEvent[eventName](node: HTMLElement, eventInit)`
+
+Convenience methods for firing DOM events. Look [here](./src/events.js) for full list.
+
+```javascript
+// <button>Submit</button>
+fireEvent.click(getElementByText('Submit'))
+```
 
 ## Custom Jest Matchers
 
