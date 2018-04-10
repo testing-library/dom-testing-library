@@ -543,29 +543,39 @@ expect(submitButton).not.toBeInTheDOM()
 
 ## Debugging
 
-When you use any `get` calls in your test cases, the current state of the `container` (DOM) gets printed on the console.
-For example:
+When you use any `get` calls in your test cases, the current state of the `container`
+(DOM) gets printed on the console. For example:
 
 ```javascript
 // <div>Hello world</div>
 getByText(container, 'Goodbye world') // will fail by throwing error
 ```
 
-The above test case will fail, however it prints the state of your DOM under test, so you will get to see:
+The above test case will fail, however it prints the state of your DOM under test,
+so you will get to see:
 
 ```
 Unable to find an element with the text: Goodbye world. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 Here is the state of your container:
 <div>
-	<div>
-		Hello World!
-	</div>
+  <div>
+    Hello World!
+  </div>
 </div>
 ```
 
-Note: Since the DOM size can get really large, you can set the limit of DOM content to be printed via environment variable `DEBUG_PRINT_LIMIT`.
-The default value is `7000`. You will see `. . .` in the console, when the DOM content is stripped off, because of the length you have set or due to
-default size limit. Please use the `DEBUG_PRINT_LIMIT` according to your needs.
+Note: Since the DOM size can get really large, you can set the limit of DOM content
+to be printed via environment variable `DEBUG_PRINT_LIMIT`. The default value is
+`7000`. You will see `...` in the console, when the DOM content is stripped off,
+because of the length you have set or due to default size limit. Here's how you
+might increase this limit when running tests:
+
+```
+DEBUG_PRINT_LIMIT=10000 npm test
+```
+
+This works on macOS/linux, you'll need to do something else for windows. If you'd
+like a solution that works for both, see [`cross-env`](https://www.npmjs.com/package/cross-env)
 
 ## Implementations
 
