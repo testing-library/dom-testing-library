@@ -407,7 +407,7 @@ html code is not meaningful when the text is rendered.
 //   Hello
 //     World  !
 // </div>
-const text = getNodeText(container.querySelector('div')) // "Hello World!"
+const text = getNodeText(container.querySelector('div')) // "Hello World !"
 ```
 
 This function is also used internally when querying nodes by their text content.
