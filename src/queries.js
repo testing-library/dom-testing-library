@@ -1,5 +1,6 @@
 import prettyFormat from 'pretty-format'
 import {matches} from './matches'
+import {getNodeText} from './get-node-text'
 
 const {DOMElement, DOMCollection} = prettyFormat.plugins
 
@@ -46,7 +47,7 @@ function queryByLabelText(container, text, {selector = '*'} = {}) {
 function queryByText(container, text, {selector = '*'} = {}) {
   return (
     Array.from(container.querySelectorAll(selector)).find(node =>
-      matches(getText(node), node, text),
+      matches(getNodeText(node), node, text),
     ) || null
   )
 }
@@ -63,19 +64,6 @@ function queryByAttribute(attribute, container, text) {
 
 const queryByPlaceholderText = queryByAttribute.bind(null, 'placeholder')
 const queryByTestId = queryByAttribute.bind(null, 'data-testid')
-
-// this is just a utility and not an exposed query.
-// There are no plans to expose this.
-function getText(node) {
-  return Array.from(node.childNodes)
-    .filter(
-      child => child.nodeType === Node.TEXT_NODE && Boolean(child.textContent),
-    )
-    .map(c => c.textContent)
-    .join(' ')
-    .trim()
-    .replace(/\s+/g, ' ')
-}
 
 // getters
 // the reason we're not dynamically generating these functions that look so similar:

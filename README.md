@@ -395,6 +395,25 @@ fireEvent.click(getElementByText('Submit'), rightClick)
 // default `button` property for click events is set to `0` which is a left click.
 ```
 
+#### `getNodeText(node: HTMLElement)`
+
+Returns the complete text content of a html element, removing any extra
+whitespace. The intention is to treat text in nodes exactly as how it is
+perceived by users in a browser, where any extra whitespace within words in the
+html code is not meaningful when the text is rendered.
+
+```javascript
+// <div>
+//   Hello
+//     World  !
+// </div>
+const text = getNodeText(container.querySelector('div')) // "Hello World !"
+```
+
+This function is also used internally when querying nodes by their text content.
+This enables functions like `getByText` and `queryByText` to work as expected,
+finding elements in the DOM similarly to how users would do.
+
 ## Custom Jest Matchers
 
 When using [jest][], we recommend that you import a set of custom matchers that
