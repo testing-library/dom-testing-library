@@ -26,8 +26,10 @@ function queryByLabelText(container, text, {selector = '*'} = {}) {
     // but this would be the proper way to do things
     return label.control
   } else if (label.getAttribute('for')) {
+    // we're using this notation because with the # selector we would have to escape special characters e.g. user.name
+    // see https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector#Escaping_special_characters
     // <label for="someId">text</label><input id="someId" />
-    return container.querySelector(`#${label.getAttribute('for')}`)
+    return container.querySelector(`[id="${label.getAttribute('for')}"]`)
   } else if (label.getAttribute('id')) {
     // <label id="someId">text</label><input aria-labelledby="someId" />
     return container.querySelector(

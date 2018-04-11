@@ -62,11 +62,16 @@ test('get can get form controls by label text', () => {
         <label id="third-label">3rd</label>
         <input aria-labelledby="third-label" id="third-id" />
       </div>
+      <div>
+        <label for="fourth.id">4th</label>
+        <input id="fourth.id" />
+      </div>
     </div>
   `)
   expect(getByLabelText('1st').id).toBe('first-id')
   expect(getByLabelText('2nd').id).toBe('second-id')
   expect(getByLabelText('3rd').id).toBe('third-id')
+  expect(getByLabelText('4th').id).toBe('fourth.id')
 })
 
 test('get can get form controls by placeholder', () => {
