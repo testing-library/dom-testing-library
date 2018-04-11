@@ -83,7 +83,7 @@ when a real user uses it.
   * [Using other assertion libraries](#using-other-assertion-libraries)
 * [`TextMatch`](#textmatch)
 * [`query` APIs](#query-apis)
-* [`bindQueriesToElement`](#bindQueriesToElement)
+* [`bindElementToQueries`](#bindElementToQueries)
 * [Debugging](#debugging)
 * [Implementations](#implementations)
 * [FAQ](#faq)
@@ -469,9 +469,9 @@ expect(submitButton).toBeNull() // it doesn't exist
 expect(submitButton).not.toBeInTheDOM()
 ```
 
-## `bindQueriesToElement`
+## `bindElementToQueries`
 
-`bindQueriesToElement` takes a DOM element and binds the raw query functions to this element, allowing them
+`bindElementToQueries` takes a DOM element and binds it to the raw query functions, allowing them
 to be used without specifying a container. It is the recommended approach for libraries built on this API
 and is in use in `react-testing-library` and `vue-testing-library`.
 
