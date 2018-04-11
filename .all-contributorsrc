@@ -160,6 +160,17 @@
         "doc",
         "example"
       ]
+    },
+    {
+      "login": "dfcook",
+      "name": "Daniel Cook",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/10348212?v=4",
+      "profile": "https://github.com/dfcook",
+      "contributions": [
+        "code",
+        "doc,
+        "test"
+      ]
     }
   ]
 }

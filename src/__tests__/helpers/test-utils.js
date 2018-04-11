@@ -1,15 +1,9 @@
-import * as queries from '../../queries'
+import {bindElementToQueries} from '../../bind-element-to-queries'
 
 function render(html) {
   const container = document.createElement('div')
   container.innerHTML = html
-  const containerQueries = Object.entries(queries).reduce(
-    (helpers, [key, fn]) => {
-      helpers[key] = fn.bind(null, container)
-      return helpers
-    },
-    {},
-  )
+  const containerQueries = bindElementToQueries(container)
   return {container, ...containerQueries}
 }
 
