@@ -33,6 +33,21 @@ test('get throws a useful error message', () => {
   expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingSnapshot()
 })
 
+test('can get elements by matching their text content', () => {
+  const {queryByText} = render(`
+    <div>
+      <span>Currently showing</span>
+      <span>
+        Step
+        1
+          of 4
+      </span>
+    </div>
+  `)
+  expect(queryByText('Currently showing')).toBeInTheDOM()
+  expect(queryByText('Step 1 of 4')).toBeInTheDOM()
+})
+
 test('get can get form controls by label text', () => {
   const {getByLabelText} = render(`
     <div>

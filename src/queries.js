@@ -71,6 +71,8 @@ function getText(node) {
     )
     .map(c => c.textContent)
     .join(' ')
+    .trim()
+    .replace(/\s+/g, ' ')
 }
 
 // getters
