@@ -1,5 +1,6 @@
 import prettyFormat from 'pretty-format'
 import {matches} from './matches'
+import {getText} from './get-text'
 
 const {DOMElement, DOMCollection} = prettyFormat.plugins
 
@@ -61,17 +62,6 @@ function queryByAttribute(attribute, container, text) {
 
 const queryByPlaceholderText = queryByAttribute.bind(null, 'placeholder')
 const queryByTestId = queryByAttribute.bind(null, 'data-testid')
-
-function getText(node) {
-  return Array.from(node.childNodes)
-    .filter(
-      child => child.nodeType === Node.TEXT_NODE && Boolean(child.textContent),
-    )
-    .map(c => c.textContent)
-    .join(' ')
-    .trim()
-    .replace(/\s+/g, ' ')
-}
 
 // getters
 // the reason we're not dynamically generating these functions that look so similar:
@@ -171,7 +161,6 @@ export {
   queryByPlaceholderText,
   getByPlaceholderText,
   queryByText,
-  getText,
   getByText,
   queryByLabelText,
   getByLabelText,
