@@ -180,6 +180,16 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "tdeschryver",
+      "name": "Tim Deschryver",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/28659384?v=4",
+      "profile": "https://github.com/tdeschryver",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ]
 }
