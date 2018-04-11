@@ -635,7 +635,7 @@ I'm not aware of any! Please feel free to make a pull request to add any here.
 > [The more your tests resemble the way your software is used, the more confidence they can give you.][guiding-principle]
 
 We try to only expose methods and utilities that encourage you to write tests
-that closely resemble how your react components are used.
+that closely resemble how your web pages are used.
 
 Utilities are included in this project based on the following guiding
 principles:
