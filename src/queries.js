@@ -62,8 +62,6 @@ function queryByAttribute(attribute, container, text) {
 const queryByPlaceholderText = queryByAttribute.bind(null, 'placeholder')
 const queryByTestId = queryByAttribute.bind(null, 'data-testid')
 
-// this is just a utility and not an exposed query.
-// There are no plans to expose this.
 function getText(node) {
   return Array.from(node.childNodes)
     .filter(
@@ -71,6 +69,8 @@ function getText(node) {
     )
     .map(c => c.textContent)
     .join(' ')
+    .trim()
+    .replace(/\s+/g, ' ')
 }
 
 // getters
@@ -171,6 +171,7 @@ export {
   queryByPlaceholderText,
   getByPlaceholderText,
   queryByText,
+  getText,
   getByText,
   queryByLabelText,
   getByLabelText,
