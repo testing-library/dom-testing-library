@@ -1,4 +1,4 @@
-function getText(node) {
+function getNodeText(node) {
   return Array.from(node.childNodes)
     .filter(
       child => child.nodeType === Node.TEXT_NODE && Boolean(child.textContent),
@@ -9,4 +9,4 @@ function getText(node) {
     .replace(/\s+/g, ' ')
 }
 
-export {getText}
+export {getNodeText}

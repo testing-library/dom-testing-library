@@ -1,6 +1,6 @@
 import prettyFormat from 'pretty-format'
 import {matches} from './matches'
-import {getText} from './get-text'
+import {getNodeText} from './get-node-text'
 
 const {DOMElement, DOMCollection} = prettyFormat.plugins
 
@@ -45,7 +45,7 @@ function queryByLabelText(container, text, {selector = '*'} = {}) {
 function queryByText(container, text, {selector = '*'} = {}) {
   return (
     Array.from(container.querySelectorAll(selector)).find(node =>
-      matches(getText(node), node, text),
+      matches(getNodeText(node), node, text),
     ) || null
   )
 }
