@@ -48,6 +48,14 @@ test('can get elements by matching their text content', () => {
   expect(queryByText('Step 1 of 4')).toBeInTheDOM()
 })
 
+test('matches case with RegExp matcher', () => {
+  const {queryByText} = render(`
+    <span>STEP 1 of 4</span>
+  `)
+  expect(queryByText(/STEP 1 of 4/)).toBeInTheDOM()
+  expect(queryByText(/Step 1 of 4/)).not.toBeInTheDOM()
+})
+
 test('get can get form controls by label text', () => {
   const {getByLabelText} = render(`
     <div>
