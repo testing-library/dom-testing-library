@@ -2,7 +2,7 @@ import prettyFormat from 'pretty-format'
 
 const {DOMElement, DOMCollection} = prettyFormat.plugins
 
-function prettyDOM(htmlElement, maxLength = undefined) {
+function prettyDOM(htmlElement, maxLength) {
   const debugContent = prettyFormat(htmlElement, {
     plugins: [DOMElement, DOMCollection],
     printFunctionName: false,
