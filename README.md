@@ -85,6 +85,7 @@ when a real user uses it.
 * [`query` APIs](#query-apis)
 * [`bindElementToQueries`](#bindelementtoqueries)
 * [Debugging](#debugging)
+  * [`prettyDOM`](#prettydom)
 * [Implementations](#implementations)
 * [FAQ](#faq)
 * [Other Solutions](#other-solutions)
@@ -529,6 +530,34 @@ DEBUG_PRINT_LIMIT=10000 npm test
 
 This works on macOS/linux, you'll need to do something else for windows. If you'd
 like a solution that works for both, see [`cross-env`](https://www.npmjs.com/package/cross-env)
+
+### `prettyDOM`
+
+This helper function can be used to print out readable representation of the DOM
+tree of a node. This can be helpful for instance when debugging tests.
+
+It is defined as:
+
+```typescript
+function prettyDOM(node: HTMLElement, maxLength?: number): string
+```
+
+It receives the root node to print out, and an optional extra argument to limit
+the size of the resulting string, for cases when it becomes too large.
+
+This function is usually used alongside `console.log` to temporarily print out
+DOM trees during tests for debugging purposes:
+
+```javascript
+const div = document.createElement('div')
+div.innerHTML = '<div><h1>Hello World</h1></div>'
+console.log(prettyDOM(div))
+// <div>
+//   <h1>Hello World</h1>
+// </div>
+```
+
+This function is what also powers [the automatic debugging output described above](#debugging).
 
 ## Implementations
 
