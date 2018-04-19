@@ -2,6 +2,10 @@ import {matches} from './matches'
 import {getNodeText} from './get-node-text'
 import {prettyDOM} from './pretty-dom'
 
+function debugDOM(htmlElement) {
+  return prettyDOM(htmlElement, process.env.DEBUG_PRINT_LIMIT || 7000)
+}
+
 // Here are the queries for the library.
 // The queries here should only be things that are accessible to both users who are using a screen reader
 // and those who are not using a screen reader (with the exception of the data-testid attribute query).
@@ -72,7 +76,7 @@ function getByTestId(container, id, ...rest) {
   const el = queryByTestId(container, id, ...rest)
   if (!el) {
     throw new Error(
-      `Unable to find an element by: [data-testid="${id}"] \n\n${prettyDOM(
+      `Unable to find an element by: [data-testid="${id}"] \n\n${debugDOM(
         container,
       )}`,
     )
@@ -84,7 +88,7 @@ function getByPlaceholderText(container, text, ...rest) {
   const el = queryByPlaceholderText(container, text, ...rest)
   if (!el) {
     throw new Error(
-      `Unable to find an element with the placeholder text of: ${text} \n\n${prettyDOM(
+      `Unable to find an element with the placeholder text of: ${text} \n\n${debugDOM(
         container,
       )}`,
     )
@@ -98,13 +102,13 @@ function getByLabelText(container, text, ...rest) {
     const label = queryLabelByText(container, text)
     if (label) {
       throw new Error(
-        `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly. \n\n${prettyDOM(
+        `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly. \n\n${debugDOM(
           container,
         )}`,
       )
     } else {
       throw new Error(
-        `Unable to find a label with the text of: ${text} \n\n${prettyDOM(
+        `Unable to find a label with the text of: ${text} \n\n${debugDOM(
           container,
         )}`,
       )
@@ -117,7 +121,7 @@ function getByText(container, text, ...rest) {
   const el = queryByText(container, text, ...rest)
   if (!el) {
     throw new Error(
-      `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible. \n\n${prettyDOM(
+      `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible. \n\n${debugDOM(
         container,
       )}`,
     )
@@ -137,7 +141,7 @@ function getByAltText(container, alt) {
   const el = queryByAltText(container, alt)
   if (!el) {
     throw new Error(
-      `Unable to find an element with the alt text: ${alt} \n\n${prettyDOM(
+      `Unable to find an element with the alt text: ${alt} \n\n${debugDOM(
         container,
       )}`,
     )

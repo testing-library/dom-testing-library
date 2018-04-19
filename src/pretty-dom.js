@@ -2,21 +2,20 @@ import prettyFormat from 'pretty-format'
 
 const {DOMElement, DOMCollection} = prettyFormat.plugins
 
-function prettyDOM(htmlElement) {
+function prettyDOM(htmlElement, maxLength = undefined) {
   const debugContent = prettyFormat(htmlElement, {
     plugins: [DOMElement, DOMCollection],
     printFunctionName: false,
     highlight: true,
   })
-  const maxLength = process.env.DEBUG_PRINT_LIMIT || 7000
-  return htmlElement.outerHTML.length > maxLength
+  return maxLength !== undefined && htmlElement.outerHTML.length > maxLength
     ? `${debugContent.slice(0, maxLength)}...`
     : debugContent
 }
 
-function logDOM(htmlElement) {
+function logDOM(htmlElement, maxLength = undefined) {
   // eslint-disable-next-line no-console
-  console.log(prettyDOM(htmlElement))
+  console.log(prettyDOM(htmlElement, maxLength))
 }
 
 export {prettyDOM, logDOM}
