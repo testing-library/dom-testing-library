@@ -13,9 +13,4 @@ function prettyDOM(htmlElement, maxLength = undefined) {
     : debugContent
 }
 
-function logDOM(htmlElement, maxLength = undefined) {
-  // eslint-disable-next-line no-console
-  console.log(prettyDOM(htmlElement, maxLength))
-}
-
-export {prettyDOM, logDOM}
+export {prettyDOM}
