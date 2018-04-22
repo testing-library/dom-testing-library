@@ -117,6 +117,27 @@ test('get element by its alt text', () => {
   expect(getByAltText(/fin.*nem.*poster$/i).src).toBe('/finding-nemo.png')
 })
 
+test('getAll* matchers return an array', () => {
+  const {getAllByAltText, getAllByTestId} = render(`
+    <div>
+      <img
+        data-testid="poster"
+        alt="finding nemo poster" 
+        src="/finding-nemo.png" />
+      <img
+        data-testid="poster"
+        alt="finding dory poster" 
+        src="/finding-dory.png" />
+      <img
+        data-testid="poster"
+        alt="jumanji poster" 
+        src="/jumanji.png" />
+    </div>,
+  `)
+  expect(getAllByAltText(/finding.*poster$/i)).toHaveLength(2)
+  expect(getAllByTestId('poster')).toHaveLength(3)
+})
+
 test('using jest helpers to assert element states', () => {
   const {queryByTestId} = render(`<span data-testid="count-value">2</span>`)
 

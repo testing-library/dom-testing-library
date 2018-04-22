@@ -64,8 +64,19 @@ function queryByAttribute(attribute, container, text) {
   )
 }
 
+// this is just a utility and not an exposed query.
+// There are no plans to expose this.
+function queryAllByAttribute(attribute, container, text) {
+  return (
+    Array.from(container.querySelectorAll(`[${attribute}]`)).filter(node =>
+      matches(node.getAttribute(attribute), node, text),
+    ) || null
+  )
+}
+
 const queryByPlaceholderText = queryByAttribute.bind(null, 'placeholder')
 const queryByTestId = queryByAttribute.bind(null, 'data-testid')
+const queryAllByTestId = queryAllByAttribute.bind(null, 'data-testid')
 
 // getters
 // the reason we're not dynamically generating these functions that look so similar:
@@ -82,6 +93,11 @@ function getByTestId(container, id, ...rest) {
     )
   }
   return el
+}
+
+function getAllByTestId(container, id, ...rest) {
+  const matched = queryAllByTestId(container, id, ...rest)
+  return matched
 }
 
 function getByPlaceholderText(container, text, ...rest) {
@@ -137,6 +153,14 @@ function queryByAltText(container, alt) {
   )
 }
 
+function queryAllByAltText(container, alt) {
+  return (
+    Array.from(container.querySelectorAll('img,input,area')).filter(node =>
+      matches(node.getAttribute('alt'), node, alt),
+    ) || null
+  )
+}
+
 function getByAltText(container, alt) {
   const el = queryByAltText(container, alt)
   if (!el) {
@@ -149,6 +173,11 @@ function getByAltText(container, alt) {
   return el
 }
 
+function getAllByAltText(container, alt) {
+  const matched = queryAllByAltText(container, alt)
+  return matched
+}
+
 export {
   queryByPlaceholderText,
   getByPlaceholderText,
@@ -157,9 +186,13 @@ export {
   queryByLabelText,
   getByLabelText,
   queryByAltText,
+  queryAllByAltText,
   getByAltText,
+  getAllByAltText,
   queryByTestId,
+  queryAllByTestId,
   getByTestId,
+  getAllByTestId,
 }
 
 /* eslint complexity:["error", 14] */
