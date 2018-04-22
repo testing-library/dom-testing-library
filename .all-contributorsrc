@@ -191,6 +191,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "alexkrolick",
+      "name": "Alex Krolick",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1571667?v=4",
+      "profile": "https://alexkrolick.com",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
