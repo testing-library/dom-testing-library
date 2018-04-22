@@ -135,7 +135,11 @@ test('getAll* matchers return an array', () => {
     </div>,
   `)
   expect(getAllByAltText(/finding.*poster$/i)).toHaveLength(2)
+  expect(getAllByAltText('jumanji')).toHaveLength(1)
   expect(getAllByTestId('poster')).toHaveLength(3)
+
+  expect(getAllByTestId('uhoh')).toHaveLength(0)
+  expect(getAllByAltText('nope')).toHaveLength(0)
 })
 
 test('using jest helpers to assert element states', () => {
