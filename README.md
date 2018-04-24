@@ -83,6 +83,7 @@ when a real user uses it.
   * [Using other assertion libraries](#using-other-assertion-libraries)
 * [`TextMatch`](#textmatch)
 * [`query` APIs](#query-apis)
+* [`queryAll` and `getAll` APIs](#queryall-and-getall-apis)
 * [`bindElementToQueries`](#bindelementtoqueries)
 * [Debugging](#debugging)
   * [`prettyDOM`](#prettydom)
@@ -105,6 +106,8 @@ npm install --save-dev dom-testing-library
 ```
 
 ## Usage
+
+Note: each of the `get` APIs below have a matching [`getAll`](#queryall-and-getall-apis) API that returns all elements instead of just the first one, and a [`query`](#query-apis) API that returns `null` instead of throwing an error.
 
 ```javascript
 // src/__tests__/example.js
@@ -487,6 +490,16 @@ const submitButton = queryByText(container, 'submit')
 expect(submitButton).toBeNull() // it doesn't exist
 // or if you're using the custom matchers:
 expect(submitButton).not.toBeInTheDOM()
+```
+
+## `queryAll` and `getAll` APIs
+
+Each of the `query` APIs have a corresponsing `queryAll` version that always returns an Array of matching nodes. `getAll` APIs are included for completeness; however, they are just aliases for the `queryAll` methods and do not throw errors like the `get` methods.
+
+```javascript
+const submitButtons = queryAllByText(container, 'submit')
+expect(submitButtons).toHaveLength(3) // expect 3 elements
+expect(submitButtons[0]).toBeInTheDOM()
 ```
 
 ## `bindElementToQueries`
