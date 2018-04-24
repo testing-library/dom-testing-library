@@ -117,6 +117,78 @@ test('get element by its alt text', () => {
   expect(getByAltText(/fin.*nem.*poster$/i).src).toBe('/finding-nemo.png')
 })
 
+test('getAll* matchers return an array', () => {
+  const {
+    getAllByAltText,
+    getAllByTestId,
+    getAllByLabelText,
+    getAllByPlaceholderText,
+    getAllByText,
+  } = render(`
+    <div>
+      <img
+        data-testid="poster"
+        alt="finding nemo poster" 
+        src="/finding-nemo.png" />
+      <img
+        data-testid="poster"
+        alt="finding dory poster" 
+        src="/finding-dory.png" />
+      <img
+        data-testid="poster"
+        alt="jumanji poster" 
+        src="/jumanji.png" />
+      <p>Where to next?</p>
+      <label for="username">User Name</label>
+      <input id="username" placeholder="Dwayne 'The Rock' Johnson" />
+    </div>,
+  `)
+  expect(getAllByAltText(/finding.*poster$/i)).toHaveLength(2)
+  expect(getAllByAltText('jumanji')).toHaveLength(1)
+  expect(getAllByTestId('poster')).toHaveLength(3)
+  expect(getAllByPlaceholderText(/The Rock/)).toHaveLength(1)
+  expect(getAllByLabelText('User Name')).toHaveLength(1)
+  expect(getAllByText('where')).toHaveLength(1)
+})
+
+test('getAll* matchers throw for 0 matches', () => {
+  const {
+    getAllByAltText,
+    getAllByTestId,
+    getAllByLabelText,
+    getAllByPlaceholderText,
+    getAllByText,
+  } = render(`
+    <div>
+      <label>No Matches Please</label>
+    </div>,
+  `)
+  expect(() => getAllByTestId('nope')).toThrow()
+  expect(() => getAllByAltText('nope')).toThrow()
+  expect(() => getAllByLabelText('nope')).toThrow()
+  expect(() => getAllByLabelText('no matches please')).toThrow()
+  expect(() => getAllByPlaceholderText('nope')).toThrow()
+  expect(() => getAllByText('nope')).toThrow()
+})
+
+test('queryAll* matchers return an array for 0 matches', () => {
+  const {
+    queryAllByAltText,
+    queryAllByTestId,
+    queryAllByLabelText,
+    queryAllByPlaceholderText,
+    queryAllByText,
+  } = render(`
+    <div>
+    </div>,
+  `)
+  expect(queryAllByTestId('nope')).toHaveLength(0)
+  expect(queryAllByAltText('nope')).toHaveLength(0)
+  expect(queryAllByLabelText('nope')).toHaveLength(0)
+  expect(queryAllByPlaceholderText('nope')).toHaveLength(0)
+  expect(queryAllByText('nope')).toHaveLength(0)
+})
+
 test('using jest helpers to assert element states', () => {
   const {queryByTestId} = render(`<span data-testid="count-value">2</span>`)
 
