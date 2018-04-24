@@ -91,76 +91,6 @@ const queryAllByPlaceholderText = queryAllByAttribute.bind(null, 'placeholder')
 const queryByTestId = queryByAttribute.bind(null, 'data-testid')
 const queryAllByTestId = queryAllByAttribute.bind(null, 'data-testid')
 
-// getters
-// the reason we're not dynamically generating these functions that look so similar:
-// 1. The error messages are specific to each one and depend on arguments
-// 2. The stack trace will look better because it'll have a helpful method name.
-
-function getByTestId(container, id, ...rest) {
-  const el = queryByTestId(container, id, ...rest)
-  if (!el) {
-    throw new Error(
-      `Unable to find an element by: [data-testid="${id}"] \n\n${debugDOM(
-        container,
-      )}`,
-    )
-  }
-  return el
-}
-
-const getAllByTestId = queryAllByTestId
-
-function getByPlaceholderText(container, text, ...rest) {
-  const el = queryByPlaceholderText(container, text, ...rest)
-  if (!el) {
-    throw new Error(
-      `Unable to find an element with the placeholder text of: ${text} \n\n${debugDOM(
-        container,
-      )}`,
-    )
-  }
-  return el
-}
-
-const getAllByPlaceholderText = queryAllByPlaceholderText
-
-function getByLabelText(container, text, ...rest) {
-  const el = queryByLabelText(container, text, ...rest)
-  if (!el) {
-    const label = queryLabelByText(container, text)
-    if (label) {
-      throw new Error(
-        `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly. \n\n${debugDOM(
-          container,
-        )}`,
-      )
-    } else {
-      throw new Error(
-        `Unable to find a label with the text of: ${text} \n\n${debugDOM(
-          container,
-        )}`,
-      )
-    }
-  }
-  return el
-}
-
-const getAllByLabelText = queryAllByLabelText
-
-function getByText(container, text, ...rest) {
-  const el = queryByText(container, text, ...rest)
-  if (!el) {
-    throw new Error(
-      `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible. \n\n${debugDOM(
-        container,
-      )}`,
-    )
-  }
-  return el
-}
-
-const getAllByText = queryAllByText
-
 function queryAllByAltText(container, alt) {
   return Array.from(container.querySelectorAll('img,input,area')).filter(node =>
     matches(node.getAttribute('alt'), node, alt),
@@ -171,19 +101,148 @@ function queryByAltText(container, alt) {
   return firstResultOrNull(queryAllByAltText, container, alt)
 }
 
-function getByAltText(container, alt) {
-  const el = queryByAltText(container, alt)
+// getters
+// the reason we're not dynamically generating these functions that look so similar:
+// 1. The error messages are specific to each one and depend on arguments
+// 2. The stack trace will look better because it'll have a helpful method name.
+
+function noMatchingTestId(container, id) {
+  return new Error(
+    `Unable to find an element by: [data-testid="${id}"] \n\n${debugDOM(
+      container,
+    )}`,
+  )
+}
+
+function getByTestId(container, id, ...rest) {
+  const el = queryByTestId(container, id, ...rest)
   if (!el) {
-    throw new Error(
-      `Unable to find an element with the alt text: ${alt} \n\n${debugDOM(
-        container,
-      )}`,
-    )
+    throw noMatchingTestId(container, id)
   }
   return el
 }
 
-const getAllByAltText = queryAllByAltText
+function getAllByTestId(container, id, ...rest) {
+  const els = queryAllByTestId(container, id, ...rest)
+  if (!els.length) {
+    throw noMatchingTestId(container, id)
+  }
+  return els
+}
+
+function noMatchingPlaceholder(container, text) {
+  return new Error(
+    `Unable to find an element with the placeholder text of: ${text} \n\n${debugDOM(
+      container,
+    )}`,
+  )
+}
+
+function getByPlaceholderText(container, text, ...rest) {
+  const el = queryByPlaceholderText(container, text, ...rest)
+  if (!el) {
+    throw noMatchingPlaceholder(container, text)
+  }
+  return el
+}
+
+function getAllByPlaceholderText(container, text, ...rest) {
+  const els = queryAllByPlaceholderText(container, text, ...rest)
+  if (!els.length) {
+    throw noMatchingPlaceholder(container, text)
+  }
+  return els
+}
+
+function noMatchingFormControl(container, text) {
+  return new Error(
+    `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly. \n\n${debugDOM(
+      container,
+    )}`,
+  )
+}
+
+function noMatchingLabel(container, text) {
+  return new Error(
+    `Unable to find a label with the text of: ${text} \n\n${debugDOM(
+      container,
+    )}`,
+  )
+}
+
+function getByLabelText(container, text, ...rest) {
+  const el = queryByLabelText(container, text, ...rest)
+  if (!el) {
+    const label = queryLabelByText(container, text)
+    if (label) {
+      throw noMatchingFormControl(container, text)
+    } else {
+      throw noMatchingLabel(container, text)
+    }
+  }
+  return el
+}
+
+function getAllByLabelText(container, text, ...rest) {
+  const els = queryAllByLabelText(container, text, ...rest)
+  if (!els.length) {
+    const labels = queryAllLabelByText(container, text)
+    if (labels.length) {
+      throw noMatchingFormControl(container, text)
+    } else {
+      throw noMatchingLabel(container, text)
+    }
+  }
+  return els
+}
+
+function noMatchingText(container, text) {
+  return new Error(
+    `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible. \n\n${debugDOM(
+      container,
+    )}`,
+  )
+}
+
+function getByText(container, text, ...rest) {
+  const el = queryByText(container, text, ...rest)
+  if (!el) {
+    throw noMatchingText(container, text)
+  }
+  return el
+}
+
+function getAllByText(container, text, ...rest) {
+  const els = queryAllByText(container, text, ...rest)
+  if (!els.length) {
+    throw noMatchingText(container, text)
+  }
+  return els
+}
+
+function noMatchingAltText(container, alt) {
+  return new Error(
+    `Unable to find an element with the alt text: ${alt} \n\n${debugDOM(
+      container,
+    )}`,
+  )
+}
+
+function getByAltText(container, alt) {
+  const el = queryByAltText(container, alt)
+  if (!el) {
+    throw noMatchingAltText(container, alt)
+  }
+  return el
+}
+
+function getAllByAltText(container, alt) {
+  const els = queryAllByAltText(container, alt)
+  if (!els.length) {
+    throw noMatchingAltText(container, alt)
+  }
+  return els
+}
 
 export {
   queryByPlaceholderText,

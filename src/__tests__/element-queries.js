@@ -151,7 +151,7 @@ test('getAll* matchers return an array', () => {
   expect(getAllByText('where')).toHaveLength(1)
 })
 
-test('getAll* matchers return an array for 0 matches', () => {
+test('getAll* matchers throw for 0 matches', () => {
   const {
     getAllByAltText,
     getAllByTestId,
@@ -160,13 +160,33 @@ test('getAll* matchers return an array for 0 matches', () => {
     getAllByText,
   } = render(`
     <div>
+      <label>No Matches Please</label>
     </div>,
   `)
-  expect(getAllByTestId('nope')).toHaveLength(0)
-  expect(getAllByAltText('nope')).toHaveLength(0)
-  expect(getAllByLabelText('nope')).toHaveLength(0)
-  expect(getAllByPlaceholderText('nope')).toHaveLength(0)
-  expect(getAllByText('nope')).toHaveLength(0)
+  expect(() => getAllByTestId('nope')).toThrow()
+  expect(() => getAllByAltText('nope')).toThrow()
+  expect(() => getAllByLabelText('nope')).toThrow()
+  expect(() => getAllByLabelText('no matches please')).toThrow()
+  expect(() => getAllByPlaceholderText('nope')).toThrow()
+  expect(() => getAllByText('nope')).toThrow()
+})
+
+test('queryAll* matchers return an array for 0 matches', () => {
+  const {
+    queryAllByAltText,
+    queryAllByTestId,
+    queryAllByLabelText,
+    queryAllByPlaceholderText,
+    queryAllByText,
+  } = render(`
+    <div>
+    </div>,
+  `)
+  expect(queryAllByTestId('nope')).toHaveLength(0)
+  expect(queryAllByAltText('nope')).toHaveLength(0)
+  expect(queryAllByLabelText('nope')).toHaveLength(0)
+  expect(queryAllByPlaceholderText('nope')).toHaveLength(0)
+  expect(queryAllByText('nope')).toHaveLength(0)
 })
 
 test('using jest helpers to assert element states', () => {
