@@ -118,7 +118,13 @@ test('get element by its alt text', () => {
 })
 
 test('getAll* matchers return an array', () => {
-  const {getAllByAltText, getAllByTestId} = render(`
+  const {
+    getAllByAltText,
+    getAllByTestId,
+    getAllByLabelText,
+    getAllByPlaceholderText,
+    getAllByText,
+  } = render(`
     <div>
       <img
         data-testid="poster"
@@ -132,14 +138,35 @@ test('getAll* matchers return an array', () => {
         data-testid="poster"
         alt="jumanji poster" 
         src="/jumanji.png" />
+      <p>Where to next?</p>
+      <label for="username">User Name</label>
+      <input id="username" placeholder="Dwayne 'The Rock' Johnson" />
     </div>,
   `)
   expect(getAllByAltText(/finding.*poster$/i)).toHaveLength(2)
   expect(getAllByAltText('jumanji')).toHaveLength(1)
   expect(getAllByTestId('poster')).toHaveLength(3)
+  expect(getAllByPlaceholderText(/The Rock/)).toHaveLength(1)
+  expect(getAllByLabelText('User Name')).toHaveLength(1)
+  expect(getAllByText('where')).toHaveLength(1)
+})
 
-  expect(getAllByTestId('uhoh')).toHaveLength(0)
+test('getAll* matchers return an array for 0 matches', () => {
+  const {
+    getAllByAltText,
+    getAllByTestId,
+    getAllByLabelText,
+    getAllByPlaceholderText,
+    getAllByText,
+  } = render(`
+    <div>
+    </div>,
+  `)
+  expect(getAllByTestId('nope')).toHaveLength(0)
   expect(getAllByAltText('nope')).toHaveLength(0)
+  expect(getAllByLabelText('nope')).toHaveLength(0)
+  expect(getAllByPlaceholderText('nope')).toHaveLength(0)
+  expect(getAllByText('nope')).toHaveLength(0)
 })
 
 test('using jest helpers to assert element states', () => {
