@@ -12,4 +12,17 @@ function matches(textToMatch, node, matcher) {
   }
 }
 
-export {matches}
+function matchesExact(textToMatch, node, matcher) {
+  if (typeof textToMatch !== 'string') {
+    return false
+  }
+  if (typeof matcher === 'string') {
+    return textToMatch === matcher
+  } else if (typeof matcher === 'function') {
+    return matcher(textToMatch, node)
+  } else {
+    return matcher.test(textToMatch)
+  }
+}
+
+export {matches, matchesExact}

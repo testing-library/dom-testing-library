@@ -117,6 +117,18 @@ test('get element by its alt text', () => {
   expect(getByAltText(/fin.*nem.*poster$/i).src).toBe('/finding-nemo.png')
 })
 
+test('can get elements by data-testid attribute', () => {
+  const {queryByTestId} = render(`<div data-testid="firstName"></div>`)
+  expect(queryByTestId('firstName')).toBeInTheDOM()
+  expect(queryByTestId(/first/)).toBeInTheDOM()
+  expect(queryByTestId(testid => testid === 'firstName')).toBeInTheDOM()
+  // match should be exact, case-sensitive
+  expect(queryByTestId('firstname')).not.toBeInTheDOM()
+  expect(queryByTestId('first')).not.toBeInTheDOM()
+  expect(queryByTestId('firstNamePlusMore')).not.toBeInTheDOM()
+  expect(queryByTestId('first-name')).not.toBeInTheDOM()
+})
+
 test('getAll* matchers return an array', () => {
   const {
     getAllByAltText,
@@ -161,9 +173,12 @@ test('getAll* matchers throw for 0 matches', () => {
   } = render(`
     <div>
       <label>No Matches Please</label>
+      <div data-testid="ABC"></div>
+      <div data-testid="a-b-c"></div>
     </div>,
   `)
   expect(() => getAllByTestId('nope')).toThrow()
+  expect(() => getAllByTestId('abc')).toThrow()
   expect(() => getAllByAltText('nope')).toThrow()
   expect(() => getAllByLabelText('nope')).toThrow()
   expect(() => getAllByLabelText('no matches please')).toThrow()

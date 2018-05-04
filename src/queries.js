@@ -1,4 +1,4 @@
-import {matches} from './matches'
+import {matches, matchesExact} from './matches'
 import {getNodeText} from './get-node-text'
 import {prettyDOM} from './pretty-dom'
 
@@ -70,22 +70,25 @@ function queryByText(container, text, opts) {
 
 // this is just a utility and not an exposed query.
 // There are no plans to expose this.
-function queryAllByAttribute(attribute, container, text) {
+function queryAllByAttribute(attribute, container, text, {exact = false} = {}) {
+  const matcher = exact ? matchesExact : matches
   return Array.from(container.querySelectorAll(`[${attribute}]`)).filter(node =>
-    matches(node.getAttribute(attribute), node, text),
+    matcher(node.getAttribute(attribute), node, text),
   )
 }
 
 // this is just a utility and not an exposed query.
 // There are no plans to expose this.
-function queryByAttribute(attribute, container, text) {
-  return firstResultOrNull(queryAllByAttribute, attribute, container, text)
+function queryByAttribute(...args) {
+  return firstResultOrNull(queryAllByAttribute, ...args)
 }
 
 const queryByPlaceholderText = queryByAttribute.bind(null, 'placeholder')
 const queryAllByPlaceholderText = queryAllByAttribute.bind(null, 'placeholder')
-const queryByTestId = queryByAttribute.bind(null, 'data-testid')
-const queryAllByTestId = queryAllByAttribute.bind(null, 'data-testid')
+const queryByTestId = (...args) =>
+  queryByAttribute('data-testid', ...args, {exact: true})
+const queryAllByTestId = (...args) =>
+  queryAllByAttribute('data-testid', ...args, {exact: true})
 
 function queryAllByAltText(container, alt) {
   return Array.from(container.querySelectorAll('img,input,area')).filter(node =>

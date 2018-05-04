@@ -76,12 +76,14 @@ when a real user uses it.
   * [`getByPlaceholderText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbyplaceholdertextcontainer-htmlelement-text-textmatch-htmlelement)
   * [`getByText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbytextcontainer-htmlelement-text-textmatch-htmlelement)
   * [`getByAltText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbyalttextcontainer-htmlelement-text-textmatch-htmlelement)
+  * [`getByTestId(container: HTMLElement, text: ExactTextMatch): HTMLElement`](#getbytestidcontainer-htmlelement-text-exacttextmatch-htmlelement)
   * [`wait`](#wait)
   * [`waitForElement`](#waitforelement)
   * [`fireEvent(node: HTMLElement, event: Event)`](#fireeventnode-htmlelement-event-event)
 * [Custom Jest Matchers](#custom-jest-matchers)
   * [Using other assertion libraries](#using-other-assertion-libraries)
 * [`TextMatch`](#textmatch)
+  * [ExactTextMatch](#exacttextmatch)
 * [`query` APIs](#query-apis)
 * [`queryAll` and `getAll` APIs](#queryall-and-getall-apis)
 * [`bindElementToQueries`](#bindelementtoqueries)
@@ -248,10 +250,10 @@ and [`<area>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area)
 const incrediblesPosterImg = getByAltText(container, /incredibles.*poster$/i)
 ```
 
-#### `getByTestId(container: HTMLElement, text: TextMatch): HTMLElement`
+### `getByTestId(container: HTMLElement, text: ExactTextMatch): HTMLElement`
 
 A shortcut to `` container.querySelector(`[data-testid="${yourId}"]`) `` (and it
-also accepts a [`TextMatch`](#textmatch)).
+also accepts an [`ExactTextMatch`](#exacttextmatch)).
 
 ```javascript
 // <input data-testid="username-input" />
@@ -475,6 +477,25 @@ getByText(container, /hello world/) // case-sensitive regex with different case
 getByText(container, (content, element) => {
   return element.tagName.toLowerCase() === 'span' && content.startsWith('Hello')
 })
+```
+
+### ExactTextMatch
+
+Some APIs use ExactTextMatch, which is the same as TextMatch but case-sensitive
+and does not match substrings; however, regexes and functions are also accepted
+for custom matching.
+
+```js
+// <button data-testid="submit-button">Go</button>
+
+// all of the following will find the button
+getByTestId(container, 'submit-button') // exact match
+getByTestId(container, /submit*/) // regex match
+getByTestId(container, content => content.startsWith('submit')) // function
+
+// all of the following will NOT find the button
+getByTestId(container, 'submit-') // no substrings
+getByTestId(container, 'Submit-Button') // case-sensitive
 ```
 
 ## `query` APIs
