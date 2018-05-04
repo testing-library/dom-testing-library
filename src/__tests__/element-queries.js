@@ -120,6 +120,8 @@ test('get element by its alt text', () => {
 test('can get elements by data-testid attribute', () => {
   const {queryByTestId} = render(`<div data-testid="firstName"></div>`)
   expect(queryByTestId('firstName')).toBeInTheDOM()
+  expect(queryByTestId(/first/)).toBeInTheDOM()
+  expect(queryByTestId(testid => testid === 'firstName')).toBeInTheDOM()
   // match should be exact, case-sensitive
   expect(queryByTestId('firstname')).not.toBeInTheDOM()
   expect(queryByTestId('first-name')).not.toBeInTheDOM()
