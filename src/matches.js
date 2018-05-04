@@ -17,7 +17,7 @@ function matchesExact(textToMatch, node, matcher) {
     return false
   }
   if (typeof matcher === 'string') {
-    return textToMatch.includes(matcher)
+    return textToMatch === matcher
   } else if (typeof matcher === 'function') {
     return matcher(textToMatch, node)
   } else {

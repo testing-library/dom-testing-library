@@ -19,6 +19,8 @@ test('matchesExact should only get exact matches', () => {
   expect(matchesExact(null, node, 'abc')).toBe(false)
   expect(matchesExact('', node, 'abc')).toBe(false)
   expect(matchesExact('ABC', node, 'abc')).toBe(false)
+  expect(matchesExact('ABC', node, 'A')).toBe(false)
+  expect(matchesExact('ABC', node, 'ABCD')).toBe(false)
   // should match
   expect(matchesExact('ABC', node, 'ABC')).toBe(true)
 })

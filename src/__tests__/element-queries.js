@@ -124,6 +124,8 @@ test('can get elements by data-testid attribute', () => {
   expect(queryByTestId(testid => testid === 'firstName')).toBeInTheDOM()
   // match should be exact, case-sensitive
   expect(queryByTestId('firstname')).not.toBeInTheDOM()
+  expect(queryByTestId('first')).not.toBeInTheDOM()
+  expect(queryByTestId('firstNamePlusMore')).not.toBeInTheDOM()
   expect(queryByTestId('first-name')).not.toBeInTheDOM()
 })
 
