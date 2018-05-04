@@ -76,6 +76,7 @@ when a real user uses it.
   * [`getByPlaceholderText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbyplaceholdertextcontainer-htmlelement-text-textmatch-htmlelement)
   * [`getByText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbytextcontainer-htmlelement-text-textmatch-htmlelement)
   * [`getByAltText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbyalttextcontainer-htmlelement-text-textmatch-htmlelement)
+  * [`getByTestId(container: HTMLElement, text: TextMatch): HTMLElement`](#getbytestidcontainer-htmlelement-text-textmatch-htmlelement)
   * [`wait`](#wait)
   * [`waitForElement`](#waitforelement)
   * [`fireEvent(node: HTMLElement, event: Event)`](#fireeventnode-htmlelement-event-event)
@@ -248,7 +249,7 @@ and [`<area>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area)
 const incrediblesPosterImg = getByAltText(container, /incredibles.*poster$/i)
 ```
 
-#### `getByTestId(container: HTMLElement, text: TextMatch): HTMLElement`
+### `getByTestId(container: HTMLElement, text: TextMatch): HTMLElement`
 
 A shortcut to `` container.querySelector(`[data-testid="${yourId}"]`) `` (and it
 also accepts a [`TextMatch`](#textmatch)).
