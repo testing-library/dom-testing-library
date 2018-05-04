@@ -485,7 +485,7 @@ Some APIs use ExactTextMatch, which is the same as TextMatch but case-sensitive
 and does not match substrings; however, regexes and functions are also accepted
 for custom matching.
 
-```
+```js
 // <button data-testid="submit-button">Go</button>
 
 // all of the following will find the button
