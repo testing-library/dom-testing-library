@@ -6,9 +6,17 @@ cases(
   'matches find case-sensitive full strings by default',
   ({dom, query, queryFn}) => {
     const queries = render(dom)
-    expect(queries[queryFn](query)).toHaveLength(1)
+
+    const queryString = query
+    const queryRegex = new RegExp(query)
+    const queryFunc = text => text === query
+
+    expect(queries[queryFn](queryString)).toHaveLength(1)
+    expect(queries[queryFn](queryRegex)).toHaveLength(1)
+    expect(queries[queryFn](queryFunc)).toHaveLength(1)
+
     expect(queries[queryFn](query.toUpperCase())).toHaveLength(0) // case
-    expect(queries[queryFn](query.slice(1))).toHaveLength(0) // substring
+    expect(queries[queryFn](query.slice(0, 1))).toHaveLength(0) // substring
   },
   {
     queryAllByTestId: {
@@ -31,15 +39,8 @@ cases(
       queryFn: `queryAllByPlaceholderText`,
     },
     queryAllByText: {
-      dom: `
-        <p>
-          Content
-          with
-          linebreaks
-          is
-          ok
-        </p>`,
-      query: `Content with linebreaks is ok`,
+      dom: `<p>Some content</p>`,
+      query: `Some content`,
       queryFn: `queryAllByText`,
     },
     queryAllByLabelText: {
@@ -123,7 +124,17 @@ cases(
   '{ exact } option toggles case-insensitive partial matches',
   ({dom, query, queryFn}) => {
     const queries = render(dom)
+
+    const queryString = query
+    const queryRegex = new RegExp(query)
+    const queryFunc = text => text === query
+
     expect(queries[queryFn](query)).toHaveLength(1)
+
+    expect(queries[queryFn](queryString, {exact: false})).toHaveLength(1)
+    expect(queries[queryFn](queryRegex, {exact: false})).toHaveLength(1)
+    expect(queries[queryFn](queryFunc, {exact: false})).toHaveLength(1)
+
     expect(queries[queryFn](query.split(' ')[0], {exact: false})).toHaveLength(
       1,
     )
