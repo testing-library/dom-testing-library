@@ -68,15 +68,11 @@ function queryByText(container, text, opts) {
   return firstResultOrNull(queryAllByText, container, text, opts)
 }
 
-function queryAllByTitle(container, title, {selector = '*'} = {}) {
-  return Array.from(container.querySelectorAll(selector)).filter(
-    el => el.title === title,
-  )
-}
+const queryAllByTitle = (...args) =>
+  queryAllByAttribute('title', ...args, {exact: true})
 
-function queryByTitle(container, title, opts) {
-  return firstResultOrNull(queryAllByTitle, container, title, opts)
-}
+const queryByTitle = (...args) =>
+  queryByAttribute('title', ...args, {exact: true})
 
 function getAllByTitle(container, title, ...rest) {
   const els = queryAllByTitle(container, title, ...rest)

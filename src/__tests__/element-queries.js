@@ -23,6 +23,7 @@ test('get throws a useful error message', () => {
     getByText,
     getByTestId,
     getByAltText,
+    getByTitle,
   } = render('<div />')
   expect(() => getByLabelText('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() =>
@@ -31,6 +32,7 @@ test('get throws a useful error message', () => {
   expect(() => getByText('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingSnapshot()
 })
 
 test('can get elements by matching their text content', () => {

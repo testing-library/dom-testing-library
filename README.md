@@ -76,6 +76,7 @@ when a real user uses it.
   * [`getByPlaceholderText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbyplaceholdertextcontainer-htmlelement-text-textmatch-htmlelement)
   * [`getByText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbytextcontainer-htmlelement-text-textmatch-htmlelement)
   * [`getByAltText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbyalttextcontainer-htmlelement-text-textmatch-htmlelement)
+  * [`getByTitle(container: HTMLElement, title: ExactTextMatch): HTMLElement`](#getbytitlecontainer-htmlelement-title-exacttextmatch-htmlelement)
   * [`getByTestId(container: HTMLElement, text: ExactTextMatch): HTMLElement`](#getbytestidcontainer-htmlelement-text-exacttextmatch-htmlelement)
   * [`wait`](#wait)
   * [`waitForElement`](#waitforelement)
@@ -248,6 +249,15 @@ and [`<area>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area)
 ```javascript
 // <img alt="Incredibles 2 Poster" src="/incredibles-2.png" />
 const incrediblesPosterImg = getByAltText(container, /incredibles.*poster$/i)
+```
+
+### `getByTitle(container: HTMLElement, title: ExactTextMatch): HTMLElement`
+
+This will return the element that has the matching `title` attribute.
+
+```javascript
+// <span title="Delete" id="2" />
+const deleteElement = getByTitle(container, 'Delete')
 ```
 
 ### `getByTestId(container: HTMLElement, text: ExactTextMatch): HTMLElement`

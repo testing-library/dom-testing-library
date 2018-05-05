@@ -40,6 +40,14 @@ exports[`get throws a useful error message 5`] = `
 [36m</div>[39m"
 `;
 
+exports[`get throws a useful error message 6`] = `
+"Unable to find an element with the title: LucyRicardo. 
+
+[36m<div>[39m
+  [36m<div />[39m
+[36m</div>[39m"
+`;
+
 exports[`label with no form control 1`] = `
 "Found a label with the text of: alone, however no form control was found associated to that label. Make sure you're using the \\"for\\" attribute or \\"aria-labelledby\\" attribute correctly. 
 
