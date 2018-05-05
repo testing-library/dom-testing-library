@@ -76,28 +76,6 @@ function queryByText(...args) {
   return firstResultOrNull(queryAllByText, ...args)
 }
 
-const queryAllByTitle = (...args) =>
-  queryAllByAttribute('title', ...args, {exact: true})
-
-const queryByTitle = (...args) =>
-  queryByAttribute('title', ...args, {exact: true})
-
-function getAllByTitle(container, title, ...rest) {
-  const els = queryAllByTitle(container, title, ...rest)
-  if (!els.length) {
-    throw new Error(
-      `Unable to find an element with the title: ${title}. \n\n${debugDOM(
-        container,
-      )}`,
-    )
-  }
-  return els
-}
-
-function getByTitle(...args) {
-  return firstResultOrNull(getAllByTitle, ...args)
-}
-
 // this is just a utility and not an exposed query.
 // There are no plans to expose this.
 function queryAllByAttribute(attribute, container, text, {exact = true} = {}) {
@@ -117,6 +95,8 @@ const queryByPlaceholderText = queryByAttribute.bind(null, 'placeholder')
 const queryAllByPlaceholderText = queryAllByAttribute.bind(null, 'placeholder')
 const queryByTestId = queryByAttribute.bind(null, 'data-testid')
 const queryAllByTestId = queryAllByAttribute.bind(null, 'data-testid')
+const queryByTitle = queryByAttribute.bind(null, 'title')
+const queryAllByTitle = queryAllByAttribute.bind(null, 'title')
 
 function queryAllByAltText(container, alt, {exact = true} = {}) {
   const matcher = exact ? matches : fuzzyMatches
@@ -148,6 +128,22 @@ function getAllByTestId(container, id, ...rest) {
 
 function getByTestId(...args) {
   return firstResultOrNull(getAllByTestId, ...args)
+}
+
+function getAllByTitle(container, title, ...rest) {
+  const els = queryAllByTitle(container, title, ...rest)
+  if (!els.length) {
+    throw new Error(
+      `Unable to find an element with the title: ${title}. \n\n${debugDOM(
+        container,
+      )}`,
+    )
+  }
+  return els
+}
+
+function getByTitle(...args) {
+  return firstResultOrNull(getAllByTitle, ...args)
 }
 
 function getAllByPlaceholderText(container, text, ...rest) {
