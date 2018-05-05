@@ -117,6 +117,19 @@ test('get element by its alt text', () => {
   expect(getByAltText(/fin.*nem.*poster$/i).src).toBe('/finding-nemo.png')
 })
 
+test('query/get element by its title', () => {
+  const {getByTitle, queryByTitle} = render(`
+    <div>
+        <span title="Ignore this" id="1"/>
+        <span title="Delete" id="2"/>
+        <span title="Ignore this as well" id="3"/>
+    </div>
+  `)
+
+  expect(getByTitle('Delete').id).toEqual('2')
+  expect(queryByTitle('Delete').id).toEqual('2')
+})
+
 test('can get elements by data-testid attribute', () => {
   const {queryByTestId} = render(`<div data-testid="firstName"></div>`)
   expect(queryByTestId('firstName')).toBeInTheDOM()
