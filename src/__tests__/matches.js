@@ -4,11 +4,21 @@ import {fuzzyMatches, matches} from '../'
 
 const node = null
 
+test('matches should accept regex', () => {
+  expect(matches('ABC', node, /ABC/)).toBe(true)
+  expect(fuzzyMatches('ABC', node, /ABC/)).toBe(true)
+})
+
+test('matches should accept functions', () => {
+  expect(matches('ABC', node, text => text === 'ABC')).toBe(true)
+  expect(fuzzyMatches('ABC', node, text => text === 'ABC')).toBe(true)
+})
+
 test('fuzzyMatches should get fuzzy matches', () => {
   // should not match
-  expect(matches(null, node, 'abc')).toBe(false)
-  expect(matches('', node, 'abc')).toBe(false)
-  expect(matches('ABC', node, 'ABCD')).toBe(false)
+  expect(fuzzyMatches(null, node, 'abc')).toBe(false)
+  expect(fuzzyMatches('', node, 'abc')).toBe(false)
+  expect(fuzzyMatches('ABC', node, 'ABCD')).toBe(false)
   // should match
   expect(fuzzyMatches('AB C', node, 'ab c')).toBe(true)
   expect(fuzzyMatches('AB C', node, 'AB C')).toBe(true)
