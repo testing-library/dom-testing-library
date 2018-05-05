@@ -91,7 +91,7 @@ function queryAllByAttribute(
   attribute,
   container,
   text,
-  {exact = true, collapseWhitespace = false, trim = true} = {},
+  {exact = true, collapseWhitespace = true, trim = true} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchOpts = {collapseWhitespace, trim}
@@ -116,7 +116,7 @@ const queryAllByTitle = queryAllByAttribute.bind(null, 'title')
 function queryAllByAltText(
   container,
   alt,
-  {exact = true, collapseWhitespace = false, trim = true} = {},
+  {exact = true, collapseWhitespace = true, trim = true} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchOpts = {collapseWhitespace, trim}

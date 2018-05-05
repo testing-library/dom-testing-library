@@ -21,7 +21,7 @@ function matches(
   textToMatch,
   node,
   matcher,
-  {collapseWhitespace = false, trim = true} = {},
+  {collapseWhitespace = true, trim = true} = {},
 ) {
   if (typeof textToMatch !== 'string') {
     return false

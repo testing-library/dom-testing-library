@@ -54,11 +54,13 @@ cases(
 )
 
 cases(
-  'attribute queries trim leading & trailing whitespace by default',
+  'queries trim leading, trailing & inner whitespace by default',
   ({dom, query, queryFn}) => {
     const queries = render(dom)
     expect(queries[queryFn](query)).toHaveLength(1)
-    expect(queries[queryFn](query, {trim: false})).toHaveLength(0)
+    expect(
+      queries[queryFn](query, {collapseWhitespace: false, trim: false}),
+    ).toHaveLength(0)
   },
   {
     queryAllByTestId: {
@@ -82,19 +84,6 @@ cases(
       query: /^Dwayne/,
       queryFn: `queryAllByPlaceholderText`,
     },
-  },
-)
-
-cases(
-  'content queries trim leading, trailing & inner whitespace by default',
-  ({dom, query, queryFn}) => {
-    const queries = render(dom)
-    expect(queries[queryFn](query)).toHaveLength(1)
-    expect(
-      queries[queryFn](query, {collapseWhitespace: false, trim: false}),
-    ).toHaveLength(0)
-  },
-  {
     queryAllByText: {
       dom: `
         <p>

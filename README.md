@@ -559,7 +559,7 @@ affect the precision of string matching:
   * In most cases using a regex instead of a string gives you more control over
     fuzzy matching and should be preferred over `{ exact: false }`.
 * `trim`: Defaults to `true`; trim leading and trailing whitespace.
-* `collapseWhitespace`: Defaults to `false` for attribute queries and `true` for content queries (i.e., `queryByLabelText`, `queryByText`). Collapses inner whitespace (newlines, tabs, repeated spaces) into a single space.
+* `collapseWhitespace`: Defaults to `true`. Collapses inner whitespace (newlines, tabs, repeated spaces) into a single space.
 
 ### TextMatch Examples
 
