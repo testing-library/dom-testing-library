@@ -314,14 +314,14 @@ const deleteElement = getByTitle(container, 'Delete')
 ```typescript
 getByTestId(
   container: HTMLElement,
-  text: ExactTextMatch,
+  text: TextMatch,
   options?: {
     exact?: boolean = true,
   }): HTMLElement`
 ```
 
 A shortcut to `` container.querySelector(`[data-testid="${yourId}"]`) `` (and it
-also accepts an [`ExactTextMatch`](#exacttextmatch)).
+also accepts a [`TextMatch`](#textmatch)).
 
 ```javascript
 // <input data-testid="username-input" />
