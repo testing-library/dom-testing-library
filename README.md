@@ -76,6 +76,7 @@ when a real user uses it.
   * [`getByPlaceholderText`](#getbyplaceholdertext)
   * [`getByText`](#getbytext)
   * [`getByAltText`](#getbyalttext)
+  * [`getByTitle`](#getbytitle)
   * [`getByTestId`](#getbytestid)
   * [`wait`](#wait)
   * [`waitForElement`](#waitforelement)
@@ -302,7 +303,7 @@ getByTitle(
   }): HTMLElement
 ```
 
-This will return the element that has the matching `title` attribute.
+Returns the element that has the matching `title` attribute.
 
 ```javascript
 // <span title="Delete" id="2" />
