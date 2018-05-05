@@ -1,4 +1,4 @@
-import {matches, matchesExact} from './matches'
+import {fuzzyMatches, matches} from './matches'
 import {getNodeText} from './get-node-text'
 import {prettyDOM} from './pretty-dom'
 
@@ -16,14 +16,20 @@ function firstResultOrNull(queryFunction, ...args) {
   return result[0]
 }
 
-function queryAllLabelsByText(container, text) {
+function queryAllLabelsByText(container, text, {exact = true} = {}) {
+  const matcher = exact ? matches : fuzzyMatches
+  const COLLAPSE_WHITESPACE = true // a little more fuzzy than other queries
   return Array.from(container.querySelectorAll('label')).filter(label =>
-    matches(label.textContent, label, text),
+    matcher(label.textContent, label, text, COLLAPSE_WHITESPACE),
   )
 }
 
-function queryAllByLabelText(container, text, {selector = '*'} = {}) {
-  const labels = queryAllLabelsByText(container, text)
+function queryAllByLabelText(
+  container,
+  text,
+  {selector = '*', exact = true} = {},
+) {
+  const labels = queryAllLabelsByText(container, text, {exact})
   const labelledElements = labels
     .map(label => {
       /* istanbul ignore if */
@@ -49,23 +55,25 @@ function queryAllByLabelText(container, text, {selector = '*'} = {}) {
       }
     })
     .filter(label => label !== null)
-    .concat(queryAllByAttribute('aria-label', container, text))
+    .concat(queryAllByAttribute('aria-label', container, text, {exact}))
 
   return labelledElements
 }
 
-function queryByLabelText(container, text, opts) {
-  return firstResultOrNull(queryAllByLabelText, container, text, opts)
+function queryByLabelText(...args) {
+  return firstResultOrNull(queryAllByLabelText, ...args)
 }
 
-function queryAllByText(container, text, {selector = '*'} = {}) {
+function queryAllByText(container, text, {selector = '*', exact = true} = {}) {
+  const matcher = exact ? matches : fuzzyMatches
+  const COLLAPSE_WHITESPACE = true // a little more fuzzy than other queries
   return Array.from(container.querySelectorAll(selector)).filter(node =>
-    matches(getNodeText(node), node, text),
+    matcher(getNodeText(node), node, text, COLLAPSE_WHITESPACE),
   )
 }
 
-function queryByText(container, text, opts) {
-  return firstResultOrNull(queryAllByText, container, text, opts)
+function queryByText(...args) {
+  return firstResultOrNull(queryAllByText, ...args)
 }
 
 const queryAllByTitle = (...args) =>
@@ -92,8 +100,8 @@ function getByTitle(...args) {
 
 // this is just a utility and not an exposed query.
 // There are no plans to expose this.
-function queryAllByAttribute(attribute, container, text, {exact = false} = {}) {
-  const matcher = exact ? matchesExact : matches
+function queryAllByAttribute(attribute, container, text, {exact = true} = {}) {
+  const matcher = exact ? matches : fuzzyMatches
   return Array.from(container.querySelectorAll(`[${attribute}]`)).filter(node =>
     matcher(node.getAttribute(attribute), node, text),
   )
@@ -107,19 +115,18 @@ function queryByAttribute(...args) {
 
 const queryByPlaceholderText = queryByAttribute.bind(null, 'placeholder')
 const queryAllByPlaceholderText = queryAllByAttribute.bind(null, 'placeholder')
-const queryByTestId = (...args) =>
-  queryByAttribute('data-testid', ...args, {exact: true})
-const queryAllByTestId = (...args) =>
-  queryAllByAttribute('data-testid', ...args, {exact: true})
+const queryByTestId = queryByAttribute.bind(null, 'data-testid')
+const queryAllByTestId = queryAllByAttribute.bind(null, 'data-testid')
 
-function queryAllByAltText(container, alt) {
+function queryAllByAltText(container, alt, {exact = true} = {}) {
+  const matcher = exact ? matches : fuzzyMatches
   return Array.from(container.querySelectorAll('img,input,area')).filter(node =>
-    matches(node.getAttribute('alt'), node, alt),
+    matcher(node.getAttribute('alt'), node, alt),
   )
 }
 
-function queryByAltText(container, alt) {
-  return firstResultOrNull(queryAllByAltText, container, alt)
+function queryByAltText(...args) {
+  return firstResultOrNull(queryAllByAltText, ...args)
 }
 
 // getters
@@ -162,7 +169,7 @@ function getByPlaceholderText(...args) {
 function getAllByLabelText(container, text, ...rest) {
   const els = queryAllByLabelText(container, text, ...rest)
   if (!els.length) {
-    const labels = queryAllLabelsByText(container, text)
+    const labels = queryAllLabelsByText(container, text, ...rest)
     if (labels.length) {
       throw new Error(
         `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly. \n\n${debugDOM(
@@ -200,8 +207,8 @@ function getByText(...args) {
   return firstResultOrNull(getAllByText, ...args)
 }
 
-function getAllByAltText(container, alt) {
-  const els = queryAllByAltText(container, alt)
+function getAllByAltText(container, alt, ...rest) {
+  const els = queryAllByAltText(container, alt, ...rest)
   if (!els.length) {
     throw new Error(
       `Unable to find an element with the alt text: ${alt} \n\n${debugDOM(
