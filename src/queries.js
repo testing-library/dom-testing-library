@@ -68,6 +68,28 @@ function queryByText(container, text, opts) {
   return firstResultOrNull(queryAllByText, container, text, opts)
 }
 
+const queryAllByTitle = (...args) =>
+  queryAllByAttribute('title', ...args, {exact: true})
+
+const queryByTitle = (...args) =>
+  queryByAttribute('title', ...args, {exact: true})
+
+function getAllByTitle(container, title, ...rest) {
+  const els = queryAllByTitle(container, title, ...rest)
+  if (!els.length) {
+    throw new Error(
+      `Unable to find an element with the title: ${title}. \n\n${debugDOM(
+        container,
+      )}`,
+    )
+  }
+  return els
+}
+
+function getByTitle(...args) {
+  return firstResultOrNull(getAllByTitle, ...args)
+}
+
 // this is just a utility and not an exposed query.
 // There are no plans to expose this.
 function queryAllByAttribute(attribute, container, text, {exact = false} = {}) {
@@ -215,6 +237,10 @@ export {
   queryAllByTestId,
   getByTestId,
   getAllByTestId,
+  queryByTitle,
+  queryAllByTitle,
+  getByTitle,
+  getAllByTitle,
 }
 
 /* eslint complexity:["error", 14] */
