@@ -72,14 +72,14 @@ when a real user uses it.
 
 * [Installation](#installation)
 * [Usage](#usage)
-  * [`getByLabelText(container: HTMLElement, text: TextMatch, options: {selector: string = '*', exact: boolean = true}): HTMLElement`](#getbylabeltextcontainer-htmlelement-text-textmatch-options-selector-string---exact-boolean--true-htmlelement)
-  * [`getByPlaceholderText(container: HTMLElement, text: TextMatch, {exact: boolean = true}): HTMLElement`](#getbyplaceholdertextcontainer-htmlelement-text-textmatch-exact-boolean--true-htmlelement)
-  * [`getByText(container: HTMLElement, text: TextMatch, {exact: boolean = true}): HTMLElement`](#getbytextcontainer-htmlelement-text-textmatch-exact-boolean--true-htmlelement)
-  * [`getByAltText(container: HTMLElement, text: TextMatch, {exact: boolean = true}): HTMLElement`](#getbyalttextcontainer-htmlelement-text-textmatch-exact-boolean--true-htmlelement)
-  * [`getByTestId(container: HTMLElement, text: ExactTextMatch, {exact: boolean = true}): HTMLElement`](#getbytestidcontainer-htmlelement-text-exacttextmatch-exact-boolean--true-htmlelement)
+  * [`getByLabelText`](#getbylabeltext)
+  * [`getByPlaceholderText`](#getbyplaceholdertext)
+  * [`getByText`](#getbytext)
+  * [`getByAltText`](#getbyalttext)
+  * [`getByTestId`](#getbytestid)
   * [`wait`](#wait)
   * [`waitForElement`](#waitforelement)
-  * [`fireEvent(node: HTMLElement, event: Event)`](#fireeventnode-htmlelement-event-event)
+  * [`fireEvent`](#fireevent)
 * [Custom Jest Matchers](#custom-jest-matchers)
   * [Using other assertion libraries](#using-other-assertion-libraries)
 * [`TextMatch`](#textmatch)
@@ -182,7 +182,17 @@ test('examples of some things', async () => {
 })
 ```
 
-### `getByLabelText(container: HTMLElement, text: TextMatch, options: {selector: string = '*', exact: boolean = true}): HTMLElement`
+### `getByLabelText`
+
+```typescript
+getByLabelText(
+  container: HTMLElement,
+  text: TextMatch,
+  options?: {
+    selector?: string = '*',
+    exact?: boolean = true,
+  }): HTMLElement
+```
 
 This will search for the label that matches the given [`TextMatch`](#textmatch),
 then find the element associated with that label.
@@ -217,7 +227,16 @@ const inputNode = getByLabelText(container, 'username', {selector: 'input'})
 > want this behavior (for example you wish to assert that it doesn't exist),
 > then use `queryByLabelText` instead.
 
-### `getByPlaceholderText(container: HTMLElement, text: TextMatch, {exact: boolean = true}): HTMLElement`
+### `getByPlaceholderText`
+
+```typescript
+getByPlaceholderText(
+  container: HTMLElement,
+  text: TextMatch,
+  options?: {
+    exact?: boolean = true,
+  }): HTMLElement
+```
 
 This will search for all elements with a placeholder attribute and find one
 that matches the given [`TextMatch`](#textmatch).
@@ -230,7 +249,16 @@ const inputNode = getByPlaceholderText(container, 'Username')
 > NOTE: a placeholder is not a good substitute for a label so you should
 > generally use `getByLabelText` instead.
 
-### `getByText(container: HTMLElement, text: TextMatch, {exact: boolean = true}): HTMLElement`
+### `getByText`
+
+```typescript
+getByText(
+  container: HTMLElement,
+  text: TextMatch,
+  options?: {
+    exact?: boolean = true,
+  }): HTMLElement
+```
 
 This will search for all elements that have a text node with `textContent`
 matching the given [`TextMatch`](#textmatch).
@@ -240,7 +268,16 @@ matching the given [`TextMatch`](#textmatch).
 const aboutAnchorNode = getByText(container, 'about')
 ```
 
-### `getByAltText(container: HTMLElement, text: TextMatch, {exact: boolean = true}): HTMLElement`
+### `getByAltText`
+
+```typescript
+getByAltText(
+  container: HTMLElement,
+  text: TextMatch,
+  options?: {
+    exact?: boolean = true,
+  }): HTMLElement
+```
 
 This will return the element (normally an `<img>`) that has the given `alt`
 text. Note that it only supports elements which accept an `alt` attribute:
@@ -254,7 +291,16 @@ and [`<area>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area)
 const incrediblesPosterImg = getByAltText(container, /incredibles.*poster$/i)
 ```
 
-### `getByTitle(container: HTMLElement, title: ExactTextMatch): HTMLElement`
+### `getByTitle`
+
+```typescript
+getByTitle(
+  container: HTMLElement,
+  title: TextMatch,
+  options?: {
+    exact?: boolean = true,
+  }): HTMLElement
+```
 
 This will return the element that has the matching `title` attribute.
 
@@ -263,7 +309,16 @@ This will return the element that has the matching `title` attribute.
 const deleteElement = getByTitle(container, 'Delete')
 ```
 
-### `getByTestId(container: HTMLElement, text: ExactTextMatch, {exact: boolean = true}): HTMLElement`
+### `getByTestId`
+
+```typescript
+getByTestId(
+  container: HTMLElement,
+  text: ExactTextMatch,
+  options?: {
+    exact?: boolean = true,
+  }): HTMLElement`
+```
 
 A shortcut to `` container.querySelector(`[data-testid="${yourId}"]`) `` (and it
 also accepts an [`ExactTextMatch`](#exacttextmatch)).
@@ -282,8 +337,6 @@ const usernameInputElement = getByTestId(container, 'username-input')
 > ["Making your UI tests resilient to change"][data-testid-blog-post]
 
 ### `wait`
-
-Defined as:
 
 ```typescript
 function wait(
@@ -325,8 +378,6 @@ on the next tick of the event loop (in a `setTimeout`) before starting the
 intervals.
 
 ### `waitForElement`
-
-Defined as:
 
 ```typescript
 function waitForElement<T>(
@@ -386,7 +437,11 @@ The default `timeout` is `4500ms` which will keep you under
 additions and removals of child elements (including text nodes) in the `container` and any of its descendants.
 It won't detect attribute changes unless you add `attributes: true` to the options.
 
-### `fireEvent(node: HTMLElement, event: Event)`
+### `fireEvent`
+
+```typescript
+fireEvent(node: HTMLElement, event: Event)
+```
 
 Fire DOM events.
 
@@ -401,7 +456,11 @@ fireEvent(
 )
 ```
 
-#### `fireEvent[eventName](node: HTMLElement, eventProperties: Object)`
+#### `fireEvent[eventName]`
+
+```typescript
+fireEvent[eventName](node: HTMLElement, eventProperties: Object)
+```
 
 Convenience methods for firing DOM events. Check out
 [src/events.js](https://github.com/kentcdodds/dom-testing-library/blob/master/src/events.js)
@@ -414,7 +473,11 @@ fireEvent.click(getElementByText('Submit'), rightClick)
 // default `button` property for click events is set to `0` which is a left click.
 ```
 
-#### `getNodeText(node: HTMLElement)`
+#### `getNodeText`
+
+```typescript
+getNodeText(node: HTMLElement)
+```
 
 Returns the complete text content of a html element, removing any extra
 whitespace. The intention is to treat text in nodes exactly as how it is
