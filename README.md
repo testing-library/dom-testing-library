@@ -114,7 +114,7 @@ npm install --save-dev dom-testing-library
 Note:
 
 * Each of the `get` APIs below have a matching [`getAll`](#queryall-and-getall-apis) API that returns all elements instead of just the first one, and [`query`](#query-apis)/[`getAll`](#queryall-and-getall-apis) that return `null`/`[]` instead of throwing an error.
-* Setting `exact: false` in the final option argument of a `get` API causes the query to use fuzzy matching. See [TextMatch](#textmatch) for details.
+* See [TextMatch](#textmatch) for details on the `exact`, `trim`, and `collapseWhitespace` options.
 
 ```javascript
 // src/__tests__/example.js
@@ -192,6 +192,8 @@ getByLabelText(
   options?: {
     selector?: string = '*',
     exact?: boolean = true,
+    collapseWhitespace?: boolean = true,
+    trim?: boolean = true,
   }): HTMLElement
 ```
 
@@ -236,6 +238,8 @@ getByPlaceholderText(
   text: TextMatch,
   options?: {
     exact?: boolean = true,
+    collapseWhitespace?: boolean = false,
+    trim?: boolean = true,
   }): HTMLElement
 ```
 
@@ -258,6 +262,8 @@ getByText(
   text: TextMatch,
   options?: {
     exact?: boolean = true,
+    collapseWhitespace?: boolean = true,
+    trim?: boolean = true,
   }): HTMLElement
 ```
 
@@ -277,6 +283,8 @@ getByAltText(
   text: TextMatch,
   options?: {
     exact?: boolean = true,
+    collapseWhitespace?: boolean = false,
+    trim?: boolean = true,
   }): HTMLElement
 ```
 
@@ -300,6 +308,8 @@ getByTitle(
   title: TextMatch,
   options?: {
     exact?: boolean = true,
+    collapseWhitespace?: boolean = false,
+    trim?: boolean = true,
   }): HTMLElement
 ```
 
@@ -318,6 +328,8 @@ getByTestId(
   text: TextMatch,
   options?: {
     exact?: boolean = true,
+    collapseWhitespace?: boolean = false,
+    trim?: boolean = true,
   }): HTMLElement`
 ```
 
@@ -538,10 +550,6 @@ Several APIs accept a `TextMatch` which can be a `string`, `regex` or a
 
 ### Precision
 
-Queries that search inner tag content (i.e., `queryByLabelText`,
-`queryByText`) collapse and trim whitespace (newlines, spaces, tabs);
-queries using attributes do not.
-
 Some APIs accept an object as the final argument that can contain options that
 affect the precision of string matching:
 
@@ -550,6 +558,8 @@ affect the precision of string matching:
   * `exact` has no effect on `regex` or `function` arguments.
   * In most cases using a regex instead of a string gives you more control over
     fuzzy matching and should be preferred over `{ exact: false }`.
+* `trim`: Defaults to `true`; trim leading and trailing whitespace.
+* `collapseWhitespace`: Defaults to `false` for attribute queries and `true` for content queries (i.e., `queryByLabelText`, `queryByText`). Collapses inner whitespace (newlines, tabs, repeated spaces) into a single space.
 
 ### TextMatch Examples
 

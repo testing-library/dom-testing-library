@@ -16,20 +16,25 @@ function firstResultOrNull(queryFunction, ...args) {
   return result[0]
 }
 
-function queryAllLabelsByText(container, text, {exact = true} = {}) {
+function queryAllLabelsByText(
+  container,
+  text,
+  {exact = true, trim = true, collapseWhitespace = true} = {},
+) {
   const matcher = exact ? matches : fuzzyMatches
-  const COLLAPSE_WHITESPACE = true // a little more fuzzy than other queries
+  const matchOpts = {collapseWhitespace, trim}
   return Array.from(container.querySelectorAll('label')).filter(label =>
-    matcher(label.textContent, label, text, COLLAPSE_WHITESPACE),
+    matcher(label.textContent, label, text, matchOpts),
   )
 }
 
 function queryAllByLabelText(
   container,
   text,
-  {selector = '*', exact = true} = {},
+  {selector = '*', exact = true, collapseWhitespace = true, trim = true} = {},
 ) {
-  const labels = queryAllLabelsByText(container, text, {exact})
+  const matchOpts = {collapseWhitespace, trim}
+  const labels = queryAllLabelsByText(container, text, {exact, ...matchOpts})
   const labelledElements = labels
     .map(label => {
       /* istanbul ignore if */
@@ -64,11 +69,15 @@ function queryByLabelText(...args) {
   return firstResultOrNull(queryAllByLabelText, ...args)
 }
 
-function queryAllByText(container, text, {selector = '*', exact = true} = {}) {
+function queryAllByText(
+  container,
+  text,
+  {selector = '*', exact = true, collapseWhitespace = true, trim = true} = {},
+) {
   const matcher = exact ? matches : fuzzyMatches
-  const COLLAPSE_WHITESPACE = true // a little more fuzzy than other queries
+  const matchOpts = {collapseWhitespace, trim}
   return Array.from(container.querySelectorAll(selector)).filter(node =>
-    matcher(getNodeText(node), node, text, COLLAPSE_WHITESPACE),
+    matcher(getNodeText(node), node, text, matchOpts),
   )
 }
 
@@ -78,10 +87,16 @@ function queryByText(...args) {
 
 // this is just a utility and not an exposed query.
 // There are no plans to expose this.
-function queryAllByAttribute(attribute, container, text, {exact = true} = {}) {
+function queryAllByAttribute(
+  attribute,
+  container,
+  text,
+  {exact = true, collapseWhitespace = false, trim = true} = {},
+) {
   const matcher = exact ? matches : fuzzyMatches
+  const matchOpts = {collapseWhitespace, trim}
   return Array.from(container.querySelectorAll(`[${attribute}]`)).filter(node =>
-    matcher(node.getAttribute(attribute), node, text),
+    matcher(node.getAttribute(attribute), node, text, matchOpts),
   )
 }
 
@@ -98,10 +113,15 @@ const queryAllByTestId = queryAllByAttribute.bind(null, 'data-testid')
 const queryByTitle = queryByAttribute.bind(null, 'title')
 const queryAllByTitle = queryAllByAttribute.bind(null, 'title')
 
-function queryAllByAltText(container, alt, {exact = true} = {}) {
+function queryAllByAltText(
+  container,
+  alt,
+  {exact = true, collapseWhitespace = false, trim = true} = {},
+) {
   const matcher = exact ? matches : fuzzyMatches
+  const matchOpts = {collapseWhitespace, trim}
   return Array.from(container.querySelectorAll('img,input,area')).filter(node =>
-    matcher(node.getAttribute('alt'), node, alt),
+    matcher(node.getAttribute('alt'), node, alt, matchOpts),
   )
 }
 
