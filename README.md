@@ -77,6 +77,7 @@ when a real user uses it.
   * [`getByText`](#getbytext)
   * [`getByAltText`](#getbyalttext)
   * [`getByTitle`](#getbytitle)
+  * [`getByValue`](#getbyvalue)
   * [`getByTestId`](#getbytestid)
   * [`wait`](#wait)
   * [`waitForElement`](#waitforelement)
@@ -318,6 +319,26 @@ Returns the element that has the matching `title` attribute.
 ```javascript
 // <span title="Delete" id="2" />
 const deleteElement = getByTitle(container, 'Delete')
+```
+
+### `getByValue`
+
+```typescript
+getByValue(
+  container: HTMLElement,
+  value: TextMatch,
+  options?: {
+    exact?: boolean = true,
+    collapseWhitespace?: boolean = false,
+    trim?: boolean = true,
+  }): HTMLElement
+```
+
+Returns the element that has the matching value.
+
+```javascript
+// <input type="text" id="lastName" defaultValue="Norris" />
+const lastNameInput = getByValue('Norris')
 ```
 
 ### `getByTestId`

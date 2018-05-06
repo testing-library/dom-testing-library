@@ -112,6 +112,8 @@ const queryByTestId = queryByAttribute.bind(null, 'data-testid')
 const queryAllByTestId = queryAllByAttribute.bind(null, 'data-testid')
 const queryByTitle = queryByAttribute.bind(null, 'title')
 const queryAllByTitle = queryAllByAttribute.bind(null, 'title')
+const queryByValue = queryByAttribute.bind(null, 'value')
+const queryAllByValue = queryAllByAttribute.bind(null, 'value')
 
 function queryAllByAltText(
   container,
@@ -164,6 +166,22 @@ function getAllByTitle(container, title, ...rest) {
 
 function getByTitle(...args) {
   return firstResultOrNull(getAllByTitle, ...args)
+}
+
+function getAllByValue(container, value, ...rest) {
+  const els = queryAllByValue(container, value, ...rest)
+  if (!els.length) {
+    throw new Error(
+      `Unable to find an element with the value: ${value}. \n\n${debugDOM(
+        container,
+      )}`,
+    )
+  }
+  return els
+}
+
+function getByValue(...args) {
+  return firstResultOrNull(getAllByValue, ...args)
 }
 
 function getAllByPlaceholderText(container, text, ...rest) {
@@ -264,6 +282,10 @@ export {
   queryAllByTitle,
   getByTitle,
   getAllByTitle,
+  queryByValue,
+  queryAllByValue,
+  getByValue,
+  getAllByValue,
 }
 
 /* eslint complexity:["error", 14] */
