@@ -135,18 +135,16 @@ test('query/get element by its title', () => {
 })
 
 test('query/get element by its value', () => {
-  const {getByValue, queryByValue, getByPlaceholderText} = render(`
+  const {getByValue, queryByValue} = render(`
   <div>
-    <input placeholder="name" type="text" id="name"/>
-    <input placeholder="lastname" type="text" id="lastname"/>
-    <input placeholder="email" type="text" id="email"/>
+    <input placeholder="name" type="text"/>
+    <input placeholder="lastname" type="text" value="Norris"/>
+    <input placeholder="email" type="text"/>
   </div>
   `)
 
-  getByPlaceholderText('lastname').setAttribute('value', 'Norris')
-
-  expect(queryByValue('Norris').id).toEqual('lastname')
-  expect(getByValue('Norris').id).toEqual('lastname')
+  expect(queryByValue('Norris').placeholder).toEqual('lastname')
+  expect(getByValue('Norris').placeholder).toEqual('lastname')
 })
 
 test('can get elements by data-testid attribute', () => {
