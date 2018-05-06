@@ -24,6 +24,7 @@ test('get throws a useful error message', () => {
     getByTestId,
     getByAltText,
     getByTitle,
+    getByValue,
   } = render('<div />')
   expect(() => getByLabelText('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() =>
@@ -33,6 +34,7 @@ test('get throws a useful error message', () => {
   expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getByValue('LucyRicardo')).toThrowErrorMatchingSnapshot()
 })
 
 test('can get elements by matching their text content', () => {
@@ -130,6 +132,19 @@ test('query/get element by its title', () => {
 
   expect(getByTitle('Delete').id).toEqual('2')
   expect(queryByTitle('Delete').id).toEqual('2')
+})
+
+test('query/get element by its value', () => {
+  const {getByValue, queryByValue} = render(`
+  <div>
+    <input placeholder="name" type="text"/>
+    <input placeholder="lastname" type="text" value="Norris"/>
+    <input placeholder="email" type="text"/>
+  </div>
+  `)
+
+  expect(queryByValue('Norris').placeholder).toEqual('lastname')
+  expect(getByValue('Norris').placeholder).toEqual('lastname')
 })
 
 test('can get elements by data-testid attribute', () => {
