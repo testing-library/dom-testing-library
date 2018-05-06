@@ -5,8 +5,6 @@ function getNodeText(node) {
     )
     .map(c => c.textContent)
     .join(' ')
-    .trim()
-    .replace(/\s+/g, ' ')
 }
 
 export {getNodeText}

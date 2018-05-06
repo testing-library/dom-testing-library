@@ -93,8 +93,8 @@ test('get can get form controls by placeholder', () => {
 
 test('label with no form control', () => {
   const {getByLabelText, queryByLabelText} = render(`<label>All alone</label>`)
-  expect(queryByLabelText('alone')).toBeNull()
-  expect(() => getByLabelText('alone')).toThrowErrorMatchingSnapshot()
+  expect(queryByLabelText(/alone/)).toBeNull()
+  expect(() => getByLabelText(/alone/)).toThrowErrorMatchingSnapshot()
 })
 
 test('totally empty label', () => {
@@ -106,7 +106,7 @@ test('totally empty label', () => {
 test('getByLabelText with aria-label', () => {
   // not recommended normally, but supported for completeness
   const {queryByLabelText} = render(`<input aria-label="batman" />`)
-  expect(queryByLabelText('bat')).toBeInTheDOM()
+  expect(queryByLabelText(/bat/)).toBeInTheDOM()
 })
 
 test('get element by its alt text', () => {
@@ -171,11 +171,11 @@ test('getAll* matchers return an array', () => {
     </div>,
   `)
   expect(getAllByAltText(/finding.*poster$/i)).toHaveLength(2)
-  expect(getAllByAltText('jumanji')).toHaveLength(1)
+  expect(getAllByAltText(/jumanji/)).toHaveLength(1)
   expect(getAllByTestId('poster')).toHaveLength(3)
   expect(getAllByPlaceholderText(/The Rock/)).toHaveLength(1)
   expect(getAllByLabelText('User Name')).toHaveLength(1)
-  expect(getAllByText('where')).toHaveLength(1)
+  expect(getAllByText(/^where/i)).toHaveLength(1)
 })
 
 test('getAll* matchers throw for 0 matches', () => {
@@ -188,8 +188,6 @@ test('getAll* matchers throw for 0 matches', () => {
   } = render(`
     <div>
       <label>No Matches Please</label>
-      <div data-testid="ABC"></div>
-      <div data-testid="a-b-c"></div>
     </div>,
   `)
   expect(() => getAllByTestId('nope')).toThrow()

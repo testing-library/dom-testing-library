@@ -1,8 +1,13 @@
-function matches(textToMatch, node, matcher) {
+function fuzzyMatches(
+  textToMatch,
+  node,
+  matcher,
+  {collapseWhitespace = true, trim = true} = {},
+) {
   if (typeof textToMatch !== 'string') {
     return false
   }
-  const normalizedText = textToMatch.trim().replace(/\s+/g, ' ')
+  const normalizedText = normalize(textToMatch, {trim, collapseWhitespace})
   if (typeof matcher === 'string') {
     return normalizedText.toLowerCase().includes(matcher.toLowerCase())
   } else if (typeof matcher === 'function') {
@@ -12,17 +17,32 @@ function matches(textToMatch, node, matcher) {
   }
 }
 
-function matchesExact(textToMatch, node, matcher) {
+function matches(
+  textToMatch,
+  node,
+  matcher,
+  {collapseWhitespace = true, trim = true} = {},
+) {
   if (typeof textToMatch !== 'string') {
     return false
   }
+  const normalizedText = normalize(textToMatch, {trim, collapseWhitespace})
   if (typeof matcher === 'string') {
-    return textToMatch === matcher
+    return normalizedText === matcher
   } else if (typeof matcher === 'function') {
-    return matcher(textToMatch, node)
+    return matcher(normalizedText, node)
   } else {
-    return matcher.test(textToMatch)
+    return matcher.test(normalizedText)
   }
 }
 
-export {matches, matchesExact}
+function normalize(text, {trim, collapseWhitespace}) {
+  let normalizedText = text
+  normalizedText = trim ? normalizedText.trim() : normalizedText
+  normalizedText = collapseWhitespace
+    ? normalizedText.replace(/\s+/g, ' ')
+    : normalizedText
+  return normalizedText
+}
+
+export {fuzzyMatches, matches}

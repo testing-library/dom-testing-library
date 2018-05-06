@@ -72,19 +72,20 @@ when a real user uses it.
 
 * [Installation](#installation)
 * [Usage](#usage)
-  * [`getByLabelText(container: HTMLElement, text: TextMatch, options: {selector: string = '*'}): HTMLElement`](#getbylabeltextcontainer-htmlelement-text-textmatch-options-selector-string---htmlelement)
-  * [`getByPlaceholderText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbyplaceholdertextcontainer-htmlelement-text-textmatch-htmlelement)
-  * [`getByText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbytextcontainer-htmlelement-text-textmatch-htmlelement)
-  * [`getByAltText(container: HTMLElement, text: TextMatch): HTMLElement`](#getbyalttextcontainer-htmlelement-text-textmatch-htmlelement)
-  * [`getByTitle(container: HTMLElement, title: ExactTextMatch): HTMLElement`](#getbytitlecontainer-htmlelement-title-exacttextmatch-htmlelement)
-  * [`getByTestId(container: HTMLElement, text: ExactTextMatch): HTMLElement`](#getbytestidcontainer-htmlelement-text-exacttextmatch-htmlelement)
+  * [`getByLabelText`](#getbylabeltext)
+  * [`getByPlaceholderText`](#getbyplaceholdertext)
+  * [`getByText`](#getbytext)
+  * [`getByAltText`](#getbyalttext)
+  * [`getByTitle`](#getbytitle)
+  * [`getByTestId`](#getbytestid)
   * [`wait`](#wait)
   * [`waitForElement`](#waitforelement)
-  * [`fireEvent(node: HTMLElement, event: Event)`](#fireeventnode-htmlelement-event-event)
+  * [`fireEvent`](#fireevent)
 * [Custom Jest Matchers](#custom-jest-matchers)
   * [Using other assertion libraries](#using-other-assertion-libraries)
 * [`TextMatch`](#textmatch)
-  * [ExactTextMatch](#exacttextmatch)
+  * [Precision](#precision)
+  * [TextMatch Examples](#textmatch-examples)
 * [`query` APIs](#query-apis)
 * [`queryAll` and `getAll` APIs](#queryall-and-getall-apis)
 * [`bindElementToQueries`](#bindelementtoqueries)
@@ -110,7 +111,10 @@ npm install --save-dev dom-testing-library
 
 ## Usage
 
-Note: each of the `get` APIs below have a matching [`getAll`](#queryall-and-getall-apis) API that returns all elements instead of just the first one, and [`query`](#query-apis)/[`getAll`](#queryall-and-getall-apis) that return `null`/`[]` instead of throwing an error.
+Note:
+
+* Each of the `get` APIs below have a matching [`getAll`](#queryall-and-getall-apis) API that returns all elements instead of just the first one, and [`query`](#query-apis)/[`getAll`](#queryall-and-getall-apis) that return `null`/`[]` instead of throwing an error.
+* See [TextMatch](#textmatch) for details on the `exact`, `trim`, and `collapseWhitespace` options.
 
 ```javascript
 // src/__tests__/example.js
@@ -179,7 +183,19 @@ test('examples of some things', async () => {
 })
 ```
 
-### `getByLabelText(container: HTMLElement, text: TextMatch, options: {selector: string = '*'}): HTMLElement`
+### `getByLabelText`
+
+```typescript
+getByLabelText(
+  container: HTMLElement,
+  text: TextMatch,
+  options?: {
+    selector?: string = '*',
+    exact?: boolean = true,
+    collapseWhitespace?: boolean = true,
+    trim?: boolean = true,
+  }): HTMLElement
+```
 
 This will search for the label that matches the given [`TextMatch`](#textmatch),
 then find the element associated with that label.
@@ -214,7 +230,18 @@ const inputNode = getByLabelText(container, 'username', {selector: 'input'})
 > want this behavior (for example you wish to assert that it doesn't exist),
 > then use `queryByLabelText` instead.
 
-### `getByPlaceholderText(container: HTMLElement, text: TextMatch): HTMLElement`
+### `getByPlaceholderText`
+
+```typescript
+getByPlaceholderText(
+  container: HTMLElement,
+  text: TextMatch,
+  options?: {
+    exact?: boolean = true,
+    collapseWhitespace?: boolean = false,
+    trim?: boolean = true,
+  }): HTMLElement
+```
 
 This will search for all elements with a placeholder attribute and find one
 that matches the given [`TextMatch`](#textmatch).
@@ -227,7 +254,18 @@ const inputNode = getByPlaceholderText(container, 'Username')
 > NOTE: a placeholder is not a good substitute for a label so you should
 > generally use `getByLabelText` instead.
 
-### `getByText(container: HTMLElement, text: TextMatch): HTMLElement`
+### `getByText`
+
+```typescript
+getByText(
+  container: HTMLElement,
+  text: TextMatch,
+  options?: {
+    exact?: boolean = true,
+    collapseWhitespace?: boolean = true,
+    trim?: boolean = true,
+  }): HTMLElement
+```
 
 This will search for all elements that have a text node with `textContent`
 matching the given [`TextMatch`](#textmatch).
@@ -237,7 +275,18 @@ matching the given [`TextMatch`](#textmatch).
 const aboutAnchorNode = getByText(container, 'about')
 ```
 
-### `getByAltText(container: HTMLElement, text: TextMatch): HTMLElement`
+### `getByAltText`
+
+```typescript
+getByAltText(
+  container: HTMLElement,
+  text: TextMatch,
+  options?: {
+    exact?: boolean = true,
+    collapseWhitespace?: boolean = false,
+    trim?: boolean = true,
+  }): HTMLElement
+```
 
 This will return the element (normally an `<img>`) that has the given `alt`
 text. Note that it only supports elements which accept an `alt` attribute:
@@ -251,19 +300,41 @@ and [`<area>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area)
 const incrediblesPosterImg = getByAltText(container, /incredibles.*poster$/i)
 ```
 
-### `getByTitle(container: HTMLElement, title: ExactTextMatch): HTMLElement`
+### `getByTitle`
 
-This will return the element that has the matching `title` attribute.
+```typescript
+getByTitle(
+  container: HTMLElement,
+  title: TextMatch,
+  options?: {
+    exact?: boolean = true,
+    collapseWhitespace?: boolean = false,
+    trim?: boolean = true,
+  }): HTMLElement
+```
+
+Returns the element that has the matching `title` attribute.
 
 ```javascript
 // <span title="Delete" id="2" />
 const deleteElement = getByTitle(container, 'Delete')
 ```
 
-### `getByTestId(container: HTMLElement, text: ExactTextMatch): HTMLElement`
+### `getByTestId`
+
+```typescript
+getByTestId(
+  container: HTMLElement,
+  text: TextMatch,
+  options?: {
+    exact?: boolean = true,
+    collapseWhitespace?: boolean = false,
+    trim?: boolean = true,
+  }): HTMLElement`
+```
 
 A shortcut to `` container.querySelector(`[data-testid="${yourId}"]`) `` (and it
-also accepts an [`ExactTextMatch`](#exacttextmatch)).
+also accepts a [`TextMatch`](#textmatch)).
 
 ```javascript
 // <input data-testid="username-input" />
@@ -279,8 +350,6 @@ const usernameInputElement = getByTestId(container, 'username-input')
 > ["Making your UI tests resilient to change"][data-testid-blog-post]
 
 ### `wait`
-
-Defined as:
 
 ```typescript
 function wait(
@@ -322,8 +391,6 @@ on the next tick of the event loop (in a `setTimeout`) before starting the
 intervals.
 
 ### `waitForElement`
-
-Defined as:
 
 ```typescript
 function waitForElement<T>(
@@ -383,7 +450,11 @@ The default `timeout` is `4500ms` which will keep you under
 additions and removals of child elements (including text nodes) in the `container` and any of its descendants.
 It won't detect attribute changes unless you add `attributes: true` to the options.
 
-### `fireEvent(node: HTMLElement, event: Event)`
+### `fireEvent`
+
+```typescript
+fireEvent(node: HTMLElement, event: Event)
+```
 
 Fire DOM events.
 
@@ -398,7 +469,11 @@ fireEvent(
 )
 ```
 
-#### `fireEvent[eventName](node: HTMLElement, eventProperties: Object)`
+#### `fireEvent[eventName]`
+
+```typescript
+fireEvent[eventName](node: HTMLElement, eventProperties: Object)
+```
 
 Convenience methods for firing DOM events. Check out
 [src/events.js](https://github.com/kentcdodds/dom-testing-library/blob/master/src/events.js)
@@ -411,7 +486,11 @@ fireEvent.click(getElementByText('Submit'), rightClick)
 // default `button` property for click events is set to `0` which is a left click.
 ```
 
-#### `getNodeText(node: HTMLElement)`
+#### `getNodeText`
+
+```typescript
+getNodeText(node: HTMLElement)
+```
 
 Returns the complete text content of a html element, removing any extra
 whitespace. The intention is to treat text in nodes exactly as how it is
@@ -469,43 +548,50 @@ and add it here!
 Several APIs accept a `TextMatch` which can be a `string`, `regex` or a
 `function` which returns `true` for a match and `false` for a mismatch.
 
-Here's an example
+### Precision
+
+Some APIs accept an object as the final argument that can contain options that
+affect the precision of string matching:
+
+* `exact`: Defaults to `true`; matches full strings, case-sensitive. When false,
+  matches substrings and is not case-sensitive.
+  * `exact` has no effect on `regex` or `function` arguments.
+  * In most cases using a regex instead of a string gives you more control over
+    fuzzy matching and should be preferred over `{ exact: false }`.
+* `trim`: Defaults to `true`; trim leading and trailing whitespace.
+* `collapseWhitespace`: Defaults to `true`. Collapses inner whitespace (newlines, tabs, repeated spaces) into a single space.
+
+### TextMatch Examples
 
 ```javascript
-// <div>Hello World</div>
-// all of the following will find the div
-getByText(container, 'Hello World') // full match
-getByText(container, 'llo worl') // substring match
-getByText(container, 'hello world') // strings ignore case
-getByText(container, /Hello W?oRlD/i) // regex
-getByText(container, (content, element) => content.startsWith('Hello')) // function
+// <div>
+//  Hello World
+// </div>
 
-// all of the following will NOT find the div
-getByText(container, 'Goodbye World') // non-string match
+// WILL find the div:
+
+// Matching a string:
+getByText(container, 'Hello World') // full string match
+getByText(container, 'llo Worl'), {exact: false} // substring match
+getByText(container, 'hello world', {exact: false}) // ignore case
+
+// Matching a regex:
+getByText(container, /World/) // substring match
+getByText(container, /world/i) // substring match, ignore case
+getByText(container, /^hello world$/i) // full string match, ignore case
+getByText(container, /Hello W?oRlD/i) // advanced regex
+
+// Matching with a custom function:
+getByText(container, (content, element) => content.startsWith('Hello'))
+
+// WILL NOT find the div:
+
+getByText(container, 'Goodbye World') // full string does not match
 getByText(container, /hello world/) // case-sensitive regex with different case
-// function looking for a span when it's actually a div
+// function looking for a span when it's actually a div:
 getByText(container, (content, element) => {
   return element.tagName.toLowerCase() === 'span' && content.startsWith('Hello')
 })
-```
-
-### ExactTextMatch
-
-Some APIs use ExactTextMatch, which is the same as TextMatch but case-sensitive
-and does not match substrings; however, regexes and functions are also accepted
-for custom matching.
-
-```js
-// <button data-testid="submit-button">Go</button>
-
-// all of the following will find the button
-getByTestId(container, 'submit-button') // exact match
-getByTestId(container, /submit*/) // regex match
-getByTestId(container, content => content.startsWith('submit')) // function
-
-// all of the following will NOT find the button
-getByTestId(container, 'submit-') // no substrings
-getByTestId(container, 'Submit-Button') // case-sensitive
 ```
 
 ## `query` APIs

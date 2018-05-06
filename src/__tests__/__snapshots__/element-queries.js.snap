@@ -49,7 +49,7 @@ exports[`get throws a useful error message 6`] = `
 `;
 
 exports[`label with no form control 1`] = `
-"Found a label with the text of: alone, however no form control was found associated to that label. Make sure you're using the \\"for\\" attribute or \\"aria-labelledby\\" attribute correctly. 
+"Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the \\"for\\" attribute or \\"aria-labelledby\\" attribute correctly. 
 
 [36m<div>[39m
   [36m<label>[39m
