@@ -1,1 +1,1 @@
-export const getNodeText: (node: HTMLElement) => string
+export function getNodeText(node: HTMLElement): string

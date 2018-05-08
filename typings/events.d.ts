@@ -1,4 +1,4 @@
-type EventType =
+export type EventType =
   | 'copy'
   | 'cut'
   | 'paste'
@@ -69,8 +69,8 @@ type EventType =
   | 'transitionEnd'
   | 'doubleClick'
 
-type FireFunction = (element: HTMLElement, event: Event) => boolean
-type FireObject = {
+export type FireFunction = (element: HTMLElement, event: Event) => boolean
+export type FireObject = {
   [K in EventType]: (element: HTMLElement, options?: {}) => boolean
 }
 

@@ -1,3 +1,4 @@
+// TypeScript Version: 2.8
 import * as queries from './queries'
 
 export {queries}
