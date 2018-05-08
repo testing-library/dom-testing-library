@@ -3,6 +3,7 @@
   "version": "0.0.0-semantically-released",
   "description": "Simple and complete DOM testing utilities that encourage good testing practices.",
   "main": "dist/index.js",
+  "typings": "typings",
   "keywords": [
     "testing",
     "ui",
@@ -27,10 +28,12 @@
     "test:update": "npm test -- --updateSnapshot --coverage",
     "validate": "kcd-scripts validate",
     "setup": "npm install && npm run validate -s",
-    "precommit": "kcd-scripts precommit"
+    "precommit": "kcd-scripts precommit",
+    "dtslint": "dtslint typings"
   },
   "files": [
     "dist",
+    "typings",
     "extend-expect.js"
   ],
   "dependencies": {
@@ -40,6 +43,7 @@
     "wait-for-expect": "^0.4.0"
   },
   "devDependencies": {
+    "dtslint": "^0.3.0",
     "jest-in-case": "^1.0.2",
     "kcd-scripts": "^0.37.0"
   },
