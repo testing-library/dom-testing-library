@@ -19,7 +19,7 @@ const {
 const eventMap = {
   // Clipboard Events
   copy: {
-    EventType: CompositionEvent,
+    EventType: ClipboardEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   cut: {
