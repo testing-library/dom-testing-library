@@ -1,9 +1,9 @@
-import {bindElementToQueries} from '../../bind-element-to-queries'
+import {getQueriesForElement} from '../../get-queries-for-element'
 
 function render(html) {
   const container = document.createElement('div')
   container.innerHTML = html
-  const containerQueries = bindElementToQueries(container)
+  const containerQueries = getQueriesForElement(container)
   return {container, ...containerQueries}
 }
 

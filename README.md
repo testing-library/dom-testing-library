@@ -89,7 +89,7 @@ when a real user uses it.
   * [TextMatch Examples](#textmatch-examples)
 * [`query` APIs](#query-apis)
 * [`queryAll` and `getAll` APIs](#queryall-and-getall-apis)
-* [`bindElementToQueries`](#bindelementtoqueries)
+* [`getQueriesForElement`](#getqueriesforelement)
 * [Debugging](#debugging)
   * [`prettyDOM`](#prettydom)
 * [Implementations](#implementations)
@@ -640,9 +640,9 @@ expect(submitButtons).toHaveLength(3) // expect 3 elements
 expect(submitButtons[0]).toBeInTheDOM()
 ```
 
-## `bindElementToQueries`
+## `getQueriesForElement`
 
-`bindElementToQueries` takes a DOM element and binds it to the raw query functions, allowing them
+`getQueriesForElement` takes a DOM element and binds it to the raw query functions, allowing them
 to be used without specifying a container. It is the recommended approach for libraries built on this API
 and is in use in `react-testing-library` and `vue-testing-library`.
 
