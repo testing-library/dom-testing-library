@@ -1,3 +1,4 @@
+import {getQueriesForElement} from './get-queries-for-element'
 import * as queries from './queries'
 
 // exporting on the queries namespace as a convenience
@@ -10,5 +11,9 @@ export * from './wait-for-element'
 export * from './matches'
 export * from './get-node-text'
 export * from './events'
-export * from './bind-element-to-queries'
+export * from './get-queries-for-element'
 export * from './pretty-dom'
+
+// The original name of bindElementToQueries was weird
+// The new name is better. Remove this in the next major version bump.
+export {getQueriesForElement as bindElementToQueries}
