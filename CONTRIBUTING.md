@@ -8,7 +8,7 @@ Thanks for being willing to contribute!
 ## Project setup
 
 1.  Fork and clone the repo
-2.  Run `npm run setup -s` to install dependencies and run validation
+2.  Run `npm run setup` to install dependencies and run validation
 3.  Create a branch for your PR with `git checkout -b pr/your-branch-name`
 
 > Tip: Keep your `master` branch pointing at the original repository and make
