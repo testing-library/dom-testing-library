@@ -3,7 +3,17 @@ import {getNodeText} from './get-node-text'
 import {prettyDOM} from './pretty-dom'
 
 function debugDOM(htmlElement) {
-  return prettyDOM(htmlElement, process.env.DEBUG_PRINT_LIMIT || 7000)
+  const limit =  process.env.DEBUG_PRINT_LIMIT || 7000
+  const inNode = (typeof module !== 'undefined' && module.exports)
+  const inBrowser = (typeof window !== 'undefined' && window.document)
+  const inCypress = (typeof window !== 'undefined' && window.Cypress)
+  if (inCypress) {
+    return ''
+  }
+  if (inBrowser && !inNode) {
+    return `\n\n${prettyDOM(htmlElement, limit, { highlight: false })}`
+  }
+  return `\n\n${prettyDOM(htmlElement, limit)}`
 }
 
 // Here are the queries for the library.
@@ -140,7 +150,7 @@ function getAllByTestId(container, id, ...rest) {
   const els = queryAllByTestId(container, id, ...rest)
   if (!els.length) {
     throw new Error(
-      `Unable to find an element by: [data-testid="${id}"] \n\n${debugDOM(
+      `Unable to find an element by: [data-testid="${id}"] ${debugDOM(
         container,
       )}`,
     )
@@ -156,7 +166,7 @@ function getAllByTitle(container, title, ...rest) {
   const els = queryAllByTitle(container, title, ...rest)
   if (!els.length) {
     throw new Error(
-      `Unable to find an element with the title: ${title}. \n\n${debugDOM(
+      `Unable to find an element with the title: ${title}. ${debugDOM(
         container,
       )}`,
     )
@@ -172,7 +182,7 @@ function getAllByValue(container, value, ...rest) {
   const els = queryAllByValue(container, value, ...rest)
   if (!els.length) {
     throw new Error(
-      `Unable to find an element with the value: ${value}. \n\n${debugDOM(
+      `Unable to find an element with the value: ${value}. ${debugDOM(
         container,
       )}`,
     )
@@ -188,7 +198,7 @@ function getAllByPlaceholderText(container, text, ...rest) {
   const els = queryAllByPlaceholderText(container, text, ...rest)
   if (!els.length) {
     throw new Error(
-      `Unable to find an element with the placeholder text of: ${text} \n\n${debugDOM(
+      `Unable to find an element with the placeholder text of: ${text} ${debugDOM(
         container,
       )}`,
     )
@@ -206,13 +216,13 @@ function getAllByLabelText(container, text, ...rest) {
     const labels = queryAllLabelsByText(container, text, ...rest)
     if (labels.length) {
       throw new Error(
-        `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly. \n\n${debugDOM(
+        `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly. ${debugDOM(
           container,
         )}`,
       )
     } else {
       throw new Error(
-        `Unable to find a label with the text of: ${text} \n\n${debugDOM(
+        `Unable to find a label with the text of: ${text} ${debugDOM(
           container,
         )}`,
       )
@@ -229,7 +239,7 @@ function getAllByText(container, text, ...rest) {
   const els = queryAllByText(container, text, ...rest)
   if (!els.length) {
     throw new Error(
-      `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible. \n\n${debugDOM(
+      `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible. ${debugDOM(
         container,
       )}`,
     )
@@ -245,7 +255,7 @@ function getAllByAltText(container, alt, ...rest) {
   const els = queryAllByAltText(container, alt, ...rest)
   if (!els.length) {
     throw new Error(
-      `Unable to find an element with the alt text: ${alt} \n\n${debugDOM(
+      `Unable to find an element with the alt text: ${alt} ${debugDOM(
         container,
       )}`,
     )
