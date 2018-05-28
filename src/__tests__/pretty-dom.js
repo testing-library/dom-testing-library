@@ -10,3 +10,7 @@ test('it supports truncating the output length', () => {
   const {container} = render('<div>Hello World!</div>')
   expect(prettyDOM(container, 5)).toMatch(/\.\.\./)
 })
+
+test('it supports receiving the document element', () => {
+  expect(prettyDOM(document)).toMatchSnapshot()
+})

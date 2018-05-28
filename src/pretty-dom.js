@@ -3,6 +3,10 @@ import prettyFormat from 'pretty-format'
 const {DOMElement, DOMCollection} = prettyFormat.plugins
 
 function prettyDOM(htmlElement, maxLength) {
+  if (htmlElement.documentElement) {
+    htmlElement = htmlElement.documentElement
+  }
+
   const debugContent = prettyFormat(htmlElement, {
     plugins: [DOMElement, DOMCollection],
     printFunctionName: false,
