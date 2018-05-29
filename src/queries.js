@@ -47,27 +47,30 @@ function queryAllByLabelText(
   const labels = queryAllLabelsByText(container, text, {exact, ...matchOpts})
   const labelledElements = labels
     .map(label => {
-      /* istanbul ignore if */
       if (label.control) {
-        // appears to be unsupported in jsdom: https://github.com/jsdom/jsdom/issues/2175
-        // but this would be the proper way to do things
         return label.control
-      } else if (label.getAttribute('for')) {
+      }
+      /* istanbul ignore if */
+      if (label.getAttribute('for')) {
         // we're using this notation because with the # selector we would have to escape special characters e.g. user.name
         // see https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector#Escaping_special_characters
         // <label for="someId">text</label><input id="someId" />
+
+        // .control support has landed in jsdom (https://github.com/jsdom/jsdom/issues/2175)
+        /* istanbul ignore next */
         return container.querySelector(`[id="${label.getAttribute('for')}"]`)
-      } else if (label.getAttribute('id')) {
+      }
+      if (label.getAttribute('id')) {
         // <label id="someId">text</label><input aria-labelledby="someId" />
         return container.querySelector(
           `[aria-labelledby="${label.getAttribute('id')}"]`,
         )
-      } else if (label.childNodes.length) {
+      }
+      if (label.childNodes.length) {
         // <label>text: <input /></label>
         return label.querySelector(selector)
-      } else {
-        return null
       }
+      return null
     })
     .filter(label => label !== null)
     .concat(queryAllByAttribute('aria-label', container, text, {exact}))
