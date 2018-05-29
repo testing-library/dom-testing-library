@@ -10,10 +10,11 @@ function debugDOM(htmlElement) {
   if (inCypress) {
     return ''
   }
+  /* istanbul ignore if */
   if (inBrowser && !inNode) {
-    return `\n\n${prettyDOM(htmlElement, limit, { highlight: false })}`
+    return prettyDOM(htmlElement, limit, { highlight: false })
   }
-  return `\n\n${prettyDOM(htmlElement, limit)}`
+  return prettyDOM(htmlElement, limit)
 }
 
 // Here are the queries for the library.
@@ -57,7 +58,6 @@ function queryAllByLabelText(
         // <label for="someId">text</label><input id="someId" />
 
         // .control support has landed in jsdom (https://github.com/jsdom/jsdom/issues/2175)
-        /* istanbul ignore next */
         return container.querySelector(`[id="${label.getAttribute('for')}"]`)
       }
       if (label.getAttribute('id')) {
@@ -152,11 +152,10 @@ function queryByAltText(...args) {
 function getAllByTestId(container, id, ...rest) {
   const els = queryAllByTestId(container, id, ...rest)
   if (!els.length) {
-    throw new Error(
-      `Unable to find an element by: [data-testid="${id}"] ${debugDOM(
-        container,
-      )}`,
-    )
+    throw new Error([
+      `Unable to find an element by: [data-testid="${id}"]`,
+      debugDOM(container),
+    ].filter(Boolean).join('\n\n'))
   }
   return els
 }
@@ -168,11 +167,10 @@ function getByTestId(...args) {
 function getAllByTitle(container, title, ...rest) {
   const els = queryAllByTitle(container, title, ...rest)
   if (!els.length) {
-    throw new Error(
-      `Unable to find an element with the title: ${title}. ${debugDOM(
-        container,
-      )}`,
-    )
+    throw new Error([
+      `Unable to find an element with the title: ${title}.`,
+      debugDOM(container),
+    ].filter(Boolean).join('\n\n'))
   }
   return els
 }
@@ -184,11 +182,10 @@ function getByTitle(...args) {
 function getAllByValue(container, value, ...rest) {
   const els = queryAllByValue(container, value, ...rest)
   if (!els.length) {
-    throw new Error(
-      `Unable to find an element with the value: ${value}. ${debugDOM(
-        container,
-      )}`,
-    )
+    throw new Error([
+      `Unable to find an element with the value: ${value}.`,
+      debugDOM(container),
+    ].filter(Boolean).join('\n\n'))
   }
   return els
 }
@@ -200,11 +197,10 @@ function getByValue(...args) {
 function getAllByPlaceholderText(container, text, ...rest) {
   const els = queryAllByPlaceholderText(container, text, ...rest)
   if (!els.length) {
-    throw new Error(
-      `Unable to find an element with the placeholder text of: ${text} ${debugDOM(
-        container,
-      )}`,
-    )
+    throw new Error([
+      `Unable to find an element with the placeholder text of: ${text}`,
+      debugDOM(container),
+    ].filter(Boolean).join('\n\n'))
   }
   return els
 }
@@ -218,17 +214,15 @@ function getAllByLabelText(container, text, ...rest) {
   if (!els.length) {
     const labels = queryAllLabelsByText(container, text, ...rest)
     if (labels.length) {
-      throw new Error(
-        `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly. ${debugDOM(
-          container,
-        )}`,
-      )
+      throw new Error([
+        `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.`,
+        debugDOM(container),
+      ].filter(Boolean).join('\n\n'))
     } else {
-      throw new Error(
-        `Unable to find a label with the text of: ${text} ${debugDOM(
-          container,
-        )}`,
-      )
+      throw new Error([
+        `Unable to find a label with the text of: ${text}`,
+        debugDOM(container),
+      ].filter(Boolean).join('\n\n'))
     }
   }
   return els
@@ -241,11 +235,10 @@ function getByLabelText(...args) {
 function getAllByText(container, text, ...rest) {
   const els = queryAllByText(container, text, ...rest)
   if (!els.length) {
-    throw new Error(
-      `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible. ${debugDOM(
-        container,
-      )}`,
-    )
+    throw new Error([
+      `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`,
+      debugDOM(container),
+    ].filter(Boolean).join('\n\n'))
   }
   return els
 }
@@ -257,11 +250,10 @@ function getByText(...args) {
 function getAllByAltText(container, alt, ...rest) {
   const els = queryAllByAltText(container, alt, ...rest)
   if (!els.length) {
-    throw new Error(
-      `Unable to find an element with the alt text: ${alt} ${debugDOM(
-        container,
-      )}`,
-    )
+    throw new Error([
+      `Unable to find an element with the alt text: ${alt}`,
+      debugDOM(container),
+    ].filter(Boolean).join('\n\n'))
   }
   return els
 }
