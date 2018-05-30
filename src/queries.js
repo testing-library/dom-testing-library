@@ -5,16 +5,15 @@ import {prettyDOM} from './pretty-dom'
 function debugDOM(htmlElement) {
   const limit =  process.env.DEBUG_PRINT_LIMIT || 7000
   const inNode = (typeof module !== 'undefined' && module.exports)
-  const inBrowser = (typeof window !== 'undefined' && window.document)
   const inCypress = (typeof window !== 'undefined' && window.Cypress)
+  /* istanbul ignore else */
   if (inCypress) {
     return ''
+  } else if (inNode) {
+    return prettyDOM(htmlElement, limit)
+  } else {
+    return prettyDOM(htmlElement, limit, {highlight: false})
   }
-  /* istanbul ignore if */
-  if (inBrowser && !inNode) {
-    return prettyDOM(htmlElement, limit, { highlight: false })
-  }
-  return prettyDOM(htmlElement, limit)
 }
 
 function getElementError(message, container) {
