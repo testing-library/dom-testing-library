@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`get throws a useful error message 1`] = `
-"Unable to find a label with the text of: LucyRicardo 
+"Unable to find a label with the text of: LucyRicardo
 
 [36m<div>[39m
   [36m<div />[39m
@@ -9,7 +9,7 @@ exports[`get throws a useful error message 1`] = `
 `;
 
 exports[`get throws a useful error message 2`] = `
-"Unable to find an element with the placeholder text of: LucyRicardo 
+"Unable to find an element with the placeholder text of: LucyRicardo
 
 [36m<div>[39m
   [36m<div />[39m
@@ -17,7 +17,7 @@ exports[`get throws a useful error message 2`] = `
 `;
 
 exports[`get throws a useful error message 3`] = `
-"Unable to find an element with the text: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible. 
+"Unable to find an element with the text: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
 [36m<div>[39m
   [36m<div />[39m
@@ -25,7 +25,7 @@ exports[`get throws a useful error message 3`] = `
 `;
 
 exports[`get throws a useful error message 4`] = `
-"Unable to find an element by: [data-testid=\\"LucyRicardo\\"] 
+"Unable to find an element by: [data-testid=\\"LucyRicardo\\"]
 
 [36m<div>[39m
   [36m<div />[39m
@@ -33,7 +33,7 @@ exports[`get throws a useful error message 4`] = `
 `;
 
 exports[`get throws a useful error message 5`] = `
-"Unable to find an element with the alt text: LucyRicardo 
+"Unable to find an element with the alt text: LucyRicardo
 
 [36m<div>[39m
   [36m<div />[39m
@@ -41,7 +41,7 @@ exports[`get throws a useful error message 5`] = `
 `;
 
 exports[`get throws a useful error message 6`] = `
-"Unable to find an element with the title: LucyRicardo. 
+"Unable to find an element with the title: LucyRicardo.
 
 [36m<div>[39m
   [36m<div />[39m
@@ -49,15 +49,29 @@ exports[`get throws a useful error message 6`] = `
 `;
 
 exports[`get throws a useful error message 7`] = `
-"Unable to find an element with the value: LucyRicardo. 
+"Unable to find an element with the value: LucyRicardo.
 
 [36m<div>[39m
   [36m<div />[39m
 [36m</div>[39m"
 `;
 
+exports[`get throws a useful error message without DOM in Cypress 1`] = `"Unable to find a label with the text of: LucyRicardo"`;
+
+exports[`get throws a useful error message without DOM in Cypress 2`] = `"Unable to find an element with the placeholder text of: LucyRicardo"`;
+
+exports[`get throws a useful error message without DOM in Cypress 3`] = `"Unable to find an element with the text: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible."`;
+
+exports[`get throws a useful error message without DOM in Cypress 4`] = `"Unable to find an element by: [data-testid=\\"LucyRicardo\\"]"`;
+
+exports[`get throws a useful error message without DOM in Cypress 5`] = `"Unable to find an element with the alt text: LucyRicardo"`;
+
+exports[`get throws a useful error message without DOM in Cypress 6`] = `"Unable to find an element with the title: LucyRicardo."`;
+
+exports[`get throws a useful error message without DOM in Cypress 7`] = `"Unable to find an element with the value: LucyRicardo."`;
+
 exports[`label with no form control 1`] = `
-"Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the \\"for\\" attribute or \\"aria-labelledby\\" attribute correctly. 
+"Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the \\"for\\" attribute or \\"aria-labelledby\\" attribute correctly.
 
 [36m<div>[39m
   [36m<label>[39m
@@ -67,7 +81,7 @@ exports[`label with no form control 1`] = `
 `;
 
 exports[`totally empty label 1`] = `
-"Found a label with the text of: , however no form control was found associated to that label. Make sure you're using the \\"for\\" attribute or \\"aria-labelledby\\" attribute correctly. 
+"Found a label with the text of: , however no form control was found associated to that label. Make sure you're using the \\"for\\" attribute or \\"aria-labelledby\\" attribute correctly.
 
 [36m<div>[39m
   [36m<label />[39m

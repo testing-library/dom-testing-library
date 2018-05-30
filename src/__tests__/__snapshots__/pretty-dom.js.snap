@@ -7,3 +7,10 @@ exports[`it prints out the given DOM element tree 1`] = `
   [36m</div>[39m
 [36m</div>[39m"
 `;
+
+exports[`it supports receiving the document element 1`] = `
+"[36m<html>[39m
+  [36m<head />[39m
+  [36m<body />[39m
+[36m</html>[39m"
+`;

@@ -3,7 +3,21 @@ import {getNodeText} from './get-node-text'
 import {prettyDOM} from './pretty-dom'
 
 function debugDOM(htmlElement) {
-  return prettyDOM(htmlElement, process.env.DEBUG_PRINT_LIMIT || 7000)
+  const limit =  process.env.DEBUG_PRINT_LIMIT || 7000
+  const inNode = (typeof module !== 'undefined' && module.exports)
+  const inCypress = (typeof window !== 'undefined' && window.Cypress)
+  /* istanbul ignore else */
+  if (inCypress) {
+    return ''
+  } else if (inNode) {
+    return prettyDOM(htmlElement, limit)
+  } else {
+    return prettyDOM(htmlElement, limit, {highlight: false})
+  }
+}
+
+function getElementError(message, container) {
+  return new Error([message, debugDOM(container)].filter(Boolean).join('\n\n'))
 }
 
 // Here are the queries for the library.
@@ -37,27 +51,29 @@ function queryAllByLabelText(
   const labels = queryAllLabelsByText(container, text, {exact, ...matchOpts})
   const labelledElements = labels
     .map(label => {
-      /* istanbul ignore if */
       if (label.control) {
-        // appears to be unsupported in jsdom: https://github.com/jsdom/jsdom/issues/2175
-        // but this would be the proper way to do things
         return label.control
-      } else if (label.getAttribute('for')) {
+      }
+      /* istanbul ignore if */
+      if (label.getAttribute('for')) {
         // we're using this notation because with the # selector we would have to escape special characters e.g. user.name
         // see https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector#Escaping_special_characters
         // <label for="someId">text</label><input id="someId" />
+
+        // .control support has landed in jsdom (https://github.com/jsdom/jsdom/issues/2175)
         return container.querySelector(`[id="${label.getAttribute('for')}"]`)
-      } else if (label.getAttribute('id')) {
+      }
+      if (label.getAttribute('id')) {
         // <label id="someId">text</label><input aria-labelledby="someId" />
         return container.querySelector(
           `[aria-labelledby="${label.getAttribute('id')}"]`,
         )
-      } else if (label.childNodes.length) {
+      }
+      if (label.childNodes.length) {
         // <label>text: <input /></label>
         return label.querySelector(selector)
-      } else {
-        return null
       }
+      return null
     })
     .filter(label => label !== null)
     .concat(queryAllByAttribute('aria-label', container, text, {exact}))
@@ -139,11 +155,7 @@ function queryByAltText(...args) {
 function getAllByTestId(container, id, ...rest) {
   const els = queryAllByTestId(container, id, ...rest)
   if (!els.length) {
-    throw new Error(
-      `Unable to find an element by: [data-testid="${id}"] \n\n${debugDOM(
-        container,
-      )}`,
-    )
+    throw getElementError(`Unable to find an element by: [data-testid="${id}"]`, container)
   }
   return els
 }
@@ -155,11 +167,7 @@ function getByTestId(...args) {
 function getAllByTitle(container, title, ...rest) {
   const els = queryAllByTitle(container, title, ...rest)
   if (!els.length) {
-    throw new Error(
-      `Unable to find an element with the title: ${title}. \n\n${debugDOM(
-        container,
-      )}`,
-    )
+    throw getElementError(`Unable to find an element with the title: ${title}.`, container)
   }
   return els
 }
@@ -171,11 +179,7 @@ function getByTitle(...args) {
 function getAllByValue(container, value, ...rest) {
   const els = queryAllByValue(container, value, ...rest)
   if (!els.length) {
-    throw new Error(
-      `Unable to find an element with the value: ${value}. \n\n${debugDOM(
-        container,
-      )}`,
-    )
+    throw getElementError(`Unable to find an element with the value: ${value}.`, container)
   }
   return els
 }
@@ -187,11 +191,7 @@ function getByValue(...args) {
 function getAllByPlaceholderText(container, text, ...rest) {
   const els = queryAllByPlaceholderText(container, text, ...rest)
   if (!els.length) {
-    throw new Error(
-      `Unable to find an element with the placeholder text of: ${text} \n\n${debugDOM(
-        container,
-      )}`,
-    )
+    throw getElementError(`Unable to find an element with the placeholder text of: ${text}`, container)
   }
   return els
 }
@@ -205,17 +205,9 @@ function getAllByLabelText(container, text, ...rest) {
   if (!els.length) {
     const labels = queryAllLabelsByText(container, text, ...rest)
     if (labels.length) {
-      throw new Error(
-        `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly. \n\n${debugDOM(
-          container,
-        )}`,
-      )
+      throw getElementError(`Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.`, container)
     } else {
-      throw new Error(
-        `Unable to find a label with the text of: ${text} \n\n${debugDOM(
-          container,
-        )}`,
-      )
+      throw getElementError(`Unable to find a label with the text of: ${text}`, container)
     }
   }
   return els
@@ -228,11 +220,7 @@ function getByLabelText(...args) {
 function getAllByText(container, text, ...rest) {
   const els = queryAllByText(container, text, ...rest)
   if (!els.length) {
-    throw new Error(
-      `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible. \n\n${debugDOM(
-        container,
-      )}`,
-    )
+    throw getElementError(`Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`, container)
   }
   return els
 }
@@ -244,11 +232,7 @@ function getByText(...args) {
 function getAllByAltText(container, alt, ...rest) {
   const els = queryAllByAltText(container, alt, ...rest)
   if (!els.length) {
-    throw new Error(
-      `Unable to find an element with the alt text: ${alt} \n\n${debugDOM(
-        container,
-      )}`,
-    )
+    throw getElementError(`Unable to find an element with the alt text: ${alt}`, container)
   }
   return els
 }

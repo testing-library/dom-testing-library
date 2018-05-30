@@ -24,7 +24,7 @@ exports[`it throws if timeout is exceeded 2`] = `
 
 exports[`it throws the same error that the callback has thrown if timeout is exceeded 1`] = `
 Array [
-  [Error: Unable to find an element by: [data-testid="test"] 
+  [Error: Unable to find an element by: [data-testid="test"]
 
 [36m<div[39m
   [33mdata-test-attribute[39m=[32m"something changed twice"[39m

@@ -6,6 +6,7 @@ dist
 .DS_Store
 .eslintcache
 yarn-error.log
+.idea/
 
 # these cause more harm than good
 # when working with contributors

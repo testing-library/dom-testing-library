@@ -1,6 +1,10 @@
 import 'jest-dom/extend-expect'
 import {render} from './helpers/test-utils'
 
+beforeEach(() => {
+  window.Cypress = null;
+});
+
 test('query can return null', () => {
   const {
     queryByLabelText,
@@ -366,6 +370,28 @@ test('test the debug helper prints the dom state here', () => {
 
   //all good replacing it with old value
   process.env.DEBUG_PRINT_LIMIT = originalDebugPrintLimit
+})
+
+test('get throws a useful error message without DOM in Cypress', () => {
+  window.Cypress = {}
+  const {
+    getByLabelText,
+    getByPlaceholderText,
+    getByText,
+    getByTestId,
+    getByAltText,
+    getByTitle,
+    getByValue,
+  } = render('<div />')
+  expect(() => getByLabelText('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() =>
+    getByPlaceholderText('LucyRicardo'),
+  ).toThrowErrorMatchingSnapshot()
+  expect(() => getByText('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getByValue('LucyRicardo')).toThrowErrorMatchingSnapshot()
 })
 
 /* eslint jsx-a11y/label-has-for:0 */

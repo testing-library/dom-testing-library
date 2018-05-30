@@ -2,12 +2,16 @@ import prettyFormat from 'pretty-format'
 
 const {DOMElement, DOMCollection} = prettyFormat.plugins
 
-function prettyDOM(htmlElement, maxLength) {
-  const debugContent = prettyFormat(htmlElement, {
+function prettyDOM(htmlElement, maxLength, options) {
+  if (htmlElement.documentElement) {
+    htmlElement = htmlElement.documentElement
+  }
+
+  const debugContent = prettyFormat(htmlElement, Object.assign({
     plugins: [DOMElement, DOMCollection],
     printFunctionName: false,
     highlight: true,
-  })
+  }, options))
   return maxLength !== undefined && htmlElement.outerHTML.length > maxLength
     ? `${debugContent.slice(0, maxLength)}...`
     : debugContent
