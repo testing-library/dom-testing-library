@@ -261,6 +261,7 @@ getByText(
   container: HTMLElement,
   text: TextMatch,
   options?: {
+    selector?: string = '*',
     exact?: boolean = true,
     collapseWhitespace?: boolean = true,
     trim?: boolean = true,
@@ -274,6 +275,8 @@ matching the given [`TextMatch`](#textmatch).
 // <a href="/about">About ℹ️</a>
 const aboutAnchorNode = getByText(container, 'about')
 ```
+
+> NOTE: see [`getbylabeltext`](#getbylabeltext) for more details on how and when to use the `selector` option
 
 ### `getByAltText`
 
