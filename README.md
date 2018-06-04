@@ -16,7 +16,7 @@
 [![downloads][downloads-badge]][npmtrends]
 [![MIT License][license-badge]][license]
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-21-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-22-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome][prs-badge]][prs]
 [![Code of Conduct][coc-badge]][coc]
 
@@ -67,37 +67,36 @@ when a real user uses it.
 ## Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-* [Installation](#installation)
-* [Usage](#usage)
-  * [`getByLabelText`](#getbylabeltext)
-  * [`getByPlaceholderText`](#getbyplaceholdertext)
-  * [`getByText`](#getbytext)
-  * [`getByAltText`](#getbyalttext)
-  * [`getByTitle`](#getbytitle)
-  * [`getByValue`](#getbyvalue)
-  * [`getByTestId`](#getbytestid)
-  * [`wait`](#wait)
-  * [`waitForElement`](#waitforelement)
-  * [`fireEvent`](#fireevent)
-* [Custom Jest Matchers](#custom-jest-matchers)
-  * [Using other assertion libraries](#using-other-assertion-libraries)
-* [`TextMatch`](#textmatch)
-  * [Precision](#precision)
-  * [TextMatch Examples](#textmatch-examples)
-* [`query` APIs](#query-apis)
-* [`queryAll` and `getAll` APIs](#queryall-and-getall-apis)
-* [`getQueriesForElement`](#getqueriesforelement)
-* [Debugging](#debugging)
-  * [`prettyDOM`](#prettydom)
-* [Implementations](#implementations)
-* [FAQ](#faq)
-* [Other Solutions](#other-solutions)
-* [Guiding Principles](#guiding-principles)
-* [Contributors](#contributors)
-* [LICENSE](#license)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [`getByLabelText`](#getbylabeltext)
+  - [`getByPlaceholderText`](#getbyplaceholdertext)
+  - [`getByText`](#getbytext)
+  - [`getByAltText`](#getbyalttext)
+  - [`getByTitle`](#getbytitle)
+  - [`getByValue`](#getbyvalue)
+  - [`getByTestId`](#getbytestid)
+  - [`wait`](#wait)
+  - [`waitForElement`](#waitforelement)
+  - [`fireEvent`](#fireevent)
+- [Custom Jest Matchers](#custom-jest-matchers)
+  - [Using other assertion libraries](#using-other-assertion-libraries)
+- [`TextMatch`](#textmatch)
+  - [Precision](#precision)
+  - [TextMatch Examples](#textmatch-examples)
+- [`query` APIs](#query-apis)
+- [`queryAll` and `getAll` APIs](#queryall-and-getall-apis)
+- [`getQueriesForElement`](#getqueriesforelement)
+- [Debugging](#debugging)
+  - [`prettyDOM`](#prettydom)
+- [Implementations](#implementations)
+- [FAQ](#faq)
+- [Other Solutions](#other-solutions)
+- [Guiding Principles](#guiding-principles)
+- [Contributors](#contributors)
+- [LICENSE](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -114,8 +113,8 @@ npm install --save-dev dom-testing-library
 
 Note:
 
-* Each of the `get` APIs below have a matching [`getAll`](#queryall-and-getall-apis) API that returns all elements instead of just the first one, and [`query`](#query-apis)/[`getAll`](#queryall-and-getall-apis) that return `null`/`[]` instead of throwing an error.
-* See [TextMatch](#textmatch) for details on the `exact`, `trim`, and `collapseWhitespace` options.
+- Each of the `get` APIs below have a matching [`getAll`](#queryall-and-getall-apis) API that returns all elements instead of just the first one, and [`query`](#query-apis)/[`getAll`](#queryall-and-getall-apis) that return `null`/`[]` instead of throwing an error.
+- See [TextMatch](#textmatch) for details on the `exact`, `trim`, and `collapseWhitespace` options.
 
 ```javascript
 // src/__tests__/example.js
@@ -262,6 +261,7 @@ getByText(
   container: HTMLElement,
   text: TextMatch,
   options?: {
+    selector?: string = '*',
     exact?: boolean = true,
     collapseWhitespace?: boolean = true,
     trim?: boolean = true,
@@ -275,6 +275,8 @@ matching the given [`TextMatch`](#textmatch).
 // <a href="/about">About ℹ️</a>
 const aboutAnchorNode = getByText(container, 'about')
 ```
+
+> NOTE: see [`getbylabeltext`](#getbylabeltext) for more details on how and when to use the `selector` option
 
 ### `getByAltText`
 
@@ -559,7 +561,7 @@ If you're not using jest, you may be able to find a similar set of custom
 assertions for your library of choice. Here's a list of alternatives to jest-dom
 for other popular assertion libraries:
 
-* [chai-dom](https://github.com/nathanboktae/chai-dom)
+- [chai-dom](https://github.com/nathanboktae/chai-dom)
 
 If you're aware of some other alternatives, please [make a pull request][prs]
 and add it here!
@@ -574,13 +576,13 @@ Several APIs accept a `TextMatch` which can be a `string`, `regex` or a
 Some APIs accept an object as the final argument that can contain options that
 affect the precision of string matching:
 
-* `exact`: Defaults to `true`; matches full strings, case-sensitive. When false,
+- `exact`: Defaults to `true`; matches full strings, case-sensitive. When false,
   matches substrings and is not case-sensitive.
-  * `exact` has no effect on `regex` or `function` arguments.
-  * In most cases using a regex instead of a string gives you more control over
+  - `exact` has no effect on `regex` or `function` arguments.
+  - In most cases using a regex instead of a string gives you more control over
     fuzzy matching and should be preferred over `{ exact: false }`.
-* `trim`: Defaults to `true`; trim leading and trailing whitespace.
-* `collapseWhitespace`: Defaults to `true`. Collapses inner whitespace (newlines, tabs, repeated spaces) into a single space.
+- `trim`: Defaults to `true`; trim leading and trailing whitespace.
+- `collapseWhitespace`: Defaults to `true`. Collapses inner whitespace (newlines, tabs, repeated spaces) into a single space.
 
 ### TextMatch Examples
 
@@ -717,7 +719,7 @@ of these utilities was in the `react-testing-library`.
 
 Implementations include:
 
-* [`react-testing-library`](https://github.com/kentcdodds/react-testing-library)
+- [`react-testing-library`](https://github.com/kentcdodds/react-testing-library)
 
 ## FAQ
 
@@ -862,6 +864,8 @@ Thanks goes to these people ([emoji key][emojis]):
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | [<img src="https://avatars1.githubusercontent.com/u/1241511?s=460&v=4" width="100px;"/><br /><sub><b>Anto Aravinth</b></sub>](https://github.com/antoaravinth)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Tests") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/3462296?v=4" width="100px;"/><br /><sub><b>Jonah Moses</b></sub>](https://github.com/JonahMoses)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=JonahMoses "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/4002543?v=4" width="100px;"/><br /><sub><b>Łukasz Gandecki</b></sub>](http://team.thebrain.pro)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Tests") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/498274?v=4" width="100px;"/><br /><sub><b>Ivan Babak</b></sub>](https://sompylasar.github.io)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Asompylasar "Bug reports") [🤔](#ideas-sompylasar "Ideas, Planning, & Feedback") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=sompylasar "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=sompylasar "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/4439618?v=4" width="100px;"/><br /><sub><b>Jesse Day</b></sub>](https://github.com/jday3)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=jday3 "Code") | [<img src="https://avatars0.githubusercontent.com/u/15199?v=4" width="100px;"/><br /><sub><b>Ernesto García</b></sub>](http://gnapse.github.io)<br />[💬](#question-gnapse "Answering Questions") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=gnapse "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=gnapse "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/2747424?v=4" width="100px;"/><br /><sub><b>Josef Maxx Blake</b></sub>](http://jomaxx.com)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=jomaxx "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=jomaxx "Documentation") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=jomaxx "Tests") |
 | [<img src="https://avatars3.githubusercontent.com/u/725236?v=4" width="100px;"/><br /><sub><b>Alex Cook</b></sub>](https://github.com/alecook)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=alecook "Documentation") [💡](#example-alecook "Examples") | [<img src="https://avatars3.githubusercontent.com/u/10348212?v=4" width="100px;"/><br /><sub><b>Daniel Cook</b></sub>](https://github.com/dfcook)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=dfcook "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=dfcook "Documentation") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=dfcook "Tests") | [<img src="https://avatars2.githubusercontent.com/u/21194045?s=400&v=4" width="100px;"/><br /><sub><b>Thomas Chia</b></sub>](https://github.com/thchia)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Athchia "Bug reports") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=thchia "Code") | [<img src="https://avatars1.githubusercontent.com/u/28659384?v=4" width="100px;"/><br /><sub><b>Tim Deschryver</b></sub>](https://github.com/tdeschryver)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=tdeschryver "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=tdeschryver "Tests") | [<img src="https://avatars3.githubusercontent.com/u/1571667?v=4" width="100px;"/><br /><sub><b>Alex Krolick</b></sub>](https://alexkrolick.com)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=alexkrolick "Code") | [<img src="https://avatars2.githubusercontent.com/u/2224291?v=4" width="100px;"/><br /><sub><b>Maddi Joyce</b></sub>](http://www.maddijoyce.com)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=maddijoyce "Code") | [<img src="https://avatars1.githubusercontent.com/u/25429764?v=4" width="100px;"/><br /><sub><b>Peter Kamps</b></sub>](https://github.com/npeterkamps)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Anpeterkamps "Bug reports") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=npeterkamps "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=npeterkamps "Tests") |
+| [<img src="https://avatars2.githubusercontent.com/u/21689428?v=4" width="100px;"/><br /><sub><b>Jonathan Stoye</b></sub>](http://jonathanstoye.de)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=JonathanStoye "Documentation") |
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors][all-contributors] specification.
