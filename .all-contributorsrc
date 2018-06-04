@@ -220,6 +220,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "JonathanStoye",
+      "name": "Jonathan Stoye",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/21689428?v=4",
+      "profile": "http://jonathanstoye.de",
+      "contributions": [
+        "doc"
+      ]
     }
   ]
 }
