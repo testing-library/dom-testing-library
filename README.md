@@ -543,8 +543,8 @@ included for convenience to be imported from this library directly:
 import 'dom-testing-library/extend-expect'
 
 // <span data-testid="greetings">Hello World</span>
-expect(queryByText(container, 'greetings')).toBeInTheDOM()
-expect(queryByText(container, 'greetings')).not.toHaveTextContent('Bye bye')
+expect(queryByTestId(container, 'greetings')).toBeInTheDOM()
+expect(queryByTestId(container, 'greetings')).not.toHaveTextContent('Bye bye')
 // ...
 
 > Note: when using `toBeInTheDOM`, make sure you use a query function
