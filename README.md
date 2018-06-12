@@ -650,14 +650,13 @@ Sometimes, there is no garauntee that the text, placeholder, or label you want t
 Example: To get the text 'hello' only within a section called 'messages', you could do:
 
 ```javascript
-import {render, within} from 'react-testing-library'
+import {within} from 'dom-testing-library'
 
-// ...
-
-const {getByTestId} = render(/* stuff */)
-const messagesSection = getByTestId('messages')
-const hello = within(messagesSection).getByText('hello')
+const {getByText} = within(document.body.getElementById('messages'))
+const helloMessage = getByText('hello')
 ```
+
+Fun fact, `within` is actually just an alias to the `getQueriesForElement` function!
 
 ## `getQueriesForElement`
 
