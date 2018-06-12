@@ -16,4 +16,7 @@ export * from './pretty-dom'
 
 // The original name of bindElementToQueries was weird
 // The new name is better. Remove this in the next major version bump.
-export {getQueriesForElement as bindElementToQueries}
+export {
+  getQueriesForElement as bindElementToQueries,
+  getQueriesForElement as within,
+}
