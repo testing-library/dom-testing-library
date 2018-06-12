@@ -14,6 +14,9 @@ export * from './events'
 export * from './get-queries-for-element'
 export * from './pretty-dom'
 
-// The original name of bindElementToQueries was weird
-// The new name is better. Remove this in the next major version bump.
-export {getQueriesForElement as bindElementToQueries}
+export {
+  // The original name of bindElementToQueries was weird
+  // The new name is better. Remove this in the next major version bump.
+  getQueriesForElement as bindElementToQueries,
+  getQueriesForElement as within,
+}
