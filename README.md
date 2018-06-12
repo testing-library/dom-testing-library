@@ -643,9 +643,11 @@ expect(submitButtons).toHaveLength(3) // expect 3 elements
 expect(submitButtons[0]).toBeInTheDOM()
 ```
 
-## `within` API
+## `within` and `getQueriesForElement` APIs
 
-Sometimes, there is no garauntee that the text, placeholder, or label you want to query is unique on the page. So you might want to explicity tell react-render-dom to get an element **only within** a particular section of the page. `within` is a helper function for this case.
+`within` (an alias to `getQueriesForElement`) takes a DOM element and binds it to the raw query functions, allowing them
+to be used without specifying a container. It is the recommended approach for libraries built on this API
+and is in use in `react-testing-library` and `vue-testing-library`.
 
 Example: To get the text 'hello' only within a section called 'messages', you could do:
 
@@ -655,14 +657,6 @@ import {within} from 'dom-testing-library'
 const {getByText} = within(document.body.getElementById('messages'))
 const helloMessage = getByText('hello')
 ```
-
-Fun fact, `within` is actually just an alias to the `getQueriesForElement` function!
-
-## `getQueriesForElement`
-
-`getQueriesForElement` takes a DOM element and binds it to the raw query functions, allowing them
-to be used without specifying a container. It is the recommended approach for libraries built on this API
-and is in use in `react-testing-library` and `vue-testing-library`.
 
 ## Debugging
 
