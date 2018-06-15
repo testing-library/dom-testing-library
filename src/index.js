@@ -7,7 +7,10 @@ export {queries}
 
 export * from './queries'
 export * from './wait'
+
+// waitForElement was merged into wait. Remove this in the next major version bump.
 export * from './wait-for-element'
+
 export * from './matches'
 export * from './get-node-text'
 export * from './events'
