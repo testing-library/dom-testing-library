@@ -3,9 +3,9 @@ import {getNodeText} from './get-node-text'
 import {prettyDOM} from './pretty-dom'
 
 function debugDOM(htmlElement) {
-  const limit =  process.env.DEBUG_PRINT_LIMIT || 7000
-  const inNode = (typeof module !== 'undefined' && module.exports)
-  const inCypress = (typeof window !== 'undefined' && window.Cypress)
+  const limit = process.env.DEBUG_PRINT_LIMIT || 7000
+  const inNode = typeof module !== 'undefined' && module.exports
+  const inCypress = typeof window !== 'undefined' && window.Cypress
   /* istanbul ignore else */
   if (inCypress) {
     return ''
@@ -66,7 +66,7 @@ function queryAllByLabelText(
       if (label.getAttribute('id')) {
         // <label id="someId">text</label><input aria-labelledby="someId" />
         return container.querySelector(
-          `[aria-labelledby="${label.getAttribute('id')}"]`,
+          `[aria-labelledby~="${label.getAttribute('id')}"]`,
         )
       }
       if (label.childNodes.length) {
@@ -155,7 +155,10 @@ function queryByAltText(...args) {
 function getAllByTestId(container, id, ...rest) {
   const els = queryAllByTestId(container, id, ...rest)
   if (!els.length) {
-    throw getElementError(`Unable to find an element by: [data-testid="${id}"]`, container)
+    throw getElementError(
+      `Unable to find an element by: [data-testid="${id}"]`,
+      container,
+    )
   }
   return els
 }
@@ -167,7 +170,10 @@ function getByTestId(...args) {
 function getAllByTitle(container, title, ...rest) {
   const els = queryAllByTitle(container, title, ...rest)
   if (!els.length) {
-    throw getElementError(`Unable to find an element with the title: ${title}.`, container)
+    throw getElementError(
+      `Unable to find an element with the title: ${title}.`,
+      container,
+    )
   }
   return els
 }
@@ -179,7 +185,10 @@ function getByTitle(...args) {
 function getAllByValue(container, value, ...rest) {
   const els = queryAllByValue(container, value, ...rest)
   if (!els.length) {
-    throw getElementError(`Unable to find an element with the value: ${value}.`, container)
+    throw getElementError(
+      `Unable to find an element with the value: ${value}.`,
+      container,
+    )
   }
   return els
 }
@@ -191,7 +200,10 @@ function getByValue(...args) {
 function getAllByPlaceholderText(container, text, ...rest) {
   const els = queryAllByPlaceholderText(container, text, ...rest)
   if (!els.length) {
-    throw getElementError(`Unable to find an element with the placeholder text of: ${text}`, container)
+    throw getElementError(
+      `Unable to find an element with the placeholder text of: ${text}`,
+      container,
+    )
   }
   return els
 }
@@ -205,9 +217,15 @@ function getAllByLabelText(container, text, ...rest) {
   if (!els.length) {
     const labels = queryAllLabelsByText(container, text, ...rest)
     if (labels.length) {
-      throw getElementError(`Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.`, container)
+      throw getElementError(
+        `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.`,
+        container,
+      )
     } else {
-      throw getElementError(`Unable to find a label with the text of: ${text}`, container)
+      throw getElementError(
+        `Unable to find a label with the text of: ${text}`,
+        container,
+      )
     }
   }
   return els
@@ -220,7 +238,10 @@ function getByLabelText(...args) {
 function getAllByText(container, text, ...rest) {
   const els = queryAllByText(container, text, ...rest)
   if (!els.length) {
-    throw getElementError(`Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`, container)
+    throw getElementError(
+      `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`,
+      container,
+    )
   }
   return els
 }
@@ -232,7 +253,10 @@ function getByText(...args) {
 function getAllByAltText(container, alt, ...rest) {
   const els = queryAllByAltText(container, alt, ...rest)
   if (!els.length) {
-    throw getElementError(`Unable to find an element with the alt text: ${alt}`, container)
+    throw getElementError(
+      `Unable to find an element with the alt text: ${alt}`,
+      container,
+    )
   }
   return els
 }
