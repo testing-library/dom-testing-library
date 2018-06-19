@@ -249,6 +249,15 @@
         "doc",
         "ideas"
       ]
+    },
+    {
+      "login": "wgcrouch",
+      "name": "Wayne Crouch",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/340761?v=4",
+      "profile": "https://github.com/wgcrouch",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }

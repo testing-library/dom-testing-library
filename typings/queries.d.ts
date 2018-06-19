@@ -14,7 +14,7 @@ export type AllByAttribute = (
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
-) => [HTMLElement]
+) => HTMLElement[]
 
 export type GetByAttribute = (
   container: HTMLElement,
@@ -32,7 +32,7 @@ export type AllByText = (
   container: HTMLElement,
   id: Matcher,
   options?: SelectorMatcherOptions,
-) => [HTMLElement]
+) => HTMLElement[]
 
 export type GetByText = (
   container: HTMLElement,
