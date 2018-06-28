@@ -4,7 +4,7 @@ import {prettyDOM} from './pretty-dom'
 
 function debugDOM(htmlElement) {
   const limit = process.env.DEBUG_PRINT_LIMIT || 7000
-  const inNode = typeof module !== 'undefined' && module.exports
+  const inNode = typeof process !== 'undefined' && process.versions !== undefined && process.versions.node !== undefined
   const inCypress = typeof window !== 'undefined' && window.Cypress
   /* istanbul ignore else */
   if (inCypress) {
