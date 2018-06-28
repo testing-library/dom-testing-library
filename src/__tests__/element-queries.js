@@ -2,8 +2,8 @@ import 'jest-dom/extend-expect'
 import {render} from './helpers/test-utils'
 
 beforeEach(() => {
-  window.Cypress = null;
-});
+  window.Cypress = null
+})
 
 test('query can return null', () => {
   const {
@@ -82,12 +82,20 @@ test('get can get form controls by label text', () => {
         <label for="fourth.id">4th</label>
         <input id="fourth.id" />
       </div>
+      <div>
+      <div>
+        <label id="fifth-label-one">5th one</label>
+        <label id="fifth-label-two">5th two</label>
+        <input aria-labelledby="fifth-label-one fifth-label-two" id="fifth-id" />
+      </div>
     </div>
   `)
   expect(getByLabelText('1st').id).toBe('first-id')
   expect(getByLabelText('2nd').id).toBe('second-id')
   expect(getByLabelText('3rd').id).toBe('third-id')
   expect(getByLabelText('4th').id).toBe('fourth.id')
+  expect(getByLabelText('5th one').id).toBe('fifth-id')
+  expect(getByLabelText('5th two').id).toBe('fifth-id')
 })
 
 test('get can get form controls by placeholder', () => {
@@ -174,15 +182,15 @@ test('getAll* matchers return an array', () => {
     <div>
       <img
         data-testid="poster"
-        alt="finding nemo poster" 
+        alt="finding nemo poster"
         src="/finding-nemo.png" />
       <img
         data-testid="poster"
-        alt="finding dory poster" 
+        alt="finding dory poster"
         src="/finding-dory.png" />
       <img
         data-testid="poster"
-        alt="jumanji poster" 
+        alt="jumanji poster"
         src="/jumanji.png" />
       <p>Where to next?</p>
       <label for="username">User Name</label>
