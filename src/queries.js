@@ -1,34 +1,15 @@
 import {fuzzyMatches, matches} from './matches'
 import {getNodeText} from './get-node-text'
-import {prettyDOM} from './pretty-dom'
-
-function debugDOM(htmlElement) {
-  const limit = process.env.DEBUG_PRINT_LIMIT || 7000
-  const inNode = typeof process !== 'undefined' && process.versions !== undefined && process.versions.node !== undefined
-  const inCypress = typeof window !== 'undefined' && window.Cypress
-  /* istanbul ignore else */
-  if (inCypress) {
-    return ''
-  } else if (inNode) {
-    return prettyDOM(htmlElement, limit)
-  } else {
-    return prettyDOM(htmlElement, limit, {highlight: false})
-  }
-}
-
-function getElementError(message, container) {
-  return new Error([message, debugDOM(container)].filter(Boolean).join('\n\n'))
-}
+import {
+  getElementError,
+  firstResultOrNull,
+  queryAllByAttribute,
+  queryByAttribute,
+} from './query-helpers'
 
 // Here are the queries for the library.
 // The queries here should only be things that are accessible to both users who are using a screen reader
 // and those who are not using a screen reader (with the exception of the data-testid attribute query).
-
-function firstResultOrNull(queryFunction, ...args) {
-  const result = queryFunction(...args)
-  if (result.length === 0) return null
-  return result[0]
-}
 
 function queryAllLabelsByText(
   container,
@@ -99,27 +80,6 @@ function queryAllByText(
 
 function queryByText(...args) {
   return firstResultOrNull(queryAllByText, ...args)
-}
-
-// this is just a utility and not an exposed query.
-// There are no plans to expose this.
-function queryAllByAttribute(
-  attribute,
-  container,
-  text,
-  {exact = true, collapseWhitespace = true, trim = true} = {},
-) {
-  const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
-  return Array.from(container.querySelectorAll(`[${attribute}]`)).filter(node =>
-    matcher(node.getAttribute(attribute), node, text, matchOpts),
-  )
-}
-
-// this is just a utility and not an exposed query.
-// There are no plans to expose this.
-function queryByAttribute(...args) {
-  return firstResultOrNull(queryAllByAttribute, ...args)
 }
 
 const queryByPlaceholderText = queryByAttribute.bind(null, 'placeholder')

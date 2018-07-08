@@ -1,20 +1,9 @@
 import {Matcher, MatcherOptions} from './matches'
-
-export interface SelectorMatcherOptions extends MatcherOptions {
-  selector?: string
-}
-
-export type QueryByAttribute = (
-  container: HTMLElement,
-  id: Matcher,
-  options?: MatcherOptions,
-) => HTMLElement | null
-
-export type AllByAttribute = (
-  container: HTMLElement,
-  id: Matcher,
-  options?: MatcherOptions,
-) => HTMLElement[]
+import {
+  QueryByAttribute,
+  AllByAttribute,
+  SelectorMatcherOptions,
+} from './query-helpers'
 
 export type GetByAttribute = (
   container: HTMLElement,
