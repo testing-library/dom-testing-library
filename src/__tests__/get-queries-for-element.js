@@ -11,6 +11,7 @@ test('accepts custom queries', () => {
   const container = document.createElement('div')
   const customQuery = jest.fn()
   const boundQueries = getQueriesForElement(container, {
+    ...queries,
     customQuery,
   })
   expect(boundQueries.customQuery).toBeDefined()
@@ -27,17 +28,4 @@ test('binds functions to container', () => {
   })
   boundQueries.customQuery()
   expect(mock).toHaveBeenCalledWith(container)
-})
-
-test('accepts an array of queries', () => {
-  const container = document.createElement('div')
-  const customQuery = jest.fn()
-  const boundQueries = getQueriesForElement(container, [
-    queries,
-    {
-      customQuery,
-    },
-  ])
-  expect(boundQueries.getAllByText).toBeDefined()
-  expect(boundQueries.customQuery).toBeDefined()
 })
