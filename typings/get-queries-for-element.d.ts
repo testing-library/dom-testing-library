@@ -12,7 +12,7 @@ export type BoundFunctions<T> = {[P in keyof T]: BoundFunction<T[P]>}
 
 export function getQueriesForElement(
   element: HTMLElement,
-  queriesToBind:
+  queriesToBind?:
     | BoundFunctions<typeof queries>
     | BoundFunctions<typeof queries>[],
 ): BoundFunctions<typeof queries>

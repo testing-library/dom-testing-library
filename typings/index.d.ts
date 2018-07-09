@@ -1,8 +1,10 @@
 // TypeScript Version: 2.8
+import {getQueriesForElement} from './get-queries-for-element'
 import * as queries from './queries'
 import * as queryHelpers from './query-helpers'
 
-export {queries, queryHelpers}
+declare const within: typeof getQueriesForElement
+export {queries, queryHelpers, within}
 
 export * from './queries'
 export * from './query-helpers'
