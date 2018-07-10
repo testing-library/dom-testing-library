@@ -35,8 +35,7 @@
   },
   "files": [
     "dist",
-    "typings",
-    "extend-expect.js"
+    "typings"
   ],
   "dependencies": {
     "jest-dom": "^1.0.0",
