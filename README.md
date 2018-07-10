@@ -129,7 +129,7 @@ import {
   wait,
 } from 'dom-testing-library'
 // adds special assertions like toHaveTextContent and toBeInTheDOM
-import 'dom-testing-library/extend-expect'
+import 'jest-dom/extend-expect'
 
 function getExampleDOM() {
   // This is just a raw example of setting up some DOM
@@ -534,13 +534,13 @@ finding elements in the DOM similarly to how users would do.
 
 ## Custom Jest Matchers
 
-When using [jest][], we recommend that you import a set of custom matchers that
-make it easier to check several aspects of the state of a DOM element. These are
-provided by [jest-dom](https://github.com/gnapse/jest-dom), but are also
-included for convenience to be imported from this library directly:
+When using [jest][], it is convenient to import a set of custom matchers that
+make it easier to check several aspects of the state of a DOM element. For
+exmaple, you can use the ones provided by
+[jest-dom](https://github.com/gnapse/jest-dom):
 
 ```javascript
-import 'dom-testing-library/extend-expect'
+import 'jest-dom/extend-expect'
 
 // <span data-testid="greetings">Hello World</span>
 expect(queryByTestId(container, 'greetings')).toBeInTheDOM()
