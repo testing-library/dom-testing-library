@@ -729,6 +729,7 @@ of these utilities was in the `react-testing-library`.
 Implementations include:
 
 - [`react-testing-library`](https://github.com/kentcdodds/react-testing-library)
+- [`pptr-testing-library`](https://github.com/patrickhulce/pptr-testing-library)
 
 ## FAQ
 
