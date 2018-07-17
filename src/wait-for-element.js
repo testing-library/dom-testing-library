@@ -5,7 +5,12 @@ function waitForElement(
   {
     container = document,
     timeout = 4500,
-    mutationObserverOptions = {subtree: true, childList: true},
+    mutationObserverOptions = {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      characterData: true,
+    },
   } = {},
 ) {
   return new Promise((resolve, reject) => {
