@@ -276,6 +276,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rbrtsmith",
+      "name": "Robert Smith",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/4982001?v=4",
+      "profile": "http://rbrtsmith.com/",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
     }
   ]
 }

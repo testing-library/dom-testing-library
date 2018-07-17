@@ -38,6 +38,22 @@ exports[`it throws the same error that the callback has thrown if timeout is exc
 />
 `;
 
+exports[`it waits characterData mutation 1`] = `
+<div>
+  <div>
+    initial text
+  </div>
+</div>
+`;
+
+exports[`it waits characterData mutation 2`] = `
+<div>
+  <div>
+    new text
+  </div>
+</div>
+`;
+
 exports[`it waits for the callback to return a value and only reacts to DOM mutations 1`] = `
 <div>
   <div
