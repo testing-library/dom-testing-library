@@ -165,6 +165,7 @@ test('it waits characterData mutation', async () => {
 
   return promise
 })
+
 test('it waits for the attributes mutation', async () => {
   const {container} = render(``)
 
