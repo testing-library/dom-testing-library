@@ -129,7 +129,44 @@ test('it waits for the next DOM mutation with default callback', async () => {
   return promise
 })
 
-test('it waits for the attributes mutation if configured', async () => {
+test('it waits characterData mutation', async () => {
+  const {container} = render(`<div>initial text</div>`)
+
+  const callback = jest
+    .fn(() => container.textContent === 'new text')
+    .mockName('callback')
+  const successHandler = jest.fn().mockName('successHandler')
+  const errorHandler = jest.fn().mockName('errorHandler')
+
+  const promise = waitForElement(callback, {container}).then(
+    successHandler,
+    errorHandler,
+  )
+
+  // Promise callbacks are always asynchronous.
+  expect(successHandler).toHaveBeenCalledTimes(0)
+  expect(errorHandler).toHaveBeenCalledTimes(0)
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(container).toMatchSnapshot()
+
+  await skipSomeTimeForMutationObserver()
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(successHandler).toHaveBeenCalledTimes(0)
+  expect(errorHandler).toHaveBeenCalledTimes(0)
+
+  container.querySelector('div').innerHTML = 'new text'
+  await skipSomeTimeForMutationObserver()
+
+  expect(successHandler).toHaveBeenCalledTimes(1)
+  expect(errorHandler).toHaveBeenCalledTimes(0)
+  expect(callback).toHaveBeenCalledTimes(2)
+  expect(container).toMatchSnapshot()
+
+  return promise
+})
+
+test('it waits for the attributes mutation', async () => {
   const {container} = render(``)
 
   const callback = jest
@@ -140,7 +177,6 @@ test('it waits for the attributes mutation if configured', async () => {
 
   const promise = waitForElement(callback, {
     container,
-    mutationObserverOptions: {attributes: true},
   }).then(successHandler, errorHandler)
 
   expect(callback).toHaveBeenCalledTimes(1)
