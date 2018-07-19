@@ -46,7 +46,7 @@ function waitForElement(
       onDone(lastError || new Error('Timed out in waitForElement.'), null)
     }
     timer = setTimeout(onTimeout, timeout)
-    observer = new MutationObserver(onMutation)
+    observer = new window.MutationObserver(onMutation)
     observer.observe(container, mutationObserverOptions)
     if (callback !== undefined) {
       onMutation()
