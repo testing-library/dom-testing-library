@@ -62,7 +62,7 @@ when a real user uses it.
 
 1.  A test runner or framework
 2.  Specific to a testing framework (though we recommend Jest as our
-    preference, the library works with any framework)
+    preference, the library works with any framework. See [Using Without Jest](#using-without-jest))
 
 ## Table of Contents
 
@@ -92,6 +92,7 @@ when a real user uses it.
 - [Debugging](#debugging)
   - [`prettyDOM`](#prettydom)
 - [Implementations](#implementations)
+- [Using Without Jest](#using-without-jest)
 - [FAQ](#faq)
 - [Other Solutions](#other-solutions)
 - [Guiding Principles](#guiding-principles)
@@ -729,6 +730,42 @@ Implementations include:
 
 - [`react-testing-library`](https://github.com/kentcdodds/react-testing-library)
 - [`pptr-testing-library`](https://github.com/patrickhulce/pptr-testing-library)
+
+## Using Without Jest
+
+Jest ships with jsdom, a pure javascript implementation of the dom/html. If
+you're not using Jest, you must install and configure this yourself.
+
+First, install jsdom.
+
+```
+npm install --save-dev jsdom
+```
+
+Then, install `babel-polyfill` if it's not already.
+
+```
+npm install --save-dev babel-polyfill
+```
+
+Next, setup your testing environment with a test helper file that gets included
+during your test run.
+
+```javascript
+// test/test-helper.js
+import jsdom from 'jsdom'
+const dom = new jsdom.JSDOM('<!doctype html><html><body></body></html>')
+
+global.window = dom.window
+global.document = dom.window.document
+global.navigator = dom.window.navigator
+```
+
+With mocha, the test command would look something like this:
+
+```
+mocha --require babel-core/register --require babel-polyfill --require ./test/test-helper.js
+```
 
 ## FAQ
 
