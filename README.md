@@ -62,7 +62,7 @@ when a real user uses it.
 
 1.  A test runner or framework
 2.  Specific to a testing framework (though we recommend Jest as our
-    preference, the library works with any framework)
+    preference, the library works with any framework. See [Using Without Jest](#using-without-jest))
 
 ## Table of Contents
 
@@ -92,6 +92,7 @@ when a real user uses it.
 - [Debugging](#debugging)
   - [`prettyDOM`](#prettydom)
 - [Implementations](#implementations)
+- [Using Without Jest](#using-without-jest)
 - [FAQ](#faq)
 - [Other Solutions](#other-solutions)
 - [Guiding Principles](#guiding-principles)
@@ -729,6 +730,37 @@ Implementations include:
 
 - [`react-testing-library`](https://github.com/kentcdodds/react-testing-library)
 - [`pptr-testing-library`](https://github.com/patrickhulce/pptr-testing-library)
+
+## Using Without Jest
+
+If you're running your tests in the browser bundled with webpack (or similar)
+then `dom-testing-library` should work out of the box for you. However, most
+people using `dom-testing-library` are using it with
+[the Jest testing framework](https://jestjs.io/) with the `testEnvironment`
+set to [`jest-environment-jsdom`](https://www.npmjs.com/package/jest-environment-jsdom)
+(which is the default configuration with Jest).
+
+[jsdom](https://github.com/jsdom/jsdom) is a pure JavaScript implementation
+of the DOM and browser APIs that runs in node. If you're not using Jest and
+you would like to run your tests in Node, then you must install jsdom yourself.
+There's also a package called
+[jsdom-global](https://github.com/rstacruz/jsdom-global) which can be used
+to setup the global environment to simulate the browser APIs.
+
+First, install jsdom and jsdom-global.
+
+```
+npm install --save-dev jsdom jsdom-global
+```
+
+With mocha, the test command would look something like this:
+
+```
+mocha --require jsdom-global/register
+```
+
+> Note, depending on the version of Node you're running, you may also need to install
+> `@babel/polyfill` (if you're using babel 7) or `babel-polyfill` (for babel 6).
 
 ## FAQ
 
