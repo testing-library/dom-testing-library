@@ -733,39 +733,34 @@ Implementations include:
 
 ## Using Without Jest
 
-Jest ships with jsdom, a pure javascript implementation of the dom/html. If
-you're not using Jest, you must install and configure this yourself.
+If you're running your tests in the browser bundled with webpack (or similar)
+then `dom-testing-library` should work out of the box for you. However, most
+people using `dom-testing-library` are using it with
+[the Jest testing framework](https://jestjs.io/) with the `testEnvironment`
+set to [`jest-environment-jsdom`](https://www.npmjs.com/package/jest-environment-jsdom)
+(which is the default configuration with Jest).
 
-First, install jsdom.
+[jsdom](https://github.com/jsdom/jsdom) is a pure JavaScript implementation
+of the DOM and browser APIs that runs in node. If you're not using Jest and
+you would like to run your tests in Node, then you must install jsdom yourself.
+There's also a package called
+[jsdom-global](https://github.com/rstacruz/jsdom-global) which can be used
+to setup the global environment to simulate the browser APIs.
+
+First, install jsdom and jsdom-global.
 
 ```
-npm install --save-dev jsdom
-```
-
-Then, install `babel-polyfill` if it's not already.
-
-```
-npm install --save-dev babel-polyfill
-```
-
-Next, setup your testing environment with a test helper file that gets included
-during your test run.
-
-```javascript
-// test/test-helper.js
-import jsdom from 'jsdom'
-const dom = new jsdom.JSDOM('<!doctype html><html><body></body></html>')
-
-global.window = dom.window
-global.document = dom.window.document
-global.navigator = dom.window.navigator
+npm install --save-dev jsdom jsdom-global
 ```
 
 With mocha, the test command would look something like this:
 
 ```
-mocha --require babel-core/register --require babel-polyfill --require ./test/test-helper.js
+mocha --require jsdom-global/register
 ```
+
+> Note, depending on the version of Node you're running, you may also need to install
+> `@babel/polyfill` (if you're using babel 7) or `babel-polyfill` (for babel 6).
 
 ## FAQ
 
