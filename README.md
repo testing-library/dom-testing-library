@@ -505,7 +505,7 @@ for a full list as well as default `eventProperties`.
 ```javascript
 // <button>Submit</button>
 const rightClick = {button: 2}
-fireEvent.click(getElementByText('Submit'), rightClick)
+fireEvent.click(getByText('Submit'), rightClick)
 // default `button` property for click events is set to `0` which is a left click.
 ```
 
