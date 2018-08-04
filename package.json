@@ -46,7 +46,7 @@
     "dtslint": "^0.3.0",
     "jest-dom": "^1.7.0",
     "jest-in-case": "^1.0.2",
-    "kcd-scripts": "^0.40.0",
+    "kcd-scripts": "^0.41.0",
     "microbundle": "^0.4.4"
   },
   "eslintConfig": {
