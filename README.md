@@ -509,6 +509,17 @@ fireEvent.click(getByText('Submit'), rightClick)
 // default `button` property for click events is set to `0` which is a left click.
 ```
 
+**target**: When an event is dispatched on an element, the event has the
+subjected element on a property called `target`. As a convenience, if you
+provide a `target` property in the `eventProperties` (second argument), then
+those properties will be assigned to the node which is receiving the event.
+
+This is particularly useful for a change event:
+
+```javascript
+fireEvent.change(getByLabelText(/username/i), {target: {value: 'a'}})
+```
+
 #### `getNodeText`
 
 ```typescript

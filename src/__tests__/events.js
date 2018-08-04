@@ -1,4 +1,4 @@
-import {fireEvent} from '../'
+import {fireEvent} from '..'
 
 const eventTypes = [
   {
@@ -148,4 +148,23 @@ describe(`Aliased Events`, () => {
     fireEvent.doubleClick(node)
     expect(spy).toHaveBeenCalledTimes(1)
   })
+})
+
+test('assigns target properties', () => {
+  const node = document.createElement('input')
+  const spy = jest.fn()
+  const value = 'a'
+  node.addEventListener('change', spy)
+  fireEvent.change(node, {target: {value}})
+  expect(spy).toHaveBeenCalledTimes(1)
+  expect(node.value).toBe(value)
+})
+
+test('assigning a value to a target that cannot have a value throws an error', () => {
+  const node = document.createElement('div')
+  expect(() =>
+    fireEvent.change(node, {target: {value: 'a'}}),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"The given element does not have a value setter"`,
+  )
 })
