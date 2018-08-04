@@ -42,7 +42,7 @@ test('examples of some things', async () => {
   getByText(container, 'Print Username').click()
 
   await wait(() =>
-    expect(queryByTestId(container, 'printed-username')).toBeInTheDOM(),
+    expect(queryByTestId(container, 'printed-username')).toBeTruthy(),
   )
 
   // getByTestId and queryByTestId are an escape hatch to get elements

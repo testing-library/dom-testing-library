@@ -18,10 +18,10 @@ tutorial to learn how: http://kcd.im/pull-request
 
 -->
 
-* `dom-testing-library` version:
-* `react` version:
-* `node` version:
-* `npm` (or `yarn`) version:
+- `dom-testing-library` version:
+- `react` version:
+- `node` version:
+- `npm` (or `yarn`) version:
 
 ### Relevant code or config:
 

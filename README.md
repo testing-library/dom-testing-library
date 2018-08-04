@@ -129,7 +129,7 @@ import {
   // called "queries" which you could import here as well
   wait,
 } from 'dom-testing-library'
-// adds special assertions like toHaveTextContent and toBeInTheDOM
+// adds special assertions like toHaveTextContent
 import 'jest-dom/extend-expect'
 
 function getExampleDOM() {
@@ -171,7 +171,7 @@ test('examples of some things', async () => {
   getByText(container, 'Print Username').click()
 
   await wait(() =>
-    expect(queryByTestId(container, 'printed-username')).toBeInTheDOM(),
+    expect(queryByTestId(container, 'printed-username')).toBeTruthy(),
   )
 
   // getByTestId and queryByTestId are an escape hatch to get elements
@@ -543,13 +543,13 @@ exmaple, you can use the ones provided by
 import 'jest-dom/extend-expect'
 
 // <span data-testid="greetings">Hello World</span>
-expect(queryByTestId(container, 'greetings')).toBeInTheDOM()
 expect(queryByTestId(container, 'greetings')).not.toHaveTextContent('Bye bye')
 // ...
 
-> Note: when using `toBeInTheDOM`, make sure you use a query function
-> (like `queryByTestId`) rather than a get function (like `getByTestId`).
-> Otherwise the `get*` function could throw an error before your assertion.
+> Note: when using some of these matchers, you may need to make sure
+> you use a query function (like `queryByTestId`) rather than a get
+> function (like `getByTestId`). Otherwise the `get*` function could
+> throw an error before your assertion.
 ```
 
 Check out [jest-dom's documentation](https://github.com/gnapse/jest-dom#readme)
@@ -629,7 +629,7 @@ the `query` API instead:
 const submitButton = queryByText(container, 'submit')
 expect(submitButton).toBeNull() // it doesn't exist
 // or if you're using the custom matchers:
-expect(submitButton).not.toBeInTheDOM()
+expect(submitButton).not.toBeTruthy()
 ```
 
 ## `queryAll` and `getAll` APIs
@@ -639,7 +639,7 @@ Each of the `query` APIs have a corresponsing `queryAll` version that always ret
 ```javascript
 const submitButtons = queryAllByText(container, 'submit')
 expect(submitButtons).toHaveLength(3) // expect 3 elements
-expect(submitButtons[0]).toBeInTheDOM()
+expect(submitButtons[0]).toBeTruthy()
 ```
 
 ## `within` and `getQueriesForElement` APIs

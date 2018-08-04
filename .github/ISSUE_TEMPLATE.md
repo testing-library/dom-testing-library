@@ -11,9 +11,9 @@ never done that before, that's great! Check this free short video tutorial to
 learn how: http://kcd.im/pull-request
 -->
 
-* `dom-testing-library` version:
-* `node` version:
-* `npm` (or `yarn`) version:
+- `dom-testing-library` version:
+- `node` version:
+- `npm` (or `yarn`) version:
 
 Relevant code or config
 

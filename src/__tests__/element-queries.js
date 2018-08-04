@@ -52,16 +52,16 @@ test('can get elements by matching their text content', () => {
       </span>
     </div>
   `)
-  expect(queryByText('Currently showing')).toBeInTheDOM()
-  expect(queryByText('Step 1 of 4')).toBeInTheDOM()
+  expect(queryByText('Currently showing')).toBeTruthy()
+  expect(queryByText('Step 1 of 4')).toBeTruthy()
 })
 
 test('matches case with RegExp matcher', () => {
   const {queryByText} = render(`
     <span>STEP 1 of 4</span>
   `)
-  expect(queryByText(/STEP 1 of 4/)).toBeInTheDOM()
-  expect(queryByText(/Step 1 of 4/)).not.toBeInTheDOM()
+  expect(queryByText(/STEP 1 of 4/)).toBeTruthy()
+  expect(queryByText(/Step 1 of 4/)).not.toBeTruthy()
 })
 
 test('get can get form controls by label text', () => {
@@ -120,7 +120,7 @@ test('totally empty label', () => {
 test('getByLabelText with aria-label', () => {
   // not recommended normally, but supported for completeness
   const {queryByLabelText} = render(`<input aria-label="batman" />`)
-  expect(queryByLabelText(/bat/)).toBeInTheDOM()
+  expect(queryByLabelText(/bat/)).toBeTruthy()
 })
 
 test('get element by its alt text', () => {
@@ -130,7 +130,9 @@ test('get element by its alt text', () => {
       <img alt="finding nemo poster" src="/finding-nemo.png" />
     </div>,
   `)
-  expect(getByAltText(/fin.*nem.*poster$/i).src).toBe('http://localhost/finding-nemo.png')
+  expect(getByAltText(/fin.*nem.*poster$/i).src).toBe(
+    'http://localhost/finding-nemo.png',
+  )
 })
 
 test('query/get element by its title', () => {
@@ -161,14 +163,14 @@ test('query/get element by its value', () => {
 
 test('can get elements by data-testid attribute', () => {
   const {queryByTestId} = render(`<div data-testid="firstName"></div>`)
-  expect(queryByTestId('firstName')).toBeInTheDOM()
-  expect(queryByTestId(/first/)).toBeInTheDOM()
-  expect(queryByTestId(testid => testid === 'firstName')).toBeInTheDOM()
+  expect(queryByTestId('firstName')).toBeTruthy()
+  expect(queryByTestId(/first/)).toBeTruthy()
+  expect(queryByTestId(testid => testid === 'firstName')).toBeTruthy()
   // match should be exact, case-sensitive
-  expect(queryByTestId('firstname')).not.toBeInTheDOM()
-  expect(queryByTestId('first')).not.toBeInTheDOM()
-  expect(queryByTestId('firstNamePlusMore')).not.toBeInTheDOM()
-  expect(queryByTestId('first-name')).not.toBeInTheDOM()
+  expect(queryByTestId('firstname')).not.toBeTruthy()
+  expect(queryByTestId('first')).not.toBeTruthy()
+  expect(queryByTestId('firstNamePlusMore')).not.toBeTruthy()
+  expect(queryByTestId('first-name')).not.toBeTruthy()
 })
 
 test('getAll* matchers return an array', () => {
@@ -248,8 +250,8 @@ test('using jest helpers to assert element states', () => {
   const {queryByTestId} = render(`<span data-testid="count-value">2</span>`)
 
   // other ways to assert your test cases, but you don't need all of them.
-  expect(queryByTestId('count-value')).toBeInTheDOM()
-  expect(queryByTestId('count-value1')).not.toBeInTheDOM()
+  expect(queryByTestId('count-value')).toBeTruthy()
+  expect(queryByTestId('count-value1')).not.toBeTruthy()
   expect(queryByTestId('count-value')).toHaveTextContent('2')
   expect(queryByTestId('count-value')).not.toHaveTextContent('21')
   expect(() =>
@@ -258,20 +260,16 @@ test('using jest helpers to assert element states', () => {
 
   // negative test cases wrapped in throwError assertions for coverage.
   expect(() =>
-    expect(queryByTestId('count-value')).not.toBeInTheDOM(),
+    expect(queryByTestId('count-value')).not.toBeTruthy(),
   ).toThrowError()
   expect(() =>
-    expect(queryByTestId('count-value1')).toBeInTheDOM(),
+    expect(queryByTestId('count-value1')).toBeTruthy(),
   ).toThrowError()
   expect(() =>
     expect(queryByTestId('count-value')).toHaveTextContent('3'),
   ).toThrowError()
   expect(() =>
     expect(queryByTestId('count-value')).not.toHaveTextContent('2'),
-  ).toThrowError()
-
-  expect(() =>
-    expect({thisIsNot: 'an html element'}).toBeInTheDOM(),
   ).toThrowError()
 })
 
@@ -359,21 +357,21 @@ test('test the debug helper prints the dom state here', () => {
     </div>`
 
   const {getByText} = render(Large) // render large DOM which exceeds 7000 limit
-  expect(() => expect(getByText('not present')).toBeInTheDOM()).toThrowError()
+  expect(() => expect(getByText('not present')).toBeTruthy()).toThrowError()
 
   const Hello = `<div data-testid="debugging" data-otherid="debugging">
         Hello World!
     </div>`
   const {getByTestId} = render(Hello)
   process.env.DEBUG_PRINT_LIMIT = 5 // user should see `...`
-  expect(() => expect(getByTestId('not present')).toBeInTheDOM()).toThrowError(
+  expect(() => expect(getByTestId('not present')).toBeTruthy()).toThrowError(
     /\.\.\./,
   )
 
   const {getByLabelText} = render(Hello)
   process.env.DEBUG_PRINT_LIMIT = 10000 // user shouldn't see `...`
   expect(() =>
-    expect(getByLabelText('not present')).toBeInTheDOM(/^((?!\.\.\.).)*$/),
+    expect(getByLabelText('not present')).toBeTruthy(/^((?!\.\.\.).)*$/),
   ).toThrowError()
 
   //all good replacing it with old value

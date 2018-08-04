@@ -7,11 +7,17 @@ function prettyDOM(htmlElement, maxLength, options) {
     htmlElement = htmlElement.documentElement
   }
 
-  const debugContent = prettyFormat(htmlElement, Object.assign({
-    plugins: [DOMElement, DOMCollection],
-    printFunctionName: false,
-    highlight: true,
-  }, options))
+  const debugContent = prettyFormat(
+    htmlElement,
+    Object.assign(
+      {
+        plugins: [DOMElement, DOMCollection],
+        printFunctionName: false,
+        highlight: true,
+      },
+      options,
+    ),
+  )
   return maxLength !== undefined && htmlElement.outerHTML.length > maxLength
     ? `${debugContent.slice(0, maxLength)}...`
     : debugContent
