@@ -321,7 +321,7 @@ Object.entries(eventMap).forEach(([key, {EventType = Event, defaultInit}]) => {
   const eventName = key.toLowerCase()
 
   fireEvent[key] = (node, init) => {
-    const eventInit = Object.assign({}, defaultInit, init)
+    const eventInit = {...defaultInit, ...init}
     const event = new EventType(eventName, eventInit)
     return fireEvent(node, event)
   }

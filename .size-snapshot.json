@@ -1,7 +1,7 @@
 {
   "dist/dom-testing-library.umd.js": {
-    "bundled": 108659,
-    "minified": 48227,
-    "gzipped": 14779
+    "bundled": 108613,
+    "minified": 48203,
+    "gzipped": 14777
   }
 }
