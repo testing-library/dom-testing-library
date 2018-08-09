@@ -146,6 +146,23 @@ test('query/get element by its title', () => {
 
   expect(getByTitle('Delete').id).toEqual('2')
   expect(queryByTitle('Delete').id).toEqual('2')
+  expect(queryByTitle('Del', {exact: false}).id).toEqual('2')
+})
+
+test('query/get title element of SVG', () => {
+  const {getByTitle, queryByTitle} = render(`
+    <div>
+        <svg>
+            <title id="svg-title">Close</title>
+            <g>
+              <path />
+            </g>
+        </svg>
+    </div>
+  `)
+
+  expect(getByTitle('Close').id).toEqual('svg-title')
+  expect(queryByTitle('Close').id).toEqual('svg-title')
 })
 
 test('query/get element by its value', () => {

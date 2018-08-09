@@ -82,12 +82,28 @@ function queryByText(...args) {
   return firstResultOrNull(queryAllByText, ...args)
 }
 
+function queryAllByTitle(
+  container,
+  text,
+  {exact = true, collapseWhitespace = true, trim = true} = {},
+) {
+  const matcher = exact ? matches : fuzzyMatches
+  const matchOpts = {collapseWhitespace, trim}
+  return Array.from(container.querySelectorAll('[title], svg > title')).filter(
+    node =>
+      matcher(node.getAttribute('title'), node, text, matchOpts) ||
+      matcher(getNodeText(node), node, text, matchOpts),
+  )
+}
+
+function queryByTitle(...args) {
+  return firstResultOrNull(queryAllByTitle, ...args)
+}
+
 const queryByPlaceholderText = queryByAttribute.bind(null, 'placeholder')
 const queryAllByPlaceholderText = queryAllByAttribute.bind(null, 'placeholder')
 const queryByTestId = queryByAttribute.bind(null, 'data-testid')
 const queryAllByTestId = queryAllByAttribute.bind(null, 'data-testid')
-const queryByTitle = queryByAttribute.bind(null, 'title')
-const queryAllByTitle = queryAllByAttribute.bind(null, 'title')
 const queryByValue = queryByAttribute.bind(null, 'value')
 const queryAllByValue = queryAllByAttribute.bind(null, 'value')
 
