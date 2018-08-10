@@ -5,7 +5,7 @@ function getNodeText(node) {
         child.nodeType === window.Node.TEXT_NODE && Boolean(child.textContent),
     )
     .map(c => c.textContent)
-    .join(' ')
+    .join('')
 }
 
 export {getNodeText}
