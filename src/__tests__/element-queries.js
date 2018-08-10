@@ -56,6 +56,18 @@ test('can get elements by matching their text content', () => {
   expect(queryByText('Step 1 of 4')).toBeTruthy()
 })
 
+test('can get elements by matching their text across adjacent text nodes', () => {
+  const textDiv = document.createElement('div')
+  const textNodeContent = ['£', '24', '.', '99']
+  textNodeContent
+    .map(text => document.createTextNode(text))
+    .forEach(textNode => textDiv.appendChild(textNode))
+
+  const {container, queryByText} = render('<div />')
+  container.appendChild(textDiv)
+  expect(queryByText('£24.99')).toBeTruthy()
+})
+
 test('matches case with RegExp matcher', () => {
   const {queryByText} = render(`
     <span>STEP 1 of 4</span>
