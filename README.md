@@ -554,7 +554,7 @@ finding elements in the DOM similarly to how users would do.
 
 When using [jest][], it is convenient to import a set of custom matchers that
 make it easier to check several aspects of the state of a DOM element. For
-exmaple, you can use the ones provided by
+example, you can use the ones provided by
 [jest-dom](https://github.com/gnapse/jest-dom):
 
 ```javascript
