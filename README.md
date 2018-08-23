@@ -525,6 +525,15 @@ This is particularly useful for a change event:
 
 ```javascript
 fireEvent.change(getByLabelText(/username/i), {target: {value: 'a'}})
+
+// note: attempting to manually set the files property of an HTMLInputElement
+// results in an error as the files property is read-only.
+// this feature works around that by using Object.defineProperty.
+fireEvent.change(getByLabelText(/picture/i), {
+  target: {
+    files: [new File(['(⌐□_□)'], 'chucknorris.png', {type: 'image/png'})],
+  },
+})
 ```
 
 #### `getNodeText`

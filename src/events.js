@@ -13,8 +13,7 @@ const {
   TransitionEvent,
   UIEvent,
   WheelEvent,
-} =
-  typeof window === 'undefined' ? /* istanbul ignore next */ global : window
+} = typeof window === 'undefined' ? /* istanbul ignore next */ global : window
 
 const eventMap = {
   // Clipboard Events
@@ -322,10 +321,18 @@ Object.entries(eventMap).forEach(([key, {EventType = Event, defaultInit}]) => {
 
   fireEvent[key] = (node, init) => {
     const eventInit = {...defaultInit, ...init}
-    const {target: {value, ...targetProperties} = {}} = eventInit
+    const {target: {value, files, ...targetProperties} = {}} = eventInit
     Object.assign(node, targetProperties)
     if (value !== undefined) {
       setNativeValue(node, value)
+    }
+    if (files !== undefined) {
+      // input.files is a read-only property so this is not allowed:
+      // input.files = [file]
+      // so we have to use this workaround to set the property
+      Object.defineProperty(node, 'files', {
+        value: files,
+      })
     }
     const event = new EventType(eventName, eventInit)
     return fireEvent(node, event)
