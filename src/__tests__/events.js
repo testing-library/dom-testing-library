@@ -168,3 +168,12 @@ test('assigning a value to a target that cannot have a value throws an error', (
     `"The given element does not have a value setter"`,
   )
 })
+
+test('assigning the files property on an input', () => {
+  const node = document.createElement('input')
+  const file = new File(['(⌐□_□)'], 'chucknorris.png', {
+    type: 'image/png',
+  })
+  fireEvent.change(node, {target: {files: [file]}})
+  expect(node.files).toEqual([file])
+})
