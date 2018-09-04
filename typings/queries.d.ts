@@ -57,3 +57,7 @@ export const queryByValue: QueryByAttribute
 export const queryAllByValue: AllByAttribute
 export const getByValue: GetByAttribute
 export const getAllByValue: AllByAttribute
+export const queryByTRole: QueryByAttribute
+export const queryAllByTRole: AllByAttribute
+export const getByTRole: GetByAttribute
+export const getAllByTRole: AllByAttribute

@@ -314,6 +314,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "JeffBaumgardt",
+      "name": "Jeff Baumgardt",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/777527?v=4",
+      "profile": "https://github.com/JeffBaumgardt",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ]
 }

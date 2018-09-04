@@ -29,6 +29,7 @@ test('get throws a useful error message', () => {
     getByAltText,
     getByTitle,
     getByValue,
+    getByRole,
   } = render('<div />')
   expect(() => getByLabelText('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() =>
@@ -39,6 +40,7 @@ test('get throws a useful error message', () => {
   expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() => getByValue('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getByRole('LucyRicardo')).toThrowErrorMatchingSnapshot()
 })
 
 test('can get elements by matching their text content', () => {
@@ -209,8 +211,9 @@ test('getAll* matchers return an array', () => {
     getAllByLabelText,
     getAllByPlaceholderText,
     getAllByText,
+    getAllByRole,
   } = render(`
-    <div>
+    <div role="container">
       <img
         data-testid="poster"
         alt="finding nemo poster"
@@ -234,6 +237,7 @@ test('getAll* matchers return an array', () => {
   expect(getAllByPlaceholderText(/The Rock/)).toHaveLength(1)
   expect(getAllByLabelText('User Name')).toHaveLength(1)
   expect(getAllByText(/^where/i)).toHaveLength(1)
+  expect(getAllByRole(/container/i)).toHaveLength(1)
 })
 
 test('getAll* matchers throw for 0 matches', () => {
@@ -243,8 +247,9 @@ test('getAll* matchers throw for 0 matches', () => {
     getAllByLabelText,
     getAllByPlaceholderText,
     getAllByText,
+    getAllByRole,
   } = render(`
-    <div>
+    <div role="container">
       <label>No Matches Please</label>
     </div>,
   `)
@@ -255,6 +260,7 @@ test('getAll* matchers throw for 0 matches', () => {
   expect(() => getAllByLabelText('no matches please')).toThrow()
   expect(() => getAllByPlaceholderText('nope')).toThrow()
   expect(() => getAllByText('nope')).toThrow()
+  expect(() => getAllByRole('nope')).toThrow()
 })
 
 test('queryAll* matchers return an array for 0 matches', () => {
@@ -264,6 +270,7 @@ test('queryAll* matchers return an array for 0 matches', () => {
     queryAllByLabelText,
     queryAllByPlaceholderText,
     queryAllByText,
+    queryAllByRole,
   } = render(`
     <div>
     </div>,
@@ -273,6 +280,7 @@ test('queryAll* matchers return an array for 0 matches', () => {
   expect(queryAllByLabelText('nope')).toHaveLength(0)
   expect(queryAllByPlaceholderText('nope')).toHaveLength(0)
   expect(queryAllByText('nope')).toHaveLength(0)
+  expect(queryAllByRole('nope')).toHaveLength(0)
 })
 
 test('using jest helpers to assert element states', () => {
@@ -373,6 +381,16 @@ test('using jest helpers to check element class names', () => {
   expect(() =>
     expect(getByTestId('cancel-button')).toHaveClass('btn-danger'),
   ).toThrowError()
+})
+
+test('using jest helpers to check element role', () => {
+  const {getByRole} = render(`
+    <div role="dialog">
+      <span>Contents</span>
+    </div>
+  `)
+
+  expect(getByRole('dialog')).toHaveTextContent('Contents')
 })
 
 test('test the debug helper prints the dom state here', () => {
