@@ -390,13 +390,7 @@ test('using jest helpers to check element role', () => {
     </div>
   `)
 
-  expect(getByRole('dialog')).toBeTruthy()
   expect(getByRole('dialog')).toHaveTextContent('Contents')
-
-  expect(() => expect(getByRole('dialog2')).not.toBeTruthy()).toThrowError()
-  expect(() =>
-    expect(getByRole('dialog')).toHaveTextContent('Something'),
-  ).toThrowError()
 })
 
 test('test the debug helper prints the dom state here', () => {

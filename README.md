@@ -351,6 +351,27 @@ Returns the element that has the matching value.
 const lastNameInput = getByValue('Norris')
 ```
 
+### `getByRole`
+
+```typescript
+getByRole(
+  container: HTMLElement,
+  text: TextMatch,
+  options?: {
+    exact?: boolean = true,
+    collapseWhitespace?: boolean = false,
+    trim?: boolean = true,
+  }): HTMLElement`
+```
+
+A shortcut to `` container.querySelector(`[role="${yourRole}"]`) `` (and it
+also accepts a [`TextMatch`](#textmatch)).
+
+```javascript
+// <div role="dialog">...</div>
+const dialogContainer = getByTestrole(container, 'dialog')
+```
+
 ### `getByTestId`
 
 ```typescript
@@ -379,27 +400,6 @@ const usernameInputElement = getByTestId(container, 'username-input')
 > querying based on DOM structure or styling css class names. Learn more about
 > `data-testid`s from the blog post
 > ["Making your UI tests resilient to change"][data-testid-blog-post]
-
-### `getByRole`
-
-```typescript
-getByRole(
-  container: HTMLElement,
-  text: TextMatch,
-  options?: {
-    exact?: boolean = true,
-    collapseWhitespace?: boolean = false,
-    trim?: boolean = true,
-  }): HTMLElement`
-```
-
-A shortcut to `` container.querySelector(`[role="${yourRole}"]`) `` (and it
-also accepts a [`TextMatch`](#textmatch)).
-
-```javascript
-// <div role="dialog">...</div>
-const dialogContainer = getByTestrole(container, 'dialog')
-```
 
 ### `wait`
 
@@ -955,6 +955,7 @@ Thanks goes to these people ([emoji key][emojis]):
 | [<img src="https://avatars3.githubusercontent.com/u/725236?v=4" width="100px;"/><br /><sub><b>Alex Cook</b></sub>](https://github.com/alecook)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=alecook "Documentation") [💡](#example-alecook "Examples") | [<img src="https://avatars3.githubusercontent.com/u/10348212?v=4" width="100px;"/><br /><sub><b>Daniel Cook</b></sub>](https://github.com/dfcook)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=dfcook "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=dfcook "Documentation") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=dfcook "Tests") | [<img src="https://avatars2.githubusercontent.com/u/21194045?s=400&v=4" width="100px;"/><br /><sub><b>Thomas Chia</b></sub>](https://github.com/thchia)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Athchia "Bug reports") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=thchia "Code") | [<img src="https://avatars1.githubusercontent.com/u/28659384?v=4" width="100px;"/><br /><sub><b>Tim Deschryver</b></sub>](https://github.com/tdeschryver)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=tdeschryver "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=tdeschryver "Tests") | [<img src="https://avatars3.githubusercontent.com/u/1571667?v=4" width="100px;"/><br /><sub><b>Alex Krolick</b></sub>](https://alexkrolick.com)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=alexkrolick "Code") | [<img src="https://avatars2.githubusercontent.com/u/2224291?v=4" width="100px;"/><br /><sub><b>Maddi Joyce</b></sub>](http://www.maddijoyce.com)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=maddijoyce "Code") | [<img src="https://avatars1.githubusercontent.com/u/25429764?v=4" width="100px;"/><br /><sub><b>Peter Kamps</b></sub>](https://github.com/npeterkamps)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Anpeterkamps "Bug reports") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=npeterkamps "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=npeterkamps "Tests") |
 | [<img src="https://avatars2.githubusercontent.com/u/21689428?v=4" width="100px;"/><br /><sub><b>Jonathan Stoye</b></sub>](http://jonathanstoye.de)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=JonathanStoye "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/4126644?v=4" width="100px;"/><br /><sub><b>Sanghyeon Lee</b></sub>](https://github.com/yongdamsh)<br />[💡](#example-yongdamsh "Examples") | [<img src="https://avatars3.githubusercontent.com/u/8015514?v=4" width="100px;"/><br /><sub><b>Justice Mba </b></sub>](https://github.com/Dajust)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=Dajust "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=Dajust "Documentation") [🤔](#ideas-Dajust "Ideas, Planning, & Feedback") | [<img src="https://avatars3.githubusercontent.com/u/340761?v=4" width="100px;"/><br /><sub><b>Wayne Crouch</b></sub>](https://github.com/wgcrouch)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=wgcrouch "Code") | [<img src="https://avatars1.githubusercontent.com/u/4996462?v=4" width="100px;"/><br /><sub><b>Ben Elliott</b></sub>](http://benjaminelliott.co.uk)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=benelliott "Code") | [<img src="https://avatars3.githubusercontent.com/u/577921?v=4" width="100px;"/><br /><sub><b>Ruben Costa</b></sub>](http://nuances.co)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=rubencosta "Code") | [<img src="https://avatars2.githubusercontent.com/u/4982001?v=4" width="100px;"/><br /><sub><b>Robert Smith</b></sub>](http://rbrtsmith.com/)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Arbrtsmith "Bug reports") [🤔](#ideas-rbrtsmith "Ideas, Planning, & Feedback") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=rbrtsmith "Documentation") |
 | [<img src="https://avatars3.githubusercontent.com/u/881986?v=4" width="100px;"/><br /><sub><b>dadamssg</b></sub>](https://github.com/dadamssg)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=dadamssg "Code") | [<img src="https://avatars1.githubusercontent.com/u/186971?v=4" width="100px;"/><br /><sub><b>Neil Kistner</b></sub>](https://neilkistner.com/)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=wyze "Code") | [<img src="https://avatars3.githubusercontent.com/u/1448597?v=4" width="100px;"/><br /><sub><b>Ben Chauvette</b></sub>](http://bdchauvette.net/)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=bdchauvette "Code") | [<img src="https://avatars2.githubusercontent.com/u/777527?v=4" width="100px;"/><br /><sub><b>Jeff Baumgardt</b></sub>](https://github.com/JeffBaumgardt)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=JeffBaumgardt "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=JeffBaumgardt "Documentation") |
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors][all-contributors] specification.
