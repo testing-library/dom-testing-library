@@ -56,6 +56,14 @@ exports[`get throws a useful error message 7`] = `
 [36m</div>[39m"
 `;
 
+exports[`get throws a useful error message 8`] = `
+"Unable to find an element by role=LucyRicardo
+
+[36m<div>[39m
+  [36m<div />[39m
+[36m</div>[39m"
+`;
+
 exports[`get throws a useful error message without DOM in Cypress 1`] = `"Unable to find a label with the text of: LucyRicardo"`;
 
 exports[`get throws a useful error message without DOM in Cypress 2`] = `"Unable to find an element with the placeholder text of: LucyRicardo"`;

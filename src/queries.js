@@ -106,6 +106,8 @@ const queryByTestId = queryByAttribute.bind(null, 'data-testid')
 const queryAllByTestId = queryAllByAttribute.bind(null, 'data-testid')
 const queryByValue = queryByAttribute.bind(null, 'value')
 const queryAllByValue = queryAllByAttribute.bind(null, 'value')
+const queryByRole = queryByAttribute.bind(null, 'role')
+const queryAllByRole = queryAllByAttribute.bind(null, 'role')
 
 function queryAllByAltText(
   container,
@@ -241,6 +243,18 @@ function getByAltText(...args) {
   return firstResultOrNull(getAllByAltText, ...args)
 }
 
+function getAllByRole(container, id, ...rest) {
+  const els = queryAllByRole(container, id, ...rest)
+  if (!els.length) {
+    throw getElementError(`Unable to find an element by role=${id}`, container)
+  }
+  return els
+}
+
+function getByRole(...args) {
+  return firstResultOrNull(getAllByRole, ...args)
+}
+
 export {
   queryByPlaceholderText,
   queryAllByPlaceholderText,
@@ -270,6 +284,10 @@ export {
   queryAllByValue,
   getByValue,
   getAllByValue,
+  queryByRole,
+  queryAllByRole,
+  getAllByRole,
+  getByRole,
 }
 
 /* eslint complexity:["error", 14] */
