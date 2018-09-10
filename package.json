@@ -40,7 +40,7 @@
   "dependencies": {
     "pretty-format": "^22.4.3",
     "mutationobserver-shim": "^0.3.2",
-    "wait-for-expect": "^0.4.0"
+    "wait-for-expect": "^1.0.0"
   },
   "devDependencies": {
     "dtslint": "^0.3.0",
