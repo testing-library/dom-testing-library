@@ -114,7 +114,7 @@ npm install --save-dev dom-testing-library
 
 Note:
 
-- Each of the `get` APIs below have a matching [`getAll`](#queryall-and-getall-apis) API that returns all elements instead of just the first one, and [`query`](#query-apis)/[`getAll`](#queryall-and-getall-apis) that return `null`/`[]` instead of throwing an error.
+- Each of the `get` APIs below have a matching [`getAll`](#queryall-and-getall-apis) API that returns all elements instead of just the first one, and [`query`](#query-apis)/[`queryAll`](#queryall-and-getall-apis) that return `null`/`[]` instead of throwing an error.
 - See [TextMatch](#textmatch) for details on the `exact`, `trim`, and `collapseWhitespace` options.
 
 ```javascript
