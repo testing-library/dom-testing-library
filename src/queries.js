@@ -5,6 +5,7 @@ import {
   firstResultOrNull,
   queryAllByAttribute,
   queryByAttribute,
+  waitFor,
 } from './query-helpers'
 
 // Here are the queries for the library.
@@ -145,6 +146,8 @@ function getByTestId(...args) {
   return firstResultOrNull(getAllByTestId, ...args)
 }
 
+const findByTestId = waitFor(getByTestId)
+
 function getAllByTitle(container, title, ...rest) {
   const els = queryAllByTitle(container, title, ...rest)
   if (!els.length) {
@@ -159,6 +162,8 @@ function getAllByTitle(container, title, ...rest) {
 function getByTitle(...args) {
   return firstResultOrNull(getAllByTitle, ...args)
 }
+
+const findByTitle = waitFor(getByTitle)
 
 function getAllByValue(container, value, ...rest) {
   const els = queryAllByValue(container, value, ...rest)
@@ -175,6 +180,8 @@ function getByValue(...args) {
   return firstResultOrNull(getAllByValue, ...args)
 }
 
+const findByValue = waitFor(getByValue)
+
 function getAllByPlaceholderText(container, text, ...rest) {
   const els = queryAllByPlaceholderText(container, text, ...rest)
   if (!els.length) {
@@ -189,6 +196,8 @@ function getAllByPlaceholderText(container, text, ...rest) {
 function getByPlaceholderText(...args) {
   return firstResultOrNull(getAllByPlaceholderText, ...args)
 }
+
+const findByPlaceholderText = waitFor(getByPlaceholderText)
 
 function getAllByLabelText(container, text, ...rest) {
   const els = queryAllByLabelText(container, text, ...rest)
@@ -213,6 +222,8 @@ function getByLabelText(...args) {
   return firstResultOrNull(getAllByLabelText, ...args)
 }
 
+const findByLabelText = waitFor(getByLabelText)
+
 function getAllByText(container, text, ...rest) {
   const els = queryAllByText(container, text, ...rest)
   if (!els.length) {
@@ -227,6 +238,8 @@ function getAllByText(container, text, ...rest) {
 function getByText(...args) {
   return firstResultOrNull(getAllByText, ...args)
 }
+
+const findByText = waitFor(getByText)
 
 function getAllByAltText(container, alt, ...rest) {
   const els = queryAllByAltText(container, alt, ...rest)
@@ -243,6 +256,8 @@ function getByAltText(...args) {
   return firstResultOrNull(getAllByAltText, ...args)
 }
 
+const findByAltText = waitFor(getByAltText)
+
 function getAllByRole(container, id, ...rest) {
   const els = queryAllByRole(container, id, ...rest)
   if (!els.length) {
@@ -255,39 +270,49 @@ function getByRole(...args) {
   return firstResultOrNull(getAllByRole, ...args)
 }
 
+const findByRole = waitFor(getAllByRole)
+
 export {
   queryByPlaceholderText,
   queryAllByPlaceholderText,
   getByPlaceholderText,
+  findByPlaceholderText,
   getAllByPlaceholderText,
   queryByText,
   queryAllByText,
   getByText,
+  findByText,
   getAllByText,
   queryByLabelText,
   queryAllByLabelText,
   getByLabelText,
+  findByLabelText,
   getAllByLabelText,
   queryByAltText,
   queryAllByAltText,
   getByAltText,
+  findByAltText,
   getAllByAltText,
   queryByTestId,
   queryAllByTestId,
   getByTestId,
+  findByTestId,
   getAllByTestId,
   queryByTitle,
   queryAllByTitle,
   getByTitle,
+  findByTitle,
   getAllByTitle,
   queryByValue,
   queryAllByValue,
   getByValue,
+  findByValue,
   getAllByValue,
   queryByRole,
   queryAllByRole,
   getAllByRole,
   getByRole,
+  findByRole,
 }
 
 /* eslint complexity:["error", 14] */

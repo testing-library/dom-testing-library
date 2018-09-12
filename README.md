@@ -77,8 +77,10 @@ when a real user uses it.
   - [`getByAltText`](#getbyalttext)
   - [`getByTitle`](#getbytitle)
   - [`getByValue`](#getbyvalue)
+  - [`getByRole`](#getbyrole)
   - [`getByTestId`](#getbytestid)
   - [`wait`](#wait)
+  - [`waitFor`](#waitfor)
   - [`waitForElement`](#waitforelement)
   - [`fireEvent`](#fireevent)
 - [Custom Jest Matchers](#custom-jest-matchers)
@@ -86,6 +88,7 @@ when a real user uses it.
 - [`TextMatch`](#textmatch)
   - [Precision](#precision)
   - [TextMatch Examples](#textmatch-examples)
+- [`find` APIs](#find-apis)
 - [`query` APIs](#query-apis)
 - [`queryAll` and `getAll` APIs](#queryall-and-getall-apis)
 - [`within` and `getQueriesForElement` APIs](#within-and-getqueriesforelement-apis)
@@ -442,6 +445,31 @@ The default `interval` is `50ms`. However it will run your callback immediately
 on the next tick of the event loop (in a `setTimeout`) before starting the
 intervals.
 
+### `waitFor`
+
+`waitFor` is a utility function that lets you retry queries until they succeed or time out. It is used internally to create the [find](#find-apis) APIs.
+
+The first argument is the query. A new async function is returned if this is the only argument. If there are more arguments, it returns a Promise which resolves with the result of calling the async function with the arguments. If the last argument is an object with a "timeout" key, it will be used as the timeout for the retries. The Promise is rejected with the last error thrown by the callback.
+
+```javascript
+// ...
+// Wait until the callback does not throw an error and returns a truthy value. In this case, that means
+// it'll wait until we can get a form control with a label that matches "username".
+const usernameElement = await waitFor(getByLabelText, container, 'username')
+usernameElement.value = 'chucknorris'
+// ...
+```
+
+You can create your own async queries by passing only the first argument:
+
+```javascript
+const waitForText = waitFor(getByText)
+
+const headline = await waitForText('news flash')
+
+expect(headline).toBeDefined() // do something
+```
+
 ### `waitForElement`
 
 ```typescript
@@ -663,6 +691,24 @@ getByText(container, /hello world/) // case-sensitive regex with different case
 getByText(container, (content, element) => {
   return element.tagName.toLowerCase() === 'span' && content.startsWith('Hello')
 })
+```
+
+## `find` APIs
+
+Each of the `get` APIs listed in [the 'Usage'](#usage) section above have a
+corresponding async `find` API.
+
+The `find` APIs return a Promise and retry automatically until they time out. The timeout can be specified as an option in the last argument.
+
+```javascript
+fireEvent.click(getByRole('log-in'))
+// This element doesn't appear immediately:
+const usernameElement = await findByLabelText('username', {timeout: 200})
+usernameElement.value = 'chucknorris'
+// wait for error state
+expect(await findByText('Error: Name must be capitalized')).not.toBeNull()
+// expect NOT to see success state
+await expect(findByText('Everything OK!')).rejects.toMatchInlineSnapshot()
 ```
 
 ## `query` APIs
