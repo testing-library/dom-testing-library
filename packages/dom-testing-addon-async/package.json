@@ -1,0 +1,57 @@
+{
+  "name": "@dom-testing/addon-async",
+  "version": "0.1.0",
+  "description": "Async queries for dom-testing-library",
+  "author": "Alex Krolick",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexkrolick/dom-testing-library.git"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "lib/index.js",
+  "source": "src/index.js",
+  "files": [
+    "dist/",
+    "lib/",
+    "src/"
+  ],
+  "scripts": {
+    "dev": "BABEL_ENV=development babel src -d lib --watch",
+    "test": "jest",
+    "check:lint": "eslint ./src --max-warnings=0 --report-unused-disable-directives",
+    "check:flow": "flow check",
+    "check:all": "npm-run-all check:lint check:flow test",
+    "build:lib": "BABEL_ENV=es babel src -d lib",
+    "build:dist": "BABEL_ENV=cjs babel src -d dist",
+    "build:flow": "cp index.js.flow.template lib/index.js.flow && cp index.js.flow.template dist/index.js.flow",
+    "build": "npm-run-all build:lib build:dist build:flow",
+    "prepublishOnly": "npm-run-all build",
+    "prebuild": "npm-run-all cleanup check:all",
+    "cleanup": "rimraf ./lib ./dist"
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "dom-testing-library": "^3.5.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react-app": "^3.1.2",
+    "eslint": "^4.1.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-config-react-app": "^3.0.0-next.3e165448",
+    "eslint-plugin-flowtype": "^2.34.1",
+    "eslint-plugin-import": "^2.6.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-prettier": "^2.6.1",
+    "eslint-plugin-react": "^7.8.2",
+    "flow-bin": "^0.75.0",
+    "flow-typed": "^2.4.0",
+    "jest": "^23.2.0",
+    "npm-run-all": "^4.1.3",
+    "prettier": "^1.13.7",
+    "rimraf": "^2.6.2"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "parser": "babel-eslint",
+  "plugins": [
+    "flowtype",
+    "prettier",
+    "jsx-a11y"
+  ],
+  "extends": [
+    "prettier",
+    "prettier/flowtype",
+    "prettier/react",
+    "plugin:flowtype/recommended",
+    "plugin:prettier/recommended",
+    "plugin:jsx-a11y/recommended",
+    "react-app"
+  ],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "parser": "flow",
+        "trailingComma": "all"
+      }
+    ]
+  },
+  "env": {
+    "node": true,
+    "browser": true,
+    "jest": true
+  }
+}
