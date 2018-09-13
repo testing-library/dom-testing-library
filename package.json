@@ -1,73 +1,11 @@
 {
-  "name": "dom-testing-library",
-  "version": "0.0.0-semantically-released",
-  "description": "Simple and complete DOM testing utilities that encourage good testing practices.",
-  "main": "dist/index.js",
-  "umd:main": "dist/dom-testing-library.umd.js",
-  "source": "src/index.js",
-  "typings": "typings",
-  "keywords": [
-    "testing",
-    "ui",
-    "dom",
-    "jsdom",
-    "unit",
-    "integration",
-    "functional",
-    "end-to-end",
-    "e2e"
-  ],
-  "author": "Kent C. Dodds <kent@doddsfamily.us> (http://kentcdodds.com/)",
+  "name": "dom-testing",
+  "private": true,
   "license": "MIT",
-  "engines": {
-    "node": ">=6"
-  },
-  "scripts": {
-    "add-contributor": "kcd-scripts contributors add",
-    "build": "kcd-scripts build && kcd-scripts build --bundle umd --no-clean",
-    "lint": "kcd-scripts lint",
-    "test": "kcd-scripts test",
-    "test:update": "npm test -- --updateSnapshot --coverage",
-    "validate": "kcd-scripts validate",
-    "setup": "npm install && npm run validate -s",
-    "precommit": "kcd-scripts precommit",
-    "dtslint": "dtslint typings"
-  },
-  "files": [
-    "dist",
-    "typings"
-  ],
   "dependencies": {
-    "pretty-format": "^22.4.3",
-    "mutationobserver-shim": "^0.3.2",
-    "wait-for-expect": "^1.0.0"
+    "kcd-scripts": "^0.44.0"
   },
   "devDependencies": {
-    "dtslint": "^0.3.0",
-    "jest-dom": "^1.7.0",
-    "jest-in-case": "^1.0.2",
-    "kcd-scripts": "^0.41.0",
-    "microbundle": "^0.4.4"
-  },
-  "eslintConfig": {
-    "extends": "./node_modules/kcd-scripts/eslint.js",
-    "rules": {
-      "import/prefer-default-export": "off",
-      "import/no-unassigned-import": "off",
-      "import/no-useless-path-segments": "off"
-    }
-  },
-  "eslintIgnore": [
-    "node_modules",
-    "coverage",
-    "dist"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kentcdodds/dom-testing-library.git"
-  },
-  "bugs": {
-    "url": "https://github.com/kentcdodds/dom-testing-library/issues"
-  },
-  "homepage": "https://github.com/kentcdodds/dom-testing-library#readme"
+    "lerna": "^3.3.2"
+  }
 }
