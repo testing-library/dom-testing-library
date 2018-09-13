@@ -2,10 +2,16 @@
   "name": "dom-testing",
   "private": true,
   "license": "MIT",
-  "dependencies": {
-    "kcd-scripts": "^0.44.0"
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "postinstall": "npm-run-all bootstrap",
+    "bootstrap": "lerna bootstrap"
   },
   "devDependencies": {
-    "lerna": "^3.3.2"
+    "kcd-scripts": "^0.44.0",
+    "lerna": "^3.3.2",
+    "npm-run-all": "^4.1.3"
   }
 }

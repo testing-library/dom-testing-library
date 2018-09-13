@@ -33,6 +33,14 @@
     "precommit": "kcd-scripts precommit",
     "dtslint": "dtslint typings"
   },
+  "eslintConfig": {
+    "extends": "./node_modules/kcd-scripts/eslint.js",
+    "rules": {
+      "import/prefer-default-export": "off",
+      "import/no-unassigned-import": "off",
+      "import/no-useless-path-segments": "off"
+    }
+  },
   "files": [
     "dist",
     "typings"
