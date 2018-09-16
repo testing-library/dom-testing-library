@@ -77,6 +77,7 @@ when a real user uses it.
   - [`getByAltText`](#getbyalttext)
   - [`getByTitle`](#getbytitle)
   - [`getByValue`](#getbyvalue)
+  - [`getByRole`](#getbyrole)
   - [`getByTestId`](#getbytestid)
   - [`wait`](#wait)
   - [`waitForElement`](#waitforelement)
@@ -361,7 +362,7 @@ getByRole(
     exact?: boolean = true,
     collapseWhitespace?: boolean = false,
     trim?: boolean = true,
-  }): HTMLElement`
+  }): HTMLElement
 ```
 
 A shortcut to `` container.querySelector(`[role="${yourRole}"]`) `` (and it
@@ -369,7 +370,7 @@ also accepts a [`TextMatch`](#textmatch)).
 
 ```javascript
 // <div role="dialog">...</div>
-const dialogContainer = getByTestrole(container, 'dialog')
+const dialogContainer = getByRole(container, 'dialog')
 ```
 
 ### `getByTestId`
