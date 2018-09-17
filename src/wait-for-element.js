@@ -18,7 +18,7 @@ function waitForElement(
     let lastError, observer, timer // eslint-disable-line prefer-const
     function onDone(error, result) {
       clearTimeout(timer)
-      setImmediate(() => observer.disconnect())
+      observer.disconnect()
       if (error) {
         reject(error)
       } else {
