@@ -312,3 +312,48 @@ test('it returns immediately if the callback returns the value before any mutati
 
   return promise
 })
+
+test('does not get into infinite setTimeout loop after MutationObserver notification', async () => {
+  const {container} = render(`<div data-testid="initial-element"></div>`)
+
+  let didMakeMutation = false
+  const callback = jest.fn(() => didMakeMutation).mockName('callback')
+  const successHandler = jest.fn().mockName('successHandler')
+  const errorHandler = jest.fn().mockName('errorHandler')
+  jest.useFakeTimers()
+
+  const promise = waitForElement(callback, {
+    container,
+    timeout: 70,
+    mutationObserverOptions: {attributes: true},
+  }).then(successHandler, errorHandler)
+
+  // Expect 2 timeouts to be scheduled:
+  // - waitForElement timeout
+  // - MutationObserver timeout
+  expect(setTimeout).toHaveBeenCalledTimes(2)
+
+  // One synchronous `callback` call is expected.
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(successHandler).toHaveBeenCalledTimes(0)
+  expect(errorHandler).toHaveBeenCalledTimes(0)
+
+  // Make a mutation so MutationObserver calls out callback
+  container.setAttribute('data-test-attribute', 'something changed')
+  didMakeMutation = true
+
+  // Advance timer to expire MutationObserver timeout
+  jest.advanceTimersByTime(50)
+  jest.runAllImmediates()
+  await promise
+  expect(setTimeout).toHaveBeenCalledTimes(3)
+
+  // Expect callback and successHandler to be called
+  expect(callback).toHaveBeenCalledTimes(2)
+  expect(successHandler).toHaveBeenCalledTimes(1)
+  expect(errorHandler).toHaveBeenCalledTimes(0)
+
+  // Expect no more setTimeout calls
+  jest.advanceTimersByTime(100)
+  expect(setTimeout).toHaveBeenCalledTimes(3)
+})
