@@ -1,3 +1,5 @@
+import {wait} from './wait'
+
 const {
   AnimationEvent,
   ClipboardEvent,
@@ -319,7 +321,7 @@ function fireEvent(element, event) {
 Object.entries(eventMap).forEach(([key, {EventType = Event, defaultInit}]) => {
   const eventName = key.toLowerCase()
 
-  fireEvent[key] = (node, init) => {
+  fireEvent[key] = async (node, init) => {
     const eventInit = {...defaultInit, ...init}
     const {target: {value, files, ...targetProperties} = {}} = eventInit
     Object.assign(node, targetProperties)
@@ -335,7 +337,9 @@ Object.entries(eventMap).forEach(([key, {EventType = Event, defaultInit}]) => {
       })
     }
     const event = new EventType(eventName, eventInit)
-    return fireEvent(node, event)
+    const ret = fireEvent(node, event)
+    await wait() // allows events to be await-ed
+    return ret
   }
 })
 

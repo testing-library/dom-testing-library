@@ -1,4 +1,4 @@
-import {fireEvent} from '..'
+import {fireEvent, wait} from '..'
 
 const eventTypes = [
   {
@@ -160,11 +160,11 @@ test('assigns target properties', () => {
   expect(node.value).toBe(value)
 })
 
-test('assigning a value to a target that cannot have a value throws an error', () => {
+test('assigning a value to a target that cannot have a value throws an error', async () => {
   const node = document.createElement('div')
-  expect(() =>
+  await expect(
     fireEvent.change(node, {target: {value: 'a'}}),
-  ).toThrowErrorMatchingInlineSnapshot(
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
     `"The given element does not have a value setter"`,
   )
 })
@@ -176,4 +176,12 @@ test('assigning the files property on an input', () => {
   })
   fireEvent.change(node, {target: {files: [file]}})
   expect(node.files).toEqual([file])
+})
+
+test('can await events', async () => {
+  const node = document.createElement('button')
+  const asyncSpy = jest.fn()
+  node.addEventListener('click', () => wait().then(asyncSpy))
+  await fireEvent.click(node)
+  expect(asyncSpy).toHaveBeenCalledTimes(1)
 })
