@@ -8,6 +8,7 @@ beforeEach(() => {
 test('query can return null', () => {
   const {
     queryByLabelText,
+    queryBySelectText,
     queryByPlaceholderText,
     queryByText,
     queryByTestId,
@@ -15,6 +16,7 @@ test('query can return null', () => {
   } = render('<div />')
   expect(queryByTestId('LucyRicardo')).toBeNull()
   expect(queryByLabelText('LucyRicardo')).toBeNull()
+  expect(queryBySelectText('LucyRicardo')).toBeNull()
   expect(queryByPlaceholderText('LucyRicardo')).toBeNull()
   expect(queryByText('LucyRicardo')).toBeNull()
   expect(queryByAltText('LucyRicardo')).toBeNull()
@@ -23,6 +25,7 @@ test('query can return null', () => {
 test('get throws a useful error message', () => {
   const {
     getByLabelText,
+    getBySelectText,
     getByPlaceholderText,
     getByText,
     getByTestId,
@@ -32,6 +35,7 @@ test('get throws a useful error message', () => {
     getByRole,
   } = render('<div />')
   expect(() => getByLabelText('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getBySelectText('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() =>
     getByPlaceholderText('LucyRicardo'),
   ).toThrowErrorMatchingSnapshot()
@@ -188,8 +192,50 @@ test('query/get element by its value', () => {
   </div>
   `)
 
-  expect(queryByValue('Norris').placeholder).toEqual('lastname')
   expect(getByValue('Norris').placeholder).toEqual('lastname')
+  expect(queryByValue('Norris').placeholder).toEqual('lastname')
+})
+
+test('query/get select by text with the default option selected', () => {
+  const {getBySelectText, queryBySelectText} = render(`
+  <select id="state-select">
+    <option value="">State</option>
+    <option value="AL">Alabama</option>
+    <option value="AK" >Alaska</option>
+    <option value="AZ">Arizona</option>
+  </select>
+  `)
+
+  expect(getBySelectText('State').id).toEqual('state-select')
+  expect(queryBySelectText('State').id).toEqual('state-select')
+})
+
+test('query/get select by text with one option selected', () => {
+  const {getBySelectText, queryBySelectText} = render(`
+  <select id="state-select">
+    <option value="">State</option>
+    <option value="AL">Alabama</option>
+    <option selected value="AK" >Alaska</option>
+    <option value="AZ">Arizona</option>
+  </select>
+  `)
+
+  expect(getBySelectText('Alaska').id).toEqual('state-select')
+  expect(queryBySelectText('Alaska').id).toEqual('state-select')
+})
+
+test('query/get select by text with multiple options selected', () => {
+  const {getBySelectText, queryBySelectText} = render(`
+  <select multiple id="state-select">
+    <option value="">State</option>
+    <option selected value="AL">Alabama</option>
+    <option selected value="AK" >Alaska</option>
+    <option value="AZ">Arizona</option>
+  </select>
+  `)
+
+  expect(getBySelectText('Alabama').id).toEqual('state-select')
+  expect(queryBySelectText('Alaska').id).toEqual('state-select')
 })
 
 test('can get elements by data-testid attribute', () => {
@@ -209,6 +255,7 @@ test('getAll* matchers return an array', () => {
     getAllByAltText,
     getAllByTestId,
     getAllByLabelText,
+    getAllBySelectText,
     getAllByPlaceholderText,
     getAllByText,
     getAllByRole,
@@ -229,6 +276,16 @@ test('getAll* matchers return an array', () => {
       <p>Where to next?</p>
       <label for="username">User Name</label>
       <input id="username" placeholder="Dwayne 'The Rock' Johnson" />
+      <select>
+        <option value="">German cars</option>
+        <option value="volvo">BMW</option>
+        <option value="audi">Audi</option>
+      </select>
+      <select>
+        <option value="">Japanese cars</option>
+        <option value="volvo">Toyota</option>
+        <option value="audi">Honda</option>
+      </select>
     </div>,
   `)
   expect(getAllByAltText(/finding.*poster$/i)).toHaveLength(2)
@@ -236,6 +293,8 @@ test('getAll* matchers return an array', () => {
   expect(getAllByTestId('poster')).toHaveLength(3)
   expect(getAllByPlaceholderText(/The Rock/)).toHaveLength(1)
   expect(getAllByLabelText('User Name')).toHaveLength(1)
+  expect(getAllBySelectText('Japanese cars')).toHaveLength(1)
+  expect(getAllBySelectText(/cars$/)).toHaveLength(2)
   expect(getAllByText(/^where/i)).toHaveLength(1)
   expect(getAllByRole(/container/i)).toHaveLength(1)
 })
@@ -245,6 +304,7 @@ test('getAll* matchers throw for 0 matches', () => {
     getAllByAltText,
     getAllByTestId,
     getAllByLabelText,
+    getAllBySelectText,
     getAllByPlaceholderText,
     getAllByText,
     getAllByRole,
@@ -258,6 +318,7 @@ test('getAll* matchers throw for 0 matches', () => {
   expect(() => getAllByAltText('nope')).toThrow()
   expect(() => getAllByLabelText('nope')).toThrow()
   expect(() => getAllByLabelText('no matches please')).toThrow()
+  expect(() => getAllBySelectText('nope')).toThrow()
   expect(() => getAllByPlaceholderText('nope')).toThrow()
   expect(() => getAllByText('nope')).toThrow()
   expect(() => getAllByRole('nope')).toThrow()
@@ -268,6 +329,7 @@ test('queryAll* matchers return an array for 0 matches', () => {
     queryAllByAltText,
     queryAllByTestId,
     queryAllByLabelText,
+    queryAllBySelectText,
     queryAllByPlaceholderText,
     queryAllByText,
     queryAllByRole,
@@ -278,6 +340,7 @@ test('queryAll* matchers return an array for 0 matches', () => {
   expect(queryAllByTestId('nope')).toHaveLength(0)
   expect(queryAllByAltText('nope')).toHaveLength(0)
   expect(queryAllByLabelText('nope')).toHaveLength(0)
+  expect(queryAllBySelectText('nope')).toHaveLength(0)
   expect(queryAllByPlaceholderText('nope')).toHaveLength(0)
   expect(queryAllByText('nope')).toHaveLength(0)
   expect(queryAllByRole('nope')).toHaveLength(0)
@@ -429,6 +492,7 @@ test('get throws a useful error message without DOM in Cypress', () => {
   window.Cypress = {}
   const {
     getByLabelText,
+    getBySelectText,
     getByPlaceholderText,
     getByText,
     getByTestId,
@@ -437,6 +501,7 @@ test('get throws a useful error message without DOM in Cypress', () => {
     getByValue,
   } = render('<div />')
   expect(() => getByLabelText('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getBySelectText('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() =>
     getByPlaceholderText('LucyRicardo'),
   ).toThrowErrorMatchingSnapshot()

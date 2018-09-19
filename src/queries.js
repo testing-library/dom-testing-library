@@ -100,6 +100,24 @@ function queryByTitle(...args) {
   return firstResultOrNull(queryAllByTitle, ...args)
 }
 
+function queryAllBySelectText(
+  container,
+  text,
+  {exact = true, collapseWhitespace = true, trim = true} = {},
+) {
+  const matcher = exact ? matches : fuzzyMatches
+  const matchOpts = {collapseWhitespace, trim}
+  return Array.from(container.querySelectorAll('select')).filter(selectNode =>
+    Array.from(selectNode.selectedOptions).some(optionNode =>
+      matcher(getNodeText(optionNode), optionNode, text, matchOpts),
+    ),
+  )
+}
+
+function queryBySelectText(...args) {
+  return firstResultOrNull(queryAllBySelectText, ...args)
+}
+
 const queryByPlaceholderText = queryByAttribute.bind(null, 'placeholder')
 const queryAllByPlaceholderText = queryAllByAttribute.bind(null, 'placeholder')
 const queryByTestId = queryByAttribute.bind(null, 'data-testid')
@@ -255,6 +273,21 @@ function getByRole(...args) {
   return firstResultOrNull(getAllByRole, ...args)
 }
 
+function getAllBySelectText(container, text, ...rest) {
+  const els = queryAllBySelectText(container, text, ...rest)
+  if (!els.length) {
+    throw getElementError(
+      `Unable to find a <select> element with the selected option's text: ${text}`,
+      container,
+    )
+  }
+  return els
+}
+
+function getBySelectText(...args) {
+  return firstResultOrNull(getAllBySelectText, ...args)
+}
+
 export {
   queryByPlaceholderText,
   queryAllByPlaceholderText,
@@ -272,6 +305,10 @@ export {
   queryAllByAltText,
   getByAltText,
   getAllByAltText,
+  queryBySelectText,
+  queryAllBySelectText,
+  getBySelectText,
+  getAllBySelectText,
   queryByTestId,
   queryAllByTestId,
   getByTestId,
