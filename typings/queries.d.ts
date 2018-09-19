@@ -33,6 +33,10 @@ export const queryByPlaceholderText: QueryByAttribute
 export const queryAllByPlaceholderText: AllByAttribute
 export const getByPlaceholderText: GetByAttribute
 export const getAllByPlaceholderText: AllByAttribute
+export const queryBySelectText: QueryByAttribute
+export const queryAllBySelectText: AllByAttribute
+export const getBySelectText: GetByAttribute
+export const getAllBySelectText: AllByAttribute
 export const queryByText: QueryByText
 export const queryAllByText: AllByText
 export const getByText: GetByText

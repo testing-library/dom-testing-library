@@ -38,6 +38,15 @@ cases(
       query: `Dwayne 'The Rock' Johnson`,
       queryFn: `queryAllByPlaceholderText`,
     },
+    queryAllBySelectText: {
+      dom: `
+      <select>
+        <option>Option 1</option>
+        <option>Option 2</option>
+      </select>`,
+      query: `Option 1`,
+      queryFn: `queryAllBySelectText`,
+    },
     queryAllByText: {
       dom: `<p>Some content</p>`,
       query: `Some content`,
@@ -83,6 +92,15 @@ cases(
         <input placeholder="  Dwayne 'The Rock' Johnson  " />`,
       query: /^Dwayne/,
       queryFn: `queryAllByPlaceholderText`,
+    },
+    queryAllBySelectText: {
+      dom: `
+      <select>
+        <option>  Option 1  </option>
+        <option>Option 2</option>
+      </select>`,
+      query: `Option 1`,
+      queryFn: `queryAllBySelectText`,
     },
     queryAllByText: {
       dom: `
@@ -136,6 +154,15 @@ cases(
       dom: `<input placeholder="Dwayne 'The Rock' Johnson" />`,
       query: `Dwayne 'The Rock' Johnson`,
       queryFn: `queryAllByPlaceholderText`,
+    },
+    queryAllBySelectText: {
+      dom: `
+      <select>
+        <option>Option 1</option>
+        <option>Option 2</option>
+      </select>`,
+      query: `Option 1`,
+      queryFn: `queryAllBySelectText`,
     },
     queryAllByLabelText: {
       dom: `
