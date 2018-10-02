@@ -69,13 +69,19 @@ function queryByLabelText(...args) {
 function queryAllByText(
   container,
   text,
-  {selector = '*', exact = true, collapseWhitespace = true, trim = true} = {},
+  {
+    selector = '*',
+    exact = true,
+    collapseWhitespace = true,
+    trim = true,
+    ignore = 'script',
+  } = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchOpts = {collapseWhitespace, trim}
-  return Array.from(container.querySelectorAll(selector)).filter(node =>
-    matcher(getNodeText(node), node, text, matchOpts),
-  )
+  return Array.from(container.querySelectorAll(selector))
+    .filter(node => !ignore || !node.matches(ignore))
+    .filter(node => matcher(getNodeText(node), node, text, matchOpts))
 }
 
 function queryByText(...args) {

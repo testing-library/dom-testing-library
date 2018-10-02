@@ -512,4 +512,12 @@ test('get throws a useful error message without DOM in Cypress', () => {
   expect(() => getByValue('LucyRicardo')).toThrowErrorMatchingSnapshot()
 })
 
+test('getByText ignores script tags by default', () => {
+  const {getAllByText} = render('<script>Hello</script><div>Hello</div>')
+  const divOnly = getAllByText(/hello/i)
+  expect(divOnly).toHaveLength(1)
+  expect(divOnly[0].tagName).toBe('DIV')
+  expect(getAllByText(/hello/i, {ignore: false})).toHaveLength(2)
+})
+
 /* eslint jsx-a11y/label-has-for:0 */
