@@ -38,8 +38,8 @@
     "typings"
   ],
   "dependencies": {
-    "pretty-format": "^22.4.3",
     "mutationobserver-shim": "^0.3.2",
+    "pretty-format": "^23.6.0",
     "wait-for-expect": "^1.0.0"
   },
   "devDependencies": {
