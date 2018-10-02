@@ -297,6 +297,7 @@ getByText(
     exact?: boolean = true,
     collapseWhitespace?: boolean = true,
     trim?: boolean = true,
+    ignore?: string|boolean = 'script'
   }): HTMLElement
 ```
 
@@ -309,6 +310,14 @@ const aboutAnchorNode = getByText(container, 'about')
 ```
 
 > NOTE: see [`getByLabelText`](#getbylabeltext) for more details on how and when to use the `selector` option
+
+The `ignore` option accepts a query selector. If the
+[`node.matches`](https://developer.mozilla.org/en-US/docs/Web/API/Element/matches)
+returns true for that selector, the node will be ignored. This defaults to
+`'script'` because generally you don't want to select script tags, but if your
+content is in an inline script file, then the script tag could be returned.
+
+If you'd rather disable this behavior, set `ignore` to `false`.
 
 ### `getByAltText`
 
