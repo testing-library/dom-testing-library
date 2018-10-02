@@ -514,7 +514,7 @@ test('get throws a useful error message without DOM in Cypress', () => {
 
 test('getByText ignores script tags by default', () => {
   const {getAllByText} = render(
-    '<script>Hello</script><div>Hello</div><style>.Hello</style>',
+    '<script>Hello</script><div>Hello</div><style>.Hello{}</style>',
   )
   const divOnly = getAllByText(/hello/i)
   expect(divOnly).toHaveLength(1)
