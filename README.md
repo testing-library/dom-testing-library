@@ -297,7 +297,7 @@ getByText(
     exact?: boolean = true,
     collapseWhitespace?: boolean = true,
     trim?: boolean = true,
-    ignore?: string|boolean = 'script'
+    ignore?: string|boolean = 'script, style'
   }): HTMLElement
 ```
 

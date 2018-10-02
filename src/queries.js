@@ -74,7 +74,7 @@ function queryAllByText(
     exact = true,
     collapseWhitespace = true,
     trim = true,
-    ignore = 'script',
+    ignore = 'script, style',
   } = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
