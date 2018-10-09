@@ -1,9 +1,9 @@
-import 'mutationobserver-shim'
+import MutationObserver from '@sheerun/mutationobserver-shim'
 
 function waitForElement(
   callback = undefined,
   {
-    container = document,
+    container,
     timeout = 4500,
     mutationObserverOptions = {
       subtree: true,
@@ -13,6 +13,14 @@ function waitForElement(
     },
   } = {},
 ) {
+  if (typeof container === 'undefined') {
+    if (typeof document === 'undefined') {
+      throw new Error('Could not find default container')
+    } else {
+      container = document
+    }
+  }
+
   return new Promise((resolve, reject) => {
     // Disabling eslint prefer-const below: either prefer-const or no-use-before-define triggers.
     let lastError, observer, timer // eslint-disable-line prefer-const
@@ -46,7 +54,7 @@ function waitForElement(
       onDone(lastError || new Error('Timed out in waitForElement.'), null)
     }
     timer = setTimeout(onTimeout, timeout)
-    observer = new window.MutationObserver(onMutation)
+    observer = new MutationObserver(onMutation)
     observer.observe(container, mutationObserverOptions)
     if (callback !== undefined) {
       onMutation()
