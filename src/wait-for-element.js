@@ -1,4 +1,4 @@
-import MutationObserver from './vendor/mutationobserver'
+import MutationObserver from '@sheerun/mutationobserver-shim'
 
 function waitForElement(
   callback = undefined,
