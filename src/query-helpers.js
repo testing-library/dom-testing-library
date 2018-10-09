@@ -8,7 +8,6 @@ function debugDOM(htmlElement) {
     typeof process !== 'undefined' &&
     process.versions !== undefined &&
     process.versions.node !== undefined
-  const window = htmlElement.ownerDocument.defaultView
   const inCypress = typeof window !== 'undefined' && window.Cypress
   /* istanbul ignore else */
   if (inCypress) {

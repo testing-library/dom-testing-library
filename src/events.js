@@ -1,201 +1,218 @@
+const {
+  AnimationEvent,
+  ClipboardEvent,
+  CompositionEvent,
+  DragEvent,
+  Event,
+  FocusEvent,
+  InputEvent,
+  KeyboardEvent,
+  MouseEvent,
+  ProgressEvent,
+  TouchEvent,
+  TransitionEvent,
+  UIEvent,
+  WheelEvent,
+} = typeof window === 'undefined' ? /* istanbul ignore next */ global : window
+
 const eventMap = {
   // Clipboard Events
   copy: {
-    EventType: 'ClipboardEvent',
+    EventType: ClipboardEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   cut: {
-    EventType: 'ClipboardEvent',
+    EventType: ClipboardEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   paste: {
-    EventType: 'ClipboardEvent',
+    EventType: ClipboardEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   // Composition Events
   compositionEnd: {
-    EventType: 'CompositionEvent',
+    EventType: CompositionEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   compositionStart: {
-    EventType: 'CompositionEvent',
+    EventType: CompositionEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   compositionUpdate: {
-    EventType: 'CompositionEvent',
+    EventType: CompositionEvent,
     defaultInit: {bubbles: true, cancelable: false},
   },
   // Keyboard Events
   keyDown: {
-    EventType: 'KeyboardEvent',
+    EventType: KeyboardEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   keyPress: {
-    EventType: 'KeyboardEvent',
+    EventType: KeyboardEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   keyUp: {
-    EventType: 'KeyboardEvent',
+    EventType: KeyboardEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   // Focus Events
   focus: {
-    EventType: 'FocusEvent',
+    EventType: FocusEvent,
     defaultInit: {bubbles: false, cancelable: false},
   },
   blur: {
-    EventType: 'FocusEvent',
+    EventType: FocusEvent,
     defaultInit: {bubbles: false, cancelable: false},
   },
   // Form Events
   change: {
-    EventType: 'InputEvent',
+    EventType: InputEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   input: {
-    EventType: 'InputEvent',
+    EventType: InputEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   invalid: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: true},
   },
   submit: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: true, cancelable: true},
   },
   // Mouse Events
   click: {
-    EventType: 'MouseEvent',
+    EventType: MouseEvent,
     defaultInit: {bubbles: true, cancelable: true, button: 0},
   },
   contextMenu: {
-    EventType: 'MouseEvent',
+    EventType: MouseEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   dblClick: {
-    EventType: 'MouseEvent',
+    EventType: MouseEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   drag: {
-    EventType: 'DragEvent',
+    EventType: DragEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   dragEnd: {
-    EventType: 'DragEvent',
+    EventType: DragEvent,
     defaultInit: {bubbles: true, cancelable: false},
   },
   dragEnter: {
-    EventType: 'DragEvent',
+    EventType: DragEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   dragExit: {
-    EventType: 'DragEvent',
+    EventType: DragEvent,
     defaultInit: {bubbles: true, cancelable: false},
   },
   dragLeave: {
-    EventType: 'DragEvent',
+    EventType: DragEvent,
     defaultInit: {bubbles: true, cancelable: false},
   },
   dragOver: {
-    EventType: 'DragEvent',
+    EventType: DragEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   dragStart: {
-    EventType: 'DragEvent',
+    EventType: DragEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   drop: {
-    EventType: 'DragEvent',
+    EventType: DragEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   mouseDown: {
-    EventType: 'MouseEvent',
+    EventType: MouseEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   mouseEnter: {
-    EventType: 'MouseEvent',
+    EventType: MouseEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   mouseLeave: {
-    EventType: 'MouseEvent',
+    EventType: MouseEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   mouseMove: {
-    EventType: 'MouseEvent',
+    EventType: MouseEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   mouseOut: {
-    EventType: 'MouseEvent',
+    EventType: MouseEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   mouseOver: {
-    EventType: 'MouseEvent',
+    EventType: MouseEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   mouseUp: {
-    EventType: 'MouseEvent',
+    EventType: MouseEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   // Selection Events
   select: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: true, cancelable: false},
   },
   // Touch Events
   touchCancel: {
-    EventType: 'TouchEvent',
+    EventType: TouchEvent,
     defaultInit: {bubbles: true, cancelable: false},
   },
   touchEnd: {
-    EventType: 'TouchEvent',
+    EventType: TouchEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   touchMove: {
-    EventType: 'TouchEvent',
+    EventType: TouchEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   touchStart: {
-    EventType: 'TouchEvent',
+    EventType: TouchEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   // UI Events
   scroll: {
-    EventType: 'UIEvent',
+    EventType: UIEvent,
     defaultInit: {bubbles: false, cancelable: false},
   },
   // Wheel Events
   wheel: {
-    EventType: 'WheelEvent',
+    EventType: WheelEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
   // Media Events
   abort: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   canPlay: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   canPlayThrough: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   durationChange: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   emptied: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   encrypted: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   ended: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   // error: {
@@ -203,90 +220,90 @@ const eventMap = {
   //   defaultInit: {bubbles: false, cancelable: false},
   // },
   loadedData: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   loadedMetadata: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   loadStart: {
-    EventType: 'ProgressEvent',
+    EventType: ProgressEvent,
     defaultInit: {bubbles: false, cancelable: false},
   },
   pause: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   play: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   playing: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   progress: {
-    EventType: 'ProgressEvent',
+    EventType: ProgressEvent,
     defaultInit: {bubbles: false, cancelable: false},
   },
   rateChange: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   seeked: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   seeking: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   stalled: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   suspend: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   timeUpdate: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   volumeChange: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   waiting: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   // Image Events
   load: {
-    EventType: 'UIEvent',
+    EventType: UIEvent,
     defaultInit: {bubbles: false, cancelable: false},
   },
   error: {
-    EventType: 'Event',
+    EventType: Event,
     defaultInit: {bubbles: false, cancelable: false},
   },
   // Animation Events
   animationStart: {
-    EventType: 'AnimationEvent',
+    EventType: AnimationEvent,
     defaultInit: {bubbles: true, cancelable: false},
   },
   animationEnd: {
-    EventType: 'AnimationEvent',
+    EventType: AnimationEvent,
     defaultInit: {bubbles: true, cancelable: false},
   },
   animationIteration: {
-    EventType: 'AnimationEvent',
+    EventType: AnimationEvent,
     defaultInit: {bubbles: true, cancelable: false},
   },
   // Transition Events
   transitionEnd: {
-    EventType: 'TransitionEvent',
+    EventType: TransitionEvent,
     defaultInit: {bubbles: true, cancelable: true},
   },
 }
@@ -299,34 +316,28 @@ function fireEvent(element, event) {
   return element.dispatchEvent(event)
 }
 
-Object.entries(eventMap).forEach(
-  ([key, {EventType = 'Event', defaultInit}]) => {
-    const eventName = key.toLowerCase()
+Object.entries(eventMap).forEach(([key, {EventType = Event, defaultInit}]) => {
+  const eventName = key.toLowerCase()
 
-    fireEvent[key] = (node, init) => {
-      const eventInit = {...defaultInit, ...init}
-      const {target: {value, files, ...targetProperties} = {}} = eventInit
-      Object.assign(node, targetProperties)
-      if (value !== undefined) {
-        setNativeValue(node, value)
-      }
-      if (files !== undefined) {
-        // input.files is a read-only property so this is not allowed:
-        // input.files = [file]
-        // so we have to use this workaround to set the property
-        Object.defineProperty(node, 'files', {
-          value: files,
-        })
-      }
-      const window = node.ownerDocument.defaultView
-      if (typeof window[EventType] === 'undefined') {
-        throw new Error(`${EventType} is not supported`)
-      }
-      const event = new window[EventType](eventName, eventInit)
-      return fireEvent(node, event)
+  fireEvent[key] = (node, init) => {
+    const eventInit = {...defaultInit, ...init}
+    const {target: {value, files, ...targetProperties} = {}} = eventInit
+    Object.assign(node, targetProperties)
+    if (value !== undefined) {
+      setNativeValue(node, value)
     }
-  },
-)
+    if (files !== undefined) {
+      // input.files is a read-only property so this is not allowed:
+      // input.files = [file]
+      // so we have to use this workaround to set the property
+      Object.defineProperty(node, 'files', {
+        value: files,
+      })
+    }
+    const event = new EventType(eventName, eventInit)
+    return fireEvent(node, event)
+  }
+})
 
 // function written after some investigation here:
 // https://github.com/facebook/react/issues/10135#issuecomment-401496776

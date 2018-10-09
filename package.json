@@ -27,9 +27,8 @@
     "build": "kcd-scripts build && kcd-scripts build --bundle umd --no-clean",
     "lint": "kcd-scripts lint",
     "test": "kcd-scripts test",
-    "test:all": "npm test && npm test -- --env jsdom",
     "test:update": "npm test -- --updateSnapshot --coverage",
-    "validate": "kcd-scripts validate build,lint,test:all",
+    "validate": "kcd-scripts validate",
     "setup": "npm install && npm run validate -s",
     "precommit": "kcd-scripts precommit",
     "dtslint": "dtslint typings"
@@ -39,15 +38,14 @@
     "typings"
   ],
   "dependencies": {
-    "@sheerun/mutationobserver-shim": "^0.3.2",
+    "mutationobserver-shim": "^0.3.2",
     "pretty-format": "^23.6.0",
     "wait-for-expect": "^1.0.0"
   },
   "devDependencies": {
     "dtslint": "^0.3.0",
-    "jest-dom": "^2.0.4",
+    "jest-dom": "^1.7.0",
     "jest-in-case": "^1.0.2",
-    "jsdom": "^12.2.0",
     "kcd-scripts": "^0.41.0",
     "microbundle": "^0.4.4"
   },

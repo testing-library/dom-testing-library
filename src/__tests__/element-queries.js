@@ -1,9 +1,8 @@
 import 'jest-dom/extend-expect'
 import {render} from './helpers/test-utils'
-import document from './helpers/document'
 
 beforeEach(() => {
-  document.defaultView.Cypress = null
+  window.Cypress = null
 })
 
 test('query can return null', () => {
@@ -149,7 +148,9 @@ test('get element by its alt text', () => {
       <img alt="finding nemo poster" src="/finding-nemo.png" />
     </div>,
   `)
-  expect(getByAltText(/fin.*nem.*poster$/i).src).toContain('/finding-nemo.png')
+  expect(getByAltText(/fin.*nem.*poster$/i).src).toBe(
+    'http://localhost/finding-nemo.png',
+  )
 })
 
 test('query/get element by its title', () => {
@@ -488,7 +489,7 @@ test('test the debug helper prints the dom state here', () => {
 })
 
 test('get throws a useful error message without DOM in Cypress', () => {
-  document.defaultView.Cypress = {}
+  window.Cypress = {}
   const {
     getByLabelText,
     getBySelectText,

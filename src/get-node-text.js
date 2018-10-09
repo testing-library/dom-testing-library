@@ -1,6 +1,4 @@
 function getNodeText(node) {
-  const window = node.ownerDocument.defaultView
-
   return Array.from(node.childNodes)
     .filter(
       child =>

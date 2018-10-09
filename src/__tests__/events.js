@@ -1,5 +1,4 @@
 import {fireEvent} from '..'
-import document from './helpers/document'
 
 const eventTypes = [
   {
@@ -172,7 +171,7 @@ test('assigning a value to a target that cannot have a value throws an error', (
 
 test('assigning the files property on an input', () => {
   const node = document.createElement('input')
-  const file = new document.defaultView.File(['(⌐□_□)'], 'chucknorris.png', {
+  const file = new File(['(⌐□_□)'], 'chucknorris.png', {
     type: 'image/png',
   })
   fireEvent.change(node, {target: {files: [file]}})
