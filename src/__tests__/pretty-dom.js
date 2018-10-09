@@ -1,5 +1,6 @@
 import {prettyDOM} from '../pretty-dom'
 import {render} from './helpers/test-utils'
+import document from './helpers/document'
 
 test('it prints out the given DOM element tree', () => {
   const {container} = render('<div>Hello World!</div>')
