@@ -1,5 +1,5 @@
 const jestConfig = require('kcd-scripts/jest')
 
 module.exports = Object.assign(jestConfig, {
-  testEnvironment: 'jest-environment-jsdom',
+  testEnvironment: 'jest-environment-node',
 })
