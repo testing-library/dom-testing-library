@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it throws if timeout is exceeded 1`] = `
+Array [
+  [Error: Timed out in waitForDomChange.],
+]
+`;
+
+exports[`it throws if timeout is exceeded 2`] = `<div />`;
+
+exports[`it waits characterData mutation 1`] = `
+<div>
+  <div>
+    initial text
+  </div>
+</div>
+`;
+
+exports[`it waits characterData mutation 2`] = `
+<div>
+  <div>
+    new text
+  </div>
+</div>
+`;
+
+exports[`it waits for the next DOM mutation 1`] = `
+<body>
+  <div />
+</body>
+`;
+
+exports[`it waits for the next DOM mutation 2`] = `
+<body>
+  <div />
+</body>
+`;
