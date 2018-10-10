@@ -211,9 +211,15 @@ const inputNode = getByLabelText(container, 'Username')
 // <label for="username-input">Username</label>
 // <input id="username-input" />
 //
-// The aria-labelledby attribute
+// The aria-labelledby attribute with form elements
 // <label id="username-label">Username</label>
 // <input aria-labelledby="username-label" />
+//
+// The aria-labelledby attribute with other elements
+// <section aria-labelledby="section-one-header">
+//   <h3 id="section-one-header">Section One</h3>
+//   <p>some content...</p>
+// <section>
 //
 // Wrapper labels
 // <label>Username <input /></label>

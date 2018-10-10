@@ -82,7 +82,7 @@ test('matches case with RegExp matcher', () => {
   expect(queryByText(/Step 1 of 4/)).not.toBeTruthy()
 })
 
-test('get can get form controls by label text', () => {
+test('can get form controls by label text', () => {
   const {getByLabelText} = render(`
     <div>
       <label>
@@ -114,6 +114,27 @@ test('get can get form controls by label text', () => {
   expect(getByLabelText('4th').id).toBe('fourth.id')
   expect(getByLabelText('5th one').id).toBe('fifth-id')
   expect(getByLabelText('5th two').id).toBe('fifth-id')
+})
+
+test('can get elements labelled with aria-labelledby attribute', () => {
+  const {getByLabelText, getAllByLabelText} = render(`
+    <div>
+      <h1 id="content-header">The Gettysburg Address</h1>
+      <main id="sibling-of-content-header" aria-labelledby="content-header">
+        <section aria-labelledby="content-header section-one-header" id="section-one">
+          <h2 id="section-one-header">Section One</h2>
+          <p>Four score and seven years ago, ...</p>
+        </section>
+      </main>
+      <p>The Gettysburg Address</p>
+    </div>
+  `)
+  const result = getAllByLabelText('The Gettysburg Address').map(el => el.id)
+  expect(result).toHaveLength(2)
+  expect(result).toEqual(
+    expect.arrayContaining(['sibling-of-content-header', 'section-one']),
+  )
+  expect(getByLabelText('Section One').id).toBe('section-one')
 })
 
 test('get can get form controls by placeholder', () => {

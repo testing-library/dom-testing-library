@@ -59,7 +59,28 @@ function queryAllByLabelText(
     .filter(label => label !== null)
     .concat(queryAllByAttribute('aria-label', container, text, {exact}))
 
-  return labelledElements
+  const possibleAriaLabelElements = queryAllByText(container, text, {
+    exact,
+    ...matchOpts,
+  }).filter(el => el.tagName !== 'LABEL') // don't reprocess labels
+
+  const ariaLabelledElements = possibleAriaLabelElements.reduce(
+    (allLabelledElements, nextLabelElement) => {
+      const labelId = nextLabelElement.getAttribute('id')
+
+      if (!labelId) return allLabelledElements
+
+      // ARIA labels can label multiple elements
+      const labelledNodes = Array.from(
+        container.querySelectorAll(`[aria-labelledby~="${labelId}"]`),
+      )
+
+      return allLabelledElements.concat(labelledNodes)
+    },
+    [],
+  )
+
+  return Array.from(new Set([...labelledElements, ...ariaLabelledElements]))
 }
 
 function queryByLabelText(...args) {
