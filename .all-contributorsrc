@@ -344,6 +344,7 @@
       "profile": "http://www.wendtedesigns.com/",
       "contributions": [
         "code",
+        "doc",
         "test"
       ]
     }

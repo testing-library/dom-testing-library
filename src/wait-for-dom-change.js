@@ -11,8 +11,10 @@ function waitForDomChange({
   },
 } = {}) {
   return new Promise((resolve, reject) => {
-    // Disabling eslint prefer-const below: either prefer-const or no-use-before-define triggers.
-    let lastError, observer, timer // eslint-disable-line prefer-const
+    const timer = setTimeout(onTimeout, timeout)
+    const observer = new window.MutationObserver(onMutation)
+    observer.observe(container, mutationObserverOptions)
+
     function onDone(error, result) {
       clearTimeout(timer)
       setImmediate(() => observer.disconnect())
@@ -22,15 +24,12 @@ function waitForDomChange({
         resolve(result)
       }
     }
-    function onMutation() {
-      onDone(null, true)
+    function onMutation(mutationsList) {
+      onDone(null, mutationsList)
     }
     function onTimeout() {
-      onDone(lastError || new Error('Timed out in waitForDomChange.'), null)
+      onDone(new Error('Timed out in waitForDomChange.'), null)
     }
-    timer = setTimeout(onTimeout, timeout)
-    observer = new window.MutationObserver(onMutation)
-    observer.observe(container, mutationObserverOptions)
   })
 }
 

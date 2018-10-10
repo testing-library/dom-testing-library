@@ -69,7 +69,6 @@ when a real user uses it.
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Installation](#installation)
 - [Usage](#usage)
   - [`getByLabelText`](#getbylabeltext)
@@ -85,8 +84,7 @@ when a real user uses it.
   - [`waitForElement`](#waitforelement)
   - [`waitForDomChange`](#waitfordomchange)
   - [`fireEvent`](#fireevent)
-    - [`fireEvent[eventName]`](#fireeventeventname)
-    - [`getNodeText`](#getnodetext)
+  - [`getNodeText`](#getnodetext)
 - [Custom Jest Matchers](#custom-jest-matchers)
   - [Using other assertion libraries](#using-other-assertion-libraries)
 - [`TextMatch`](#textmatch)
@@ -502,7 +500,6 @@ function waitForElement<T>(
 When in need to wait for DOM elements to appear, disappear, or change you can use `waitForElement`.
 The `waitForElement` function is a small wrapper around the [`MutationObserver`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver).
 
-
 Here's a simple example:
 
 ```javascript
@@ -548,20 +545,18 @@ additions and removals of child elements (including text nodes) in the `containe
 ### `waitForDomChange`
 
 ```typescript
-function waitForDomChange<T>(
-  options?: {
-    container?: HTMLElement
-    timeout?: number
-    mutationObserverOptions?: MutationObserverInit
-  },
-): Promise<T>
+function waitForDomChange<T>(options?: {
+  container?: HTMLElement
+  timeout?: number
+  mutationObserverOptions?: MutationObserverInit
+}): Promise<T>
 ```
 
-When in need to wait for DOM to change you can use `waitForDomChange`.
-The `waitForDomChange` function is a small wrapper
-around the
+When in need to wait for the DOM to change you can use `waitForDomChange`. The `waitForDomChange`
+function is a small wrapper around the
 [`MutationObserver`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver).
-Here is an example where the Promise will be resolved because the container is changed
+
+Here is an example where the promise will be resolved because the container is changed:
 
 ```javascript
 const container = document.createElement('div')
@@ -571,6 +566,27 @@ waitForDomChange({container})
 container.append(document.createElement('p'))
 // if 👆 was the only code affecting the container and it was not run,
 // waitForDomChange would throw an error
+```
+
+The promise will resolve with a [`mutationsList`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/MutationObserver) which you can use to determine what kind of a change (or changes) affected the container
+
+```javascript
+const container = document.createElement('div')
+container.setAttribute('data-cool', 'true')
+waitForDomChange({container}).then(mutationsList => {
+  const mutation = mutationsList[0]
+  console.log(
+    `was cool: ${mutation.oldValue}\ncurrently cool: ${
+      mutation.target.dataset.cool
+    }`,
+  )
+})
+container.setAttribute('data-cool', 'false')
+/*
+  logs:
+    was cool: true
+    currently cool: false
+*/
 ```
 
 ### `fireEvent`
@@ -629,7 +645,7 @@ fireEvent.change(getByLabelText(/picture/i), {
 })
 ```
 
-#### `getNodeText`
+### `getNodeText`
 
 ```typescript
 getNodeText(node: HTMLElement)
@@ -1026,7 +1042,8 @@ Thanks goes to these people ([emoji key][emojis]):
 | [<img src="https://avatars1.githubusercontent.com/u/1241511?s=460&v=4" width="100px;"/><br /><sub><b>Anto Aravinth</b></sub>](https://github.com/antoaravinth)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Tests") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=antoaravinth "Documentation")                                                | [<img src="https://avatars2.githubusercontent.com/u/3462296?v=4" width="100px;"/><br /><sub><b>Jonah Moses</b></sub>](https://github.com/JonahMoses)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=JonahMoses "Documentation")                                                                                                                                                                     | [<img src="https://avatars1.githubusercontent.com/u/4002543?v=4" width="100px;"/><br /><sub><b>Łukasz Gandecki</b></sub>](http://team.thebrain.pro)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Tests") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=lgandecki "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/498274?v=4" width="100px;"/><br /><sub><b>Ivan Babak</b></sub>](https://sompylasar.github.io)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Asompylasar "Bug reports") [🤔](#ideas-sompylasar "Ideas, Planning, & Feedback") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=sompylasar "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=sompylasar "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/4439618?v=4" width="100px;"/><br /><sub><b>Jesse Day</b></sub>](https://github.com/jday3)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=jday3 "Code")                                                                                                                                                                                                                                         | [<img src="https://avatars0.githubusercontent.com/u/15199?v=4" width="100px;"/><br /><sub><b>Ernesto García</b></sub>](http://gnapse.github.io)<br />[💬](#question-gnapse "Answering Questions") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=gnapse "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=gnapse "Documentation")                                                                                                                                      | [<img src="https://avatars2.githubusercontent.com/u/2747424?v=4" width="100px;"/><br /><sub><b>Josef Maxx Blake</b></sub>](http://jomaxx.com)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=jomaxx "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=jomaxx "Documentation") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=jomaxx "Tests")                          |
 | [<img src="https://avatars3.githubusercontent.com/u/725236?v=4" width="100px;"/><br /><sub><b>Alex Cook</b></sub>](https://github.com/alecook)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=alecook "Documentation") [💡](#example-alecook "Examples")                                                                                                                                                                                                                          | [<img src="https://avatars3.githubusercontent.com/u/10348212?v=4" width="100px;"/><br /><sub><b>Daniel Cook</b></sub>](https://github.com/dfcook)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=dfcook "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=dfcook "Documentation") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=dfcook "Tests") | [<img src="https://avatars2.githubusercontent.com/u/21194045?s=400&v=4" width="100px;"/><br /><sub><b>Thomas Chia</b></sub>](https://github.com/thchia)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Athchia "Bug reports") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=thchia "Code")                                                                                           | [<img src="https://avatars1.githubusercontent.com/u/28659384?v=4" width="100px;"/><br /><sub><b>Tim Deschryver</b></sub>](https://github.com/tdeschryver)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=tdeschryver "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=tdeschryver "Tests")                                                                                                                                                        | [<img src="https://avatars3.githubusercontent.com/u/1571667?v=4" width="100px;"/><br /><sub><b>Alex Krolick</b></sub>](https://alexkrolick.com)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=alexkrolick "Code")                                                                                                                                                                                                                                 | [<img src="https://avatars2.githubusercontent.com/u/2224291?v=4" width="100px;"/><br /><sub><b>Maddi Joyce</b></sub>](http://www.maddijoyce.com)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=maddijoyce "Code")                                                                                                                                                                                                                                                                            | [<img src="https://avatars1.githubusercontent.com/u/25429764?v=4" width="100px;"/><br /><sub><b>Peter Kamps</b></sub>](https://github.com/npeterkamps)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Anpeterkamps "Bug reports") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=npeterkamps "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=npeterkamps "Tests") |
 | [<img src="https://avatars2.githubusercontent.com/u/21689428?v=4" width="100px;"/><br /><sub><b>Jonathan Stoye</b></sub>](http://jonathanstoye.de)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=JonathanStoye "Documentation")                                                                                                                                                                                                                                                  | [<img src="https://avatars2.githubusercontent.com/u/4126644?v=4" width="100px;"/><br /><sub><b>Sanghyeon Lee</b></sub>](https://github.com/yongdamsh)<br />[💡](#example-yongdamsh "Examples")                                                                                                                                                                                                                                  | [<img src="https://avatars3.githubusercontent.com/u/8015514?v=4" width="100px;"/><br /><sub><b>Justice Mba </b></sub>](https://github.com/Dajust)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=Dajust "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=Dajust "Documentation") [🤔](#ideas-Dajust "Ideas, Planning, & Feedback")                                                | [<img src="https://avatars3.githubusercontent.com/u/340761?v=4" width="100px;"/><br /><sub><b>Wayne Crouch</b></sub>](https://github.com/wgcrouch)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=wgcrouch "Code")                                                                                                                                                                                                                                                             | [<img src="https://avatars1.githubusercontent.com/u/4996462?v=4" width="100px;"/><br /><sub><b>Ben Elliott</b></sub>](http://benjaminelliott.co.uk)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=benelliott "Code")                                                                                                                                                                                                                              | [<img src="https://avatars3.githubusercontent.com/u/577921?v=4" width="100px;"/><br /><sub><b>Ruben Costa</b></sub>](http://nuances.co)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=rubencosta "Code")                                                                                                                                                                                                                                                                                     | [<img src="https://avatars2.githubusercontent.com/u/4982001?v=4" width="100px;"/><br /><sub><b>Robert Smith</b></sub>](http://rbrtsmith.com/)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Arbrtsmith "Bug reports") [🤔](#ideas-rbrtsmith "Ideas, Planning, & Feedback") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=rbrtsmith "Documentation")                                           |
-| [<img src="https://avatars3.githubusercontent.com/u/881986?v=4" width="100px;"/><br /><sub><b>dadamssg</b></sub>](https://github.com/dadamssg)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=dadamssg "Code")                                                                                                                                                                                                                                                                    | [<img src="https://avatars1.githubusercontent.com/u/186971?v=4" width="100px;"/><br /><sub><b>Neil Kistner</b></sub>](https://neilkistner.com/)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=wyze "Code")                                                                                                                                                                                         | [<img src="https://avatars3.githubusercontent.com/u/1448597?v=4" width="100px;"/><br /><sub><b>Ben Chauvette</b></sub>](http://bdchauvette.net/)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=bdchauvette "Code")                                                                                                                                                                                            | [<img src="https://avatars2.githubusercontent.com/u/777527?v=4" width="100px;"/><br /><sub><b>Jeff Baumgardt</b></sub>](https://github.com/JeffBaumgardt)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=JeffBaumgardt "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=JeffBaumgardt "Documentation")                                                                                                                                            | [<img src="https://avatars0.githubusercontent.com/u/4658208?v=4" width="100px;"/><br /><sub><b>Matan Kushner</b></sub>](http://matchai.me)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=matchai "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=matchai "Documentation") [🤔](#ideas-matchai "Ideas, Planning, & Feedback") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=matchai "Tests") | [<img src="https://avatars2.githubusercontent.com/u/5779538?v=4" width="100px;"/><br /><sub><b>Alex Wendte</b></sub>](http://www.wendtedesigns.com/)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=themostcolm "Code") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=themostcolm "Tests")                                                                                                                                                                            |
+| [<img src="https://avatars3.githubusercontent.com/u/881986?v=4" width="100px;"/><br /><sub><b>dadamssg</b></sub>](https://github.com/dadamssg)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=dadamssg "Code")                                                                                                                                                                                                                                                                    | [<img src="https://avatars1.githubusercontent.com/u/186971?v=4" width="100px;"/><br /><sub><b>Neil Kistner</b></sub>](https://neilkistner.com/)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=wyze "Code")                                                                                                                                                                                         | [<img src="https://avatars3.githubusercontent.com/u/1448597?v=4" width="100px;"/><br /><sub><b>Ben Chauvette</b></sub>](http://bdchauvette.net/)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=bdchauvette "Code")                                                                                                                                                                                            | [<img src="https://avatars2.githubusercontent.com/u/777527?v=4" width="100px;"/><br /><sub><b>Jeff Baumgardt</b></sub>](https://github.com/JeffBaumgardt)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=JeffBaumgardt "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=JeffBaumgardt "Documentation")                                                                                                                                            | [<img src="https://avatars0.githubusercontent.com/u/4658208?v=4" width="100px;"/><br /><sub><b>Matan Kushner</b></sub>](http://matchai.me)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=matchai "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=matchai "Documentation") [🤔](#ideas-matchai "Ideas, Planning, & Feedback") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=matchai "Tests") | [<img src="https://avatars2.githubusercontent.com/u/5779538?v=4" width="100px;"/><br /><sub><b>Alex Wendte</b></sub>](http://www.wendtedesigns.com/)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=themostcolm "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=themostcolm "Documentation") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=themostcolm "Tests")                                                                         |
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors][all-contributors] specification.
