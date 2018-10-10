@@ -2,6 +2,7 @@ import {waitForElement, wait} from '../'
 // adds special assertions like toBeTruthy
 import 'jest-dom/extend-expect'
 import {render} from './helpers/test-utils'
+import document from './helpers/document'
 
 async function skipSomeTime(delayMs) {
   await new Promise(resolve => setTimeout(resolve, delayMs))
@@ -104,7 +105,16 @@ test('it waits for the next DOM mutation with default callback', async () => {
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  const promise = waitForElement().then(successHandler, errorHandler)
+  let promise
+
+  if (typeof window !== 'undefined' && typeof window.document !== 'undefined') {
+    promise = waitForElement().then(successHandler, errorHandler)
+  } else {
+    promise = waitForElement(undefined, {container: document}).then(
+      successHandler,
+      errorHandler,
+    )
+  }
 
   // Promise callbacks are always asynchronous.
   expect(successHandler).toHaveBeenCalledTimes(0)
