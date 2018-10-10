@@ -1,7 +1,7 @@
 import 'mutationobserver-shim'
 
 function waitForElement(
-  callback = undefined,
+  callback,
   {
     container = document,
     timeout = 4500,
@@ -14,8 +14,13 @@ function waitForElement(
   } = {},
 ) {
   return new Promise((resolve, reject) => {
-    // Disabling eslint prefer-const below: either prefer-const or no-use-before-define triggers.
-    let lastError, observer, timer // eslint-disable-line prefer-const
+    if (typeof callback !== 'function') {
+      reject('waitForElement requires a callback as the first parameter')
+    }
+    let lastError
+    const timer = setTimeout(onTimeout, timeout)
+    const observer = new window.MutationObserver(onMutation)
+    observer.observe(container, mutationObserverOptions)
     function onDone(error, result) {
       clearTimeout(timer)
       setImmediate(() => observer.disconnect())
@@ -26,10 +31,6 @@ function waitForElement(
       }
     }
     function onMutation() {
-      if (callback === undefined) {
-        onDone(null, undefined)
-        return
-      }
       try {
         const result = callback()
         if (result) {
@@ -45,12 +46,7 @@ function waitForElement(
     function onTimeout() {
       onDone(lastError || new Error('Timed out in waitForElement.'), null)
     }
-    timer = setTimeout(onTimeout, timeout)
-    observer = new window.MutationObserver(onMutation)
-    observer.observe(container, mutationObserverOptions)
-    if (callback !== undefined) {
-      onMutation()
-    }
+    onMutation()
   })
 }
 
