@@ -319,10 +319,8 @@ Object.entries(eventMap).forEach(
         })
       }
       const window = node.ownerDocument.defaultView
-      if (typeof window[EventType] === 'undefined') {
-        window[EventType] = class extends window.Event {}
-      }
-      const event = new window[EventType](eventName, eventInit)
+      const EventConstructor = window[EventType] || window.Event
+      const event = new EventConstructor(eventName, eventInit)
       return fireEvent(node, event)
     }
   },
