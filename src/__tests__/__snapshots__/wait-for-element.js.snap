@@ -79,15 +79,3 @@ exports[`it waits for the callback to return a value and only reacts to DOM muta
   />
 </div>
 `;
-
-exports[`it waits for the next DOM mutation with default callback 1`] = `
-<body>
-  <div />
-</body>
-`;
-
-exports[`it waits for the next DOM mutation with default callback 2`] = `
-<body>
-  <div />
-</body>
-`;

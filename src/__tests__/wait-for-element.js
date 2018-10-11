@@ -3,14 +3,12 @@ import {waitForElement, wait} from '../'
 import 'jest-dom/extend-expect'
 import {render} from './helpers/test-utils'
 
-async function skipSomeTime(delayMs) {
-  await new Promise(resolve => setTimeout(resolve, delayMs))
-}
+const skipSomeTime = delayMs =>
+  new Promise(resolve => setTimeout(resolve, delayMs))
 
-async function skipSomeTimeForMutationObserver(delayMs = 50) {
-  // Using `setTimeout` >30ms instead of `wait` here because `mutationobserver-shim` uses `setTimeout` ~30ms.
-  await skipSomeTime(delayMs, 50)
-}
+// Using `setTimeout` >30ms instead of `wait` here because `mutationobserver-shim` uses `setTimeout` ~30ms.
+const skipSomeTimeForMutationObserver = (delayMs = 50) =>
+  skipSomeTime(delayMs, 50)
 
 test('it waits for the callback to return a value and only reacts to DOM mutations', async () => {
   const {container, getByTestId} = render(
@@ -66,10 +64,7 @@ test('it waits for the callback to return a value and only reacts to DOM mutatio
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  const promise = waitForElement(callback, {container}).then(
-    successHandler,
-    errorHandler,
-  )
+  waitForElement(callback, {container}).then(successHandler, errorHandler)
 
   // One synchronous `callback` call is expected.
   expect(callback).toHaveBeenCalledTimes(1)
@@ -96,37 +91,6 @@ test('it waits for the callback to return a value and only reacts to DOM mutatio
   expect(errorHandler).toHaveBeenCalledTimes(0)
   expect(container).toMatchSnapshot()
   expect(testEl.parentNode).toBe(container)
-
-  return promise
-})
-
-test('it waits for the next DOM mutation with default callback', async () => {
-  const successHandler = jest.fn().mockName('successHandler')
-  const errorHandler = jest.fn().mockName('errorHandler')
-
-  const promise = waitForElement().then(successHandler, errorHandler)
-
-  // Promise callbacks are always asynchronous.
-  expect(successHandler).toHaveBeenCalledTimes(0)
-  expect(errorHandler).toHaveBeenCalledTimes(0)
-
-  await skipSomeTimeForMutationObserver()
-
-  // No more expected calls without DOM mutations.
-  expect(successHandler).toHaveBeenCalledTimes(0)
-  expect(errorHandler).toHaveBeenCalledTimes(0)
-
-  document.body.appendChild(document.createElement('div'))
-  expect(document.body).toMatchSnapshot()
-
-  await skipSomeTimeForMutationObserver()
-
-  expect(successHandler).toHaveBeenCalledTimes(1)
-  expect(successHandler).toHaveBeenCalledWith(undefined)
-  expect(errorHandler).toHaveBeenCalledTimes(0)
-  expect(document.body).toMatchSnapshot()
-
-  return promise
 })
 
 test('it waits characterData mutation', async () => {
@@ -138,10 +102,7 @@ test('it waits characterData mutation', async () => {
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  const promise = waitForElement(callback, {container}).then(
-    successHandler,
-    errorHandler,
-  )
+  waitForElement(callback, {container}).then(successHandler, errorHandler)
 
   // Promise callbacks are always asynchronous.
   expect(successHandler).toHaveBeenCalledTimes(0)
@@ -162,8 +123,6 @@ test('it waits characterData mutation', async () => {
   expect(errorHandler).toHaveBeenCalledTimes(0)
   expect(callback).toHaveBeenCalledTimes(2)
   expect(container).toMatchSnapshot()
-
-  return promise
 })
 
 test('it waits for the attributes mutation', async () => {
@@ -175,7 +134,7 @@ test('it waits for the attributes mutation', async () => {
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  const promise = waitForElement(callback, {
+  waitForElement(callback, {
     container,
   }).then(successHandler, errorHandler)
 
@@ -196,8 +155,6 @@ test('it waits for the attributes mutation', async () => {
   expect(successHandler).toHaveBeenCalledTimes(1)
   expect(successHandler).toHaveBeenCalledWith('PASSED')
   expect(errorHandler).toHaveBeenCalledTimes(0)
-
-  return promise
 })
 
 test('it throws if timeout is exceeded', async () => {
@@ -207,7 +164,7 @@ test('it throws if timeout is exceeded', async () => {
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  const promise = waitForElement(callback, {
+  waitForElement(callback, {
     container,
     timeout: 70,
     mutationObserverOptions: {attributes: true},
@@ -232,8 +189,6 @@ test('it throws if timeout is exceeded', async () => {
   expect(errorHandler).toHaveBeenCalledTimes(1)
   expect(errorHandler.mock.calls[0]).toMatchSnapshot()
   expect(container).toMatchSnapshot()
-
-  return promise
 })
 
 test('it throws the same error that the callback has thrown if timeout is exceeded', async () => {
@@ -243,7 +198,7 @@ test('it throws the same error that the callback has thrown if timeout is exceed
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  const promise = waitForElement(callback, {
+  waitForElement(callback, {
     container,
     timeout: 70,
     mutationObserverOptions: {attributes: true},
@@ -268,8 +223,6 @@ test('it throws the same error that the callback has thrown if timeout is exceed
   expect(errorHandler).toHaveBeenCalledTimes(1)
   expect(errorHandler.mock.calls[0]).toMatchSnapshot()
   expect(container).toMatchSnapshot()
-
-  return promise
 })
 
 test('it returns immediately if the callback returns the value before any mutations', async () => {
@@ -283,7 +236,7 @@ test('it returns immediately if the callback returns the value before any mutati
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  const promise = waitForElement(callback, {
+  waitForElement(callback, {
     container,
     timeout: 70,
     mutationObserverOptions: {attributes: true},
@@ -309,8 +262,6 @@ test('it returns immediately if the callback returns the value before any mutati
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
   expect(container).toMatchSnapshot()
-
-  return promise
 })
 
 test('does not get into infinite setTimeout loop after MutationObserver notification', async () => {
@@ -356,4 +307,47 @@ test('does not get into infinite setTimeout loop after MutationObserver notifica
   // Expect no more setTimeout calls
   jest.advanceTimersByTime(100)
   expect(setTimeout).toHaveBeenCalledTimes(3)
+  jest.useRealTimers()
+})
+
+test('works if a container is not defined', async () => {
+  render(``)
+  const el = document.createElement('p')
+  document.body.appendChild(el)
+  const callback = jest
+    .fn(() => el.textContent === 'I changed!')
+    .mockName('callback')
+  const successHandler = jest.fn().mockName('successHandler')
+  const errorHandler = jest.fn().mockName('errorHandler')
+
+  waitForElement(callback).then(successHandler, errorHandler)
+
+  await skipSomeTimeForMutationObserver()
+
+  expect(callback).toHaveBeenCalledTimes(1)
+  expect(successHandler).toHaveBeenCalledTimes(0)
+  expect(errorHandler).toHaveBeenCalledTimes(0)
+
+  el.innerHTML = 'I changed!'
+  await skipSomeTimeForMutationObserver()
+
+  expect(callback).toHaveBeenCalledTimes(2)
+  expect(successHandler).toHaveBeenCalledTimes(1)
+  expect(errorHandler).toHaveBeenCalledTimes(0)
+
+  document.getElementsByTagName('html')[0].innerHTML = '' // cleans the document
+})
+
+test('throws an error if callback is not a function', async () => {
+  const successHandler = jest.fn().mockName('successHandler')
+  const errorHandler = jest.fn().mockName('errorHandler')
+
+  waitForElement().then(successHandler, errorHandler)
+
+  await skipSomeTimeForMutationObserver()
+
+  expect(errorHandler).toHaveBeenLastCalledWith(
+    'waitForElement requires a callback as the first parameter',
+  )
+  expect(successHandler).toHaveBeenCalledTimes(0)
 })

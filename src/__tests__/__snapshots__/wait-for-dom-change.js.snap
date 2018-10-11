@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it waits for the attributes mutation 1`] = `
+Array [
+  Array [
+    Object {
+      "addedNodes": Array [],
+      "attributeName": "data-test-attribute",
+      "attributeNamespace": null,
+      "nextSibling": null,
+      "oldValue": null,
+      "previousSibling": null,
+      "removedNodes": Array [],
+      "target": <div
+        data-test-attribute="PASSED"
+      />,
+      "type": "attributes",
+    },
+  ],
+]
+`;
+
+exports[`it waits for the next DOM mutation 1`] = `
+Array [
+  Array [
+    Object {
+      "addedNodes": Array [
+        <div />,
+      ],
+      "attributeName": null,
+      "attributeNamespace": null,
+      "nextSibling": null,
+      "oldValue": null,
+      "previousSibling": null,
+      "removedNodes": Array [],
+      "target": <body>
+        <div />
+      </body>,
+      "type": "childList",
+    },
+  ],
+]
+`;
