@@ -10,13 +10,6 @@ function waitForDomChange({
     characterData: true,
   },
 } = {}) {
-  if (typeof container === 'undefined') {
-    if (typeof window === 'undefined') {
-      throw new Error('Could not find default container')
-    } else {
-      container = window.document
-    }
-  }
   return new Promise((resolve, reject) => {
     const timer = setTimeout(onTimeout, timeout)
     const MutationObserverConstructor =

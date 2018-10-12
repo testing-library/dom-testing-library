@@ -2,6 +2,7 @@ const baseConfig = require('kcd-scripts/jest')
 
 module.exports = {
   collectCoverageFrom: baseConfig.collectCoverageFrom,
+  coverageThreshold: baseConfig.coverageThreshold,
   projects: [
     {
       ...baseConfig,
