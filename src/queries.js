@@ -134,11 +134,14 @@ function queryAllBySelectText(
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchOpts = {collapseWhitespace, trim}
-  return Array.from(container.querySelectorAll('select')).filter(selectNode =>
-    Array.from(selectNode.selectedOptions).some(optionNode =>
+  return Array.from(container.querySelectorAll('select')).filter(selectNode => {
+    const selectedOptions = Array.from(selectNode.options).filter(
+      option => option.selected,
+    )
+    return selectedOptions.some(optionNode =>
       matcher(getNodeText(optionNode), optionNode, text, matchOpts),
-    ),
-  )
+    )
+  })
 }
 
 function queryBySelectText(...args) {
