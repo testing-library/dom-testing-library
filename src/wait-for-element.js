@@ -1,5 +1,17 @@
 import MutationObserver from '@sheerun/mutationobserver-shim'
 
+function windowFor(container) {
+  if (container.defaultView) {
+    return container.defaultView
+  }
+
+  if (container.ownerDocument) {
+    return container.ownerDocument.defaultView
+  }
+
+  throw new Error('No window for container')
+}
+
 function waitForElement(
   callback = undefined,
   {
@@ -46,8 +58,9 @@ function waitForElement(
       onDone(lastError || new Error('Timed out in waitForElement.'), null)
     }
     timer = setTimeout(onTimeout, timeout)
-    const window = container.ownerDocument.defaultView
-    const MutationObserverConstructor = window.MutationObserver || MutationObserver
+    const window = windowFor(container)
+    const MutationObserverConstructor =
+      window.MutationObserver || MutationObserver
     observer = new MutationObserverConstructor(onMutation)
     observer.observe(container, mutationObserverOptions)
     if (callback !== undefined) {
