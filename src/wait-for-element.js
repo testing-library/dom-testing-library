@@ -1,9 +1,9 @@
-import 'mutationobserver-shim'
+import MutationObserver from '@sheerun/mutationobserver-shim'
 
 function waitForElement(
   callback,
   {
-    container = document,
+    container = getDocument(),
     timeout = 4500,
     mutationObserverOptions = {
       subtree: true,
@@ -19,7 +19,13 @@ function waitForElement(
     }
     let lastError
     const timer = setTimeout(onTimeout, timeout)
-    const observer = new window.MutationObserver(onMutation)
+    /* istanbul ignore next */
+    const MutationObserverConstructor =
+      typeof window !== 'undefined' &&
+      typeof window.MutationObserver !== 'undefined'
+        ? window.MutationObserver
+        : MutationObserver
+    const observer = new MutationObserverConstructor(onMutation)
     observer.observe(container, mutationObserverOptions)
     function onDone(error, result) {
       clearTimeout(timer)
@@ -48,6 +54,14 @@ function waitForElement(
     }
     onMutation()
   })
+}
+
+function getDocument() {
+  /* istanbul ignore if */
+  if (typeof window === 'undefined') {
+    throw new Error('Could not find default container')
+  }
+  return window.document
 }
 
 export {waitForElement}
