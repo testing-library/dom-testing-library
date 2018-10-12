@@ -1,4 +1,4 @@
-import MutationObserver from '@sheerun/mutationobserver-shim'
+import {newMutationObserver, getDocument} from './helpers'
 
 function waitForDomChange({
   container = getDocument(),
@@ -12,13 +12,7 @@ function waitForDomChange({
 } = {}) {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(onTimeout, timeout)
-    /* istanbul ignore next */
-    const MutationObserverConstructor =
-      typeof window !== 'undefined' &&
-      typeof window.MutationObserver !== 'undefined'
-        ? window.MutationObserver
-        : MutationObserver
-    const observer = new MutationObserverConstructor(onMutation)
+    const observer = newMutationObserver(onMutation)
     observer.observe(container, mutationObserverOptions)
 
     function onDone(error, result) {
@@ -37,14 +31,6 @@ function waitForDomChange({
       onDone(new Error('Timed out in waitForDomChange.'), null)
     }
   })
-}
-
-function getDocument() {
-  /* istanbul ignore if */
-  if (typeof window === 'undefined') {
-    throw new Error('Could not find default container')
-  }
-  return window.document
 }
 
 export {waitForDomChange}
