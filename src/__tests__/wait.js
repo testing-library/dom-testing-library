@@ -20,6 +20,6 @@ test('can just be used for a next tick thing', async () => {
   const after = Date.now()
   // if it's greater than 50 then `wait` used a timeout
   // but it should have resolved sooner. It really should be 0
-  expect(after - before).not.toBeGreaterThan(50)
+  expect(after - before).not.toBeGreaterThan(60)
   expect(spy).toHaveBeenCalledTimes(1)
 })
