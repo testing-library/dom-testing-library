@@ -299,32 +299,30 @@ function fireEvent(element, event) {
   return element.dispatchEvent(event)
 }
 
-Object.entries(eventMap).forEach(
-  ([key, {EventType = 'Event', defaultInit}]) => {
-    const eventName = key.toLowerCase()
+Object.entries(eventMap).forEach(([key, {EventType, defaultInit}]) => {
+  const eventName = key.toLowerCase()
 
-    fireEvent[key] = (node, init) => {
-      const eventInit = {...defaultInit, ...init}
-      const {target: {value, files, ...targetProperties} = {}} = eventInit
-      Object.assign(node, targetProperties)
-      if (value !== undefined) {
-        setNativeValue(node, value)
-      }
-      if (files !== undefined) {
-        // input.files is a read-only property so this is not allowed:
-        // input.files = [file]
-        // so we have to use this workaround to set the property
-        Object.defineProperty(node, 'files', {
-          value: files,
-        })
-      }
-      const window = node.ownerDocument.defaultView
-      const EventConstructor = window[EventType] || window.Event
-      const event = new EventConstructor(eventName, eventInit)
-      return fireEvent(node, event)
+  fireEvent[key] = (node, init) => {
+    const eventInit = {...defaultInit, ...init}
+    const {target: {value, files, ...targetProperties} = {}} = eventInit
+    Object.assign(node, targetProperties)
+    if (value !== undefined) {
+      setNativeValue(node, value)
     }
-  },
-)
+    if (files !== undefined) {
+      // input.files is a read-only property so this is not allowed:
+      // input.files = [file]
+      // so we have to use this workaround to set the property
+      Object.defineProperty(node, 'files', {
+        value: files,
+      })
+    }
+    const window = node.ownerDocument.defaultView
+    const EventConstructor = window[EventType] || window.Event
+    const event = new EventConstructor(eventName, eventInit)
+    return fireEvent(node, event)
+  }
+})
 
 // function written after some investigation here:
 // https://github.com/facebook/react/issues/10135#issuecomment-401496776

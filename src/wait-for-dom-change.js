@@ -12,6 +12,7 @@ function waitForDomChange({
 } = {}) {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(onTimeout, timeout)
+    /* istanbul ignore next */
     const MutationObserverConstructor =
       typeof window !== 'undefined' &&
       typeof window.MutationObserver !== 'undefined'
@@ -39,6 +40,7 @@ function waitForDomChange({
 }
 
 function getDocument() {
+  /* istanbul ignore if */
   if (typeof window === 'undefined') {
     throw new Error('Could not find default container')
   }
