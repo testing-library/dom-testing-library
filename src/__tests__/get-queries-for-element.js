@@ -1,5 +1,6 @@
 import {getQueriesForElement} from '../get-queries-for-element'
 import {queries} from '..'
+import document from './helpers/document'
 
 test('uses default queries', () => {
   const container = document.createElement('div')

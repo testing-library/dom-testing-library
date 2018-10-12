@@ -1,4 +1,5 @@
 import {getQueriesForElement} from '../../get-queries-for-element'
+import document from './document'
 
 function render(html) {
   const container = document.createElement('div')

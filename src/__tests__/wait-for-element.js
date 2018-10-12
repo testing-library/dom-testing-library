@@ -2,6 +2,7 @@ import {waitForElement, wait} from '../'
 // adds special assertions like toBeTruthy
 import 'jest-dom/extend-expect'
 import {render} from './helpers/test-utils'
+import document from './helpers/document'
 
 const skipSomeTime = delayMs =>
   new Promise(resolve => setTimeout(resolve, delayMs))
@@ -320,7 +321,14 @@ test('works if a container is not defined', async () => {
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  waitForElement(callback).then(successHandler, errorHandler)
+  if (typeof window === 'undefined') {
+    waitForElement(callback, {container: document}).then(
+      successHandler,
+      errorHandler,
+    )
+  } else {
+    waitForElement(callback).then(successHandler, errorHandler)
+  }
 
   await skipSomeTimeForMutationObserver()
 
@@ -342,7 +350,14 @@ test('throws an error if callback is not a function', async () => {
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  waitForElement().then(successHandler, errorHandler)
+  if (typeof window === 'undefined') {
+    waitForElement(undefined, {container: document}).then(
+      successHandler,
+      errorHandler,
+    )
+  } else {
+    waitForElement().then(successHandler, errorHandler)
+  }
 
   await skipSomeTimeForMutationObserver()
 
