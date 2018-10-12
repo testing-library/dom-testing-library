@@ -347,6 +347,15 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "ruffle1986",
+      "name": "Tamas Fodor",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/2196208?v=4",
+      "profile": "https://github.com/ruffle1986",
+      "contributions": [
+        "doc"
+      ]
     }
   ]
 }
