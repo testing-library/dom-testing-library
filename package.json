@@ -27,9 +27,8 @@
     "build": "kcd-scripts build && kcd-scripts build --bundle umd --no-clean",
     "lint": "kcd-scripts lint",
     "test": "kcd-scripts test",
-    "test:all": "npm test && npm test -- --env jsdom",
     "test:update": "npm test -- --updateSnapshot --coverage",
-    "validate": "kcd-scripts validate build,lint,test:all",
+    "validate": "kcd-scripts validate",
     "setup": "npm install && npm run validate -s",
     "precommit": "kcd-scripts precommit",
     "dtslint": "dtslint typings"
