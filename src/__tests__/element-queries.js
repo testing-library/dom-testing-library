@@ -1,5 +1,5 @@
 import 'jest-dom/extend-expect'
-import {render} from './helpers/test-utils'
+import {render, renderIntoDocument} from './helpers/test-utils'
 import document from './helpers/document'
 
 beforeEach(() => {
@@ -486,19 +486,19 @@ test('test the debug helper prints the dom state here', () => {
         })}
     </div>`
 
-  const {getByText} = render(Large) // render large DOM which exceeds 7000 limit
+  const {getByText} = renderIntoDocument(Large) // render large DOM which exceeds 7000 limit
   expect(() => expect(getByText('not present')).toBeTruthy()).toThrowError()
 
   const Hello = `<div data-testid="debugging" data-otherid="debugging">
         Hello World!
     </div>`
-  const {getByTestId} = render(Hello)
+  const {getByTestId} = renderIntoDocument(Hello)
   process.env.DEBUG_PRINT_LIMIT = 5 // user should see `...`
   expect(() => expect(getByTestId('not present')).toBeTruthy()).toThrowError(
-    /\.\.\./,
+    /\.\.\.$/,
   )
 
-  const {getByLabelText} = render(Hello)
+  const {getByLabelText} = renderIntoDocument(Hello)
   process.env.DEBUG_PRINT_LIMIT = 10000 // user shouldn't see `...`
   expect(() =>
     expect(getByLabelText('not present')).toBeTruthy(/^((?!\.\.\.).)*$/),
