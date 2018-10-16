@@ -8,4 +8,10 @@ function render(html) {
   return {container, ...containerQueries}
 }
 
-export {render}
+function renderIntoDocument(html) {
+  document.body.innerHTML = html
+  const containerQueries = getQueriesForElement(document)
+  return {container: document, ...containerQueries}
+}
+
+export {render, renderIntoDocument}
