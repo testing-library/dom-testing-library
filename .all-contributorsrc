@@ -356,6 +356,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "BenjaminEckardt",
+      "name": "Benjamin Eckardt",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/14793495?v=4",
+      "profile": "https://github.com/BenjaminEckardt",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }

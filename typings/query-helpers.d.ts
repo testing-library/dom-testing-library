@@ -5,12 +5,14 @@ export interface SelectorMatcherOptions extends MatcherOptions {
 }
 
 export type QueryByAttribute = (
+  attribute: string,
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
 ) => HTMLElement | null
 
 export type AllByAttribute = (
+  attribute: string,
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
