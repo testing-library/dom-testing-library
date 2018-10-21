@@ -365,6 +365,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "campbellr",
+      "name": "Ryan Campbell",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/205752?v=4",
+      "profile": "https://github.com/campbellr",
+      "contributions": [
+        "doc"
+      ]
     }
   ]
 }
