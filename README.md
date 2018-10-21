@@ -808,7 +808,7 @@ Example: To get the text 'hello' only within a section called 'messages', you co
 ```javascript
 import {within} from 'dom-testing-library'
 
-const {getByText} = within(document.body.getElementById('messages'))
+const {getByText} = within(document.getElementById('messages'))
 const helloMessage = getByText('hello')
 ```
 
