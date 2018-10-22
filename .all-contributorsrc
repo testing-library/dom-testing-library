@@ -374,6 +374,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "TaylorBriggs",
+      "name": "Taylor Briggs",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1335519?v=4",
+      "profile": "https://taylor-briggs.com",
+      "contributions": [
+        "test"
+      ]
     }
   ]
 }
