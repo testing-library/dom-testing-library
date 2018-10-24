@@ -314,6 +314,9 @@ Object.entries(eventMap).forEach(([key, {EventType, defaultInit}]) => {
       // input.files = [file]
       // so we have to use this workaround to set the property
       Object.defineProperty(node, 'files', {
+        configurable: true,
+        enumerable: true,
+        writable: true,
         value: files,
       })
     }
