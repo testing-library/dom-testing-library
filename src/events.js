@@ -345,6 +345,6 @@ Object.entries(eventAliasMap).forEach(([aliasKey, key]) => {
   fireEvent[aliasKey] = (...args) => fireEvent[key](...args)
 })
 
-export {fireEvent}
+export {fireEvent, setNativeValue}
 
 /* eslint complexity:["error", 9] */
