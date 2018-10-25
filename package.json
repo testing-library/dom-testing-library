@@ -3,6 +3,7 @@
   "version": "0.0.0-semantically-released",
   "description": "Simple and complete DOM testing utilities that encourage good testing practices.",
   "main": "dist/index.js",
+  "module": "dist/dom-testing-library.esm.js",
   "umd:main": "dist/dom-testing-library.umd.js",
   "source": "src/index.js",
   "typings": "typings",
@@ -24,7 +25,7 @@
   },
   "scripts": {
     "add-contributor": "kcd-scripts contributors add",
-    "build": "kcd-scripts build && kcd-scripts build --bundle umd --no-clean",
+    "build": "kcd-scripts build && kcd-scripts build --bundle --no-clean",
     "lint": "kcd-scripts lint",
     "test": "kcd-scripts test",
     "test:update": "npm test -- --updateSnapshot --coverage",
