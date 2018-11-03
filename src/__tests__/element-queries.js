@@ -34,6 +34,7 @@ test('get throws a useful error message', () => {
     getByTitle,
     getByValue,
     getByRole,
+    getByName,
   } = render('<div />')
   expect(() => getByLabelText('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() => getBySelectText('LucyRicardo')).toThrowErrorMatchingSnapshot()
@@ -46,6 +47,7 @@ test('get throws a useful error message', () => {
   expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() => getByValue('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() => getByRole('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getByName('LucyRicardo')).toThrowErrorMatchingSnapshot()
 })
 
 test('can get elements by matching their text content', () => {
@@ -216,6 +218,23 @@ test('query/get element by its value', () => {
   expect(queryByValue('Norris').placeholder).toEqual('lastname')
 })
 
+test('query/get element by its name', () => {
+  const {getByName, queryByName} = render(`
+  <div>
+    <input name="name" type="text"/>
+    <select name="state">
+      <option value="">State</option>
+      <option value="AL">Alabama</option>
+      <option selected value="AK">Alaska</option>
+      <option value="AZ">Arizona</option>
+    </select>
+  </div>
+  `)
+
+  expect(getByName('state').value).toEqual('AK')
+  expect(queryByName('state').value).toEqual('AK')
+})
+
 test('query/get select by text with the default option selected', () => {
   const {getBySelectText, queryBySelectText} = render(`
   <select id="state-select">
@@ -279,6 +298,7 @@ test('getAll* matchers return an array', () => {
     getAllByPlaceholderText,
     getAllByText,
     getAllByRole,
+    getAllByName,
   } = render(`
     <div role="container">
       <img
@@ -295,7 +315,7 @@ test('getAll* matchers return an array', () => {
         src="/jumanji.png" />
       <p>Where to next?</p>
       <label for="username">User Name</label>
-      <input id="username" placeholder="Dwayne 'The Rock' Johnson" />
+      <input id="username" name="username" placeholder="Dwayne 'The Rock' Johnson" />
       <select>
         <option value="">German cars</option>
         <option value="volvo">BMW</option>
@@ -317,6 +337,7 @@ test('getAll* matchers return an array', () => {
   expect(getAllBySelectText(/cars$/)).toHaveLength(2)
   expect(getAllByText(/^where/i)).toHaveLength(1)
   expect(getAllByRole(/container/i)).toHaveLength(1)
+  expect(getAllByName(/username/i)).toHaveLength(1)
 })
 
 test('getAll* matchers throw for 0 matches', () => {
@@ -328,6 +349,7 @@ test('getAll* matchers throw for 0 matches', () => {
     getAllByPlaceholderText,
     getAllByText,
     getAllByRole,
+    getAllByName,
   } = render(`
     <div role="container">
       <label>No Matches Please</label>
@@ -342,6 +364,7 @@ test('getAll* matchers throw for 0 matches', () => {
   expect(() => getAllByPlaceholderText('nope')).toThrow()
   expect(() => getAllByText('nope')).toThrow()
   expect(() => getAllByRole('nope')).toThrow()
+  expect(() => getAllByName('nope')).toThrow()
 })
 
 test('queryAll* matchers return an array for 0 matches', () => {
@@ -353,6 +376,7 @@ test('queryAll* matchers return an array for 0 matches', () => {
     queryAllByPlaceholderText,
     queryAllByText,
     queryAllByRole,
+    queryAllByName,
   } = render(`
     <div>
     </div>,
@@ -364,6 +388,7 @@ test('queryAll* matchers return an array for 0 matches', () => {
   expect(queryAllByPlaceholderText('nope')).toHaveLength(0)
   expect(queryAllByText('nope')).toHaveLength(0)
   expect(queryAllByRole('nope')).toHaveLength(0)
+  expect(queryAllByName('nope')).toHaveLength(0)
 })
 
 test('using jest helpers to assert element states', () => {

@@ -154,6 +154,8 @@ const queryByTestId = queryByAttribute.bind(null, 'data-testid')
 const queryAllByTestId = queryAllByAttribute.bind(null, 'data-testid')
 const queryByValue = queryByAttribute.bind(null, 'value')
 const queryAllByValue = queryAllByAttribute.bind(null, 'value')
+const queryByName = queryByAttribute.bind(null, 'name')
+const queryAllByName = queryAllByAttribute.bind(null, 'name')
 const queryByRole = queryByAttribute.bind(null, 'role')
 const queryAllByRole = queryAllByAttribute.bind(null, 'role')
 
@@ -221,6 +223,21 @@ function getAllByValue(container, value, ...rest) {
 
 function getByValue(...args) {
   return firstResultOrNull(getAllByValue, ...args)
+}
+
+function getAllByName(container, value, ...rest) {
+  const els = queryAllByName(container, value, ...rest)
+  if (!els.length) {
+    throw getElementError(
+      `Unable to find an element with the name: ${value}.`,
+      container,
+    )
+  }
+  return els
+}
+
+function getByName(...args) {
+  return firstResultOrNull(getAllByName, ...args)
 }
 
 function getAllByPlaceholderText(container, text, ...rest) {
@@ -355,6 +372,10 @@ export {
   queryAllByRole,
   getAllByRole,
   getByRole,
+  queryByName,
+  queryAllByName,
+  getByName,
+  getAllByName,
 }
 
 /* eslint complexity:["error", 14] */

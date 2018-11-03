@@ -1,30 +1,30 @@
 {
   "dist/dom-testing-library.cjs.js": {
-    "bundled": 137666,
-    "minified": 59811,
-    "gzipped": 16554
+    "bundled": 138727,
+    "minified": 60548,
+    "gzipped": 16644
   },
   "dist/dom-testing-library.umd.min.js": {
-    "bundled": 146462,
-    "minified": 53705,
-    "gzipped": 15876
+    "bundled": 147577,
+    "minified": 54219,
+    "gzipped": 15949
   },
   "dist/dom-testing-library.umd.js": {
-    "bundled": 146462,
-    "minified": 53705,
-    "gzipped": 15876
+    "bundled": 147577,
+    "minified": 54219,
+    "gzipped": 15949
   },
   "dist/dom-testing-library.esm.js": {
-    "bundled": 136297,
-    "minified": 58558,
-    "gzipped": 16321,
+    "bundled": 137268,
+    "minified": 59213,
+    "gzipped": 16393,
     "treeshaked": {
       "rollup": {
-        "code": 41502,
+        "code": 41541,
         "import_statements": 0
       },
       "webpack": {
-        "code": 44070
+        "code": 44109
       }
     }
   }
