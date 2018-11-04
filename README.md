@@ -710,6 +710,49 @@ expect(queryByTestId(container, 'greetings')).not.toHaveTextContent('Bye bye')
 Check out [jest-dom's documentation](https://github.com/gnapse/jest-dom#readme)
 for a full list of available matchers.
 
+## Custom Queries
+
+`dom-testing-library` exposes many of the helper functions that are used to implement the default queries. You can use the helpers to build custom queries. For example, the code below shows a way to override the default `testId` queries to use a different data-attribute. (Note: test files would import `test-utils.js` instead of using `dom-testing-library` directly).
+
+```js
+// test-utils.js
+const domTestingLib = require('dom-testing-library')
+const {queryHelpers} = domTestingLib
+
+export const queryByTestId = queryHelpers.queryByAttribute.bind(
+  null,
+  'data-test-id',
+)
+export const queryAllByTestId = queryHelpers.queryAllByAttribute.bind(
+  null,
+  'data-test-id',
+)
+
+export function getAllByTestId(container, id, ...rest) {
+  const els = queryAllByTestId(container, id, ...rest)
+  if (!els.length) {
+    throw queryHelpers.getElementError(
+      `Unable to find an element by: [data-test-id="${id}"]`,
+      container,
+    )
+  }
+  return els
+}
+
+export function getByTestId(...args) {
+  return queryHelpers.firstResultOrNull(getAllByTestId, ...args)
+}
+
+// re-export with overrides
+module.exports = {
+  ...domTestingLib,
+  getByTestId,
+  getAllByTestId,
+  queryByTestId,
+  queryAllByTestId,
+}
+```
+
 ### Using other assertion libraries
 
 If you're not using jest, you may be able to find a similar set of custom
