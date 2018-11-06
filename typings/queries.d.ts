@@ -1,11 +1,21 @@
 import {Matcher, MatcherOptions} from './matches'
 import {
-  QueryByAttribute,
-  AllByAttribute,
   SelectorMatcherOptions,
 } from './query-helpers'
 
-export type GetByAttribute = (
+export type QueryByBoundAttribute = (
+  container: HTMLElement,
+  id: Matcher,
+  options?: MatcherOptions,
+) => HTMLElement | null
+
+export type AllByBoundAttribute = (
+  container: HTMLElement,
+  id: Matcher,
+  options?: MatcherOptions,
+) => HTMLElement[]
+
+export type GetByBoundAttribute = (
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
@@ -29,14 +39,14 @@ export type GetByText = (
   options?: SelectorMatcherOptions,
 ) => HTMLElement
 
-export const queryByPlaceholderText: QueryByAttribute
-export const queryAllByPlaceholderText: AllByAttribute
-export const getByPlaceholderText: GetByAttribute
-export const getAllByPlaceholderText: AllByAttribute
-export const queryBySelectText: QueryByAttribute
-export const queryAllBySelectText: AllByAttribute
-export const getBySelectText: GetByAttribute
-export const getAllBySelectText: AllByAttribute
+export const queryByPlaceholderText: QueryByBoundAttribute
+export const queryAllByPlaceholderText: AllByBoundAttribute
+export const getByPlaceholderText: GetByBoundAttribute
+export const getAllByPlaceholderText: AllByBoundAttribute
+export const queryBySelectText: QueryByBoundAttribute
+export const queryAllBySelectText: AllByBoundAttribute
+export const getBySelectText: GetByBoundAttribute
+export const getAllBySelectText: AllByBoundAttribute
 export const queryByText: QueryByText
 export const queryAllByText: AllByText
 export const getByText: GetByText
@@ -45,23 +55,23 @@ export const queryByLabelText: QueryByText
 export const queryAllByLabelText: AllByText
 export const getByLabelText: GetByText
 export const getAllByLabelText: AllByText
-export const queryByAltText: QueryByAttribute
-export const queryAllByAltText: AllByAttribute
-export const getByAltText: GetByAttribute
-export const getAllByAltText: AllByAttribute
-export const queryByTestId: QueryByAttribute
-export const queryAllByTestId: AllByAttribute
-export const getByTestId: GetByAttribute
-export const getAllByTestId: AllByAttribute
-export const queryByTitle: QueryByAttribute
-export const queryAllByTitle: AllByAttribute
-export const getByTitle: GetByAttribute
-export const getAllByTitle: AllByAttribute
-export const queryByValue: QueryByAttribute
-export const queryAllByValue: AllByAttribute
-export const getByValue: GetByAttribute
-export const getAllByValue: AllByAttribute
-export const queryByRole: QueryByAttribute
-export const queryAllByRole: AllByAttribute
-export const getByRole: GetByAttribute
-export const getAllByRole: AllByAttribute
+export const queryByAltText: QueryByBoundAttribute
+export const queryAllByAltText: AllByBoundAttribute
+export const getByAltText: GetByBoundAttribute
+export const getAllByAltText: AllByBoundAttribute
+export const queryByTestId: QueryByBoundAttribute
+export const queryAllByTestId: AllByBoundAttribute
+export const getByTestId: GetByBoundAttribute
+export const getAllByTestId: AllByBoundAttribute
+export const queryByTitle: QueryByBoundAttribute
+export const queryAllByTitle: AllByBoundAttribute
+export const getByTitle: GetByBoundAttribute
+export const getAllByTitle: AllByBoundAttribute
+export const queryByValue: QueryByBoundAttribute
+export const queryAllByValue: AllByBoundAttribute
+export const getByValue: GetByBoundAttribute
+export const getAllByValue: AllByBoundAttribute
+export const queryByRole: QueryByBoundAttribute
+export const queryAllByRole: AllByBoundAttribute
+export const getByRole: GetByBoundAttribute
+export const getAllByRole: AllByBoundAttribute
