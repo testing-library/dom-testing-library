@@ -69,9 +69,9 @@ export type EventType =
   | 'transitionEnd'
   | 'doubleClick'
 
-export type FireFunction = (element: HTMLElement, event: Event) => boolean
+export type FireFunction = (element: Element, event: Event) => boolean
 export type FireObject = {
-  [K in EventType]: (element: HTMLElement, options?: {}) => boolean
+  [K in EventType]: (element: Element, options?: {}) => boolean
 }
 
 export const fireEvent: FireFunction & FireObject
