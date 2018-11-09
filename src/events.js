@@ -299,7 +299,8 @@ function fireEvent(element, event) {
   return element.dispatchEvent(event)
 }
 
-Object.entries(eventMap).forEach(([key, {EventType, defaultInit}]) => {
+Object.keys(eventMap).forEach(key => {
+  const {EventType, defaultInit} = eventMap[key]
   const eventName = key.toLowerCase()
 
   fireEvent[key] = (node, init) => {
@@ -344,7 +345,8 @@ function setNativeValue(element, value) {
   }
 }
 
-Object.entries(eventAliasMap).forEach(([aliasKey, key]) => {
+Object.keys(eventAliasMap).forEach(aliasKey => {
+  const key = eventAliasMap[aliasKey]
   fireEvent[aliasKey] = (...args) => fireEvent[key](...args)
 })
 

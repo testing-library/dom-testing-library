@@ -10,7 +10,8 @@ import * as defaultQueries from './queries'
  * @returns {FuncMap} returns object of functions bound to container
  */
 function getQueriesForElement(element, queries = defaultQueries) {
-  return Object.entries(queries).reduce((helpers, [key, fn]) => {
+  return Object.keys(queries).reduce((helpers, key) => {
+    const fn = queries[key]
     helpers[key] = fn.bind(null, element)
     return helpers
   }, {})

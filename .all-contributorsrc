@@ -401,6 +401,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "terrencewwong",
+      "name": "Terrence Wong",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5312329?v=4",
+      "profile": "http://terrencewwong.com",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
