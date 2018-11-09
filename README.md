@@ -794,7 +794,7 @@ affect the precision of string matching:
 
 // Matching a string:
 getByText(container, 'Hello World') // full string match
-getByText(container, 'llo Worl'), {exact: false} // substring match
+getByText(container, 'llo Worl', {exact: false}) // substring match
 getByText(container, 'hello world', {exact: false}) // ignore case
 
 // Matching a regex:
