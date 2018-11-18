@@ -665,11 +665,10 @@ fireEvent.change(getByLabelText(/picture/i), {
 })
 ```
 
-**Keyboard events**: There are three event types related to keyboard input - `keyPress`, `keyDown`, and `keyUp`. When firing these you need to reference an element in the DOM. If the event you want to trigger is not bound to a certain element, you can reference the `container` returned from `render`.
+**Keyboard events**: There are three event types related to keyboard input - `keyPress`, `keyDown`, and `keyUp`. When firing these you need to reference an element in the DOM and the key you want to fire.
 
 ```javascript
-const { container } = render(<MyComponent />)
-fireEvent.keyDown(container, { key: 'Enter' })
+fireEvent.keyDown(domNode, { key: 'Enter', code: 13 })
 ```
 
 ### `getNodeText`
