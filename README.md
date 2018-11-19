@@ -665,6 +665,14 @@ fireEvent.change(getByLabelText(/picture/i), {
 })
 ```
 
+**Keyboard events**: There are three event types related to keyboard input - `keyPress`, `keyDown`, and `keyUp`. When firing these you need to reference an element in the DOM and the key you want to fire.
+
+```javascript
+fireEvent.keyDown(domNode, { key: 'Enter', code: 13 })
+```
+
+You can find out which key code to use at [https://keycode.info/](https://keycode.info/).
+
 ### `getNodeText`
 
 ```typescript
