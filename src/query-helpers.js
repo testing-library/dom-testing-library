@@ -12,7 +12,8 @@ function debugDOM(htmlElement) {
     (htmlElement.ownerDocument && htmlElement.ownerDocument.defaultView) ||
     undefined
   const inCypress =
-    global.Cypress || (typeof window !== 'undefined' && window.Cypress)
+    (typeof global !== 'undefined' && global.Cypress) ||
+    (typeof window !== 'undefined' && window.Cypress)
   /* istanbul ignore else */
   if (inCypress) {
     return ''
