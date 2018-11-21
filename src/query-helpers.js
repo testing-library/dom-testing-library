@@ -11,7 +11,8 @@ function debugDOM(htmlElement) {
   const window =
     (htmlElement.ownerDocument && htmlElement.ownerDocument.defaultView) ||
     undefined
-  const inCypress = typeof window !== 'undefined' && window.Cypress
+  const inCypress =
+    global.Cypress || (typeof window !== 'undefined' && window.Cypress)
   /* istanbul ignore else */
   if (inCypress) {
     return ''
