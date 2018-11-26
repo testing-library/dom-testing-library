@@ -39,17 +39,17 @@
     "typings"
   ],
   "dependencies": {
+    "@babel/runtime": "^7.1.5",
     "@sheerun/mutationobserver-shim": "^0.3.2",
     "pretty-format": "^23.6.0",
-    "wait-for-expect": "^1.0.0"
+    "wait-for-expect": "^1.1.0"
   },
   "devDependencies": {
     "dtslint": "^0.3.0",
-    "jest-dom": "^2.0.4",
+    "jest-dom": "^2.1.1",
     "jest-in-case": "^1.0.2",
-    "jsdom": "^12.2.0",
-    "kcd-scripts": "^0.41.0",
-    "microbundle": "^0.4.4"
+    "jsdom": "^13.0.0",
+    "kcd-scripts": "^0.46.0"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",
