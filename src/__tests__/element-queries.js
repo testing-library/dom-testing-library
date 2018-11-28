@@ -1,4 +1,5 @@
 import 'jest-dom/extend-expect'
+import {configure} from '../config'
 import {render, renderIntoDocument} from './helpers/test-utils'
 import document from './helpers/document'
 
@@ -258,16 +259,34 @@ test('query/get select by text with multiple options selected', () => {
   expect(queryBySelectText('Alaska').id).toEqual('state-select')
 })
 
-test('can get elements by data-testid attribute', () => {
-  const {queryByTestId} = render(`<div data-testid="firstName"></div>`)
-  expect(queryByTestId('firstName')).toBeTruthy()
-  expect(queryByTestId(/first/)).toBeTruthy()
-  expect(queryByTestId(testid => testid === 'firstName')).toBeTruthy()
-  // match should be exact, case-sensitive
-  expect(queryByTestId('firstname')).not.toBeTruthy()
-  expect(queryByTestId('first')).not.toBeTruthy()
-  expect(queryByTestId('firstNamePlusMore')).not.toBeTruthy()
-  expect(queryByTestId('first-name')).not.toBeTruthy()
+describe('query by test id', () => {
+  test('can get elements by test id', () => {
+    const {queryByTestId} = render(`<div data-testid="firstName"></div>`)
+    expect(queryByTestId('firstName')).toBeTruthy()
+    expect(queryByTestId(/first/)).toBeTruthy()
+    expect(queryByTestId(testid => testid === 'firstName')).toBeTruthy()
+    // match should be exact, case-sensitive
+    expect(queryByTestId('firstname')).not.toBeTruthy()
+    expect(queryByTestId('first')).not.toBeTruthy()
+    expect(queryByTestId('firstNamePlusMore')).not.toBeTruthy()
+    expect(queryByTestId('first-name')).not.toBeTruthy()
+  })
+
+  test('can override test id attribute', () => {
+    const {queryByTestId} = render(`<div data-my-test-id="theTestId"></div>`)
+
+    configure({testIdAttribute: 'data-my-test-id'})
+    expect(queryByTestId('theTestId')).toBeTruthy()
+
+    configure({testIdAttribute: 'something-else'})
+    expect(queryByTestId('theTestId')).toBeFalsy()
+  })
+
+  afterEach(() => {
+    // Restore the default test id attribute
+    // even if these tests failed
+    configure({testIdAttribute: 'data-testid'})
+  })
 })
 
 test('getAll* matchers return an array', () => {
