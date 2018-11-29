@@ -6,7 +6,7 @@ import {
   queryAllByAttribute,
   queryByAttribute,
 } from './query-helpers'
-import {getTestIdAttribute} from './config'
+import {getConfig} from './config'
 
 // Here are the queries for the library.
 // The queries here should only be things that are accessible to both users who are using a screen reader
@@ -147,6 +147,10 @@ function queryAllBySelectText(
 
 function queryBySelectText(...args) {
   return firstResultOrNull(queryAllBySelectText, ...args)
+}
+
+function getTestIdAttribute() {
+  return getConfig().testIdAttribute
 }
 
 const queryByPlaceholderText = queryByAttribute.bind(null, 'placeholder')

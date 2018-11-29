@@ -2,4 +2,8 @@ export interface IConfig {
   testIdAttribute: string
 }
 
-export function configure(configDelta: Partial<IConfig>): void
+export interface IConfigFn {
+  (existingConfig: IConfig): Partial<IConfig>
+}
+
+export function configure(configDelta: Partial<IConfig> | IConfigFn): void

@@ -5,12 +5,20 @@ let config = {
   testIdAttribute: 'data-testid',
 }
 
-export function configure(configDelta) {
+export function configure(newConfig) {
+  if (typeof newConfig === 'function') {
+    // Pass the existing config out to the provided function
+    // and accept a delta in return
+    newConfig = newConfig(config)
+  }
+
+  // Merge the incoming config delta
   config = {
     ...config,
-    ...configDelta,
+    ...newConfig,
   }
 }
-export function getTestIdAttribute() {
-  return config.testIdAttribute
+
+export function getConfig() {
+  return config
 }
