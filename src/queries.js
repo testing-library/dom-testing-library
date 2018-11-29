@@ -6,6 +6,7 @@ import {
   queryAllByAttribute,
   queryByAttribute,
 } from './query-helpers'
+import {getConfig} from './config'
 
 // Here are the queries for the library.
 // The queries here should only be things that are accessible to both users who are using a screen reader
@@ -148,10 +149,16 @@ function queryBySelectText(...args) {
   return firstResultOrNull(queryAllBySelectText, ...args)
 }
 
+function getTestIdAttribute() {
+  return getConfig().testIdAttribute
+}
+
 const queryByPlaceholderText = queryByAttribute.bind(null, 'placeholder')
 const queryAllByPlaceholderText = queryAllByAttribute.bind(null, 'placeholder')
-const queryByTestId = queryByAttribute.bind(null, 'data-testid')
-const queryAllByTestId = queryAllByAttribute.bind(null, 'data-testid')
+const queryByTestId = (...args) =>
+  queryByAttribute(getTestIdAttribute(), ...args)
+const queryAllByTestId = (...args) =>
+  queryAllByAttribute(getTestIdAttribute(), ...args)
 const queryByValue = queryByAttribute.bind(null, 'value')
 const queryAllByValue = queryAllByAttribute.bind(null, 'value')
 const queryByRole = queryByAttribute.bind(null, 'role')
@@ -182,7 +189,7 @@ function getAllByTestId(container, id, ...rest) {
   const els = queryAllByTestId(container, id, ...rest)
   if (!els.length) {
     throw getElementError(
-      `Unable to find an element by: [data-testid="${id}"]`,
+      `Unable to find an element by: [${getTestIdAttribute()}="${id}"]`,
       container,
     )
   }

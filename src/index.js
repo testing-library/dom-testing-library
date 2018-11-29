@@ -12,6 +12,7 @@ export * from './events'
 export * from './get-queries-for-element'
 export * from './query-helpers'
 export * from './pretty-dom'
+export {configure} from './config'
 
 export {
   // The original name of bindElementToQueries was weird

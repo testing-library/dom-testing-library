@@ -10,19 +10,21 @@
 
 <hr />
 
+<!-- prettier-ignore-start -->
 [![Build Status][build-badge]][build]
 [![Code Coverage][coverage-badge]][coverage]
 [![version][version-badge]][package]
 [![downloads][downloads-badge]][npmtrends]
 [![MIT License][license-badge]][license]
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-42-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-43-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome][prs-badge]][prs]
 [![Code of Conduct][coc-badge]][coc]
 
 [![Watch on GitHub][github-watch-badge]][github-watch]
 [![Star on GitHub][github-star-badge]][github-star]
 [![Tweet][twitter-badge]][twitter]
+<!-- prettier-ignore-end -->
 
 <div align="center">
 <a href="https://testingjavascript.com">
@@ -102,6 +104,7 @@ when a real user uses it.
 - [`within` and `getQueriesForElement` APIs](#within-and-getqueriesforelement-apis)
 - [Debugging](#debugging)
   - [`prettyDOM`](#prettydom)
+- [Configuration](#configuration)
 - [Implementations](#implementations)
 - [Using Without Jest](#using-without-jest)
 - [FAQ](#faq)
@@ -455,6 +458,17 @@ const usernameInputElement = getByTestId(container, 'username-input')
 > querying based on DOM structure or styling css class names. Learn more about
 > `data-testid`s from the blog post
 > ["Making your UI tests resilient to change"][data-testid-blog-post]
+
+#### Overriding `data-testid`
+
+The `...ByTestId` functions in `dom-testing-library` use the attribute `data-testid`
+by default, following the precedent set by
+[React Native Web](https://github.com/kentcdodds/react-testing-library/issues/1)
+which uses a `testID` prop to emit a `data-testid` attribute on the element,
+and we recommend you adopt that attribute where possible.
+But if you already have an existing codebase that uses a different attribute
+for this purpose, you can override this value via
+`configure({testIdAttribute: 'data-my-test-attribute'})`.
 
 ### `wait`
 
@@ -928,6 +942,19 @@ console.log(prettyDOM(div))
 
 This function is what also powers [the automatic debugging output described above](#debugging).
 
+## Configuration
+
+The library can be configured via the `configure` function, which accepts:
+
+- a plain JS object; this will be merged into the existing configuration. e.g. `configure({testIdAttribute: 'not-data-testid'})`
+- a function; the function will be given the existing configuration, and should return a plain JS object which will be merged as above, e.g.
+  `configure(existingConfig => ({something: [...existingConfig.something, 'extra value for the something array']}))`
+
+Configuration options:
+
+`testIdAttribute`: The attribute used by `getByTestId` and related queries.
+Defaults to `data-testid`. See [`getByTestId`](#getbytestid).
+
 ## Implementations
 
 This library was not built to be used on its own. The original implementation
@@ -1115,6 +1142,7 @@ Thanks goes to these people ([emoji key][emojis]):
 | [<img src="https://avatars2.githubusercontent.com/u/21689428?v=4" width="100px;"/><br /><sub><b>Jonathan Stoye</b></sub>](http://jonathanstoye.de)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=JonathanStoye "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/4126644?v=4" width="100px;"/><br /><sub><b>Sanghyeon Lee</b></sub>](https://github.com/yongdamsh)<br />[💡](#example-yongdamsh "Examples") | [<img src="https://avatars3.githubusercontent.com/u/8015514?v=4" width="100px;"/><br /><sub><b>Justice Mba </b></sub>](https://github.com/Dajust)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=Dajust "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=Dajust "Documentation") [🤔](#ideas-Dajust "Ideas, Planning, & Feedback") | [<img src="https://avatars3.githubusercontent.com/u/340761?v=4" width="100px;"/><br /><sub><b>Wayne Crouch</b></sub>](https://github.com/wgcrouch)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=wgcrouch "Code") | [<img src="https://avatars1.githubusercontent.com/u/4996462?v=4" width="100px;"/><br /><sub><b>Ben Elliott</b></sub>](http://benjaminelliott.co.uk)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=benelliott "Code") | [<img src="https://avatars3.githubusercontent.com/u/577921?v=4" width="100px;"/><br /><sub><b>Ruben Costa</b></sub>](http://nuances.co)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=rubencosta "Code") | [<img src="https://avatars2.githubusercontent.com/u/4982001?v=4" width="100px;"/><br /><sub><b>Robert Smith</b></sub>](http://rbrtsmith.com/)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3Arbrtsmith "Bug reports") [🤔](#ideas-rbrtsmith "Ideas, Planning, & Feedback") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=rbrtsmith "Documentation") |
 | [<img src="https://avatars3.githubusercontent.com/u/881986?v=4" width="100px;"/><br /><sub><b>dadamssg</b></sub>](https://github.com/dadamssg)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=dadamssg "Code") | [<img src="https://avatars1.githubusercontent.com/u/186971?v=4" width="100px;"/><br /><sub><b>Neil Kistner</b></sub>](https://neilkistner.com/)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=wyze "Code") | [<img src="https://avatars3.githubusercontent.com/u/1448597?v=4" width="100px;"/><br /><sub><b>Ben Chauvette</b></sub>](http://bdchauvette.net/)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=bdchauvette "Code") | [<img src="https://avatars2.githubusercontent.com/u/777527?v=4" width="100px;"/><br /><sub><b>Jeff Baumgardt</b></sub>](https://github.com/JeffBaumgardt)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=JeffBaumgardt "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=JeffBaumgardt "Documentation") | [<img src="https://avatars0.githubusercontent.com/u/4658208?v=4" width="100px;"/><br /><sub><b>Matan Kushner</b></sub>](http://matchai.me)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=matchai "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=matchai "Documentation") [🤔](#ideas-matchai "Ideas, Planning, & Feedback") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=matchai "Tests") | [<img src="https://avatars2.githubusercontent.com/u/5779538?v=4" width="100px;"/><br /><sub><b>Alex Wendte</b></sub>](http://www.wendtedesigns.com/)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=themostcolm "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=themostcolm "Documentation") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=themostcolm "Tests") | [<img src="https://avatars0.githubusercontent.com/u/2196208?v=4" width="100px;"/><br /><sub><b>Tamas Fodor</b></sub>](https://github.com/ruffle1986)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=ruffle1986 "Documentation") |
 | [<img src="https://avatars3.githubusercontent.com/u/14793495?v=4" width="100px;"/><br /><sub><b>Benjamin Eckardt</b></sub>](https://github.com/BenjaminEckardt)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=BenjaminEckardt "Code") | [<img src="https://avatars3.githubusercontent.com/u/205752?v=4" width="100px;"/><br /><sub><b>Ryan Campbell</b></sub>](https://github.com/campbellr)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=campbellr "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/1335519?v=4" width="100px;"/><br /><sub><b>Taylor Briggs</b></sub>](https://taylor-briggs.com)<br />[⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=TaylorBriggs "Tests") | [<img src="https://avatars2.githubusercontent.com/u/132233?v=4" width="100px;"/><br /><sub><b>John Gozde</b></sub>](https://github.com/jgoz)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=jgoz "Code") | [<img src="https://avatars2.githubusercontent.com/u/3382565?v=4" width="100px;"/><br /><sub><b>C. T. Lin</b></sub>](https://github.com/chentsulin)<br />[📖](https://github.com/kentcdodds/dom-testing-library/commits?author=chentsulin "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/5312329?v=4" width="100px;"/><br /><sub><b>Terrence Wong</b></sub>](http://terrencewwong.com)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=terrencewwong "Code") | [<img src="https://avatars0.githubusercontent.com/u/12230408?v=4" width="100px;"/><br /><sub><b>Soo Jae Hwang</b></sub>](https://www.ossfinder.com)<br />[💻](https://github.com/kentcdodds/dom-testing-library/commits?author=misoguy "Code") |
+| [<img src="https://avatars0.githubusercontent.com/u/19773?v=4" width="100px;"/><br /><sub><b>Royston Shufflebotham</b></sub>](https://github.com/RoystonS)<br />[🐛](https://github.com/kentcdodds/dom-testing-library/issues?q=author%3ARoystonS "Bug reports") [💻](https://github.com/kentcdodds/dom-testing-library/commits?author=RoystonS "Code") [📖](https://github.com/kentcdodds/dom-testing-library/commits?author=RoystonS "Documentation") [⚠️](https://github.com/kentcdodds/dom-testing-library/commits?author=RoystonS "Tests") |
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
