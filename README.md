@@ -952,8 +952,8 @@ The library can be configured via the `configure` function, which accepts:
 
 Configuration options:
 
-`testIdAttribute`
-: The attribute used by `getByTestId` and related queries. Defaults to `data-testid`. See [`getByTestId`](#getbytestid).
+`testIdAttribute`: The attribute used by `getByTestId` and related queries.
+Defaults to `data-testid`. See [`getByTestId`](#getbytestid).
 
 ## Implementations
 

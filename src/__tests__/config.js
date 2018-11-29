@@ -28,12 +28,8 @@ describe('configuration API', () => {
 
   describe('configure', () => {
     test('merges a delta rather than replacing the whole config', () => {
-      configure({newKey: 123})
       const conf = getConfig()
-      expect(conf).toMatchObject({
-        newKey: 123,
-        testIdAttribute: 'data-testid',
-      })
+      expect(conf).toMatchObject({testIdAttribute: 'data-testid'})
     })
 
     test('overrides existing values', () => {
@@ -45,15 +41,14 @@ describe('configuration API', () => {
     test('passes existing config out to config function', () => {
       // Create a new config key based on the value of an existing one
       configure(existingConfig => ({
-        newKey: `${existingConfig.testIdAttribute}-derived`,
+        testIdAttribute: `${existingConfig.testIdAttribute}-derived`,
       }))
       const conf = getConfig()
 
       // The new value should be there, and existing values should be
       // untouched
       expect(conf).toMatchObject({
-        testIdAttribute: 'data-testid',
-        newKey: 'data-testid-derived',
+        testIdAttribute: 'data-testid-derived',
       })
     })
   })
