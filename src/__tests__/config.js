@@ -45,7 +45,7 @@ describe('configuration API', () => {
     test('passes existing config out to config function', () => {
       // Create a new config key based on the value of an existing one
       configure(existingConfig => ({
-        newKey: existingConfig.testIdAttribute + '-derived',
+        newKey: `${existingConfig.testIdAttribute}-derived`,
       }))
       const conf = getConfig()
 
