@@ -1,5 +1,6 @@
 import {fireEvent} from '..'
 import document from './helpers/document'
+import window from './helpers/window'
 
 const eventTypes = [
   {
@@ -177,4 +178,12 @@ test('assigning the files property on an input', () => {
   })
   fireEvent.change(node, {target: {files: [file]}})
   expect(node.files).toEqual([file])
+})
+
+test('fires events on Window', () => {
+  const messageSpy = jest.fn()
+  window.addEventListener('message', messageSpy)
+  fireEvent(window, new window.MessageEvent('message', {data: 'hello'}))
+  expect(messageSpy).toHaveBeenCalledTimes(1)
+  window.removeEventListener('message', messageSpy)
 })

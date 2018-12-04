@@ -431,6 +431,15 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "VadimBrodsky",
+      "name": "Vadim Brodsky",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/591673?v=4",
+      "profile": "http://www.vadimbrodsky.com",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
