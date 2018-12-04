@@ -185,4 +185,5 @@ test('fires events on Window', () => {
   window.addEventListener('message', messageSpy)
   fireEvent(window, new window.MessageEvent('message', {data: 'hello'}))
   expect(messageSpy).toHaveBeenCalledTimes(1)
+  window.removeEventListener('message', messageSpy)
 })
