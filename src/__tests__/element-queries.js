@@ -565,4 +565,15 @@ test('getByText ignores script tags by default', () => {
   expect(getAllByText(/hello/i, {ignore: false})).toHaveLength(3)
 })
 
+test('get element by its dynamically assigned value', () => {
+  const {getByValue, queryByValue, getByTestId} = renderIntoDocument(`
+    <div>
+      <input placeholder="name" type="text" data-testid="name" />
+    </div>
+  `)
+  getByTestId('name').value = 'Norris'
+  expect(getByValue('Norris').placeholder).toEqual('name')
+  expect(queryByValue('Norris').placeholder).toEqual('name')
+})
+
 /* eslint jsx-a11y/label-has-for:0 */

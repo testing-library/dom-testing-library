@@ -43,9 +43,17 @@ function queryAllByAttribute(
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchOpts = {collapseWhitespace, trim}
-  return Array.from(container.querySelectorAll(`[${attribute}]`)).filter(node =>
-    matcher(node.getAttribute(attribute), node, text, matchOpts),
-  )
+  if (attribute === 'value') {
+    return Array.from(container.querySelectorAll('input')).filter(node =>
+      [node.getAttribute('value'), node.value].some(value =>
+        matcher(value, node, text, matchOpts),
+      ),
+    )
+  } else {
+    return Array.from(container.querySelectorAll(`[${attribute}]`)).filter(
+      node => matcher(node.getAttribute(attribute), node, text, matchOpts),
+    )
+  }
 }
 
 function queryByAttribute(...args) {
