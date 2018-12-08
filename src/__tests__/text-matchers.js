@@ -196,7 +196,8 @@ cases(
 )
 
 // A good use case for a custom normalizer is stripping
-// out UCC codes such as LRM before matching
+// out Unicode control characters such as LRM (left-right-mark)
+// before matching
 const LRM = '\u200e'
 function removeUCC(str) {
   return str.replace(/[\u200e]/g, '')
