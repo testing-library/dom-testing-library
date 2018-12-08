@@ -15,10 +15,10 @@ import {getConfig} from './config'
 function queryAllLabelsByText(
   container,
   text,
-  {exact = true, trim = true, collapseWhitespace = true} = {},
+  {exact = true, trim = true, collapseWhitespace = true, normalizer} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
+  const matchOpts = {collapseWhitespace, trim, normalizer}
   return Array.from(container.querySelectorAll('label')).filter(label =>
     matcher(label.textContent, label, text, matchOpts),
   )
@@ -27,9 +27,15 @@ function queryAllLabelsByText(
 function queryAllByLabelText(
   container,
   text,
-  {selector = '*', exact = true, collapseWhitespace = true, trim = true} = {},
+  {
+    selector = '*',
+    exact = true,
+    collapseWhitespace = true,
+    trim = true,
+    normalizer,
+  } = {},
 ) {
-  const matchOpts = {collapseWhitespace, trim}
+  const matchOpts = {collapseWhitespace, trim, normalizer}
   const labels = queryAllLabelsByText(container, text, {exact, ...matchOpts})
   const labelledElements = labels
     .map(label => {
@@ -97,10 +103,11 @@ function queryAllByText(
     collapseWhitespace = true,
     trim = true,
     ignore = 'script, style',
+    normalizer,
   } = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
+  const matchOpts = {collapseWhitespace, trim, normalizer}
   return Array.from(container.querySelectorAll(selector))
     .filter(node => !ignore || !node.matches(ignore))
     .filter(node => matcher(getNodeText(node), node, text, matchOpts))
@@ -113,10 +120,10 @@ function queryByText(...args) {
 function queryAllByTitle(
   container,
   text,
-  {exact = true, collapseWhitespace = true, trim = true} = {},
+  {exact = true, collapseWhitespace = true, trim = true, normalizer} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
+  const matchOpts = {collapseWhitespace, trim, normalizer}
   return Array.from(container.querySelectorAll('[title], svg > title')).filter(
     node =>
       matcher(node.getAttribute('title'), node, text, matchOpts) ||
@@ -131,10 +138,10 @@ function queryByTitle(...args) {
 function queryAllBySelectText(
   container,
   text,
-  {exact = true, collapseWhitespace = true, trim = true} = {},
+  {exact = true, collapseWhitespace = true, trim = true, normalizer} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
+  const matchOpts = {collapseWhitespace, trim, normalizer}
   return Array.from(container.querySelectorAll('select')).filter(selectNode => {
     const selectedOptions = Array.from(selectNode.options).filter(
       option => option.selected,
@@ -167,10 +174,10 @@ const queryAllByRole = queryAllByAttribute.bind(null, 'role')
 function queryAllByAltText(
   container,
   alt,
-  {exact = true, collapseWhitespace = true, trim = true} = {},
+  {exact = true, collapseWhitespace = true, trim = true, normalizer} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
+  const matchOpts = {collapseWhitespace, trim, normalizer}
   return Array.from(container.querySelectorAll('img,input,area')).filter(node =>
     matcher(node.getAttribute('alt'), node, alt, matchOpts),
   )

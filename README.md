@@ -209,6 +209,7 @@ getByLabelText(
     exact?: boolean = true,
     collapseWhitespace?: boolean = true,
     trim?: boolean = true,
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -261,6 +262,7 @@ getByPlaceholderText(
     exact?: boolean = true,
     collapseWhitespace?: boolean = false,
     trim?: boolean = true,
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -285,6 +287,7 @@ getBySelectText(
     exact?: boolean = true,
     collapseWhitespace?: boolean = true,
     trim?: boolean = true,
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -315,7 +318,8 @@ getByText(
     exact?: boolean = true,
     collapseWhitespace?: boolean = true,
     trim?: boolean = true,
-    ignore?: string|boolean = 'script, style'
+    ignore?: string|boolean = 'script, style',
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -347,6 +351,7 @@ getByAltText(
     exact?: boolean = true,
     collapseWhitespace?: boolean = false,
     trim?: boolean = true,
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -372,6 +377,7 @@ getByTitle(
     exact?: boolean = true,
     collapseWhitespace?: boolean = false,
     trim?: boolean = true,
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -399,6 +405,7 @@ getByValue(
     exact?: boolean = true,
     collapseWhitespace?: boolean = false,
     trim?: boolean = true,
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -419,6 +426,7 @@ getByRole(
     exact?: boolean = true,
     collapseWhitespace?: boolean = false,
     trim?: boolean = true,
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -440,7 +448,8 @@ getByTestId(
     exact?: boolean = true,
     collapseWhitespace?: boolean = false,
     trim?: boolean = true,
-  }): HTMLElement`
+    normalizer?: NormalizerFn,
+  }): HTMLElement
 ```
 
 A shortcut to `` container.querySelector(`[data-testid="${yourId}"]`) `` (and it
@@ -802,8 +811,15 @@ affect the precision of string matching:
   - `exact` has no effect on `regex` or `function` arguments.
   - In most cases using a regex instead of a string gives you more control over
     fuzzy matching and should be preferred over `{ exact: false }`.
-- `trim`: Defaults to `true`; trim leading and trailing whitespace.
+- `trim`: Defaults to `true`. Trims leading and trailing whitespace.
 - `collapseWhitespace`: Defaults to `true`. Collapses inner whitespace (newlines, tabs, repeated spaces) into a single space.
+- `normalizer`: Defaults to `undefined`. Specifies a custom function which will be called to normalize the text (after applying any `trim` or
+  `collapseWhitespace` behaviour). An example use of this might be to remove Unicode control characters before applying matching behavior, e.g.
+  ```javascript
+  {
+    normalizer: str => str.replace(/[\u200E-\u200F]*/g, '')
+  }
+  ```
 
 ### TextMatch Examples
 

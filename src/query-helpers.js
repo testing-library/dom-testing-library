@@ -39,10 +39,10 @@ function queryAllByAttribute(
   attribute,
   container,
   text,
-  {exact = true, collapseWhitespace = true, trim = true} = {},
+  {exact = true, collapseWhitespace = true, trim = true, normalizer} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
+  const matchOpts = {collapseWhitespace, trim, normalizer}
   return Array.from(container.querySelectorAll(`[${attribute}]`)).filter(node =>
     matcher(node.getAttribute(attribute), node, text, matchOpts),
   )
