@@ -43,6 +43,8 @@ var your => (code) => here;
 If possible, please create a repository that reproduces the issue with the
 minimal amount of code possible.
 
+Repository template: https://github.com/alexkrolick/dom-testing-library-template
+
 Or if you can, try to reproduce the issue in a Codesandbox. You can fork the one
 here: https://codesandbox.io/s/5z6x4r7n0p
 -->
