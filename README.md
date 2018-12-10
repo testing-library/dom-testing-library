@@ -105,6 +105,7 @@ when a real user uses it.
 - [Debugging](#debugging)
   - [`prettyDOM`](#prettydom)
 - [Configuration](#configuration)
+- [Great companion](#great-companion)
 - [Implementations](#implementations)
 - [Using Without Jest](#using-without-jest)
 - [FAQ](#faq)
@@ -954,6 +955,10 @@ Configuration options:
 
 `testIdAttribute`: The attribute used by `getByTestId` and related queries.
 Defaults to `data-testid`. See [`getByTestId`](#getbytestid).
+
+## Great companion
+
+A helper library named [`user-event`](https://github.com/Gpx/user-event) has been written in companion with `dom-testing-library` which eases common interactions, such as typing, clicking etc. The `type`-interaction will allow to easily dispatch the appropriate keyboard events for inserting text, or dispatch these events for each character of the to be typed text.
 
 ## Implementations
 
