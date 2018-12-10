@@ -188,7 +188,18 @@ function queryAllByCurrentValue(
   const matcher = exact ? matches : fuzzyMatches
   const matchOpts = {collapseWhitespace, trim}
   return Array.from(container.querySelectorAll(`input,textarea,select`)).filter(
-    node => matcher(node.value, node, value, matchOpts),
+    node => {
+      if (node.tagName === 'SELECT') {
+        const selectedOptions = Array.from(node.options).filter(
+          option => option.selected,
+        )
+        return selectedOptions.some(optionNode =>
+          matcher(getNodeText(optionNode), optionNode, value, matchOpts),
+        )
+      } else {
+        return matcher(node.value, node, value, matchOpts)
+      }
+    },
   )
 }
 
