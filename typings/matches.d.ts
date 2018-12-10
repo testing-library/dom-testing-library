@@ -5,7 +5,9 @@ export type NormalizerFn = (text: string) => string
 
 export interface MatcherOptions {
   exact?: boolean
+  /** Use normalizer with getDefaultNormalizer instead */
   trim?: boolean
+  /** Use normalizer with getDefaultNormalizer instead */
   collapseWhitespace?: boolean
   normalizer?: NormalizerFn
 }
@@ -17,5 +19,13 @@ export type Match = (
   options?: MatcherOptions,
 ) => boolean
 
-export const fuzzyMatches: Match
-export const matches: Match
+export interface DefaultNormalizerOptions {
+  trim?: boolean
+  collapseWhitespace?: boolean
+}
+
+export declare function getDefaultNormalizer(
+  options?: DefaultNormalizerOptions,
+): NormalizerFn
+
+// N.B. Don't expose fuzzyMatches + matches here: they're not public API

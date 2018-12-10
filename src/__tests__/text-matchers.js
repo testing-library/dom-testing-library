@@ -1,5 +1,7 @@
 import 'jest-dom/extend-expect'
 import cases from 'jest-in-case'
+
+import {getDefaultNormalizer} from '../'
 import {render} from './helpers/test-utils'
 
 cases(
@@ -68,7 +70,12 @@ cases(
     const queries = render(dom)
     expect(queries[queryFn](query)).toHaveLength(1)
     expect(
-      queries[queryFn](query, {collapseWhitespace: false, trim: false}),
+      queries[queryFn](query, {
+        normalizer: getDefaultNormalizer({
+          collapseWhitespace: false,
+          trim: false,
+        }),
+      }),
     ).toHaveLength(0)
   },
   {
@@ -271,39 +278,47 @@ test('normalizer works with both exact and non-exact matching', () => {
   expect(queryAllByText('MiXeD CaSe', {exact: true})).toHaveLength(0)
 })
 
-test('normalizer runs after trim and collapseWhitespace options', () => {
-  // Our test text has leading and trailing spaces, and multiple
-  // spaces in the middle; we'll make use of that fact to test
-  // the execution order of trim/collapseWhitespace and the custom
-  // normalizer
+test('top-level trim and collapseWhitespace options are not supported if normalizer is specified', () => {
   const {queryAllByText} = render('<div>  abc  def  </div>')
+  const normalizer = str => str
 
-  // Double-check the normal trim + collapseWhitespace behavior
-  expect(
-    queryAllByText('abc def', {trim: true, collapseWhitespace: true}),
-  ).toHaveLength(1)
+  expect(() => queryAllByText('abc', {trim: false, normalizer})).toThrow()
+  expect(() => queryAllByText('abc', {trim: true, normalizer})).toThrow()
+  expect(() =>
+    queryAllByText('abc', {collapseWhitespace: false, normalizer}),
+  ).toThrow()
+  expect(() =>
+    queryAllByText('abc', {collapseWhitespace: true, normalizer}),
+  ).toThrow()
+})
 
-  // Test that again, but with a normalizer that replaces double
-  // spaces with 'X' characters.  If that runs before trim/collapseWhitespace,
-  // it'll prevent successful matching
-  expect(
-    queryAllByText('abc def', {
-      trim: true,
-      collapseWhitespace: true,
-      normalizer: str => str.replace(/ {2}/g, 'X'),
-    }),
-  ).toHaveLength(1)
+test('getDefaultNormalizer returns a normalizer that supports trim and collapseWhitespace', () => {
+  // Default is trim: true and collapseWhitespace: true
+  expect(getDefaultNormalizer()('  abc  def  ')).toEqual('abc def')
 
-  // Test that, if we turn off trim + collapse, that the normalizer does
-  // then get to see the double whitespace, and we should now be able
-  // to match the Xs
+  // Turning off trimming should not turn off whitespace collapsing
+  expect(getDefaultNormalizer({trim: false})('  abc  def  ')).toEqual(
+    ' abc def ',
+  )
+
+  // Turning off whitespace collapsing should not turn off trimming
   expect(
-    queryAllByText('XabcXdefX', {
-      trim: false,
-      collapseWhitespace: false,
-      // With the whitespace left in, this will add Xs which will
-      // prevent matching
-      normalizer: str => str.replace(/ {2}/g, 'X'),
-    }),
-  ).toHaveLength(1)
+    getDefaultNormalizer({collapseWhitespace: false})('  abc  def  '),
+  ).toEqual('abc  def')
+
+  // Whilst it's rather pointless, we should be able to turn both off
+  expect(
+    getDefaultNormalizer({trim: false, collapseWhitespace: false})(
+      '  abc  def  ',
+    ),
+  ).toEqual('  abc  def  ')
+})
+
+test('we support an older API with trim and collapseWhitespace instead of a normalizer', () => {
+  const {queryAllByText} = render('<div>  x  y  </div>')
+  expect(queryAllByText('x y')).toHaveLength(1)
+  expect(queryAllByText('x y', {trim: false})).toHaveLength(0)
+  expect(queryAllByText(' x y ', {trim: false})).toHaveLength(1)
+  expect(queryAllByText('x y', {collapseWhitespace: false})).toHaveLength(0)
+  expect(queryAllByText('x  y', {collapseWhitespace: false})).toHaveLength(1)
 })
