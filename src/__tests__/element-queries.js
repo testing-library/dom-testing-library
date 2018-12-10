@@ -347,6 +347,7 @@ test('getAll* matchers throw for 0 matches', () => {
     getAllByPlaceholderText,
     getAllByText,
     getAllByRole,
+    getAllByCurrentValue,
   } = render(`
     <div role="container">
       <label>No Matches Please</label>
@@ -361,6 +362,7 @@ test('getAll* matchers throw for 0 matches', () => {
   expect(() => getAllByPlaceholderText('nope')).toThrow()
   expect(() => getAllByText('nope')).toThrow()
   expect(() => getAllByRole('nope')).toThrow()
+  expect(() => getAllByCurrentValue('nope')).toThrow()
 })
 
 test('queryAll* matchers return an array for 0 matches', () => {
