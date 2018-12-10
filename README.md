@@ -958,7 +958,7 @@ Defaults to `data-testid`. See [`getByTestId`](#getbytestid).
 
 ## Great companion
 
-A helper library named [`user-event`](https://github.com/Gpx/user-event) has been written in companion with `dom-testing-library` which easiest common interactions, such as typing, clicking etc. The `type`-interaction will allow to easily dispatch the appropriate keyboard events for a text, or dispatch these events for each character of the to be typed text.
+A helper library named [`user-event`](https://github.com/Gpx/user-event) has been written in companion with `dom-testing-library` which eases common interactions, such as typing, clicking etc. The `type`-interaction will allow to easily dispatch the appropriate keyboard events for inserting text, or dispatch these events for each character of the to be typed text.
 
 ## Implementations
 
