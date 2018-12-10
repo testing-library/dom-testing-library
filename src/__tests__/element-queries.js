@@ -565,19 +565,63 @@ test('getByText ignores script tags by default', () => {
   expect(getAllByText(/hello/i, {ignore: false})).toHaveLength(3)
 })
 
-test('get element by its dynamically assigned value', () => {
+test('get/query input element by current value', () => {
   const {
     getByCurrentValue,
     queryByCurrentValue,
     getByTestId,
   } = renderIntoDocument(`
     <div>
-      <input placeholder="name" type="text" data-testid="name" />
+      <input placeholder="name" type="text" data-testid="name" value="Mercury" />
     </div>
   `)
+  expect(getByCurrentValue('Mercury').placeholder).toEqual('name')
+  expect(queryByCurrentValue('Mercury').placeholder).toEqual('name')
+
   getByTestId('name').value = 'Norris'
   expect(getByCurrentValue('Norris').placeholder).toEqual('name')
   expect(queryByCurrentValue('Norris').placeholder).toEqual('name')
+})
+
+test('get/query select element by current value', () => {
+  const {
+    getByCurrentValue,
+    queryByCurrentValue,
+    getByTestId,
+  } = renderIntoDocument(`
+    <select id="state-select" data-testid="state">
+      <option value="">State</option>
+      <option value="AL">Alabama</option>
+      <option selected value="AK" >Alaska</option>
+      <option value="AZ">Arizona</option>
+    </select>
+  `)
+
+  expect(getByCurrentValue('Alaska').id).toEqual('state-select')
+  expect(queryByCurrentValue('Alaska').id).toEqual('state-select')
+
+  getByTestId('state').value = 'AL'
+  expect(getByCurrentValue('Alabama').id).toEqual('state-select')
+  expect(queryByCurrentValue('Alabama').id).toEqual('state-select')
+})
+
+test('get/query textarea element by current value', () => {
+  const {
+    getByCurrentValue,
+    queryByCurrentValue,
+    getByTestId,
+  } = renderIntoDocument(`
+    <textarea id="content-textarea" data-testid="content">
+      Hello
+    </textarea>
+  `)
+
+  expect(getByCurrentValue('Hello').id).toEqual('content-textarea')
+  expect(queryByCurrentValue('Hello').id).toEqual('content-textarea')
+
+  getByTestId('content').value = 'World'
+  expect(getByCurrentValue('World').id).toEqual('content-textarea')
+  expect(queryByCurrentValue('World').id).toEqual('content-textarea')
 })
 
 /* eslint jsx-a11y/label-has-for:0 */
