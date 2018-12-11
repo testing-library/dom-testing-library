@@ -86,6 +86,7 @@ when a real user uses it.
   - [`getByAltText`](#getbyalttext)
   - [`getByTitle`](#getbytitle)
   - [`getByValue`](#getbyvalue)
+  - [`getByDisplayValue`](#getbydisplayvalue)
   - [`getByRole`](#getbyrole)
   - [`getByTestId`](#getbytestid)
   - [`wait`](#wait)
@@ -408,6 +409,55 @@ Returns the element that has the matching value.
 // <input type="text" id="lastName" defaultValue="Norris" />
 const lastNameInput = getByValue('Norris')
 ```
+
+### `getByDisplayValue`
+
+```typescript
+getByDisplayValue(
+  container: HTMLElement,
+  value: TextMatch,
+  options?: {
+    exact?: boolean = true,
+    collapseWhitespace?: boolean = false,
+    trim?: boolean = true,
+  }): HTMLElement
+```
+
+Returns the element that has the matching display value.
+
+#### `input`
+
+```javascript
+// <input type="text" id="lastName" />
+// document.getElementById('lastName').value = 'Norris'
+
+const lastNameInput = getByDisplayValue('Norris')
+```
+
+#### `textarea`
+
+```javascript
+// <textarea id="messageTextArea"></textarea>
+// document.getElementById('messageTextArea').value = 'Hello World'
+
+const messageTextArea = getByDisplayValue('Hello World')
+```
+
+#### `select`
+
+```javascript
+// <select id="state-select" data-testid="state">
+//   <option value="">State</option>
+//   <option value="AL">Alabama</option>
+//   <option selected value="AK" >Alaska</option>
+//   <option value="AZ">Arizona</option>
+// </select>
+
+const selectElement = getByDisplayName('Alaska')
+console.log(selectElement.id)
+```
+
+In case of `select`, it gets an element by the display name of its selected option.
 
 ### `getByRole`
 
