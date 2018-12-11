@@ -348,7 +348,7 @@ getByDisplayValue(
   }): HTMLElement
 ```
 
-Returns the element that has the matching display value.
+Returns the `input`, `textarea`, or `select` element that has the matching display value.
 
 #### `input`
 
@@ -356,7 +356,7 @@ Returns the element that has the matching display value.
 // <input type="text" id="lastName" />
 // document.getElementById('lastName').value = 'Norris'
 
-const lastNameInput = getByDisplayValue('Norris')
+const lastNameInput = getByDisplayValue(container, 'Norris')
 ```
 
 #### `textarea`
@@ -365,7 +365,7 @@ const lastNameInput = getByDisplayValue('Norris')
 // <textarea id="messageTextArea"></textarea>
 // document.getElementById('messageTextArea').value = 'Hello World'
 
-const messageTextArea = getByDisplayValue('Hello World')
+const messageTextArea = getByDisplayValue(container, 'Hello World')
 ```
 
 #### `select`
@@ -378,7 +378,7 @@ const messageTextArea = getByDisplayValue('Hello World')
 //   <option value="AZ">Arizona</option>
 // </select>
 
-const selectElement = getByDisplayName('Alaska')
+const selectElement = getByDisplayName(container, 'Alaska')
 console.log(selectElement.id)
 ```
 
