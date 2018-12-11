@@ -180,7 +180,7 @@ function queryByAltText(...args) {
   return firstResultOrNull(queryAllByAltText, ...args)
 }
 
-function queryAllByCurrentValue(
+function queryAllByDisplayValue(
   container,
   value,
   {exact = true, collapseWhitespace = true, trim = true} = {},
@@ -203,8 +203,8 @@ function queryAllByCurrentValue(
   )
 }
 
-function queryByCurrentValue(...args) {
-  return firstResultOrNull(queryAllByCurrentValue, ...args)
+function queryByDisplayValue(...args) {
+  return firstResultOrNull(queryAllByDisplayValue, ...args)
 }
 
 // getters
@@ -352,8 +352,8 @@ function getBySelectText(...args) {
   return firstResultOrNull(getAllBySelectText, ...args)
 }
 
-function getAllByCurrentValue(container, value, ...rest) {
-  const els = queryAllByCurrentValue(container, value, ...rest)
+function getAllByDisplayValue(container, value, ...rest) {
+  const els = queryAllByDisplayValue(container, value, ...rest)
   if (!els.length) {
     throw getElementError(
       `Unable to find an element with the value: ${value}.`,
@@ -363,8 +363,8 @@ function getAllByCurrentValue(container, value, ...rest) {
   return els
 }
 
-function getByCurrentValue(...args) {
-  return firstResultOrNull(getAllByCurrentValue, ...args)
+function getByDisplayValue(...args) {
+  return firstResultOrNull(getAllByDisplayValue, ...args)
 }
 
 export {
@@ -400,10 +400,10 @@ export {
   queryAllByValue,
   getByValue,
   getAllByValue,
-  queryByCurrentValue,
-  queryAllByCurrentValue,
-  getByCurrentValue,
-  getAllByCurrentValue,
+  queryByDisplayValue,
+  queryAllByDisplayValue,
+  getByDisplayValue,
+  getAllByDisplayValue,
   queryByRole,
   queryAllByRole,
   getAllByRole,
