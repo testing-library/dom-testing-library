@@ -9,6 +9,7 @@ export {queries, queryHelpers, within}
 export * from './queries'
 export * from './query-helpers'
 export * from './wait'
+export * from './wait-for-dom-change'
 export * from './wait-for-element'
 export * from './matches'
 export * from './get-node-text'
