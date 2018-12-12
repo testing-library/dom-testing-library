@@ -81,11 +81,9 @@ when a real user uses it.
 - [Usage](#usage)
   - [`getByLabelText`](#getbylabeltext)
   - [`getByPlaceholderText`](#getbyplaceholdertext)
-  - [`getBySelectText`](#getbyselecttext)
   - [`getByText`](#getbytext)
   - [`getByAltText`](#getbyalttext)
   - [`getByTitle`](#getbytitle)
-  - [`getByValue`](#getbyvalue)
   - [`getByDisplayValue`](#getbydisplayvalue)
   - [`getByRole`](#getbyrole)
   - [`getByTestId`](#getbytestid)
@@ -276,35 +274,6 @@ const inputNode = getByPlaceholderText(container, 'Username')
 > NOTE: a placeholder is not a good substitute for a label so you should
 > generally use `getByLabelText` instead.
 
-### `getBySelectText`
-
-```typescript
-getBySelectText(
-  container: HTMLElement,
-  text: TextMatch,
-  options?: {
-    exact?: boolean = true,
-    collapseWhitespace?: boolean = true,
-    trim?: boolean = true,
-  }): HTMLElement
-```
-
-This will search for a `<select>` whose selected `<option>` matches the given [`TextMatch`](#textmatch). This would find the `<select>` node in a situation
-where the first value acts as a sort of placeholder for the dropdown.
-
-```javascript
-// <select>
-//   <option value="">Day of the Week</option>
-//   <option value="1">Monday</option>
-//   <option value="2">Tuesday</option>
-//   <option value="3">Wednesday</option>
-// </select>
-const selectNode = getBySelectText(container, 'Day of the Week')
-```
-
-> Note: It is highly preferred to use `getByLabelText` over this method. This
-> method should only be used in the event where there is no label text available.
-
 ### `getByText`
 
 ```typescript
@@ -388,26 +357,6 @@ Will also find a `title` element within an SVG.
 ```javascript
 // <svg> <title>Close</title> <g> <path /> </g> </svg>
 const closeElement = getByTitle(container, 'Close')
-```
-
-### `getByValue`
-
-```typescript
-getByValue(
-  container: HTMLElement,
-  value: TextMatch,
-  options?: {
-    exact?: boolean = true,
-    collapseWhitespace?: boolean = false,
-    trim?: boolean = true,
-  }): HTMLElement
-```
-
-Returns the element that has the matching value.
-
-```javascript
-// <input type="text" id="lastName" defaultValue="Norris" />
-const lastNameInput = getByValue('Norris')
 ```
 
 ### `getByDisplayValue`
