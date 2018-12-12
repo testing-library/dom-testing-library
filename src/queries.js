@@ -1,4 +1,4 @@
-import {fuzzyMatches, matches} from './matches'
+import {fuzzyMatches, matches, makeNormalizer} from './matches'
 import {getNodeText} from './get-node-text'
 import {
   getElementError,
@@ -15,22 +15,25 @@ import {getConfig} from './config'
 function queryAllLabelsByText(
   container,
   text,
-  {exact = true, trim = true, collapseWhitespace = true} = {},
+  {exact = true, trim, collapseWhitespace, normalizer} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
+  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(container.querySelectorAll('label')).filter(label =>
-    matcher(label.textContent, label, text, matchOpts),
+    matcher(label.textContent, label, text, matchNormalizer),
   )
 }
 
 function queryAllByLabelText(
   container,
   text,
-  {selector = '*', exact = true, collapseWhitespace = true, trim = true} = {},
+  {selector = '*', exact = true, collapseWhitespace, trim, normalizer} = {},
 ) {
-  const matchOpts = {collapseWhitespace, trim}
-  const labels = queryAllLabelsByText(container, text, {exact, ...matchOpts})
+  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
+  const labels = queryAllLabelsByText(container, text, {
+    exact,
+    normalizer: matchNormalizer,
+  })
   const labelledElements = labels
     .map(label => {
       if (label.control) {
@@ -62,7 +65,7 @@ function queryAllByLabelText(
 
   const possibleAriaLabelElements = queryAllByText(container, text, {
     exact,
-    ...matchOpts,
+    normalizer: matchNormalizer,
   }).filter(el => el.tagName !== 'LABEL') // don't reprocess labels
 
   const ariaLabelledElements = possibleAriaLabelElements.reduce(
@@ -94,16 +97,17 @@ function queryAllByText(
   {
     selector = '*',
     exact = true,
-    collapseWhitespace = true,
-    trim = true,
+    collapseWhitespace,
+    trim,
     ignore = 'script, style',
+    normalizer,
   } = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
+  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(container.querySelectorAll(selector))
     .filter(node => !ignore || !node.matches(ignore))
-    .filter(node => matcher(getNodeText(node), node, text, matchOpts))
+    .filter(node => matcher(getNodeText(node), node, text, matchNormalizer))
 }
 
 function queryByText(...args) {
@@ -113,14 +117,14 @@ function queryByText(...args) {
 function queryAllByTitle(
   container,
   text,
-  {exact = true, collapseWhitespace = true, trim = true} = {},
+  {exact = true, collapseWhitespace, trim, normalizer} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
+  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(container.querySelectorAll('[title], svg > title')).filter(
     node =>
-      matcher(node.getAttribute('title'), node, text, matchOpts) ||
-      matcher(getNodeText(node), node, text, matchOpts),
+      matcher(node.getAttribute('title'), node, text, matchNormalizer) ||
+      matcher(getNodeText(node), node, text, matchNormalizer),
   )
 }
 
@@ -131,16 +135,16 @@ function queryByTitle(...args) {
 function queryAllBySelectText(
   container,
   text,
-  {exact = true, collapseWhitespace = true, trim = true} = {},
+  {exact = true, collapseWhitespace, trim, normalizer} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
+  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(container.querySelectorAll('select')).filter(selectNode => {
     const selectedOptions = Array.from(selectNode.options).filter(
       option => option.selected,
     )
     return selectedOptions.some(optionNode =>
-      matcher(getNodeText(optionNode), optionNode, text, matchOpts),
+      matcher(getNodeText(optionNode), optionNode, text, matchNormalizer),
     )
   })
 }
@@ -167,12 +171,12 @@ const queryAllByRole = queryAllByAttribute.bind(null, 'role')
 function queryAllByAltText(
   container,
   alt,
-  {exact = true, collapseWhitespace = true, trim = true} = {},
+  {exact = true, collapseWhitespace, trim, normalizer} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
+  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(container.querySelectorAll('img,input,area')).filter(node =>
-    matcher(node.getAttribute('alt'), node, alt, matchOpts),
+    matcher(node.getAttribute('alt'), node, alt, matchNormalizer),
   )
 }
 
@@ -183,10 +187,10 @@ function queryByAltText(...args) {
 function queryAllByDisplayValue(
   container,
   value,
-  {exact = true, collapseWhitespace = true, trim = true} = {},
+  {exact = true, collapseWhitespace, trim, normalizer} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
+  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(container.querySelectorAll(`input,textarea,select`)).filter(
     node => {
       if (node.tagName === 'SELECT') {
@@ -194,10 +198,10 @@ function queryAllByDisplayValue(
           option => option.selected,
         )
         return selectedOptions.some(optionNode =>
-          matcher(getNodeText(optionNode), optionNode, value, matchOpts),
+          matcher(getNodeText(optionNode), optionNode, value, matchNormalizer),
         )
       } else {
-        return matcher(node.value, node, value, matchOpts)
+        return matcher(node.value, node, value, matchNormalizer)
       }
     },
   )

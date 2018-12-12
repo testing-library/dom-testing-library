@@ -97,6 +97,7 @@ when a real user uses it.
   - [Using other assertion libraries](#using-other-assertion-libraries)
 - [`TextMatch`](#textmatch)
   - [Precision](#precision)
+  - [Normalization](#normalization)
   - [TextMatch Examples](#textmatch-examples)
 - [`query` APIs](#query-apis)
 - [`queryAll` and `getAll` APIs](#queryall-and-getall-apis)
@@ -207,8 +208,7 @@ getByLabelText(
   options?: {
     selector?: string = '*',
     exact?: boolean = true,
-    collapseWhitespace?: boolean = true,
-    trim?: boolean = true,
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -259,8 +259,7 @@ getByPlaceholderText(
   text: TextMatch,
   options?: {
     exact?: boolean = true,
-    collapseWhitespace?: boolean = false,
-    trim?: boolean = true,
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -284,9 +283,8 @@ getByText(
   options?: {
     selector?: string = '*',
     exact?: boolean = true,
-    collapseWhitespace?: boolean = true,
-    trim?: boolean = true,
-    ignore?: string|boolean = 'script, style'
+    ignore?: string|boolean = 'script, style',
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -316,8 +314,7 @@ getByAltText(
   text: TextMatch,
   options?: {
     exact?: boolean = true,
-    collapseWhitespace?: boolean = false,
-    trim?: boolean = true,
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -341,8 +338,7 @@ getByTitle(
   title: TextMatch,
   options?: {
     exact?: boolean = true,
-    collapseWhitespace?: boolean = false,
-    trim?: boolean = true,
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -368,8 +364,7 @@ getByDisplayValue(
   value: TextMatch,
   options?: {
     exact?: boolean = true,
-    collapseWhitespace?: boolean = false,
-    trim?: boolean = true,
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -416,8 +411,7 @@ getByRole(
   text: TextMatch,
   options?: {
     exact?: boolean = true,
-    collapseWhitespace?: boolean = false,
-    trim?: boolean = true,
+    normalizer?: NormalizerFn,
   }): HTMLElement
 ```
 
@@ -437,9 +431,8 @@ getByTestId(
   text: TextMatch,
   options?: {
     exact?: boolean = true,
-    collapseWhitespace?: boolean = false,
-    trim?: boolean = true,
-  }): HTMLElement`
+    normalizer?: NormalizerFn,
+  }): HTMLElement
 ```
 
 A shortcut to `` container.querySelector(`[data-testid="${yourId}"]`) `` (and it
@@ -801,8 +794,46 @@ affect the precision of string matching:
   - `exact` has no effect on `regex` or `function` arguments.
   - In most cases using a regex instead of a string gives you more control over
     fuzzy matching and should be preferred over `{ exact: false }`.
-- `trim`: Defaults to `true`; trim leading and trailing whitespace.
+- `normalizer`: An optional function which overrides normalization behavior.
+  See [`Normalization`](#normalization).
+
+### Normalization
+
+Before running any matching logic against text in the DOM, `dom-testing-library`
+automatically normalizes that text. By default, normalization consists of
+trimming whitespace from the start and end of text, and collapsing multiple
+adjacent whitespace characters into a single space.
+
+If you want to prevent that normalization, or provide alternative
+normalization (e.g. to remove Unicode control characters), you can provide a
+`normalizer` function in the options object. This function will be given
+a string and is expected to return a normalized version of that string.
+
+Note: Specifying a value for `normalizer` _replaces_ the built-in normalization, but
+you can call `getDefaultNormalizer` to obtain a built-in normalizer, either
+to adjust that normalization or to call it from your own normalizer.
+
+`getDefaultNormalizer` takes an options object which allows the selection of behaviour:
+
+- `trim`: Defaults to `true`. Trims leading and trailing whitespace
 - `collapseWhitespace`: Defaults to `true`. Collapses inner whitespace (newlines, tabs, repeated spaces) into a single space.
+
+#### Normalization Examples
+
+To perform a match against text without trimming:
+
+```javascript
+getByText(node, 'text', {normalizer: getDefaultNormalizer({trim: false})})
+```
+
+To override normalization to remove some Unicode characters whilst keeping some (but not all) of the built-in normalization behavior:
+
+```javascript
+getByText(node, 'text', {
+  normalizer: str =>
+    getDefaultNormalizer({trim: false})(str).replace(/[\u200E-\u200F]*/g, ''),
+})
+```
 
 ### TextMatch Examples
 

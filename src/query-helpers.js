@@ -1,5 +1,5 @@
 import {prettyDOM} from './pretty-dom'
-import {fuzzyMatches, matches} from './matches'
+import {fuzzyMatches, matches, makeNormalizer} from './matches'
 
 /* eslint-disable complexity */
 function debugDOM(htmlElement) {
@@ -39,12 +39,12 @@ function queryAllByAttribute(
   attribute,
   container,
   text,
-  {exact = true, collapseWhitespace = true, trim = true} = {},
+  {exact = true, collapseWhitespace, trim, normalizer} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
+  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(container.querySelectorAll(`[${attribute}]`)).filter(node =>
-    matcher(node.getAttribute(attribute), node, text, matchOpts),
+    matcher(node.getAttribute(attribute), node, text, matchNormalizer),
   )
 }
 

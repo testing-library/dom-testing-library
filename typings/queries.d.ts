@@ -1,7 +1,5 @@
 import {Matcher, MatcherOptions} from './matches'
-import {
-  SelectorMatcherOptions,
-} from './query-helpers'
+import {SelectorMatcherOptions} from './query-helpers'
 
 export type QueryByBoundAttribute = (
   container: HTMLElement,
