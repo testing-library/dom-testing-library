@@ -379,7 +379,6 @@ const messageTextArea = getByDisplayValue(container, 'Hello World')
 // </select>
 
 const selectElement = getByDisplayName(container, 'Alaska')
-console.log(selectElement.id)
 ```
 
 In case of `select`, it gets an element by the display name of its selected option.
