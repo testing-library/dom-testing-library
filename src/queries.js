@@ -180,6 +180,33 @@ function queryByAltText(...args) {
   return firstResultOrNull(queryAllByAltText, ...args)
 }
 
+function queryAllByDisplayValue(
+  container,
+  value,
+  {exact = true, collapseWhitespace = true, trim = true} = {},
+) {
+  const matcher = exact ? matches : fuzzyMatches
+  const matchOpts = {collapseWhitespace, trim}
+  return Array.from(container.querySelectorAll(`input,textarea,select`)).filter(
+    node => {
+      if (node.tagName === 'SELECT') {
+        const selectedOptions = Array.from(node.options).filter(
+          option => option.selected,
+        )
+        return selectedOptions.some(optionNode =>
+          matcher(getNodeText(optionNode), optionNode, value, matchOpts),
+        )
+      } else {
+        return matcher(node.value, node, value, matchOpts)
+      }
+    },
+  )
+}
+
+function queryByDisplayValue(...args) {
+  return firstResultOrNull(queryAllByDisplayValue, ...args)
+}
+
 // getters
 // the reason we're not dynamically generating these functions that look so similar:
 // 1. The error messages are specific to each one and depend on arguments
@@ -325,6 +352,21 @@ function getBySelectText(...args) {
   return firstResultOrNull(getAllBySelectText, ...args)
 }
 
+function getAllByDisplayValue(container, value, ...rest) {
+  const els = queryAllByDisplayValue(container, value, ...rest)
+  if (!els.length) {
+    throw getElementError(
+      `Unable to find an element with the value: ${value}.`,
+      container,
+    )
+  }
+  return els
+}
+
+function getByDisplayValue(...args) {
+  return firstResultOrNull(getAllByDisplayValue, ...args)
+}
+
 export {
   queryByPlaceholderText,
   queryAllByPlaceholderText,
@@ -358,6 +400,10 @@ export {
   queryAllByValue,
   getByValue,
   getAllByValue,
+  queryByDisplayValue,
+  queryAllByDisplayValue,
+  getByDisplayValue,
+  getAllByDisplayValue,
   queryByRole,
   queryAllByRole,
   getAllByRole,

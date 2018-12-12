@@ -347,6 +347,7 @@ test('getAll* matchers throw for 0 matches', () => {
     getAllByPlaceholderText,
     getAllByText,
     getAllByRole,
+    getAllByDisplayValue,
   } = render(`
     <div role="container">
       <label>No Matches Please</label>
@@ -361,6 +362,7 @@ test('getAll* matchers throw for 0 matches', () => {
   expect(() => getAllByPlaceholderText('nope')).toThrow()
   expect(() => getAllByText('nope')).toThrow()
   expect(() => getAllByRole('nope')).toThrow()
+  expect(() => getAllByDisplayValue('nope')).toThrow()
 })
 
 test('queryAll* matchers return an array for 0 matches', () => {
@@ -563,6 +565,67 @@ test('getByText ignores script tags by default', () => {
   expect(noScript[1].tagName).toBe('STYLE')
   expect(noScript).toHaveLength(2)
   expect(getAllByText(/hello/i, {ignore: false})).toHaveLength(3)
+})
+
+test('get/query input element by current value', () => {
+  const {
+    getByDisplayValue,
+    queryByDisplayValue,
+    getByTestId,
+  } = renderIntoDocument(`
+    <div>
+      <input placeholder="name" type="text" data-testid="name" value="Mercury" />
+    </div>
+  `)
+  expect(getByDisplayValue('Mercury').placeholder).toEqual('name')
+  expect(queryByDisplayValue('Mercury').placeholder).toEqual('name')
+
+  getByTestId('name').value = 'Norris'
+  expect(getByDisplayValue('Norris').placeholder).toEqual('name')
+  expect(queryByDisplayValue('Norris').placeholder).toEqual('name')
+
+  expect(queryByDisplayValue('Nor', {exact: false}).placeholder).toEqual('name')
+})
+
+test('get/query select element by current value', () => {
+  const {
+    getByDisplayValue,
+    queryByDisplayValue,
+    getByTestId,
+  } = renderIntoDocument(`
+    <select id="state-select" data-testid="state">
+      <option value="">State</option>
+      <option value="AL">Alabama</option>
+      <option selected value="AK" >Alaska</option>
+      <option value="AZ">Arizona</option>
+    </select>
+  `)
+
+  expect(getByDisplayValue('Alaska').id).toEqual('state-select')
+  expect(queryByDisplayValue('Alaska').id).toEqual('state-select')
+
+  getByTestId('state').value = 'AL'
+  expect(getByDisplayValue('Alabama').id).toEqual('state-select')
+  expect(queryByDisplayValue('Alabama').id).toEqual('state-select')
+})
+
+test('get/query textarea element by current value', () => {
+  const {
+    getByDisplayValue,
+    queryByDisplayValue,
+    getByTestId,
+  } = renderIntoDocument(`
+    <textarea id="content-textarea" data-testid="content">
+      Hello
+    </textarea>
+  `)
+
+  expect(getByDisplayValue('Hello').id).toEqual('content-textarea')
+  expect(queryByDisplayValue('Hello').id).toEqual('content-textarea')
+
+  getByTestId('content').value = 'World'
+  expect(getByDisplayValue('World').id).toEqual('content-textarea')
+  expect(queryByDisplayValue('World').id).toEqual('content-textarea')
 })
 
 /* eslint jsx-a11y/label-has-for:0 */
