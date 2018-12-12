@@ -583,6 +583,8 @@ test('get/query input element by current value', () => {
   getByTestId('name').value = 'Norris'
   expect(getByDisplayValue('Norris').placeholder).toEqual('name')
   expect(queryByDisplayValue('Norris').placeholder).toEqual('name')
+
+  expect(queryByDisplayValue('Nor', {exact: false}).placeholder).toEqual('name')
 })
 
 test('get/query select element by current value', () => {
