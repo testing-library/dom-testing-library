@@ -405,7 +405,7 @@ const messageTextArea = getByDisplayValue(container, 'Hello World')
 const selectElement = getByDisplayName(container, 'Alaska')
 ```
 
-In case of `select`, it gets an element by the display name of its selected option.
+In case of `select`, this will search for a `<select>` whose selected `<option>` matches the given [`TextMatch`](#textmatch).
 
 ### `getByRole`
 
