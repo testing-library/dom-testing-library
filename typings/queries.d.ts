@@ -71,6 +71,10 @@ export const queryByValue: QueryByBoundAttribute
 export const queryAllByValue: AllByBoundAttribute
 export const getByValue: GetByBoundAttribute
 export const getAllByValue: AllByBoundAttribute
+export const queryByDisplayValue: QueryByBoundAttribute
+export const queryAllByDisplayValue: AllByBoundAttribute
+export const getByDisplayValue: GetByBoundAttribute
+export const getAllByDisplayValue: AllByBoundAttribute
 export const queryByRole: QueryByBoundAttribute
 export const queryAllByRole: AllByBoundAttribute
 export const getByRole: GetByBoundAttribute
