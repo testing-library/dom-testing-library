@@ -187,10 +187,10 @@ function queryByAltText(...args) {
 function queryAllByDisplayValue(
   container,
   value,
-  {exact = true, collapseWhitespace = true, trim = true} = {},
+  {exact = true, collapseWhitespace, trim, normalizer} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
-  const matchOpts = {collapseWhitespace, trim}
+  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(container.querySelectorAll(`input,textarea,select`)).filter(
     node => {
       if (node.tagName === 'SELECT') {
@@ -198,10 +198,10 @@ function queryAllByDisplayValue(
           option => option.selected,
         )
         return selectedOptions.some(optionNode =>
-          matcher(getNodeText(optionNode), optionNode, value, matchOpts),
+          matcher(getNodeText(optionNode), optionNode, value, matchNormalizer),
         )
       } else {
-        return matcher(node.value, node, value, matchOpts)
+        return matcher(node.value, node, value, matchNormalizer)
       }
     },
   )
