@@ -47,6 +47,14 @@ const eventMap = {
     EventType: 'FocusEvent',
     defaultInit: {bubbles: false, cancelable: false},
   },
+  focusIn: {
+    EventType: 'FocusEvent',
+    defaultInit: {bubbles: true, cancelable: false},
+  },
+  focusOut: {
+    EventType: 'FocusEvent',
+    defaultInit: {bubbles: true, cancelable: false},
+  },
   // Form Events
   change: {
     EventType: 'InputEvent',

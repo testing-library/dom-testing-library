@@ -20,7 +20,7 @@ const eventTypes = [
   },
   {
     type: 'Focus',
-    events: ['focus', 'blur'],
+    events: ['focus', 'blur', 'focusIn', 'focusOut'],
     elementType: 'input',
   },
   {
