@@ -10,6 +10,8 @@ export type EventType =
   | 'keyUp'
   | 'focus'
   | 'blur'
+  | 'focusIn'
+  | 'focusOut'
   | 'change'
   | 'input'
   | 'invalid'
