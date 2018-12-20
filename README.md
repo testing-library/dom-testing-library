@@ -296,6 +296,14 @@ matching the given [`TextMatch`](#textmatch).
 const aboutAnchorNode = getByText(container, /about/i)
 ```
 
+It also works properly with `input`s whose `type` attribute is either `submit`
+or `button`:
+
+```javascript
+// <input type="submit" value="Send data" />
+const submitButton = getByText(container, /send data/i)
+```
+
 > NOTE: see [`getByLabelText`](#getbylabeltext) for more details on how and when to use the `selector` option
 
 The `ignore` option accepts a query selector. If the
@@ -701,6 +709,17 @@ const text = getNodeText(container.querySelector('div')) // "Hello World !"
 This function is also used internally when querying nodes by their text content.
 This enables functions like `getByText` and `queryByText` to work as expected,
 finding elements in the DOM similarly to how users would do.
+
+The function has a special behavior for some input elements:
+
+```javascript
+// <input type="submit" value="Send data" />
+// <input type="button" value="Push me" />
+const submitText = getNodeText(container.querySelector('input[type=submit]')) // "Send data"
+const buttonText = getNodeText(container.querySelector('input[type=button]')) // "Push me"
+
+These elements use the attribute `value` and display its value to the user.
+```
 
 ## Custom Jest Matchers
 
