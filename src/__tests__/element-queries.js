@@ -76,6 +76,19 @@ test('can get elements by matching their text across adjacent text nodes', () =>
   expect(queryByText('£24.99')).toBeTruthy()
 })
 
+test('can get input elements with type submit or button', () => {
+  const {queryByText} = render(`
+    <div>
+      <input type="submit" value="Send data"/>
+      <input type="button" value="Push me!"/>
+      <input type="text" value="user data" />
+    </div>
+  `)
+  expect(queryByText('Send data')).toBeTruthy()
+  expect(queryByText('Push me!')).toBeTruthy()
+  expect(queryByText('user data')).toBeFalsy()
+})
+
 test('matches case with RegExp matcher', () => {
   const {queryByText} = render(`
     <span>STEP 1 of 4</span>
