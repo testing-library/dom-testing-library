@@ -6,11 +6,13 @@
 </a>
 
 <p>Simple and complete DOM testing utilities that encourage good testing practices.</p>
+
+[**Read the docs**](https://react-testing-library-docs.netlify.com/) | [Edit the docs](https://github.com/alexkrolick/react-testing-library-docs)
+
 </div>
 
 <hr />
 
-[**Read the docs**](https://react-testing-library-docs.netlify.com/) | [Edit the docs](https://github.com/alexkrolick/react-testing-library-docs)
 
 <!-- prettier-ignore-start -->
 [![Build Status][build-badge]][build]
