@@ -7,7 +7,7 @@
 
 <p>Simple and complete DOM testing utilities that encourage good testing practices.</p>
 
-[**Read the docs**](https://react-testing-library-docs.netlify.com/) | [Edit the docs](https://github.com/alexkrolick/react-testing-library-docs)
+[**Read the docs**](https://testing-library.com/) | [Edit the docs](https://github.com/alexkrolick/testing-library-docs)
 
 </div>
 
@@ -84,7 +84,7 @@ should be installed as one of your project's `devDependencies`:
 npm install --save-dev dom-testing-library
 ```
 
-> [**Docs**](https://react-testing-library-docs.netlify.com/docs/install)
+> [**Docs**](https://testing-library.com/docs/install)
 
 ## Implementations
 
