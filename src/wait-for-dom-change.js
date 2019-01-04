@@ -1,4 +1,4 @@
-import {getDocument, getSetImmediate, newMutationObserver} from './helpers'
+import {newMutationObserver, getDocument, getSetImmediate} from './helpers'
 
 function waitForDomChange({
   container = getDocument(),
