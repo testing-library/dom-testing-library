@@ -1,4 +1,4 @@
-import {newMutationObserver, getDocument} from './helpers'
+import {newMutationObserver, getDocument, getSetImmediate} from './helpers'
 
 function waitForElement(
   callback,
@@ -22,6 +22,7 @@ function waitForElement(
     const observer = newMutationObserver(onMutation)
     observer.observe(container, mutationObserverOptions)
     function onDone(error, result) {
+      const setImmediate = getSetImmediate();
       clearTimeout(timer)
       setImmediate(() => observer.disconnect())
       if (error) {
