@@ -23,6 +23,7 @@ function getDocument() {
  * equivalent
  */
 function getSetImmediate() {
+  /* istanbul ignore else */
   if (typeof setImmediate === 'function') {
     return setImmediate
   } else {
