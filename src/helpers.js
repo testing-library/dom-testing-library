@@ -17,7 +17,7 @@ function getDocument() {
   return window.document
 }
 
-/**
+/*
  * There are browsers for which `setImmediate` is not available. This
  * serves as a polyfill of sorts, adopting `setTimeout` as the closest
  * equivalent
@@ -25,11 +25,11 @@ function getDocument() {
 function getSetImmediate() {
   if (typeof setImmediate === 'function') {
     return setImmediate
-  }
-  else {
-    return function setImmediate(fn) { return setTimeout(fn, 0)}
+  } else {
+    return function setImmediate(fn) {
+      return setTimeout(fn, 0)
+    }
   }
 }
 
 export {getDocument, newMutationObserver, getSetImmediate}
-
