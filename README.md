@@ -100,7 +100,7 @@ Implementations include:
 
 ## Other Solutions
 
-I'm not aware of any! Please feel free to make a pull request to add any here.
+- [browser-monkey](https://github.com/featurist/browser-monkey)
 
 ## Guiding Principles
 
