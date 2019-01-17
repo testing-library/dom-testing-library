@@ -13,7 +13,6 @@
 
 <hr />
 
-
 <!-- prettier-ignore-start -->
 [![Build Status][build-badge]][build]
 [![Code Coverage][coverage-badge]][coverage]
@@ -43,7 +42,6 @@
 
 - [The Problem](#the-problem)
 - [This Solution](#this-solution)
-- [Example](#example)
 - [Installation](#installation)
 - [Implementations](#implementations)
 - [Other Solutions](#other-solutions)
@@ -53,7 +51,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## The problem
+## The Problem
 
 You want to write maintainable tests for your Web UI. As a part of
 this goal, you want your tests to avoid including implementation details of
@@ -63,7 +61,7 @@ maintainable in the long run so refactors of your components (changes to
 implementation but not functionality) don't break your tests and slow you and
 your team down.
 
-## This solution
+## This Solution
 
 The `dom-testing-library` is a very light-weight solution for testing DOM nodes
 (whether simulated with [`JSDOM`](https://github.com/jsdom/jsdom) as provided by
