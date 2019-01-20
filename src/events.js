@@ -28,15 +28,15 @@ const eventMap = {
   // Keyboard Events
   keyDown: {
     EventType: 'KeyboardEvent',
-    defaultInit: {bubbles: true, cancelable: true},
+    defaultInit: {bubbles: true, cancelable: true, charCode: 0},
   },
   keyPress: {
     EventType: 'KeyboardEvent',
-    defaultInit: {bubbles: true, cancelable: true},
+    defaultInit: {bubbles: true, cancelable: true, charCode: 0},
   },
   keyUp: {
     EventType: 'KeyboardEvent',
-    defaultInit: {bubbles: true, cancelable: true},
+    defaultInit: {bubbles: true, cancelable: true, charCode: 0},
   },
   // Focus Events
   focus: {

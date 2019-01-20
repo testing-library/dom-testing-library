@@ -458,6 +458,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "puemos",
+      "name": "Shy Alter",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/13174025?v=4",
+      "profile": "https://twitter.com/@puemos",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ]
 }
