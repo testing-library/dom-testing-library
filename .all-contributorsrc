@@ -468,6 +468,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "lukaszmakuch",
+      "name": "Łukasz Makuch",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/11966621?v=4",
+      "profile": "https://lukaszmakuch.pl",
+      "contributions": [
+        "platform"
+      ]
     }
   ]
 }
