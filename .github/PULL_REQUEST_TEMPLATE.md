@@ -35,6 +35,7 @@ merge of your pull request!
 <!-- to check an item, place an "x" in the box like so: "- [x] Documentation" -->
 
 - [ ] Documentation
+- [ ] Typescript definitions updated
 - [ ] Tests
 - [ ] Ready to be merged <!-- In your opinion, is this ready to be merged as soon as it's reviewed? -->
 - [ ] Added myself to contributors table <!-- this is optional, see the contributing guidelines for instructions -->
