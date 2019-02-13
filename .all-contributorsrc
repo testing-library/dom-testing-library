@@ -7,6 +7,7 @@
   ],
   "imageSize": 100,
   "commit": false,
+  "contributorsPerLine": 7,
   "contributors": [
     {
       "login": "kentcdodds",
@@ -476,6 +477,16 @@
       "profile": "https://lukaszmakuch.pl",
       "contributions": [
         "platform"
+      ]
+    },
+    {
+      "login": "tylerthehaas",
+      "name": "Tyler Haas",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/11150235?v=4",
+      "profile": "https://github.com/tylerthehaas",
+      "contributions": [
+        "code",
+        "test"
       ]
     }
   ]
