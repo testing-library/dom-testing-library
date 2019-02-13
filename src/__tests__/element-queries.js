@@ -404,6 +404,7 @@ test('queryAllByText can query dom nodes', () => {
   const {queryAllByText} = render('hi')
   expect(queryAllByText('hi')).toHaveLength(1)
   expect(queryAllByText('not here')).toHaveLength(0)
+  expect(queryAllByText('hi', {selector: 'span'})).toHaveLength(0)
 })
 
 test('using jest helpers to assert element states', () => {
