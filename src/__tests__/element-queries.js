@@ -400,6 +400,12 @@ test('queryAll* matchers return an array for 0 matches', () => {
   expect(queryAllByRole('nope')).toHaveLength(0)
 })
 
+test('queryAllByText can query dom nodes', () => {
+  const {queryAllByText} = render('hi')
+  expect(queryAllByText('hi')).toHaveLength(1)
+  expect(queryAllByText('not here')).toHaveLength(0)
+})
+
 test('using jest helpers to assert element states', () => {
   const {queryByTestId} = render(`<span data-testid="count-value">2</span>`)
 
