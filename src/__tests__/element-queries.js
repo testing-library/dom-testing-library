@@ -407,6 +407,15 @@ test('queryAllByText can query dom nodes', () => {
   expect(queryAllByText('hi', {selector: 'span'})).toHaveLength(0)
 })
 
+test('queryAllByText works with document container', () => {
+  // This is required for Cypress as it uses `document`
+  // as the container for all methods
+  const {queryAllByText} = renderIntoDocument('<p>hello</p>')
+  expect(queryAllByText('hello')).toHaveLength(1)
+  expect(queryAllByText('not here')).toHaveLength(0)
+  expect(queryAllByText('hello', {selector: 'span'})).toHaveLength(0)
+})
+
 test('using jest helpers to assert element states', () => {
   const {queryByTestId} = render(`<span data-testid="count-value">2</span>`)
 
