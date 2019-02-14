@@ -105,7 +105,10 @@ function queryAllByText(
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-  const baseArray = container.matches(selector) ? [container] : []
+  let baseArray = []
+  if (typeof container.matches === 'function' && container.matches(selector)) {
+    baseArray = [container]
+  }
   return Array.from([...baseArray, ...container.querySelectorAll(selector)])
     .filter(node => !ignore || !node.matches(ignore))
     .filter(node => matcher(getNodeText(node), node, text, matchNormalizer))
