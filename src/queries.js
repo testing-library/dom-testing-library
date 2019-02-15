@@ -109,7 +109,7 @@ function queryAllByText(
   if (typeof container.matches === 'function' && container.matches(selector)) {
     baseArray = [container]
   }
-  return Array.from([...baseArray, ...container.querySelectorAll(selector)])
+  return [...baseArray, ...Array.from(container.querySelectorAll(selector))]
     .filter(node => !ignore || !node.matches(ignore))
     .filter(node => matcher(getNodeText(node), node, text, matchNormalizer))
 }
