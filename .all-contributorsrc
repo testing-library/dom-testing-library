@@ -498,6 +498,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "ken-kenware",
+      "name": "ken-kenware",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/3946841?v=4",
+      "profile": "https://github.com/ken-kenware",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
