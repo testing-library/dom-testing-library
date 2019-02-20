@@ -358,6 +358,39 @@ Object.keys(eventAliasMap).forEach(aliasKey => {
   fireEvent[aliasKey] = (...args) => fireEvent[key](...args)
 })
 
+const disableableElements = new Set([
+  'button',
+  'input',
+  'fieldset',
+  'optgroup',
+  'option',
+  'select',
+  'textarea',
+])
+function isElementDisabled(element) {
+  if (!element) {
+    return false
+  }
+
+  if (
+    disableableElements.has(element.tagName.toLowerCase()) &&
+    element.disabled
+  ) {
+    return true
+  }
+
+  return isElementDisabled(element.parentElement)
+}
+
+const origClickEvent = fireEvent.click
+fireEvent.click = (node, init) => {
+  if (isElementDisabled(node)) {
+    return false
+  }
+
+  return origClickEvent(node, init)
+}
+
 export {fireEvent}
 
 /* eslint complexity:["error", 9] */

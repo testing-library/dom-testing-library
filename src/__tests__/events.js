@@ -187,3 +187,67 @@ test('fires events on Window', () => {
   expect(messageSpy).toHaveBeenCalledTimes(1)
   window.removeEventListener('message', messageSpy)
 })
+
+test('does not fire click event on disabled elements', () => {
+  const clickSpy = jest.fn()
+  const changeSpy = jest.fn()
+  const inputSpy = jest.fn()
+
+  const node = document.createElement('input')
+  node.setAttribute('type', 'checkbox')
+  node.disabled = true
+
+  node.addEventListener('click', clickSpy)
+  node.addEventListener('change', changeSpy)
+  node.addEventListener('change', inputSpy)
+
+  fireEvent.click(node)
+
+  expect(clickSpy).not.toHaveBeenCalled()
+  expect(changeSpy).not.toHaveBeenCalled()
+  expect(inputSpy).not.toHaveBeenCalled()
+})
+
+test('does not fire click event if is contained by a parent', () => {
+  const clickSpy = jest.fn()
+  const changeSpy = jest.fn()
+  const inputSpy = jest.fn()
+
+  const parentNode = document.createElement('fieldset')
+  parentNode.disabled = true
+
+  const node = document.createElement('input')
+  node.setAttribute('type', 'checkbox')
+  node.addEventListener('click', clickSpy)
+  node.addEventListener('change', changeSpy)
+  node.addEventListener('change', inputSpy)
+  parentNode.appendChild(node)
+
+  fireEvent.click(node)
+
+  expect(clickSpy).not.toHaveBeenCalled()
+  expect(changeSpy).not.toHaveBeenCalled()
+  expect(inputSpy).not.toHaveBeenCalled()
+})
+
+test('does fires the click event if is contained by a parent that can not be disabled', () => {
+  const clickSpy = jest.fn()
+  const changeSpy = jest.fn()
+  const inputSpy = jest.fn()
+
+  const parentNode = document.createElement('div')
+  parentNode.disabled = true
+
+  const node = document.createElement('input')
+  node.setAttribute('type', 'checkbox')
+  node.addEventListener('click', clickSpy)
+  node.addEventListener('change', changeSpy)
+  node.addEventListener('change', inputSpy)
+  parentNode.appendChild(node)
+
+  fireEvent.click(node)
+
+  expect(clickSpy).toHaveBeenCalled()
+  expect(changeSpy).toHaveBeenCalled()
+  expect(inputSpy).toHaveBeenCalled()
+})
