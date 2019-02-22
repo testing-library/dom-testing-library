@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it returns immediately if the callback returns the value before any mutations 1`] = `
+<div
+  data-test-attribute="something changed once"
+/>
+`;
+
+exports[`it throws if timeout is exceeded 1`] = `
+Array [
+  [Error: Timed out in waitForElementToBeRemoved.],
+]
+`;
+
+exports[`it throws if timeout is exceeded 2`] = `
+<div
+  data-test-attribute="something changed twice"
+/>
+`;
+
+exports[`it waits characterData mutation 1`] = `
+<div>
+  <div>
+    initial text
+  </div>
+</div>
+`;
+
+exports[`it waits characterData mutation 2`] = `
+<div>
+  <div>
+    new text
+  </div>
+</div>
+`;
+
+exports[`it waits for the callback to throw error or a falsy value and only reacts to DOM mutations 1`] = `
+<div>
+  <div
+    data-testid="initial-element"
+  >
+    
+    
+  </div>
+  <div
+    data-testid="another-element-that-causes-mutation-1"
+  />
+  <div
+    data-testid="another-element-that-causes-mutation-2"
+  />
+</div>
+`;
