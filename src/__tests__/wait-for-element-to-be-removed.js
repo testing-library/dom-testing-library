@@ -185,36 +185,45 @@ test('it throws if timeout is exceeded', async () => {
 test('it returns error immediately if there callback returns falsy value or error before any mutations', async () => {
   const {container, getByTestId} = render(``)
 
-  const callback = jest
+  const callbackForError = jest
     .fn(() => getByTestId('initial-element'))
     .mockName('callback')
+  const callbackForFalsy = jest.fn(() => false).mockName('callback')
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  waitForElementToBeRemoved(callback, {
+  waitForElementToBeRemoved(callbackForError, {
+    container,
+    timeout: 70,
+    mutationObserverOptions: {attributes: true},
+  }).then(successHandler, errorHandler)
+  waitForElementToBeRemoved(callbackForFalsy, {
     container,
     timeout: 70,
     mutationObserverOptions: {attributes: true},
   }).then(successHandler, errorHandler)
 
   // One synchronous `callback` call is expected.
-  expect(callback).toHaveBeenCalledTimes(1)
+  expect(callbackForError).toHaveBeenCalledTimes(1)
+  expect(callbackForFalsy).toHaveBeenCalledTimes(1)
 
   // The promise callbacks are expected to be called asyncronously.
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
   await wait()
   expect(successHandler).toHaveBeenCalledTimes(0)
-  expect(errorHandler).toHaveBeenCalledTimes(1)
+  expect(errorHandler).toHaveBeenCalledTimes(2)
 
   container.setAttribute('data-test-attribute', 'something changed once')
   await skipSomeTimeForMutationObserver(50)
 
   // No more calls are expected.
-  expect(callback).toHaveBeenCalledTimes(1)
+  expect(callbackForError).toHaveBeenCalledTimes(1)
+  expect(callbackForFalsy).toHaveBeenCalledTimes(1)
   expect(successHandler).toHaveBeenCalledTimes(0)
-  expect(errorHandler).toHaveBeenCalledTimes(1)
+  expect(errorHandler).toHaveBeenCalledTimes(2)
   expect(errorHandler.mock.calls[0]).toMatchSnapshot()
+  expect(errorHandler.mock.calls[1]).toMatchSnapshot()
 })
 
 test('works if a container is not defined', async () => {
