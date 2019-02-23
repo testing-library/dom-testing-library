@@ -78,9 +78,8 @@ test('it waits for the callback to throw error or a falsy value and only reacts 
 
   expect(callback).toHaveBeenCalledTimes(1 + mutationsAndCallbacks.length)
   expect(successHandler).toHaveBeenCalledTimes(1)
-  expect(successHandler).toHaveBeenCalledWith(true)
+  expect(successHandler.mock.calls[0]).toMatchSnapshot()
   expect(errorHandler).toHaveBeenCalledTimes(0)
-  expect(container).toMatchSnapshot()
 })
 
 test('it waits characterData mutation', async () => {
@@ -101,7 +100,6 @@ test('it waits characterData mutation', async () => {
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
   expect(callback).toHaveBeenCalledTimes(1)
-  expect(container).toMatchSnapshot()
 
   await skipSomeTimeForMutationObserver()
 
@@ -113,9 +111,9 @@ test('it waits characterData mutation', async () => {
   await skipSomeTimeForMutationObserver()
 
   expect(successHandler).toHaveBeenCalledTimes(1)
+  expect(successHandler.mock.calls[0]).toMatchSnapshot()
   expect(errorHandler).toHaveBeenCalledTimes(0)
   expect(callback).toHaveBeenCalledTimes(2)
-  expect(container).toMatchSnapshot()
 })
 
 test('it waits for the attributes mutation', async () => {
@@ -147,6 +145,7 @@ test('it waits for the attributes mutation', async () => {
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(successHandler).toHaveBeenCalledTimes(1)
+  expect(successHandler.mock.calls[0]).toMatchSnapshot()
   expect(errorHandler).toHaveBeenCalledTimes(0)
 })
 
@@ -181,10 +180,9 @@ test('it throws if timeout is exceeded', async () => {
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(1)
   expect(errorHandler.mock.calls[0]).toMatchSnapshot()
-  expect(container).toMatchSnapshot()
 })
 
-test('it returns immediately if the callback returns the value before any mutations', async () => {
+test('it returns error immediately if there callback returns falsy value or error before any mutations', async () => {
   const {container, getByTestId} = render(``)
 
   const callback = jest
@@ -206,18 +204,17 @@ test('it returns immediately if the callback returns the value before any mutati
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
   await wait()
-  expect(successHandler).toHaveBeenCalledTimes(1)
-  expect(errorHandler).toHaveBeenCalledTimes(0)
+  expect(successHandler).toHaveBeenCalledTimes(0)
+  expect(errorHandler).toHaveBeenCalledTimes(1)
 
   container.setAttribute('data-test-attribute', 'something changed once')
   await skipSomeTimeForMutationObserver(50)
 
   // No more calls are expected.
   expect(callback).toHaveBeenCalledTimes(1)
-  expect(successHandler).toHaveBeenCalledTimes(1)
-  expect(errorHandler).toHaveBeenCalledTimes(0)
-
-  expect(container).toMatchSnapshot()
+  expect(successHandler).toHaveBeenCalledTimes(0)
+  expect(errorHandler).toHaveBeenCalledTimes(1)
+  expect(errorHandler.mock.calls[0]).toMatchSnapshot()
 })
 
 test('works if a container is not defined', async () => {
@@ -251,6 +248,7 @@ test('works if a container is not defined', async () => {
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(successHandler).toHaveBeenCalledTimes(1)
+  expect(successHandler.mock.calls[0]).toMatchSnapshot()
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
   document.getElementsByTagName('html')[0].innerHTML = '' // cleans the document
@@ -271,8 +269,7 @@ test('throws an error if callback is not a function', async () => {
 
   await skipSomeTimeForMutationObserver()
 
-  expect(errorHandler).toHaveBeenLastCalledWith(
-    'waitForElementToBeRemoved requires a callback as the first parameter',
-  )
+  expect(errorHandler).toHaveBeenCalledTimes(1)
+  expect(errorHandler.mock.calls[0]).toMatchSnapshot()
   expect(successHandler).toHaveBeenCalledTimes(0)
 })
