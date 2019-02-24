@@ -6,7 +6,6 @@ import document from './helpers/document'
 
 jest.useFakeTimers()
 
-// Using `setTimeout` >30ms instead of `wait` here because `mutationobserver-shim` uses `setTimeout` ~30ms.
 const skipSomeTimeForMutationObserver = (delayMs = 50) => {
   jest.advanceTimersByTime(delayMs)
   jest.runAllImmediates()
@@ -74,7 +73,7 @@ test('it waits for the callback to throw error or a falsy value and only reacts 
   for (const [mutationImpl, callbackImpl] of mutationsAndCallbacks) {
     callback.mockImplementation(callbackImpl)
     mutationImpl()
-    skipSomeTimeForMutationObserver() // eslint-disable-line no-await-in-loop
+    skipSomeTimeForMutationObserver()
   }
 
   await promise
@@ -99,7 +98,6 @@ test('it waits characterData mutation', async () => {
     errorHandler,
   )
 
-  // Promise callbacks are always asynchronous.
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
   expect(callback).toHaveBeenCalledTimes(1)
@@ -209,11 +207,9 @@ test('it returns error immediately if there callback returns falsy value or erro
     mutationObserverOptions: {attributes: true},
   }).then(successHandler, errorHandler)
 
-  // One synchronous `callback` call is expected.
   expect(callbackForError).toHaveBeenCalledTimes(1)
   expect(callbackForFalsy).toHaveBeenCalledTimes(1)
 
-  // The promise callbacks are expected to be called asyncronously.
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
   await wait()
@@ -223,7 +219,6 @@ test('it returns error immediately if there callback returns falsy value or erro
   container.setAttribute('data-test-attribute', 'something changed once')
   skipSomeTimeForMutationObserver(50)
 
-  // No more calls are expected.
   expect(callbackForError).toHaveBeenCalledTimes(1)
   expect(callbackForFalsy).toHaveBeenCalledTimes(1)
   expect(successHandler).toHaveBeenCalledTimes(0)
