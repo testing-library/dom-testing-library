@@ -16,7 +16,7 @@ function waitForElementToBeRemoved(
   return new Promise((resolve, reject) => {
     if (typeof callback !== 'function') {
       reject(
-        'waitForElementToBeRemoved requires a callback as the first parameter',
+        'waitForElementToBeRemoved requires a function as the first parameter',
       )
     }
 

@@ -38,7 +38,7 @@ Array [
 
 exports[`throws an error if callback is not a function 1`] = `
 Array [
-  "waitForElementToBeRemoved requires a callback as the first parameter",
+  "waitForElementToBeRemoved requires a function as the first parameter",
 ]
 `;
 
