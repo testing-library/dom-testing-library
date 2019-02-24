@@ -4,12 +4,13 @@ import 'jest-dom/extend-expect'
 import {render} from './helpers/test-utils'
 import document from './helpers/document'
 
-const skipSomeTime = delayMs =>
-  new Promise(resolve => setTimeout(resolve, delayMs))
+jest.useFakeTimers()
 
 // Using `setTimeout` >30ms instead of `wait` here because `mutationobserver-shim` uses `setTimeout` ~30ms.
-const skipSomeTimeForMutationObserver = (delayMs = 50) =>
-  skipSomeTime(delayMs, 50)
+const skipSomeTimeForMutationObserver = (delayMs = 50) => {
+  jest.advanceTimersByTime(delayMs)
+  jest.runAllImmediates()
+}
 
 test('it waits for the callback to throw error or a falsy value and only reacts to DOM mutations', async () => {
   const {container, getByTestId} = render(
@@ -52,7 +53,7 @@ test('it waits for the callback to throw error or a falsy value and only reacts 
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  waitForElementToBeRemoved(callback, {container}).then(
+  const promise = waitForElementToBeRemoved(callback, {container}).then(
     successHandler,
     errorHandler,
   )
@@ -62,7 +63,7 @@ test('it waits for the callback to throw error or a falsy value and only reacts 
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
-  await skipSomeTimeForMutationObserver()
+  skipSomeTimeForMutationObserver()
 
   // No more expected calls without DOM mutations.
   expect(callback).toHaveBeenCalledTimes(1)
@@ -73,8 +74,10 @@ test('it waits for the callback to throw error or a falsy value and only reacts 
   for (const [mutationImpl, callbackImpl] of mutationsAndCallbacks) {
     callback.mockImplementation(callbackImpl)
     mutationImpl()
-    await skipSomeTimeForMutationObserver() // eslint-disable-line no-await-in-loop
+    skipSomeTimeForMutationObserver() // eslint-disable-line no-await-in-loop
   }
+
+  await promise
 
   expect(callback).toHaveBeenCalledTimes(1 + mutationsAndCallbacks.length)
   expect(successHandler).toHaveBeenCalledTimes(1)
@@ -91,7 +94,7 @@ test('it waits characterData mutation', async () => {
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  waitForElementToBeRemoved(callback, {container}).then(
+  const promise = waitForElementToBeRemoved(callback, {container}).then(
     successHandler,
     errorHandler,
   )
@@ -101,14 +104,15 @@ test('it waits characterData mutation', async () => {
   expect(errorHandler).toHaveBeenCalledTimes(0)
   expect(callback).toHaveBeenCalledTimes(1)
 
-  await skipSomeTimeForMutationObserver()
+  skipSomeTimeForMutationObserver()
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
   container.querySelector('div').innerHTML = 'new text'
-  await skipSomeTimeForMutationObserver()
+  skipSomeTimeForMutationObserver()
+  await promise
 
   expect(successHandler).toHaveBeenCalledTimes(1)
   expect(successHandler.mock.calls[0]).toMatchSnapshot()
@@ -126,7 +130,7 @@ test('it waits for the attributes mutation', async () => {
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  waitForElementToBeRemoved(callback, {
+  const promise = waitForElementToBeRemoved(callback, {
     container,
   }).then(successHandler, errorHandler)
 
@@ -134,14 +138,15 @@ test('it waits for the attributes mutation', async () => {
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
-  await skipSomeTimeForMutationObserver()
+  skipSomeTimeForMutationObserver()
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
   container.removeAttribute('data-test-attribute')
-  await skipSomeTimeForMutationObserver()
+  skipSomeTimeForMutationObserver()
+  await promise
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(successHandler).toHaveBeenCalledTimes(1)
@@ -156,7 +161,7 @@ test('it throws if timeout is exceeded', async () => {
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  waitForElementToBeRemoved(callback, {
+  const promise = waitForElementToBeRemoved(callback, {
     container,
     timeout: 70,
     mutationObserverOptions: {attributes: true},
@@ -167,14 +172,15 @@ test('it throws if timeout is exceeded', async () => {
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
   container.setAttribute('data-test-attribute', 'something changed once')
-  await skipSomeTimeForMutationObserver(50)
+  skipSomeTimeForMutationObserver(50)
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
   container.setAttribute('data-test-attribute', 'something changed twice')
-  await skipSomeTimeForMutationObserver(50)
+  skipSomeTimeForMutationObserver(50)
+  await promise
 
   expect(callback).toHaveBeenCalledTimes(3)
   expect(successHandler).toHaveBeenCalledTimes(0)
@@ -215,7 +221,7 @@ test('it returns error immediately if there callback returns falsy value or erro
   expect(errorHandler).toHaveBeenCalledTimes(2)
 
   container.setAttribute('data-test-attribute', 'something changed once')
-  await skipSomeTimeForMutationObserver(50)
+  skipSomeTimeForMutationObserver(50)
 
   // No more calls are expected.
   expect(callbackForError).toHaveBeenCalledTimes(1)
@@ -237,23 +243,28 @@ test('works if a container is not defined', async () => {
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
+  let promise
   if (typeof window === 'undefined') {
-    waitForElementToBeRemoved(callback, {container: document}).then(
+    promise = waitForElementToBeRemoved(callback, {container: document}).then(
       successHandler,
       errorHandler,
     )
   } else {
-    waitForElementToBeRemoved(callback).then(successHandler, errorHandler)
+    promise = waitForElementToBeRemoved(callback).then(
+      successHandler,
+      errorHandler,
+    )
   }
 
-  await skipSomeTimeForMutationObserver()
+  skipSomeTimeForMutationObserver()
 
   expect(callback).toHaveBeenCalledTimes(1)
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
   el.innerHTML = 'Changed!'
-  await skipSomeTimeForMutationObserver()
+  skipSomeTimeForMutationObserver()
+  await promise
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(successHandler).toHaveBeenCalledTimes(1)
@@ -267,16 +278,18 @@ test('throws an error if callback is not a function', async () => {
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
+  let promise
   if (typeof window === 'undefined') {
-    waitForElementToBeRemoved(undefined, {container: document}).then(
+    promise = waitForElementToBeRemoved(undefined, {container: document}).then(
       successHandler,
       errorHandler,
     )
   } else {
-    waitForElementToBeRemoved().then(successHandler, errorHandler)
+    promise = waitForElementToBeRemoved().then(successHandler, errorHandler)
   }
 
-  await skipSomeTimeForMutationObserver()
+  skipSomeTimeForMutationObserver()
+  await promise
 
   expect(errorHandler).toHaveBeenCalledTimes(1)
   expect(errorHandler.mock.calls[0]).toMatchSnapshot()
