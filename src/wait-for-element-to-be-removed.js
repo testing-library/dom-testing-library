@@ -22,16 +22,14 @@ function waitForElementToBeRemoved(
 
     // Check if the element is not present synchronously,
     // As the name waitForElementToBeRemoved should check `present` --> `removed`
-    ;(function checkElementPresent() {
-      try {
-        const result = callback()
-        if (!result) {
-          onDone(new Error('Element is not present in the DOM.'), true)
-        }
-      } catch (error) {
+    try {
+      const result = callback()
+      if (!result) {
         onDone(new Error('Element is not present in the DOM.'), true)
       }
-    })()
+    } catch (error) {
+      onDone(new Error('Element is not present in the DOM.'), true)
+    }
 
     const timer = setTimeout(onTimeout, timeout)
     const observer = newMutationObserver(onMutation)
