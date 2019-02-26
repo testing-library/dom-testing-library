@@ -12,6 +12,8 @@ Array [
 ]
 `;
 
+exports[`it returns error immediately if there callback returns falsy value or error before any mutations 3`] = `undefined`;
+
 exports[`it throws if timeout is exceeded 1`] = `
 Array [
   [Error: Timed out in waitForElementToBeRemoved.],

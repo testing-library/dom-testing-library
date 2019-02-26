@@ -187,12 +187,17 @@ test('it throws if timeout is exceeded', async () => {
 })
 
 test('it returns error immediately if there callback returns falsy value or error before any mutations', async () => {
-  const {container, getByTestId} = render(``)
+  const {container, getByTestId, queryByTestId, queryAllByTestId} = render(``)
 
   const callbackForError = jest
     .fn(() => getByTestId('initial-element'))
     .mockName('callback')
-  const callbackForFalsy = jest.fn(() => false).mockName('callback')
+  const callbackForFalsy = jest
+    .fn(() => queryByTestId('initial-element'))
+    .mockName('callback')
+  const callbackForEmptyArray = jest
+    .fn(() => queryAllByTestId('initial-element'))
+    .mockName('callback')
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
@@ -206,15 +211,21 @@ test('it returns error immediately if there callback returns falsy value or erro
     timeout: 70,
     mutationObserverOptions: {attributes: true},
   }).then(successHandler, errorHandler)
+  waitForElementToBeRemoved(callbackForEmptyArray, {
+    container,
+    timeout: 70,
+    mutationObserverOptions: {attributes: true},
+  }).then(successHandler, errorHandler)
 
   expect(callbackForError).toHaveBeenCalledTimes(1)
   expect(callbackForFalsy).toHaveBeenCalledTimes(1)
+  expect(callbackForEmptyArray).toHaveBeenCalledTimes(1)
 
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
   await wait()
   expect(successHandler).toHaveBeenCalledTimes(0)
-  expect(errorHandler).toHaveBeenCalledTimes(2)
+  expect(errorHandler).toHaveBeenCalledTimes(3)
 
   container.setAttribute('data-test-attribute', 'something changed once')
   skipSomeTimeForMutationObserver(50)
@@ -222,9 +233,10 @@ test('it returns error immediately if there callback returns falsy value or erro
   expect(callbackForError).toHaveBeenCalledTimes(1)
   expect(callbackForFalsy).toHaveBeenCalledTimes(1)
   expect(successHandler).toHaveBeenCalledTimes(0)
-  expect(errorHandler).toHaveBeenCalledTimes(2)
+  expect(errorHandler).toHaveBeenCalledTimes(3)
   expect(errorHandler.mock.calls[0]).toMatchSnapshot()
   expect(errorHandler.mock.calls[1]).toMatchSnapshot()
+  expect(errorHandler.mock.calls[3]).toMatchSnapshot()
 })
 
 test('works if a container is not defined', async () => {
