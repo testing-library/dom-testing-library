@@ -16,7 +16,9 @@ function waitForElementToBeRemoved(
   return new Promise((resolve, reject) => {
     if (typeof callback !== 'function') {
       reject(
-        'waitForElementToBeRemoved requires a function as the first parameter',
+        new Error(
+          'waitForElementToBeRemoved requires a function as the first parameter',
+        ),
       )
     }
 
@@ -24,11 +26,15 @@ function waitForElementToBeRemoved(
     // As the name waitForElementToBeRemoved should check `present` --> `removed`
     try {
       const result = callback()
-      if (!result) {
-        onDone(new Error('Element is not present in the DOM.'), true)
+      if (!result || (Array.isArray(result) && !result.length)) {
+        onDone(
+          new Error(
+            'The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal.',
+          ),
+        )
       }
     } catch (error) {
-      onDone(new Error('Element is not present in the DOM.'), true)
+      onDone(error)
     }
 
     const timer = setTimeout(onTimeout, timeout)
