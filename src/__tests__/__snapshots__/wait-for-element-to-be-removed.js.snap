@@ -32,7 +32,7 @@ Array [
 ]
 `;
 
-exports[`it waits for the callback to throw error or a falsy value and only reacts to DOM mutations 1`] = `
+exports[`it waits for the callback to throw error, a falsy value or empty array and only reacts to DOM mutations 1`] = `
 Array [
   true,
 ]

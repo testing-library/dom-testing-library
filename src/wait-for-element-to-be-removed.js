@@ -53,7 +53,7 @@ function waitForElementToBeRemoved(
     function onMutation() {
       try {
         const result = callback()
-        if (!result) {
+        if (!result || (Array.isArray(result) && !result.length)) {
           onDone(null, true)
         }
         // If `callback` returns truthy value, wait for the next mutation or timeout.

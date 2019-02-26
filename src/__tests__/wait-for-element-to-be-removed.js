@@ -11,8 +11,8 @@ const skipSomeTimeForMutationObserver = (delayMs = 50) => {
   jest.runAllImmediates()
 }
 
-test('it waits for the callback to throw error or a falsy value and only reacts to DOM mutations', async () => {
-  const {container, getByTestId} = render(
+test('it waits for the callback to throw error, a falsy value or empty array and only reacts to DOM mutations', async () => {
+  const {container, getByTestId, queryAllByTestId} = render(
     `<div data-testid="initial-element">
     </div>`,
   )
@@ -35,6 +35,10 @@ test('it waits for the callback to throw error or a falsy value and only reacts 
   const mutationsAndCallbacks = [
     [makeMutationFn(), () => true],
     [makeMutationFn(), () => getByTestId('the-element-we-are-looking-for')],
+    [
+      makeMutationFn(),
+      () => queryAllByTestId('the-element-we-are-looking-for'),
+    ],
     [
       () =>
         container.removeChild(getByTestId('the-element-we-are-looking-for')),
