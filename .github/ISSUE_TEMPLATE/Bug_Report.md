@@ -16,6 +16,8 @@ We'll probably ask you to submit the fix (after giving some direction). If
 you've never done that before, that's great! Check this free short video
 tutorial to learn how: http://kcd.im/pull-request
 
+If this is an issue with the documentation, please file an issue in the docs repo:
+https://github.com/alexkrolick/testing-library-docs
 -->
 
 - `dom-testing-library` version:
