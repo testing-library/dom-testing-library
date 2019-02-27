@@ -21,6 +21,7 @@ function waitForElementToBeRemoved(
         ),
       )
     }
+    const timer = setTimeout(onTimeout, timeout)
 
     // Check if the element is not present synchronously,
     // As the name waitForElementToBeRemoved should check `present` --> `removed`
@@ -37,7 +38,6 @@ function waitForElementToBeRemoved(
       onDone(error)
     }
 
-    const timer = setTimeout(onTimeout, timeout)
     const observer = newMutationObserver(onMutation)
     observer.observe(container, mutationObserverOptions)
     function onDone(error, result) {
@@ -53,7 +53,7 @@ function waitForElementToBeRemoved(
     function onMutation() {
       try {
         const result = callback()
-        if (!result) {
+        if (!result || (Array.isArray(result) && !result.length)) {
           onDone(null, true)
         }
         // If `callback` returns truthy value, wait for the next mutation or timeout.
