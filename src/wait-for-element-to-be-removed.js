@@ -34,10 +34,10 @@ function waitForElementToBeRemoved(
             'The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal.',
           ),
         )
+      } else {
+        // Only observe if synchronous test passes
+        observer.observe(container, mutationObserverOptions)
       }
-
-      // Only observe if synchronous test passes
-      observer.observe(container, mutationObserverOptions)
     } catch (error) {
       onDone(error)
     }
