@@ -22,6 +22,7 @@ function waitForElementToBeRemoved(
       )
     }
     const timer = setTimeout(onTimeout, timeout)
+    const observer = newMutationObserver(onMutation)
 
     // Check if the element is not present synchronously,
     // As the name waitForElementToBeRemoved should check `present` --> `removed`
@@ -34,12 +35,13 @@ function waitForElementToBeRemoved(
           ),
         )
       }
+
+      // Only observe if synchronous test passes
+      observer.observe(container, mutationObserverOptions)
     } catch (error) {
       onDone(error)
     }
 
-    const observer = newMutationObserver(onMutation)
-    observer.observe(container, mutationObserverOptions)
     function onDone(error, result) {
       const setImmediate = getSetImmediate()
       clearTimeout(timer)
