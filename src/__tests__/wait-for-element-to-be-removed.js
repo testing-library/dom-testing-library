@@ -1,4 +1,4 @@
-import {waitForElementToBeRemoved, wait} from '../'
+import {waitForElementToBeRemoved} from '../'
 // adds special assertions like toBeTruthy
 import 'jest-dom/extend-expect'
 import {render} from './helpers/test-utils'
@@ -221,17 +221,17 @@ test('it returns error immediately if there callback returns falsy value, empty 
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  waitForElementToBeRemoved(callbackForError, {
+  const errorPromise = waitForElementToBeRemoved(callbackForError, {
     container,
     timeout: 70,
     mutationObserverOptions: {attributes: true},
   }).then(successHandler, errorHandler)
-  waitForElementToBeRemoved(callbackForFalsy, {
+  const falsyPromise = waitForElementToBeRemoved(callbackForFalsy, {
     container,
     timeout: 70,
     mutationObserverOptions: {attributes: true},
   }).then(successHandler, errorHandler)
-  waitForElementToBeRemoved(callbackForEmptyArray, {
+  const emptyArrayPromise = waitForElementToBeRemoved(callbackForEmptyArray, {
     container,
     timeout: 70,
     mutationObserverOptions: {attributes: true},
@@ -243,7 +243,11 @@ test('it returns error immediately if there callback returns falsy value, empty 
 
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(0)
-  await wait()
+
+  await errorPromise
+  await falsyPromise
+  await emptyArrayPromise
+
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(3)
 
