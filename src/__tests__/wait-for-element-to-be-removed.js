@@ -11,8 +11,8 @@ const skipSomeTimeForMutationObserver = (delayMs = 50) => {
   jest.runAllImmediates()
 }
 
-test('it waits for the callback to throw error or a falsy value and only reacts to DOM mutations', async () => {
-  const {container, getByTestId} = render(
+test('it waits for the callback to throw error, a falsy value or empty array and only reacts to DOM mutations', async () => {
+  const {container, getByTestId, queryAllByTestId} = render(
     `<div data-testid="initial-element">
     </div>`,
   )
@@ -35,6 +35,10 @@ test('it waits for the callback to throw error or a falsy value and only reacts 
   const mutationsAndCallbacks = [
     [makeMutationFn(), () => true],
     [makeMutationFn(), () => getByTestId('the-element-we-are-looking-for')],
+    [
+      makeMutationFn(),
+      () => queryAllByTestId('the-element-we-are-looking-for'),
+    ],
     [
       () =>
         container.removeChild(getByTestId('the-element-we-are-looking-for')),
@@ -80,7 +84,11 @@ test('it waits for the callback to throw error or a falsy value and only reacts 
 
   expect(callback).toHaveBeenCalledTimes(1 + mutationsAndCallbacks.length)
   expect(successHandler).toHaveBeenCalledTimes(1)
-  expect(successHandler.mock.calls[0]).toMatchSnapshot()
+  expect(successHandler.mock.calls[0]).toMatchInlineSnapshot(`
+Array [
+  true,
+]
+`)
   expect(errorHandler).toHaveBeenCalledTimes(0)
 })
 
@@ -113,7 +121,11 @@ test('it waits characterData mutation', async () => {
   await promise
 
   expect(successHandler).toHaveBeenCalledTimes(1)
-  expect(successHandler.mock.calls[0]).toMatchSnapshot()
+  expect(successHandler.mock.calls[0]).toMatchInlineSnapshot(`
+Array [
+  true,
+]
+`)
   expect(errorHandler).toHaveBeenCalledTimes(0)
   expect(callback).toHaveBeenCalledTimes(2)
 })
@@ -148,7 +160,11 @@ test('it waits for the attributes mutation', async () => {
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(successHandler).toHaveBeenCalledTimes(1)
-  expect(successHandler.mock.calls[0]).toMatchSnapshot()
+  expect(successHandler.mock.calls[0]).toMatchInlineSnapshot(`
+Array [
+  true,
+]
+`)
   expect(errorHandler).toHaveBeenCalledTimes(0)
 })
 
@@ -183,10 +199,14 @@ test('it throws if timeout is exceeded', async () => {
   expect(callback).toHaveBeenCalledTimes(3)
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(1)
-  expect(errorHandler.mock.calls[0]).toMatchSnapshot()
+  expect(errorHandler.mock.calls[0]).toMatchInlineSnapshot(`
+Array [
+  [Error: Timed out in waitForElementToBeRemoved.],
+]
+`)
 })
 
-test('it returns error immediately if there callback returns falsy value or error before any mutations', async () => {
+test('it returns error immediately if there callback returns falsy value, empty array or error before any mutations', async () => {
   const {container, getByTestId, queryByTestId, queryAllByTestId} = render(``)
 
   const callbackForError = jest
@@ -235,8 +255,16 @@ test('it returns error immediately if there callback returns falsy value or erro
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(3)
   expect(errorHandler.mock.calls[0]).toMatchSnapshot()
-  expect(errorHandler.mock.calls[1]).toMatchSnapshot()
-  expect(errorHandler.mock.calls[3]).toMatchSnapshot()
+  expect(errorHandler.mock.calls[1]).toMatchInlineSnapshot(`
+Array [
+  [Error: The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal.],
+]
+`)
+  expect(errorHandler.mock.calls[2]).toMatchInlineSnapshot(`
+Array [
+  [Error: The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal.],
+]
+`)
 })
 
 test('works if a container is not defined', async () => {
@@ -275,7 +303,11 @@ test('works if a container is not defined', async () => {
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(successHandler).toHaveBeenCalledTimes(1)
-  expect(successHandler.mock.calls[0]).toMatchSnapshot()
+  expect(successHandler.mock.calls[0]).toMatchInlineSnapshot(`
+Array [
+  true,
+]
+`)
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
   document.getElementsByTagName('html')[0].innerHTML = '' // cleans the document
@@ -299,6 +331,10 @@ test('throws an error if callback is not a function', async () => {
   await promise
 
   expect(errorHandler).toHaveBeenCalledTimes(1)
-  expect(errorHandler.mock.calls[0]).toMatchSnapshot()
+  expect(errorHandler.mock.calls[0]).toMatchInlineSnapshot(`
+Array [
+  [Error: waitForElementToBeRemoved requires a function as the first parameter],
+]
+`)
   expect(successHandler).toHaveBeenCalledTimes(0)
 })
