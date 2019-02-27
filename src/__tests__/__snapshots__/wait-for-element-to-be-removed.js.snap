@@ -1,51 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`it returns error immediately if there callback returns falsy value or error before any mutations 1`] = `
+exports[`it returns error immediately if there callback returns falsy value, empty array or error before any mutations 1`] = `
 Array [
-  [ReferenceError: timer is not defined],
-]
-`;
+  [Error: Unable to find an element by: [data-testid="initial-element"]
 
-exports[`it returns error immediately if there callback returns falsy value or error before any mutations 2`] = `
-Array [
-  [ReferenceError: timer is not defined],
-]
-`;
-
-exports[`it returns error immediately if there callback returns falsy value or error before any mutations 3`] = `undefined`;
-
-exports[`it throws if timeout is exceeded 1`] = `
-Array [
-  [Error: Timed out in waitForElementToBeRemoved.],
-]
-`;
-
-exports[`it waits characterData mutation 1`] = `
-Array [
-  true,
-]
-`;
-
-exports[`it waits for the attributes mutation 1`] = `
-Array [
-  true,
-]
-`;
-
-exports[`it waits for the callback to throw error or a falsy value and only reacts to DOM mutations 1`] = `
-Array [
-  true,
-]
-`;
-
-exports[`throws an error if callback is not a function 1`] = `
-Array [
-  [Error: waitForElementToBeRemoved requires a function as the first parameter],
-]
-`;
-
-exports[`works if a container is not defined 1`] = `
-Array [
-  true,
+[36m<div />[39m],
 ]
 `;
