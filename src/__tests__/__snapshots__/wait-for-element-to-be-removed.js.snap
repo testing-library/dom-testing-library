@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`it returns error immediately if there callback returns falsy value, empty array or error before any mutations 1`] = `
-Array [
-  [Error: Unable to find an element by: [data-testid="initial-element"]
-
-[36m<div />[39m],
-]
-`;

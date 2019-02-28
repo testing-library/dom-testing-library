@@ -84,11 +84,7 @@ test('it waits for the callback to throw error, a falsy value or empty array and
 
   expect(callback).toHaveBeenCalledTimes(1 + mutationsAndCallbacks.length)
   expect(successHandler).toHaveBeenCalledTimes(1)
-  expect(successHandler.mock.calls[0]).toMatchInlineSnapshot(`
-Array [
-  true,
-]
-`)
+  expect(successHandler).toHaveBeenCalledWith(true)
   expect(errorHandler).toHaveBeenCalledTimes(0)
 })
 
@@ -121,11 +117,7 @@ test('it waits characterData mutation', async () => {
   await promise
 
   expect(successHandler).toHaveBeenCalledTimes(1)
-  expect(successHandler.mock.calls[0]).toMatchInlineSnapshot(`
-Array [
-  true,
-]
-`)
+  expect(successHandler).toHaveBeenCalledWith(true)
   expect(errorHandler).toHaveBeenCalledTimes(0)
   expect(callback).toHaveBeenCalledTimes(2)
 })
@@ -160,11 +152,7 @@ test('it waits for the attributes mutation', async () => {
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(successHandler).toHaveBeenCalledTimes(1)
-  expect(successHandler.mock.calls[0]).toMatchInlineSnapshot(`
-Array [
-  true,
-]
-`)
+  expect(successHandler).toHaveBeenCalledWith(true)
   expect(errorHandler).toHaveBeenCalledTimes(0)
 })
 
@@ -199,11 +187,9 @@ test('it throws if timeout is exceeded', async () => {
   expect(callback).toHaveBeenCalledTimes(3)
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(1)
-  expect(errorHandler.mock.calls[0]).toMatchInlineSnapshot(`
-Array [
-  [Error: Timed out in waitForElementToBeRemoved.],
-]
-`)
+  expect(errorHandler).toHaveBeenCalledWith(
+    new Error('Timed out in waitForElementToBeRemoved.'),
+  )
 })
 
 test('it returns error immediately if there callback returns falsy value, empty array or error before any mutations', async () => {
@@ -258,17 +244,25 @@ test('it returns error immediately if there callback returns falsy value, empty 
   expect(callbackForFalsy).toHaveBeenCalledTimes(1)
   expect(successHandler).toHaveBeenCalledTimes(0)
   expect(errorHandler).toHaveBeenCalledTimes(3)
-  expect(errorHandler.mock.calls[0]).toMatchSnapshot()
-  expect(errorHandler.mock.calls[1]).toMatchInlineSnapshot(`
+  expect(errorHandler.mock.calls[0]).toMatchInlineSnapshot(`
 Array [
-  [Error: The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal.],
+  [Error: Unable to find an element by: [data-testid="initial-element"]
+
+[36m<div />[39m],
 ]
 `)
-  expect(errorHandler.mock.calls[2]).toMatchInlineSnapshot(`
-Array [
-  [Error: The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal.],
-]
-`)
+  expect(errorHandler).toHaveBeenNthCalledWith(
+    2,
+    new Error(
+      'The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal.',
+    ),
+  )
+  expect(errorHandler).toHaveBeenNthCalledWith(
+    3,
+    new Error(
+      'The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal.',
+    ),
+  )
 })
 
 test('works if a container is not defined', async () => {
@@ -307,11 +301,7 @@ test('works if a container is not defined', async () => {
 
   expect(callback).toHaveBeenCalledTimes(2)
   expect(successHandler).toHaveBeenCalledTimes(1)
-  expect(successHandler.mock.calls[0]).toMatchInlineSnapshot(`
-Array [
-  true,
-]
-`)
+  expect(successHandler).toHaveBeenCalledWith(true)
   expect(errorHandler).toHaveBeenCalledTimes(0)
 
   document.getElementsByTagName('html')[0].innerHTML = '' // cleans the document
@@ -335,10 +325,10 @@ test('throws an error if callback is not a function', async () => {
   await promise
 
   expect(errorHandler).toHaveBeenCalledTimes(1)
-  expect(errorHandler.mock.calls[0]).toMatchInlineSnapshot(`
-Array [
-  [Error: waitForElementToBeRemoved requires a function as the first parameter],
-]
-`)
+  expect(errorHandler).toHaveBeenCalledWith(
+    new Error(
+      'waitForElementToBeRemoved requires a function as the first parameter',
+    ),
+  )
   expect(successHandler).toHaveBeenCalledTimes(0)
 })
