@@ -1,5 +1,4 @@
 import {waitForElementToBeRemoved} from '../'
-// adds special assertions like toBeTruthy
 import 'jest-dom/extend-expect'
 import {render} from './helpers/test-utils'
 import document from './helpers/document'
