@@ -35,7 +35,7 @@ function waitForElementToBeRemoved(
           ),
         )
       } else {
-        // Only observe if synchronous test passes
+        // Only observe for mutations only if there is element while checking synchronously
         observer.observe(container, mutationObserverOptions)
       }
     } catch (error) {
