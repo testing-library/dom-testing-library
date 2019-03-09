@@ -1,6 +1,4 @@
 import {fireEvent} from '..'
-import document from './helpers/document'
-import window from './helpers/window'
 
 const eventTypes = [
   {

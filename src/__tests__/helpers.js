@@ -1,17 +1,7 @@
 import {getDocument, newMutationObserver} from '../helpers'
 
-describe('getDocument', () => {
-  if (typeof document === 'undefined') {
-    test('throws an error if window does not exist', () => {
-      expect(() => getDocument()).toThrowError(
-        /Could not find default container/,
-      )
-    })
-  } else {
-    test('returns global document if exists', () => {
-      expect(getDocument()).toBe(document)
-    })
-  }
+test('returns global document if exists', () => {
+  expect(getDocument()).toBe(document)
 })
 
 class DummyClass {

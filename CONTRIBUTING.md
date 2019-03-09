@@ -27,21 +27,6 @@ Thanks for being willing to contribute!
 > branch. Whenever you want to update your version of `master`, do a regular
 > `git pull`.
 
-## Add yourself as a contributor
-
-This project follows the [all contributors][all-contributors] specification.
-To add yourself to the table of contributors on the `README.md`, please use the
-automated script as part of your PR:
-
-```console
-npm run add-contributor
-```
-
-Follow the prompt and commit `.all-contributorsrc` and `README.md` in the PR.
-If you've already added yourself to the list and are making
-a new type of contribution, you can run it again and select the added
-contribution type.
-
 ## Committing and Pushing changes
 
 Please make sure to run the tests before you commit your changes. You can run

@@ -4,11 +4,6 @@ import {render} from './helpers/test-utils'
 
 jest.useFakeTimers()
 
-// const skipSomeTimeForMutationObserver = (delayMs = 50) => {
-//   jest.advanceTimersByTime(delayMs)
-//   jest.runAllImmediates()
-// }
-
 test('requires a function as the first parameter', () => {
   return expect(
     waitForElementToBeRemoved(),

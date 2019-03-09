@@ -11,6 +11,7 @@ function newMutationObserver(onMutation) {
 }
 
 function getDocument() {
+  /* istanbul ignore if */
   if (typeof window === 'undefined') {
     throw new Error('Could not find default container')
   }

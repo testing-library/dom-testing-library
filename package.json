@@ -24,32 +24,36 @@
     "node": ">=8"
   },
   "scripts": {
-    "add-contributor": "kcd-scripts contributors add",
     "build": "kcd-scripts build && kcd-scripts build --bundle --no-clean",
     "lint": "kcd-scripts lint",
     "test": "kcd-scripts test",
     "test:update": "npm test -- --updateSnapshot --coverage",
     "validate": "kcd-scripts validate",
     "setup": "npm install && npm run validate -s",
-    "precommit": "kcd-scripts precommit",
     "dtslint": "dtslint typings"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "kcd-scripts pre-commit"
+    }
   },
   "files": [
     "dist",
     "typings"
   ],
   "dependencies": {
-    "@babel/runtime": "^7.1.5",
+    "@babel/runtime": "^7.3.4",
     "@sheerun/mutationobserver-shim": "^0.3.2",
     "pretty-format": "^24.0.0",
     "wait-for-expect": "^1.1.0"
   },
   "devDependencies": {
-    "dtslint": "^0.3.0",
-    "jest-dom": "^2.1.1",
+    "dtslint": "^0.5.3",
+    "jest-dom": "^3.1.2",
     "jest-in-case": "^1.0.2",
-    "jsdom": "^13.0.0",
-    "kcd-scripts": "^0.46.0"
+    "jest-watch-select-projects": "^0.1.1",
+    "jsdom": "^13.2.0",
+    "kcd-scripts": "^1.1.0"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",
