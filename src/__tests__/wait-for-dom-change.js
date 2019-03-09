@@ -2,7 +2,6 @@ import {waitForDomChange} from '../'
 // adds special assertions like toBeTruthy
 import 'jest-dom/extend-expect'
 import {render} from './helpers/test-utils'
-import document from './helpers/document'
 
 const skipSomeTime = delayMs =>
   new Promise(resolve => setTimeout(resolve, delayMs))
@@ -16,11 +15,7 @@ test('it waits for the next DOM mutation', async () => {
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  if (typeof window === 'undefined') {
-    waitForDomChange({container: document}).then(successHandler, errorHandler)
-  } else {
-    waitForDomChange().then(successHandler, errorHandler)
-  }
+  waitForDomChange().then(successHandler, errorHandler)
 
   // Promise callbacks are always asynchronous.
   expect(successHandler).toHaveBeenCalledTimes(0)
@@ -88,14 +83,7 @@ test('it throws if timeout is exceeded', async () => {
   const successHandler = jest.fn().mockName('successHandler')
   const errorHandler = jest.fn().mockName('errorHandler')
 
-  if (typeof window === 'undefined') {
-    waitForDomChange({container: document, timeout: 70}).then(
-      successHandler,
-      errorHandler,
-    )
-  } else {
-    waitForDomChange({timeout: 70}).then(successHandler, errorHandler)
-  }
+  waitForDomChange({timeout: 70}).then(successHandler, errorHandler)
 
   await skipSomeTimeForMutationObserver(100)
 

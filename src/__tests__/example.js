@@ -2,7 +2,6 @@
 import {getByLabelText, getByText, getByTestId, queryByTestId, wait} from '../'
 // adds special assertions like toHaveTextContent
 import 'jest-dom/extend-expect'
-import document from './helpers/document'
 
 function getExampleDOM() {
   // This is just a raw example of setting up some DOM
