@@ -6,7 +6,6 @@ cache:
 notifications:
   email: false
 node_js:
-  - 'node'
   - '10'
   - '8'
 install: npm install
