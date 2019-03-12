@@ -329,7 +329,8 @@ Object.keys(eventMap).forEach(key => {
         value: files,
       })
     }
-    const window = node.ownerDocument.defaultView
+    // if the node does not have an owner document, then it probably _is_ the owner document
+    const window = (node.ownerDocument || node).defaultView
     const EventConstructor = window[EventType] || window.Event
     const event = new EventConstructor(eventName, eventInit)
     return fireEvent(node, event)
