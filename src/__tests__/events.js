@@ -185,3 +185,11 @@ test('fires events on Window', () => {
   expect(messageSpy).toHaveBeenCalledTimes(1)
   window.removeEventListener('message', messageSpy)
 })
+
+test('fires events on Document', () => {
+  const keyDownSpy = jest.fn()
+  document.addEventListener('keydown', keyDownSpy)
+  fireEvent.keyDown(document, {key: 'Escape'})
+  expect(keyDownSpy).toHaveBeenCalledTimes(1)
+  document.removeEventListener('keydown', keyDownSpy)
+})

@@ -507,6 +507,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "tnunes",
+      "name": "Tiago Nunes",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/163187?v=4",
+      "profile": "https://github.com/tnunes",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ]
 }
