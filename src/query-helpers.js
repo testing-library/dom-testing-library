@@ -32,7 +32,6 @@ function getElementError(message, container) {
 function firstResultOrNull(queryFunction, ...args) {
   const result = queryFunction(...args)
   if (result.length === 0) return null
-  if (result.length > 1) return null
   return result[0]
 }
 
