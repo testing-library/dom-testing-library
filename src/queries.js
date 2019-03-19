@@ -2,6 +2,7 @@ import {fuzzyMatches, matches, makeNormalizer} from './matches'
 import {getNodeText} from './get-node-text'
 import {
   getElementError,
+  getGetByElementError,
   firstResultOrNull,
   queryAllByAttribute,
   queryByAttribute,
@@ -136,7 +137,6 @@ function queryAllByTitle(
 function queryByTitle(...args) {
   return firstResultOrNull(queryAllByTitle, ...args)
 }
-
 function getTestIdAttribute() {
   return getConfig().testIdAttribute
 }
@@ -209,8 +209,15 @@ function getAllByTestId(container, id, ...rest) {
   return els
 }
 
-function getByTestId(...args) {
-  return firstResultOrNull(getAllByTestId, ...args)
+function getByTestId(container, id, ...args) {
+  const els = getAllByTestId(container, id, ...args)
+  if (els.length > 1) {
+    throw getGetByElementError(
+      `Found multiple elements by: [${getTestIdAttribute()}="${id}"]`,
+      container,
+    )
+  }
+  return els[0]
 }
 
 function getAllByTitle(container, title, ...rest) {
@@ -224,8 +231,15 @@ function getAllByTitle(container, title, ...rest) {
   return els
 }
 
-function getByTitle(...args) {
-  return firstResultOrNull(getAllByTitle, ...args)
+function getByTitle(container, title, ...args) {
+  const els = getAllByTitle(container, title, ...args)
+  if (els.length > 1) {
+    throw getGetByElementError(
+      `Found multiple elements with the title: ${title}.`,
+      container,
+    )
+  }
+  return els[0]
 }
 
 function getAllByPlaceholderText(container, text, ...rest) {
@@ -239,8 +253,15 @@ function getAllByPlaceholderText(container, text, ...rest) {
   return els
 }
 
-function getByPlaceholderText(...args) {
-  return firstResultOrNull(getAllByPlaceholderText, ...args)
+function getByPlaceholderText(container, text, ...args) {
+  const els = getAllByPlaceholderText(container, text, ...args)
+  if (els.length > 1) {
+    throw getGetByElementError(
+      `Found multiple elements with the placeholder text of: ${text}`,
+      container,
+    )
+  }
+  return els[0]
 }
 
 function getAllByLabelText(container, text, ...rest) {
@@ -262,8 +283,15 @@ function getAllByLabelText(container, text, ...rest) {
   return els
 }
 
-function getByLabelText(...args) {
-  return firstResultOrNull(getAllByLabelText, ...args)
+function getByLabelText(container, text, ...args) {
+  const els = getAllByLabelText(container, text, ...args)
+  if (els.length > 1) {
+    throw getGetByElementError(
+      `Found multiple elements with the text of: ${text}`,
+      container,
+    )
+  }
+  return els[0]
 }
 
 function getAllByText(container, text, ...rest) {
@@ -277,8 +305,15 @@ function getAllByText(container, text, ...rest) {
   return els
 }
 
-function getByText(...args) {
-  return firstResultOrNull(getAllByText, ...args)
+function getByText(container, text, ...args) {
+  const els = getAllByText(container, text, ...args)
+  if (els.length > 1) {
+    throw getGetByElementError(
+      `Found multiple elements with the text: ${text}`,
+      container,
+    )
+  }
+  return els[0]
 }
 
 function getAllByAltText(container, alt, ...rest) {
@@ -292,20 +327,37 @@ function getAllByAltText(container, alt, ...rest) {
   return els
 }
 
-function getByAltText(...args) {
-  return firstResultOrNull(getAllByAltText, ...args)
+function getByAltText(container, alt, ...args) {
+  const els = getAllByAltText(container, alt, ...args)
+  if (els.length > 1) {
+    throw getGetByElementError(
+      `Found multiple elements with the alt text: ${alt}`,
+      container,
+    )
+  }
+  return els[0]
 }
 
 function getAllByRole(container, id, ...rest) {
   const els = queryAllByRole(container, id, ...rest)
   if (!els.length) {
-    throw getElementError(`Unable to find an element by role=${id}`, container)
+    throw getElementError(
+      `Unable to find an element by [role=${id}]`,
+      container,
+    )
   }
   return els
 }
 
-function getByRole(...args) {
-  return firstResultOrNull(getAllByRole, ...args)
+function getByRole(container, id, ...args) {
+  const els = getAllByRole(container, id, ...args)
+  if (els.length > 1) {
+    throw getGetByElementError(
+      `Found multiple elements by [role=${id}]`,
+      container,
+    )
+  }
+  return els[0]
 }
 
 function getAllByDisplayValue(container, value, ...rest) {
@@ -319,8 +371,15 @@ function getAllByDisplayValue(container, value, ...rest) {
   return els
 }
 
-function getByDisplayValue(...args) {
-  return firstResultOrNull(getAllByDisplayValue, ...args)
+function getByDisplayValue(container, value, ...args) {
+  const els = getAllByDisplayValue(container, value, ...args)
+  if (els.length > 1) {
+    throw getGetByElementError(
+      `Found multiple elements with the value: ${value}.`,
+      container,
+    )
+  }
+  return els[0]
 }
 
 function makeFinder(getter) {

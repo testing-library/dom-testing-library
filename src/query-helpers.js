@@ -30,6 +30,13 @@ function getElementError(message, container) {
   return new Error([message, debugDOM(container)].filter(Boolean).join('\n\n'))
 }
 
+function getGetByElementError(message, container) {
+  return getElementError(
+    `${message}\n\n(If this is intentional, then use the \`*AllBy*\` variant of the query (like \`getAllByText\` or \`findAllByText\`)).`,
+    container,
+  )
+}
+
 function firstResultOrNull(queryFunction, ...args) {
   const result = queryFunction(...args)
   if (result.length === 0) return null
@@ -56,6 +63,7 @@ function queryByAttribute(...args) {
 export {
   debugDOM,
   getElementError,
+  getGetByElementError,
   firstResultOrNull,
   queryAllByAttribute,
   queryByAttribute,
