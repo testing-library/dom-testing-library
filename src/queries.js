@@ -6,6 +6,7 @@ import {
   queryAllByAttribute,
   queryByAttribute,
 } from './query-helpers'
+import {waitForElement} from './wait-for-element'
 import {getConfig} from './config'
 
 // Here are the queries for the library.
@@ -374,6 +375,38 @@ function getAllByDisplayValue(container, value, ...rest) {
 function getByDisplayValue(...args) {
   return firstResultOrNull(getAllByDisplayValue, ...args)
 }
+
+function makeFinder(getter) {
+  return (container, text, options, waitForElementOptions) =>
+    waitForElement(
+      () => getter(container, text, options),
+      waitForElementOptions,
+    )
+}
+
+export const findByLabelText = makeFinder(getByLabelText)
+export const findAllByLabelText = makeFinder(getAllByLabelText)
+
+export const findByPlaceholderText = makeFinder(getByPlaceholderText)
+export const findAllByPlaceholderText = makeFinder(getAllByPlaceholderText)
+
+export const findByText = makeFinder(getByText)
+export const findAllByText = makeFinder(getAllByText)
+
+export const findByAltText = makeFinder(getByAltText)
+export const findAllByAltText = makeFinder(getAllByAltText)
+
+export const findByTitle = makeFinder(getByTitle)
+export const findAllByTitle = makeFinder(getAllByTitle)
+
+export const findByDisplayValue = makeFinder(getByDisplayValue)
+export const findAllByDisplayValue = makeFinder(getAllByDisplayValue)
+
+export const findByRole = makeFinder(getByRole)
+export const findAllByRole = makeFinder(getAllByRole)
+
+export const findByTestId = makeFinder(getByTestId)
+export const findAllByTestId = makeFinder(getAllByTestId)
 
 export {
   queryByPlaceholderText,
