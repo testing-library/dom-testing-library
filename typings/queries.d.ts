@@ -18,7 +18,7 @@ export type FindAllByBoundAttribute = (
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
-  waitForElementOptions?: WaitForElementOptions
+  waitForElementOptions?: WaitForElementOptions,
 ) => Promise<HTMLElement[]>
 
 export type GetByBoundAttribute = (
@@ -31,7 +31,7 @@ export type FindByBoundAttribute = (
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
-  waitForElementOptions?: WaitForElementOptions
+  waitForElementOptions?: WaitForElementOptions,
 ) => Promise<HTMLElement>
 
 export type QueryByText = (
@@ -50,7 +50,7 @@ export type FindAllByText = (
   container: HTMLElement,
   id: Matcher,
   options?: SelectorMatcherOptions,
-  waitForElementOptions?: WaitForElementOptions
+  waitForElementOptions?: WaitForElementOptions,
 ) => Promise<HTMLElement[]>
 
 export type GetByText = (
@@ -63,7 +63,7 @@ export type FindByText = (
   container: HTMLElement,
   id: Matcher,
   options?: SelectorMatcherOptions,
-  waitForElementOptions?: WaitForElementOptions
+  waitForElementOptions?: WaitForElementOptions,
 ) => Promise<HTMLElement>
 
 export const getByLabelText: GetByText
@@ -114,11 +114,3 @@ export const queryByTestId: QueryByBoundAttribute
 export const queryAllByTestId: AllByBoundAttribute
 export const findByTestId: FindByBoundAttribute
 export const findAllByTestId: FindAllByBoundAttribute
-export const getBySelectText: GetByBoundAttribute
-export const getAllBySelectText: AllByBoundAttribute
-export const queryBySelectText: QueryByBoundAttribute
-export const queryAllBySelectText: AllByBoundAttribute
-export const getByValue: GetByBoundAttribute
-export const getAllByValue: AllByBoundAttribute
-export const queryByValue: QueryByBoundAttribute
-export const queryAllByValue: AllByBoundAttribute
