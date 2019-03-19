@@ -137,27 +137,6 @@ function queryByTitle(...args) {
   return firstResultOrNull(queryAllByTitle, ...args)
 }
 
-function queryAllBySelectText(
-  container,
-  text,
-  {exact = true, collapseWhitespace, trim, normalizer} = {},
-) {
-  const matcher = exact ? matches : fuzzyMatches
-  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-  return Array.from(container.querySelectorAll('select')).filter(selectNode => {
-    const selectedOptions = Array.from(selectNode.options).filter(
-      option => option.selected,
-    )
-    return selectedOptions.some(optionNode =>
-      matcher(getNodeText(optionNode), optionNode, text, matchNormalizer),
-    )
-  })
-}
-
-function queryBySelectText(...args) {
-  return firstResultOrNull(queryAllBySelectText, ...args)
-}
-
 function getTestIdAttribute() {
   return getConfig().testIdAttribute
 }
@@ -168,8 +147,6 @@ const queryByTestId = (...args) =>
   queryByAttribute(getTestIdAttribute(), ...args)
 const queryAllByTestId = (...args) =>
   queryAllByAttribute(getTestIdAttribute(), ...args)
-const queryByValue = queryByAttribute.bind(null, 'value')
-const queryAllByValue = queryAllByAttribute.bind(null, 'value')
 const queryByRole = queryByAttribute.bind(null, 'role')
 const queryAllByRole = queryAllByAttribute.bind(null, 'role')
 
@@ -249,21 +226,6 @@ function getAllByTitle(container, title, ...rest) {
 
 function getByTitle(...args) {
   return firstResultOrNull(getAllByTitle, ...args)
-}
-
-function getAllByValue(container, value, ...rest) {
-  const els = queryAllByValue(container, value, ...rest)
-  if (!els.length) {
-    throw getElementError(
-      `Unable to find an element with the value: ${value}.`,
-      container,
-    )
-  }
-  return els
-}
-
-function getByValue(...args) {
-  return firstResultOrNull(getAllByValue, ...args)
 }
 
 function getAllByPlaceholderText(container, text, ...rest) {
@@ -346,21 +308,6 @@ function getByRole(...args) {
   return firstResultOrNull(getAllByRole, ...args)
 }
 
-function getAllBySelectText(container, text, ...rest) {
-  const els = queryAllBySelectText(container, text, ...rest)
-  if (!els.length) {
-    throw getElementError(
-      `Unable to find a <select> element with the selected option's text: ${text}`,
-      container,
-    )
-  }
-  return els
-}
-
-function getBySelectText(...args) {
-  return firstResultOrNull(getAllBySelectText, ...args)
-}
-
 function getAllByDisplayValue(container, value, ...rest) {
   const els = queryAllByDisplayValue(container, value, ...rest)
   if (!els.length) {
@@ -425,10 +372,6 @@ export {
   queryAllByAltText,
   getByAltText,
   getAllByAltText,
-  queryBySelectText,
-  queryAllBySelectText,
-  getBySelectText,
-  getAllBySelectText,
   queryByTestId,
   queryAllByTestId,
   getByTestId,
@@ -437,10 +380,6 @@ export {
   queryAllByTitle,
   getByTitle,
   getAllByTitle,
-  queryByValue,
-  queryAllByValue,
-  getByValue,
-  getAllByValue,
   queryByDisplayValue,
   queryAllByDisplayValue,
   getByDisplayValue,

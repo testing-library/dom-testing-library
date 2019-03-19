@@ -41,10 +41,6 @@ export const queryByPlaceholderText: QueryByBoundAttribute
 export const queryAllByPlaceholderText: AllByBoundAttribute
 export const getByPlaceholderText: GetByBoundAttribute
 export const getAllByPlaceholderText: AllByBoundAttribute
-export const queryBySelectText: QueryByBoundAttribute
-export const queryAllBySelectText: AllByBoundAttribute
-export const getBySelectText: GetByBoundAttribute
-export const getAllBySelectText: AllByBoundAttribute
 export const queryByText: QueryByText
 export const queryAllByText: AllByText
 export const getByText: GetByText
@@ -65,10 +61,6 @@ export const queryByTitle: QueryByBoundAttribute
 export const queryAllByTitle: AllByBoundAttribute
 export const getByTitle: GetByBoundAttribute
 export const getAllByTitle: AllByBoundAttribute
-export const queryByValue: QueryByBoundAttribute
-export const queryAllByValue: AllByBoundAttribute
-export const getByValue: GetByBoundAttribute
-export const getAllByValue: AllByBoundAttribute
 export const queryByDisplayValue: QueryByBoundAttribute
 export const queryAllByDisplayValue: AllByBoundAttribute
 export const getByDisplayValue: GetByBoundAttribute

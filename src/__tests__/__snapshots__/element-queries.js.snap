@@ -9,7 +9,7 @@ exports[`get throws a useful error message 1`] = `
 `;
 
 exports[`get throws a useful error message 2`] = `
-"Unable to find a <select> element with the selected option's text: LucyRicardo
+"Unable to find an element with the value: LucyRicardo.
 
 [36m<div>[39m
   [36m<div />[39m
@@ -74,7 +74,7 @@ exports[`get throws a useful error message 9`] = `
 
 exports[`get throws a useful error message without DOM in Cypress 1`] = `"Unable to find a label with the text of: LucyRicardo"`;
 
-exports[`get throws a useful error message without DOM in Cypress 2`] = `"Unable to find a <select> element with the selected option's text: LucyRicardo"`;
+exports[`get throws a useful error message without DOM in Cypress 2`] = `"Unable to find an element with the value: LucyRicardo."`;
 
 exports[`get throws a useful error message without DOM in Cypress 3`] = `"Unable to find an element with the placeholder text of: LucyRicardo"`;
 

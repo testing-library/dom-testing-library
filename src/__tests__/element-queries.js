@@ -8,7 +8,7 @@ beforeEach(() => {
 test('query can return null', () => {
   const {
     queryByLabelText,
-    queryBySelectText,
+    queryByDisplayValue,
     queryByPlaceholderText,
     queryByText,
     queryByTestId,
@@ -16,7 +16,7 @@ test('query can return null', () => {
   } = render('<div />')
   expect(queryByTestId('LucyRicardo')).toBeNull()
   expect(queryByLabelText('LucyRicardo')).toBeNull()
-  expect(queryBySelectText('LucyRicardo')).toBeNull()
+  expect(queryByDisplayValue('LucyRicardo')).toBeNull()
   expect(queryByPlaceholderText('LucyRicardo')).toBeNull()
   expect(queryByText('LucyRicardo')).toBeNull()
   expect(queryByAltText('LucyRicardo')).toBeNull()
@@ -25,17 +25,16 @@ test('query can return null', () => {
 test('get throws a useful error message', () => {
   const {
     getByLabelText,
-    getBySelectText,
+    getByDisplayValue,
     getByPlaceholderText,
     getByText,
     getByTestId,
     getByAltText,
     getByTitle,
-    getByValue,
     getByRole,
   } = render('<div />')
   expect(() => getByLabelText('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getBySelectText('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getByDisplayValue('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() =>
     getByPlaceholderText('LucyRicardo'),
   ).toThrowErrorMatchingSnapshot()
@@ -43,7 +42,7 @@ test('get throws a useful error message', () => {
   expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getByValue('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getByDisplayValue('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() => getByRole('LucyRicardo')).toThrowErrorMatchingSnapshot()
 })
 
@@ -216,7 +215,7 @@ test('query/get title element of SVG', () => {
 })
 
 test('query/get element by its value', () => {
-  const {getByValue, queryByValue} = render(`
+  const {getByDisplayValue, queryByDisplayValue} = render(`
   <div>
     <input placeholder="name" type="text"/>
     <input placeholder="lastname" type="text" value="Norris"/>
@@ -224,12 +223,12 @@ test('query/get element by its value', () => {
   </div>
   `)
 
-  expect(getByValue('Norris').placeholder).toEqual('lastname')
-  expect(queryByValue('Norris').placeholder).toEqual('lastname')
+  expect(getByDisplayValue('Norris').placeholder).toEqual('lastname')
+  expect(queryByDisplayValue('Norris').placeholder).toEqual('lastname')
 })
 
 test('query/get select by text with the default option selected', () => {
-  const {getBySelectText, queryBySelectText} = render(`
+  const {getByDisplayValue, queryByDisplayValue} = render(`
   <select id="state-select">
     <option value="">State</option>
     <option value="AL">Alabama</option>
@@ -238,12 +237,12 @@ test('query/get select by text with the default option selected', () => {
   </select>
   `)
 
-  expect(getBySelectText('State').id).toEqual('state-select')
-  expect(queryBySelectText('State').id).toEqual('state-select')
+  expect(getByDisplayValue('State').id).toEqual('state-select')
+  expect(queryByDisplayValue('State').id).toEqual('state-select')
 })
 
 test('query/get select by text with one option selected', () => {
-  const {getBySelectText, queryBySelectText} = render(`
+  const {getByDisplayValue, queryByDisplayValue} = render(`
   <select id="state-select">
     <option value="">State</option>
     <option value="AL">Alabama</option>
@@ -252,12 +251,12 @@ test('query/get select by text with one option selected', () => {
   </select>
   `)
 
-  expect(getBySelectText('Alaska').id).toEqual('state-select')
-  expect(queryBySelectText('Alaska').id).toEqual('state-select')
+  expect(getByDisplayValue('Alaska').id).toEqual('state-select')
+  expect(queryByDisplayValue('Alaska').id).toEqual('state-select')
 })
 
 test('query/get select by text with multiple options selected', () => {
-  const {getBySelectText, queryBySelectText} = render(`
+  const {getByDisplayValue, queryByDisplayValue} = render(`
   <select multiple id="state-select">
     <option value="">State</option>
     <option selected value="AL">Alabama</option>
@@ -266,8 +265,8 @@ test('query/get select by text with multiple options selected', () => {
   </select>
   `)
 
-  expect(getBySelectText('Alabama').id).toEqual('state-select')
-  expect(queryBySelectText('Alaska').id).toEqual('state-select')
+  expect(getByDisplayValue('Alabama').id).toEqual('state-select')
+  expect(queryByDisplayValue('Alaska').id).toEqual('state-select')
 })
 
 describe('query by test id', () => {
@@ -305,7 +304,7 @@ test('getAll* matchers return an array', () => {
     getAllByAltText,
     getAllByTestId,
     getAllByLabelText,
-    getAllBySelectText,
+    getAllByDisplayValue,
     getAllByPlaceholderText,
     getAllByText,
     getAllByRole,
@@ -343,8 +342,8 @@ test('getAll* matchers return an array', () => {
   expect(getAllByTestId('poster')).toHaveLength(3)
   expect(getAllByPlaceholderText(/The Rock/)).toHaveLength(1)
   expect(getAllByLabelText('User Name')).toHaveLength(1)
-  expect(getAllBySelectText('Japanese cars')).toHaveLength(1)
-  expect(getAllBySelectText(/cars$/)).toHaveLength(2)
+  expect(getAllByDisplayValue('Japanese cars')).toHaveLength(1)
+  expect(getAllByDisplayValue(/cars$/)).toHaveLength(2)
   expect(getAllByText(/^where/i)).toHaveLength(1)
   expect(getAllByRole(/container/i)).toHaveLength(1)
 })
@@ -354,11 +353,10 @@ test('getAll* matchers throw for 0 matches', () => {
     getAllByAltText,
     getAllByTestId,
     getAllByLabelText,
-    getAllBySelectText,
+    getAllByDisplayValue,
     getAllByPlaceholderText,
     getAllByText,
     getAllByRole,
-    getAllByDisplayValue,
   } = render(`
     <div role="container">
       <label>No Matches Please</label>
@@ -369,7 +367,7 @@ test('getAll* matchers throw for 0 matches', () => {
   expect(() => getAllByAltText('nope')).toThrow()
   expect(() => getAllByLabelText('nope')).toThrow()
   expect(() => getAllByLabelText('no matches please')).toThrow()
-  expect(() => getAllBySelectText('nope')).toThrow()
+  expect(() => getAllByDisplayValue('nope')).toThrow()
   expect(() => getAllByPlaceholderText('nope')).toThrow()
   expect(() => getAllByText('nope')).toThrow()
   expect(() => getAllByRole('nope')).toThrow()
@@ -381,7 +379,7 @@ test('queryAll* matchers return an array for 0 matches', () => {
     queryAllByAltText,
     queryAllByTestId,
     queryAllByLabelText,
-    queryAllBySelectText,
+    queryAllByDisplayValue,
     queryAllByPlaceholderText,
     queryAllByText,
     queryAllByRole,
@@ -392,7 +390,7 @@ test('queryAll* matchers return an array for 0 matches', () => {
   expect(queryAllByTestId('nope')).toHaveLength(0)
   expect(queryAllByAltText('nope')).toHaveLength(0)
   expect(queryAllByLabelText('nope')).toHaveLength(0)
-  expect(queryAllBySelectText('nope')).toHaveLength(0)
+  expect(queryAllByDisplayValue('nope')).toHaveLength(0)
   expect(queryAllByPlaceholderText('nope')).toHaveLength(0)
   expect(queryAllByText('nope')).toHaveLength(0)
   expect(queryAllByRole('nope')).toHaveLength(0)
@@ -560,16 +558,15 @@ test('get throws a useful error message without DOM in Cypress', () => {
   document.defaultView.Cypress = {}
   const {
     getByLabelText,
-    getBySelectText,
     getByPlaceholderText,
     getByText,
     getByTestId,
     getByAltText,
     getByTitle,
-    getByValue,
+    getByDisplayValue,
   } = render('<div />')
   expect(() => getByLabelText('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getBySelectText('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getByDisplayValue('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() =>
     getByPlaceholderText('LucyRicardo'),
   ).toThrowErrorMatchingSnapshot()
@@ -577,7 +574,7 @@ test('get throws a useful error message without DOM in Cypress', () => {
   expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingSnapshot()
   expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getByValue('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getByDisplayValue('LucyRicardo')).toThrowErrorMatchingSnapshot()
 })
 
 test('getByText ignores script tags by default', () => {
