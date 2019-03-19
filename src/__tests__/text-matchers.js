@@ -1,4 +1,3 @@
-import 'jest-dom/extend-expect'
 import cases from 'jest-in-case'
 
 import {getDefaultNormalizer} from '../'

@@ -1,4 +1,3 @@
-import 'jest-dom/extend-expect'
 import {waitForElementToBeRemoved} from '../'
 import {render} from './helpers/test-utils'
 
