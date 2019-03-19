@@ -39,14 +39,14 @@ cases(
       query: `Dwayne 'The Rock' Johnson`,
       queryFn: `queryAllByPlaceholderText`,
     },
-    queryAllBySelectText: {
+    'queryAllByDisplayValue (for select)': {
       dom: `
       <select>
         <option>Option 1</option>
         <option>Option 2</option>
       </select>`,
       query: `Option 1`,
-      queryFn: `queryAllBySelectText`,
+      queryFn: `queryAllByDisplayValue`,
     },
     queryAllByText: {
       dom: `<p>Some content</p>`,
@@ -99,14 +99,14 @@ cases(
       query: /^Dwayne/,
       queryFn: `queryAllByPlaceholderText`,
     },
-    queryAllBySelectText: {
+    'queryAllByDisplayValue (for select)': {
       dom: `
       <select>
         <option>  Option 1  </option>
         <option>Option 2</option>
       </select>`,
       query: `Option 1`,
-      queryFn: `queryAllBySelectText`,
+      queryFn: `queryAllByDisplayValue`,
     },
     queryAllByText: {
       dom: `
@@ -161,14 +161,14 @@ cases(
       query: `Dwayne 'The Rock' Johnson`,
       queryFn: `queryAllByPlaceholderText`,
     },
-    queryAllBySelectText: {
+    'queryAllByDisplayValue (for select)': {
       dom: `
       <select>
         <option>Option 1</option>
         <option>Option 2</option>
       </select>`,
       query: `Option 1`,
-      queryFn: `queryAllBySelectText`,
+      queryFn: `queryAllByDisplayValue`,
     },
     queryAllByLabelText: {
       dom: `
@@ -235,9 +235,9 @@ cases(
       dom: `<input placeholder="User ${LRM}name" />`,
       queryFn: 'queryAllByPlaceholderText',
     },
-    queryAllBySelectText: {
+    'queryAllByDisplayValue (for select)': {
       dom: `<select><option>User ${LRM}name</option></select>`,
-      queryFn: 'queryAllBySelectText',
+      queryFn: 'queryAllByDisplayValue',
     },
     queryAllByText: {
       dom: `<div>User ${LRM}name</div>`,
@@ -250,10 +250,6 @@ cases(
     queryAllByTitle: {
       dom: `<div title="User ${LRM}name" />`,
       queryFn: 'queryAllByTitle',
-    },
-    queryAllByValue: {
-      dom: `<input value="User ${LRM}name" />`,
-      queryFn: 'queryAllByValue',
     },
     queryAllByDisplayValue: {
       dom: `<input value="User ${LRM}name" />`,
