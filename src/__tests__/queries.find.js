@@ -117,3 +117,9 @@ test('find rejects when something cannot be found', async () => {
   await expect(findByTestId('x', qo, wo)).rejects.toThrow('x')
   await expect(findAllByTestId('x', qo, wo)).rejects.toThrow('x')
 })
+
+test('actually works with async code', async () => {
+  const {findByTestId, container, rerender} = render(`<div />`)
+  setTimeout(() => rerender(`<div data-testid="div">correct dom</div>`), 20)
+  await expect(findByTestId('div', {}, {container})).resolves.toBeTruthy()
+})

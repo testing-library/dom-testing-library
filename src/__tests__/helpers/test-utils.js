@@ -1,10 +1,12 @@
 import {getQueriesForElement} from '../../get-queries-for-element'
 
-function render(html) {
-  const container = document.createElement('div')
+function render(html, {container = document.createElement('div')} = {}) {
   container.innerHTML = html
   const containerQueries = getQueriesForElement(container)
-  return {container, ...containerQueries}
+  function rerender(newHtml) {
+    return render(newHtml, {container})
+  }
+  return {container, rerender, ...containerQueries}
 }
 
 function renderIntoDocument(html) {
