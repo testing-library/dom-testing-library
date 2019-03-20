@@ -113,11 +113,7 @@ export const getBySelectText: GetByBoundAttribute
 export const getAllBySelectText: AllByBoundAttribute
 export const queryBySelectText: QueryByBoundAttribute
 export const queryAllBySelectText: AllByBoundAttribute
-export const findBySelectText: FindByBoundAttribute
-export const findAllBySelectText: FindAllByBoundAttribute
 export const getByValue: GetByBoundAttribute
 export const getAllByValue: AllByBoundAttribute
 export const queryByValue: QueryByBoundAttribute
 export const queryAllByValue: AllByBoundAttribute
-export const findByValue: FindByBoundAttribute
-export const findAllByValue: FindAllByBoundAttribute
