@@ -21,7 +21,7 @@ function queryAllLabelsByText(
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(container.querySelectorAll('label')).filter(label =>
-    matcher(getNodeText(label), label, text, matchNormalizer),
+    matcher(label.textContent, label, text, matchNormalizer),
   )
 }
 
