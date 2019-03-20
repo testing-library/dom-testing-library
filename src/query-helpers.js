@@ -8,6 +8,7 @@ function debugDOM(htmlElement) {
     typeof process !== 'undefined' &&
     process.versions !== undefined &&
     process.versions.node !== undefined
+  /* istanbul ignore next */
   const window =
     (htmlElement.ownerDocument && htmlElement.ownerDocument.defaultView) ||
     undefined

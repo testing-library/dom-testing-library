@@ -10,3 +10,10 @@ test('it waits for the data to be loaded', async () => {
   await wait(() => expect(spy).toHaveBeenCalledTimes(1))
   expect(spy).toHaveBeenCalledWith()
 })
+
+test('wait defaults to a noop callback', async () => {
+  const handler = jest.fn()
+  Promise.resolve().then(handler)
+  await wait()
+  expect(handler).toHaveBeenCalledTimes(1)
+})

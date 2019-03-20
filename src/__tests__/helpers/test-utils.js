@@ -10,9 +10,11 @@ function render(html, {container = document.createElement('div')} = {}) {
 }
 
 function renderIntoDocument(html) {
-  document.body.innerHTML = html
-  const containerQueries = getQueriesForElement(document)
-  return {container: document, ...containerQueries}
+  return render(html, {container: document.body})
 }
 
-export {render, renderIntoDocument}
+function cleanup() {
+  document.body.innerHTML = ''
+}
+
+export {render, renderIntoDocument, cleanup}

@@ -15,7 +15,10 @@ function waitForElement(
 ) {
   return new Promise((resolve, reject) => {
     if (typeof callback !== 'function') {
-      reject('waitForElement requires a callback as the first parameter')
+      reject(
+        new Error('waitForElement requires a callback as the first parameter'),
+      )
+      return
     }
     let lastError
     const timer = setTimeout(onTimeout, timeout)
