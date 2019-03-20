@@ -1,5 +1,6 @@
 import {Matcher, MatcherOptions} from './matches'
 import {SelectorMatcherOptions} from './query-helpers'
+import {WaitForElementOptions} from './wait-for-element'
 
 export type QueryByBoundAttribute = (
   container: HTMLElement,
@@ -17,6 +18,7 @@ export type FindAllByBoundAttribute = (
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
+  waitForElementOptions?: WaitForElementOptions
 ) => Promise<HTMLElement[]> | Error
 
 export type GetByBoundAttribute = (
@@ -29,6 +31,7 @@ export type FindByBoundAttribute = (
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
+  waitForElementOptions?: WaitForElementOptions
 ) => Promise<HTMLElement> | Error
 
 export type QueryByText = (
@@ -47,6 +50,7 @@ export type FindAllByText = (
   container: HTMLElement,
   id: Matcher,
   options?: SelectorMatcherOptions,
+  waitForElementOptions?: WaitForElementOptions
 ) => Promise<HTMLElement[]> | Error
 
 export type GetByText = (
@@ -59,6 +63,7 @@ export type FindByText = (
   container: HTMLElement,
   id: Matcher,
   options?: SelectorMatcherOptions,
+  waitForElementOptions?: WaitForElementOptions
 ) => Promise<HTMLElement> | Error
 
 export const getByLabelText: GetByText
