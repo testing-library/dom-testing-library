@@ -34,17 +34,72 @@ test('get throws a useful error message', () => {
     getByValue,
     getByRole,
   } = render('<div />')
-  expect(() => getByLabelText('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getBySelectText('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() =>
-    getByPlaceholderText('LucyRicardo'),
-  ).toThrowErrorMatchingSnapshot()
-  expect(() => getByText('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getByValue('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getByRole('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() => getByLabelText('LucyRicardo'))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Unable to find a label with the text of: LucyRicardo
+
+[36m<div>[39m
+  [36m<div />[39m
+[36m</div>[39m"
+`)
+  expect(() => getBySelectText('LucyRicardo'))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Unable to find a <select> element with the selected option's text: LucyRicardo
+
+[36m<div>[39m
+  [36m<div />[39m
+[36m</div>[39m"
+`)
+  expect(() => getByPlaceholderText('LucyRicardo'))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an element with the placeholder text of: LucyRicardo
+
+[36m<div>[39m
+  [36m<div />[39m
+[36m</div>[39m"
+`)
+  expect(() => getByText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an element with the text: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+[36m<div>[39m
+  [36m<div />[39m
+[36m</div>[39m"
+`)
+  expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an element by: [data-testid=\\"LucyRicardo\\"]
+
+[36m<div>[39m
+  [36m<div />[39m
+[36m</div>[39m"
+`)
+  expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an element with the alt text: LucyRicardo
+
+[36m<div>[39m
+  [36m<div />[39m
+[36m</div>[39m"
+`)
+  expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an element with the title: LucyRicardo.
+
+[36m<div>[39m
+  [36m<div />[39m
+[36m</div>[39m"
+`)
+  expect(() => getByValue('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an element with the value: LucyRicardo.
+
+[36m<div>[39m
+  [36m<div />[39m
+[36m</div>[39m"
+`)
+  expect(() => getByRole('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an element by role=LucyRicardo
+
+[36m<div>[39m
+  [36m<div />[39m
+[36m</div>[39m"
+`)
 })
 
 test('can get elements by matching their text content', () => {
@@ -160,13 +215,27 @@ test('get can get form controls by placeholder', () => {
 test('label with no form control', () => {
   const {getByLabelText, queryByLabelText} = render(`<label>All alone</label>`)
   expect(queryByLabelText(/alone/)).toBeNull()
-  expect(() => getByLabelText(/alone/)).toThrowErrorMatchingSnapshot()
+  expect(() => getByLabelText(/alone/)).toThrowErrorMatchingInlineSnapshot(`
+"Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the \\"for\\" attribute or \\"aria-labelledby\\" attribute correctly.
+
+[36m<div>[39m
+  [36m<label>[39m
+    [0mAll alone[0m
+  [36m</label>[39m
+[36m</div>[39m"
+`)
 })
 
 test('totally empty label', () => {
   const {getByLabelText, queryByLabelText} = render(`<label />`)
   expect(queryByLabelText('')).toBeNull()
-  expect(() => getByLabelText('')).toThrowErrorMatchingSnapshot()
+  expect(() => getByLabelText('')).toThrowErrorMatchingInlineSnapshot(`
+"Found a label with the text of: , however no form control was found associated to that label. Make sure you're using the \\"for\\" attribute or \\"aria-labelledby\\" attribute correctly.
+
+[36m<div>[39m
+  [36m<label />[39m
+[36m</div>[39m"
+`)
 })
 
 test('getByLabelText with aria-label', () => {
@@ -568,16 +637,36 @@ test('get throws a useful error message without DOM in Cypress', () => {
     getByTitle,
     getByValue,
   } = render('<div />')
-  expect(() => getByLabelText('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getBySelectText('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  expect(() =>
+    getByLabelText('LucyRicardo'),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"Unable to find a label with the text of: LucyRicardo"`,
+  )
+  expect(() =>
+    getBySelectText('LucyRicardo'),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"Unable to find a <select> element with the selected option's text: LucyRicardo"`,
+  )
   expect(() =>
     getByPlaceholderText('LucyRicardo'),
-  ).toThrowErrorMatchingSnapshot()
-  expect(() => getByText('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingSnapshot()
-  expect(() => getByValue('LucyRicardo')).toThrowErrorMatchingSnapshot()
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"Unable to find an element with the placeholder text of: LucyRicardo"`,
+  )
+  expect(() => getByText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(
+    `"Unable to find an element with the text: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible."`,
+  )
+  expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(
+    `"Unable to find an element by: [data-testid=\\"LucyRicardo\\"]"`,
+  )
+  expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(
+    `"Unable to find an element with the alt text: LucyRicardo"`,
+  )
+  expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(
+    `"Unable to find an element with the title: LucyRicardo."`,
+  )
+  expect(() => getByValue('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(
+    `"Unable to find an element with the value: LucyRicardo."`,
+  )
 })
 
 test('getByText ignores script tags by default', () => {

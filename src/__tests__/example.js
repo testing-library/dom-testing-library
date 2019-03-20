@@ -1,5 +1,12 @@
 // query utilities:
-import {getByLabelText, getByText, getByTestId, queryByTestId, wait} from '../'
+import {
+  getByLabelText,
+  getByText,
+  getByTestId,
+  queryByTestId,
+  wait,
+  fireEvent,
+} from '../'
 
 function getExampleDOM() {
   // This is just a raw example of setting up some DOM
@@ -34,7 +41,7 @@ test('examples of some things', async () => {
   // Get form elements by their label text.
   // An error will be thrown if one cannot be found (accessibility FTW!)
   const input = getByLabelText(container, 'Username')
-  input.value = famousWomanInHistory
+  fireEvent.change(input, {target: {value: famousWomanInHistory}})
 
   // Get elements by their text, just like a real user does.
   getByText(container, 'Print Username').click()
@@ -48,5 +55,38 @@ test('examples of some things', async () => {
   expect(getByTestId(container, 'printed-username')).toHaveTextContent(
     famousWomanInHistory,
   )
-  expect(container).toMatchSnapshot()
+  expect(container).toMatchInlineSnapshot(`
+<div>
+  
+    
+  <label
+    for="username"
+  >
+    Username
+  </label>
+  
+    
+  <input
+    id="username"
+  />
+  
+    
+  <button>
+    Print Username
+  </button>
+  
+  
+  <div>
+    
+        
+    <div
+      data-testid="printed-username"
+    >
+      Ada Lovelace
+    </div>
+    
+      
+  </div>
+</div>
+`)
 })
