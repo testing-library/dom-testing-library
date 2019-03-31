@@ -169,6 +169,13 @@ test('assigning a value to a target that cannot have a value throws an error', (
   )
 })
 
+test('triggers an input event on a contenteditable target', () => {
+  const node = document.createElement('div')
+  node.setAttribute('contenteditable', 'true')
+  fireEvent.change(node, {target: {value: 'i am a rich editor'}})
+  expect(node.textContent).toEqual('i am a rich editor')
+})
+
 test('assigning the files property on an input', () => {
   const node = document.createElement('input')
   const file = new document.defaultView.File(['(⌐□_□)'], 'chucknorris.png', {
