@@ -1,4 +1,5 @@
 import {newMutationObserver, getDocument, getSetImmediate} from './helpers'
+import {getConfig} from './config'
 
 function waitForElement(
   callback,
@@ -54,4 +55,8 @@ function waitForElement(
   })
 }
 
-export {waitForElement}
+function waitForElementWrapper(...args) {
+  return getConfig().asyncWrapper(() => waitForElement(...args))
+}
+
+export {waitForElementWrapper as waitForElement}

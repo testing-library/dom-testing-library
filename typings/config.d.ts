@@ -1,5 +1,6 @@
 export interface IConfig {
   testIdAttribute: string
+  asyncWrapper<T>(cb: Function): Promise<T>
 }
 
 export interface IConfigFn {

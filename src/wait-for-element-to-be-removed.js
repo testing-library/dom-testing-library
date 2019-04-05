@@ -1,4 +1,5 @@
 import {getDocument, getSetImmediate, newMutationObserver} from './helpers'
+import {getConfig} from './config'
 
 function waitForElementToBeRemoved(
   callback,
@@ -69,4 +70,8 @@ function waitForElementToBeRemoved(
   })
 }
 
-export {waitForElementToBeRemoved}
+function waitForElementToBeRemovedWrapper(...args) {
+  return getConfig().asyncWrapper(() => waitForElementToBeRemoved(...args))
+}
+
+export {waitForElementToBeRemovedWrapper as waitForElementToBeRemoved}
