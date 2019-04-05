@@ -3,6 +3,14 @@
 // './queries' are query functions.
 let config = {
   testIdAttribute: 'data-testid',
+  // this is to support React's async `act` function.
+  // forcing react-testing-library to wrap all async functions would've been
+  // a total nightmare (consider wrapping every findBy* query and then also
+  // updating `within` so those would be wrapped too. Total nightmare).
+  // so we have this config option that's really only intended for
+  // react-testing-library to use. For that reason, this feature will remain
+  // undocumented.
+  asyncWrapper: cb => cb(),
 }
 
 export function configure(newConfig) {

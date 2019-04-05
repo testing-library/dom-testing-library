@@ -1,4 +1,5 @@
 import {newMutationObserver, getDocument, getSetImmediate} from './helpers'
+import {getConfig} from './config'
 
 function waitForDomChange({
   container = getDocument(),
@@ -36,4 +37,8 @@ function waitForDomChange({
   })
 }
 
-export {waitForDomChange}
+function waitForDomChangeWrapper(...args) {
+  return getConfig().asyncWrapper(() => waitForDomChange(...args))
+}
+
+export {waitForDomChangeWrapper as waitForDomChange}
