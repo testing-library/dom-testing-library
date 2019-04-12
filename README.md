@@ -65,7 +65,7 @@ your team down.
 
 The `dom-testing-library` is a very light-weight solution for testing DOM nodes
 (whether simulated with [`JSDOM`](https://github.com/jsdom/jsdom) as provided by
-default with [jest][] or in the browser). The main utilities it provides involve
+default with [Jest][] or in the browser). The main utilities it provides involve
 querying the DOM for nodes in a way that's similar to how the user finds
 elements on the page. In this way, the library helps ensure your tests give you
 confidence in your UI code. The `dom-testing-library`'s primary guiding

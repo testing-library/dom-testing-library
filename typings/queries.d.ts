@@ -19,7 +19,7 @@ export type FindAllByBoundAttribute = (
   id: Matcher,
   options?: MatcherOptions,
   waitForElementOptions?: WaitForElementOptions
-) => Promise<HTMLElement[]> | Error
+) => Promise<HTMLElement[]>
 
 export type GetByBoundAttribute = (
   container: HTMLElement,
@@ -32,7 +32,7 @@ export type FindByBoundAttribute = (
   id: Matcher,
   options?: MatcherOptions,
   waitForElementOptions?: WaitForElementOptions
-) => Promise<HTMLElement> | Error
+) => Promise<HTMLElement>
 
 export type QueryByText = (
   container: HTMLElement,
@@ -51,7 +51,7 @@ export type FindAllByText = (
   id: Matcher,
   options?: SelectorMatcherOptions,
   waitForElementOptions?: WaitForElementOptions
-) => Promise<HTMLElement[]> | Error
+) => Promise<HTMLElement[]>
 
 export type GetByText = (
   container: HTMLElement,
@@ -64,7 +64,7 @@ export type FindByText = (
   id: Matcher,
   options?: SelectorMatcherOptions,
   waitForElementOptions?: WaitForElementOptions
-) => Promise<HTMLElement> | Error
+) => Promise<HTMLElement>
 
 export const getByLabelText: GetByText
 export const getAllByLabelText: AllByText
