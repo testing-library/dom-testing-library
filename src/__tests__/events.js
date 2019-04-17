@@ -186,6 +186,14 @@ test('fires events on Window', () => {
   window.removeEventListener('message', messageSpy)
 })
 
+test('fires shortcut events on Window', () => {
+  const clickSpy = jest.fn()
+  window.addEventListener('click', clickSpy)
+  fireEvent.click(window)
+  expect(clickSpy).toHaveBeenCalledTimes(1)
+  window.removeEventListener('message', clickSpy)
+})
+
 test('fires events on Document', () => {
   const keyDownSpy = jest.fn()
   document.addEventListener('keydown', keyDownSpy)

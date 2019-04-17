@@ -329,13 +329,31 @@ Object.keys(eventMap).forEach(key => {
         value: files,
       })
     }
-    // if the node does not have an owner document, then it probably _is_ the owner document
-    const window = (node.ownerDocument || node).defaultView
+    const window = getWindowFromNode(node)
     const EventConstructor = window[EventType] || window.Event
     const event = new EventConstructor(eventName, eventInit)
     return fireEvent(node, event)
   }
 })
+
+function getWindowFromNode(node) {
+  // istanbul ignore next I'm not sure what could cause the final else so we'll leave it uncovered.
+  if (node.defaultView) {
+    // node is document
+    return node.defaultView
+  } else if (node.ownerDocument) {
+    // node is a DOM node
+    return node.ownerDocument.defaultView
+  } else if (node.window) {
+    // node is window
+    return node.window
+  } else {
+    // no idea...
+    throw new Error(
+      `Unable to find the "window" object for the given node. fireEvent currently supports firing events on DOM nodes, document, and window. Please file an issue with the code that's causing you to see this error: https://github.com/kentcdodds/dom-testing-library/issues/new`,
+    )
+  }
+}
 
 // function written after some investigation here:
 // https://github.com/facebook/react/issues/10135#issuecomment-401496776
