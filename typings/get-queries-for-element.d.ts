@@ -13,9 +13,7 @@ export type BoundFunction<T> = T extends (
   : never
 export type BoundFunctions<T> = {[P in keyof T]: BoundFunction<T[P]>}
 
-export function getQueriesForElement(
+export function getQueriesForElement<T = typeof queries>(
   element: HTMLElement,
-  queriesToBind?:
-    | BoundFunctions<typeof queries>
-    | BoundFunctions<typeof queries>[],
-): BoundFunctions<typeof queries>
+  queriesToBind?: T,
+): BoundFunctions<T>
