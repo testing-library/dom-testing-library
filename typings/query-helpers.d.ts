@@ -20,11 +20,5 @@ export type AllByAttribute = (
 
 export const queryByAttribute: QueryByAttribute
 export const queryAllByAttribute: AllByAttribute
-export const firstResultOrNull: (
-  fn: AllByAttribute,
-  container?: HTMLElement,
-  id?: Matcher,
-  options?: MatcherOptions,
-) => HTMLElement | null
 export const debugDOM: (htmlElement: HTMLElement) => string
 export const getElementError: (message: string, container: HTMLElement) => Error
