@@ -33,7 +33,6 @@ const getMultipleError = (c, value) =>
   `Found multiple elements with the value: ${value}.`
 const getMissingError = (c, value) =>
   `Unable to find an element with the value: ${value}.`
-
 const [
   queryByDisplayValue,
   getAllByDisplayValue,
