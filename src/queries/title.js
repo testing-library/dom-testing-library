@@ -3,9 +3,7 @@ import {
   matches,
   makeNormalizer,
   getNodeText,
-  makeFindQuery,
-  makeSingleQuery,
-  makeGetAllQuery,
+  buildQueries,
 } from './all-utils'
 
 function queryAllByTitle(
@@ -24,14 +22,16 @@ function queryAllByTitle(
 
 const getMultipleError = (c, title) =>
   `Found multiple elements with the title: ${title}.`
-const queryByTitle = makeSingleQuery(queryAllByTitle, getMultipleError)
-const getAllByTitle = makeGetAllQuery(
-  queryAllByTitle,
-  (c, title) => `Unable to find an element with the title: ${title}.`,
-)
-const getByTitle = makeSingleQuery(getAllByTitle, getMultipleError)
-const findByTitle = makeFindQuery(getByTitle)
-const findAllByTitle = makeFindQuery(getAllByTitle)
+const getMissingError = (c, title) =>
+  `Unable to find an element with the title: ${title}.`
+
+const [
+  queryByTitle,
+  getAllByTitle,
+  getByTitle,
+  findAllByTitle,
+  findByTitle,
+] = buildQueries(queryAllByTitle, getMultipleError, getMissingError)
 
 export {
   queryByTitle,

@@ -1,10 +1,4 @@
-import {
-  queryAllByAttribute,
-  makeFindQuery,
-  getConfig,
-  makeSingleQuery,
-  makeGetAllQuery,
-} from './all-utils'
+import {queryAllByAttribute, getConfig, buildQueries} from './all-utils'
 
 const getTestIdAttribute = () => getConfig().testIdAttribute
 
@@ -13,15 +7,16 @@ const queryAllByTestId = (...args) =>
 
 const getMultipleError = (c, id) =>
   `Found multiple elements by: [${getTestIdAttribute()}="${id}"]`
-const queryByTestId = makeSingleQuery(queryAllByTestId, getMultipleError)
-const getAllByTestId = makeGetAllQuery(
-  queryAllByTestId,
-  (c, id) => `Unable to find an element by: [${getTestIdAttribute()}="${id}"]`,
-)
-const getByTestId = makeSingleQuery(getAllByTestId, getMultipleError)
+const getMissingError = (c, id) =>
+  `Unable to find an element by: [${getTestIdAttribute()}="${id}"]`
 
-const findByTestId = makeFindQuery(getByTestId)
-const findAllByTestId = makeFindQuery(getAllByTestId)
+const [
+  queryByTestId,
+  getAllByTestId,
+  getByTestId,
+  findAllByTestId,
+  findByTestId,
+] = buildQueries(queryAllByTestId, getMultipleError, getMissingError)
 
 export {
   queryByTestId,

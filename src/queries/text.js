@@ -3,9 +3,7 @@ import {
   matches,
   makeNormalizer,
   getNodeText,
-  makeSingleQuery,
-  makeGetAllQuery,
-  makeFindQuery,
+  buildQueries,
 } from './all-utils'
 
 function queryAllByText(
@@ -33,15 +31,16 @@ function queryAllByText(
 
 const getMultipleError = (c, text) =>
   `Found multiple elements with the text: ${text}`
-const queryByText = makeSingleQuery(queryAllByText, getMultipleError)
-const getAllByText = makeGetAllQuery(
-  queryAllByText,
-  (c, text) =>
-    `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`,
-)
-const getByText = makeSingleQuery(getAllByText, getMultipleError)
-const findByText = makeFindQuery(getByText)
-const findAllByText = makeFindQuery(getAllByText)
+const getMissingError = (c, text) =>
+  `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`
+
+const [
+  queryByText,
+  getAllByText,
+  getByText,
+  findAllByText,
+  findByText,
+] = buildQueries(queryAllByText, getMultipleError, getMissingError)
 
 export {
   queryByText,

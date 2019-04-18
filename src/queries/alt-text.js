@@ -1,11 +1,4 @@
-import {
-  makeFindQuery,
-  matches,
-  fuzzyMatches,
-  makeNormalizer,
-  makeSingleQuery,
-  makeGetAllQuery,
-} from './all-utils'
+import {matches, fuzzyMatches, makeNormalizer, buildQueries} from './all-utils'
 
 function queryAllByAltText(
   container,
@@ -21,15 +14,15 @@ function queryAllByAltText(
 
 const getMultipleError = (c, alt) =>
   `Found multiple elements with the alt text: ${alt}`
-const queryByAltText = makeSingleQuery(queryAllByAltText, getMultipleError)
-const getAllByAltText = makeGetAllQuery(
-  queryAllByAltText,
-  (c, alt) => `Unable to find an element with the alt text: ${alt}`,
-)
-const getByAltText = makeSingleQuery(getAllByAltText, getMultipleError)
-
-const findAllByAltText = makeFindQuery(getAllByAltText)
-const findByAltText = makeFindQuery(getByAltText)
+const getMissingError = (c, alt) =>
+  `Unable to find an element with the alt text: ${alt}`
+const [
+  queryByAltText,
+  getAllByAltText,
+  getByAltText,
+  findAllByAltText,
+  findByAltText,
+] = buildQueries(queryAllByAltText, getMultipleError, getMissingError)
 
 export {
   queryByAltText,

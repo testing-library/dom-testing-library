@@ -1,11 +1,9 @@
 import {
-  makeFindQuery,
   getNodeText,
   matches,
   fuzzyMatches,
   makeNormalizer,
-  makeSingleQuery,
-  makeGetAllQuery,
+  buildQueries,
 } from './all-utils'
 
 function queryAllByDisplayValue(
@@ -33,21 +31,16 @@ function queryAllByDisplayValue(
 
 const getMultipleError = (c, value) =>
   `Found multiple elements with the value: ${value}.`
-const queryByDisplayValue = makeSingleQuery(
-  queryAllByDisplayValue,
-  getMultipleError,
-)
-const getAllByDisplayValue = makeGetAllQuery(
-  queryAllByDisplayValue,
-  (c, value) => `Unable to find an element with the value: ${value}.`,
-)
-const getByDisplayValue = makeSingleQuery(
-  getAllByDisplayValue,
-  getMultipleError,
-)
+const getMissingError = (c, value) =>
+  `Unable to find an element with the value: ${value}.`
 
-const findAllByDisplayValue = makeFindQuery(getAllByDisplayValue)
-const findByDisplayValue = makeFindQuery(getByDisplayValue)
+const [
+  queryByDisplayValue,
+  getAllByDisplayValue,
+  getByDisplayValue,
+  findAllByDisplayValue,
+  findByDisplayValue,
+] = buildQueries(queryAllByDisplayValue, getMultipleError, getMissingError)
 
 export {
   queryByDisplayValue,

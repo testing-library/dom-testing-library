@@ -110,6 +110,7 @@ function getAllByLabelText(container, text, ...rest) {
   return els
 }
 
+// the reason mentioned above is the same reason we're not using buildQueries
 const getMultipleError = (c, text) =>
   `Found multiple elements with the text of: ${text}`
 const queryByLabelText = makeSingleQuery(queryAllByLabelText, getMultipleError)

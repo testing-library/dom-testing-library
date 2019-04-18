@@ -100,6 +100,16 @@ function makeFindQuery(getter) {
     )
 }
 
+function buildQueries(queryAllBy, getMultipleError, getMissingError) {
+  const queryBy = makeSingleQuery(queryAllBy, getMultipleError)
+  const getAllBy = makeGetAllQuery(queryAllBy, getMissingError)
+  const getBy = makeSingleQuery(getAllBy, getMultipleError)
+  const findAllBy = makeFindQuery(getAllBy)
+  const findBy = makeFindQuery(getBy)
+
+  return [queryBy, getAllBy, getBy, findAllBy, findBy]
+}
+
 export {
   debugDOM,
   getElementError,
@@ -109,4 +119,5 @@ export {
   makeSingleQuery,
   makeGetAllQuery,
   makeFindQuery,
+  buildQueries,
 }
