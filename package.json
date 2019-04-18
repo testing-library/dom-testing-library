@@ -1,6 +1,6 @@
 {
   "name": "dom-testing-library",
-  "version": "4.0.0-alpha.0",
+  "version": "0.0.0-semantically-released",
   "description": "Simple and complete DOM testing utilities that encourage good testing practices.",
   "main": "dist/index.js",
   "module": "dist/dom-testing-library.esm.js",
