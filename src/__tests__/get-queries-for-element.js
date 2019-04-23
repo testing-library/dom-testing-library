@@ -1,10 +1,11 @@
 import {getQueriesForElement} from '../get-queries-for-element'
 import {queries} from '..'
 
-test('uses default queries', () => {
+test('uses default queries + debug method that prints out the given DOM element', () => {
   const container = document.createElement('div')
-  const boundQueries = getQueriesForElement(container)
-  expect(Object.keys(boundQueries)).toEqual(Object.keys(queries))
+  const {debug, ...defaultBoundQueries} = getQueriesForElement(container)
+  expect(Object.keys(defaultBoundQueries)).toEqual(Object.keys(queries))
+  expect(debug).toBeDefined()
 })
 
 test('accepts custom queries', () => {
