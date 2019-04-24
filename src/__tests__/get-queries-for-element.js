@@ -6,6 +6,7 @@ test('uses default queries + debug method that prints out the given DOM element'
   const {debug, ...defaultBoundQueries} = getQueriesForElement(container)
   expect(Object.keys(defaultBoundQueries)).toEqual(Object.keys(queries))
   expect(debug).toBeDefined()
+  debug() // need to invoke the function for coverage
 })
 
 test('accepts custom queries', () => {
