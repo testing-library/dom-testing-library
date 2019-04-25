@@ -350,7 +350,7 @@ function getWindowFromNode(node) {
   } else {
     // no idea...
     throw new Error(
-      `Unable to find the "window" object for the given node. fireEvent currently supports firing events on DOM nodes, document, and window. Please file an issue with the code that's causing you to see this error: https://github.com/kentcdodds/dom-testing-library/issues/new`,
+      `Unable to find the "window" object for the given node. fireEvent currently supports firing events on DOM nodes, document, and window. Please file an issue with the code that's causing you to see this error: https://github.com/testing-library/dom-testing-library/issues/new`,
     )
   }
 }
