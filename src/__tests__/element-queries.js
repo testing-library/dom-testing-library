@@ -86,7 +86,7 @@ test('get throws a useful error message', () => {
 [36m</div>[39m"
 `)
   expect(() => getByRole('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element by role=LucyRicardo
+"Unable to find an element by [role=LucyRicardo]
 
 [36m<div>[39m
   [36m<div />[39m
