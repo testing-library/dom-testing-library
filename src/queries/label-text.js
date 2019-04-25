@@ -1,0 +1,129 @@
+import {
+  fuzzyMatches,
+  matches,
+  makeNormalizer,
+  getElementError,
+  queryAllByAttribute,
+  makeFindQuery,
+  makeSingleQuery,
+} from './all-utils'
+import {queryAllByText} from './text'
+
+function queryAllLabelsByText(
+  container,
+  text,
+  {exact = true, trim, collapseWhitespace, normalizer} = {},
+) {
+  const matcher = exact ? matches : fuzzyMatches
+  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
+  return Array.from(container.querySelectorAll('label')).filter(label =>
+    matcher(label.textContent, label, text, matchNormalizer),
+  )
+}
+
+function queryAllByLabelText(
+  container,
+  text,
+  {selector = '*', exact = true, collapseWhitespace, trim, normalizer} = {},
+) {
+  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
+  const labels = queryAllLabelsByText(container, text, {
+    exact,
+    normalizer: matchNormalizer,
+  })
+  const labelledElements = labels
+    .map(label => {
+      if (label.control) {
+        return label.control
+      }
+      /* istanbul ignore if */
+      if (label.getAttribute('for')) {
+        // we're using this notation because with the # selector we would have to escape special characters e.g. user.name
+        // see https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector#Escaping_special_characters
+        // <label for="someId">text</label><input id="someId" />
+
+        // .control support has landed in jsdom (https://github.com/jsdom/jsdom/issues/2175)
+        return container.querySelector(`[id="${label.getAttribute('for')}"]`)
+      }
+      if (label.getAttribute('id')) {
+        // <label id="someId">text</label><input aria-labelledby="someId" />
+        return container.querySelector(
+          `[aria-labelledby~="${label.getAttribute('id')}"]`,
+        )
+      }
+      if (label.childNodes.length) {
+        // <label>text: <input /></label>
+        return label.querySelector(selector)
+      }
+      return null
+    })
+    .filter(label => label !== null)
+    .concat(queryAllByAttribute('aria-label', container, text, {exact}))
+
+  const possibleAriaLabelElements = queryAllByText(container, text, {
+    exact,
+    normalizer: matchNormalizer,
+  }).filter(el => el.tagName !== 'LABEL') // don't reprocess labels
+
+  const ariaLabelledElements = possibleAriaLabelElements.reduce(
+    (allLabelledElements, nextLabelElement) => {
+      const labelId = nextLabelElement.getAttribute('id')
+
+      if (!labelId) return allLabelledElements
+
+      // ARIA labels can label multiple elements
+      const labelledNodes = Array.from(
+        container.querySelectorAll(`[aria-labelledby~="${labelId}"]`),
+      )
+
+      return allLabelledElements.concat(labelledNodes)
+    },
+    [],
+  )
+
+  return Array.from(new Set([...labelledElements, ...ariaLabelledElements]))
+}
+
+// the getAll* query would normally look like this:
+// const getAllByLabelText = makeGetAllQuery(
+//   queryAllByLabelText,
+//   (c, text) => `Unable to find a label with the text of: ${text}`,
+// )
+// however, we can give a more helpful error message than the generic one,
+// so we're writing this one out by hand.
+function getAllByLabelText(container, text, ...rest) {
+  const els = queryAllByLabelText(container, text, ...rest)
+  if (!els.length) {
+    const labels = queryAllLabelsByText(container, text, ...rest)
+    if (labels.length) {
+      throw getElementError(
+        `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.`,
+        container,
+      )
+    } else {
+      throw getElementError(
+        `Unable to find a label with the text of: ${text}`,
+        container,
+      )
+    }
+  }
+  return els
+}
+
+// the reason mentioned above is the same reason we're not using buildQueries
+const getMultipleError = (c, text) =>
+  `Found multiple elements with the text of: ${text}`
+const queryByLabelText = makeSingleQuery(queryAllByLabelText, getMultipleError)
+const getByLabelText = makeSingleQuery(getAllByLabelText, getMultipleError)
+
+const findAllByLabelText = makeFindQuery(getAllByLabelText)
+const findByLabelText = makeFindQuery(getByLabelText)
+
+export {
+  queryAllByLabelText,
+  queryByLabelText,
+  getAllByLabelText,
+  getByLabelText,
+  findAllByLabelText,
+  findByLabelText,
+}
