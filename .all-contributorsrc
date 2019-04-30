@@ -537,6 +537,15 @@
       "contributions": [
         "test"
       ]
+    },
+    {
+      "login": "alfrescian",
+      "name": "Jan Pfitzner",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1340740?v=4",
+      "profile": "http://blog.alfrescian.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
