@@ -307,11 +307,13 @@ function fireEvent(element, event) {
   return element.dispatchEvent(event)
 }
 
+const createEvent = {}
+
 Object.keys(eventMap).forEach(key => {
   const {EventType, defaultInit} = eventMap[key]
   const eventName = key.toLowerCase()
 
-  fireEvent[key] = (node, init) => {
+  createEvent[key] = (node, init) => {
     const eventInit = {...defaultInit, ...init}
     const {target: {value, files, ...targetProperties} = {}} = eventInit
     Object.assign(node, targetProperties)
@@ -331,9 +333,10 @@ Object.keys(eventMap).forEach(key => {
     }
     const window = getWindowFromNode(node)
     const EventConstructor = window[EventType] || window.Event
-    const event = new EventConstructor(eventName, eventInit)
-    return fireEvent(node, event)
+    return new EventConstructor(eventName, eventInit)
   }
+
+  fireEvent[key] = (node, init) => fireEvent(node, createEvent[key](node, init))
 })
 
 function getWindowFromNode(node) {
@@ -377,6 +380,6 @@ Object.keys(eventAliasMap).forEach(aliasKey => {
   fireEvent[aliasKey] = (...args) => fireEvent[key](...args)
 })
 
-export {fireEvent}
+export {fireEvent, createEvent}
 
 /* eslint complexity:["error", 9] */
