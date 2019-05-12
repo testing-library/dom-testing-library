@@ -75,5 +75,9 @@ export type FireFunction = (element: Element | Window, event: Event) => boolean
 export type FireObject = {
   [K in EventType]: (element: Element | Window, options?: {}) => boolean
 }
+export type CreateObject = {
+  [K in EventType]: (element: Element | Window, options?: {}) => Event
+}
 
+export const createEvent: CreateObject
 export const fireEvent: FireFunction & FireObject
