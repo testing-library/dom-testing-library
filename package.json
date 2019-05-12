@@ -30,8 +30,7 @@
     "test:update": "npm test -- --updateSnapshot --coverage",
     "validate": "kcd-scripts validate",
     "setup": "npm install && npm run validate -s",
-    "dtslint": "dtslint typings",
-    "precommit": "kcd-scripts pre-commit"
+    "dtslint": "dtslint typings"
   },
   "husky": {
     "hooks": {
