@@ -316,7 +316,6 @@ Object.keys(eventMap).forEach(key => {
   createEvent[key] = (node, init) => {
     const eventInit = {...defaultInit, ...init}
     const {target: {value, files, ...targetProperties} = {}} = eventInit
-    Object.assign(node, targetProperties)
     if (value !== undefined) {
       setNativeValue(node, value)
     }
@@ -331,6 +330,7 @@ Object.keys(eventMap).forEach(key => {
         value: files,
       })
     }
+    Object.assign(node, targetProperties)
     const window = getWindowFromNode(node)
     const EventConstructor = window[EventType] || window.Event
     return new EventConstructor(eventName, eventInit)

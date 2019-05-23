@@ -160,6 +160,19 @@ test('assigns target properties', () => {
   expect(node.value).toBe(value)
 })
 
+test('assigns selection-related target properties', () => {
+  const node = document.createElement('input')
+  const spy = jest.fn()
+  const value = 'ab'
+  const selectionStart = 1
+  const selectionEnd = 2
+  node.addEventListener('change', spy)
+  fireEvent.change(node, {target: {value, selectionStart, selectionEnd}})
+  expect(node.value).toBe(value)
+  expect(node.selectionStart).toBe(selectionStart)
+  expect(node.selectionEnd).toBe(selectionEnd)
+})
+
 test('assigning a value to a target that cannot have a value throws an error', () => {
   const node = document.createElement('div')
   expect(() =>
