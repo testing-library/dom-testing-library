@@ -555,6 +555,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "diego-codes",
+      "name": "Diego Hernandez",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5973294?v=4",
+      "profile": "https://twitter.com/diego_codes",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
