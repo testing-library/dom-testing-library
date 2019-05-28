@@ -3,6 +3,8 @@
 // './queries' are query functions.
 let config = {
   testIdAttribute: 'data-testid',
+  idAttribute: 'id',
+  classAttribute: 'class',
   // this is to support React's async `act` function.
   // forcing react-testing-library to wrap all async functions would've been
   // a total nightmare (consider wrapping every findBy* query and then also

@@ -4,6 +4,8 @@ import {
   getByText,
   getByTestId,
   queryByTestId,
+  queryById,
+  queryAllByClass,
   wait,
   fireEvent,
 } from '../'
@@ -17,6 +19,8 @@ function getExampleDOM() {
     <label for="username">Username</label>
     <input id="username" />
     <button>Print Username</button>
+    <div class="username-list" />
+    <div class="username-list" />
   `
   const button = div.querySelector('button')
   const input = div.querySelector('input')
@@ -50,43 +54,61 @@ test('examples of some things', async () => {
     expect(queryByTestId(container, 'printed-username')).toBeTruthy(),
   )
 
+  await wait(() => expect(queryById(container, 'username')).toBeTruthy())
+
+  await wait(() =>
+    expect(queryAllByClass(container, 'username-list')).toBeTruthy(),
+  )
+
   // getByTestId and queryByTestId are an escape hatch to get elements
   // by a test id (could also attempt to get this element by it's text)
   expect(getByTestId(container, 'printed-username')).toHaveTextContent(
     famousWomanInHistory,
   )
   expect(container).toMatchInlineSnapshot(`
-<div>
-  
-    
-  <label
-    for="username"
-  >
-    Username
-  </label>
-  
-    
-  <input
-    id="username"
-  />
-  
-    
-  <button>
-    Print Username
-  </button>
-  
-  
-  <div>
-    
-        
-    <div
-      data-testid="printed-username"
-    >
-      Ada Lovelace
-    </div>
-    
+    <div>
       
-  </div>
-</div>
-`)
+        
+      <label
+        for="username"
+      >
+        Username
+      </label>
+      
+        
+      <input
+        id="username"
+      />
+      
+        
+      <button>
+        Print Username
+      </button>
+      
+        
+      <div
+        class="username-list"
+      >
+        
+        
+        <div
+          class="username-list"
+        >
+          
+      
+        </div>
+      </div>
+      <div>
+        
+            
+        <div
+          data-testid="printed-username"
+        >
+          Ada Lovelace
+        </div>
+        
+          
+      </div>
+    </div>
+  `)
 })
