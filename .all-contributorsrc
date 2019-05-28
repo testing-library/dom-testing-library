@@ -565,6 +565,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "neoziro",
+      "name": "Greg Bergé",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/266302?v=4",
+      "profile": "https://www.smooth-code.com",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "repoHost": "https://github.com"
