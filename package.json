@@ -1,10 +1,10 @@
 {
-  "name": "dom-testing-library",
+  "name": "@testing-library/dom",
   "version": "0.0.0-semantically-released",
   "description": "Simple and complete DOM testing utilities that encourage good testing practices.",
   "main": "dist/index.js",
-  "module": "dist/dom-testing-library.esm.js",
-  "umd:main": "dist/dom-testing-library.umd.js",
+  "module": "dist/@testing-library/dom.esm.js",
+  "umd:main": "dist/@testing-library/dom.umd.js",
   "source": "src/index.js",
   "typings": "typings",
   "keywords": [
