@@ -150,12 +150,12 @@ MIT
 [coverage]: https://codecov.io/github/testing-library/dom-testing-library
 [version-badge]:
   https://img.shields.io/npm/v/dom-testing-library.svg?style=flat-square
-[package]: https://www.npmjs.com/package/dom-testing-library
+[package]: https://www.npmjs.com/package/@testing-library/dom
 [downloads-badge]:
-  https://img.shields.io/npm/dm/dom-testing-library.svg?style=flat-square
-[npmtrends]: http://www.npmtrends.com/dom-testing-library
+  https://img.shields.io/npm/dm/@testing-library/dom.svg?style=flat-square
+[npmtrends]: http://www.npmtrends.com/@testing-library/dom
 [license-badge]:
-  https://img.shields.io/npm/l/dom-testing-library.svg?style=flat-square
+  https://img.shields.io/npm/l/@testing-library/dom.svg?style=flat-square
 [license]:
   https://github.com/testing-library/dom-testing-library/blob/master/LICENSE
 [prs-badge]:
