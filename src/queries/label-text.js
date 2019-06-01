@@ -63,7 +63,7 @@ function queryAllByLabelText(
   const possibleAriaLabelElements = queryAllByText(container, text, {
     exact,
     normalizer: matchNormalizer,
-  }).filter(el => el.tagName !== 'LABEL') // don't reprocess labels
+  })
 
   const ariaLabelledElements = possibleAriaLabelElements.reduce(
     (allLabelledElements, nextLabelElement) => {

@@ -197,6 +197,19 @@ test('can get elements labelled with aria-labelledby attribute', () => {
   expect(getByLabelText('Section One').id).toBe('section-one')
 })
 
+test('can get sibling elements with aria-labelledby attrib ute', () => {
+  const {getAllByLabelText} = render(`
+    <div>
+      <svg id="icon" aria-labelledby="icon-desc"></svg>
+      <span id="icon-desc">Tacos</span>
+    </div>
+  `)
+
+  const result = getAllByLabelText('Tacos')
+  expect(result).toHaveLength(1)
+  expect(result[0].id).toBe('icon')
+})
+
 test('get can get form controls by placeholder', () => {
   const {getByPlaceholderText} = render(`
     <input id="username-id" placeholder="username" />,
