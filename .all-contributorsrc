@@ -593,6 +593,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "szabototo89",
+      "name": "Tamás Szabó",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3720079?v=4",
+      "profile": "https://hu.linkedin.com/pub/tamas-szabo/57/a4b/242",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
