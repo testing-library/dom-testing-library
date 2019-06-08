@@ -374,6 +374,61 @@ describe('query by test id', () => {
   })
 })
 
+test('queryAllByRole returns semantic html elements', () => {
+  const {queryAllByRole} = render(`
+    <form>
+      <h1>Heading 1</h1>
+      <h2>Heading 2</h2>
+      <h3>Heading 3</h3>
+      <h4>Heading 4</h4>
+      <h5>Heading 5</h5>
+      <h6>Heading 6</h6>
+      <ol>
+        <li></li>
+        <li></li>
+      </ol>
+      <ul>
+        <li></li>
+      </ul>
+      <input>
+      <input type="text">
+      <input type="checkbox">
+      <input type="radio">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th scope="row"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr></tr>
+          <tr></tr>
+        </tbody>
+      </table>
+      <table role="grid"></table>
+      <button>Button</button>
+    </form>
+  `)
+
+  expect(queryAllByRole(/table/i)).toHaveLength(1)
+  expect(queryAllByRole(/tabl/i, {exact: false})).toHaveLength(1)
+  expect(queryAllByRole(/columnheader/i)).toHaveLength(1)
+  expect(queryAllByRole(/rowheader/i)).toHaveLength(1)
+  expect(queryAllByRole(/grid/i)).toHaveLength(1)
+  expect(queryAllByRole(/form/i)).toHaveLength(1)
+  expect(queryAllByRole(/button/i)).toHaveLength(1)
+  expect(queryAllByRole(/heading/i)).toHaveLength(6)
+  expect(queryAllByRole('list')).toHaveLength(2)
+  expect(queryAllByRole(/listitem/i)).toHaveLength(3)
+  expect(queryAllByRole(/textbox/i)).toHaveLength(2)
+  expect(queryAllByRole(/checkbox/i)).toHaveLength(1)
+  expect(queryAllByRole(/radio/i)).toHaveLength(1)
+  expect(queryAllByRole('row')).toHaveLength(3)
+  expect(queryAllByRole(/rowgroup/i)).toHaveLength(2)
+  expect(queryAllByRole(/(table)|(textbox)/i)).toHaveLength(3)
+})
+
 test('getAll* matchers return an array', () => {
   const {
     getAllByAltText,
