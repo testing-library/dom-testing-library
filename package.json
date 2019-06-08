@@ -44,6 +44,7 @@
   "dependencies": {
     "@babel/runtime": "^7.4.5",
     "@sheerun/mutationobserver-shim": "^0.3.2",
+    "aria-query": "3.0.0",
     "pretty-format": "^24.8.0",
     "wait-for-expect": "^1.2.0"
   },
