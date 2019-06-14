@@ -1,41 +1,5 @@
+import {elementRoleList} from '../role-helpers'
 import {buildQueries, fuzzyMatches, makeNormalizer, matches} from './all-utils'
-import {elementRoles} from 'aria-query'
-
-function buildElementRoleList(elementRolesMap) {
-  function makeElementSelector({name, attributes = []}) {
-    return `${name}${attributes
-      .map(({name: attributeName, value}) => `[${attributeName}=${value}]`)
-      .join('')}`
-  }
-
-  function getSelectorSpecificity({attributes = []}) {
-    return attributes.length
-  }
-
-  function bySelectorSpecificity(
-    {specificity: leftSpecificity},
-    {specificity: rightSpecificity},
-  ) {
-    return rightSpecificity - leftSpecificity
-  }
-
-  let result = []
-
-  for (const [element, roles] of elementRolesMap.entries()) {
-    result = [
-      ...result,
-      {
-        selector: makeElementSelector(element),
-        roles: Array.from(roles),
-        specificity: getSelectorSpecificity(element),
-      },
-    ]
-  }
-
-  return result.sort(bySelectorSpecificity)
-}
-
-const elementRoleList = buildElementRoleList(elementRoles)
 
 function queryAllByRole(
   container,
