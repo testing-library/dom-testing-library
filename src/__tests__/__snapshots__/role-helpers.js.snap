@@ -1,0 +1,144 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`logRoles logs expected roles for various dom nodes 1`] = `
+"region ####################################
+
+[36m<section[39m
+  [33mdata-testid[39m=[32m\\"main-content\\"[39m
+[36m/>[39m
+
+
+navigation ################################
+
+[36m<nav[39m
+  [33mdata-testid[39m=[32m\\"nav-bar\\"[39m
+[36m/>[39m
+
+
+heading ###################################
+
+[36m<h1[39m
+  [33mdata-testid[39m=[32m\\"main-heading\\"[39m
+[36m/>[39m
+
+[36m<h2[39m
+  [33mdata-testid[39m=[32m\\"sub-heading\\"[39m
+[36m/>[39m
+
+[36m<h3[39m
+  [33mdata-testid[39m=[32m\\"tertiary-heading\\"[39m
+[36m/>[39m
+
+
+article ###################################
+
+[36m<article[39m
+  [33mdata-testid[39m=[32m\\"featured-article\\"[39m
+[36m/>[39m
+
+
+list ######################################
+
+[36m<ul[39m
+  [33mdata-testid[39m=[32m\\"a-list\\"[39m
+[36m/>[39m
+
+[36m<ul[39m
+  [33mdata-testid[39m=[32m\\"b-list\\"[39m
+[36m/>[39m
+
+
+listitem ##################################
+
+[36m<li[39m
+  [33mdata-testid[39m=[32m\\"a-list-item-1\\"[39m
+[36m/>[39m
+
+[36m<li[39m
+  [33mdata-testid[39m=[32m\\"a-list-item-2\\"[39m
+[36m/>[39m
+
+[36m<li[39m
+  [33mdata-testid[39m=[32m\\"b-list-item-1\\"[39m
+[36m/>[39m
+
+[36m<li[39m
+  [33mdata-testid[39m=[32m\\"b-list-item-2\\"[39m
+[36m/>[39m
+
+
+table #####################################
+
+[36m<table[39m
+  [33mdata-testid[39m=[32m\\"a-table\\"[39m
+[36m/>[39m
+
+
+rowgroup ##################################
+
+[36m<tbody[39m
+  [33mdata-testid[39m=[32m\\"a-tbody\\"[39m
+[36m/>[39m
+
+
+row #######################################
+
+[36m<tr[39m
+  [33mdata-testid[39m=[32m\\"a-row\\"[39m
+[36m/>[39m
+
+
+cell ######################################
+
+[36m<td[39m
+  [33mdata-testid[39m=[32m\\"a-cell-1\\"[39m
+[36m/>[39m
+
+[36m<td[39m
+  [33mdata-testid[39m=[32m\\"a-cell-2\\"[39m
+[36m/>[39m
+
+[36m<td[39m
+  [33mdata-testid[39m=[32m\\"a-cell-3\\"[39m
+[36m/>[39m
+
+
+form ######################################
+
+[36m<form[39m
+  [33mdata-testid[39m=[32m\\"a-form\\"[39m
+[36m/>[39m
+
+
+radio #####################################
+
+[36m<input[39m
+  [33mdata-testid[39m=[32m\\"a-radio-1\\"[39m
+  [33mtype[39m=[32m\\"radio\\"[39m
+[36m/>[39m
+
+[36m<input[39m
+  [33mdata-testid[39m=[32m\\"a-radio-2\\"[39m
+  [33mtype[39m=[32m\\"radio\\"[39m
+[36m/>[39m
+
+
+textbox ###################################
+
+[36m<input[39m
+  [33mdata-testid[39m=[32m\\"a-input-1\\"[39m
+  [33mtype[39m=[32m\\"text\\"[39m
+[36m/>[39m
+
+[36m<input[39m
+  [33mdata-testid[39m=[32m\\"a-input-2\\"[39m
+  [33mtype[39m=[32m\\"text\\"[39m
+[36m/>[39m
+
+[36m<textarea[39m
+  [33mdata-testid[39m=[32m\\"a-textarea\\"[39m
+[36m/>[39m
+
+
+"
+`;
