@@ -1,3 +1,4 @@
+/* eslint-disable no-control-regex */
 import {getRoles, logRoles} from '../role-helpers'
 
 function setup() {
@@ -104,17 +105,15 @@ test('logRoles logs expected roles for various dom nodes', () => {
   const {section} = setup()
   const output = logRoles(section)
 
-  expect(/region:[^:]+section/i.test(output)).toBe(true)
-  expect(/heading:[^:]+h1/i.test(output)).toBe(true)
-  expect(/heading:[^:]+h2/i.test(output)).toBe(true)
-  expect(/heading:[^:]+h3/i.test(output)).toBe(true)
-  expect(/navigation:[^:]+nav/i.test(output)).toBe(true)
-  expect(/article:[^:]+article/i.test(output)).toBe(true)
-  expect(/list:[^:]+ul/i.test(output)).toBe(true)
-  expect(/listitem:[^:]+li[^:]+li/i.test(output)).toBe(true)
-  expect(/table:[^:]+table/i.test(output)).toBe(true)
-  expect(/row:[^:]+tr/i.test(output)).toBe(true)
-  expect(/cell:[^:]+td[^:]+td[^:]+td/i.test(output)).toBe(true)
-  expect(/form:[^:]+form/i.test(output)).toBe(true)
-  expect(/textbox:[^:]+input[^:]+input/i.test(output)).toBe(true)
+  expect(/region[^<]+<section/gi.test(output)).toBe(true)
+  expect(/heading[^<]+<h1 \/>[^<]+<h2 \/>[^<]+<h3/i.test(output)).toBe(true)
+  expect(/navigation[^<]+<nav/i.test(output)).toBe(true)
+  expect(/article[^<]+<article/i.test(output)).toBe(true)
+  expect(/list[^<]+<ul/i.test(output)).toBe(true)
+  expect(/listitem[^<]+<li[^<]+<li/i.test(output)).toBe(true)
+  expect(/table[^<]+<table/i.test(output)).toBe(true)
+  expect(/row[^<]+<tr/i.test(output)).toBe(true)
+  expect(/cell[^<]+<td[^<]+<td[^<]+<td/i.test(output)).toBe(true)
+  expect(/form[^<]+<form/i.test(output)).toBe(true)
+  expect(/textbox[^<]+<input[^<]+<input/i.test(output)).toBe(true)
 })
