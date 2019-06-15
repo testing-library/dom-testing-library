@@ -1,5 +1,4 @@
-/* eslint-disable no-control-regex */
-import {getRoles, logRoles} from '../role-helpers'
+import {getRoles, logRoles, getImplicitAriaRole} from '../role-helpers'
 import {render} from './helpers/test-utils'
 
 function setup() {
@@ -150,4 +149,14 @@ test('logRoles logs expected roles for various dom nodes', () => {
   // and take a look at the output to make sure it still looks good
   //console.log(output);
   expect(output).toMatchSnapshot()
+})
+
+test('getImplicitAriaRole returns expected roles for various dom nodes', () => {
+  const {section, h1, form, radio, input} = setup()
+
+  expect(getImplicitAriaRole(section)).toEqual(['region'])
+  expect(getImplicitAriaRole(h1)).toEqual(['heading'])
+  expect(getImplicitAriaRole(form)).toEqual(['form'])
+  expect(getImplicitAriaRole(radio)).toEqual(['radio'])
+  expect(getImplicitAriaRole(input)).toEqual(['textbox'])
 })
