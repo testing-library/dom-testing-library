@@ -1,41 +1,67 @@
 /* eslint-disable no-control-regex */
 import {getRoles, logRoles} from '../role-helpers'
+import {render} from './helpers/test-utils'
 
 function setup() {
-  const section = document.createElement('section')
-  const h1 = document.createElement('h1')
-  const h2 = document.createElement('h2')
-  const h3 = document.createElement('h3')
-  const nav = document.createElement('nav')
-  const article = document.createElement('article')
-  const ul = document.createElement('ul')
-  const li1 = document.createElement('li')
-  const li2 = document.createElement('li')
-  const table = document.createElement('table')
-  const tr = document.createElement('tr')
-  const td1 = document.createElement('td')
-  const td2 = document.createElement('td')
-  const td3 = document.createElement('td')
-  const formEl = document.createElement('form')
-  const input = document.createElement('input')
-  const input2 = document.createElement('input')
+  const {getByTestId} = render(`
+<section data-testid='main-content'>
+  <nav data-testid='nav-bar' />
+  
+  <h1 data-testid='main-heading'>Main Heading</h1>
+  <h2 data-testid='sub-heading'>Sub Heading</h2>
+  <h3 data-testid='tertiary-heading'>Tertiary Heading</h3>
+  
+  <article data-testid='featured-article'>
+  
+    <ul data-testid='a-list'>
+      <li data-testid='a-list-item-1'>Item 1</li>
+      <li data-testid='a-list-item-2'>Item 2</li>
+    </ul>
 
-  section.appendChild(h1)
-  section.appendChild(nav)
-  section.appendChild(h2)
-  section.appendChild(h3)
-  section.appendChild(article)
-  article.appendChild(ul)
-  ul.appendChild(li1)
-  ul.appendChild(li2)
-  article.appendChild(table)
-  table.appendChild(tr)
-  tr.appendChild(td1)
-  tr.appendChild(td2)
-  tr.appendChild(td3)
-  article.appendChild(formEl)
-  formEl.appendChild(input)
-  formEl.appendChild(input2)
+    <table data-testid='a-table'>
+      <tbody data-testid='a-tbody'>
+        <tr data-testid='a-row'>
+          <td data-testid='a-cell-1'>Cell 1</td>
+          <td data-testid='a-cell-2'>Cell 2</td>
+          <td data-testid='a-cell-3'>Cell 3</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <form data-testid='a-form'>
+      <input type='text' data-testid='a-input-1' />
+      <input type='text' data-testid='a-input-2' />
+    </form>
+
+    <ul data-testid='b-list'>
+      <li data-testid='b-list-item-1'>Item 1</li>
+      <li data-testid='b-list-item-2'>Item 2</li>
+    </ul>
+   </article>
+</section>
+  `)
+
+  const section = getByTestId('main-content')
+  const h1 = getByTestId('main-heading')
+  const h2 = getByTestId('sub-heading')
+  const h3 = getByTestId('tertiary-heading')
+  const nav = getByTestId('nav-bar')
+  const article = getByTestId('featured-article')
+  const aUl = getByTestId('a-list')
+  const aLi1 = getByTestId('a-list-item-1')
+  const aLi2 = getByTestId('a-list-item-2')
+  const bUl = getByTestId('b-list')
+  const bLi1 = getByTestId('b-list-item-1')
+  const bLi2 = getByTestId('b-list-item-2')
+  const table = getByTestId('a-table')
+  const tbody = getByTestId('a-tbody')
+  const tr = getByTestId('a-row')
+  const td1 = getByTestId('a-cell-1')
+  const td2 = getByTestId('a-cell-2')
+  const td3 = getByTestId('a-cell-3')
+  const formEl = getByTestId('a-form')
+  const input = getByTestId('a-input-1')
+  const input2 = getByTestId('a-input-2')
 
   return {
     section,
@@ -44,10 +70,14 @@ function setup() {
     h3,
     nav,
     article,
-    ul,
-    li1,
-    li2,
+    aUl,
+    aLi1,
+    aLi2,
+    bUl,
+    bLi1,
+    bLi2,
     table,
+    tbody,
     tr,
     td1,
     td2,
@@ -66,10 +96,14 @@ test('getRoles returns expected roles for various dom nodes', () => {
     h3,
     nav,
     article,
-    ul,
-    li1,
-    li2,
+    aUl,
+    aLi1,
+    aLi2,
+    bUl,
+    bLi1,
+    bLi2,
     table,
+    tbody,
     tr,
     td1,
     td2,
@@ -84,13 +118,14 @@ test('getRoles returns expected roles for various dom nodes', () => {
     heading: [h1, h2, h3],
     navigation: [nav],
     article: [article],
-    list: [ul],
-    listitem: [li1, li2],
+    list: [aUl, bUl],
+    listitem: [aLi1, aLi2, bLi1, bLi2],
     table: [table],
     row: [tr],
     cell: [td1, td2, td3],
     form: [formEl],
     textbox: [input, input2],
+    rowgroup: [tbody],
   })
 })
 
@@ -98,15 +133,8 @@ test('logRoles logs expected roles for various dom nodes', () => {
   const {section} = setup()
   const output = logRoles(section)
 
-  expect(/region[^<]+<section/gi.test(output)).toBe(true)
-  expect(/heading[^<]+<h1 \/>[^<]+<h2 \/>[^<]+<h3/i.test(output)).toBe(true)
-  expect(/navigation[^<]+<nav/i.test(output)).toBe(true)
-  expect(/article[^<]+<article/i.test(output)).toBe(true)
-  expect(/list[^<]+<ul/i.test(output)).toBe(true)
-  expect(/listitem[^<]+<li[^<]+<li/i.test(output)).toBe(true)
-  expect(/table[^<]+<table/i.test(output)).toBe(true)
-  expect(/row[^<]+<tr/i.test(output)).toBe(true)
-  expect(/cell[^<]+<td[^<]+<td[^<]+<td/i.test(output)).toBe(true)
-  expect(/form[^<]+<form/i.test(output)).toBe(true)
-  expect(/textbox[^<]+<input[^<]+<input/i.test(output)).toBe(true)
+  // If the snapshot needs to be updated, uncomment the console.log
+  // and take a look at the output to make sure it still looks good
+  //console.log(output);
+  expect(output).toMatchSnapshot()
 })

@@ -1,5 +1,4 @@
 import {elementRoles} from 'aria-query'
-import merge from 'lodash.merge'
 import {debugDOM} from './query-helpers'
 
 function buildElementRoleList(elementRolesMap) {
@@ -43,26 +42,22 @@ const elementRoleMap = elementRoleList.reduce(
 )
 
 function getRoles(container) {
-  function getRolesForElements(elements) {
-    return elements
-      .filter(el => el.tagName !== undefined)
-      .map(el => [el, elementRoleMap[el.tagName.toLowerCase()]])
-      .reduce(
-        (acc, [el, roleName]) =>
-          acc[roleName]
-            ? {...acc, [roleName]: [...acc[roleName], el]}
-            : {...acc, [roleName]: [el]},
-        {},
-      )
+  function flattenDOM(node) {
+    return [
+      node,
+      ...Array.from(node.children).reduce(
+        (acc, c) => (c.tagName ? [...acc, ...flattenDOM(c)] : acc),
+        [],
+      ),
+    ]
   }
 
-  const elements = Array.isArray(container) ? container : [container]
-  const childRoles = elements.reduce(
-    (acc, el) => ({...acc, ...getRoles(Array.from(el.childNodes))}),
-    {},
-  )
-
-  return merge(getRolesForElements(elements), childRoles)
+  return flattenDOM(container).reduce((acc, node) => {
+    const role = elementRoleMap[node.tagName.toLowerCase()]
+    return Array.isArray(acc[role])
+      ? {...acc, [role]: [...acc[role], node]}
+      : {...acc, [role]: [node]}
+  }, [])
 }
 
 function logRoles(container) {
@@ -70,13 +65,13 @@ function logRoles(container) {
 
   return Object.entries(roles)
     .map(([role, elements]) => {
-      const numDelimeters = 42 - role.length - 1
+      const numDelimeters = 42 - role.length - 1 // 42 is arbitrary
       const delimeterBar = [...Array(numDelimeters)].map(_ => '#').join('')
       const elementsString = elements
         .map(el => `${debugDOM(el.cloneNode(false))}`)
-        .join('\n\n\t')
+        .join('\n\n')
 
-      return `${role} ${delimeterBar}\n\n\t${elementsString}\n\n\n`
+      return `${role} ${delimeterBar}\n\n${elementsString}\n\n\n`
     })
     .join('')
 }
