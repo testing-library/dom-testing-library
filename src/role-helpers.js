@@ -1,6 +1,22 @@
 import {elementRoles} from 'aria-query'
 import {debugDOM} from './query-helpers'
 
+const elementRoleList = buildElementRoleList(elementRoles)
+const elementRoleMap = elementRoleList.reduce(
+  (acc, {selector, roles}) => ({...acc, [selector]: roles}),
+  {},
+)
+
+function getImplicitAriaRole(currentNode) {
+  for (const {selector, roles} of elementRoleList) {
+    if (currentNode.matches(selector)) {
+      return [...roles]
+    }
+  }
+
+  return []
+}
+
 function buildElementRoleList(elementRolesMap) {
   function makeElementSelector({name, attributes = []}) {
     return `${name}${attributes
@@ -35,12 +51,6 @@ function buildElementRoleList(elementRolesMap) {
   return result.sort(bySelectorSpecificity)
 }
 
-const elementRoleList = buildElementRoleList(elementRoles)
-const elementRoleMap = elementRoleList.reduce(
-  (acc, {selector, roles}) => ({...acc, [selector]: roles}),
-  {},
-)
-
 function getRoles(container) {
   function flattenDOM(node) {
     return [
@@ -53,11 +63,11 @@ function getRoles(container) {
   }
 
   return flattenDOM(container).reduce((acc, node) => {
-    const role = elementRoleMap[node.tagName.toLowerCase()]
+    const [role] = getImplicitAriaRole(node)
     return Array.isArray(acc[role])
       ? {...acc, [role]: [...acc[role], node]}
       : {...acc, [role]: [node]}
-  }, [])
+  }, {})
 }
 
 function logRoles(container) {
@@ -76,4 +86,10 @@ function logRoles(container) {
     .join('')
 }
 
-export {getRoles, logRoles, elementRoleList, elementRoleMap}
+export {
+  getRoles,
+  logRoles,
+  elementRoleList,
+  elementRoleMap,
+  getImplicitAriaRole,
+}

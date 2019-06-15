@@ -29,8 +29,11 @@ function setup() {
     </table>
 
     <form data-testid='a-form'>
+      <input type='radio' data-testid='a-radio-1' />
+      <input type='radio' data-testid='a-radio-2' />
       <input type='text' data-testid='a-input-1' />
       <input type='text' data-testid='a-input-2' />
+      <textarea data-testid='a-textarea'></textarea>
     </form>
 
     <ul data-testid='b-list'>
@@ -60,8 +63,11 @@ function setup() {
   const td2 = getByTestId('a-cell-2')
   const td3 = getByTestId('a-cell-3')
   const form = getByTestId('a-form')
+  const radio = getByTestId('a-radio-1')
+  const radio2 = getByTestId('a-radio-2')
   const input = getByTestId('a-input-1')
   const input2 = getByTestId('a-input-2')
+  const textarea = getByTestId('a-textarea')
 
   return {
     section,
@@ -83,8 +89,11 @@ function setup() {
     td2,
     td3,
     form,
+    radio,
+    radio2,
     input,
     input2,
+    textarea,
   }
 }
 
@@ -109,14 +118,18 @@ test('getRoles returns expected roles for various dom nodes', () => {
     td2,
     td3,
     form,
+    radio,
+    radio2,
     input,
     input2,
+    textarea,
   } = setup()
 
   expect(getRoles(section)).toEqual({
     region: [section],
     heading: [h1, h2, h3],
     navigation: [nav],
+    radio: [radio, radio2],
     article: [article],
     list: [aUl, bUl],
     listitem: [aLi1, aLi2, bLi1, bLi2],
@@ -124,7 +137,7 @@ test('getRoles returns expected roles for various dom nodes', () => {
     row: [tr],
     cell: [td1, td2, td3],
     form: [form],
-    textbox: [input, input2],
+    textbox: [input, input2, textarea],
     rowgroup: [tbody],
   })
 })

@@ -1,4 +1,4 @@
-import {elementRoleList} from '../role-helpers'
+import {getImplicitAriaRole} from '../role-helpers'
 import {buildQueries, fuzzyMatches, makeNormalizer, matches} from './all-utils'
 
 function queryAllByRole(
@@ -8,16 +8,6 @@ function queryAllByRole(
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-
-  function getImplicitAriaRole(currentNode) {
-    for (const {selector, roles} of elementRoleList) {
-      if (currentNode.matches(selector)) {
-        return [...roles]
-      }
-    }
-
-    return []
-  }
 
   return Array.from(container.querySelectorAll('*')).filter(node => {
     const isRoleSpecifiedExplicitly = node.hasAttribute('role')
