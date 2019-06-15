@@ -76,10 +76,4 @@ function logRoles(container) {
     .join('')
 }
 
-export {
-  getRoles,
-  logRoles,
-  buildElementRoleList,
-  elementRoleList,
-  elementRoleMap,
-}
+export {getRoles, logRoles, elementRoleList, elementRoleMap}
