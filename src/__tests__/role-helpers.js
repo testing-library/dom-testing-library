@@ -57,9 +57,6 @@ function setup() {
     input2,
   }
 }
-test('getRoles is a function', () => {
-  expect(typeof getRoles).toBe('function')
-})
 
 test('getRoles returns expected roles for various dom nodes', () => {
   const {
@@ -95,10 +92,6 @@ test('getRoles returns expected roles for various dom nodes', () => {
     form: [formEl],
     textbox: [input, input2],
   })
-})
-
-test('logRoles is a function', () => {
-  expect(typeof logRoles).toBe('function')
 })
 
 test('logRoles logs expected roles for various dom nodes', () => {
