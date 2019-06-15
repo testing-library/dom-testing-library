@@ -65,7 +65,7 @@ function logRoles(container) {
 
   return Object.entries(roles)
     .map(([role, elements]) => {
-      const numDelimeters = 42 - role.length - 1 // 42 is arbitrary
+      const numDelimeters = 42 - role.length // 42 is arbitrary
       const delimeterBar = [...Array(numDelimeters)].map(_ => '#').join('')
       const elementsString = elements
         .map(el => `${debugDOM(el.cloneNode(false))}`)
