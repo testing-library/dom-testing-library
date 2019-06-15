@@ -2,10 +2,6 @@ import {elementRoles} from 'aria-query'
 import {debugDOM} from './query-helpers'
 
 const elementRoleList = buildElementRoleList(elementRoles)
-const elementRoleMap = elementRoleList.reduce(
-  (acc, {selector, roles}) => ({...acc, [selector]: roles}),
-  {},
-)
 
 function getImplicitAriaRole(currentNode) {
   for (const {selector, roles} of elementRoleList) {
@@ -86,10 +82,4 @@ function logRoles(container) {
     .join('')
 }
 
-export {
-  getRoles,
-  logRoles,
-  elementRoleList,
-  elementRoleMap,
-  getImplicitAriaRole,
-}
+export {getRoles, logRoles, elementRoleList, getImplicitAriaRole}
