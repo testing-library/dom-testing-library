@@ -1,5 +1,7 @@
 import {getRoles, logRoles, getImplicitAriaRole} from '../role-helpers'
-import {render} from './helpers/test-utils'
+import {render, cleanup} from './helpers/test-utils'
+
+afterEach(cleanup)
 
 function setup() {
   const {getByTestId} = render(`
