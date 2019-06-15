@@ -11,7 +11,7 @@ function setup() {
   <h3 data-testid='tertiary-heading'>Tertiary Heading</h3>
   
   <article data-testid='featured-article'>
-  
+
     <ul data-testid='a-list'>
       <li data-testid='a-list-item-1'>Item 1</li>
       <li data-testid='a-list-item-2'>Item 2</li>

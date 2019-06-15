@@ -56,7 +56,7 @@ function getRoles(container) {
     return [
       node,
       ...Array.from(node.children).reduce(
-        (acc, child) => (child.tagName ? [...acc, ...flattenDOM(child)] : acc),
+        (acc, child) => [...acc, ...flattenDOM(child)],
         [],
       ),
     ]
