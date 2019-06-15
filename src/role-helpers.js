@@ -57,7 +57,7 @@ function getRoles(container) {
     return Array.isArray(acc[role])
       ? {...acc, [role]: [...acc[role], node]}
       : {...acc, [role]: [node]}
-  }, {})
+  }, [])
 }
 
 function logRoles(container) {
