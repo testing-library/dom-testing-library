@@ -46,7 +46,7 @@ function getRoles(container) {
     return [
       node,
       ...Array.from(node.children).reduce(
-        (acc, c) => (c.tagName ? [...acc, ...flattenDOM(c)] : acc),
+        (acc, child) => (child.tagName ? [...acc, ...flattenDOM(child)] : acc),
         [],
       ),
     ]
@@ -57,7 +57,7 @@ function getRoles(container) {
     return Array.isArray(acc[role])
       ? {...acc, [role]: [...acc[role], node]}
       : {...acc, [role]: [node]}
-  }, [])
+  }, {})
 }
 
 function logRoles(container) {
@@ -66,7 +66,7 @@ function logRoles(container) {
   return Object.entries(roles)
     .map(([role, elements]) => {
       const numDelimeters = 42 - role.length // 42 is arbitrary
-      const delimeterBar = [...Array(numDelimeters)].map(_ => '#').join('')
+      const delimeterBar = '#'.repeat(numDelimeters)
       const elementsString = elements
         .map(el => debugDOM(el.cloneNode(false)))
         .join('\n\n')

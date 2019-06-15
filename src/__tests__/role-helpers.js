@@ -59,7 +59,7 @@ function setup() {
   const td1 = getByTestId('a-cell-1')
   const td2 = getByTestId('a-cell-2')
   const td3 = getByTestId('a-cell-3')
-  const formEl = getByTestId('a-form')
+  const form = getByTestId('a-form')
   const input = getByTestId('a-input-1')
   const input2 = getByTestId('a-input-2')
 
@@ -82,7 +82,7 @@ function setup() {
     td1,
     td2,
     td3,
-    formEl,
+    form,
     input,
     input2,
   }
@@ -108,7 +108,7 @@ test('getRoles returns expected roles for various dom nodes', () => {
     td1,
     td2,
     td3,
-    formEl,
+    form,
     input,
     input2,
   } = setup()
@@ -123,7 +123,7 @@ test('getRoles returns expected roles for various dom nodes', () => {
     table: [table],
     row: [tr],
     cell: [td1, td2, td3],
-    form: [formEl],
+    form: [form],
     textbox: [input, input2],
     rowgroup: [tbody],
   })
