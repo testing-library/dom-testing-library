@@ -1,4 +1,4 @@
-import {getRoles, logRoles, getImplicitAriaRole} from '../role-helpers'
+import {getRoles, logRoles, getImplicitAriaRoles} from '../role-helpers'
 import {render, cleanup} from './helpers/test-utils'
 
 afterEach(cleanup)
@@ -11,8 +11,15 @@ function setup() {
   <h1 data-testid='main-heading'>Main Heading</h1>
   <h2 data-testid='sub-heading'>Sub Heading</h2>
   <h3 data-testid='tertiary-heading'>Tertiary Heading</h3>
-  
+
   <article data-testid='featured-article'>
+    <!-- menuitem is currently deprecated, but is the only 
+         tag currently that aria-query returns multiple roles for
+         (roles: command, menuitem).
+         It's used here in case a future tag also has multiple 
+         roles -->
+    <menuitem data-testid='a-menuitem-1'>1</menuitem> 
+    <menuitem data-testid='a-menuitem-2'>2</menuitem>
 
     <ul data-testid='a-list'>
       <li data-testid='a-list-item-1'>Item 1</li>
@@ -51,6 +58,8 @@ function setup() {
   const h3 = getByTestId('tertiary-heading')
   const nav = getByTestId('nav-bar')
   const article = getByTestId('featured-article')
+  const menuItem = getByTestId('a-menuitem-1')
+  const menuItem2 = getByTestId('a-menuitem-2')
   const aUl = getByTestId('a-list')
   const aLi1 = getByTestId('a-list-item-1')
   const aLi2 = getByTestId('a-list-item-2')
@@ -77,6 +86,8 @@ function setup() {
     h3,
     nav,
     article,
+    menuItem,
+    menuItem2,
     aUl,
     aLi1,
     aLi2,
@@ -106,6 +117,8 @@ test('getRoles returns expected roles for various dom nodes', () => {
     h3,
     nav,
     article,
+    menuItem,
+    menuItem2,
     aUl,
     aLi1,
     aLi2,
@@ -140,6 +153,8 @@ test('getRoles returns expected roles for various dom nodes', () => {
     form: [form],
     textbox: [input, input2, textarea],
     rowgroup: [tbody],
+    command: [menuItem, menuItem2],
+    menuitem: [menuItem, menuItem2],
   })
 })
 
@@ -149,16 +164,16 @@ test('logRoles logs expected roles for various dom nodes', () => {
 
   // If the snapshot needs to be updated, uncomment the console.log
   // and take a look at the output to make sure it still looks good
-  //console.log(output);
+  // console.log(output);
   expect(output).toMatchSnapshot()
 })
 
-test('getImplicitAriaRole returns expected roles for various dom nodes', () => {
+test('getImplicitAriaRoles returns expected roles for various dom nodes', () => {
   const {section, h1, form, radio, input} = setup()
 
-  expect(getImplicitAriaRole(section)).toEqual(['region'])
-  expect(getImplicitAriaRole(h1)).toEqual(['heading'])
-  expect(getImplicitAriaRole(form)).toEqual(['form'])
-  expect(getImplicitAriaRole(radio)).toEqual(['radio'])
-  expect(getImplicitAriaRole(input)).toEqual(['textbox'])
+  expect(getImplicitAriaRoles(section)).toEqual(['region'])
+  expect(getImplicitAriaRoles(h1)).toEqual(['heading'])
+  expect(getImplicitAriaRoles(form)).toEqual(['form'])
+  expect(getImplicitAriaRoles(radio)).toEqual(['radio'])
+  expect(getImplicitAriaRoles(input)).toEqual(['textbox'])
 })

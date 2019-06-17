@@ -3,7 +3,7 @@ import {debugDOM} from './query-helpers'
 
 const elementRoleList = buildElementRoleList(elementRoles)
 
-function getImplicitAriaRole(currentNode) {
+function getImplicitAriaRoles(currentNode) {
   for (const {selector, roles} of elementRoleList) {
     if (currentNode.matches(selector)) {
       return [...roles]
@@ -59,10 +59,14 @@ function getRoles(container) {
   }
 
   return flattenDOM(container).reduce((acc, node) => {
-    const [role] = getImplicitAriaRole(node)
-    return Array.isArray(acc[role])
-      ? {...acc, [role]: [...acc[role], node]}
-      : {...acc, [role]: [node]}
+    const roles = getImplicitAriaRoles(node)
+    return roles.reduce(
+      (rolesAcc, role) =>
+        Array.isArray(rolesAcc[role])
+          ? {...rolesAcc, [role]: [...rolesAcc[role], node]}
+          : {...rolesAcc, [role]: [node]},
+      acc,
+    )
   }, {})
 }
 
@@ -82,4 +86,4 @@ function logRoles(container) {
     .join('')
 }
 
-export {getRoles, logRoles, elementRoleList, getImplicitAriaRole}
+export {getRoles, logRoles, elementRoleList, getImplicitAriaRoles}

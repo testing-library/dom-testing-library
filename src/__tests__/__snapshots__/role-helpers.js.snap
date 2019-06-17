@@ -37,6 +37,28 @@ article ###################################
 [36m/>[39m
 
 
+command ###################################
+
+[36m<menuitem[39m
+  [33mdata-testid[39m=[32m\\"a-menuitem-1\\"[39m
+[36m/>[39m
+
+[36m<menuitem[39m
+  [33mdata-testid[39m=[32m\\"a-menuitem-2\\"[39m
+[36m/>[39m
+
+
+menuitem ##################################
+
+[36m<menuitem[39m
+  [33mdata-testid[39m=[32m\\"a-menuitem-1\\"[39m
+[36m/>[39m
+
+[36m<menuitem[39m
+  [33mdata-testid[39m=[32m\\"a-menuitem-2\\"[39m
+[36m/>[39m
+
+
 list ######################################
 
 [36m<ul[39m

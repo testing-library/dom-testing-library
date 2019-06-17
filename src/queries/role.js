@@ -1,4 +1,4 @@
-import {getImplicitAriaRole} from '../role-helpers'
+import {getImplicitAriaRoles} from '../role-helpers'
 import {buildQueries, fuzzyMatches, makeNormalizer, matches} from './all-utils'
 
 function queryAllByRole(
@@ -16,7 +16,7 @@ function queryAllByRole(
       return matcher(node.getAttribute('role'), node, role, matchNormalizer)
     }
 
-    const implicitRoles = getImplicitAriaRole(node)
+    const implicitRoles = getImplicitAriaRoles(node)
 
     return implicitRoles.some(implicitRole =>
       matcher(implicitRole, node, role, matchNormalizer),
