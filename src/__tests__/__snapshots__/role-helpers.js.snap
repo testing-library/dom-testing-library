@@ -3,163 +3,163 @@
 exports[`logRoles logs expected roles for various dom nodes 1`] = `
 "region ####################################
 
-[36m<section[39m
-  [33mdata-testid[39m=[32m\\"main-content\\"[39m
-[36m/>[39m
+<section
+  data-testid="main-content"
+/>
 
 
 navigation ################################
 
-[36m<nav[39m
-  [33mdata-testid[39m=[32m\\"nav-bar\\"[39m
-[36m/>[39m
+<nav
+  data-testid="nav-bar"
+/>
 
 
 heading ###################################
 
-[36m<h1[39m
-  [33mdata-testid[39m=[32m\\"main-heading\\"[39m
-[36m/>[39m
+<h1
+  data-testid="main-heading"
+/>
 
-[36m<h2[39m
-  [33mdata-testid[39m=[32m\\"sub-heading\\"[39m
-[36m/>[39m
+<h2
+  data-testid="sub-heading"
+/>
 
-[36m<h3[39m
-  [33mdata-testid[39m=[32m\\"tertiary-heading\\"[39m
-[36m/>[39m
+<h3
+  data-testid="tertiary-heading"
+/>
 
 
 article ###################################
 
-[36m<article[39m
-  [33mdata-testid[39m=[32m\\"featured-article\\"[39m
-[36m/>[39m
+<article
+  data-testid="featured-article"
+/>
 
 
 command ###################################
 
-[36m<menuitem[39m
-  [33mdata-testid[39m=[32m\\"a-menuitem-1\\"[39m
-[36m/>[39m
+<menuitem
+  data-testid="a-menuitem-1"
+/>
 
-[36m<menuitem[39m
-  [33mdata-testid[39m=[32m\\"a-menuitem-2\\"[39m
-[36m/>[39m
+<menuitem
+  data-testid="a-menuitem-2"
+/>
 
 
 menuitem ##################################
 
-[36m<menuitem[39m
-  [33mdata-testid[39m=[32m\\"a-menuitem-1\\"[39m
-[36m/>[39m
+<menuitem
+  data-testid="a-menuitem-1"
+/>
 
-[36m<menuitem[39m
-  [33mdata-testid[39m=[32m\\"a-menuitem-2\\"[39m
-[36m/>[39m
+<menuitem
+  data-testid="a-menuitem-2"
+/>
 
 
 list ######################################
 
-[36m<ul[39m
-  [33mdata-testid[39m=[32m\\"a-list\\"[39m
-[36m/>[39m
+<ul
+  data-testid="a-list"
+/>
 
-[36m<ul[39m
-  [33mdata-testid[39m=[32m\\"b-list\\"[39m
-[36m/>[39m
+<ul
+  data-testid="b-list"
+/>
 
 
 listitem ##################################
 
-[36m<li[39m
-  [33mdata-testid[39m=[32m\\"a-list-item-1\\"[39m
-[36m/>[39m
+<li
+  data-testid="a-list-item-1"
+/>
 
-[36m<li[39m
-  [33mdata-testid[39m=[32m\\"a-list-item-2\\"[39m
-[36m/>[39m
+<li
+  data-testid="a-list-item-2"
+/>
 
-[36m<li[39m
-  [33mdata-testid[39m=[32m\\"b-list-item-1\\"[39m
-[36m/>[39m
+<li
+  data-testid="b-list-item-1"
+/>
 
-[36m<li[39m
-  [33mdata-testid[39m=[32m\\"b-list-item-2\\"[39m
-[36m/>[39m
+<li
+  data-testid="b-list-item-2"
+/>
 
 
 table #####################################
 
-[36m<table[39m
-  [33mdata-testid[39m=[32m\\"a-table\\"[39m
-[36m/>[39m
+<table
+  data-testid="a-table"
+/>
 
 
 rowgroup ##################################
 
-[36m<tbody[39m
-  [33mdata-testid[39m=[32m\\"a-tbody\\"[39m
-[36m/>[39m
+<tbody
+  data-testid="a-tbody"
+/>
 
 
 row #######################################
 
-[36m<tr[39m
-  [33mdata-testid[39m=[32m\\"a-row\\"[39m
-[36m/>[39m
+<tr
+  data-testid="a-row"
+/>
 
 
 cell ######################################
 
-[36m<td[39m
-  [33mdata-testid[39m=[32m\\"a-cell-1\\"[39m
-[36m/>[39m
+<td
+  data-testid="a-cell-1"
+/>
 
-[36m<td[39m
-  [33mdata-testid[39m=[32m\\"a-cell-2\\"[39m
-[36m/>[39m
+<td
+  data-testid="a-cell-2"
+/>
 
-[36m<td[39m
-  [33mdata-testid[39m=[32m\\"a-cell-3\\"[39m
-[36m/>[39m
+<td
+  data-testid="a-cell-3"
+/>
 
 
 form ######################################
 
-[36m<form[39m
-  [33mdata-testid[39m=[32m\\"a-form\\"[39m
-[36m/>[39m
+<form
+  data-testid="a-form"
+/>
 
 
 radio #####################################
 
-[36m<input[39m
-  [33mdata-testid[39m=[32m\\"a-radio-1\\"[39m
-  [33mtype[39m=[32m\\"radio\\"[39m
-[36m/>[39m
+<input
+  data-testid="a-radio-1"
+  type="radio"
+/>
 
-[36m<input[39m
-  [33mdata-testid[39m=[32m\\"a-radio-2\\"[39m
-  [33mtype[39m=[32m\\"radio\\"[39m
-[36m/>[39m
+<input
+  data-testid="a-radio-2"
+  type="radio"
+/>
 
 
 textbox ###################################
 
-[36m<input[39m
-  [33mdata-testid[39m=[32m\\"a-input-1\\"[39m
-  [33mtype[39m=[32m\\"text\\"[39m
-[36m/>[39m
+<input
+  data-testid="a-input-1"
+  type="text"
+/>
 
-[36m<input[39m
-  [33mdata-testid[39m=[32m\\"a-input-2\\"[39m
-  [33mtype[39m=[32m\\"text\\"[39m
-[36m/>[39m
+<input
+  data-testid="a-input-2"
+  type="text"
+/>
 
-[36m<textarea[39m
-  [33mdata-testid[39m=[32m\\"a-textarea\\"[39m
-[36m/>[39m
+<textarea
+  data-testid="a-textarea"
+/>
 
 
 "

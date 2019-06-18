@@ -60,6 +60,7 @@ function getRoles(container) {
 
   return flattenDOM(container).reduce((acc, node) => {
     const roles = getImplicitAriaRoles(node)
+
     return roles.reduce(
       (rolesAcc, role) =>
         Array.isArray(rolesAcc[role])
