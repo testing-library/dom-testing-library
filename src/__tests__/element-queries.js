@@ -1,6 +1,8 @@
+import jestSerializerAnsi from 'jest-serializer-ansi'
 import {configure} from '../config'
 import {render, renderIntoDocument} from './helpers/test-utils'
 
+expect.addSnapshotSerializer(jestSerializerAnsi)
 beforeEach(() => {
   document.defaultView.Cypress = null
 })
@@ -37,60 +39,60 @@ test('get throws a useful error message', () => {
     .toThrowErrorMatchingInlineSnapshot(`
 "Unable to find a label with the text of: LucyRicardo
 
-[36m<div>[39m
-  [36m<div />[39m
-[36m</div>[39m"
+<div>
+  <div />
+</div>"
 `)
   expect(() => getByPlaceholderText('LucyRicardo'))
     .toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an element with the placeholder text of: LucyRicardo
 
-[36m<div>[39m
-  [36m<div />[39m
-[36m</div>[39m"
+<div>
+  <div />
+</div>"
 `)
   expect(() => getByText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an element with the text: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
-[36m<div>[39m
-  [36m<div />[39m
-[36m</div>[39m"
+<div>
+  <div />
+</div>"
 `)
   expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element by: [data-testid=\\"LucyRicardo\\"]
+"Unable to find an element by: [data-testid="LucyRicardo"]
 
-[36m<div>[39m
-  [36m<div />[39m
-[36m</div>[39m"
+<div>
+  <div />
+</div>"
 `)
   expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an element with the alt text: LucyRicardo
 
-[36m<div>[39m
-  [36m<div />[39m
-[36m</div>[39m"
+<div>
+  <div />
+</div>"
 `)
   expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an element with the title: LucyRicardo.
 
-[36m<div>[39m
-  [36m<div />[39m
-[36m</div>[39m"
+<div>
+  <div />
+</div>"
 `)
   expect(() => getByDisplayValue('LucyRicardo'))
     .toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an element with the value: LucyRicardo.
 
-[36m<div>[39m
-  [36m<div />[39m
-[36m</div>[39m"
+<div>
+  <div />
+</div>"
 `)
   expect(() => getByRole('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an element by [role=LucyRicardo]
 
-[36m<div>[39m
-  [36m<div />[39m
-[36m</div>[39m"
+<div>
+  <div />
+</div>"
 `)
 })
 
@@ -221,13 +223,13 @@ test('label with no form control', () => {
   const {getByLabelText, queryByLabelText} = render(`<label>All alone</label>`)
   expect(queryByLabelText(/alone/)).toBeNull()
   expect(() => getByLabelText(/alone/)).toThrowErrorMatchingInlineSnapshot(`
-"Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the \\"for\\" attribute or \\"aria-labelledby\\" attribute correctly.
+"Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
 
-[36m<div>[39m
-  [36m<label>[39m
-    [0mAll alone[0m
-  [36m</label>[39m
-[36m</div>[39m"
+<div>
+  <label>
+    All alone
+  </label>
+</div>"
 `)
 })
 
@@ -235,11 +237,11 @@ test('totally empty label', () => {
   const {getByLabelText, queryByLabelText} = render(`<label />`)
   expect(queryByLabelText('')).toBeNull()
   expect(() => getByLabelText('')).toThrowErrorMatchingInlineSnapshot(`
-"Found a label with the text of: , however no form control was found associated to that label. Make sure you're using the \\"for\\" attribute or \\"aria-labelledby\\" attribute correctly.
+"Found a label with the text of: , however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
 
-[36m<div>[39m
-  [36m<label />[39m
-[36m</div>[39m"
+<div>
+  <label />
+</div>"
 `)
 })
 
