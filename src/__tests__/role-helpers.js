@@ -53,60 +53,33 @@ function setup() {
 </section>
   `)
 
-  const section = getByTestId('main-content')
-  const h1 = getByTestId('main-heading')
-  const h2 = getByTestId('sub-heading')
-  const h3 = getByTestId('tertiary-heading')
-  const nav = getByTestId('nav-bar')
-  const article = getByTestId('featured-article')
-  const menuItem = getByTestId('a-menuitem-1')
-  const menuItem2 = getByTestId('a-menuitem-2')
-  const aUl = getByTestId('a-list')
-  const aLi1 = getByTestId('a-list-item-1')
-  const aLi2 = getByTestId('a-list-item-2')
-  const bUl = getByTestId('b-list')
-  const bLi1 = getByTestId('b-list-item-1')
-  const bLi2 = getByTestId('b-list-item-2')
-  const table = getByTestId('a-table')
-  const tbody = getByTestId('a-tbody')
-  const tr = getByTestId('a-row')
-  const td1 = getByTestId('a-cell-1')
-  const td2 = getByTestId('a-cell-2')
-  const td3 = getByTestId('a-cell-3')
-  const form = getByTestId('a-form')
-  const radio = getByTestId('a-radio-1')
-  const radio2 = getByTestId('a-radio-2')
-  const input = getByTestId('a-input-1')
-  const input2 = getByTestId('a-input-2')
-  const textarea = getByTestId('a-textarea')
-
   return {
-    section,
-    h1,
-    h2,
-    h3,
-    nav,
-    article,
-    menuItem,
-    menuItem2,
-    aUl,
-    aLi1,
-    aLi2,
-    bUl,
-    bLi1,
-    bLi2,
-    table,
-    tbody,
-    tr,
-    td1,
-    td2,
-    td3,
-    form,
-    radio,
-    radio2,
-    input,
-    input2,
-    textarea,
+    section: getByTestId('main-content'),
+    h1: getByTestId('main-heading'),
+    h2: getByTestId('sub-heading'),
+    h3: getByTestId('tertiary-heading'),
+    nav: getByTestId('nav-bar'),
+    article: getByTestId('featured-article'),
+    menuItem: getByTestId('a-menuitem-1'),
+    menuItem2: getByTestId('a-menuitem-2'),
+    aUl: getByTestId('a-list'),
+    aLi1: getByTestId('a-list-item-1'),
+    aLi2: getByTestId('a-list-item-2'),
+    bUl: getByTestId('b-list'),
+    bLi1: getByTestId('b-list-item-1'),
+    bLi2: getByTestId('b-list-item-2'),
+    table: getByTestId('a-table'),
+    tbody: getByTestId('a-tbody'),
+    tr: getByTestId('a-row'),
+    td1: getByTestId('a-cell-1'),
+    td2: getByTestId('a-cell-2'),
+    td3: getByTestId('a-cell-3'),
+    form: getByTestId('a-form'),
+    radio: getByTestId('a-radio-1'),
+    radio2: getByTestId('a-radio-2'),
+    input: getByTestId('a-input-1'),
+    input2: getByTestId('a-input-2'),
+    textarea: getByTestId('a-textarea'),
   }
 }
 
