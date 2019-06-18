@@ -6,14 +6,14 @@ afterEach(cleanup)
 
 function setup() {
   const {getByTestId} = render(`
-<section data-testid='main-content'>
-  <nav data-testid='nav-bar' />
+<section data-testid='a-section'>
+  <nav data-testid='a-nav' />
   
-  <h1 data-testid='main-heading'>Main Heading</h1>
-  <h2 data-testid='sub-heading'>Sub Heading</h2>
-  <h3 data-testid='tertiary-heading'>Tertiary Heading</h3>
+  <h1 data-testid='a-h1'>Main Heading</h1>
+  <h2 data-testid='a-h2'>Sub Heading</h2>
+  <h3 data-testid='a-h3'>Tertiary Heading</h3>
 
-  <article data-testid='featured-article'>
+  <article data-testid='a-article'>
     <!-- menuitem is currently deprecated, but is the only 
          tag currently that aria-query returns multiple roles for
          (roles: command, menuitem).
@@ -54,12 +54,12 @@ function setup() {
   `)
 
   return {
-    section: getByTestId('main-content'),
-    h1: getByTestId('main-heading'),
-    h2: getByTestId('sub-heading'),
-    h3: getByTestId('tertiary-heading'),
-    nav: getByTestId('nav-bar'),
-    article: getByTestId('featured-article'),
+    section: getByTestId('a-section'),
+    h1: getByTestId('a-h1'),
+    h2: getByTestId('a-h2'),
+    h3: getByTestId('a-h3'),
+    nav: getByTestId('a-nav'),
+    article: getByTestId('a-article'),
     menuItem: getByTestId('a-menuitem-1'),
     menuItem2: getByTestId('a-menuitem-2'),
     aUl: getByTestId('a-list'),

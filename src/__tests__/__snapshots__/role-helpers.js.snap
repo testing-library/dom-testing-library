@@ -4,36 +4,36 @@ exports[`logRoles logs expected roles for various dom nodes 1`] = `
 "region ------------------------------------
 
 <section
-  data-testid="main-content"
+  data-testid="a-section"
 />
 
 
 navigation --------------------------------
 
 <nav
-  data-testid="nav-bar"
+  data-testid="a-nav"
 />
 
 
 heading -----------------------------------
 
 <h1
-  data-testid="main-heading"
+  data-testid="a-h1"
 />
 
 <h2
-  data-testid="sub-heading"
+  data-testid="a-h2"
 />
 
 <h3
-  data-testid="tertiary-heading"
+  data-testid="a-h3"
 />
 
 
 article -----------------------------------
 
 <article
-  data-testid="featured-article"
+  data-testid="a-article"
 />
 
 
