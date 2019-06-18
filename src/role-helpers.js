@@ -82,9 +82,9 @@ function logRoles(container) {
         .map(el => debugDOM(el.cloneNode(false)))
         .join('\n\n')
 
-      return `${role} ${delimeterBar}\n\n${elementsString}\n\n\n`
+      return `${role} ${delimeterBar}\n\n${elementsString}`
     })
-    .join('')
+    .join('\n\n\n')
 }
 
 export {getRoles, logRoles, getImplicitAriaRoles}

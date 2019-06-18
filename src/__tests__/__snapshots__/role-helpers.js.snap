@@ -159,8 +159,5 @@ textbox -----------------------------------
 
 <textarea
   data-testid="a-textarea"
-/>
-
-
-"
+/>"
 `;
