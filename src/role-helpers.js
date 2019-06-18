@@ -87,4 +87,4 @@ function logRoles(container) {
     .join('')
 }
 
-export {getRoles, logRoles, elementRoleList, getImplicitAriaRoles}
+export {getRoles, logRoles, getImplicitAriaRoles}
