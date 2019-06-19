@@ -47,3 +47,32 @@ test('works without a global dom', async () => {
   const data = JSON.parse(submittedDataPre.textContent)
   expect(data).toEqual(fakeUser)
 })
+
+test('works without a browser context on a dom node (JSDOM Fragment)', () => {
+  const container = JSDOM.fragment(`
+    <html>
+      <body>
+        <form id="login-form">
+          <label for="username">Username</label>
+          <input id="username" />
+          <label for="password">Password</label>
+          <input id="password" type="password" />
+          <button type="submit">Submit</button>
+          <div id="data-container"></div>
+        </form>
+      </body>
+    </html>
+  `)
+
+  expect(dtl.getByLabelText(container, /username/i)).toMatchInlineSnapshot(`
+    <input
+      id="username"
+    />
+  `)
+  expect(dtl.getByLabelText(container, /password/i)).toMatchInlineSnapshot(`
+    <input
+      id="password"
+      type="password"
+    />
+  `)
+})
