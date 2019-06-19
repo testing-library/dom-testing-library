@@ -28,6 +28,7 @@
     "lint": "kcd-scripts lint",
     "test": "kcd-scripts test",
     "test:update": "npm test -- --updateSnapshot --coverage",
+    "test:debug": "node --inspect-brk ./node_modules/.bin/jest --watch --runInBand",
     "validate": "kcd-scripts validate",
     "setup": "npm install && npm run validate -s",
     "dtslint": "dtslint typings"
@@ -53,6 +54,8 @@
     "jest-dom": "^3.4.0",
     "jest-in-case": "^1.0.2",
     "jest-serializer-ansi": "^1.0.3",
+    "jest-watch-select-projects": "^0.1.1",
+    "jsdom": "^15.1.1",
     "kcd-scripts": "^1.4.0"
   },
   "eslintConfig": {
