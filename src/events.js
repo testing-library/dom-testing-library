@@ -344,7 +344,7 @@ function getWindowFromNode(node) {
   if (node.defaultView) {
     // node is document
     return node.defaultView
-  } else if (node.ownerDocument) {
+  } else if (node.ownerDocument && node.ownerDocument.defaultView) {
     // node is a DOM node
     return node.ownerDocument.defaultView
   } else if (node.window) {
