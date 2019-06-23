@@ -298,43 +298,43 @@ const eventMap = {
     defaultInit: {bubbles: true, cancelable: true},
   },
   // pointer events
-  pointerover: {
+  pointerOver: {
     EventType: 'PointerEvent',
     defaultInit: {bubbles: true, cancelable: true},
   },
-  pointerenter: {
+  pointerEnter: {
     EventType: 'PointerEvent',
     defaultInit: {bubbles: false, cancelable: false},
   },
-  pointerdown: {
+  pointerDown: {
     EventType: 'PointerEvent',
     defaultInit: {bubbles: true, cancelable: true},
   },
-  pointermove: {
+  pointerMove: {
     EventType: 'PointerEvent',
     defaultInit: {bubbles: true, cancelable: true},
   },
-  pointerup: {
+  pointerUp: {
     EventType: 'PointerEvent',
     defaultInit: {bubbles: true, cancelable: true},
   },
-  pointercancel: {
+  pointerCancel: {
     EventType: 'PointerEvent',
     defaultInit: {bubbles: true, cancelable: false},
   },
-  pointerout: {
+  pointerOut: {
     EventType: 'PointerEvent',
     defaultInit: {bubbles: true, cancelable: true},
   },
-  pointerleave: {
+  pointerLeave: {
     EventType: 'PointerEvent',
     defaultInit: {bubbles: false, cancelable: false},
   },
-  gotpointercapture: {
+  gotPointerCapture: {
     EventType: 'PointerEvent',
     defaultInit: {bubbles: false, cancelable: false},
   },
-  lostpointercapture: {
+  lostPointerCapture: {
     EventType: 'PointerEvent',
     defaultInit: {bubbles: false, cancelable: false},
   },
