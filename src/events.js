@@ -57,8 +57,8 @@ const eventMap = {
   },
   // Form Events
   change: {
-    EventType: 'InputEvent',
-    defaultInit: {bubbles: true, cancelable: true},
+    EventType: 'Event',
+    defaultInit: {bubbles: true, cancelable: false},
   },
   input: {
     EventType: 'InputEvent',
