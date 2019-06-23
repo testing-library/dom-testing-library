@@ -123,7 +123,7 @@ const eventMap = {
   },
   mouseEnter: {
     EventType: 'MouseEvent',
-    defaultInit: {bubbles: true, cancelable: true},
+    defaultInit: {bubbles: false, cancelable: false},
   },
   mouseLeave: {
     EventType: 'MouseEvent',
