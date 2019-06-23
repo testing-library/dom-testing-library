@@ -23,7 +23,7 @@ const eventMap = {
   },
   compositionUpdate: {
     EventType: 'CompositionEvent',
-    defaultInit: {bubbles: true, cancelable: false},
+    defaultInit: {bubbles: true, cancelable: true},
   },
   // Keyboard Events
   keyDown: {
