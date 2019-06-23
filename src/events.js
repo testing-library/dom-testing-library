@@ -297,6 +297,47 @@ const eventMap = {
     EventType: 'TransitionEvent',
     defaultInit: {bubbles: true, cancelable: true},
   },
+  // pointer events
+  pointerover: {
+    EventType: 'PointerEvent',
+    defaultInit: {bubbles: true, cancelable: true},
+  },
+  pointerenter: {
+    EventType: 'PointerEvent',
+    defaultInit: {bubbles: false, cancelable: false},
+  },
+  pointerdown: {
+    EventType: 'PointerEvent',
+    defaultInit: {bubbles: true, cancelable: true},
+  },
+  pointermove: {
+    EventType: 'PointerEvent',
+    defaultInit: {bubbles: true, cancelable: true},
+  },
+  pointerup: {
+    EventType: 'PointerEvent',
+    defaultInit: {bubbles: true, cancelable: true},
+  },
+  pointercancel: {
+    EventType: 'PointerEvent',
+    defaultInit: {bubbles: true, cancelable: false},
+  },
+  pointerout: {
+    EventType: 'PointerEvent',
+    defaultInit: {bubbles: true, cancelable: true},
+  },
+  pointerleave: {
+    EventType: 'PointerEvent',
+    defaultInit: {bubbles: false, cancelable: false},
+  },
+  gotpointercapture: {
+    EventType: 'PointerEvent',
+    defaultInit: {bubbles: false, cancelable: false},
+  },
+  lostpointercapture: {
+    EventType: 'PointerEvent',
+    defaultInit: {bubbles: false, cancelable: false},
+  },
 }
 
 const eventAliasMap = {
