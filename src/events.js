@@ -62,7 +62,7 @@ const eventMap = {
   },
   input: {
     EventType: 'InputEvent',
-    defaultInit: {bubbles: true, cancelable: true},
+    defaultInit: {bubbles: true, cancelable: false},
   },
   invalid: {
     EventType: 'Event',
