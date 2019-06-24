@@ -76,12 +76,12 @@ function logRoles(container) {
 
   return Object.entries(roles)
     .map(([role, elements]) => {
-      const delimeterBar = '-'.repeat(50)
+      const delimiterBar = '-'.repeat(50)
       const elementsString = elements
         .map(el => debugDOM(el.cloneNode(false)))
         .join('\n\n')
 
-      return `${role}:\n\n${elementsString}\n\n${delimeterBar}`
+      return `${role}:\n\n${elementsString}\n\n${delimiterBar}`
     })
     .join('\n')
 }
