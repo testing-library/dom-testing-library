@@ -613,6 +613,17 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "michaellasky",
+      "name": "Michael Lasky",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6646599?v=4",
+      "profile": "https://github.com/michaellasky",
+      "contributions": [
+        "code",
+        "test",
+        "doc"
+      ]
     }
   ],
   "repoHost": "https://github.com"
