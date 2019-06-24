@@ -23,7 +23,7 @@ const eventMap = {
   },
   compositionUpdate: {
     EventType: 'CompositionEvent',
-    defaultInit: {bubbles: true, cancelable: false},
+    defaultInit: {bubbles: true, cancelable: true},
   },
   // Keyboard Events
   keyDown: {
@@ -57,12 +57,12 @@ const eventMap = {
   },
   // Form Events
   change: {
-    EventType: 'InputEvent',
-    defaultInit: {bubbles: true, cancelable: true},
+    EventType: 'Event',
+    defaultInit: {bubbles: true, cancelable: false},
   },
   input: {
     EventType: 'InputEvent',
-    defaultInit: {bubbles: true, cancelable: true},
+    defaultInit: {bubbles: true, cancelable: false},
   },
   invalid: {
     EventType: 'Event',
@@ -123,11 +123,11 @@ const eventMap = {
   },
   mouseEnter: {
     EventType: 'MouseEvent',
-    defaultInit: {bubbles: true, cancelable: true},
+    defaultInit: {bubbles: false, cancelable: false},
   },
   mouseLeave: {
     EventType: 'MouseEvent',
-    defaultInit: {bubbles: true, cancelable: true},
+    defaultInit: {bubbles: false, cancelable: false},
   },
   mouseMove: {
     EventType: 'MouseEvent',
