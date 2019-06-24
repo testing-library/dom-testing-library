@@ -138,9 +138,6 @@ test('logRoles logs expected roles for various dom nodes', () => {
   const {section} = setup()
   const output = logRoles(section)
 
-  // If the snapshot needs to be updated, uncomment the console.log
-  // and take a look at the output to make sure it still looks good
-  // console.log(output);
   expect(output).toMatchSnapshot()
 })
 

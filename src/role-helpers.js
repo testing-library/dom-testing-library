@@ -76,15 +76,14 @@ function logRoles(container) {
 
   return Object.entries(roles)
     .map(([role, elements]) => {
-      const numDelimeters = 42 - role.length // 42 is arbitrary
-      const delimeterBar = '-'.repeat(numDelimeters)
+      const delimeterBar = '-'.repeat(50)
       const elementsString = elements
         .map(el => debugDOM(el.cloneNode(false)))
         .join('\n\n')
 
-      return `${role} ${delimeterBar}\n\n${elementsString}`
+      return `${role}:\n\n${elementsString}\n\n${delimeterBar}`
     })
-    .join('\n\n\n')
+    .join('\n')
 }
 
 export {getRoles, logRoles, getImplicitAriaRoles}
