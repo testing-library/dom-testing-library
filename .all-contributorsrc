@@ -624,6 +624,15 @@
         "test",
         "doc"
       ]
+    },
+    {
+      "login": "eps1lon",
+      "name": "Sebastian Silbermann",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/12292047?v=4",
+      "profile": "https://twitter.com/sebsilbermann",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
