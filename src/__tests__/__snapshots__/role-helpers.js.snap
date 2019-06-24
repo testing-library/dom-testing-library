@@ -1,0 +1,165 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`logRoles logs expected roles for various dom nodes 1`] = `
+"region:
+
+<section
+  data-testid="a-section"
+/>
+
+--------------------------------------------------
+navigation:
+
+<nav
+  data-testid="a-nav"
+/>
+
+--------------------------------------------------
+heading:
+
+<h1
+  data-testid="a-h1"
+/>
+
+<h2
+  data-testid="a-h2"
+/>
+
+<h3
+  data-testid="a-h3"
+/>
+
+--------------------------------------------------
+article:
+
+<article
+  data-testid="a-article"
+/>
+
+--------------------------------------------------
+command:
+
+<menuitem
+  data-testid="a-menuitem-1"
+/>
+
+<menuitem
+  data-testid="a-menuitem-2"
+/>
+
+--------------------------------------------------
+menuitem:
+
+<menuitem
+  data-testid="a-menuitem-1"
+/>
+
+<menuitem
+  data-testid="a-menuitem-2"
+/>
+
+--------------------------------------------------
+list:
+
+<ul
+  data-testid="a-list"
+/>
+
+<ul
+  data-testid="b-list"
+/>
+
+--------------------------------------------------
+listitem:
+
+<li
+  data-testid="a-list-item-1"
+/>
+
+<li
+  data-testid="a-list-item-2"
+/>
+
+<li
+  data-testid="b-list-item-1"
+/>
+
+<li
+  data-testid="b-list-item-2"
+/>
+
+--------------------------------------------------
+table:
+
+<table
+  data-testid="a-table"
+/>
+
+--------------------------------------------------
+rowgroup:
+
+<tbody
+  data-testid="a-tbody"
+/>
+
+--------------------------------------------------
+row:
+
+<tr
+  data-testid="a-row"
+/>
+
+--------------------------------------------------
+cell:
+
+<td
+  data-testid="a-cell-1"
+/>
+
+<td
+  data-testid="a-cell-2"
+/>
+
+<td
+  data-testid="a-cell-3"
+/>
+
+--------------------------------------------------
+form:
+
+<form
+  data-testid="a-form"
+/>
+
+--------------------------------------------------
+radio:
+
+<input
+  data-testid="a-radio-1"
+  type="radio"
+/>
+
+<input
+  data-testid="a-radio-2"
+  type="radio"
+/>
+
+--------------------------------------------------
+textbox:
+
+<input
+  data-testid="a-input-1"
+  type="text"
+/>
+
+<input
+  data-testid="a-input-2"
+  type="text"
+/>
+
+<textarea
+  data-testid="a-textarea"
+/>
+
+--------------------------------------------------"
+`;

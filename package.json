@@ -53,6 +53,7 @@
     "dtslint": "^0.7.7",
     "jest-dom": "^3.4.0",
     "jest-in-case": "^1.0.2",
+    "jest-serializer-ansi": "^1.0.3",
     "jest-watch-select-projects": "^0.1.1",
     "jsdom": "^15.1.1",
     "kcd-scripts": "^1.4.0"

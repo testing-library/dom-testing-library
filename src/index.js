@@ -12,6 +12,7 @@ export * from './get-node-text'
 export * from './events'
 export * from './get-queries-for-element'
 export * from './query-helpers'
+export {getRoles, logRoles} from './role-helpers'
 export * from './pretty-dom'
 export {configure} from './config'
 
