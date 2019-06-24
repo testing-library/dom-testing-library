@@ -70,6 +70,16 @@ export type EventType =
   | 'animationIteration'
   | 'transitionEnd'
   | 'doubleClick'
+  | 'pointerOver'
+  | 'pointerEnter'
+  | 'pointerDown'
+  | 'pointerMove'
+  | 'pointerUp'
+  | 'pointerCancel'
+  | 'pointerOut'
+  | 'pointerLeave'
+  | 'gotPointerCapture'
+  | 'lostPointerCapture'
 
 export type FireFunction = (
   element: Document | Element | Window,

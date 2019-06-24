@@ -124,6 +124,22 @@ const eventTypes = [
     events: ['transitionEnd'],
     elementType: 'div',
   },
+  {
+    type: 'Pointer',
+    events: [
+      'pointerOver',
+      'pointerEnter',
+      'pointerDown',
+      'pointerMove',
+      'pointerUp',
+      'pointerCancel',
+      'pointerOut',
+      'pointerLeave',
+      'gotPointerCapture',
+      'lostPointerCapture',
+    ],
+    elementType: 'div',
+  },
 ]
 
 eventTypes.forEach(({type, events, elementType}) => {
