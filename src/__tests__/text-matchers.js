@@ -28,7 +28,7 @@ cases(
     queryAllByAltText: {
       dom: `
         <img
-          alt="Finding Nemo poster" 
+          alt="Finding Nemo poster"
           src="/finding-nemo.png"
         />`,
       query: `Finding Nemo poster`,
@@ -87,7 +87,7 @@ cases(
       dom: `
         <img
           alt="
-            Finding Nemo poster " 
+            Finding Nemo poster "
           src="/finding-nemo.png"
         />`,
       query: /^Finding Nemo poster$/,
@@ -192,7 +192,7 @@ cases(
     queryAllByAltText: {
       dom: `
         <img
-          alt="Finding Nemo poster" 
+          alt="Finding Nemo poster"
           src="/finding-nemo.png"
         />`,
       query: `Finding Nemo poster`,
@@ -320,4 +320,12 @@ test('we support an older API with trim and collapseWhitespace instead of a norm
   expect(queryAllByText(' x y ', {trim: false})).toHaveLength(1)
   expect(queryAllByText('x y', {collapseWhitespace: false})).toHaveLength(0)
   expect(queryAllByText('x  y', {collapseWhitespace: false})).toHaveLength(1)
+})
+
+test('ByTextContent is a simple selector for HTMLElement.textContent', () => {
+  const {queryAllByTextContent} = render(
+    '<button>  <span>Click</span> <span>me</span></button>',
+  )
+  expect(queryAllByTextContent('Click me', 'button')).toHaveLength(0)
+  expect(queryAllByTextContent('  Click me', 'button')).toHaveLength(1)
 })

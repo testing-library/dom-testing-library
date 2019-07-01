@@ -66,6 +66,38 @@ export type FindByText = (
   waitForElementOptions?: WaitForElementOptions,
 ) => Promise<HTMLElement>
 
+export type QueryByTextContent = (
+  container: HTMLElement,
+  id: Matcher,
+  selector?: string,
+) => HTMLElement | null
+
+export type AllByTextContent = (
+  container: HTMLElement,
+  id: Matcher,
+  selector?: string,
+) => HTMLElement[]
+
+export type FindAllByTextContent = (
+  container: HTMLElement,
+  id: Matcher,
+  selector?: string,
+  waitForElementOptions?: WaitForElementOptions,
+) => Promise<HTMLElement[]>
+
+export type GetByTextContent = (
+  container: HTMLElement,
+  id: Matcher,
+  selector?: string,
+) => HTMLElement
+
+export type FindByTextContent = (
+  container: HTMLElement,
+  id: Matcher,
+  selector?: string,
+  waitForElementOptions?: WaitForElementOptions,
+) => Promise<HTMLElement>
+
 export const getByLabelText: GetByText
 export const getAllByLabelText: AllByText
 export const queryByLabelText: QueryByText
@@ -84,6 +116,12 @@ export const queryByText: QueryByText
 export const queryAllByText: AllByText
 export const findByText: FindByText
 export const findAllByText: FindAllByText
+export const getByTextContent: GetByTextContent
+export const getAllByTextContent: AllByTextContent
+export const queryByTextContent: QueryByTextContent
+export const queryAllByTextContent: AllByTextContent
+export const findByTextContent: FindByTextContent
+export const findAllByTextContent: FindAllByTextContent
 export const getByAltText: GetByBoundAttribute
 export const getAllByAltText: AllByBoundAttribute
 export const queryByAltText: QueryByBoundAttribute
