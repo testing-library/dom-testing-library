@@ -329,3 +329,10 @@ test('ByTextContent is a simple selector for HTMLElement.textContent', () => {
   expect(queryAllByTextContent('Click me', 'button')).toHaveLength(0)
   expect(queryAllByTextContent('  Click me', 'button')).toHaveLength(1)
 })
+
+test('ByTextContent tests all elements by default', () => {
+  const {container,queryAllByTextContent} = render(
+    '<span>jekyll</span><div>jekyll</div></button>',
+  )
+  expect(queryAllByTextContent('jekyll')).toHaveLength(2)
+})
