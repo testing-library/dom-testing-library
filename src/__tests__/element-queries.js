@@ -828,6 +828,7 @@ test('DescriptionOf uses aria-describedby', () => {
 test('AllDescriptionOf throws with a recommendation', () => {
   const {
     getByRole,
+    getDescriptionOf,
     getAllDescriptionOf,
     queryAllDescriptionOf,
     findAllDescriptionOf,
@@ -839,6 +840,9 @@ test('AllDescriptionOf throws with a recommendation', () => {
     </main>
   `)
 
+  expect(() => getDescriptionOf(getByRole('button'))).toThrow(
+    'Found multiple descriptions. An element should be described by a unique element.',
+  )
   expect(() => getAllDescriptionOf(getByRole('button'))).toThrow(
     'An element should be described by a unique element. If you want to expect that only a single element exists prefer getDescriptionOf and expect an error thrown.',
   )
@@ -847,6 +851,19 @@ test('AllDescriptionOf throws with a recommendation', () => {
   )
   expect(() => findAllDescriptionOf(getByRole('button'))).toThrow(
     'An element should be described by a unique element. If you want to expect that only a single element exists prefer findDescriptionOf and expect an error thrown.',
+  )
+})
+
+test('DescriptionOf recommends how to describe an element', () => {
+  const {getByRole, getDescriptionOf} = renderIntoDocument(`
+    <main>
+      <button aria-describedby="button-description">Click me</button>
+      <p id="description">Hello, Dave!</p>
+    </main>
+  `)
+
+  expect(() => getDescriptionOf(getByRole('button'))).toThrow(
+    "The container should include an element with the id 'button-description' ",
   )
 })
 
