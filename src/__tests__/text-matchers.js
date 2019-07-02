@@ -28,7 +28,7 @@ cases(
     queryAllByAltText: {
       dom: `
         <img
-          alt="Finding Nemo poster" 
+          alt="Finding Nemo poster"
           src="/finding-nemo.png"
         />`,
       query: `Finding Nemo poster`,
@@ -87,7 +87,7 @@ cases(
       dom: `
         <img
           alt="
-            Finding Nemo poster " 
+            Finding Nemo poster "
           src="/finding-nemo.png"
         />`,
       query: /^Finding Nemo poster$/,
@@ -192,7 +192,7 @@ cases(
     queryAllByAltText: {
       dom: `
         <img
-          alt="Finding Nemo poster" 
+          alt="Finding Nemo poster"
           src="/finding-nemo.png"
         />`,
       query: `Finding Nemo poster`,

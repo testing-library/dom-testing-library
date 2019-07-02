@@ -801,4 +801,53 @@ test('get/query textarea element by current value', () => {
   expect(queryByDisplayValue('World').id).toEqual('content-textarea')
 })
 
+test('DescriptionOf uses aria-describedby', () => {
+  const {
+    getByRole,
+    getDescriptionOf,
+    queryDescriptionOf,
+    findDescriptionOf,
+  } = renderIntoDocument(`
+    <main>
+      <button aria-describedby="button-description">Click me</button>
+      <p id="button-description">Hello, Dave!</p>
+    </main>
+  `)
+
+  expect(getDescriptionOf(getByRole('button'))).toHaveTextContent(
+    'Hello, Dave!',
+  )
+  expect(queryDescriptionOf(getByRole('button'))).toHaveTextContent(
+    'Hello, Dave!',
+  )
+  expect(findDescriptionOf(getByRole('button'))).resolves.toHaveTextContent(
+    'Hello, Dave!',
+  )
+})
+
+test('AllDescriptionOf throws with a recommendation', () => {
+  const {
+    getByRole,
+    getAllDescriptionOf,
+    queryAllDescriptionOf,
+    findAllDescriptionOf,
+  } = renderIntoDocument(`
+    <main>
+      <button aria-describedby="button-description">Click me</button>
+      <p id="button-description">Hello, Jekyll!</p>
+      <p id="button-description">Hello, Hyde!</p>
+    </main>
+  `)
+
+  expect(() => getAllDescriptionOf(getByRole('button'))).toThrow(
+    'An element should be described by a unique element. If you want to expect that only a single element exists prefer getDescriptionOf and expect an error thrown.',
+  )
+  expect(() => queryAllDescriptionOf(getByRole('button'))).toThrow(
+    'An element should be described by a unique element. If you want to expect that only a single element exists prefer queryDescriptionOf and expect an error thrown.',
+  )
+  expect(() => findAllDescriptionOf(getByRole('button'))).toThrow(
+    'An element should be described by a unique element. If you want to expect that only a single element exists prefer findDescriptionOf and expect an error thrown.',
+  )
+})
+
 /* eslint jsx-a11y/label-has-for:0 */
