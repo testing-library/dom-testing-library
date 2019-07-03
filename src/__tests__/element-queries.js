@@ -801,7 +801,7 @@ test('get/query textarea element by current value', () => {
   expect(queryByDisplayValue('World').id).toEqual('content-textarea')
 })
 
-test('DescriptionOf uses aria-describedby', () => {
+test('DescriptionOf uses aria-describedby', async () => {
   const {
     getByRole,
     getDescriptionOf,
@@ -820,7 +820,7 @@ test('DescriptionOf uses aria-describedby', () => {
   expect(queryDescriptionOf(getByRole('button'))).toHaveTextContent(
     'Hello, Dave!',
   )
-  expect(findDescriptionOf(getByRole('button'))).resolves.toHaveTextContent(
+  expect(await findDescriptionOf(getByRole('button'))).toHaveTextContent(
     'Hello, Dave!',
   )
 })
