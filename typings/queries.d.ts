@@ -66,6 +66,18 @@ export type FindByText = (
   waitForElementOptions?: WaitForElementOptions,
 ) => Promise<HTMLElement>
 
+export type QueryDescriptionOf = (element: HTMLElement) => HTMLElement | null
+
+export type AllDescriptionOf = (element: HTMLElement) => HTMLElement[]
+
+export type FindAllDescriptionOf = (
+  element: HTMLElement,
+) => Promise<HTMLElement[]>
+
+export type GetDescriptionOf = (element: HTMLElement) => HTMLElement
+
+export type FindDescriptionOf = (element: HTMLElement) => Promise<HTMLElement>
+
 export const getByLabelText: GetByText
 export const getAllByLabelText: AllByText
 export const queryByLabelText: QueryByText
@@ -114,3 +126,9 @@ export const queryByTestId: QueryByBoundAttribute
 export const queryAllByTestId: AllByBoundAttribute
 export const findByTestId: FindByBoundAttribute
 export const findAllByTestId: FindAllByBoundAttribute
+export const getDescriptionOf: GetDescriptionOf
+export const getAllDescriptionOf: AllDescriptionOf
+export const queryDescriptionOf: QueryDescriptionOf
+export const queryAllDescriptionOf: AllDescriptionOf
+export const findDescriptionOf: FindDescriptionOf
+export const findAllDescriptionOf: FindAllDescriptionOf
