@@ -56,7 +56,7 @@ if (typeof window !== 'undefined') {
  */
 function getSetTimeout(windowObject) {
   if (global.useFakeTimers) {
-    if (typeof windowObject !== 'undefined') {
+    if (typeof windowObject !== 'undefined' && windowObject !== false) {
       return windowObject.setTimeout
     }
 
@@ -68,7 +68,7 @@ function getSetTimeout(windowObject) {
 
 function getClearTimeout(windowObject) {
   if (global.useFakeTimers) {
-    if (typeof windowObject !== 'undefined') {
+    if (typeof windowObject !== 'undefined' && windowObject !== false) {
       return windowObject.clearTimeout
     }
 
