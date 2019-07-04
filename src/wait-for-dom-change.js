@@ -1,4 +1,9 @@
-import {newMutationObserver, getDocument, getSetImmediate} from './helpers'
+import {
+  newMutationObserver,
+  getDocument,
+  getSetImmediate,
+  getSetTimeout,
+} from './helpers'
 import {getConfig} from './config'
 
 function waitForDomChange({
@@ -13,6 +18,8 @@ function waitForDomChange({
 } = {}) {
   return new Promise((resolve, reject) => {
     const setImmediate = getSetImmediate()
+    const setTimeout = getSetTimeout()
+
     const timer = setTimeout(onTimeout, timeout)
     const observer = newMutationObserver(onMutation)
     observer.observe(container, mutationObserverOptions)

@@ -1,4 +1,9 @@
-import {getDocument, getSetImmediate, newMutationObserver} from './helpers'
+import {
+  getDocument,
+  getSetImmediate,
+  newMutationObserver,
+  getSetTimeout,
+} from './helpers'
 import {getConfig} from './config'
 
 function waitForElementToBeRemoved(
@@ -22,6 +27,7 @@ function waitForElementToBeRemoved(
         ),
       )
     }
+    const setTimeout = getSetTimeout()
     const timer = setTimeout(onTimeout, timeout)
     const observer = newMutationObserver(onMutation)
 

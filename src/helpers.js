@@ -34,4 +34,30 @@ function getSetImmediate() {
   }
 }
 
-export {getDocument, newMutationObserver, getSetImmediate}
+let originalSetTimeout = global.setTimeout
+
+if (typeof window !== 'undefined') {
+  originalSetTimeout = window.setTimeout
+}
+
+/*
+ * Return the original setTimeout function so that all functions work as expected by a user
+ * if he/she utilizes dom-testing-library in a test where jest.fakeTimers() is used.
+ *
+ * global.useFakeTimers is used by us to make sure that we can still utilize fakeTimers in our tests.
+ *
+ * see: https://github.com/testing-library/dom-testing-library/issues/300
+ */
+function getSetTimeout() {
+  if (global.useFakeTimers) {
+    if (typeof window !== 'undefined') {
+      return window.setTimeout
+    }
+
+    return global.setTimeout
+  }
+
+  return originalSetTimeout
+}
+
+export {getDocument, newMutationObserver, getSetImmediate, getSetTimeout}

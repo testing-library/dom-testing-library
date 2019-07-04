@@ -1,4 +1,9 @@
-import {newMutationObserver, getDocument, getSetImmediate} from './helpers'
+import {
+  newMutationObserver,
+  getDocument,
+  getSetImmediate,
+  getSetTimeout,
+} from './helpers'
 import {getConfig} from './config'
 
 function waitForElement(
@@ -22,7 +27,9 @@ function waitForElement(
       return
     }
     let lastError
+    const setTimeout = getSetTimeout()
     const timer = setTimeout(onTimeout, timeout)
+
     const observer = newMutationObserver(onMutation)
     observer.observe(container, mutationObserverOptions)
     function onDone(error, result) {
