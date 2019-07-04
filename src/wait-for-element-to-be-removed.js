@@ -3,6 +3,7 @@ import {
   getSetImmediate,
   newMutationObserver,
   getSetTimeout,
+  getClearTimeout,
 } from './helpers'
 import {getConfig} from './config'
 
@@ -27,7 +28,10 @@ function waitForElementToBeRemoved(
         ),
       )
     }
-    const setTimeout = getSetTimeout()
+    const setTimeout = getSetTimeout(typeof window !== 'undefined' && window)
+    const clearTimeout = getClearTimeout(
+      typeof window !== 'undefined' && window,
+    )
     const timer = setTimeout(onTimeout, timeout)
     const observer = newMutationObserver(onMutation)
 

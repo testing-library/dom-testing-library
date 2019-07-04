@@ -40,6 +40,12 @@ if (typeof window !== 'undefined') {
   originalSetTimeout = window.setTimeout
 }
 
+let originalClearTimeout = global.clearTimeout
+
+if (typeof window !== 'undefined') {
+  originalClearTimeout = window.clearTimeout
+}
+
 /*
  * Return the original setTimeout function so that all functions work as expected by a user
  * if he/she utilizes dom-testing-library in a test where jest.fakeTimers() is used.
@@ -48,10 +54,10 @@ if (typeof window !== 'undefined') {
  *
  * see: https://github.com/testing-library/dom-testing-library/issues/300
  */
-function getSetTimeout() {
+function getSetTimeout(windowObject) {
   if (global.useFakeTimers) {
-    if (typeof window !== 'undefined') {
-      return window.setTimeout
+    if (typeof windowObject !== 'undefined') {
+      return windowObject.setTimeout
     }
 
     return global.setTimeout
@@ -60,4 +66,22 @@ function getSetTimeout() {
   return originalSetTimeout
 }
 
-export {getDocument, newMutationObserver, getSetImmediate, getSetTimeout}
+function getClearTimeout(windowObject) {
+  if (global.useFakeTimers) {
+    if (typeof windowObject !== 'undefined') {
+      return windowObject.clearTimeout
+    }
+
+    return global.clearTimeout
+  }
+
+  return originalClearTimeout
+}
+
+export {
+  getDocument,
+  newMutationObserver,
+  getSetImmediate,
+  getSetTimeout,
+  getClearTimeout,
+}

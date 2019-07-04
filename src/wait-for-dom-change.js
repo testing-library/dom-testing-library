@@ -3,6 +3,7 @@ import {
   getDocument,
   getSetImmediate,
   getSetTimeout,
+  getClearTimeout,
 } from './helpers'
 import {getConfig} from './config'
 
@@ -18,7 +19,10 @@ function waitForDomChange({
 } = {}) {
   return new Promise((resolve, reject) => {
     const setImmediate = getSetImmediate()
-    const setTimeout = getSetTimeout()
+    const setTimeout = getSetTimeout(typeof window !== 'undefined' && window)
+    const clearTimeout = getClearTimeout(
+      typeof window !== 'undefined' && window,
+    )
 
     const timer = setTimeout(onTimeout, timeout)
     const observer = newMutationObserver(onMutation)
