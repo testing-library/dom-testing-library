@@ -56,11 +56,7 @@ if (typeof window !== 'undefined') {
  */
 function getSetTimeout(windowObject) {
   if (global.useFakeTimers) {
-    if (typeof windowObject !== 'undefined' && windowObject !== false) {
-      return windowObject.setTimeout
-    }
-
-    return global.setTimeout
+    return windowObject ? window.setTimeout : global.setTimeout
   }
 
   return originalSetTimeout
@@ -68,11 +64,7 @@ function getSetTimeout(windowObject) {
 
 function getClearTimeout(windowObject) {
   if (global.useFakeTimers) {
-    if (typeof windowObject !== 'undefined' && windowObject !== false) {
-      return windowObject.clearTimeout
-    }
-
-    return global.clearTimeout
+    return windowObject ? window.clearTimeout : global.clearTimeout
   }
 
   return originalClearTimeout
