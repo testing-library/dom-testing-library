@@ -19,10 +19,8 @@ function waitForDomChange({
 } = {}) {
   return new Promise((resolve, reject) => {
     const setImmediate = getSetImmediate()
-    const setTimeout = getSetTimeout(typeof window !== 'undefined' && window)
-    const clearTimeout = getClearTimeout(
-      typeof window !== 'undefined' && window,
-    )
+    const setTimeout = getSetTimeout()
+    const clearTimeout = getClearTimeout()
 
     const timer = setTimeout(onTimeout, timeout)
     const observer = newMutationObserver(onMutation)

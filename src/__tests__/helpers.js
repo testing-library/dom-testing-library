@@ -14,22 +14,17 @@ describe('getSetTimeout', () => {
     // global.useFakeTimers is set to true for all tests in tests/setup-env.js
     jest.useFakeTimers()
 
-    const setTimeout = getSetTimeout(window)
+    const setTimeout = getSetTimeout()
 
+    expect(setTimeout).toBe(window.setTimeout)
     expect(setTimeout._isMockFunction).toBe(true)
 
     jest.useRealTimers()
   })
   it('returns original getSetTimeout from window', () => {
-    const setTimeout = getSetTimeout(window)
+    const setTimeout = getSetTimeout()
 
     expect(setTimeout).toBe(window.setTimeout)
-    expect(setTimeout._isMockFunction).toBe(undefined)
-  })
-  it('returns original getSetTimeout from global if window is undefined', () => {
-    const setTimeout = getSetTimeout(undefined)
-
-    expect(setTimeout).toBe(global.setTimeout)
     expect(setTimeout._isMockFunction).toBe(undefined)
   })
 })
@@ -39,22 +34,16 @@ describe('getClearTimeout', () => {
     // global.useFakeTimers is set to true for all tests in tests/setup-env.js
     jest.useFakeTimers()
 
-    const clearTimeout = getClearTimeout(window)
+    const clearTimeout = getClearTimeout()
 
     expect(clearTimeout._isMockFunction).toBe(true)
 
     jest.useRealTimers()
   })
   it('returns original clearTimeout from window', () => {
-    const clearTimeout = getClearTimeout(window)
+    const clearTimeout = getClearTimeout()
 
     expect(clearTimeout).toBe(window.clearTimeout)
-    expect(clearTimeout._isMockFunction).toBe(undefined)
-  })
-  it('returns original clearTimeout from global if window is undefined', () => {
-    const clearTimeout = getClearTimeout(undefined)
-
-    expect(clearTimeout).toBe(global.clearTimeout)
     expect(clearTimeout._isMockFunction).toBe(undefined)
   })
 })

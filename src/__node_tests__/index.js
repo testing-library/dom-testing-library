@@ -76,3 +76,50 @@ test('works without a browser context on a dom node (JSDOM Fragment)', () => {
     />
   `)
 })
+
+describe('getClearTimeout', () => {
+  beforeEach(jest.resetModules)
+
+  test('returns original clearTimeout from global if window is undefined', () => {
+    global.useFakeTimers = false
+    const {getClearTimeout} = require('../helpers')
+    const clearTimeout = getClearTimeout()
+
+    expect(clearTimeout).toBe(global.clearTimeout)
+    expect(clearTimeout._isMockFunction).toBe(undefined)
+  })
+  test('returns mocked clearTimeout if jest.useFaketimers is used', () => {
+    jest.useFakeTimers()
+    const {getClearTimeout} = require('../helpers')
+
+    const clearTimeout = getClearTimeout()
+
+    expect(clearTimeout).toBe(global.clearTimeout)
+    expect(clearTimeout._isMockFunction).toBe(true)
+
+    jest.useRealTimers()
+  })
+})
+
+describe('getSetTimeout', () => {
+  beforeEach(jest.resetModules)
+
+  test('returns original getSetTimeout from global if window is undefined', () => {
+    global.useFakeTimers = false
+    const {getSetTimeout} = require('../helpers')
+    const setTimeout = getSetTimeout()
+
+    expect(setTimeout).toBe(global.setTimeout)
+    expect(setTimeout._isMockFunction).toBe(undefined)
+  })
+  test('returns mocked getSetTimeout from global jest.useFaketimers is used', () => {
+    jest.useFakeTimers()
+    const {getSetTimeout} = require('../helpers')
+    const setTimeout = getSetTimeout()
+
+    expect(setTimeout).toBe(global.setTimeout)
+    expect(setTimeout._isMockFunction).toBe(true)
+
+    jest.useRealTimers()
+  })
+})

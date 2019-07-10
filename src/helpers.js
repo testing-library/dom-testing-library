@@ -54,17 +54,21 @@ if (typeof window !== 'undefined') {
  *
  * see: https://github.com/testing-library/dom-testing-library/issues/300
  */
-function getSetTimeout(windowObject) {
+function getSetTimeout() {
   if (global.useFakeTimers) {
-    return windowObject ? window.setTimeout : global.setTimeout
+    // eslint-disable-next-line no-negated-condition
+    return typeof window !== 'undefined' ? window.setTimeout : global.setTimeout
   }
 
   return originalSetTimeout
 }
 
-function getClearTimeout(windowObject) {
+function getClearTimeout() {
   if (global.useFakeTimers) {
-    return windowObject ? window.clearTimeout : global.clearTimeout
+    // eslint-disable-next-line no-negated-condition
+    return typeof window !== 'undefined'
+      ? window.clearTimeout
+      : global.clearTimeout
   }
 
   return originalClearTimeout
