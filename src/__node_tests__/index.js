@@ -88,7 +88,7 @@ describe('getClearTimeout', () => {
     expect(clearTimeout).toBe(global.clearTimeout)
     expect(clearTimeout._isMockFunction).toBe(undefined)
   })
-  test('returns mocked clearTimeout if jest.useFaketimers is used', () => {
+  test('returns mocked clearTimeout from global if jest.useFaketimers is used', () => {
     jest.useFakeTimers()
     const {getClearTimeout} = require('../helpers')
 
@@ -112,7 +112,7 @@ describe('getSetTimeout', () => {
     expect(setTimeout).toBe(global.setTimeout)
     expect(setTimeout._isMockFunction).toBe(undefined)
   })
-  test('returns mocked getSetTimeout from global jest.useFaketimers is used', () => {
+  test('returns mocked getSetTimeout from global if jest.useFaketimers is used', () => {
     jest.useFakeTimers()
     const {getSetTimeout} = require('../helpers')
     const setTimeout = getSetTimeout()
