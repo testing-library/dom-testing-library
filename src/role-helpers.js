@@ -74,7 +74,7 @@ function getRoles(container) {
 function logRoles(container) {
   const roles = getRoles(container)
 
-  return Object.entries(roles)
+  const rolesStr = Object.entries(roles)
     .map(([role, elements]) => {
       const delimiterBar = '-'.repeat(50)
       const elementsString = elements
@@ -84,6 +84,9 @@ function logRoles(container) {
       return `${role}:\n\n${elementsString}\n\n${delimiterBar}`
     })
     .join('\n')
+
+  // eslint-disable-next-line no-console
+  console.log(rolesStr)
 }
 
 export {getRoles, logRoles, getImplicitAriaRoles}
