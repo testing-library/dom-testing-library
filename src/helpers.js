@@ -48,7 +48,7 @@ if (typeof window !== 'undefined') {
 
 /*
  * Return the original setTimeout function so that all functions work as expected by a user
- * if he/she utilizes dom-testing-library in a test where jest.fakeTimers() is used.
+ * if they utilize dom-testing-library in a test where jest.fakeTimers() is used.
  *
  * global.useFakeTimers is used by us to make sure that we can still utilize fakeTimers in our tests.
  *
