@@ -87,8 +87,6 @@ function logRoles(container) {
 
   // eslint-disable-next-line no-console
   console.log(rolesStr)
-
-  return rolesStr
 }
 
 export {getRoles, logRoles, getImplicitAriaRoles}

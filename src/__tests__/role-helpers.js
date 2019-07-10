@@ -1,5 +1,4 @@
-import jestSerializerAnsi from 'jest-serializer-ansi'
-import {getRoles, logRoles, getImplicitAriaRoles} from '../role-helpers'
+import {getRoles, getImplicitAriaRoles} from '../role-helpers'
 import {render, cleanup} from './helpers/test-utils'
 
 afterEach(cleanup)
@@ -130,15 +129,6 @@ test('getRoles returns expected roles for various dom nodes', () => {
     command: [menuItem, menuItem2],
     menuitem: [menuItem, menuItem2],
   })
-})
-
-test('logRoles logs expected roles for various dom nodes', () => {
-  expect.addSnapshotSerializer(jestSerializerAnsi)
-
-  const {section} = setup()
-  const output = logRoles(section)
-
-  expect(output).toMatchSnapshot()
 })
 
 test('getImplicitAriaRoles returns expected roles for various dom nodes', () => {
