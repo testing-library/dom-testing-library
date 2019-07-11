@@ -1,51 +1,7 @@
-import {
-  getDocument,
-  newMutationObserver,
-  getSetTimeout,
-  getClearTimeout,
-} from '../helpers'
+import {getDocument, newMutationObserver} from '../helpers'
 
 test('returns global document if exists', () => {
   expect(getDocument()).toBe(document)
-})
-
-describe('getSetTimeout', () => {
-  it('returns mocked setTimeout if global.useFakeTimers is set and jest.useFakeTimers is used', () => {
-    // global.useFakeTimers is set to true for all tests in tests/setup-env.js
-    jest.useFakeTimers()
-
-    const setTimeout = getSetTimeout()
-
-    expect(setTimeout).toBe(window.setTimeout)
-    expect(setTimeout._isMockFunction).toBe(true)
-
-    jest.useRealTimers()
-  })
-  it('returns original getSetTimeout from window', () => {
-    const setTimeout = getSetTimeout()
-
-    expect(setTimeout).toBe(window.setTimeout)
-    expect(setTimeout._isMockFunction).toBe(undefined)
-  })
-})
-
-describe('getClearTimeout', () => {
-  it('returns mocked clearTimeout if global.useFakeTimers is set and jest.useFakeTimers is used', () => {
-    // global.useFakeTimers is set to true for all tests in tests/setup-env.js
-    jest.useFakeTimers()
-
-    const clearTimeout = getClearTimeout()
-
-    expect(clearTimeout._isMockFunction).toBe(true)
-
-    jest.useRealTimers()
-  })
-  it('returns original clearTimeout from window', () => {
-    const clearTimeout = getClearTimeout()
-
-    expect(clearTimeout).toBe(window.clearTimeout)
-    expect(clearTimeout._isMockFunction).toBe(undefined)
-  })
 })
 
 class DummyClass {

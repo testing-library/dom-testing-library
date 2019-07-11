@@ -19,32 +19,6 @@ test('waits for element to appear in a specified container', async () => {
   expect(element).toBeTruthy()
 })
 
-test('can time out', async () => {
-  jest.useFakeTimers()
-  const promise = waitForElement(() => {})
-  jest.advanceTimersByTime(4600)
-  await expect(promise).rejects.toThrow(/timed out/i)
-  jest.useRealTimers()
-})
-
-test('can specify our own timeout time', async () => {
-  jest.useFakeTimers()
-  const promise = waitForElement(() => {}, {timeout: 4700})
-  const handler = jest.fn()
-  promise.then(handler, handler)
-  // advance beyond the default
-  jest.advanceTimersByTime(4600)
-  // promise was neither rejected nor resolved
-  expect(handler).toHaveBeenCalledTimes(0)
-
-  // advance beyond our specified timeout
-  jest.advanceTimersByTime(150)
-
-  // timed out
-  await expect(promise).rejects.toThrow(/timed out/i)
-  jest.useRealTimers()
-})
-
 test('throws last thrown error', async () => {
   const {rerender, container} = render('<div />')
   let error
