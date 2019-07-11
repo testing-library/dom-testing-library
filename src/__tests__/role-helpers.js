@@ -1,4 +1,3 @@
-import jestSerializerAnsi from 'jest-serializer-ansi'
 import {getRoles, logRoles, getImplicitAriaRoles} from '../role-helpers'
 import {render, cleanup} from './helpers/test-utils'
 
@@ -132,13 +131,18 @@ test('getRoles returns expected roles for various dom nodes', () => {
   })
 })
 
-test('logRoles logs expected roles for various dom nodes', () => {
-  expect.addSnapshotSerializer(jestSerializerAnsi)
-
+test('logRoles calls console.log with output from prettyRoles', () => {
   const {section} = setup()
-  const output = logRoles(section)
 
-  expect(output).toMatchSnapshot()
+  jest.spyOn(console, 'log').mockImplementationOnce(() => {})
+
+  logRoles(section)
+  // eslint-disable-next-line no-console
+  expect(console.log).toHaveBeenCalledTimes(1)
+  // eslint-disable-next-line no-console
+  expect(console.log.mock.calls[0][0]).toMatchSnapshot()
+  // eslint-disable-next-line no-console
+  console.log.mockRestore()
 })
 
 test('getImplicitAriaRoles returns expected roles for various dom nodes', () => {
