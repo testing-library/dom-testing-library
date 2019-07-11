@@ -56,7 +56,6 @@ if (typeof window !== 'undefined') {
  */
 function getSetTimeout() {
   if (global.useFakeTimers) {
-    // eslint-disable-next-line no-negated-condition
     return typeof window === 'undefined' ? global.setTimeout : window.setTimeout
   }
 
@@ -65,10 +64,9 @@ function getSetTimeout() {
 
 function getClearTimeout() {
   if (global.useFakeTimers) {
-    // eslint-disable-next-line no-negated-condition
-    return typeof window !== 'undefined'
-      ? window.clearTimeout
-      : global.clearTimeout
+    return typeof window === 'undefined'
+      ? global.clearTimeout
+      : window.clearTimeout
   }
 
   return originalClearTimeout
