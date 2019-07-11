@@ -33,3 +33,27 @@ test('resolves on mutation if callback throws an error', async () => {
   })
   await waitForElementToBeRemoved(() => getByTestId('div'), {timeout: 100})
 })
+
+test('requires a function as the first parameter', () => {
+  return expect(
+    waitForElementToBeRemoved(),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"waitForElementToBeRemoved requires a function as the first parameter"`,
+  )
+})
+
+test('requires an element to exist first', () => {
+  return expect(
+    waitForElementToBeRemoved(() => null),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal."`,
+  )
+})
+
+test('requires an unempty array of elements to exist first', () => {
+  return expect(
+    waitForElementToBeRemoved(() => []),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal."`,
+  )
+})

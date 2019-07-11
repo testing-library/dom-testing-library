@@ -1,5 +1,20 @@
 import MutationObserver from '@sheerun/mutationobserver-shim'
 
+const globalObj = typeof window === 'undefined' ? global : window
+
+// we only run our tests in node, and setImmediate is supported in node.
+// istanbul ignore next
+function setImmediatePolyfill(fn) {
+  return globalObj.setTimeout(fn, 0)
+}
+
+// istanbul ignore next
+const {
+  setTimeout,
+  clearTimeout,
+  setImmediate = setImmediatePolyfill,
+} = globalObj
+
 function newMutationObserver(onMutation) {
   const MutationObserverConstructor =
     typeof window !== 'undefined' &&
@@ -18,20 +33,10 @@ function getDocument() {
   return window.document
 }
 
-/*
- * There are browsers for which `setImmediate` is not available. This
- * serves as a polyfill of sorts, adopting `setTimeout` as the closest
- * equivalent
- */
-function getSetImmediate() {
-  /* istanbul ignore else */
-  if (typeof setImmediate === 'function') {
-    return setImmediate
-  } else {
-    return function setImmediate(fn) {
-      return setTimeout(fn, 0)
-    }
-  }
+export {
+  getDocument,
+  newMutationObserver,
+  setImmediate,
+  setTimeout,
+  clearTimeout,
 }
-
-export {getDocument, newMutationObserver, getSetImmediate}
