@@ -57,7 +57,7 @@ if (typeof window !== 'undefined') {
 function getSetTimeout() {
   if (global.useFakeTimers) {
     // eslint-disable-next-line no-negated-condition
-    return typeof window !== 'undefined' ? window.setTimeout : global.setTimeout
+    return typeof window === 'undefined' ? global.setTimeout : window.setTimeout
   }
 
   return originalSetTimeout
