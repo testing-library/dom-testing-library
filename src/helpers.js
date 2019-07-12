@@ -8,8 +8,8 @@ function setImmediatePolyfill(fn) {
   return globalObj.setTimeout(fn, 0)
 }
 
-// istanbul ignore next
 const clearTimeoutFn = globalObj.clearTimeout
+// istanbul ignore next
 const setImmediateFn = globalObj.setImmediate || setImmediatePolyfill
 const setTimeoutFn = globalObj.setTimeout
 
