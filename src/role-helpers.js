@@ -73,10 +73,10 @@ function getRoles(container) {
   }, {})
 }
 
-function logRoles(container) {
+function prettyRoles(container) {
   const roles = getRoles(container)
 
-  const rolesStr = Object.entries(roles)
+  return Object.entries(roles)
     .map(([role, elements]) => {
       const delimiterBar = '-'.repeat(50)
       const elementsString = elements
@@ -86,9 +86,11 @@ function logRoles(container) {
       return `${role}:\n\n${elementsString}\n\n${delimiterBar}`
     })
     .join('\n')
-
-  // eslint-disable-next-line no-console
-  console.log(rolesStr)
 }
 
-export {getRoles, logRoles, getImplicitAriaRoles}
+function logRoles(container) {
+  // eslint-disable-next-line no-console
+  console.log(prettyRoles(container))
+}
+
+export {getRoles, logRoles, getImplicitAriaRoles, prettyRoles}

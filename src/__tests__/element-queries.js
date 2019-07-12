@@ -1,8 +1,6 @@
-import jestSerializerAnsi from 'jest-serializer-ansi'
 import {configure} from '../config'
 import {render, renderIntoDocument} from './helpers/test-utils'
 
-expect.addSnapshotSerializer(jestSerializerAnsi)
 beforeEach(() => {
   document.defaultView.Cypress = null
 })
@@ -88,7 +86,9 @@ test('get throws a useful error message', () => {
 </div>"
 `)
   expect(() => getByRole('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element by [role=LucyRicardo]
+"Unable to find an element with the role "LucyRicardo"
+
+Here are the available roles:
 
 <div>
   <div />
