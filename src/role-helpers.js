@@ -16,7 +16,9 @@ function getImplicitAriaRoles(currentNode) {
 function buildElementRoleList(elementRolesMap) {
   function makeElementSelector({name, attributes = []}) {
     return `${name}${attributes
-      .map(({name: attributeName, value}) => `[${attributeName}=${value}]`)
+      .map(({name: attributeName, value}) =>
+        value ? `[${attributeName}=${value}]` : `[${attributeName}]`,
+      )
       .join('')}`
   }
 

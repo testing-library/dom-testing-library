@@ -6,6 +6,9 @@ afterEach(cleanup)
 function setup() {
   const {getByTestId} = render(`
 <section data-testid='a-section'>
+  <a href="http://whatever.com" data-testid="a-link">link</a>
+  <a>invalid link</a>
+
   <nav data-testid='a-nav' />
   
   <h1 data-testid='a-h1'>Main Heading</h1>
@@ -54,6 +57,7 @@ function setup() {
 
   return {
     section: getByTestId('a-section'),
+    anchor: getByTestId('a-link'),
     h1: getByTestId('a-h1'),
     h2: getByTestId('a-h2'),
     h3: getByTestId('a-h3'),
@@ -85,6 +89,7 @@ function setup() {
 test('getRoles returns expected roles for various dom nodes', () => {
   const {
     section,
+    anchor,
     h1,
     h2,
     h3,
@@ -113,6 +118,7 @@ test('getRoles returns expected roles for various dom nodes', () => {
   } = setup()
 
   expect(getRoles(section)).toEqual({
+    link: [anchor],
     region: [section],
     heading: [h1, h2, h3],
     navigation: [nav],
