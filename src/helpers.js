@@ -9,11 +9,9 @@ function setImmediatePolyfill(fn) {
 }
 
 // istanbul ignore next
-const {
-  setTimeout,
-  clearTimeout,
-  setImmediate = setImmediatePolyfill,
-} = globalObj
+const clearTimeoutFn = globalObj.clearTimeout
+const setImmediateFn = globalObj.setImmediate || setImmediatePolyfill
+const setTimeoutFn = globalObj.setTimeout
 
 function newMutationObserver(onMutation) {
   const MutationObserverConstructor =
@@ -36,7 +34,7 @@ function getDocument() {
 export {
   getDocument,
   newMutationObserver,
-  setImmediate,
-  setTimeout,
-  clearTimeout,
+  clearTimeoutFn as clearTimeout,
+  setImmediateFn as setImmediate,
+  setTimeoutFn as setTimeout,
 }
