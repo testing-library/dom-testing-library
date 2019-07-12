@@ -7,7 +7,11 @@ const {
 
 module.exports = {
   collectCoverageFrom,
-  coveragePathIgnorePatterns,
+  coveragePathIgnorePatterns: [
+    ...coveragePathIgnorePatterns,
+    '/__tests__/',
+    '/__node_tests__/',
+  ],
   coverageThreshold,
   watchPlugins: [
     ...watchPlugins,

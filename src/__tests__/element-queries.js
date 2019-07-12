@@ -800,5 +800,3 @@ test('get/query textarea element by current value', () => {
   expect(getByDisplayValue('World').id).toEqual('content-textarea')
   expect(queryByDisplayValue('World').id).toEqual('content-textarea')
 })
-
-/* eslint jsx-a11y/label-has-for:0 */

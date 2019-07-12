@@ -24,7 +24,7 @@
     "node": ">=8"
   },
   "scripts": {
-    "build": "kcd-scripts build && kcd-scripts build --bundle --no-clean",
+    "build": "kcd-scripts build --ignore \"**/__tests__/**,**/__node_tests__/**,**/__mocks__/**\" && kcd-scripts build --bundle --no-clean",
     "lint": "kcd-scripts lint",
     "test": "kcd-scripts test",
     "test:update": "npm test -- --updateSnapshot --coverage",
@@ -50,13 +50,13 @@
     "wait-for-expect": "^1.2.0"
   },
   "devDependencies": {
-    "dtslint": "^0.7.7",
-    "jest-dom": "^3.4.0",
+    "@testing-library/jest-dom": "^4.0.0",
+    "dtslint": "^0.8.0",
     "jest-in-case": "^1.0.2",
     "jest-serializer-ansi": "^1.0.3",
     "jest-watch-select-projects": "^0.1.1",
     "jsdom": "^15.1.1",
-    "kcd-scripts": "^1.4.0"
+    "kcd-scripts": "^1.5.2"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",
