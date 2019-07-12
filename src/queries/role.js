@@ -1,4 +1,4 @@
-import {getImplicitAriaRoles} from '../role-helpers'
+import {getImplicitAriaRoles, prettyRoles} from '../role-helpers'
 import {buildQueries, fuzzyMatches, makeNormalizer, matches} from './all-utils'
 
 function queryAllByRole(
@@ -24,8 +24,18 @@ function queryAllByRole(
   })
 }
 
-const getMultipleError = (c, id) => `Found multiple elements by [role=${id}]`
-const getMissingError = (c, id) => `Unable to find an element by [role=${id}]`
+const getMultipleError = (c, role) =>
+  `Found multiple elements with the role "${role}"`
+const getMissingError = (container, role) =>
+  `
+Unable to find an element with the role "${role}"
+
+Here are the available roles:
+
+  ${prettyRoles(container)
+    .replace(/\n/g, '\n  ')
+    .replace(/\n\s\s\n/g, '\n\n')}
+`.trim()
 
 const [
   queryByRole,
