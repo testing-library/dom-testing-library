@@ -8,6 +8,14 @@ exports[`logRoles calls console.log with output from prettyRoles 1`] = `
 />
 
 --------------------------------------------------
+link:
+
+<a
+  data-testid="a-link"
+  href="http://whatever.com"
+/>
+
+--------------------------------------------------
 navigation:
 
 <nav
