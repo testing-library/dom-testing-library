@@ -20,3 +20,16 @@ Here are the available roles:
 </div>"
 `)
 })
+
+test('logs error when there are no available roles', () => {
+  const {getByRole} = render('<div />')
+  expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an element with the role "article"
+
+There are no available roles.
+
+<div>
+  <div />
+</div>"
+`)
+})
