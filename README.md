@@ -27,7 +27,7 @@ practices.</p>
 [![downloads][downloads-badge]][npmtrends]
 [![MIT License][license-badge]][license]
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-67-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-68-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome][prs-badge]][prs]
 [![Code of Conduct][coc-badge]][coc]
 
@@ -216,6 +216,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://dylanvann.com/"><img src="https://avatars0.githubusercontent.com/u/1537615?v=4" width="100px;" alt="Dylan Vann"/><br /><sub><b>Dylan Vann</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=DylanVann" title="Code">💻</a></td>
     <td align="center"><a href="https://afontcu.dev"><img src="https://avatars0.githubusercontent.com/u/9197791?v=4" width="100px;" alt="Adrià Fontcuberta"/><br /><sub><b>Adrià Fontcuberta</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=afontcu" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=afontcu" title="Tests">⚠️</a></td>
     <td align="center"><a href="http://thomlom.dev"><img src="https://avatars3.githubusercontent.com/u/16003285?v=4" width="100px;" alt="Thomas Lombart"/><br /><sub><b>Thomas Lombart</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=thomlom" title="Code">💻</a></td>
+    <td align="center"><a href="https://twitter.com/SavePointSam"><img src="https://avatars0.githubusercontent.com/u/8203211?v=4" width="100px;" alt="Sam Horton"/><br /><sub><b>Sam Horton</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=SavePointSam" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=SavePointSam" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
