@@ -26,16 +26,26 @@ function queryAllByRole(
 
 const getMultipleError = (c, role) =>
   `Found multiple elements with the role "${role}"`
-const getMissingError = (container, role) =>
-  `
-Unable to find an element with the role "${role}"
 
+const getMissingError = (container, role) => {
+  const roles = prettyRoles(container)
+  let roleMessage
+
+  if (roles.length === 0) {
+    roleMessage = 'There are no available roles.'
+  } else {
+    roleMessage = `
 Here are the available roles:
 
-  ${prettyRoles(container)
-    .replace(/\n/g, '\n  ')
-    .replace(/\n\s\s\n/g, '\n\n')}
+  ${roles.replace(/\n/g, '\n  ').replace(/\n\s\s\n/g, '\n\n')}
 `.trim()
+  }
+
+  return `
+Unable to find an element with the role "${role}"
+
+${roleMessage}`.trim()
+}
 
 const [
   queryByRole,
