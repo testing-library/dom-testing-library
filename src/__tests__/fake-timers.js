@@ -31,6 +31,8 @@ const {
 
 test('waitForElementToBeRemoved: times out after 4500ms by default', () => {
   const {container} = render(`<div></div>`)
+  // there's a bug with this rule here...
+  // eslint-disable-next-line jest/valid-expect
   const promise = expect(
     waitForElementToBeRemoved(() => container),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
