@@ -651,7 +651,8 @@
       "profile": "https://afontcu.dev",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "doc"
       ]
     },
     {
