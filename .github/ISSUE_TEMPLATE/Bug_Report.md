@@ -17,11 +17,10 @@ you've never done that before, that's great! Check this free short video
 tutorial to learn how: http://kcd.im/pull-request
 
 If this is an issue with the documentation, please file an issue in the docs repo:
-https://github.com/alexkrolick/testing-library-docs
+https://github.com/testing-library/testing-library-docs
 -->
 
-- `dom-testing-library` version:
-- `react` version:
+- `DOM Testing Library` version:
 - `node` version:
 - `npm` (or `yarn`) version:
 
@@ -45,7 +44,7 @@ var your => (code) => here;
 If possible, please create a repository that reproduces the issue with the
 minimal amount of code possible.
 
-Repository template: https://github.com/alexkrolick/dom-testing-library-template
+Repository template: https://github.com/testing-library/dom-testing-library-template
 
 Or if you can, try to reproduce the issue in a Codesandbox. You can fork the one
 here: https://codesandbox.io/s/5z6x4r7n0p
