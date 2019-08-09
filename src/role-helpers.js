@@ -1,5 +1,5 @@
 import {elementRoles} from 'aria-query'
-import {debugDOM} from './query-helpers'
+import {prettyDOM} from './pretty-dom'
 
 const elementRoleList = buildElementRoleList(elementRoles)
 
@@ -73,14 +73,14 @@ function getRoles(container) {
   }, {})
 }
 
-function prettyRoles(container) {
-  const roles = getRoles(container)
+function prettyRoles(dom) {
+  const roles = getRoles(dom)
 
   return Object.entries(roles)
     .map(([role, elements]) => {
       const delimiterBar = '-'.repeat(50)
       const elementsString = elements
-        .map(el => debugDOM(el.cloneNode(false)))
+        .map(el => prettyDOM(el.cloneNode(false)))
         .join('\n\n')
 
       return `${role}:\n\n${elementsString}\n\n${delimiterBar}`
@@ -88,9 +88,8 @@ function prettyRoles(container) {
     .join('\n')
 }
 
-function logRoles(container) {
-  // eslint-disable-next-line no-console
-  console.log(prettyRoles(container))
-}
+const logRoles = dom => console.log(prettyRoles(dom))
 
 export {getRoles, logRoles, getImplicitAriaRoles, prettyRoles}
+
+/* eslint no-console:0 */

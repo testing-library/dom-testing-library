@@ -1,6 +1,14 @@
 import {getRoles, logRoles, getImplicitAriaRoles} from '../role-helpers'
 import {render} from './helpers/test-utils'
 
+beforeEach(() => {
+  jest.spyOn(console, 'log').mockImplementation(() => {})
+})
+
+afterEach(() => {
+  console.log.mockRestore()
+})
+
 function setup() {
   const {getByTestId} = render(`
 <section data-testid='a-section'>
@@ -137,16 +145,9 @@ test('getRoles returns expected roles for various dom nodes', () => {
 
 test('logRoles calls console.log with output from prettyRoles', () => {
   const {section} = setup()
-
-  jest.spyOn(console, 'log').mockImplementationOnce(() => {})
-
   logRoles(section)
-  // eslint-disable-next-line no-console
   expect(console.log).toHaveBeenCalledTimes(1)
-  // eslint-disable-next-line no-console
   expect(console.log.mock.calls[0][0]).toMatchSnapshot()
-  // eslint-disable-next-line no-console
-  console.log.mockRestore()
 })
 
 test('getImplicitAriaRoles returns expected roles for various dom nodes', () => {
@@ -158,3 +159,5 @@ test('getImplicitAriaRoles returns expected roles for various dom nodes', () => 
   expect(getImplicitAriaRoles(radio)).toEqual(['radio'])
   expect(getImplicitAriaRoles(input)).toEqual(['textbox'])
 })
+
+/* eslint no-console:0 */
