@@ -1,7 +1,5 @@
 import {waitForDomChange} from '../wait-for-dom-change'
-import {renderIntoDocument, cleanup} from './helpers/test-utils'
-
-afterEach(cleanup)
+import {renderIntoDocument} from './helpers/test-utils'
 
 test('waits for the dom to change in the document', async () => {
   const {container} = renderIntoDocument('<div />')

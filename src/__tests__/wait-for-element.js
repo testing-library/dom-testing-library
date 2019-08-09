@@ -1,7 +1,5 @@
 import {waitForElement} from '../wait-for-element'
-import {render, renderIntoDocument, cleanup} from './helpers/test-utils'
-
-afterEach(cleanup)
+import {render, renderIntoDocument} from './helpers/test-utils'
 
 test('waits for element to appear in the document', async () => {
   const {rerender, getByTestId} = renderIntoDocument('<div />')
