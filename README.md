@@ -227,7 +227,7 @@ Contributions of any kind welcome!
 
 ## LICENSE
 
-MIT
+[MIT](LICENSE)
 
 [npm]: https://www.npmjs.com/
 [node]: https://nodejs.org
