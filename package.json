@@ -6,7 +6,6 @@
   "module": "dist/@testing-library/dom.esm.js",
   "umd:main": "dist/@testing-library/dom.umd.js",
   "source": "src/index.js",
-  "typings": "typings",
   "keywords": [
     "testing",
     "ui",
@@ -30,8 +29,7 @@
     "test:update": "npm test -- --updateSnapshot --coverage",
     "test:debug": "node --inspect-brk ./node_modules/.bin/jest --watch --runInBand",
     "validate": "kcd-scripts validate",
-    "setup": "npm install && npm run validate -s",
-    "dtslint": "dtslint typings"
+    "setup": "npm install && npm run validate -s"
   },
   "husky": {
     "hooks": {
@@ -39,19 +37,18 @@
     }
   },
   "files": [
-    "dist",
-    "typings"
+    "dist"
   ],
   "dependencies": {
     "@babel/runtime": "^7.5.5",
     "@sheerun/mutationobserver-shim": "^0.3.2",
+    "@types/testing-library__dom": "^6.0.0",
     "aria-query": "3.0.0",
     "pretty-format": "^24.8.0",
     "wait-for-expect": "^1.3.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.0.0",
-    "dtslint": "^0.9.1",
     "jest-in-case": "^1.0.2",
     "jest-serializer-ansi": "^1.0.3",
     "jest-watch-select-projects": "^0.1.1",
