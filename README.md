@@ -1,5 +1,5 @@
 <div align="center">
-<h1>dom-testing-library</h1>
+<h1>DOM Testing Library</h1>
 
 <a href="https://www.emojione.com/emoji/1f419">
   <img
@@ -72,12 +72,12 @@ functionality) don't break your tests and slow you and your team down.
 
 ## This Solution
 
-The `dom-testing-library` is a very light-weight solution for testing DOM nodes
+The `DOM Testing Library` is a very light-weight solution for testing DOM nodes
 (whether simulated with [`JSDOM`](https://github.com/jsdom/jsdom) as provided by
 default with [Jest][] or in the browser). The main utilities it provides involve
 querying the DOM for nodes in a way that's similar to how the user finds
 elements on the page. In this way, the library helps ensure your tests give you
-confidence in your UI code. The `dom-testing-library`'s primary guiding
+confidence in your UI code. The `DOM Testing Library`'s primary guiding
 principle is:
 
 > [The more your tests resemble the way your software is used, the more
