@@ -673,6 +673,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "andrewhillcode",
+      "name": "Andrew Hill",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/12396191?v=4",
+      "profile": "http://andrewhillcode.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
