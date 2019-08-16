@@ -11,7 +11,7 @@ function waitForElement(
   callback,
   {
     container = getDocument(),
-    timeout = 4500,
+    timeout = getConfig().asyncUtilTimeout,
     mutationObserverOptions = {
       subtree: true,
       childList: true,
