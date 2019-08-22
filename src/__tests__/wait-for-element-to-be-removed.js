@@ -57,3 +57,31 @@ test('requires an unempty array of elements to exist first', () => {
     `"The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal."`,
   )
 })
+
+test('uses real timers even if they were set to fake before importing the module', async () => {
+  jest.resetModules()
+  jest.useFakeTimers()
+  const importedWaitForElementToBeRemoved = require('../')
+    .waitForElementToBeRemoved
+  jest.useRealTimers()
+
+  const {queryAllByTestId} = renderIntoDocument(`
+    <div data-testid="div"></div>
+    <div data-testid="div"></div>
+  `)
+  const divs = queryAllByTestId('div')
+  // first mutation
+  setTimeout(() => {
+    divs.forEach(d => d.setAttribute('id', 'mutated'))
+  })
+  // removal
+  setTimeout(() => {
+    divs.forEach(div => div.parentElement.removeChild(div))
+  }, 1000)
+
+  await expect(
+    importedWaitForElementToBeRemoved(() => queryAllByTestId('div'), {
+      timeout: 200,
+    }),
+  ).rejects.toThrow(/timed out/i)
+})

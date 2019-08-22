@@ -48,3 +48,18 @@ test('waits until callback does not return null', async () => {
 test('throws error if no callback is provided', async () => {
   await expect(waitForElement()).rejects.toThrow(/callback/i)
 })
+
+test('uses real timers even if they were set to fake before importing the module', async () => {
+  jest.resetModules()
+  jest.useFakeTimers()
+  const importedWaitForElement = require('../').waitForElement
+  jest.useRealTimers()
+
+  const {rerender, getByTestId} = renderIntoDocument('<div />')
+
+  setTimeout(() => rerender('<div data-testid="div" />'), 1000)
+
+  await expect(
+    importedWaitForElement(() => getByTestId('div'), {timeout: 200}),
+  ).rejects.toThrow(/Unable to find/i)
+})

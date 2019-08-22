@@ -48,3 +48,18 @@ Array [
 ]
 `)
 })
+
+test('uses real timers even if they were set to fake before importing the module', async () => {
+  jest.resetModules()
+  jest.useFakeTimers()
+  const importedWaitForDomChange = require('../').waitForDomChange
+  jest.useRealTimers()
+
+  const {container} = renderIntoDocument('<div />')
+
+  setTimeout(() => container.firstChild.setAttribute('id', 'foo'), 1000)
+
+  await expect(importedWaitForDomChange({timeout: 200})).rejects.toThrow(
+    /timed out/i,
+  )
+})
