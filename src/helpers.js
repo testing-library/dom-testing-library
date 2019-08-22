@@ -1,17 +1,26 @@
 import MutationObserver from '@sheerun/mutationobserver-shim'
 
-const globalObj = typeof window === 'undefined' ? global : window
+function getGlobalObj() {
+  return typeof window === 'undefined' ? global : window
+}
 
 // we only run our tests in node, and setImmediate is supported in node.
 // istanbul ignore next
 function setImmediatePolyfill(fn) {
-  return globalObj.setTimeout(fn, 0)
+  return getGlobalObj().setTimeout(fn, 0)
 }
 
-const clearTimeoutFn = globalObj.clearTimeout
+function getClearTimeoutFn() {
+  return getGlobalObj().clearTimeout
+}
 // istanbul ignore next
-const setImmediateFn = globalObj.setImmediate || setImmediatePolyfill
-const setTimeoutFn = globalObj.setTimeout
+function getSetImmediateFn() {
+  return getGlobalObj().setImmediate || setImmediatePolyfill
+}
+
+function getSetTimeoutFn() {
+  return getGlobalObj().setTimeout
+}
 
 function newMutationObserver(onMutation) {
   const MutationObserverConstructor =
@@ -34,7 +43,7 @@ function getDocument() {
 export {
   getDocument,
   newMutationObserver,
-  clearTimeoutFn as clearTimeout,
-  setImmediateFn as setImmediate,
-  setTimeoutFn as setTimeout,
+  getClearTimeoutFn as getClearTimeout,
+  getSetImmediateFn as getSetImmediate,
+  getSetTimeoutFn as getSetTimeout,
 }

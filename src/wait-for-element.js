@@ -1,9 +1,9 @@
 import {
   newMutationObserver,
   getDocument,
-  setImmediate,
-  setTimeout,
-  clearTimeout,
+  getSetImmediate,
+  getSetTimeout,
+  getClearTimeout,
 } from './helpers'
 import {getConfig} from './config'
 
@@ -28,13 +28,13 @@ function waitForElement(
       return
     }
     let lastError
-    const timer = setTimeout(onTimeout, timeout)
+    const timer = getSetTimeout()(onTimeout, timeout)
 
     const observer = newMutationObserver(onMutation)
     observer.observe(container, mutationObserverOptions)
     function onDone(error, result) {
-      clearTimeout(timer)
-      setImmediate(() => observer.disconnect())
+      getClearTimeout()(timer)
+      getSetImmediate()(() => observer.disconnect())
       if (error) {
         reject(error)
       } else {
