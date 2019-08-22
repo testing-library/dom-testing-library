@@ -16,9 +16,17 @@ function queryAllLabelsByText(
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-  return Array.from(container.querySelectorAll('label')).filter(label =>
-    matcher(label.textContent, label, text, matchNormalizer),
-  )
+  return Array.from(container.querySelectorAll('label')).filter(label => {
+    let textToMatch = label.textContent
+
+    // The children of a textarea are part of `textContent` as well. We
+    // need to remove them from the string so we can match it afterwards.
+    label.querySelectorAll('textarea').forEach(textarea => {
+      textToMatch = textToMatch.replace(textarea.value, '')
+    })
+
+    return matcher(textToMatch, label, text, matchNormalizer)
+  })
 }
 
 function queryAllByLabelText(
