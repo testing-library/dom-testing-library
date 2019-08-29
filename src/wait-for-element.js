@@ -4,6 +4,7 @@ import {
   setImmediate,
   setTimeout,
   clearTimeout,
+  runWithRealTimers,
 } from './helpers'
 import {getConfig} from './config'
 
@@ -31,7 +32,9 @@ function waitForElement(
     const timer = setTimeout(onTimeout, timeout)
 
     const observer = newMutationObserver(onMutation)
-    observer.observe(container, mutationObserverOptions)
+    runWithRealTimers(() =>
+      observer.observe(container, mutationObserverOptions),
+    )
     function onDone(error, result) {
       clearTimeout(timer)
       setImmediate(() => observer.disconnect())

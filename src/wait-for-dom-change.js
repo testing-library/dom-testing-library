@@ -4,6 +4,7 @@ import {
   setImmediate,
   setTimeout,
   clearTimeout,
+  runWithRealTimers,
 } from './helpers'
 import {getConfig} from './config'
 
@@ -20,7 +21,9 @@ function waitForDomChange({
   return new Promise((resolve, reject) => {
     const timer = setTimeout(onTimeout, timeout)
     const observer = newMutationObserver(onMutation)
-    observer.observe(container, mutationObserverOptions)
+    runWithRealTimers(() =>
+      observer.observe(container, mutationObserverOptions),
+    )
 
     function onDone(error, result) {
       clearTimeout(timer)

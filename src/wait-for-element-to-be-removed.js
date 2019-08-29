@@ -4,6 +4,7 @@ import {
   setImmediate,
   setTimeout,
   clearTimeout,
+  runWithRealTimers,
 } from './helpers'
 import {getConfig} from './config'
 
@@ -43,7 +44,9 @@ function waitForElementToBeRemoved(
         )
       } else {
         // Only observe for mutations only if there is element while checking synchronously
-        observer.observe(container, mutationObserverOptions)
+        runWithRealTimers(() =>
+          observer.observe(container, mutationObserverOptions),
+        )
       }
     } catch (error) {
       onDone(error)

@@ -2,6 +2,22 @@ import MutationObserver from '@sheerun/mutationobserver-shim'
 
 const globalObj = typeof window === 'undefined' ? global : window
 
+function runWithRealTimers(callback) {
+  const usingJestFakeTimers = globalObj.setTimeout._isMockFunction && !!jest
+
+  if (usingJestFakeTimers) {
+    jest.useRealTimers()
+  }
+
+  const callbackReturnValue = callback()
+
+  if (usingJestFakeTimers) {
+    jest.useFakeTimers()
+  }
+
+  return callbackReturnValue
+}
+
 // we only run our tests in node, and setImmediate is supported in node.
 // istanbul ignore next
 function setImmediatePolyfill(fn) {
@@ -9,27 +25,17 @@ function setImmediatePolyfill(fn) {
 }
 
 function getTimeFunctions() {
-  const usingJestFakeTimers = globalObj.setTimeout._isMockFunction && !!jest
-
-  if (usingJestFakeTimers) {
-    jest.useRealTimers()
-  }
-
-  const timeFunctions = {
+  return {
     clearTimeoutFn: globalObj.clearTimeout,
     // istanbul ignore next
     setImmediateFn: globalObj.setImmediate || setImmediatePolyfill,
     setTimeoutFn: globalObj.setTimeout,
   }
-
-  if (usingJestFakeTimers) {
-    jest.useFakeTimers()
-  }
-
-  return timeFunctions
 }
 
-const {clearTimeoutFn, setImmediateFn, setTimeoutFn} = getTimeFunctions()
+const {clearTimeoutFn, setImmediateFn, setTimeoutFn} = runWithRealTimers(
+  getTimeFunctions,
+)
 
 function newMutationObserver(onMutation) {
   const MutationObserverConstructor =
@@ -55,4 +61,5 @@ export {
   clearTimeoutFn as clearTimeout,
   setImmediateFn as setImmediate,
   setTimeoutFn as setTimeout,
+  runWithRealTimers,
 }
