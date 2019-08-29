@@ -1,6 +1,11 @@
 import {waitForElementToBeRemoved} from '../'
 import {renderIntoDocument} from './helpers/test-utils'
 
+function importModule() {
+  jest.resetModules()
+  return require('../').waitForElementToBeRemoved
+}
+
 test('resolves on mutation only when the element is removed', async () => {
   const {queryAllByTestId} = renderIntoDocument(`
     <div data-testid="div"></div>
@@ -58,38 +63,47 @@ test('requires an unempty array of elements to exist first', () => {
   )
 })
 
-test('uses real timers even if they were set to fake before importing the module', async () => {
-  jest.resetModules()
+test('always uses real timers', async () => {
+  const expectElementToBeRemoved = async () => {
+    const importedWaitForElementToBeRemoved = importModule()
+
+    const {queryAllByTestId} = renderIntoDocument(`
+  <div data-testid="div"></div>
+  <div data-testid="div"></div>
+`)
+    const divs = queryAllByTestId('div')
+    // first mutation
+    setTimeout(() => {
+      divs.forEach(d => d.setAttribute('id', 'mutated'))
+    })
+    // removal
+    setTimeout(() => {
+      divs.forEach(div => div.parentElement.removeChild(div))
+    }, 100)
+
+    const promise = importedWaitForElementToBeRemoved(
+      () => queryAllByTestId('div'),
+      {
+        timeout: 200,
+      },
+    )
+
+    if (setTimeout._isMockFunction) {
+      jest.advanceTimersByTime(110)
+    }
+
+    await promise
+  }
+
   jest.useFakeTimers()
-  const importedWaitForElementToBeRemoved = require('../')
-    .waitForElementToBeRemoved
-
-  const {queryAllByTestId} = renderIntoDocument(`
-    <div data-testid="div"></div>
-    <div data-testid="div"></div>
-  `)
-  const divs = queryAllByTestId('div')
-  // first mutation
-  setTimeout(() => {
-    divs.forEach(d => d.setAttribute('id', 'mutated'))
-  })
-  // removal
-  setTimeout(() => {
-    divs.forEach(div => div.parentElement.removeChild(div))
-  }, 1000)
-
-  await expect(
-    importedWaitForElementToBeRemoved(() => queryAllByTestId('div'), {
-      timeout: 200,
-    }),
-  ).rejects.toThrow(/timed out/i)
+  await expectElementToBeRemoved()
+  jest.useRealTimers()
+  await expectElementToBeRemoved()
 })
 
 test("doesn't change jest's timers value when importing the module", () => {
-  jest.resetModules()
   jest.useFakeTimers()
-  // eslint-disable-next-line
-  require('../').waitForElementToBeRemoved
+  importModule()
 
   expect(window.setTimeout._isMockFunction).toEqual(true)
 })

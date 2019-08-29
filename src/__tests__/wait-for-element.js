@@ -1,6 +1,11 @@
 import {waitForElement} from '../wait-for-element'
 import {render, renderIntoDocument} from './helpers/test-utils'
 
+function importModule() {
+  jest.resetModules()
+  return require('../').waitForElement
+}
+
 test('waits for element to appear in the document', async () => {
   const {rerender, getByTestId} = renderIntoDocument('<div />')
   const promise = waitForElement(() => getByTestId('div'))
@@ -49,25 +54,36 @@ test('throws error if no callback is provided', async () => {
   await expect(waitForElement()).rejects.toThrow(/callback/i)
 })
 
-test('uses real timers even if they were set to fake before importing the module', async () => {
-  jest.resetModules()
+test('always uses real timers', async () => {
+  const expectElementToExist = async () => {
+    const importedWaitForElement = importModule()
+
+    const {rerender, getByTestId} = renderIntoDocument('<div />')
+
+    setTimeout(() => rerender('<div data-testid="div" />'), 100)
+
+    const promise = importedWaitForElement(() => getByTestId('div'), {
+      timeout: 200,
+    })
+
+    if (setTimeout._isMockFunction) {
+      jest.advanceTimersByTime(110)
+    }
+
+    const element = await promise
+
+    await expect(element).toBeInTheDocument()
+  }
+
   jest.useFakeTimers()
-  const importedWaitForElement = require('../').waitForElement
-
-  const {rerender, getByTestId} = renderIntoDocument('<div />')
-
-  setTimeout(() => rerender('<div data-testid="div" />'), 1000)
-
-  await expect(
-    importedWaitForElement(() => getByTestId('div'), {timeout: 200}),
-  ).rejects.toThrow(/Unable to find/i)
+  await expectElementToExist()
+  jest.useRealTimers()
+  await expectElementToExist()
 })
 
 test("doesn't change jest's timers value when importing the module", () => {
-  jest.resetModules()
   jest.useFakeTimers()
-  // eslint-disable-next-line
-  require('../').waitForElement
+  importModule()
 
   expect(window.setTimeout._isMockFunction).toEqual(true)
 })
