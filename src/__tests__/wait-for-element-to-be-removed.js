@@ -63,7 +63,6 @@ test('uses real timers even if they were set to fake before importing the module
   jest.useFakeTimers()
   const importedWaitForElementToBeRemoved = require('../')
     .waitForElementToBeRemoved
-  jest.useRealTimers()
 
   const {queryAllByTestId} = renderIntoDocument(`
     <div data-testid="div"></div>
@@ -84,4 +83,13 @@ test('uses real timers even if they were set to fake before importing the module
       timeout: 200,
     }),
   ).rejects.toThrow(/timed out/i)
+})
+
+test("doesn't change jest's timers value when importing the module", () => {
+  jest.resetModules()
+  jest.useFakeTimers()
+  // eslint-disable-next-line
+  require('../').waitForElementToBeRemoved
+
+  expect(window.setTimeout._isMockFunction).toEqual(true)
 })

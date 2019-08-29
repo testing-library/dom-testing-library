@@ -53,7 +53,6 @@ test('uses real timers even if they were set to fake before importing the module
   jest.resetModules()
   jest.useFakeTimers()
   const importedWaitForElement = require('../').waitForElement
-  jest.useRealTimers()
 
   const {rerender, getByTestId} = renderIntoDocument('<div />')
 
@@ -62,4 +61,13 @@ test('uses real timers even if they were set to fake before importing the module
   await expect(
     importedWaitForElement(() => getByTestId('div'), {timeout: 200}),
   ).rejects.toThrow(/Unable to find/i)
+})
+
+test("doesn't change jest's timers value when importing the module", () => {
+  jest.resetModules()
+  jest.useFakeTimers()
+  // eslint-disable-next-line
+  require('../').waitForElement
+
+  expect(window.setTimeout._isMockFunction).toEqual(true)
 })
