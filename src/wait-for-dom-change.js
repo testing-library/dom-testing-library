@@ -1,9 +1,9 @@
 import {
   newMutationObserver,
   getDocument,
-  getSetImmediate,
-  getSetTimeout,
-  getClearTimeout,
+  setImmediate,
+  setTimeout,
+  clearTimeout,
 } from './helpers'
 import {getConfig} from './config'
 
@@ -18,13 +18,13 @@ function waitForDomChange({
   },
 } = {}) {
   return new Promise((resolve, reject) => {
-    const timer = getSetTimeout()(onTimeout, timeout)
+    const timer = setTimeout(onTimeout, timeout)
     const observer = newMutationObserver(onMutation)
     observer.observe(container, mutationObserverOptions)
 
     function onDone(error, result) {
-      getClearTimeout()(timer)
-      getSetImmediate()(() => observer.disconnect())
+      clearTimeout(timer)
+      setImmediate(() => observer.disconnect())
       if (error) {
         reject(error)
       } else {

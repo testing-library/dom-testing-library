@@ -1,9 +1,9 @@
 import {
   getDocument,
   newMutationObserver,
-  getSetImmediate,
-  getSetTimeout,
-  getClearTimeout,
+  setImmediate,
+  setTimeout,
+  clearTimeout,
 } from './helpers'
 import {getConfig} from './config'
 
@@ -28,7 +28,7 @@ function waitForElementToBeRemoved(
         ),
       )
     }
-    const timer = getSetTimeout()(onTimeout, timeout)
+    const timer = setTimeout(onTimeout, timeout)
     const observer = newMutationObserver(onMutation)
 
     // Check if the element is not present synchronously,
@@ -50,8 +50,8 @@ function waitForElementToBeRemoved(
     }
 
     function onDone(error, result) {
-      getClearTimeout()(timer)
-      getSetImmediate()(() => observer.disconnect())
+      clearTimeout(timer)
+      setImmediate(() => observer.disconnect())
       if (error) {
         reject(error)
       } else {

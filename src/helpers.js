@@ -1,26 +1,35 @@
 import MutationObserver from '@sheerun/mutationobserver-shim'
 
-function getGlobalObj() {
-  return typeof window === 'undefined' ? global : window
-}
+const globalObj = typeof window === 'undefined' ? global : window
 
 // we only run our tests in node, and setImmediate is supported in node.
 // istanbul ignore next
 function setImmediatePolyfill(fn) {
-  return getGlobalObj().setTimeout(fn, 0)
+  return globalObj.setTimeout(fn, 0)
 }
 
-function getClearTimeoutFn() {
-  return getGlobalObj().clearTimeout
-}
-// istanbul ignore next
-function getSetImmediateFn() {
-  return getGlobalObj().setImmediate || setImmediatePolyfill
+function getTimeFunctions() {
+  const usingJestFakeTimers = globalObj.setTimeout._isMockFunction && !!jest
+
+  if (usingJestFakeTimers) {
+    jest.useRealTimers()
+  }
+
+  const timeFunctions = {
+    clearTimeoutFn: globalObj.clearTimeout,
+    // istanbul ignore next
+    setImmediateFn: globalObj.setImmediate || setImmediatePolyfill,
+    setTimeoutFn: globalObj.setTimeout,
+  }
+
+  if (usingJestFakeTimers) {
+    jest.useFakeTimers()
+  }
+
+  return timeFunctions
 }
 
-function getSetTimeoutFn() {
-  return getGlobalObj().setTimeout
-}
+const {clearTimeoutFn, setImmediateFn, setTimeoutFn} = getTimeFunctions()
 
 function newMutationObserver(onMutation) {
   const MutationObserverConstructor =
@@ -43,7 +52,7 @@ function getDocument() {
 export {
   getDocument,
   newMutationObserver,
-  getClearTimeoutFn as getClearTimeout,
-  getSetImmediateFn as getSetImmediate,
-  getSetTimeoutFn as getSetTimeout,
+  clearTimeoutFn as clearTimeout,
+  setImmediateFn as setImmediate,
+  setTimeoutFn as setTimeout,
 }
