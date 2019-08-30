@@ -3,7 +3,8 @@ import MutationObserver from '@sheerun/mutationobserver-shim'
 const globalObj = typeof window === 'undefined' ? global : window
 
 function runWithRealTimers(callback) {
-  const usingJestFakeTimers = globalObj.setTimeout._isMockFunction && !!jest
+  const usingJestFakeTimers =
+    globalObj.setTimeout._isMockFunction && typeof jest !== 'undefined'
 
   if (usingJestFakeTimers) {
     jest.useRealTimers()
