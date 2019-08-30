@@ -2,6 +2,7 @@ import MutationObserver from '@sheerun/mutationobserver-shim'
 
 const globalObj = typeof window === 'undefined' ? global : window
 
+// Currently this fn only supports jest timers, but it could support other test runners in the future.
 function runWithRealTimers(callback) {
   const usingJestFakeTimers =
     globalObj.setTimeout._isMockFunction && typeof jest !== 'undefined'
