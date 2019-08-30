@@ -60,7 +60,7 @@ test('throws error if no callback is provided', async () => {
   await expect(waitForElement()).rejects.toThrow(/callback/i)
 })
 
-test('always uses real timers', async () => {
+describe('timers', () => {
   const expectElementToExist = async () => {
     const importedWaitForElement = importModule()
 
@@ -81,15 +81,12 @@ test('always uses real timers', async () => {
     await expect(element).toBeInTheDocument()
   }
 
-  jest.useFakeTimers()
-  await expectElementToExist()
-  jest.useRealTimers()
-  await expectElementToExist()
-})
-
-test("doesn't change jest's timers value when importing the module", () => {
-  jest.useFakeTimers()
-  importModule()
-
-  expect(window.setTimeout._isMockFunction).toEqual(true)
+  it('works with real timers', async () => {
+    jest.useRealTimers()
+    await expectElementToExist()
+  })
+  it('works with fake timers', async () => {
+    jest.useFakeTimers()
+    await expectElementToExist()
+  })
 })

@@ -69,7 +69,7 @@ test('requires an unempty array of elements to exist first', () => {
   )
 })
 
-test('always uses real timers', async () => {
+describe('timers', () => {
   const expectElementToBeRemoved = async () => {
     const importedWaitForElementToBeRemoved = importModule()
 
@@ -101,10 +101,14 @@ test('always uses real timers', async () => {
     await promise
   }
 
-  jest.useFakeTimers()
-  await expectElementToBeRemoved()
-  jest.useRealTimers()
-  await expectElementToBeRemoved()
+  it('works with real timers', async () => {
+    jest.useRealTimers()
+    await expectElementToBeRemoved()
+  })
+  it('works with fake timers', async () => {
+    jest.useFakeTimers()
+    await expectElementToBeRemoved()
+  })
 })
 
 test("doesn't change jest's timers value when importing the module", () => {

@@ -60,7 +60,7 @@ Array [
 `)
 })
 
-test('always uses real timers', async () => {
+describe('timers', () => {
   const expectElementToChange = async () => {
     const importedWaitForDomChange = importModule()
     const {container} = renderIntoDocument('<div />')
@@ -92,10 +92,14 @@ test('always uses real timers', async () => {
   `)
   }
 
-  jest.useFakeTimers()
-  await expectElementToChange()
-  jest.useRealTimers()
-  await expectElementToChange()
+  it('works with real timers', async () => {
+    jest.useRealTimers()
+    await expectElementToChange()
+  })
+  it('works with fake timers', async () => {
+    jest.useFakeTimers()
+    await expectElementToChange()
+  })
 })
 
 test("doesn't change jest's timers value when importing the module", () => {
