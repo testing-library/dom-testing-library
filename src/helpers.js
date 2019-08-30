@@ -25,9 +25,9 @@ function setImmediatePolyfill(fn) {
 }
 
 function getTimeFunctions() {
+  // istanbul ignore next
   return {
     clearTimeoutFn: globalObj.clearTimeout,
-    // istanbul ignore next
     setImmediateFn: globalObj.setImmediate || setImmediatePolyfill,
     setTimeoutFn: globalObj.setTimeout,
   }
