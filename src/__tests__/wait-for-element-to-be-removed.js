@@ -1,10 +1,16 @@
-import {waitForElementToBeRemoved} from '../'
 import {renderIntoDocument} from './helpers/test-utils'
 
 function importModule() {
-  jest.resetModules()
   return require('../').waitForElementToBeRemoved
 }
+
+let waitForElementToBeRemoved
+
+beforeEach(() => {
+  jest.useRealTimers()
+  jest.resetModules()
+  waitForElementToBeRemoved = importModule()
+})
 
 test('resolves on mutation only when the element is removed', async () => {
   const {queryAllByTestId} = renderIntoDocument(`

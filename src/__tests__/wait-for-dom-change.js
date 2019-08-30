@@ -1,10 +1,16 @@
-import {waitForDomChange} from '../wait-for-dom-change'
 import {renderIntoDocument} from './helpers/test-utils'
 
 function importModule() {
-  jest.resetModules()
   return require('../').waitForDomChange
 }
+
+let waitForDomChange
+
+beforeEach(() => {
+  jest.useRealTimers()
+  jest.resetModules()
+  waitForDomChange = importModule()
+})
 
 test('waits for the dom to change in the document', async () => {
   const {container} = renderIntoDocument('<div />')

@@ -1,10 +1,16 @@
-import {waitForElement} from '../wait-for-element'
 import {render, renderIntoDocument} from './helpers/test-utils'
 
 function importModule() {
-  jest.resetModules()
   return require('../').waitForElement
 }
+
+let waitForElement
+
+beforeEach(() => {
+  jest.useRealTimers()
+  jest.resetModules()
+  waitForElement = importModule()
+})
 
 test('waits for element to appear in the document', async () => {
   const {rerender, getByTestId} = renderIntoDocument('<div />')
