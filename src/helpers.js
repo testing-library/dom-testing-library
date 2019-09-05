@@ -2,16 +2,42 @@ import MutationObserver from '@sheerun/mutationobserver-shim'
 
 const globalObj = typeof window === 'undefined' ? global : window
 
+// Currently this fn only supports jest timers, but it could support other test runners in the future.
+function runWithRealTimers(callback) {
+  const usingJestFakeTimers =
+    globalObj.setTimeout._isMockFunction && typeof jest !== 'undefined'
+
+  if (usingJestFakeTimers) {
+    jest.useRealTimers()
+  }
+
+  const callbackReturnValue = callback()
+
+  if (usingJestFakeTimers) {
+    jest.useFakeTimers()
+  }
+
+  return callbackReturnValue
+}
+
 // we only run our tests in node, and setImmediate is supported in node.
 // istanbul ignore next
 function setImmediatePolyfill(fn) {
   return globalObj.setTimeout(fn, 0)
 }
 
-const clearTimeoutFn = globalObj.clearTimeout
-// istanbul ignore next
-const setImmediateFn = globalObj.setImmediate || setImmediatePolyfill
-const setTimeoutFn = globalObj.setTimeout
+function getTimeFunctions() {
+  // istanbul ignore next
+  return {
+    clearTimeoutFn: globalObj.clearTimeout,
+    setImmediateFn: globalObj.setImmediate || setImmediatePolyfill,
+    setTimeoutFn: globalObj.setTimeout,
+  }
+}
+
+const {clearTimeoutFn, setImmediateFn, setTimeoutFn} = runWithRealTimers(
+  getTimeFunctions,
+)
 
 function newMutationObserver(onMutation) {
   const MutationObserverConstructor =
@@ -37,4 +63,5 @@ export {
   clearTimeoutFn as clearTimeout,
   setImmediateFn as setImmediate,
   setTimeoutFn as setTimeout,
+  runWithRealTimers,
 }
