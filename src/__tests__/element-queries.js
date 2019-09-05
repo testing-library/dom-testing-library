@@ -800,3 +800,10 @@ test('get/query textarea element by current value', () => {
   expect(getByDisplayValue('World').id).toEqual('content-textarea')
   expect(queryByDisplayValue('World').id).toEqual('content-textarea')
 })
+
+test('can get a textarea with children', () => {
+  const {getByLabelText} = renderIntoDocument(`
+    <label>Label<textarea>Value</textarea></label>
+  `)
+  getByLabelText('Label')
+})
