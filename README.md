@@ -27,7 +27,7 @@ practices.</p>
 [![downloads][downloads-badge]][npmtrends]
 [![MIT License][license-badge]][license]
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-70-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-71-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome][prs-badge]][prs]
 [![Code of Conduct][coc-badge]][coc]
 
@@ -219,6 +219,9 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://twitter.com/SavePointSam"><img src="https://avatars0.githubusercontent.com/u/8203211?v=4" width="100px;" alt="Sam Horton"/><br /><sub><b>Sam Horton</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=SavePointSam" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=SavePointSam" title="Tests">⚠️</a></td>
     <td align="center"><a href="http://andrewhillcode.com"><img src="https://avatars1.githubusercontent.com/u/12396191?v=4" width="100px;" alt="Andrew Hill"/><br /><sub><b>Andrew Hill</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=andrewhillcode" title="Code">💻</a></td>
     <td align="center"><a href="https://amann.me"><img src="https://avatars1.githubusercontent.com/u/4038316?v=4" width="100px;" alt="Jan Amann"/><br /><sub><b>Jan Amann</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=amannn" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=amannn" title="Tests">⚠️</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/brapifra"><img src="https://avatars3.githubusercontent.com/u/17855450?v=4" width="100px;" alt="Brais Piñeiro"/><br /><sub><b>Brais Piñeiro</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=brapifra" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=brapifra" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
