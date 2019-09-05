@@ -682,6 +682,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "amannn",
+      "name": "Jan Amann",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4038316?v=4",
+      "profile": "https://amann.me",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
