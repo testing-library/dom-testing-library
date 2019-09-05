@@ -692,6 +692,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "brapifra",
+      "name": "Brais Piñeiro",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/17855450?v=4",
+      "profile": "https://github.com/brapifra",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
