@@ -3,9 +3,9 @@ import {render} from './helpers/test-utils'
 test('logs available roles when it fails', () => {
   const {getByRole} = render(`<h1>Hi</h1>`)
   expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element with the role "article"
+"Unable to find an accessible  element with the role "article"
 
-Here are the available roles:
+Here are the accessible roles:
 
   heading:
 
@@ -24,9 +24,9 @@ Here are the available roles:
 test('logs error when there are no available roles', () => {
   const {getByRole} = render('<div />')
   expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element with the role "article"
+"Unable to find an accessible  element with the role "article"
 
-There are no available roles.
+There are no accessible roles.
 
 <div>
   <div />
@@ -38,15 +38,9 @@ test('by default excludes elements that have the html hidden attribute or any of
   const {getByRole} = render('<div hidden><ul /></div>')
 
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element with the role "list"
+"Unable to find an accessible  element with the role "list"
 
-Here are the available roles:
-
-  list:
-
-  <ul />
-
-  --------------------------------------------------
+There are no accessible roles.
 
 <div>
   <div
@@ -64,17 +58,9 @@ test('by default excludes elements which have display: none or any of their pare
   )
 
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element with the role "list"
+"Unable to find an accessible  element with the role "list"
 
-Here are the available roles:
-
-  list:
-
-  <ul
-    style="display: block;"
-  />
-
-  --------------------------------------------------
+There are no accessible roles.
 
 <div>
   <div
@@ -92,15 +78,9 @@ test('by default excludes elements which have visibility hidden', () => {
   const {getByRole} = render('<div style="visibility: hidden;"><ul /></div>')
 
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element with the role "list"
+"Unable to find an accessible  element with the role "list"
 
-Here are the available roles:
-
-  list:
-
-  <ul />
-
-  --------------------------------------------------
+There are no accessible roles.
 
 <div>
   <div
@@ -122,17 +102,9 @@ test('by default excludes elements which have aria-hidden="true" or any of their
   )
 
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element with the role "list"
+"Unable to find an accessible  element with the role "list"
 
-Here are the available roles:
-
-  list:
-
-  <ul
-    aria-hidden="false"
-  />
-
-  --------------------------------------------------
+There are no accessible roles.
 
 <div>
   <div

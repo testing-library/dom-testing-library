@@ -86,9 +86,9 @@ test('get throws a useful error message', () => {
 </div>"
 `)
   expect(() => getByRole('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element with the role "LucyRicardo"
+"Unable to find an accessible  element with the role "LucyRicardo"
 
-There are no available roles.
+There are no accessible roles.
 
 <div>
   <div />
