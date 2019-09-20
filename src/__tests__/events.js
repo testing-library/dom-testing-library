@@ -223,6 +223,24 @@ test('fires shortcut events on Window', () => {
   window.removeEventListener('message', clickSpy)
 })
 
+test('throws a useful error message when firing events on non-existent nodes', () => {
+  expect(() => fireEvent(undefined, new MouseEvent('click'))).toThrow(
+    'Unable to fire a "click" event - please provide a DOM element.',
+  )
+})
+
+test('throws a useful error message when firing events on non-existent nodes (shortcut)', () => {
+  expect(() => fireEvent.click(undefined)).toThrow(
+    'Unable to fire a "click" event - please provide a DOM element.',
+  )
+})
+
+test('throws a useful error message when firing non-events', () => {
+  expect(() => fireEvent(document.createElement('div'), undefined)).toThrow(
+    'Unable to fire an event - please provide an event object.',
+  )
+})
+
 test('fires events on Document', () => {
   const keyDownSpy = jest.fn()
   document.addEventListener('keydown', keyDownSpy)

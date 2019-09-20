@@ -345,6 +345,14 @@ const eventAliasMap = {
 }
 
 function fireEvent(element, event) {
+  if (!event) {
+    throw new Error(`Unable to fire an event - please provide an event object.`)
+  }
+  if (!element) {
+    throw new Error(
+      `Unable to fire a "${event.type}" event - please provide a DOM element.`,
+    )
+  }
   return element.dispatchEvent(event)
 }
 
@@ -355,6 +363,11 @@ Object.keys(eventMap).forEach(key => {
   const eventName = key.toLowerCase()
 
   createEvent[key] = (node, init) => {
+    if (!node) {
+      throw new Error(
+        `Unable to fire a "${key}" event - please provide a DOM element.`,
+      )
+    }
     const eventInit = {...defaultInit, ...init}
     const {target: {value, files, ...targetProperties} = {}} = eventInit
     if (value !== undefined) {
