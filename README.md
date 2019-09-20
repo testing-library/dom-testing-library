@@ -27,7 +27,7 @@ practices.</p>
 [![downloads][downloads-badge]][npmtrends]
 [![MIT License][license-badge]][license]
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-71-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-72-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome][prs-badge]][prs]
 [![Code of Conduct][coc-badge]][coc]
 
@@ -222,6 +222,7 @@ Thanks goes to these people ([emoji key][emojis]):
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/brapifra"><img src="https://avatars3.githubusercontent.com/u/17855450?v=4" width="100px;" alt="Brais Piñeiro"/><br /><sub><b>Brais Piñeiro</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=brapifra" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=brapifra" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://www.dominykas.com/"><img src="https://avatars1.githubusercontent.com/u/505619?v=4" width="100px;" alt="Dominykas Blyžė"/><br /><sub><b>Dominykas Blyžė</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=dominykas" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=dominykas" title="Tests">⚠️</a></td>
   </tr>
 </table>
 

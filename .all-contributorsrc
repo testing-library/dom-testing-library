@@ -702,6 +702,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "dominykas",
+      "name": "Dominykas Blyžė",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/505619?v=4",
+      "profile": "https://www.dominykas.com/",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
