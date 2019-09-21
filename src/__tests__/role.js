@@ -164,7 +164,7 @@ test('considers the computed visibility style not the parent', () => {
   // the following markup. This behavior might change depending on how
   // https://github.com/w3c/aria/issues/1055 is resolved.
   const {getByRole} = render(
-    '<div style="visibility: hidden;"><ul style="visibility: visible;" /></div>',
+    '<div style="visibility: hidden;"><main style="visibility: visible;"><ul /></main></div>',
   )
 
   expect(getByRole('list')).not.toBeNull()

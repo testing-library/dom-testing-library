@@ -132,7 +132,7 @@ function getRoles(container, {hidden = false} = {}) {
     }, {})
 }
 
-function prettyRoles(dom, {hidden = false} = {}) {
+function prettyRoles(dom, {hidden}) {
   const roles = getRoles(dom, {hidden})
 
   return Object.entries(roles)
