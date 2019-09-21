@@ -58,7 +58,7 @@ Here are the ${hidden === false ? 'accessible' : 'available'} roles:
   return `
 Unable to find an ${
     hidden === false ? 'accessible ' : ''
-  } element with the role "${role}"
+  }element with the role "${role}"
 
 ${roleMessage}`.trim()
 }

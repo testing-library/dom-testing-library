@@ -3,7 +3,7 @@ import {render} from './helpers/test-utils'
 test('logs available roles when it fails', () => {
   const {getByRole} = render(`<h1>Hi</h1>`)
   expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible  element with the role "article"
+"Unable to find an accessible element with the role "article"
 
 Here are the accessible roles:
 
@@ -24,7 +24,7 @@ Here are the accessible roles:
 test('logs error when there are no available roles', () => {
   const {getByRole} = render('<div />')
   expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible  element with the role "article"
+"Unable to find an accessible element with the role "article"
 
 There are no accessible roles.
 
@@ -38,7 +38,7 @@ test('by default excludes elements that have the html hidden attribute or any of
   const {getByRole} = render('<div hidden><ul /></div>')
 
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible  element with the role "list"
+"Unable to find an accessible element with the role "list"
 
 There are no accessible roles.
 
@@ -58,7 +58,7 @@ test('by default excludes elements which have display: none or any of their pare
   )
 
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible  element with the role "list"
+"Unable to find an accessible element with the role "list"
 
 There are no accessible roles.
 
@@ -78,7 +78,7 @@ test('by default excludes elements which have visibility hidden', () => {
   const {getByRole} = render('<div style="visibility: hidden;"><ul /></div>')
 
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible  element with the role "list"
+"Unable to find an accessible element with the role "list"
 
 There are no accessible roles.
 
@@ -102,7 +102,7 @@ test('by default excludes elements which have aria-hidden="true" or any of their
   )
 
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible  element with the role "list"
+"Unable to find an accessible element with the role "list"
 
 There are no accessible roles.
 
