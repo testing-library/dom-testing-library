@@ -43,7 +43,10 @@ const getMissingError = (container, role, {hidden = false} = {}) => {
 
   if (roles.length === 0) {
     if (hidden === false) {
-      roleMessage = 'There are no accessible roles.'
+      roleMessage =
+        'There are no accessible roles. But there might be some inaccessible roles. ' +
+        'If you wish to access them, then set the `hidden` option to `true`. ' +
+        'Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole'
     } else {
       roleMessage = 'There are no available roles.'
     }

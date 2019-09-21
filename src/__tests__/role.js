@@ -26,7 +26,7 @@ test('logs error when there are no available roles', () => {
   expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an accessible element with the role "article"
 
-There are no accessible roles.
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
 <div>
   <div />
@@ -40,7 +40,7 @@ test('by default excludes elements that have the html hidden attribute or any of
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an accessible element with the role "list"
 
-There are no accessible roles.
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
 <div>
   <div
@@ -60,7 +60,7 @@ test('by default excludes elements which have display: none or any of their pare
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an accessible element with the role "list"
 
-There are no accessible roles.
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
 <div>
   <div
@@ -80,7 +80,7 @@ test('by default excludes elements which have visibility hidden', () => {
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an accessible element with the role "list"
 
-There are no accessible roles.
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
 <div>
   <div
@@ -104,7 +104,7 @@ test('by default excludes elements which have aria-hidden="true" or any of their
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an accessible element with the role "list"
 
-There are no accessible roles.
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
 <div>
   <div
