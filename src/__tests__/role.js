@@ -1,6 +1,6 @@
 import {render} from './helpers/test-utils'
 
-test('logs available roles when it fails', () => {
+test('by default logs accessible roles when it fails', () => {
   const {getByRole} = render(`<h1>Hi</h1>`)
   expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an accessible element with the role "article"
@@ -21,12 +21,52 @@ Here are the accessible roles:
 `)
 })
 
-test('logs error when there are no available roles', () => {
+test('when hidden: true logs available roles when it fails', () => {
+  const {getByRole} = render(`<div hidden><h1>Hi</h1></div>`)
+  expect(() => getByRole('article', {hidden: true}))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an element with the role "article"
+
+Here are the available roles:
+
+  heading:
+
+  <h1 />
+
+  --------------------------------------------------
+
+<div>
+  <div
+    hidden=""
+  >
+    <h1>
+      Hi
+    </h1>
+  </div>
+</div>"
+`)
+})
+
+test('logs error when there are no accessible roles', () => {
   const {getByRole} = render('<div />')
   expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an accessible element with the role "article"
 
 There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+<div>
+  <div />
+</div>"
+`)
+})
+
+test('logs a different error if inaccessible roles should be included', () => {
+  const {getByRole} = render('<div />')
+  expect(() => getByRole('article', {hidden: true}))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an element with the role "article"
+
+There are no available roles.
 
 <div>
   <div />
@@ -128,4 +168,14 @@ test('considers the computed visibility style not the parent', () => {
   )
 
   expect(getByRole('list')).not.toBeNull()
+})
+
+test('can include inaccessible roles', () => {
+  // this behavior deviates from the spec which includes "any descendant"
+  // if visibility is hidden. However, chrome a11y tree and nvda will include
+  // the following markup. This behavior might change depending on how
+  // https://github.com/w3c/aria/issues/1055 is resolved.
+  const {getByRole} = render('<div hidden><ul  /></div>')
+
+  expect(getByRole('list', {hidden: true})).not.toBeNull()
 })
