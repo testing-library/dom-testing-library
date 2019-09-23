@@ -86,9 +86,9 @@ test('get throws a useful error message', () => {
 </div>"
 `)
   expect(() => getByRole('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element with the role "LucyRicardo"
+"Unable to find an accessible element with the role "LucyRicardo"
 
-There are no available roles.
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
 <div>
   <div />
