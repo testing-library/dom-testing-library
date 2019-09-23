@@ -36,7 +36,7 @@ merge of your pull request!
 
 - [ ] Documentation added to the
       [docs site](https://github.com/alexkrolick/testing-library-docs)
-- [ ] Typescript definitions updated
+- [ ] I've prepared a PR for types targetting https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/testing-library__dom
 - [ ] Tests
 - [ ] Ready to be merged
       <!-- In your opinion, is this ready to be merged as soon as it's reviewed? -->
