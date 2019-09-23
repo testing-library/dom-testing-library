@@ -27,7 +27,7 @@ function shouldExcludeFromA11yTree(element) {
 
   let currentElement = element
   while (currentElement !== null) {
-    if (currentElement.hasAttribute('hidden')) {
+    if (currentElement.hidden === true) {
       return true
     }
 
