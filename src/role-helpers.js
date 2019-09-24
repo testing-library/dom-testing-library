@@ -57,6 +57,8 @@ function shouldExcludeFromA11yTree(element) {
 }
 
 function getImplicitAriaRoles(currentNode) {
+  // eslint bug here:
+  // eslint-disable-next-line no-unused-vars
   for (const {selector, roles} of elementRoleList) {
     if (currentNode.matches(selector)) {
       return [...roles]
@@ -88,6 +90,8 @@ function buildElementRoleList(elementRolesMap) {
 
   let result = []
 
+  // eslint bug here:
+  // eslint-disable-next-line no-unused-vars
   for (const [element, roles] of elementRolesMap.entries()) {
     result = [
       ...result,
