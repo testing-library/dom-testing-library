@@ -135,8 +135,9 @@ function getRoles(container, {hidden = false} = {}) {
 function prettyRoles(dom, {hidden}) {
   const roles = getRoles(dom, {hidden})
 
-  return Object.entries(roles)
-    .map(([role, elements]) => {
+  return Object.keys(roles)
+    .map(role => {
+      const elements = roles[role]
       const delimiterBar = '-'.repeat(50)
       const elementsString = elements
         .map(el => prettyDOM(el.cloneNode(false)))
