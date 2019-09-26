@@ -21,7 +21,7 @@ function queryAllLabelsByText(
 
     // The children of a textarea are part of `textContent` as well. We
     // need to remove them from the string so we can match it afterwards.
-    label.querySelectorAll('textarea').forEach(textarea => {
+    Array.from(label.querySelectorAll('textarea')).forEach(textarea => {
       textToMatch = textToMatch.replace(textarea.value, '')
     })
 
