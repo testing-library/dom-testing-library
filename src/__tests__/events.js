@@ -33,7 +33,7 @@ const eventTypes = [
   },
   {
     type: 'Focus',
-    events: ['submit'],
+    events: ['submit', 'reset'],
     elementType: 'form',
   },
   {
