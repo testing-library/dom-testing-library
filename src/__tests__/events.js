@@ -22,17 +22,12 @@ const eventTypes = [
     elementType: 'input',
   },
   {
-    type: 'Form',
-    events: ['focus', 'blur'],
-    elementType: 'input',
-  },
-  {
-    type: 'Focus',
+    type: 'Input',
     events: ['change', 'input', 'invalid'],
     elementType: 'input',
   },
   {
-    type: 'Focus',
+    type: 'Form',
     events: ['submit', 'reset'],
     elementType: 'form',
   },
