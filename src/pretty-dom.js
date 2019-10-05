@@ -20,16 +20,32 @@ const getMaxLength = dom =>
 
 const {DOMElement, DOMCollection} = prettyFormat.plugins
 
-function prettyDOM(
-  dom = getDocument().body,
-  maxLength = getMaxLength(dom),
-  options,
-) {
+function prettyDOM(dom, maxLength, options) {
+  if (!dom) {
+    dom = getDocument().body
+  }
+  if (typeof maxLength !== 'number') {
+    maxLength = getMaxLength(dom)
+  }
+
   if (maxLength === 0) {
     return ''
   }
   if (dom.documentElement) {
     dom = dom.documentElement
+  }
+
+  let domTypeName = typeof dom
+  if (domTypeName === 'object') {
+    domTypeName = dom.constructor.name
+  } else {
+    // To don't fall with `in` operator
+    dom = {}
+  }
+  if (!('outerHTML' in dom)) {
+    throw new TypeError(
+      `Expected an element or document but got ${domTypeName}`,
+    )
   }
 
   const debugContent = prettyFormat(dom, {

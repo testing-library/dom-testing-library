@@ -26,14 +26,16 @@ test('prettyDOM supports truncating the output length', () => {
 })
 
 test('prettyDOM defaults to document.body', () => {
+  const defaultInlineSnapshot = `
+  "<body>
+    <div>
+      Hello World!
+    </div>
+  </body>"
+`
   renderIntoDocument('<div>Hello World!</div>')
-  expect(prettyDOM()).toMatchInlineSnapshot(`
-    "<body>
-      <div>
-        Hello World!
-      </div>
-    </body>"
-  `)
+  expect(prettyDOM()).toMatchInlineSnapshot(defaultInlineSnapshot)
+  expect(prettyDOM(null)).toMatchInlineSnapshot(defaultInlineSnapshot)
 })
 
 test('prettyDOM supports receiving the document element', () => {
@@ -56,6 +58,24 @@ test('logDOM logs prettyDOM to the console', () => {
       </div>
     </div>"
   `)
+})
+
+describe('prettyDOM fails with first parameter without outerHTML field', () => {
+  test('with array', () => {
+    expect(() => prettyDOM(['outerHTML'])).toThrowErrorMatchingInlineSnapshot(
+      `"Expected an element or document but got Array"`,
+    )
+  })
+  test('with number', () => {
+    expect(() => prettyDOM(1)).toThrowErrorMatchingInlineSnapshot(
+      `"Expected an element or document but got number"`,
+    )
+  })
+  test('with object', () => {
+    expect(() => prettyDOM({})).toThrowErrorMatchingInlineSnapshot(
+      `"Expected an element or document but got Object"`,
+    )
+  })
 })
 
 /* eslint no-console:0 */
