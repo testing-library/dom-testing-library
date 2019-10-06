@@ -94,13 +94,9 @@ function queryAllByLabelText(
     [],
   )
 
-  const allMatches = Array.from(
+  return Array.from(
     new Set([...labelledElements, ...ariaLabelledElements]),
-  )
-  const elementsMatchingSelector = new Set(container.querySelectorAll(selector))
-  return allMatches.filter(matchingElement =>
-    elementsMatchingSelector.has(matchingElement),
-  )
+  ).filter(matchingElement => matchingElement.matches(selector))
 }
 
 // the getAll* query would normally look like this:
