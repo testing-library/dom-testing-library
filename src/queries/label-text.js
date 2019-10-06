@@ -96,7 +96,7 @@ function queryAllByLabelText(
 
   return Array.from(
     new Set([...labelledElements, ...ariaLabelledElements]),
-  ).filter(matchingElement => matchingElement.matches(selector))
+  ).filter(element => element.matches(selector))
 }
 
 // the getAll* query would normally look like this:
