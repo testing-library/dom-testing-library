@@ -242,6 +242,22 @@ test('can find input when label text is in a span', () => {
   expect(result[0].id).toBe('input1')
 })
 
+test('can find the correct element when there are multiple matching labels', () => {
+  const {getByLabelText} = render(`
+    <label>
+      Test Label
+      <input />
+    </label>
+    <label>
+      Test Label
+      <textarea></textarea>
+    </label>
+  `)
+
+  const result = getByLabelText('Test Label', {selector: 'input'})
+  expect(result.nodeName).toBe('INPUT')
+})
+
 test('get can get form controls by placeholder', () => {
   const {getByPlaceholderText} = render(`
     <input id="username-id" placeholder="username" />,
