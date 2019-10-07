@@ -229,18 +229,23 @@ test('can filter results of label query based on selector', () => {
   expect(result[0].id).toBe('input1')
 })
 
-test('can find input or textarea when label text is inside other elements', () => {
+test('can find any form control when label text is inside other elements', () => {
   const {getAllByLabelText} = render(`
     <label>
       <span>Test</span>
       <span>Label</span>
-      <textarea id="textarea1" />
+      <button />
+      <input />
+      <meter />
+      <output />
+      <progress />
+      <select />
+      <textarea />
     </label>
   `)
 
   const result = getAllByLabelText('Test Label')
-  expect(result).toHaveLength(1)
-  expect(result[0].id).toBe('textarea1')
+  expect(result).toHaveLength(7)
 })
 
 test('can find non-input elements when aria-labelledby a label', () => {
