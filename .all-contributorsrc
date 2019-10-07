@@ -723,6 +723,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "mbelsky",
+      "name": "Max Belsky",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/3923527?v=4",
+      "profile": "https://twitter.com/mbelsky_",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
