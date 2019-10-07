@@ -26,7 +26,7 @@ function shouldExcludeFromA11yTree(element) {
   let visibility = computedStyle.visibility
 
   let currentElement = element
-  while (currentElement !== null) {
+  while (currentElement) {
     if (currentElement.hidden === true) {
       return true
     }
