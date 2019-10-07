@@ -166,6 +166,9 @@ test('getImplicitAriaRoles returns expected roles for various dom nodes', () => 
 })
 
 test.each([
+  ['<div />', false],
+  ['<div aria-hidden="false" />', false],
+  ['<div style="visibility: visible" />', false],
   ['<div hidden />', true],
   ['<div style="display: none;"/>', true],
   ['<div style="visibility: hidden;"/>', true],
