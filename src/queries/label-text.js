@@ -64,16 +64,8 @@ function queryAllByLabelText(
       }
       if (label.childNodes.length) {
         // <label>text: <input /></label>
-        const validFormControls = [
-          'button',
-          'input',
-          'meter',
-          'output',
-          'progress',
-          'select',
-          'textarea',
-        ]
-        const formControlSelector = validFormControls.join(', ')
+        const formControlSelector =
+          'button, input, meter, output, progress, select, textarea'
         label
           .querySelectorAll(formControlSelector)
           .forEach(element => elementsForLabel.push(element))
