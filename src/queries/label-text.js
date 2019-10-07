@@ -65,7 +65,7 @@ function queryAllByLabelText(
       if (label.childNodes.length) {
         // <label>text: <input /></label>
         label
-          .querySelectorAll(selector)
+          .querySelectorAll('input, textarea')
           .forEach(element => elementsForLabel.push(element))
       }
       return matchedElements.concat(elementsForLabel)

@@ -229,17 +229,33 @@ test('can filter results of label query based on selector', () => {
   expect(result[0].id).toBe('input1')
 })
 
-test('can find input when label text is in a span', () => {
+test('can find input or textarea when label text is inside other elements', () => {
   const {getAllByLabelText} = render(`
     <label>
-      <span>Test Label</span>
-      <input id="input1" />
+      <span>Test</span>
+      <span>Label</span>
+      <textarea id="textarea1" />
     </label>
   `)
 
-  const result = getAllByLabelText('Test Label', {selector: 'input'})
+  const result = getAllByLabelText('Test Label')
   expect(result).toHaveLength(1)
-  expect(result[0].id).toBe('input1')
+  expect(result[0].id).toBe('textarea1')
+})
+
+test('can find non-input elements when aria-labelledby a label', () => {
+  const {getAllByLabelText} = render(`
+    <div>
+      <label id="label1">Test Label</label>
+      <ul aria-labelledby="label1">
+        <li>Hello</li>
+      </ul
+    </div>
+  `)
+
+  const result = getAllByLabelText('Test Label')
+  expect(result).toHaveLength(1)
+  expect(result[0].nodeName).toBe('UL')
 })
 
 test('can find the correct element when there are multiple matching labels', () => {
