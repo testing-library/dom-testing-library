@@ -713,6 +713,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "pheeria",
+      "name": "Olzhas Askar",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/15848876?v=4",
+      "profile": "http://olzhas.de",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"

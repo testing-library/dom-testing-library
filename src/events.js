@@ -72,6 +72,10 @@ const eventMap = {
     EventType: 'Event',
     defaultInit: {bubbles: true, cancelable: true},
   },
+  reset: {
+    EventType: 'Event',
+    defaultInit: {bubbles: true, cancelable: true},
+  },
   // Mouse Events
   click: {
     EventType: 'MouseEvent',
