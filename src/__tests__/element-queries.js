@@ -385,6 +385,9 @@ test('queryAllByRole returns semantic html elements', () => {
       <h4>Heading 4</h4>
       <h5>Heading 5</h5>
       <h6>Heading 6</h6>
+      <svg role="img">
+        <rect width="100" height="100" />
+      </svg>
       <ol>
         <li></li>
         <li></li>
@@ -429,6 +432,7 @@ test('queryAllByRole returns semantic html elements', () => {
   expect(queryAllByRole('row')).toHaveLength(3)
   expect(queryAllByRole(/rowgroup/i)).toHaveLength(2)
   expect(queryAllByRole(/(table)|(textbox)/i)).toHaveLength(3)
+  expect(queryAllByRole(/img/i)).toHaveLength(1)
 })
 
 test('getAll* matchers return an array', () => {
