@@ -1,4 +1,5 @@
 import {getQueriesForElement} from '../get-queries-for-element'
+import document from './helpers/document'
 import {queries} from '..'
 
 test('uses default queries', () => {

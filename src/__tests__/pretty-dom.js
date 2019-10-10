@@ -1,5 +1,6 @@
 import {prettyDOM, logDOM} from '../pretty-dom'
 import {render, renderIntoDocument} from './helpers/test-utils'
+import document from './helpers/document'
 
 beforeEach(() => {
   jest.spyOn(console, 'log').mockImplementation(() => {})

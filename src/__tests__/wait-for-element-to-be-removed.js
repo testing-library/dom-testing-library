@@ -1,4 +1,7 @@
 import {renderIntoDocument} from './helpers/test-utils'
+import document from './helpers/document'
+
+const window = document.defaultView
 
 function importModule() {
   return require('../').waitForElementToBeRemoved

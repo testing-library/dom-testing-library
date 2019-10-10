@@ -4,6 +4,17 @@ import {prettyDOM} from './pretty-dom'
 const elementRoleList = buildElementRoleList(elementRoles)
 
 /**
+ * @param {Node} node -
+ * @returns {Window} -
+ */
+function defaultViewOf(node) {
+  // is null when node is already the document
+  return node.ownerDocument === null
+    ? node.defaultView
+    : node.ownerDocument.defaultView
+}
+
+/**
  * Partial implementation https://www.w3.org/TR/wai-aria-1.2/#tree_exclusion
  * which should only be used for elements with a non-presentational role i.e.
  * `role="none"` and `role="presentation"` will not be excluded.
@@ -15,7 +26,7 @@ const elementRoleList = buildElementRoleList(elementRoles)
  * @returns {boolean} true if excluded, otherwise false
  */
 function isInaccessible(element) {
-  const window = element.ownerDocument.defaultView
+  const window = defaultViewOf(element)
   const computedStyle = window.getComputedStyle(element)
   // since visibility is inherited we can exit early
   if (computedStyle.visibility === 'hidden') {

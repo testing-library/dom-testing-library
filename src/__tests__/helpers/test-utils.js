@@ -1,4 +1,5 @@
 import {getQueriesForElement} from '../../get-queries-for-element'
+import document from './document'
 
 function render(html, {container = document.createElement('div')} = {}) {
   container.innerHTML = html

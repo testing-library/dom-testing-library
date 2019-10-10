@@ -1,4 +1,6 @@
+import document from './helpers/document'
 import {fireEvent} from '..'
+const window = document.defaultView
 
 const eventTypes = [
   {
@@ -219,7 +221,7 @@ test('fires shortcut events on Window', () => {
 })
 
 test('throws a useful error message when firing events on non-existent nodes', () => {
-  expect(() => fireEvent(undefined, new MouseEvent('click'))).toThrow(
+  expect(() => fireEvent(undefined, new window.MouseEvent('click'))).toThrow(
     'Unable to fire a "click" event - please provide a DOM element.',
   )
 })

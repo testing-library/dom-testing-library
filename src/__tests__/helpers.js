@@ -1,4 +1,6 @@
 import {getDocument, newMutationObserver} from '../helpers'
+import document from './helpers/document'
+const window = document.defaultView
 
 test('returns global document if exists', () => {
   expect(getDocument()).toBe(document)

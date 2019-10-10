@@ -1,5 +1,6 @@
 import {configure} from '../config'
 import {render, renderIntoDocument} from './helpers/test-utils'
+import document from './helpers/document'
 
 beforeEach(() => {
   document.defaultView.Cypress = null
