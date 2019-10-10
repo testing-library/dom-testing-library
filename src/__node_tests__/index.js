@@ -76,3 +76,23 @@ test('works without a browser context on a dom node (JSDOM Fragment)', () => {
     />
   `)
 })
+
+test('byRole works without a global DOM', () => {
+  const {
+    window: {
+      document: {body: container},
+    },
+  } = new JSDOM(`
+    <html>
+      <body>
+        <button>Say "Hello, Dave!"</button>
+      </body>
+    </html>
+  `)
+
+  expect(dtl.getByRole(container, 'button')).toMatchInlineSnapshot(`
+    <button>
+      Say "Hello, Dave!"
+    </button>
+  `)
+})

@@ -15,6 +15,7 @@ const elementRoleList = buildElementRoleList(elementRoles)
  * @returns {boolean} true if excluded, otherwise false
  */
 function shouldExcludeFromA11yTree(element) {
+  const window = element.ownerDocument.defaultView
   const computedStyle = window.getComputedStyle(element)
   // since visibility is inherited we can exit early
   if (computedStyle.visibility === 'hidden') {
