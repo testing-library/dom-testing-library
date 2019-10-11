@@ -1,4 +1,9 @@
-import {getRoles, logRoles, getImplicitAriaRoles} from '../role-helpers'
+import {
+  getRoles,
+  logRoles,
+  getImplicitAriaRoles,
+  isInaccessible,
+} from '../role-helpers'
 import {render} from './helpers/test-utils'
 
 beforeEach(() => {
@@ -158,6 +163,21 @@ test('getImplicitAriaRoles returns expected roles for various dom nodes', () => 
   expect(getImplicitAriaRoles(form)).toEqual(['form'])
   expect(getImplicitAriaRoles(radio)).toEqual(['radio'])
   expect(getImplicitAriaRoles(input)).toEqual(['textbox'])
+})
+
+test.each([
+  ['<div />', false],
+  ['<div aria-hidden="false" />', false],
+  ['<div style="visibility: visible" />', false],
+  ['<div hidden />', true],
+  ['<div style="display: none;"/>', true],
+  ['<div style="visibility: hidden;"/>', true],
+  ['<div aria-hidden="true" />', true],
+])('shouldExcludeFromA11yTree for %s returns %p', (html, expected) => {
+  const {container} = render(html)
+  container.firstChild.appendChild(document.createElement('button'))
+
+  expect(isInaccessible(container.querySelector('button'))).toBe(expected)
 })
 
 /* eslint no-console:0 */
