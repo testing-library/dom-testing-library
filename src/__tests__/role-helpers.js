@@ -2,7 +2,7 @@ import {
   getRoles,
   logRoles,
   getImplicitAriaRoles,
-  shouldExcludeFromA11yTree,
+  isInaccessible,
 } from '../role-helpers'
 import {render} from './helpers/test-utils'
 
@@ -177,9 +177,7 @@ test.each([
   const {container} = render(html)
   container.firstChild.appendChild(document.createElement('button'))
 
-  expect(shouldExcludeFromA11yTree(container.querySelector('button'))).toBe(
-    expected,
-  )
+  expect(isInaccessible(container.querySelector('button'))).toBe(expected)
 })
 
 /* eslint no-console:0 */

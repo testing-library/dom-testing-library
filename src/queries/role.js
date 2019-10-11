@@ -1,7 +1,7 @@
 import {
   getImplicitAriaRoles,
   prettyRoles,
-  shouldExcludeFromA11yTree,
+  isInaccessible,
 } from '../role-helpers'
 import {buildQueries, fuzzyMatches, makeNormalizer, matches} from './all-utils'
 
@@ -15,9 +15,7 @@ function queryAllByRole(
 
   return Array.from(container.querySelectorAll('*'))
     .filter(element => {
-      return hidden === false
-        ? shouldExcludeFromA11yTree(element) === false
-        : true
+      return hidden === false ? isInaccessible(element) === false : true
     })
     .filter(node => {
       const isRoleSpecifiedExplicitly = node.hasAttribute('role')

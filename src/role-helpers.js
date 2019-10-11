@@ -14,7 +14,7 @@ const elementRoleList = buildElementRoleList(elementRoles)
  * @param {Element} element -
  * @returns {boolean} true if excluded, otherwise false
  */
-function shouldExcludeFromA11yTree(element) {
+function isInaccessible(element) {
   const window = element.ownerDocument.defaultView
   const computedStyle = window.getComputedStyle(element)
   // since visibility is inherited we can exit early
@@ -120,9 +120,7 @@ function getRoles(container, {hidden = false} = {}) {
 
   return flattenDOM(container)
     .filter(element => {
-      return hidden === false
-        ? shouldExcludeFromA11yTree(element) === false
-        : true
+      return hidden === false ? isInaccessible(element) === false : true
     })
     .reduce((acc, node) => {
       const roles = getImplicitAriaRoles(node)
@@ -155,12 +153,6 @@ function prettyRoles(dom, {hidden}) {
 const logRoles = (dom, {hidden = false} = {}) =>
   console.log(prettyRoles(dom, {hidden}))
 
-export {
-  getRoles,
-  logRoles,
-  getImplicitAriaRoles,
-  prettyRoles,
-  shouldExcludeFromA11yTree,
-}
+export {getRoles, logRoles, getImplicitAriaRoles, prettyRoles, isInaccessible}
 
 /* eslint no-console:0 */
