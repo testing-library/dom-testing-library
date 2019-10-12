@@ -17,7 +17,7 @@
     "end-to-end",
     "e2e"
   ],
-  "author": "Kent C. Dodds <kent@doddsfamily.us> (http://kentcdodds.com/)",
+  "author": "Kent C. Dodds <kent@doddsfamily.us> (https://kentcdodds.com/)",
   "license": "MIT",
   "engines": {
     "node": ">=8"
