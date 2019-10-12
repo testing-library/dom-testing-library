@@ -21,7 +21,7 @@ this free short video tutorial to learn how: http://kcd.im/pull-request
 
 
 If this is an issue with the documentation, please file an issue in the docs repo:
-https://github.com/alexkrolick/testing-library-docs
+https://github.com/testing-library/testing-library-docs
 -->
 
 ### Describe the feature you'd like:

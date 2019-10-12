@@ -12,7 +12,7 @@ learn how: http://kcd.im/pull-request
 
 
 If this is an issue with the documentation, please file an issue in the docs repo:
-https://github.com/alexkrolick/testing-library-docs
+https://github.com/testing-library/testing-library-docs
 
 -->
 
@@ -32,7 +32,7 @@ What happened:
 <!-- Please provide the full error message/screenshots/anything -->
 
 Reproduction repository:
-https://github.com/alexkrolick/dom-testing-library-template
+https://github.com/testing-library/dom-testing-library-template
 
 <!--
 If possible, please create a repository that reproduces the issue with the
