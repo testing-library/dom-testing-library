@@ -42,6 +42,8 @@ function isInaccessible(element) {
       return true
     }
 
+    // this branch is temporary code until jsdom fixes a bug
+    // istanbul ignore else
     if (supportsStyleInheritance === false) {
       // we go bottom-up for an inheritable property so we can only set it
       // if it wasn't set already i.e. the parent can't overwrite the child
