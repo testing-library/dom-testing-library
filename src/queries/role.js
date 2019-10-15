@@ -14,9 +14,6 @@ function queryAllByRole(
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
 
   return Array.from(container.querySelectorAll('*'))
-    .filter(element => {
-      return hidden === false ? isInaccessible(element) === false : true
-    })
     .filter(node => {
       const isRoleSpecifiedExplicitly = node.hasAttribute('role')
 
@@ -29,6 +26,9 @@ function queryAllByRole(
       return implicitRoles.some(implicitRole =>
         matcher(implicitRole, node, role, matchNormalizer),
       )
+    })
+    .filter(element => {
+      return hidden === false ? isInaccessible(element) === false : true
     })
 }
 
