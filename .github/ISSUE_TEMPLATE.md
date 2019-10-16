@@ -22,7 +22,7 @@ https://github.com/testing-library/testing-library-docs
 
 Relevant code or config
 
-```javascript
+```js
 ```
 
 What you did:

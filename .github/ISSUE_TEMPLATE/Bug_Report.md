@@ -26,7 +26,7 @@ https://github.com/testing-library/testing-library-docs
 
 ### Relevant code or config:
 
-```javascript
+```js
 var your => (code) => here;
 ```
 
