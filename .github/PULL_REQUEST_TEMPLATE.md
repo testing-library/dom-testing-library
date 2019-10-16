@@ -8,7 +8,7 @@ Also, please make sure you're familiar with and follow the instructions in the
 contributing guidelines (found in the CONTRIBUTING.md file).
 
 If you're new to contributing to open source projects, you might find this free
-video course helpful: http://kcd.im/pull-request
+video course helpful: https://kcd.im/pull-request
 
 Please fill out the information below to expedite the review and (hopefully)
 merge of your pull request!
@@ -35,8 +35,9 @@ merge of your pull request!
 <!-- to check an item, place an "x" in the box like so: "- [x] Documentation" -->
 
 - [ ] Documentation added to the
-      [docs site](https://github.com/alexkrolick/testing-library-docs)
-- [ ] I've prepared a PR for types targetting https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/testing-library__dom
+      [docs site](https://github.com/testing-library/testing-library-docs)
+- [ ] I've prepared a PR for types targeting
+      [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/testing-library__dom)
 - [ ] Tests
 - [ ] Ready to be merged
       <!-- In your opinion, is this ready to be merged as soon as it's reviewed? -->
