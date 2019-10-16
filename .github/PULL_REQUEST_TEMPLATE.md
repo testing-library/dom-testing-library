@@ -34,14 +34,12 @@ merge of your pull request!
 
 <!-- to check an item, place an "x" in the box like so: "- [x] Documentation" -->
 
-- [ ] Documentation added to the [docs site][docs]
-- [ ] I've prepared a PR for types targeting [DefinitelyTyped][types]
+- [ ] Documentation added to the
+      [docs site](https://github.com/testing-library/testing-library-docs)
+- [ ] I've prepared a PR for types targeting
+      [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/testing-library__dom)
 - [ ] Tests
 - [ ] Ready to be merged
       <!-- In your opinion, is this ready to be merged as soon as it's reviewed? -->
 
 <!-- feel free to add additional comments -->
-
-[docs]: https://github.com/testing-library/testing-library-docs
-[types]:
-  https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/testing-library__dom
