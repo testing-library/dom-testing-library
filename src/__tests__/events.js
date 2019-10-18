@@ -333,7 +333,7 @@ test('fires shortcut events on Window', () => {
   window.addEventListener('click', clickSpy)
   fireEvent.click(window)
   expect(clickSpy).toHaveBeenCalledTimes(1)
-  window.removeEventListener('message', clickSpy)
+  window.removeEventListener('click', clickSpy)
 })
 
 test('throws a useful error message when firing events on non-existent nodes', () => {
