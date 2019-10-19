@@ -347,6 +347,12 @@ test('query/get select by text with multiple options selected', () => {
 })
 
 describe('query by test id', () => {
+  afterEach(() => {
+    // Restore the default test id attribute
+    // even if these tests failed
+    configure({testIdAttribute: 'data-testid'})
+  })
+
   test('can get elements by test id', () => {
     const {queryByTestId} = render(`<div data-testid="firstName"></div>`)
     expect(queryByTestId('firstName')).toBeTruthy()
@@ -367,12 +373,6 @@ describe('query by test id', () => {
 
     configure({testIdAttribute: 'something-else'})
     expect(queryByTestId('theTestId')).toBeFalsy()
-  })
-
-  afterEach(() => {
-    // Restore the default test id attribute
-    // even if these tests failed
-    configure({testIdAttribute: 'data-testid'})
   })
 })
 
