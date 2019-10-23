@@ -138,87 +138,90 @@ const eventTypes = [
 ]
 
 const bubblingEvents = [
-  {name: 'copy', bubbles: true},
-  {name: 'cut', bubbles: true},
-  {name: 'paste', bubbles: true},
-  {name: 'compositionEnd', bubbles: true},
-  {name: 'compositionStart', bubbles: true},
-  {name: 'compositionUpdate', bubbles: true},
-  {name: 'keyDown', bubbles: true},
-  {name: 'keyPress', bubbles: true},
-  {name: 'keyUp', bubbles: true},
-  {name: 'focus', bubbles: false},
-  {name: 'blur', bubbles: false},
-  {name: 'focusIn', bubbles: true},
-  {name: 'focusOut', bubbles: true},
-  {name: 'change', bubbles: true},
-  {name: 'input', bubbles: true},
-  {name: 'invalid', bubbles: false},
-  {name: 'submit', bubbles: true},
-  {name: 'reset', bubbles: true},
-  {name: 'click', bubbles: true},
-  {name: 'contextMenu', bubbles: true},
-  {name: 'dblClick', bubbles: true},
-  {name: 'drag', bubbles: true},
-  {name: 'dragEnd', bubbles: true},
-  {name: 'dragEnter', bubbles: true},
-  {name: 'dragExit', bubbles: true},
-  {name: 'dragLeave', bubbles: true},
-  {name: 'dragOver', bubbles: true},
-  {name: 'dragStart', bubbles: true},
-  {name: 'drop', bubbles: true},
-  {name: 'mouseDown', bubbles: true},
-  {name: 'mouseEnter', bubbles: false},
-  {name: 'mouseLeave', bubbles: false},
-  {name: 'mouseMove', bubbles: true},
-  {name: 'mouseOut', bubbles: true},
-  {name: 'mouseOver', bubbles: true},
-  {name: 'mouseUp', bubbles: true},
-  {name: 'select', bubbles: true},
-  {name: 'touchCancel', bubbles: true},
-  {name: 'touchEnd', bubbles: true},
-  {name: 'touchMove', bubbles: true},
-  {name: 'touchStart', bubbles: true},
-  {name: 'scroll', bubbles: false},
-  {name: 'wheel', bubbles: true},
-  {name: 'abort', bubbles: false},
-  {name: 'canPlay', bubbles: false},
-  {name: 'canPlayThrough', bubbles: false},
-  {name: 'durationChange', bubbles: false},
-  {name: 'emptied', bubbles: false},
-  {name: 'encrypted', bubbles: false},
-  {name: 'ended', bubbles: false},
-  {name: 'loadedData', bubbles: false},
-  {name: 'loadedMetadata', bubbles: false},
-  {name: 'loadStart', bubbles: false},
-  {name: 'pause', bubbles: false},
-  {name: 'play', bubbles: false},
-  {name: 'playing', bubbles: false},
-  {name: 'progress', bubbles: false},
-  {name: 'rateChange', bubbles: false},
-  {name: 'seeked', bubbles: false},
-  {name: 'seeking', bubbles: false},
-  {name: 'stalled', bubbles: false},
-  {name: 'suspend', bubbles: false},
-  {name: 'timeUpdate', bubbles: false},
-  {name: 'volumeChange', bubbles: false},
-  {name: 'waiting', bubbles: false},
-  {name: 'load', bubbles: false},
-  {name: 'error', bubbles: false},
-  {name: 'animationStart', bubbles: true},
-  {name: 'animationEnd', bubbles: true},
-  {name: 'animationIteration', bubbles: true},
-  {name: 'transitionEnd', bubbles: true},
-  {name: 'pointerOver', bubbles: true},
-  {name: 'pointerEnter', bubbles: false},
-  {name: 'pointerDown', bubbles: true},
-  {name: 'pointerMove', bubbles: true},
-  {name: 'pointerUp', bubbles: true},
-  {name: 'pointerCancel', bubbles: true},
-  {name: 'pointerOut', bubbles: true},
-  {name: 'pointerLeave', bubbles: false},
-  {name: 'gotPointerCapture', bubbles: false},
-  {name: 'lostPointerCapture', bubbles: false},
+  'copy',
+  'cut',
+  'paste',
+  'compositionEnd',
+  'compositionStart',
+  'compositionUpdate',
+  'keyDown',
+  'keyPress',
+  'keyUp',
+  'focusIn',
+  'focusOut',
+  'change',
+  'input',
+  'submit',
+  'reset',
+  'click',
+  'contextMenu',
+  'dblClick',
+  'drag',
+  'dragEnd',
+  'dragEnter',
+  'dragExit',
+  'dragLeave',
+  'dragOver',
+  'dragStart',
+  'drop',
+  'mouseDown',
+  'mouseMove',
+  'mouseOut',
+  'mouseOver',
+  'mouseUp',
+  'select',
+  'touchCancel',
+  'touchEnd',
+  'touchMove',
+  'touchStart',
+  'wheel',
+  'animationStart',
+  'animationEnd',
+  'animationIteration',
+  'transitionEnd',
+  'pointerOver',
+  'pointerDown',
+  'pointerMove',
+  'pointerUp',
+  'pointerCancel',
+  'pointerOut',
+]
+
+const nonBubblingEvents = [
+  'focus',
+  'blur',
+  'invalid',
+  'mouseEnter',
+  'mouseLeave',
+  'scroll',
+  'abort',
+  'canPlay',
+  'canPlayThrough',
+  'durationChange',
+  'emptied',
+  'encrypted',
+  'ended',
+  'loadedData',
+  'loadedMetadata',
+  'loadStart',
+  'pause',
+  'play',
+  'playing',
+  'progress',
+  'rateChange',
+  'seeked',
+  'seeking',
+  'stalled',
+  'suspend',
+  'timeUpdate',
+  'volumeChange',
+  'waiting',
+  'load',
+  'error',
+  'pointerEnter',
+  'pointerLeave',
+  'gotPointerCapture',
+  'lostPointerCapture',
 ]
 
 eventTypes.forEach(({type, events, elementType}) => {
@@ -236,37 +239,33 @@ eventTypes.forEach(({type, events, elementType}) => {
 })
 
 describe(`Bubbling Events`, () => {
-  bubblingEvents
-    .filter(e => e.bubbles)
-    .forEach(event =>
-      it(`bubbles ${event.name}`, () => {
-        const node = document.createElement('div')
-        const spy = jest.fn()
-        node.addEventListener(event.name.toLowerCase(), spy)
+  bubblingEvents.forEach(event =>
+    it(`bubbles ${event}`, () => {
+      const node = document.createElement('div')
+      const spy = jest.fn()
+      node.addEventListener(event.toLowerCase(), spy)
 
-        const innerNode = document.createElement('div')
-        node.appendChild(innerNode)
+      const innerNode = document.createElement('div')
+      node.appendChild(innerNode)
 
-        fireEvent[event.name](innerNode)
-        expect(spy).toHaveBeenCalledTimes(1)
-      }),
-    )
+      fireEvent[event](innerNode)
+      expect(spy).toHaveBeenCalledTimes(1)
+    }),
+  )
 
-  bubblingEvents
-    .filter(e => !e.bubbles)
-    .forEach(event =>
-      it(`doesn't bubble ${event.name}`, () => {
-        const node = document.createElement('div')
-        const spy = jest.fn()
-        node.addEventListener(event.name.toLowerCase(), spy)
+  nonBubblingEvents.forEach(event =>
+    it(`doesn't bubble ${event}`, () => {
+      const node = document.createElement('div')
+      const spy = jest.fn()
+      node.addEventListener(event.toLowerCase(), spy)
 
-        const innerNode = document.createElement('div')
-        node.appendChild(innerNode)
+      const innerNode = document.createElement('div')
+      node.appendChild(innerNode)
 
-        fireEvent[event.name](innerNode)
-        expect(spy).not.toHaveBeenCalled()
-      }),
-    )
+      fireEvent[event](innerNode)
+      expect(spy).not.toHaveBeenCalled()
+    }),
+  )
 })
 
 describe(`Aliased Events`, () => {
