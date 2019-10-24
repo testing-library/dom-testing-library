@@ -21,6 +21,28 @@ Here are the available roles:
 `)
 })
 
+test('when hidde: false logs accessible roles when it fails', () => {
+  const {getByRole} = render(`<h1>Hi</h1>`)
+  expect(() => getByRole('article', {hidden: false}))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an accessible element with the role "article"
+
+Here are the accessible roles:
+
+  heading:
+
+  <h1 />
+
+  --------------------------------------------------
+
+<div>
+  <h1>
+    Hi
+  </h1>
+</div>"
+`)
+})
+
 test('when hidden: false logs accessible roles when it fails', () => {
   const {getByRole} = render(`<div hidden><h1>Hi</h1></div>`)
   expect(() => getByRole('article', {hidden: false}))
