@@ -12,6 +12,8 @@ let config = {
   // react-testing-library to use. For that reason, this feature will remain
   // undocumented.
   asyncWrapper: cb => cb(),
+  // don't check if the element is part of the a11y tree by default
+  defaultHidden: true,
 }
 
 export function configure(newConfig) {

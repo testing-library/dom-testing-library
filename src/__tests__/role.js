@@ -1,11 +1,11 @@
 import {render} from './helpers/test-utils'
 
-test('by default logs accessible roles when it fails', () => {
+test('by default logs available roles when it fails', () => {
   const {getByRole} = render(`<h1>Hi</h1>`)
   expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "article"
+"Unable to find an element with the role "article"
 
-Here are the accessible roles:
+Here are the available roles:
 
   heading:
 
@@ -21,19 +21,13 @@ Here are the accessible roles:
 `)
 })
 
-test('when hidden: true logs available roles when it fails', () => {
+test('when hidden: false logs accessible roles when it fails', () => {
   const {getByRole} = render(`<div hidden><h1>Hi</h1></div>`)
-  expect(() => getByRole('article', {hidden: true}))
+  expect(() => getByRole('article', {hidden: false}))
     .toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element with the role "article"
+"Unable to find an accessible element with the role "article"
 
-Here are the available roles:
-
-  heading:
-
-  <h1 />
-
-  --------------------------------------------------
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
 <div>
   <div
@@ -47,9 +41,10 @@ Here are the available roles:
 `)
 })
 
-test('logs error when there are no accessible roles', () => {
+test('logs a different error if inaccessible roles should not be included', () => {
   const {getByRole} = render('<div />')
-  expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
+  expect(() => getByRole('article', {hidden: false}))
+    .toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an accessible element with the role "article"
 
 There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
@@ -60,10 +55,9 @@ There are no accessible roles. But there might be some inaccessible roles. If yo
 `)
 })
 
-test('logs a different error if inaccessible roles should be included', () => {
+test('logs error when there are no available roles', () => {
   const {getByRole} = render('<div />')
-  expect(() => getByRole('article', {hidden: true}))
-    .toThrowErrorMatchingInlineSnapshot(`
+  expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an element with the role "article"
 
 There are no available roles.
@@ -74,10 +68,11 @@ There are no available roles.
 `)
 })
 
-test('by default excludes elements that have the html hidden attribute or any of their parents', () => {
+test('can exclude elements that have the html hidden attribute or any of their parents', () => {
   const {getByRole} = render('<div hidden><ul /></div>')
 
-  expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
+  expect(() => getByRole('list', {hidden: false}))
+    .toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an accessible element with the role "list"
 
 There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
@@ -92,12 +87,13 @@ There are no accessible roles. But there might be some inaccessible roles. If yo
 `)
 })
 
-test('by default excludes elements which have display: none or any of their parents', () => {
+test('can exclude elements which have display: none or any of their parents', () => {
   const {getByRole} = render(
     '<div style="display: none;"><ul style="display: block;" /></div>',
   )
 
-  expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
+  expect(() => getByRole('list', {hidden: false}))
+    .toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an accessible element with the role "list"
 
 There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
@@ -117,7 +113,8 @@ There are no accessible roles. But there might be some inaccessible roles. If yo
 test('by default excludes elements which have visibility hidden', () => {
   const {getByRole} = render('<div style="visibility: hidden;"><ul /></div>')
 
-  expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
+  expect(() => getByRole('list', {hidden: false}))
+    .toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an accessible element with the role "list"
 
 There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
@@ -141,7 +138,8 @@ test('by default excludes elements which have aria-hidden="true" or any of their
     '<div aria-hidden="true"><ul aria-hidden="false" /></div>',
   )
 
-  expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
+  expect(() => getByRole('list', {hidden: false}))
+    .toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an accessible element with the role "list"
 
 There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
@@ -158,7 +156,7 @@ There are no accessible roles. But there might be some inaccessible roles. If yo
 `)
 })
 
-test('considers the computed visibility style not the parent', () => {
+test('when hidden: false considers the computed visibility style not the parent', () => {
   // this behavior deviates from the spec which includes "any descendant"
   // if visibility is hidden. However, chrome a11y tree and nvda will include
   // the following markup. This behavior might change depending on how
@@ -167,10 +165,10 @@ test('considers the computed visibility style not the parent', () => {
     '<div style="visibility: hidden;"><main style="visibility: visible;"><ul /></main></div>',
   )
 
-  expect(getByRole('list')).not.toBeNull()
+  expect(getByRole('list', {hidden: false})).not.toBeNull()
 })
 
-test('can include inaccessible roles', () => {
+test('includes inaccessible roles by default', () => {
   // this behavior deviates from the spec which includes "any descendant"
   // if visibility is hidden. However, chrome a11y tree and nvda will include
   // the following markup. This behavior might change depending on how
