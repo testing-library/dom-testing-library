@@ -39,8 +39,8 @@ test('byRole performance', () => {
 median:          ${Math.round(median * 1000)}µs
 avg:             ${Math.round(avg * 1000)}µs`).toMatchInlineSnapshot(`
     "
-    95th percentile: 6045µs
-    median:          4680µs
-    avg:             4775µs"
+    95th percentile: 3341µs
+    median:          2481µs
+    avg:             2666µs"
   `)
 })

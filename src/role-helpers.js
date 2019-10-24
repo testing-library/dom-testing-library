@@ -156,6 +156,13 @@ function prettyRoles(dom, {hidden}) {
 const logRoles = (dom, {hidden = false} = {}) =>
   console.log(prettyRoles(dom, {hidden}))
 
-export {getRoles, logRoles, getImplicitAriaRoles, prettyRoles, isInaccessible}
+export {
+  getRoles,
+  logRoles,
+  getImplicitAriaRoles,
+  isSubtreeInaccessible,
+  prettyRoles,
+  isInaccessible,
+}
 
 /* eslint no-console:0 */
