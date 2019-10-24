@@ -132,7 +132,7 @@ There are no accessible roles. But there might be some inaccessible roles. If yo
 `)
 })
 
- test('can exclude excludes elements which have visibility hidden', () => {
+test('can exclude elements which have visibility hidden', () => {
   const {getByRole} = render('<div style="visibility: hidden;"><ul /></div>')
 
   expect(() => getByRole('list', {hidden: false}))
