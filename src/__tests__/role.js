@@ -21,7 +21,7 @@ Here are the available roles:
 `)
 })
 
-test('when hidde: false logs accessible roles when it fails', () => {
+test('when hidden: false logs accessible roles when it fails', () => {
   const {getByRole} = render(`<h1>Hi</h1>`)
   expect(() => getByRole('article', {hidden: false}))
     .toThrowErrorMatchingInlineSnapshot(`
@@ -132,7 +132,7 @@ There are no accessible roles. But there might be some inaccessible roles. If yo
 `)
 })
 
-test('by default excludes elements which have visibility hidden', () => {
+ test('can exclude excludes elements which have visibility hidden', () => {
   const {getByRole} = render('<div style="visibility: hidden;"><ul /></div>')
 
   expect(() => getByRole('list', {hidden: false}))
