@@ -21,7 +21,7 @@ Here are the available roles:
 `)
 })
 
-test('when hidden: false logs accessible roles when it fails', () => {
+test('when hidden: false logs only accessible roles when it fails', () => {
   const {getByRole} = render(`<h1>Hi</h1>`)
   expect(() => getByRole('article', {hidden: false}))
     .toThrowErrorMatchingInlineSnapshot(`
@@ -39,26 +39,6 @@ Here are the accessible roles:
   <h1>
     Hi
   </h1>
-</div>"
-`)
-})
-
-test('when hidden: false logs accessible roles when it fails', () => {
-  const {getByRole} = render(`<div hidden><h1>Hi</h1></div>`)
-  expect(() => getByRole('article', {hidden: false}))
-    .toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "article"
-
-There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
-
-<div>
-  <div
-    hidden=""
-  >
-    <h1>
-      Hi
-    </h1>
-  </div>
 </div>"
 `)
 })
