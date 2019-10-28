@@ -2,6 +2,7 @@ import {
   getImplicitAriaRoles,
   prettyRoles,
   isInaccessible,
+  isSubtreeInaccessible,
 } from '../role-helpers'
 import {buildQueries, fuzzyMatches, makeNormalizer, matches} from './all-utils'
 
@@ -12,6 +13,15 @@ function queryAllByRole(
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
+
+  const subtreeIsInaccessibleCache = new WeakMap()
+  function cachedIsSubtreeInaccessible(element) {
+    if (!subtreeIsInaccessibleCache.has(element)) {
+      subtreeIsInaccessibleCache.set(element, isSubtreeInaccessible(element))
+    }
+
+    return subtreeIsInaccessibleCache.get(element)
+  }
 
   return Array.from(container.querySelectorAll('*'))
     .filter(node => {
@@ -28,7 +38,11 @@ function queryAllByRole(
       )
     })
     .filter(element => {
-      return hidden === false ? isInaccessible(element) === false : true
+      return hidden === false
+        ? isInaccessible(element, {
+            isSubtreeInaccessible: cachedIsSubtreeInaccessible,
+          }) === false
+        : true
     })
 }
 
