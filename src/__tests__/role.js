@@ -1,3 +1,4 @@
+import {configure, getConfig} from '../config'
 import {render} from './helpers/test-utils'
 
 test('by default logs accessible roles when it fails', () => {
@@ -180,4 +181,22 @@ test('can include inaccessible roles', () => {
   const {getByRole} = render('<div hidden><ul  /></div>')
 
   expect(getByRole('list', {hidden: true})).not.toBeNull()
+})
+
+describe('configuration', () => {
+  let originalConfig
+  beforeEach(() => {
+    originalConfig = getConfig()
+  })
+
+  afterEach(() => {
+    configure(originalConfig)
+  })
+
+  test('the default value for `hidden` can be configured', () => {
+    configure({defaultHidden: true})
+
+    const {getByRole} = render('<div hidden><ul  /></div>')
+    expect(getByRole('list')).not.toBeNull()
+  })
 })

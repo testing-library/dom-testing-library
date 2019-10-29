@@ -12,6 +12,8 @@ let config = {
   // react-testing-library to use. For that reason, this feature will remain
   // undocumented.
   asyncWrapper: cb => cb(),
+  // default value for the `hidden` option in `ByRole` queries
+  defaultHidden: false,
 }
 
 export function configure(newConfig) {
