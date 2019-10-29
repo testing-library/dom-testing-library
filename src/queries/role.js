@@ -4,12 +4,24 @@ import {
   isInaccessible,
   isSubtreeInaccessible,
 } from '../role-helpers'
-import {buildQueries, fuzzyMatches, makeNormalizer, matches} from './all-utils'
+import {
+  buildQueries,
+  fuzzyMatches,
+  getConfig,
+  makeNormalizer,
+  matches,
+} from './all-utils'
 
 function queryAllByRole(
   container,
   role,
-  {exact = true, collapseWhitespace, hidden = false, trim, normalizer} = {},
+  {
+    exact = true,
+    collapseWhitespace,
+    hidden = getConfig().defaultHidden,
+    trim,
+    normalizer,
+  } = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
@@ -49,7 +61,11 @@ function queryAllByRole(
 const getMultipleError = (c, role) =>
   `Found multiple elements with the role "${role}"`
 
-const getMissingError = (container, role, {hidden = false} = {}) => {
+const getMissingError = (
+  container,
+  role,
+  {hidden = getConfig().defaultHidden} = {},
+) => {
   const roles = prettyRoles(container, {hidden})
   let roleMessage
 
