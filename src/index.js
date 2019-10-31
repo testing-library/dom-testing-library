@@ -25,3 +25,7 @@ export {
   queries,
   queryHelpers,
 }
+
+export function csb() {
+  return 'yay!'
+}
