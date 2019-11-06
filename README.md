@@ -27,7 +27,7 @@ practices.</p>
 [![downloads][downloads-badge]][npmtrends]
 [![MIT License][license-badge]][license]
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-75-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-76-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome][prs-badge]][prs]
 [![Code of Conduct][coc-badge]][coc]
 
@@ -226,6 +226,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="http://olzhas.de"><img src="https://avatars3.githubusercontent.com/u/15848876?v=4" width="100px;" alt="Olzhas Askar"/><br /><sub><b>Olzhas Askar</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=pheeria" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=pheeria" title="Tests">⚠️</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=pheeria" title="Documentation">📖</a></td>
     <td align="center"><a href="https://twitter.com/mbelsky_"><img src="https://avatars1.githubusercontent.com/u/3923527?v=4" width="100px;" alt="Max Belsky"/><br /><sub><b>Max Belsky</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=mbelsky" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=mbelsky" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/mmantel"><img src="https://avatars2.githubusercontent.com/u/1326403?v=4" width="100px;" alt="Michael Mantel"/><br /><sub><b>Michael Mantel</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=mmantel" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://tomdoes.tech/"><img src="https://avatars1.githubusercontent.com/u/8683577?v=4" width="100px;" alt="Tom Nagle"/><br /><sub><b>Tom Nagle</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=tomanagle" title="Code">💻</a></td>
   </tr>
 </table>
 
