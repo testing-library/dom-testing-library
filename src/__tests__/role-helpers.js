@@ -55,7 +55,14 @@ function setup() {
       <input type='radio' data-testid='a-radio-2' />
       <input type='text' data-testid='a-input-1' />
       <input type='text' data-testid='a-input-2' />
+      <!-- https://github.com/A11yance/aria-query/pull/34/files#r351310368 -->
+      <input type='text' list="" data-testid='a-input-3' />
+      <input type='text' list="a" data-testid='a-combobox-1' />
       <textarea data-testid='a-textarea'></textarea>
+      <select data-testid='a-combobox-2'></select>
+      <select data-testid='a-listbox-1' multiple></select>
+      <select data-testid='a-listbox-2' multiple=""></select>
+      <select data-testid='a-listbox-3' size="3"></select>
     </form>
 
     <ul data-testid='b-list'>
@@ -93,7 +100,13 @@ function setup() {
     radio2: getByTestId('a-radio-2'),
     input: getByTestId('a-input-1'),
     input2: getByTestId('a-input-2'),
+    input3: getByTestId('a-input-3'),
     textarea: getByTestId('a-textarea'),
+    combobox1: getByTestId('a-combobox-1'),
+    combobox2: getByTestId('a-combobox-2'),
+    listbox1: getByTestId('a-listbox-1'),
+    listbox2: getByTestId('a-listbox-2'),
+    listbox3: getByTestId('a-listbox-3'),
   }
 }
 
@@ -126,6 +139,11 @@ test('getRoles returns expected roles for various dom nodes', () => {
     input,
     input2,
     textarea,
+    combobox1,
+    combobox2,
+    listbox1,
+    listbox2,
+    listbox3,
   } = setup()
 
   expect(getRoles(section)).toEqual({
@@ -145,6 +163,8 @@ test('getRoles returns expected roles for various dom nodes', () => {
     rowgroup: [tbody],
     command: [menuItem, menuItem2],
     menuitem: [menuItem, menuItem2],
+    combobox: [combobox1, combobox2],
+    listbox: [listbox1, listbox2, listbox3],
   })
 })
 

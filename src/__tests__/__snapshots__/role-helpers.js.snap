@@ -169,5 +169,36 @@ textbox:
   data-testid="a-textarea"
 />
 
+--------------------------------------------------
+combobox:
+
+<input
+  data-testid="a-combobox-1"
+  list="a"
+  type="text"
+/>
+
+<select
+  data-testid="a-combobox-2"
+/>
+
+--------------------------------------------------
+listbox:
+
+<select
+  data-testid="a-listbox-1"
+  multiple=""
+/>
+
+<select
+  data-testid="a-listbox-2"
+  multiple=""
+/>
+
+<select
+  data-testid="a-listbox-3"
+  size="3"
+/>
+
 --------------------------------------------------"
 `;
