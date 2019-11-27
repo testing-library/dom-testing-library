@@ -69,16 +69,54 @@ function getImplicitAriaRoles(currentNode) {
     }
   }
 
+  // <form /> with an accessible name?
+  if (currentNode.matches('form')) {
+    return ['form']
+  }
+
+  // <section /> with an accessible name?
+  if (currentNode.matches('section')) {
+    return ['region']
+  }
+
   return []
 }
 
 function buildElementRoleList(elementRolesMap) {
   function makeElementSelector({name, attributes = []}) {
-    return `${name}${attributes
-      .map(({name: attributeName, value}) =>
-        value ? `[${attributeName}=${value}]` : `[${attributeName}]`,
-      )
-      .join('')}`
+    const inclusiveAttributeSelectors = []
+    const exclusiveAttributeSelectors = []
+    attributes.forEach(({name: attributeName, constraints = [], value}) => {
+      const selector = value
+        ? `[${attributeName}="${value}"]`
+        : `[${attributeName}]`
+
+      const shouldBeUndefined = constraints.indexOf('undefined') !== -1
+      const shouldBeGreaterOne = constraints.indexOf('>1') !== -1
+      const shouldHaveAnyValue = constraints.indexOf('set') !== -1
+
+      if (shouldHaveAnyValue) {
+        inclusiveAttributeSelectors.push(selector)
+        exclusiveAttributeSelectors.push(`[${attributeName}=""]`)
+      } else if (shouldBeGreaterOne) {
+        exclusiveAttributeSelectors.push(`[${attributeName}^="-"]`)
+        exclusiveAttributeSelectors.push(`[${attributeName}="0"]`)
+        exclusiveAttributeSelectors.push(`[${attributeName}="1"]`)
+      } else if (shouldBeUndefined) {
+        exclusiveAttributeSelectors.push(selector)
+      } else {
+        inclusiveAttributeSelectors.push(selector)
+      }
+    })
+
+    const inclusiveAttributeSelector = inclusiveAttributeSelectors.join('')
+    const exclusiveAttributeSelector = exclusiveAttributeSelectors.join('')
+
+    return `${name}${inclusiveAttributeSelector}${
+      exclusiveAttributeSelector === ''
+        ? ''
+        : `:not(${exclusiveAttributeSelector})`
+    }`
   }
 
   function getSelectorSpecificity({attributes = []}) {
