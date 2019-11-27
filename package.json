@@ -43,7 +43,7 @@
     "@babel/runtime": "^7.6.2",
     "@sheerun/mutationobserver-shim": "^0.3.2",
     "@types/testing-library__dom": "^6.0.0",
-    "aria-query": "3.0.0",
+    "aria-query": "https://pkg.csb.dev/eps1lon/aria-query/commit/7dc0809b/aria-query",
     "pretty-format": "^24.9.0",
     "wait-for-expect": "^3.0.0"
   },
@@ -54,9 +54,6 @@
     "jest-watch-select-projects": "^1.0.0",
     "jsdom": "^15.1.1",
     "kcd-scripts": "^1.7.0"
-  },
-  "resolutions": {
-    "**/aria-query": "https://pkg.csb.dev/eps1lon/aria-query/commit/7dc0809b/aria-query"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",
