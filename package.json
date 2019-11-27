@@ -55,6 +55,9 @@
     "jsdom": "^15.1.1",
     "kcd-scripts": "^1.7.0"
   },
+  "resolutions": {
+    "**/aria-query": "https://pkg.csb.dev/eps1lon/aria-query/commit/7dc0809b/aria-query"
+  },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",
     "rules": {
