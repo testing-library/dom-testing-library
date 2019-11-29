@@ -1,5 +1,6 @@
 import {configure, getConfig} from '../config'
-import {render} from './helpers/test-utils'
+import {render, renderIntoDocument} from './helpers/test-utils'
+import {getQueriesForElement} from '../get-queries-for-element'
 
 test('by default logs accessible roles when it fails', () => {
   const {getByRole} = render(`<h1>Hi</h1>`)
@@ -181,6 +182,73 @@ test('can include inaccessible roles', () => {
   const {getByRole} = render('<div hidden><ul  /></div>')
 
   expect(getByRole('list', {hidden: true})).not.toBeNull()
+})
+
+test('can be filtered by accessible name', () => {
+  const {getByRole} = renderIntoDocument(
+    `
+<div>
+  <h1>Order</h1>
+  <h2>Delivery Adress</h2>
+  <form aria-label="Delivery Adress">
+    <label>
+      <div>Street</div>
+      <input type="text" />
+    </label>
+    <input type="submit" />
+  </form>
+  <h2>Invoice Adress</h2>
+  <form aria-label="Invoice Adress">
+    <label>
+      <div>Street</div>
+      <input type="text" />
+    </label>
+    <input type="submit" />
+  </form>
+</div>`,
+  )
+
+  const deliveryForm = getByRole('form', {name: 'Delivery Adress'})
+  expect(deliveryForm).not.toBeNull()
+
+  expect(
+    // TODO: upstream bug in `aria-query`; should be `button` role
+    getQueriesForElement(deliveryForm).getByRole('textbox', {name: 'Submit'}),
+  ).not.toBeNull()
+
+  const invoiceForm = getByRole('form', {name: 'Delivery Adress'})
+  expect(invoiceForm).not.toBeNull()
+
+  expect(
+    getQueriesForElement(invoiceForm).getByRole('textbox', {name: 'Street'}),
+  ).not.toBeNull()
+})
+
+test('includes accesible names in error message', () => {
+  const {getByRole} = render(`<h1>Sign <em>up</em></h1>`)
+
+  expect(() => getByRole('heading', {name: 'Sign Up'}))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an accessible element with the role "heading" and name "Sign Up"
+
+Here are the accessible roles:
+
+  heading:
+
+  Name "Sign up":
+  <h1 />
+
+  --------------------------------------------------
+
+<div>
+  <h1>
+    Sign 
+    <em>
+      up
+    </em>
+  </h1>
+</div>"
+`)
 })
 
 describe('configuration', () => {
