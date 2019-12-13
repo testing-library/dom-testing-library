@@ -1,3 +1,4 @@
+import {configure, getConfig} from '../config'
 import {render} from './helpers/test-utils'
 
 test('by default logs accessible roles when it fails', () => {
@@ -115,7 +116,9 @@ There are no accessible roles. But there might be some inaccessible roles. If yo
 })
 
 test('by default excludes elements which have visibility hidden', () => {
-  const {getByRole} = render('<div style="visibility: hidden;"><ul /></div>')
+  // works in jsdom < 15.2 only when the actual element in question has this
+  // css property. only jsdom@^15.2 implements inheritance for `visibility`
+  const {getByRole} = render('<div><ul style="visibility: hidden;" /></div>')
 
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an accessible element with the role "list"
@@ -123,10 +126,10 @@ test('by default excludes elements which have visibility hidden', () => {
 There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
 <div>
-  <div
-    style="visibility: hidden;"
-  >
-    <ul />
+  <div>
+    <ul
+      style="visibility: hidden;"
+    />
   </div>
 </div>"
 `)
@@ -178,4 +181,22 @@ test('can include inaccessible roles', () => {
   const {getByRole} = render('<div hidden><ul  /></div>')
 
   expect(getByRole('list', {hidden: true})).not.toBeNull()
+})
+
+describe('configuration', () => {
+  let originalConfig
+  beforeEach(() => {
+    originalConfig = getConfig()
+  })
+
+  afterEach(() => {
+    configure(originalConfig)
+  })
+
+  test('the default value for `hidden` can be configured', () => {
+    configure({defaultHidden: true})
+
+    const {getByRole} = render('<div hidden><ul  /></div>')
+    expect(getByRole('list')).not.toBeNull()
+  })
 })

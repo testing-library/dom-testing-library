@@ -17,11 +17,11 @@ to work on.
 
 It'd be great if after the discussion you're the one who submits the PR that
 implements this feature. If you've never done that before, that's great! Check
-this free short video tutorial to learn how: http://kcd.im/pull-request
+this free short video tutorial to learn how: https://kcd.im/pull-request
 
 
 If this is an issue with the documentation, please file an issue in the docs repo:
-https://github.com/alexkrolick/testing-library-docs
+https://github.com/testing-library/testing-library-docs
 -->
 
 ### Describe the feature you'd like:

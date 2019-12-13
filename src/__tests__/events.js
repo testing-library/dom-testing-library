@@ -137,6 +137,93 @@ const eventTypes = [
   },
 ]
 
+const bubblingEvents = [
+  'copy',
+  'cut',
+  'paste',
+  'compositionEnd',
+  'compositionStart',
+  'compositionUpdate',
+  'keyDown',
+  'keyPress',
+  'keyUp',
+  'focusIn',
+  'focusOut',
+  'change',
+  'input',
+  'submit',
+  'reset',
+  'click',
+  'contextMenu',
+  'dblClick',
+  'drag',
+  'dragEnd',
+  'dragEnter',
+  'dragExit',
+  'dragLeave',
+  'dragOver',
+  'dragStart',
+  'drop',
+  'mouseDown',
+  'mouseMove',
+  'mouseOut',
+  'mouseOver',
+  'mouseUp',
+  'select',
+  'touchCancel',
+  'touchEnd',
+  'touchMove',
+  'touchStart',
+  'wheel',
+  'animationStart',
+  'animationEnd',
+  'animationIteration',
+  'transitionEnd',
+  'pointerOver',
+  'pointerDown',
+  'pointerMove',
+  'pointerUp',
+  'pointerCancel',
+  'pointerOut',
+]
+
+const nonBubblingEvents = [
+  'focus',
+  'blur',
+  'invalid',
+  'mouseEnter',
+  'mouseLeave',
+  'scroll',
+  'abort',
+  'canPlay',
+  'canPlayThrough',
+  'durationChange',
+  'emptied',
+  'encrypted',
+  'ended',
+  'loadedData',
+  'loadedMetadata',
+  'loadStart',
+  'pause',
+  'play',
+  'playing',
+  'progress',
+  'rateChange',
+  'seeked',
+  'seeking',
+  'stalled',
+  'suspend',
+  'timeUpdate',
+  'volumeChange',
+  'waiting',
+  'load',
+  'error',
+  'pointerEnter',
+  'pointerLeave',
+  'gotPointerCapture',
+  'lostPointerCapture',
+]
+
 eventTypes.forEach(({type, events, elementType}) => {
   describe(`${type} Events`, () => {
     events.forEach(eventName => {
@@ -149,6 +236,36 @@ eventTypes.forEach(({type, events, elementType}) => {
       })
     })
   })
+})
+
+describe(`Bubbling Events`, () => {
+  bubblingEvents.forEach(event =>
+    it(`bubbles ${event}`, () => {
+      const node = document.createElement('div')
+      const spy = jest.fn()
+      node.addEventListener(event.toLowerCase(), spy)
+
+      const innerNode = document.createElement('div')
+      node.appendChild(innerNode)
+
+      fireEvent[event](innerNode)
+      expect(spy).toHaveBeenCalledTimes(1)
+    }),
+  )
+
+  nonBubblingEvents.forEach(event =>
+    it(`doesn't bubble ${event}`, () => {
+      const node = document.createElement('div')
+      const spy = jest.fn()
+      node.addEventListener(event.toLowerCase(), spy)
+
+      const innerNode = document.createElement('div')
+      node.appendChild(innerNode)
+
+      fireEvent[event](innerNode)
+      expect(spy).not.toHaveBeenCalled()
+    }),
+  )
 })
 
 describe(`Aliased Events`, () => {
@@ -215,7 +332,7 @@ test('fires shortcut events on Window', () => {
   window.addEventListener('click', clickSpy)
   fireEvent.click(window)
   expect(clickSpy).toHaveBeenCalledTimes(1)
-  window.removeEventListener('message', clickSpy)
+  window.removeEventListener('click', clickSpy)
 })
 
 test('throws a useful error message when firing events on non-existent nodes', () => {

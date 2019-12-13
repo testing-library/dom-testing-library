@@ -1,24 +1,41 @@
 import {
   getImplicitAriaRoles,
   prettyRoles,
-  shouldExcludeFromA11yTree,
+  isInaccessible,
+  isSubtreeInaccessible,
 } from '../role-helpers'
-import {buildQueries, fuzzyMatches, makeNormalizer, matches} from './all-utils'
+import {
+  buildQueries,
+  fuzzyMatches,
+  getConfig,
+  makeNormalizer,
+  matches,
+} from './all-utils'
 
 function queryAllByRole(
   container,
   role,
-  {exact = true, collapseWhitespace, hidden = false, trim, normalizer} = {},
+  {
+    exact = true,
+    collapseWhitespace,
+    hidden = getConfig().defaultHidden,
+    trim,
+    normalizer,
+  } = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
 
+  const subtreeIsInaccessibleCache = new WeakMap()
+  function cachedIsSubtreeInaccessible(element) {
+    if (!subtreeIsInaccessibleCache.has(element)) {
+      subtreeIsInaccessibleCache.set(element, isSubtreeInaccessible(element))
+    }
+
+    return subtreeIsInaccessibleCache.get(element)
+  }
+
   return Array.from(container.querySelectorAll('*'))
-    .filter(element => {
-      return hidden === false
-        ? shouldExcludeFromA11yTree(element) === false
-        : true
-    })
     .filter(node => {
       const isRoleSpecifiedExplicitly = node.hasAttribute('role')
 
@@ -32,12 +49,23 @@ function queryAllByRole(
         matcher(implicitRole, node, role, matchNormalizer),
       )
     })
+    .filter(element => {
+      return hidden === false
+        ? isInaccessible(element, {
+            isSubtreeInaccessible: cachedIsSubtreeInaccessible,
+          }) === false
+        : true
+    })
 }
 
 const getMultipleError = (c, role) =>
   `Found multiple elements with the role "${role}"`
 
-const getMissingError = (container, role, {hidden = false} = {}) => {
+const getMissingError = (
+  container,
+  role,
+  {hidden = getConfig().defaultHidden} = {},
+) => {
   const roles = prettyRoles(container, {hidden})
   let roleMessage
 
