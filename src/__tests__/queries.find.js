@@ -33,6 +33,7 @@ test('find asynchronously finds elements', async () => {
       <img alt="test alt text" src="/lucy-ricardo.png" />
       <span title="test title" />
       <div role="dialog"></div>
+      <div role="meter progressbar"></div>
     </div>
   `)
   await expect(findByLabelText('test-label')).resolves.toBeTruthy()
@@ -55,6 +56,13 @@ test('find asynchronously finds elements', async () => {
 
   await expect(findByRole('dialog')).resolves.toBeTruthy()
   await expect(findAllByRole('dialog')).resolves.toHaveLength(1)
+
+  await expect(
+    findByRole('progressbar', {queryFallbacks: true}),
+  ).resolves.toBeTruthy()
+  await expect(
+    findAllByRole('progressbar', {queryFallbacks: true}),
+  ).resolves.toHaveLength(1)
 
   await expect(findByTestId('test-id')).resolves.toBeTruthy()
   await expect(findAllByTestId('test-id')).resolves.toHaveLength(1)

@@ -21,6 +21,7 @@ function queryAllByRole(
     hidden = getConfig().defaultHidden,
     trim,
     normalizer,
+    queryFallbacks = false,
   } = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
@@ -40,6 +41,13 @@ function queryAllByRole(
       const isRoleSpecifiedExplicitly = node.hasAttribute('role')
 
       if (isRoleSpecifiedExplicitly) {
+        if (queryFallbacks) {
+          return node
+            .getAttribute('role')
+            .split(' ')
+            .filter(Boolean)
+            .some(text => matcher(text, node, role, matchNormalizer))
+        }
         return matcher(node.getAttribute('role'), node, role, matchNormalizer)
       }
 
