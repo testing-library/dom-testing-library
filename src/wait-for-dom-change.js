@@ -8,6 +8,9 @@ import {
 } from './helpers'
 import {getConfig} from './config'
 
+// deprecated... TODO: remove this method. People should use wait instead
+// the reasoning is that waiting for just any DOM change is an implementation
+// detail. People should be waiting for a specific thing to change.
 function waitForDomChange({
   container = getDocument(),
   timeout = getConfig().asyncUtilTimeout,

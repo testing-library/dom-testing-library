@@ -49,7 +49,7 @@ test('requires a function as the first parameter', () => {
   return expect(
     waitForElementToBeRemoved(),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"waitForElementToBeRemoved requires a function as the first parameter"`,
+    `"waitForElementToBeRemoved requires a callback as the first parameter"`,
   )
 })
 
