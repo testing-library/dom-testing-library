@@ -238,7 +238,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/21689428?v=4",
       "profile": "http://jonathanstoye.de",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -755,5 +756,6 @@
       ]
     }
   ],
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi": true
 }
