@@ -210,10 +210,6 @@ const eventMap = {
     EventType: 'Event',
     defaultInit: {bubbles: false, cancelable: false},
   },
-  // error: {
-  //   EventType: Event,
-  //   defaultInit: {bubbles: false, cancelable: false},
-  // },
   loadedData: {
     EventType: 'Event',
     defaultInit: {bubbles: false, cancelable: false},
