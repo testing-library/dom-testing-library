@@ -338,6 +338,11 @@ const eventMap = {
     EventType: 'PointerEvent',
     defaultInit: {bubbles: false, cancelable: false},
   },
+  // history events
+  popState: {
+    EventType: 'PopStateEvent',
+    defaultInit: {bubbles: true, cancelable: false},
+  },
 }
 
 const eventAliasMap = {
