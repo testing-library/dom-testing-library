@@ -57,6 +57,8 @@ test('find asynchronously finds elements', async () => {
   await expect(findByRole('dialog')).resolves.toBeTruthy()
   await expect(findAllByRole('dialog')).resolves.toHaveLength(1)
 
+  await expect(findByRole('meter')).resolves.toBeTruthy()
+  await expect(findAllByRole('meter')).resolves.toHaveLength(1)
   await expect(
     findByRole('progressbar', {queryFallbacks: true}),
   ).resolves.toBeTruthy()

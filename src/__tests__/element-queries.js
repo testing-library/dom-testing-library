@@ -434,6 +434,8 @@ test('queryAllByRole returns semantic html elements', () => {
   expect(queryAllByRole(/rowgroup/i)).toHaveLength(2)
   expect(queryAllByRole(/(table)|(textbox)/i)).toHaveLength(3)
   expect(queryAllByRole(/img/i)).toHaveLength(1)
+  expect(queryAllByRole('meter')).toHaveLength(1)
+  expect(queryAllByRole('progressbar')).toHaveLength(0)
   expect(queryAllByRole('progressbar', {queryFallbacks: true})).toHaveLength(1)
 })
 
@@ -485,6 +487,7 @@ test('getAll* matchers return an array', () => {
   expect(getAllByDisplayValue(/cars$/)).toHaveLength(2)
   expect(getAllByText(/^where/i)).toHaveLength(1)
   expect(getAllByRole(/container/i)).toHaveLength(1)
+  expect(getAllByRole('meter')).toHaveLength(1)
   expect(getAllByRole('progressbar', {queryFallbacks: true})).toHaveLength(1)
 })
 
