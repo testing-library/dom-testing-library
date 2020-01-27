@@ -16,7 +16,9 @@ const inNode = () =>
   process.versions.node !== undefined
 
 const getMaxLength = dom =>
-  inCypress(dom) ? 0 : process.env.DEBUG_PRINT_LIMIT || 7000
+  inCypress(dom)
+    ? 0
+    : typeof process !== 'undefined' && process.env.DEBUG_PRINT_LIMIT || 7000
 
 const {DOMElement, DOMCollection} = prettyFormat.plugins
 
