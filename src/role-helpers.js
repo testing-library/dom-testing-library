@@ -1,6 +1,6 @@
 import {elementRoles} from 'aria-query'
-import {prettyDOM} from './pretty-dom'
 import {computeAccessibleName} from 'dom-accessibility-api'
+import {prettyDOM} from './pretty-dom'
 
 const elementRoleList = buildElementRoleList(elementRoles)
 

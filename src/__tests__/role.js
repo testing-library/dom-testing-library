@@ -1,6 +1,6 @@
 import {configure, getConfig} from '../config'
-import {render, renderIntoDocument} from './helpers/test-utils'
 import {getQueriesForElement} from '../get-queries-for-element'
+import {render, renderIntoDocument} from './helpers/test-utils'
 
 test('by default logs accessible roles when it fails', () => {
   const {getByRole} = render(`<h1>Hi</h1>`)
