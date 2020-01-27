@@ -73,9 +73,19 @@ function queryAllByRole(
         : true
     })
     .filter(element => {
-      return typeof name === 'string'
-        ? computeAccessibleName(element) === name
-        : true
+      if (name === undefined) {
+        // Don't care
+        return true
+      }
+
+      const accessibleName = computeAccessibleName(element)
+      if (typeof name === 'string') {
+        return name === accessibleName
+      }
+      if (typeof name === 'function') {
+        return name(accessibleName, element)
+      }
+      return name.test(accessibleName)
     })
 }
 
@@ -89,7 +99,7 @@ const getMissingError = (
 ) => {
   const roles = prettyRoles(container, {
     hidden,
-    includeName: typeof name === 'string',
+    includeName: name !== undefined,
   })
   let roleMessage
 
@@ -110,12 +120,19 @@ Here are the ${hidden === false ? 'accessible' : 'available'} roles:
 `.trim()
   }
 
+  let nameHint = ''
+  if (name === undefined) {
+    nameHint = ''
+  } else if (typeof name === 'string') {
+    nameHint = ` and name "${name}"`
+  } else {
+    nameHint = ` and name \`${name}\``
+  }
+
   return `
 Unable to find an ${
     hidden === false ? 'accessible ' : ''
-  }element with the role "${role}"${
-    typeof name === 'string' ? ` and name "${name}"` : ''
-  }
+  }element with the role "${role}"${nameHint}
 
 ${roleMessage}`.trim()
 }
