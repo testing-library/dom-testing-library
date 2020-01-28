@@ -21,6 +21,7 @@ function queryAllByRole(
     hidden = getConfig().defaultHidden,
     trim,
     normalizer,
+    queryFallbacks = false,
   } = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
@@ -40,7 +41,20 @@ function queryAllByRole(
       const isRoleSpecifiedExplicitly = node.hasAttribute('role')
 
       if (isRoleSpecifiedExplicitly) {
-        return matcher(node.getAttribute('role'), node, role, matchNormalizer)
+        const roleValue = node.getAttribute('role')
+        if (queryFallbacks) {
+          return roleValue
+            .split(' ')
+            .filter(Boolean)
+            .some(text => matcher(text, node, role, matchNormalizer))
+        }
+        // if a custom normalizer is passed then let normalizer handle the role value
+        if (normalizer) {
+          return matcher(roleValue, node, role, matchNormalizer)
+        }
+        // other wise only send the first word to match
+        const [firstWord] = roleValue.split(' ')
+        return matcher(firstWord, node, role, matchNormalizer)
       }
 
       const implicitRoles = getImplicitAriaRoles(node)
