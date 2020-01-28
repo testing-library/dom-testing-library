@@ -230,6 +230,9 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://tomdoes.tech/"><img src="https://avatars1.githubusercontent.com/u/8683577?v=4" width="100px;" alt=""/><br /><sub><b>Tom Nagle</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=tomanagle" title="Code">💻</a></td>
     <td align="center"><a href="http://westbrookjohnson.com"><img src="https://avatars0.githubusercontent.com/u/1156657?v=4" width="100px;" alt=""/><br /><sub><b>Westbrook Johnson</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=Westbrook" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://aziz.js.org"><img src="https://avatars3.githubusercontent.com/u/17024120?v=4" width="100px;" alt=""/><br /><sub><b>Mohammad Aziz</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=iAziz786" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=iAziz786" title="Tests">⚠️</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
