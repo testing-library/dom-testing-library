@@ -8,7 +8,7 @@
   "imageSize": 100,
   "commit": false,
   "contributorsPerLine": 7,
-  "skipCi": false,
+  "skipCi": true,
   "contributors": [
     {
       "login": "kentcdodds",
@@ -764,8 +764,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "iAziz786",
+      "name": "Mohammad Aziz",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/17024120?v=4",
+      "profile": "https://aziz.js.org",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
-  "repoHost": "https://github.com",
-  "skipCi": true
+  "repoHost": "https://github.com"
 }
