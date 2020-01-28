@@ -232,6 +232,7 @@ Thanks goes to these people ([emoji key][emojis]):
   </tr>
   <tr>
     <td align="center"><a href="https://aziz.js.org"><img src="https://avatars3.githubusercontent.com/u/17024120?v=4" width="100px;" alt=""/><br /><sub><b>Mohammad Aziz</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=iAziz786" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=iAziz786" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/seetdev/"><img src="https://avatars2.githubusercontent.com/u/35116035?v=4" width="100px;" alt=""/><br /><sub><b>seetdev</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=seetdev" title="Tests">⚠️</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=seetdev" title="Code">💻</a></td>
   </tr>
 </table>
 
