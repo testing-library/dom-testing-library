@@ -228,6 +228,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://twitter.com/mbelsky_"><img src="https://avatars1.githubusercontent.com/u/3923527?v=4" width="100px;" alt=""/><br /><sub><b>Max Belsky</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=mbelsky" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=mbelsky" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/mmantel"><img src="https://avatars2.githubusercontent.com/u/1326403?v=4" width="100px;" alt=""/><br /><sub><b>Michael Mantel</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=mmantel" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://tomdoes.tech/"><img src="https://avatars1.githubusercontent.com/u/8683577?v=4" width="100px;" alt=""/><br /><sub><b>Tom Nagle</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=tomanagle" title="Code">💻</a></td>
+    <td align="center"><a href="http://westbrookjohnson.com"><img src="https://avatars0.githubusercontent.com/u/1156657?v=4" width="100px;" alt=""/><br /><sub><b>Westbrook Johnson</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=Westbrook" title="Code">💻</a></td>
   </tr>
 </table>
 
