@@ -774,6 +774,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "seetdev",
+      "name": "seetdev",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/35116035?v=4",
+      "profile": "https://www.linkedin.com/in/seetdev/",
+      "contributions": [
+        "test",
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
