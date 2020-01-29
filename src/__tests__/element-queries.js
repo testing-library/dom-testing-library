@@ -677,7 +677,7 @@ test('using jest helpers to check element fallback roles', () => {
   )
 })
 
-test('test the debug helper prints the dom state here', () => {
+test('the debug helper prints the dom state here', () => {
   const originalDebugPrintLimit = process.env.DEBUG_PRINT_LIMIT
   const Large = `<div>
         ${Array.from({length: 7000}, (v, key) => key).map(() => {
