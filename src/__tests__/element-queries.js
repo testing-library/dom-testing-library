@@ -79,7 +79,7 @@ test('get throws a useful error message', () => {
 `)
   expect(() => getByDisplayValue('LucyRicardo'))
     .toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element with the value: LucyRicardo.
+"Unable to find an element with the display value: LucyRicardo.
 
 <div>
   <div />
@@ -745,7 +745,7 @@ test('get throws a useful error message without DOM in Cypress', () => {
   expect(() =>
     getByDisplayValue('LucyRicardo'),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"Unable to find an element with the value: LucyRicardo."`,
+    `"Unable to find an element with the display value: LucyRicardo."`,
   )
 })
 

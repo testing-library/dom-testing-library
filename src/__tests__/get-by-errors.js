@@ -28,10 +28,6 @@ cases(
       query: /his/,
       html: `<div title="his"></div><div title="history"></div>`,
     },
-    getByDisplayValue: {
-      query: /his/,
-      html: `<input value="his" /><select><option value="history">history</option></select>`,
-    },
     getByRole: {
       query: /his/,
       html: `<div role="his"></div><div role="history"></div>`,
@@ -70,10 +66,6 @@ cases(
       query: /his/,
       html: `<div title="his"></div><div title="history"></div>`,
     },
-    queryByDisplayValue: {
-      query: /his/,
-      html: `<input value="his" /><select><option value="history">history</option></select>`,
-    },
     queryByRole: {
       query: /his/,
       html: `<div role="his"></div><div role="history"></div>`,
@@ -84,3 +76,22 @@ cases(
     },
   },
 )
+
+describe('*ByDisplayValue queries throw an error when there are multiple elements returned', () => {
+  test('getByDisplayValue', () => {
+    const {getByDisplayValue} = render(
+      `<input value="his" /><select><option value="history">history</option></select>`,
+    )
+    expect(() => getByDisplayValue(/his/)).toThrow(
+      /multiple elements with the display value:/i,
+    )
+  })
+  test('queryByDisplayValue', () => {
+    const {queryByDisplayValue} = render(
+      `<input value="his" /><select><option value="history">history</option></select>`,
+    )
+    expect(() => queryByDisplayValue(/his/)).toThrow(
+      /multiple elements with the display value:/i,
+    )
+  })
+})

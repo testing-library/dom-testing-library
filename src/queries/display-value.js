@@ -30,9 +30,9 @@ function queryAllByDisplayValue(
 }
 
 const getMultipleError = (c, value) =>
-  `Found multiple elements with the value: ${value}.`
+  `Found multiple elements with the display value: ${value}.`
 const getMissingError = (c, value) =>
-  `Unable to find an element with the value: ${value}.`
+  `Unable to find an element with the display value: ${value}.`
 const [
   queryByDisplayValue,
   getAllByDisplayValue,
