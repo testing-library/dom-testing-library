@@ -784,6 +784,16 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "xgbuils",
+      "name": "Xavier Garcia Buils",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6483614?v=4",
+      "profile": "https://twitter.com/xgbuils",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
