@@ -392,7 +392,19 @@ Object.keys(eventMap).forEach(key => {
     Object.assign(node, targetProperties)
     const window = getWindowFromNode(node)
     const EventConstructor = window[EventType] || window.Event
-    return new EventConstructor(eventName, eventInit)
+    /* istanbul ignore else  */
+    if (typeof EventConstructor === 'function') {
+      return new EventConstructor(eventName, eventInit)
+    } else {
+      // IE11 polyfill from https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
+      const event = window.document.createEvent(EventType)
+      const {bubbles, cancelable, detail, ...otherInit} = eventInit
+      event.initEvent(eventName, bubbles, cancelable, detail)
+      Object.keys(otherInit).forEach(eventKey => {
+        event[eventKey] = otherInit[eventKey]
+      })
+      return event
+    }
   }
 
   fireEvent[key] = (node, init) => fireEvent(node, createEvent[key](node, init))
