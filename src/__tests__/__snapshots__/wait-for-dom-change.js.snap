@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`timers works with fake timers 1`] = `
+Array [
+  MutationRecord {},
+]
+`;
+
+exports[`timers works with real timers 1`] = `
+Array [
+  MutationRecord {},
+]
+`;

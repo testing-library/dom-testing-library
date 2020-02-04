@@ -18,22 +18,10 @@ test('waits for the dom to change in the document', async () => {
   setTimeout(() => container.firstChild.setAttribute('id', 'foo'))
   const mutationResult = await promise
   expect(mutationResult).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "addedNodes": Array [],
-    "attributeName": "id",
-    "attributeNamespace": null,
-    "nextSibling": null,
-    "oldValue": null,
-    "previousSibling": null,
-    "removedNodes": Array [],
-    "target": <div
-      id="foo"
-    />,
-    "type": "attributes",
-  },
-]
-`)
+    Array [
+      MutationRecord {},
+    ]
+  `)
 })
 
 test('waits for the dom to change in a specified container', async () => {
@@ -42,22 +30,10 @@ test('waits for the dom to change in a specified container', async () => {
   setTimeout(() => container.firstChild.setAttribute('id', 'foo'))
   const mutationResult = await promise
   expect(mutationResult).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "addedNodes": Array [],
-    "attributeName": "id",
-    "attributeNamespace": null,
-    "nextSibling": null,
-    "oldValue": null,
-    "previousSibling": null,
-    "removedNodes": Array [],
-    "target": <div
-      id="foo"
-    />,
-    "type": "attributes",
-  },
-]
-`)
+    Array [
+      MutationRecord {},
+    ]
+  `)
 })
 
 describe('timers', () => {
@@ -73,23 +49,7 @@ describe('timers', () => {
       jest.advanceTimersByTime(110)
     }
 
-    await expect(promise).resolves.toMatchInlineSnapshot(`
-  Array [
-    Object {
-      "addedNodes": Array [],
-      "attributeName": "id",
-      "attributeNamespace": null,
-      "nextSibling": null,
-      "oldValue": null,
-      "previousSibling": null,
-      "removedNodes": Array [],
-      "target": <div
-        id="foo"
-      />,
-      "type": "attributes",
-    },
-  ]
-  `)
+    await expect(promise).resolves.toMatchSnapshot()
   }
 
   it('works with real timers', async () => {
