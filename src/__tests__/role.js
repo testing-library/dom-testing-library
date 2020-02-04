@@ -224,28 +224,11 @@ test('can be filtered by accessible name', () => {
   ).not.toBeNull()
 })
 
-test('accessible name filter implements TextMatch', () => {
-  const {getByRole} = render(
-    `<h1>Sign <em>up</em></h1><h2>Details</h2><h2>Your Signature</h2>`,
-  )
-
-  // subset via regex
-  expect(getByRole('heading', {name: /gn u/})).not.toBeNull()
-  // regex
-  expect(getByRole('heading', {name: /^sign/i})).not.toBeNull()
-  // function
-  expect(
-    getByRole('heading', {
-      name: (name, element) => {
-        return element.nodeName === 'H2' && name === 'Your Signature'
-      },
-    }),
-  ).not.toBeNull()
-})
-
-test('includes accesible names in error message', () => {
+test('accessible name comparison is case sensitive', () => {
   const {getByRole} = render(`<h1>Sign <em>up</em></h1>`)
 
+  // actual:  "Sign up", 
+  // queried: "Sign Up"
   expect(() => getByRole('heading', {name: 'Sign Up'}))
     .toThrowErrorMatchingInlineSnapshot(`
 "Unable to find an accessible element with the role "heading" and name "Sign Up"
@@ -268,6 +251,29 @@ Here are the accessible roles:
   </h1>
 </div>"
 `)
+})
+
+test('accessible name filter implements TextMatch', () => {
+  const {getByRole} = render(
+    `<h1>Sign <em>up</em></h1><h2>Details</h2><h2>Your Signature</h2>`,
+  )
+
+  // subset via regex
+  expect(getByRole('heading', {name: /gn u/})).not.toBeNull()
+  // regex
+  expect(getByRole('heading', {name: /^sign/i})).not.toBeNull()
+  // function
+  expect(
+    getByRole('heading', {
+      name: (name, element) => {
+        return element.nodeName === 'H2' && name === 'Your Signature'
+      },
+    }),
+  ).not.toBeNull()
+})
+
+test('TextMatch serialization in error message', () => {
+  const {getByRole} = render(`<h1>Sign <em>up</em></h1>`)
 
   expect(() => getByRole('heading', {name: /Login/}))
     .toThrowErrorMatchingInlineSnapshot(`
