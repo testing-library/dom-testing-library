@@ -414,6 +414,11 @@ test('queryAllByRole returns semantic html elements', () => {
       <table role="grid"></table>
       <div role="meter progressbar" />
       <button>Button</button>
+      <select><option value="1">one</option></select>
+      <select size="2">
+        <option value="1">one</option>
+        <option value="2">two</option>
+      </select>
     </form>
   `)
 
@@ -437,6 +442,8 @@ test('queryAllByRole returns semantic html elements', () => {
   expect(queryAllByRole('meter')).toHaveLength(1)
   expect(queryAllByRole('progressbar')).toHaveLength(0)
   expect(queryAllByRole('progressbar', {queryFallbacks: true})).toHaveLength(1)
+  expect(queryAllByRole('combobox')).toHaveLength(2)
+  expect(queryAllByRole('listbox')).toHaveLength(2)
 })
 
 test('getAll* matchers return an array', () => {
