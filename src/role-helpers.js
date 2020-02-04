@@ -161,7 +161,7 @@ function prettyRoles(dom, {hidden, includeName}) {
     .join('\n')
 }
 
-const logRoles = (dom, {hidden = false, includeName = false} = {}) =>
+const logRoles = (dom, {hidden = false, includeName = true} = {}) =>
   console.log(prettyRoles(dom, {hidden, includeName}))
 
 export {
