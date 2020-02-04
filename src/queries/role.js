@@ -78,14 +78,12 @@ function queryAllByRole(
         return true
       }
 
-      const accessibleName = computeAccessibleName(element)
-      if (typeof name === 'string') {
-        return name === accessibleName
-      }
-      if (typeof name === 'function') {
-        return name(accessibleName, element)
-      }
-      return name.test(accessibleName)
+      return matches(
+        computeAccessibleName(element),
+        element,
+        name,
+        text => text,
+      )
     })
 }
 
