@@ -67,7 +67,7 @@ function setup() {
   `)
 
   return {
-    section: getByTestId('a-section'),
+    unnamedSection: getByTestId('a-section'),
     anchor: getByTestId('a-link'),
     h1: getByTestId('a-h1'),
     h2: getByTestId('a-h2'),
@@ -88,7 +88,7 @@ function setup() {
     td1: getByTestId('a-cell-1'),
     td2: getByTestId('a-cell-2'),
     td3: getByTestId('a-cell-3'),
-    form: getByTestId('a-form'),
+    unnamedForm: getByTestId('a-form'),
     radio: getByTestId('a-radio-1'),
     radio2: getByTestId('a-radio-2'),
     input: getByTestId('a-input-1'),
@@ -99,7 +99,7 @@ function setup() {
 
 test('getRoles returns expected roles for various dom nodes', () => {
   const {
-    section,
+    unnamedSection,
     anchor,
     h1,
     h2,
@@ -120,7 +120,6 @@ test('getRoles returns expected roles for various dom nodes', () => {
     td1,
     td2,
     td3,
-    form,
     radio,
     radio2,
     input,
@@ -128,9 +127,8 @@ test('getRoles returns expected roles for various dom nodes', () => {
     textarea,
   } = setup()
 
-  expect(getRoles(section)).toEqual({
+  expect(getRoles(unnamedSection)).toEqual({
     link: [anchor],
-    region: [section],
     heading: [h1, h2, h3],
     navigation: [nav],
     radio: [radio, radio2],
@@ -140,7 +138,6 @@ test('getRoles returns expected roles for various dom nodes', () => {
     table: [table],
     row: [tr],
     cell: [td1, td2, td3],
-    form: [form],
     textbox: [input, input2, textarea],
     rowgroup: [tbody],
     command: [menuItem, menuItem2],
@@ -149,18 +146,18 @@ test('getRoles returns expected roles for various dom nodes', () => {
 })
 
 test('logRoles calls console.log with output from prettyRoles', () => {
-  const {section} = setup()
-  logRoles(section)
+  const {unnamedSection} = setup()
+  logRoles(unnamedSection)
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchSnapshot()
 })
 
 test('getImplicitAriaRoles returns expected roles for various dom nodes', () => {
-  const {section, h1, form, radio, input} = setup()
+  const {unnamedSection, h1, unnamedForm, radio, input} = setup()
 
-  expect(getImplicitAriaRoles(section)).toEqual(['region'])
+  expect(getImplicitAriaRoles(unnamedSection)).toEqual([])
   expect(getImplicitAriaRoles(h1)).toEqual(['heading'])
-  expect(getImplicitAriaRoles(form)).toEqual(['form'])
+  expect(getImplicitAriaRoles(unnamedForm)).toEqual([])
   expect(getImplicitAriaRoles(radio)).toEqual(['radio'])
   expect(getImplicitAriaRoles(input)).toEqual(['textbox'])
 })

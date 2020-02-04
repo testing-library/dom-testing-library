@@ -43,7 +43,7 @@
     "@babel/runtime": "^7.6.2",
     "@sheerun/mutationobserver-shim": "^0.3.2",
     "@types/testing-library__dom": "^6.0.0",
-    "aria-query": "3.0.0",
+    "aria-query": "^4.0.1",
     "dom-accessibility-api": "^0.3.0",
     "pretty-format": "^24.9.0",
     "wait-for-expect": "^3.0.0"
