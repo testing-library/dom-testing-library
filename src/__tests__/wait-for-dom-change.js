@@ -19,7 +19,19 @@ test('waits for the dom to change in the document', async () => {
   const mutationResult = await promise
   expect(mutationResult).toMatchInlineSnapshot(`
     Array [
-      MutationRecord {},
+      Object {
+        "addedNodes": NodeList [],
+        "attributeName": "id",
+        "attributeNamespace": null,
+        "nextSibling": null,
+        "oldValue": null,
+        "previousSibling": null,
+        "removedNodes": NodeList [],
+        "target": <div
+          id="foo"
+        />,
+        "type": "attributes",
+      },
     ]
   `)
 })
@@ -31,7 +43,19 @@ test('waits for the dom to change in a specified container', async () => {
   const mutationResult = await promise
   expect(mutationResult).toMatchInlineSnapshot(`
     Array [
-      MutationRecord {},
+      Object {
+        "addedNodes": NodeList [],
+        "attributeName": "id",
+        "attributeNamespace": null,
+        "nextSibling": null,
+        "oldValue": null,
+        "previousSibling": null,
+        "removedNodes": NodeList [],
+        "target": <div
+          id="foo"
+        />,
+        "type": "attributes",
+      },
     ]
   `)
 })
