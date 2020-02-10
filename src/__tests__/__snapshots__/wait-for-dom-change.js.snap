@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`timers works with fake timers 1`] = `
+Array [
+  Object {
+    "addedNodes": NodeList [],
+    "attributeName": "id",
+    "attributeNamespace": null,
+    "nextSibling": null,
+    "oldValue": null,
+    "previousSibling": null,
+    "removedNodes": NodeList [],
+    "target": <div
+      id="foo"
+    />,
+    "type": "attributes",
+  },
+]
+`;
+
+exports[`timers works with real timers 1`] = `
+Array [
+  Object {
+    "addedNodes": NodeList [],
+    "attributeName": "id",
+    "attributeNamespace": null,
+    "nextSibling": null,
+    "oldValue": null,
+    "previousSibling": null,
+    "removedNodes": NodeList [],
+    "target": <div
+      id="foo"
+    />,
+    "type": "attributes",
+  },
+]
+`;

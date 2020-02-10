@@ -52,8 +52,8 @@
     "jest-in-case": "^1.0.2",
     "jest-serializer-ansi": "^1.0.3",
     "jest-watch-select-projects": "^1.0.0",
-    "jsdom": "^15.1.1",
-    "kcd-scripts": "^1.7.0"
+    "jsdom": "^15.2.1",
+    "kcd-scripts": "^5.0.0"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",
