@@ -830,3 +830,16 @@ test('can get a textarea with children', () => {
   `)
   getByLabelText('Label')
 })
+
+test('can get a select with options', () => {
+  const {getByLabelText} = renderIntoDocument(`
+    <label>
+      Label
+      <select>
+        <option>Some</option>
+        <option>Options</option>
+      </select>
+    </label>
+  `)
+  getByLabelText('Label')
+})
