@@ -1,8 +1,13 @@
 import {prettyDOM} from './pretty-dom'
 import {fuzzyMatches, matches, makeNormalizer} from './matches'
 import {waitForElement} from './wait-for-element'
+import {getConfig} from './config'
 
 function getElementError(message, container) {
+  const customGetElementError = getConfig().customGetElementError
+  if (customGetElementError) {
+    return customGetElementError(message, container)
+  }
   return new Error([message, prettyDOM(container)].filter(Boolean).join('\n\n'))
 }
 

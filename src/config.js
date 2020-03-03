@@ -14,6 +14,9 @@ let config = {
   asyncWrapper: cb => cb(),
   // default value for the `hidden` option in `ByRole` queries
   defaultHidden: false,
+
+  // called when getBy* queries fail. (message, container) => Error
+  customGetElementError: null,
 }
 
 export function configure(newConfig) {
