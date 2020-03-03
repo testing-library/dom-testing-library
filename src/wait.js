@@ -23,20 +23,20 @@ function wait(
   } = {},
 ) {
   if (interval < 1) interval = 1
-  const maxTries = Math.ceil(timeout / interval)
-  let tries = 0
   return new Promise((resolve, reject) => {
-    let lastError, lastTimer
+    let lastError
     const overallTimeoutTimer = setTimeout(onTimeout, timeout)
+    const intervalId = setInterval(checkCallback, interval)
 
     const observer = newMutationObserver(checkCallback)
     runWithRealTimers(() =>
       observer.observe(container, mutationObserverOptions),
     )
+    checkCallback()
 
     function onDone(error, result) {
       clearTimeout(overallTimeoutTimer)
-      clearTimeout(lastTimer)
+      clearInterval(intervalId)
       setImmediate(() => observer.disconnect())
       if (error) {
         reject(error)
@@ -58,21 +58,6 @@ function wait(
     function onTimeout() {
       onDone(lastError || new Error('Timed out in wait.'), null)
     }
-
-    function startTimer() {
-      lastTimer = setTimeout(() => {
-        tries++
-        checkCallback()
-        if (tries > maxTries) {
-          onTimeout()
-          return
-        }
-        startTimer()
-      }, interval)
-    }
-
-    checkCallback()
-    startTimer()
   })
 }
 
