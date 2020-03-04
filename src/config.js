@@ -19,9 +19,11 @@ let config = {
 
   // called when getBy* queries fail. (message, container) => Error
   getElementError(message, container) {
-    return new Error(
+    const error = new Error(
       [message, prettyDOM(container)].filter(Boolean).join('\n\n'),
     )
+    error.name = 'TestingLibraryElementError'
+    return error
   },
 }
 

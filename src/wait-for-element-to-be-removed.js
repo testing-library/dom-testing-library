@@ -24,11 +24,7 @@ async function waitForElementToBeRemoved(callback, options) {
     try {
       result = callback()
     } catch (error) {
-      if (error.message && error.message.startsWith('Unable to find')) {
-        // All of our get* queries throw an error that starts with "Unable to find"
-        // when it fails to find an element.
-        // TODO: make the queries throw a special kind of error
-        // so we can be more explicit about the check.
+      if (error.name === 'TestingLibraryElementError') {
         return true
       }
       throw error
