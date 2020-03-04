@@ -2,22 +2,30 @@ import {waitFor} from './wait-for'
 
 const isRemoved = result => !result || (Array.isArray(result) && !result.length)
 
-async function waitForElementToBeRemoved(callback, options) {
-  if (!callback) {
-    return Promise.reject(
-      new Error(
-        'waitForElementToBeRemoved requires a callback as the first parameter',
-      ),
+// Check if the element is not present.
+// As the name implies, waitForElementToBeRemoved should check `present` --> `removed`
+function initialCheck(elements) {
+  if (isRemoved(elements)) {
+    throw new Error(
+      'The element(s) given to waitForElementToBeRemoved are already removed. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal.',
     )
+  }
+}
+
+async function waitForElementToBeRemoved(callback, options) {
+  if (typeof callback !== 'function') {
+    // await waitForElementToBeRemoved(getAllByText('Hello'))
+    initialCheck(callback)
+    const elements = Array.isArray(callback) ? callback : [callback]
+    const getRemainingElements = elements.map(element => {
+      let parent = element.parentElement
+      while (parent.parentElement) parent = parent.parentElement
+      return () => (parent.contains(element) ? element : null)
+    })
+    callback = () => getRemainingElements.map(c => c()).filter(Boolean)
   }
 
-  // Check if the element is not present synchronously,
-  // As the name implies, waitForElementToBeRemoved should check `present` --> `removed`
-  if (isRemoved(callback())) {
-    throw new Error(
-      'The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal.',
-    )
-  }
+  initialCheck(callback())
 
   return waitFor(() => {
     let result
