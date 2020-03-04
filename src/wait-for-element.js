@@ -8,7 +8,6 @@ let hasWarned = false
 async function waitForElement(callback, options) {
   if (!hasWarned) {
     hasWarned = true
-    // eslint-disable-next-line no-console
     console.warn(
       `\`waitForElement\` has been deprecated. Use \`wait\` instead (it's the same API, so you can find/replace): https://testing-library.com/docs/dom-testing-library/api-async#wait`,
     )

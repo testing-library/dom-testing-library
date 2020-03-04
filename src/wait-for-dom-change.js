@@ -25,7 +25,6 @@ function waitForDomChange({
 } = {}) {
   if (!hasWarned) {
     hasWarned = true
-    // eslint-disable-next-line no-console
     console.warn(
       `\`waitForDomChange\` has been deprecated. Use \`wait\` instead: https://testing-library.com/docs/dom-testing-library/api-async#wait.`,
     )

@@ -176,5 +176,3 @@ export {
   prettyRoles,
   isInaccessible,
 }
-
-/* eslint no-console:0 */
