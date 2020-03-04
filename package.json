@@ -40,21 +40,21 @@
     "dist"
   ],
   "dependencies": {
-    "@babel/runtime": "^7.6.2",
+    "@babel/runtime": "^7.8.4",
     "@sheerun/mutationobserver-shim": "^0.3.2",
-    "@types/testing-library__dom": "^6.0.0",
-    "aria-query": "^4.0.1",
+    "@types/testing-library__dom": "^6.12.1",
+    "aria-query": "^4.0.2",
     "dom-accessibility-api": "^0.3.0",
-    "pretty-format": "^24.9.0",
-    "wait-for-expect": "^3.0.0"
+    "pretty-format": "^25.1.0",
+    "wait-for-expect": "^3.0.2"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^4.1.0",
+    "@testing-library/jest-dom": "^5.1.1",
     "jest-in-case": "^1.0.2",
     "jest-serializer-ansi": "^1.0.3",
-    "jest-watch-select-projects": "^1.0.0",
-    "jsdom": "^15.2.1",
-    "kcd-scripts": "^5.0.0"
+    "jest-watch-select-projects": "^2.0.0",
+    "jsdom": "^16.2.0",
+    "kcd-scripts": "^5.4.0"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",
