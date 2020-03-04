@@ -49,7 +49,7 @@ test('requires a function as the first parameter', () => {
   return expect(
     waitForElementToBeRemoved(),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"waitForElementToBeRemoved requires a function as the first parameter"`,
+    `"waitForElementToBeRemoved requires a callback as the first parameter"`,
   )
 })
 
@@ -57,7 +57,7 @@ test('requires an element to exist first', () => {
   return expect(
     waitForElementToBeRemoved(() => null),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal."`,
+    `"The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
   )
 })
 
@@ -65,7 +65,7 @@ test('requires an unempty array of elements to exist first', () => {
   return expect(
     waitForElementToBeRemoved(() => []),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal."`,
+    `"The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
   )
 })
 
@@ -116,4 +116,19 @@ test("doesn't change jest's timers value when importing the module", () => {
   importModule()
 
   expect(window.setTimeout._isMockFunction).toEqual(true)
+})
+
+test('rethrows non-testing-lib errors', () => {
+  let throwIt = false
+  const div = document.createElement('div')
+  const error = new Error('my own error')
+  return expect(
+    waitForElementToBeRemoved(() => {
+      if (throwIt) {
+        throw error
+      }
+      throwIt = true
+      return div
+    }),
+  ).rejects.toBe(error)
 })

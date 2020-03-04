@@ -5,7 +5,7 @@ import {prettyDOM} from './pretty-dom'
 // './queries' are query functions.
 let config = {
   testIdAttribute: 'data-testid',
-  asyncUtilTimeout: 4500,
+  asyncUtilTimeout: 1000,
   // this is to support React's async `act` function.
   // forcing react-testing-library to wrap all async functions would've been
   // a total nightmare (consider wrapping every findBy* query and then also
@@ -19,9 +19,11 @@ let config = {
 
   // called when getBy* queries fail. (message, container) => Error
   getElementError(message, container) {
-    return new Error(
+    const error = new Error(
       [message, prettyDOM(container)].filter(Boolean).join('\n\n'),
     )
+    error.name = 'TestingLibraryElementError'
+    return error
   },
 }
 

@@ -45,8 +45,7 @@
     "@types/testing-library__dom": "^6.12.1",
     "aria-query": "^4.0.2",
     "dom-accessibility-api": "^0.3.0",
-    "pretty-format": "^25.1.0",
-    "wait-for-expect": "^3.0.2"
+    "pretty-format": "^25.1.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.1.1",
@@ -61,7 +60,8 @@
     "rules": {
       "import/prefer-default-export": "off",
       "import/no-unassigned-import": "off",
-      "import/no-useless-path-segments": "off"
+      "import/no-useless-path-segments": "off",
+      "no-console": "off"
     }
   },
   "eslintIgnore": [

@@ -77,5 +77,3 @@ describe('prettyDOM fails with first parameter without outerHTML field', () => {
     )
   })
 })
-
-/* eslint no-console:0 */
