@@ -46,9 +46,10 @@ function queryAllByLabelText(
     normalizer: matchNormalizer,
   })
   const labelledElements = labels
-    .map(label => {
+    .reduce((matchedElements, label) => {
+      const elementsForLabel = []
       if (label.control) {
-        return label.control
+        elementsForLabel.push(label.control)
       }
       /* istanbul ignore if */
       if (label.getAttribute('for')) {
@@ -57,21 +58,27 @@ function queryAllByLabelText(
         // <label for="someId">text</label><input id="someId" />
 
         // .control support has landed in jsdom (https://github.com/jsdom/jsdom/issues/2175)
-        return container.querySelector(`[id="${label.getAttribute('for')}"]`)
+        elementsForLabel.push(
+          container.querySelector(`[id="${label.getAttribute('for')}"]`),
+        )
       }
       if (label.getAttribute('id')) {
         // <label id="someId">text</label><input aria-labelledby="someId" />
-        return container.querySelector(
-          `[aria-labelledby~="${label.getAttribute('id')}"]`,
-        )
+        container
+          .querySelectorAll(`[aria-labelledby~="${label.getAttribute('id')}"]`)
+          .forEach(element => elementsForLabel.push(element))
       }
       if (label.childNodes.length) {
         // <label>text: <input /></label>
-        return label.querySelector(selector)
+        const formControlSelector =
+          'button, input, meter, output, progress, select, textarea'
+        label
+          .querySelectorAll(formControlSelector)
+          .forEach(element => elementsForLabel.push(element))
       }
-      return null
-    })
-    .filter(label => label !== null)
+      return matchedElements.concat(elementsForLabel)
+    }, [])
+    .filter(element => element !== null)
     .concat(queryAllByAttribute('aria-label', container, text, {exact}))
 
   const possibleAriaLabelElements = queryAllByText(container, text, {
@@ -95,7 +102,9 @@ function queryAllByLabelText(
     [],
   )
 
-  return Array.from(new Set([...labelledElements, ...ariaLabelledElements]))
+  return Array.from(
+    new Set([...labelledElements, ...ariaLabelledElements]),
+  ).filter(element => element.matches(selector))
 }
 
 // the getAll* query would normally look like this:
