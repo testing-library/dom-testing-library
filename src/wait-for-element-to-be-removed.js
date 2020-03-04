@@ -15,7 +15,7 @@ async function waitForElementToBeRemoved(callback, options) {
   // As the name implies, waitForElementToBeRemoved should check `present` --> `removed`
   if (isRemoved(callback())) {
     throw new Error(
-      'The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal.',
+      'The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal.',
     )
   }
 
