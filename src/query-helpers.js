@@ -1,18 +1,9 @@
-import {prettyDOM} from './pretty-dom'
 import {fuzzyMatches, matches, makeNormalizer} from './matches'
 import {waitForElement} from './wait-for-element'
 import {getConfig} from './config'
 
-function getElementError(message, container) {
-  const customGetElementError = getConfig().customGetElementError
-  if (customGetElementError) {
-    return customGetElementError(message, container)
-  }
-  return new Error([message, prettyDOM(container)].filter(Boolean).join('\n\n'))
-}
-
 function getMultipleElementsFoundError(message, container) {
-  return getElementError(
+  return getConfig().getElementError(
     `${message}\n\n(If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).`,
     container,
   )
@@ -64,7 +55,10 @@ function makeGetAllQuery(allQuery, getMissingError) {
   return (container, ...args) => {
     const els = allQuery(container, ...args)
     if (!els.length) {
-      throw getElementError(getMissingError(container, ...args), container)
+      throw getConfig().getElementError(
+        getMissingError(container, ...args),
+        container,
+      )
     }
     return els
   }
@@ -91,7 +85,6 @@ function buildQueries(queryAllBy, getMultipleError, getMissingError) {
 }
 
 export {
-  getElementError,
   getMultipleElementsFoundError,
   queryAllByAttribute,
   queryByAttribute,

@@ -1,3 +1,5 @@
+import {prettyDOM} from './pretty-dom'
+
 // It would be cleaner for this to live inside './queries', but
 // other parts of the code assume that all exports from
 // './queries' are query functions.
@@ -16,7 +18,11 @@ let config = {
   defaultHidden: false,
 
   // called when getBy* queries fail. (message, container) => Error
-  customGetElementError: null,
+  getElementError(message, container) {
+    return new Error(
+      [message, prettyDOM(container)].filter(Boolean).join('\n\n'),
+    )
+  },
 }
 
 export function configure(newConfig) {

@@ -47,15 +47,15 @@ cases(
 )
 
 test.each([['getByText'], ['getByLabelText']])(
-  '%s query will throw the custom error returned by config.customGetElementError',
+  '%s query will throw the custom error returned by config.getElementError',
   query => {
-    const customGetElementError = jest.fn(
+    const getElementError = jest.fn(
       (message, _container) => new Error(`My custom error: ${message}`),
     )
-    configure({customGetElementError})
+    configure({getElementError})
     document.body.innerHTML = '<div>Hello</div>'
     expect(() => screen[query]('TEST QUERY')).toThrowErrorMatchingSnapshot()
-    expect(customGetElementError).toBeCalledTimes(1)
+    expect(getElementError).toBeCalledTimes(1)
   },
 )
 
