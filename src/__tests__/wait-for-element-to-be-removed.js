@@ -49,7 +49,7 @@ test('requires an element to exist first', () => {
   return expect(
     waitForElementToBeRemoved(null),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
+    `"The element(s) given to waitForElementToBeRemoved are already removed. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
   )
 })
 
@@ -57,7 +57,7 @@ test('requires an unempty array of elements to exist first', () => {
   return expect(
     waitForElementToBeRemoved([]),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
+    `"The element(s) given to waitForElementToBeRemoved are already removed. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
   )
 })
 
@@ -65,7 +65,7 @@ test('requires an element to exist first (function form)', () => {
   return expect(
     waitForElementToBeRemoved(() => null),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
+    `"The element(s) given to waitForElementToBeRemoved are already removed. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
   )
 })
 
@@ -73,7 +73,7 @@ test('requires an unempty array of elements to exist first (function form)', () 
   return expect(
     waitForElementToBeRemoved(() => []),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
+    `"The element(s) given to waitForElementToBeRemoved are already removed. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
   )
 })
 

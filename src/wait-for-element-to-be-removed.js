@@ -7,7 +7,7 @@ const isRemoved = result => !result || (Array.isArray(result) && !result.length)
 function initialCheck(elements) {
   if (isRemoved(elements)) {
     throw new Error(
-      'The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal.',
+      'The element(s) given to waitForElementToBeRemoved are already removed. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal.',
     )
   }
 }
