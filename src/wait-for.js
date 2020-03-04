@@ -1,5 +1,5 @@
 import {
-  newMutationObserver,
+  getWindowFromNode,
   getDocument,
   setImmediate,
   setTimeout,
@@ -28,7 +28,8 @@ function waitFor(
     const overallTimeoutTimer = setTimeout(onTimeout, timeout)
     const intervalId = setInterval(checkCallback, interval)
 
-    const observer = newMutationObserver(checkCallback)
+    const {MutationObserver} = getWindowFromNode(container)
+    const observer = new MutationObserver(checkCallback)
     runWithRealTimers(() =>
       observer.observe(container, mutationObserverOptions),
     )

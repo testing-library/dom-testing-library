@@ -41,7 +41,6 @@
   ],
   "dependencies": {
     "@babel/runtime": "^7.8.4",
-    "@sheerun/mutationobserver-shim": "^0.3.2",
     "@types/testing-library__dom": "^6.12.1",
     "aria-query": "^4.0.2",
     "dom-accessibility-api": "^0.3.0",

@@ -1,5 +1,5 @@
 import {
-  newMutationObserver,
+  getWindowFromNode,
   getDocument,
   setImmediate,
   setTimeout,
@@ -31,7 +31,8 @@ function waitForDomChange({
   }
   return new Promise((resolve, reject) => {
     const timer = setTimeout(onTimeout, timeout)
-    const observer = newMutationObserver(onMutation)
+    const {MutationObserver} = getWindowFromNode(container)
+    const observer = new MutationObserver(onMutation)
     runWithRealTimers(() =>
       observer.observe(container, mutationObserverOptions),
     )
