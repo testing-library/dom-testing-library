@@ -1,7 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`logRoles calls console.log with output from prettyRoles 1`] = `
-"link:
+"region:
+
+Name "a region":
+<section
+  aria-label="a region"
+  data-testid="named-section"
+/>
+
+--------------------------------------------------
+link:
 
 Name "link":
 <a
@@ -145,6 +154,15 @@ Name "Cell 2":
 Name "Cell 3":
 <td
   data-testid="a-cell-3"
+/>
+
+--------------------------------------------------
+form:
+
+Name "a form":
+<form
+  aria-label="a form"
+  data-testid="named-form"
 />
 
 --------------------------------------------------
