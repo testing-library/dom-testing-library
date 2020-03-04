@@ -146,14 +146,12 @@ function prettyRoles(dom, {hidden, includeName}) {
     .map(([role, elements]) => {
       const delimiterBar = '-'.repeat(50)
       const elementsString = elements
-        .map(
-          el =>
-            `${
-              includeName === true
-                ? `Name "${computeAccessibleName(el)}":\n`
-                : ''
-            }${prettyDOM(el.cloneNode(false))}`,
-        )
+        .map(el => {
+          const nameString =
+            includeName === true ? `Name "${computeAccessibleName(el)}":\n` : ''
+          const domString = prettyDOM(el.cloneNode(false))
+          return `${nameString}${domString}`
+        })
         .join('\n\n')
 
       return `${role}:\n\n${elementsString}\n\n${delimiterBar}`
