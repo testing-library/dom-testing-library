@@ -64,17 +64,19 @@ function queryAllByLabelText(
       }
       if (label.getAttribute('id')) {
         // <label id="someId">text</label><input aria-labelledby="someId" />
-        container
-          .querySelectorAll(`[aria-labelledby~="${label.getAttribute('id')}"]`)
-          .forEach(element => elementsForLabel.push(element))
+        Array.from(
+          container.querySelectorAll(
+            `[aria-labelledby~="${label.getAttribute('id')}"]`,
+          ),
+        ).forEach(element => elementsForLabel.push(element))
       }
       if (label.childNodes.length) {
         // <label>text: <input /></label>
         const formControlSelector =
           'button, input, meter, output, progress, select, textarea'
-        label
-          .querySelectorAll(formControlSelector)
-          .forEach(element => elementsForLabel.push(element))
+        Array.from(
+          label.querySelectorAll(formControlSelector),
+        ).forEach(element => elementsForLabel.push(element))
       }
       return matchedElements.concat(elementsForLabel)
     }, [])
