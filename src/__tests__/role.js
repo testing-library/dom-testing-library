@@ -214,8 +214,7 @@ test('can be filtered by accessible name', () => {
   expect(deliveryForm).not.toBeNull()
 
   expect(
-    // TODO: upstream bug in `aria-query`; should be `button` role
-    getQueriesForElement(deliveryForm).getByRole('textbox', {name: 'Submit'}),
+    getQueriesForElement(deliveryForm).getByRole('button', {name: 'Submit'}),
   ).not.toBeNull()
 
   const invoiceForm = getByRole('form', {name: 'Delivery Adress'})
@@ -229,11 +228,9 @@ test('can be filtered by accessible name', () => {
 test('accessible name comparison is case sensitive', () => {
   const {getByRole} = render(`<h1>Sign <em>up</em></h1>`)
 
-  // actual:  "Sign up",
-  // queried: "Sign Up"
-  expect(() => getByRole('heading', {name: 'Sign Up'}))
+  expect(() => getByRole('heading', {name: 'something that does not match'}))
     .toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "heading" and name "Sign Up"
+"Unable to find an accessible element with the role "heading" and name "something that does not match"
 
 Here are the accessible roles:
 
@@ -277,9 +274,9 @@ test('accessible name filter implements TextMatch', () => {
 test('TextMatch serialization in error message', () => {
   const {getByRole} = render(`<h1>Sign <em>up</em></h1>`)
 
-  expect(() => getByRole('heading', {name: /Login/}))
+  expect(() => getByRole('heading', {name: /something that does not match/}))
     .toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "heading" and name \`/Login/\`
+"Unable to find an accessible element with the role "heading" and name \`/something that does not match/\`
 
 Here are the accessible roles:
 
