@@ -117,3 +117,18 @@ test("doesn't change jest's timers value when importing the module", () => {
 
   expect(window.setTimeout._isMockFunction).toEqual(true)
 })
+
+test('rethrows non-testing-lib errors', () => {
+  let throwIt = false
+  const div = document.createElement('div')
+  const error = new Error('my own error')
+  return expect(
+    waitForElementToBeRemoved(() => {
+      if (throwIt) {
+        throw error
+      }
+      throwIt = true
+      return div
+    }),
+  ).rejects.toBe(error)
+})
