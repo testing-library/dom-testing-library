@@ -45,27 +45,35 @@ test('resolves on mutation if callback throws an error', async () => {
   await waitForElementToBeRemoved(() => getByTestId('div'), {timeout: 100})
 })
 
-test('requires a function as the first parameter', () => {
-  return expect(
-    waitForElementToBeRemoved(),
-  ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"waitForElementToBeRemoved requires a callback as the first parameter"`,
-  )
-})
-
 test('requires an element to exist first', () => {
   return expect(
-    waitForElementToBeRemoved(() => null),
+    waitForElementToBeRemoved(null),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
+    `"The element(s) given to waitForElementToBeRemoved are already removed. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
   )
 })
 
 test('requires an unempty array of elements to exist first', () => {
   return expect(
+    waitForElementToBeRemoved([]),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"The element(s) given to waitForElementToBeRemoved are already removed. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
+  )
+})
+
+test('requires an element to exist first (function form)', () => {
+  return expect(
+    waitForElementToBeRemoved(() => null),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"The element(s) given to waitForElementToBeRemoved are already removed. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
+  )
+})
+
+test('requires an unempty array of elements to exist first (function form)', () => {
+  return expect(
     waitForElementToBeRemoved(() => []),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
+    `"The element(s) given to waitForElementToBeRemoved are already removed. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
   )
 })
 
@@ -131,4 +139,38 @@ test('rethrows non-testing-lib errors', () => {
       return div
     }),
   ).rejects.toBe(error)
+})
+
+test('accepts an element as an argument and waits for it to be removed from its top-most parent', async () => {
+  const {queryByTestId} = renderIntoDocument(`
+    <div data-testid="div"></div>
+  `)
+  const div = queryByTestId('div')
+  setTimeout(() => {
+    div.parentElement.removeChild(div)
+  }, 20)
+
+  await waitForElementToBeRemoved(div, {timeout: 200})
+})
+
+test('accepts an array of elements as an argument and waits for those elements to be removed from their top-most parent', async () => {
+  const {queryAllByTestId} = renderIntoDocument(`
+    <div>
+      <div>
+        <div data-testid="div"></div>
+      </div>
+      <div>
+        <div data-testid="div"></div>
+      </div>
+    </div>
+  `)
+  const [div1, div2] = queryAllByTestId('div')
+  setTimeout(() => {
+    div1.parentElement.removeChild(div1)
+  }, 20)
+
+  setTimeout(() => {
+    div2.parentElement.removeChild(div2)
+  }, 50)
+  await waitForElementToBeRemoved([div1, div2], {timeout: 200})
 })
