@@ -25,3 +25,17 @@ expect.addSnapshotSerializer({
     )
   },
 })
+
+beforeAll(() => {
+  const originalWarn = console.warn
+  jest.spyOn(console, 'warn').mockImplementation((...args) => {
+    if (args[0] && args[0].includes && args[0].includes('deprecated')) {
+      return
+    }
+    originalWarn(...args)
+  })
+})
+
+afterAll(() => {
+  console.warn.mockRestore()
+})

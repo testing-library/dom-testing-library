@@ -61,5 +61,3 @@ test('exposes debug method', () => {
   `)
   console.log.mockClear()
 })
-
-/* eslint no-console:0 */

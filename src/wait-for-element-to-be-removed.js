@@ -1,85 +1,44 @@
-import {
-  getDocument,
-  newMutationObserver,
-  setImmediate,
-  setTimeout,
-  clearTimeout,
-  runWithRealTimers,
-} from './helpers'
-import {getConfig} from './config'
+import {waitFor} from './wait-for'
 
-function waitForElementToBeRemoved(
-  callback,
-  {
-    container = getDocument(),
-    timeout = getConfig().asyncUtilTimeout,
-    mutationObserverOptions = {
-      subtree: true,
-      childList: true,
-      attributes: true,
-      characterData: true,
-    },
-  } = {},
-) {
-  return new Promise((resolve, reject) => {
-    if (typeof callback !== 'function') {
-      reject(
-        new Error(
-          'waitForElementToBeRemoved requires a function as the first parameter',
-        ),
-      )
-    }
-    const timer = setTimeout(onTimeout, timeout)
-    const observer = newMutationObserver(onMutation)
+const isRemoved = result => !result || (Array.isArray(result) && !result.length)
 
-    // Check if the element is not present synchronously,
-    // As the name waitForElementToBeRemoved should check `present` --> `removed`
+async function waitForElementToBeRemoved(callback, options) {
+  if (!callback) {
+    return Promise.reject(
+      new Error(
+        'waitForElementToBeRemoved requires a callback as the first parameter',
+      ),
+    )
+  }
+
+  // Check if the element is not present synchronously,
+  // As the name implies, waitForElementToBeRemoved should check `present` --> `removed`
+  if (isRemoved(callback())) {
+    throw new Error(
+      'The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal.',
+    )
+  }
+
+  return waitFor(() => {
+    let result
     try {
-      const result = callback()
-      if (!result || (Array.isArray(result) && !result.length)) {
-        onDone(
-          new Error(
-            'The callback function which was passed did not return an element or non-empty array of elements. waitForElementToBeRemoved requires that the element(s) exist before waiting for removal.',
-          ),
-        )
-      } else {
-        // Only observe for mutations only if there is element while checking synchronously
-        runWithRealTimers(() =>
-          observer.observe(container, mutationObserverOptions),
-        )
-      }
+      result = callback()
     } catch (error) {
-      onDone(error)
-    }
-
-    function onDone(error, result) {
-      clearTimeout(timer)
-      setImmediate(() => observer.disconnect())
-      if (error) {
-        reject(error)
-      } else {
-        resolve(result)
+      if (error.name === 'TestingLibraryElementError') {
+        return true
       }
+      throw error
     }
-    function onMutation() {
-      try {
-        const result = callback()
-        if (!result || (Array.isArray(result) && !result.length)) {
-          onDone(null, true)
-        }
-        // If `callback` returns truthy value, wait for the next mutation or timeout.
-      } catch (error) {
-        onDone(null, true)
-      }
+    if (!isRemoved(result)) {
+      throw new Error('Timed out in waitForElementToBeRemoved.')
     }
-    function onTimeout() {
-      onDone(new Error('Timed out in waitForElementToBeRemoved.'), null)
-    }
-  })
+    return true
+  }, options)
 }
 
-function waitForElementToBeRemovedWrapper(...args) {
-  return getConfig().asyncWrapper(() => waitForElementToBeRemoved(...args))
-}
+export {waitForElementToBeRemoved}
 
-export {waitForElementToBeRemovedWrapper as waitForElementToBeRemoved}
+/*
+eslint
+  require-await: "off"
+*/

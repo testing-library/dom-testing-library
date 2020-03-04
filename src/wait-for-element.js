@@ -1,71 +1,32 @@
-import {
-  newMutationObserver,
-  getDocument,
-  setImmediate,
-  setTimeout,
-  clearTimeout,
-  runWithRealTimers,
-} from './helpers'
-import {getConfig} from './config'
+import {waitFor} from './wait-for'
 
-function waitForElement(
-  callback,
-  {
-    container = getDocument(),
-    timeout = getConfig().asyncUtilTimeout,
-    mutationObserverOptions = {
-      subtree: true,
-      childList: true,
-      attributes: true,
-      characterData: true,
-    },
-  } = {},
-) {
-  return new Promise((resolve, reject) => {
-    if (typeof callback !== 'function') {
-      reject(
-        new Error('waitForElement requires a callback as the first parameter'),
-      )
-      return
-    }
-    let lastError
-    const timer = setTimeout(onTimeout, timeout)
+let hasWarned = false
 
-    const observer = newMutationObserver(onMutation)
-    runWithRealTimers(() =>
-      observer.observe(container, mutationObserverOptions),
+// deprecated... TODO: remove this method. People should use a find* query or
+// wait instead the reasoning is that this doesn't really do anything useful
+// that you can't get from using find* or wait.
+async function waitForElement(callback, options) {
+  if (!hasWarned) {
+    hasWarned = true
+    console.warn(
+      `\`waitForElement\` has been deprecated. Use a \`find*\` query (preferred: https://testing-library.com/docs/dom-testing-library/api-queries#findby) or use \`wait\` instead (it's the same API, so you can find/replace): https://testing-library.com/docs/dom-testing-library/api-async#waitfor`,
     )
-    function onDone(error, result) {
-      clearTimeout(timer)
-      setImmediate(() => observer.disconnect())
-      if (error) {
-        reject(error)
-      } else {
-        resolve(result)
-      }
+  }
+  if (!callback) {
+    throw new Error('waitForElement requires a callback as the first parameter')
+  }
+  return waitFor(() => {
+    const result = callback()
+    if (!result) {
+      throw new Error('Timed out in waitForElement.')
     }
-    function onMutation() {
-      try {
-        const result = callback()
-        if (result) {
-          onDone(null, result)
-        }
-        // If `callback` returns falsy value, wait for the next mutation or timeout.
-      } catch (error) {
-        // Save the callback error to reject the promise with it.
-        lastError = error
-        // If `callback` throws an error, wait for the next mutation or timeout.
-      }
-    }
-    function onTimeout() {
-      onDone(lastError || new Error('Timed out in waitForElement.'), null)
-    }
-    onMutation()
-  })
+    return result
+  }, options)
 }
 
-function waitForElementWrapper(...args) {
-  return getConfig().asyncWrapper(() => waitForElement(...args))
-}
+export {waitForElement}
 
-export {waitForElementWrapper as waitForElement}
+/*
+eslint
+  require-await: "off"
+*/

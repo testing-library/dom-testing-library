@@ -8,6 +8,11 @@ import {
 } from './helpers'
 import {getConfig} from './config'
 
+let hasWarned = false
+
+// deprecated... TODO: remove this method. People should use wait instead
+// the reasoning is that waiting for just any DOM change is an implementation
+// detail. People should be waiting for a specific thing to change.
 function waitForDomChange({
   container = getDocument(),
   timeout = getConfig().asyncUtilTimeout,
@@ -18,6 +23,12 @@ function waitForDomChange({
     characterData: true,
   },
 } = {}) {
+  if (!hasWarned) {
+    hasWarned = true
+    console.warn(
+      `\`waitForDomChange\` has been deprecated. Use \`wait\` instead: https://testing-library.com/docs/dom-testing-library/api-async#waitfor.`,
+    )
+  }
   return new Promise((resolve, reject) => {
     const timer = setTimeout(onTimeout, timeout)
     const observer = newMutationObserver(onMutation)
