@@ -16,7 +16,7 @@ afterEach(() => {
 
 function setup() {
   const {getByTestId} = render(`
-<section data-testid='a-section'>
+<section aria-label="a region" data-testid='named-section'>
   <a href="http://whatever.com" data-testid="a-link">link</a>
   <a>invalid link</a>
 
@@ -50,7 +50,7 @@ function setup() {
       </tbody>
     </table>
 
-    <form data-testid='a-form'>
+    <form aria-label="a form" data-testid='named-form'>
       <input type='radio' data-testid='a-radio-1' />
       <input type='radio' data-testid='a-radio-2' />
       <input type='text' data-testid='a-input-1' />
@@ -62,12 +62,16 @@ function setup() {
       <li data-testid='b-list-item-1'>Item 1</li>
       <li data-testid='b-list-item-2'>Item 2</li>
     </ul>
+
+    <form data-testid="a-form" />
+    <section data-testid="a-section" />
    </article>
 </section>
   `)
 
   return {
-    section: getByTestId('a-section'),
+    unnamedSection: getByTestId('a-section'),
+    namedSection: getByTestId('named-section'),
     anchor: getByTestId('a-link'),
     h1: getByTestId('a-h1'),
     h2: getByTestId('a-h2'),
@@ -88,7 +92,8 @@ function setup() {
     td1: getByTestId('a-cell-1'),
     td2: getByTestId('a-cell-2'),
     td3: getByTestId('a-cell-3'),
-    form: getByTestId('a-form'),
+    unnamedForm: getByTestId('a-form'),
+    namedForm: getByTestId('named-form'),
     radio: getByTestId('a-radio-1'),
     radio2: getByTestId('a-radio-2'),
     input: getByTestId('a-input-1'),
@@ -99,7 +104,6 @@ function setup() {
 
 test('getRoles returns expected roles for various dom nodes', () => {
   const {
-    section,
     anchor,
     h1,
     h2,
@@ -120,17 +124,17 @@ test('getRoles returns expected roles for various dom nodes', () => {
     td1,
     td2,
     td3,
-    form,
     radio,
     radio2,
     input,
     input2,
     textarea,
+    namedSection,
+    namedForm,
   } = setup()
 
-  expect(getRoles(section)).toEqual({
+  expect(getRoles(namedSection)).toEqual({
     link: [anchor],
-    region: [section],
     heading: [h1, h2, h3],
     navigation: [nav],
     radio: [radio, radio2],
@@ -140,27 +144,28 @@ test('getRoles returns expected roles for various dom nodes', () => {
     table: [table],
     row: [tr],
     cell: [td1, td2, td3],
-    form: [form],
     textbox: [input, input2, textarea],
     rowgroup: [tbody],
     command: [menuItem, menuItem2],
     menuitem: [menuItem, menuItem2],
+    form: [namedForm],
+    region: [namedSection],
   })
 })
 
 test('logRoles calls console.log with output from prettyRoles', () => {
-  const {section} = setup()
-  logRoles(section)
+  const {namedSection} = setup()
+  logRoles(namedSection)
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchSnapshot()
 })
 
 test('getImplicitAriaRoles returns expected roles for various dom nodes', () => {
-  const {section, h1, form, radio, input} = setup()
+  const {namedSection, h1, unnamedForm, radio, input} = setup()
 
-  expect(getImplicitAriaRoles(section)).toEqual(['region'])
+  expect(getImplicitAriaRoles(namedSection)).toEqual(['region'])
   expect(getImplicitAriaRoles(h1)).toEqual(['heading'])
-  expect(getImplicitAriaRoles(form)).toEqual(['form'])
+  expect(getImplicitAriaRoles(unnamedForm)).toEqual([])
   expect(getImplicitAriaRoles(radio)).toEqual(['radio'])
   expect(getImplicitAriaRoles(input)).toEqual(['textbox'])
 })

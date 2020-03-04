@@ -1,3 +1,4 @@
+import {computeAccessibleName} from 'dom-accessibility-api'
 import {
   getImplicitAriaRoles,
   prettyRoles,
@@ -19,8 +20,10 @@ function queryAllByRole(
     exact = true,
     collapseWhitespace,
     hidden = getConfig().defaultHidden,
+    name,
     trim,
     normalizer,
+    queryFallbacks = false,
   } = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
@@ -40,7 +43,20 @@ function queryAllByRole(
       const isRoleSpecifiedExplicitly = node.hasAttribute('role')
 
       if (isRoleSpecifiedExplicitly) {
-        return matcher(node.getAttribute('role'), node, role, matchNormalizer)
+        const roleValue = node.getAttribute('role')
+        if (queryFallbacks) {
+          return roleValue
+            .split(' ')
+            .filter(Boolean)
+            .some(text => matcher(text, node, role, matchNormalizer))
+        }
+        // if a custom normalizer is passed then let normalizer handle the role value
+        if (normalizer) {
+          return matcher(roleValue, node, role, matchNormalizer)
+        }
+        // other wise only send the first word to match
+        const [firstWord] = roleValue.split(' ')
+        return matcher(firstWord, node, role, matchNormalizer)
       }
 
       const implicitRoles = getImplicitAriaRoles(node)
@@ -56,6 +72,19 @@ function queryAllByRole(
           }) === false
         : true
     })
+    .filter(element => {
+      if (name === undefined) {
+        // Don't care
+        return true
+      }
+
+      return matches(
+        computeAccessibleName(element),
+        element,
+        name,
+        text => text,
+      )
+    })
 }
 
 const getMultipleError = (c, role) =>
@@ -64,9 +93,12 @@ const getMultipleError = (c, role) =>
 const getMissingError = (
   container,
   role,
-  {hidden = getConfig().defaultHidden} = {},
+  {hidden = getConfig().defaultHidden, name} = {},
 ) => {
-  const roles = prettyRoles(container, {hidden})
+  const roles = prettyRoles(container, {
+    hidden,
+    includeName: name !== undefined,
+  })
   let roleMessage
 
   if (roles.length === 0) {
@@ -86,10 +118,19 @@ Here are the ${hidden === false ? 'accessible' : 'available'} roles:
 `.trim()
   }
 
+  let nameHint = ''
+  if (name === undefined) {
+    nameHint = ''
+  } else if (typeof name === 'string') {
+    nameHint = ` and name "${name}"`
+  } else {
+    nameHint = ` and name \`${name}\``
+  }
+
   return `
 Unable to find an ${
     hidden === false ? 'accessible ' : ''
-  }element with the role "${role}"
+  }element with the role "${role}"${nameHint}
 
 ${roleMessage}`.trim()
 }

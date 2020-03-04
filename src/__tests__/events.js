@@ -327,6 +327,17 @@ test('fires events on Window', () => {
   window.removeEventListener('message', messageSpy)
 })
 
+test('fires history popstate event on Window', () => {
+  const popStateSpy = jest.fn()
+  window.addEventListener('popstate', popStateSpy)
+  fireEvent.popState(window, {
+    location: 'http://www.example.com/?page=1',
+    state: {page: 1},
+  })
+  expect(popStateSpy).toHaveBeenCalledTimes(1)
+  window.removeEventListener('popstate', popStateSpy)
+})
+
 test('fires shortcut events on Window', () => {
   const clickSpy = jest.fn()
   window.addEventListener('click', clickSpy)

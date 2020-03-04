@@ -1,5 +1,12 @@
 import cases from 'jest-in-case'
+import {screen} from '../'
+import {configure, getConfig} from '../config'
 import {render} from './helpers/test-utils'
+
+const originalConfig = getConfig()
+beforeEach(() => {
+  configure(originalConfig)
+})
 
 cases(
   'getBy* queries throw an error when there are multiple elements returned',
@@ -28,10 +35,6 @@ cases(
       query: /his/,
       html: `<div title="his"></div><div title="history"></div>`,
     },
-    getByDisplayValue: {
-      query: /his/,
-      html: `<input value="his" /><select><option value="history">history</option></select>`,
-    },
     getByRole: {
       query: /his/,
       html: `<div role="his"></div><div role="history"></div>`,
@@ -40,6 +43,19 @@ cases(
       query: /his/,
       html: `<div data-testid="his"></div><div data-testid="history"></div>`,
     },
+  },
+)
+
+test.each([['getByText'], ['getByLabelText']])(
+  '%s query will throw the custom error returned by config.getElementError',
+  query => {
+    const getElementError = jest.fn(
+      (message, _container) => new Error(`My custom error: ${message}`),
+    )
+    configure({getElementError})
+    document.body.innerHTML = '<div>Hello</div>'
+    expect(() => screen[query]('TEST QUERY')).toThrowErrorMatchingSnapshot()
+    expect(getElementError).toBeCalledTimes(1)
   },
 )
 
@@ -70,10 +86,6 @@ cases(
       query: /his/,
       html: `<div title="his"></div><div title="history"></div>`,
     },
-    queryByDisplayValue: {
-      query: /his/,
-      html: `<input value="his" /><select><option value="history">history</option></select>`,
-    },
     queryByRole: {
       query: /his/,
       html: `<div role="his"></div><div role="history"></div>`,
@@ -84,3 +96,22 @@ cases(
     },
   },
 )
+
+describe('*ByDisplayValue queries throw an error when there are multiple elements returned', () => {
+  test('getByDisplayValue', () => {
+    const {getByDisplayValue} = render(
+      `<input value="his" /><select><option value="history">history</option></select>`,
+    )
+    expect(() => getByDisplayValue(/his/)).toThrow(
+      /multiple elements with the display value:/i,
+    )
+  })
+  test('queryByDisplayValue', () => {
+    const {queryByDisplayValue} = render(
+      `<input value="his" /><select><option value="history">history</option></select>`,
+    )
+    expect(() => queryByDisplayValue(/his/)).toThrow(
+      /multiple elements with the display value:/i,
+    )
+  })
+})

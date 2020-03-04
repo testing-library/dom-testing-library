@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getByLabelText query will throw the custom error returned by config.getElementError 1`] = `"My custom error: Unable to find a label with the text of: TEST QUERY"`;
+
+exports[`getByText query will throw the custom error returned by config.getElementError 1`] = `"My custom error: Unable to find an element with the text: TEST QUERY. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible."`;

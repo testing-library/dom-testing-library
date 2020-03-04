@@ -79,7 +79,7 @@ test('get throws a useful error message', () => {
 `)
   expect(() => getByDisplayValue('LucyRicardo'))
     .toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element with the value: LucyRicardo.
+"Unable to find an element with the display value: LucyRicardo.
 
 <div>
   <div />
@@ -479,7 +479,13 @@ test('queryAllByRole returns semantic html elements', () => {
         </tbody>
       </table>
       <table role="grid"></table>
+      <div role="meter progressbar" />
       <button>Button</button>
+      <select><option value="1">one</option></select>
+      <select size="2">
+        <option value="1">one</option>
+        <option value="2">two</option>
+      </select>
     </form>
   `)
 
@@ -488,18 +494,27 @@ test('queryAllByRole returns semantic html elements', () => {
   expect(queryAllByRole(/columnheader/i)).toHaveLength(1)
   expect(queryAllByRole(/rowheader/i)).toHaveLength(1)
   expect(queryAllByRole(/grid/i)).toHaveLength(1)
-  expect(queryAllByRole(/form/i)).toHaveLength(1)
+  expect(queryAllByRole(/form/i)).toHaveLength(0)
   expect(queryAllByRole(/button/i)).toHaveLength(1)
   expect(queryAllByRole(/heading/i)).toHaveLength(6)
   expect(queryAllByRole('list')).toHaveLength(2)
   expect(queryAllByRole(/listitem/i)).toHaveLength(3)
-  expect(queryAllByRole(/textbox/i)).toHaveLength(2)
+  // TODO: with https://github.com/A11yance/aria-query/pull/42
+  // the actual value will match `toHaveLength(2)`
+  expect(queryAllByRole(/textbox/i)).toHaveLength(1)
   expect(queryAllByRole(/checkbox/i)).toHaveLength(1)
   expect(queryAllByRole(/radio/i)).toHaveLength(1)
   expect(queryAllByRole('row')).toHaveLength(3)
   expect(queryAllByRole(/rowgroup/i)).toHaveLength(2)
-  expect(queryAllByRole(/(table)|(textbox)/i)).toHaveLength(3)
+  // TODO: with https://github.com/A11yance/aria-query/pull/42
+  // the actual value will match `toHaveLength(3)`
+  expect(queryAllByRole(/(table)|(textbox)/i)).toHaveLength(2)
   expect(queryAllByRole(/img/i)).toHaveLength(1)
+  expect(queryAllByRole('meter')).toHaveLength(1)
+  expect(queryAllByRole('progressbar')).toHaveLength(0)
+  expect(queryAllByRole('progressbar', {queryFallbacks: true})).toHaveLength(1)
+  expect(queryAllByRole('combobox')).toHaveLength(1)
+  expect(queryAllByRole('listbox')).toHaveLength(1)
 })
 
 test('getAll* matchers return an array', () => {
@@ -538,6 +553,7 @@ test('getAll* matchers return an array', () => {
         <option value="volvo">Toyota</option>
         <option value="audi">Honda</option>
       </select>
+      <div role="meter progressbar" />
     </div>,
   `)
   expect(getAllByAltText(/finding.*poster$/i)).toHaveLength(2)
@@ -549,6 +565,8 @@ test('getAll* matchers return an array', () => {
   expect(getAllByDisplayValue(/cars$/)).toHaveLength(2)
   expect(getAllByText(/^where/i)).toHaveLength(1)
   expect(getAllByRole(/container/i)).toHaveLength(1)
+  expect(getAllByRole('meter')).toHaveLength(1)
+  expect(getAllByRole('progressbar', {queryFallbacks: true})).toHaveLength(1)
 })
 
 test('getAll* matchers throw for 0 matches', () => {
@@ -725,7 +743,19 @@ test('using jest helpers to check element role', () => {
   expect(getByRole('dialog')).toHaveTextContent('Contents')
 })
 
-test('test the debug helper prints the dom state here', () => {
+test('using jest helpers to check element fallback roles', () => {
+  const {getByRole} = render(`
+    <div role="meter progressbar">
+      <span>Contents</span>
+    </div>
+  `)
+
+  expect(getByRole('progressbar', {queryFallbacks: true})).toHaveTextContent(
+    'Contents',
+  )
+})
+
+test('the debug helper prints the dom state here', () => {
   const originalDebugPrintLimit = process.env.DEBUG_PRINT_LIMIT
   const Large = `<div>
         ${Array.from({length: 7000}, (v, key) => key).map(() => {
@@ -793,7 +823,7 @@ test('get throws a useful error message without DOM in Cypress', () => {
   expect(() =>
     getByDisplayValue('LucyRicardo'),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"Unable to find an element with the value: LucyRicardo."`,
+    `"Unable to find an element with the display value: LucyRicardo."`,
   )
 })
 
@@ -875,6 +905,19 @@ test('get/query textarea element by current value', () => {
 test('can get a textarea with children', () => {
   const {getByLabelText} = renderIntoDocument(`
     <label>Label<textarea>Value</textarea></label>
+  `)
+  getByLabelText('Label')
+})
+
+test('can get a select with options', () => {
+  const {getByLabelText} = renderIntoDocument(`
+    <label>
+      Label
+      <select>
+        <option>Some</option>
+        <option>Options</option>
+      </select>
+    </label>
   `)
   getByLabelText('Label')
 })
