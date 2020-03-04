@@ -9,7 +9,7 @@ import {
 import {getConfig} from './config'
 
 function wait(
-  callback = () => {},
+  callback,
   {
     container = getDocument(),
     timeout = getConfig().asyncUtilTimeout,
@@ -22,6 +22,9 @@ function wait(
     },
   } = {},
 ) {
+  if (!callback) {
+    return Promise.reject(new Error('wait callback is required'))
+  }
   if (interval < 1) interval = 1
   return new Promise((resolve, reject) => {
     let lastError
