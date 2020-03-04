@@ -25,6 +25,12 @@ function queryAllLabelsByText(
       textToMatch = textToMatch.replace(textarea.value, '')
     })
 
+    // The children of a select are also part of `textContent`, so we
+    // need also to remove their text.
+    Array.from(label.querySelectorAll('select')).forEach(select => {
+      textToMatch = textToMatch.replace(select.textContent, '')
+    })
+
     return matcher(textToMatch, label, text, matchNormalizer)
   })
 }
