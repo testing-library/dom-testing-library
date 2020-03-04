@@ -1,8 +1,8 @@
+import {getConfig} from '../config'
 import {
   fuzzyMatches,
   matches,
   makeNormalizer,
-  getElementError,
   queryAllByAttribute,
   makeFindQuery,
   makeSingleQuery,
@@ -104,12 +104,12 @@ function getAllByLabelText(container, text, ...rest) {
   if (!els.length) {
     const labels = queryAllLabelsByText(container, text, ...rest)
     if (labels.length) {
-      throw getElementError(
+      throw getConfig().getElementError(
         `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.`,
         container,
       )
     } else {
-      throw getElementError(
+      throw getConfig().getElementError(
         `Unable to find a label with the text of: ${text}`,
         container,
       )
