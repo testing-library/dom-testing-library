@@ -17,3 +17,14 @@ test('wait defaults to a noop callback', async () => {
   await wait()
   expect(handler).toHaveBeenCalledTimes(1)
 })
+
+test('can timeout after the given timeout time', async () => {
+  const error = new Error('throws every time')
+  const result = await wait(
+    () => {
+      throw error
+    },
+    {timeout: 8, interval: 5},
+  ).catch(e => e)
+  expect(result).toBe(error)
+})

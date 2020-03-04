@@ -24,6 +24,7 @@ jest.useFakeTimers()
 jest.resetModules()
 
 const {
+  wait,
   waitForElement,
   waitForDomChange,
   waitForElementToBeRemoved,
@@ -40,6 +41,15 @@ test('waitForElementToBeRemoved: times out after 4500ms by default', () => {
   )
   jest.advanceTimersByTime(4501)
   return promise
+})
+
+test('wait: can time out', async () => {
+  const promise = wait(() => {
+    // eslint-disable-next-line no-throw-literal
+    throw undefined
+  })
+  jest.advanceTimersByTime(4600)
+  await expect(promise).rejects.toThrow(/timed out/i)
 })
 
 test('waitForElement: can time out', async () => {
@@ -84,4 +94,46 @@ test('waitForDomChange: can specify our own timeout time', async () => {
 
   // timed out
   await expect(promise).rejects.toThrow(/timed out/i)
+})
+
+test('wait: ensures the interval is greater than 0', async () => {
+  // Arrange
+  const spy = jest.fn()
+  spy.mockImplementationOnce(() => {
+    throw new Error('first time does not work')
+  })
+  const promise = wait(spy, {interval: 0})
+  expect(spy).toHaveBeenCalledTimes(1)
+  spy.mockClear()
+
+  // Act
+  // this line will throw an error if wait does not make the interval 1 instead of 0
+  // which is why it does that!
+  jest.advanceTimersByTime(0)
+
+  // Assert
+  expect(spy).toHaveBeenCalledTimes(0)
+  spy.mockImplementationOnce(() => 'second time does work')
+
+  // Act
+  jest.advanceTimersByTime(1)
+  await promise
+
+  // Assert
+  expect(spy).toHaveBeenCalledTimes(1)
+})
+
+test('wait: times out if it runs out of attempts', () => {
+  const spy = jest.fn(() => {
+    throw new Error('example error')
+  })
+  // there's a bug with this rule here...
+  // eslint-disable-next-line jest/valid-expect
+  const promise = expect(
+    wait(spy, {interval: 1, timeout: 3}),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(`"example error"`)
+  jest.advanceTimersByTime(1)
+  jest.advanceTimersByTime(1)
+  jest.advanceTimersByTime(1)
+  return promise
 })

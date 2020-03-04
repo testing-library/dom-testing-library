@@ -184,5 +184,3 @@ test.each([
 
   expect(isInaccessible(container.querySelector('button'))).toBe(expected)
 })
-
-/* eslint no-console:0 */

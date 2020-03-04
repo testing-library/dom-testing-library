@@ -18,7 +18,7 @@ const inNode = () =>
 const getMaxLength = dom =>
   inCypress(dom)
     ? 0
-    : typeof process !== 'undefined' && process.env.DEBUG_PRINT_LIMIT || 7000
+    : (typeof process !== 'undefined' && process.env.DEBUG_PRINT_LIMIT) || 7000
 
 const {DOMElement, DOMCollection} = prettyFormat.plugins
 
@@ -64,5 +64,3 @@ function prettyDOM(dom, maxLength, options) {
 const logDOM = (...args) => console.log(prettyDOM(...args))
 
 export {prettyDOM, logDOM}
-
-/* eslint no-console:0 */
