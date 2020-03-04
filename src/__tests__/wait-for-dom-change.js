@@ -10,6 +10,7 @@ beforeEach(() => {
   jest.useRealTimers()
   jest.resetModules()
   waitForDomChange = importModule()
+  console.warn.mockClear()
 })
 
 test('waits for the dom to change in the document', async () => {
@@ -34,6 +35,13 @@ test('waits for the dom to change in the document', async () => {
       },
     ]
   `)
+  expect(console.warn.mock.calls).toMatchInlineSnapshot(`
+Array [
+  Array [
+    "\`waitForDomChange\` has been deprecated. Use \`wait\` instead: https://testing-library.com/docs/dom-testing-library/api-async#waitfor.",
+  ],
+]
+`)
 })
 
 test('waits for the dom to change in a specified container', async () => {

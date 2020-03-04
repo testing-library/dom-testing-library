@@ -3,7 +3,7 @@ import * as queries from './queries'
 import * as queryHelpers from './query-helpers'
 
 export * from './queries'
-export * from './wait'
+export * from './wait-for'
 export * from './wait-for-element'
 export * from './wait-for-element-to-be-removed'
 export * from './wait-for-dom-change'
