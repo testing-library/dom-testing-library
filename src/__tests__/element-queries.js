@@ -199,7 +199,7 @@ test('can get elements labelled with aria-labelledby attribute', () => {
   expect(getByLabelText('Section One').id).toBe('section-one')
 })
 
-test('can get sibling elements with aria-labelledby attrib ute', () => {
+test('can get sibling elements with aria-labelledby attribute', () => {
   const {getAllByLabelText} = render(`
     <div>
       <svg id="icon" aria-labelledby="icon-desc"></svg>
@@ -210,6 +210,73 @@ test('can get sibling elements with aria-labelledby attrib ute', () => {
   const result = getAllByLabelText('Tacos')
   expect(result).toHaveLength(1)
   expect(result[0].id).toBe('icon')
+})
+
+test('can filter results of label query based on selector', () => {
+  const {getAllByLabelText} = render(`
+    <div>
+      <label id="label1" for="input1">
+        Test Label
+        <input id="input2" />
+      </label>
+      <input id="input1" class="fancy-input" />
+      <span aria-labelledby="label1">Some hint text</span>
+    </div>
+  `)
+
+  const result = getAllByLabelText('Test Label', {selector: '.fancy-input'})
+  expect(result).toHaveLength(1)
+  expect(result[0].id).toBe('input1')
+})
+
+test('can find any form control when label text is inside other elements', () => {
+  const {getAllByLabelText} = render(`
+    <label>
+      <span>Test</span>
+      <span>Label</span>
+      <button />
+      <input />
+      <meter />
+      <output />
+      <progress />
+      <select />
+      <textarea />
+    </label>
+  `)
+
+  const result = getAllByLabelText('Test Label')
+  expect(result).toHaveLength(7)
+})
+
+test('can find non-input elements when aria-labelledby a label', () => {
+  const {getAllByLabelText} = render(`
+    <div>
+      <label id="label1">Test Label</label>
+      <ul aria-labelledby="label1">
+        <li>Hello</li>
+      </ul
+    </div>
+  `)
+
+  const result = getAllByLabelText('Test Label')
+  expect(result).toHaveLength(1)
+  expect(result[0].nodeName).toBe('UL')
+})
+
+test('can find the correct element when there are multiple matching labels', () => {
+  const {getByLabelText} = render(`
+    <label>
+      Test Label
+      <input />
+    </label>
+    <label>
+      Test Label
+      <textarea></textarea>
+    </label>
+  `)
+
+  const result = getByLabelText('Test Label', {selector: 'input'})
+  expect(result.nodeName).toBe('INPUT')
 })
 
 test('get can get form controls by placeholder', () => {
