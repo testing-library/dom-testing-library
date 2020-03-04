@@ -1,3 +1,4 @@
+import {getWindowFromNode} from './helpers'
 const eventMap = {
   // Clipboard Events
   copy: {
@@ -409,25 +410,6 @@ Object.keys(eventMap).forEach(key => {
 
   fireEvent[key] = (node, init) => fireEvent(node, createEvent[key](node, init))
 })
-
-function getWindowFromNode(node) {
-  // istanbul ignore next I'm not sure what could cause the final else so we'll leave it uncovered.
-  if (node.defaultView) {
-    // node is document
-    return node.defaultView
-  } else if (node.ownerDocument && node.ownerDocument.defaultView) {
-    // node is a DOM node
-    return node.ownerDocument.defaultView
-  } else if (node.window) {
-    // node is window
-    return node.window
-  } else {
-    // no idea...
-    throw new Error(
-      `Unable to find the "window" object for the given node. fireEvent currently supports firing events on DOM nodes, document, and window. Please file an issue with the code that's causing you to see this error: https://github.com/testing-library/dom-testing-library/issues/new`,
-    )
-  }
-}
 
 // function written after some investigation here:
 // https://github.com/facebook/react/issues/10135#issuecomment-401496776
