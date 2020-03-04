@@ -139,7 +139,7 @@ function getRoles(container, {hidden = false} = {}) {
     }, {})
 }
 
-function prettyRoles(dom, {hidden, includeName}) {
+function prettyRoles(dom, {hidden}) {
   const roles = getRoles(dom, {hidden})
 
   return Object.entries(roles)
@@ -147,8 +147,7 @@ function prettyRoles(dom, {hidden, includeName}) {
       const delimiterBar = '-'.repeat(50)
       const elementsString = elements
         .map(el => {
-          const nameString =
-            includeName === true ? `Name "${computeAccessibleName(el)}":\n` : ''
+          const nameString = `Name "${computeAccessibleName(el)}":\n`
           const domString = prettyDOM(el.cloneNode(false))
           return `${nameString}${domString}`
         })
@@ -159,8 +158,8 @@ function prettyRoles(dom, {hidden, includeName}) {
     .join('\n')
 }
 
-const logRoles = (dom, {hidden = false, includeName = true} = {}) =>
-  console.log(prettyRoles(dom, {hidden, includeName}))
+const logRoles = (dom, {hidden = false} = {}) =>
+  console.log(prettyRoles(dom, {hidden}))
 
 export {
   getRoles,

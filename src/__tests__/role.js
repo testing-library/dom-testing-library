@@ -11,6 +11,7 @@ Here are the accessible roles:
 
   heading:
 
+  Name "Hi":
   <h1 />
 
   --------------------------------------------------
@@ -33,6 +34,7 @@ Here are the available roles:
 
   heading:
 
+  Name "Hi":
   <h1 />
 
   --------------------------------------------------
@@ -227,7 +229,7 @@ test('can be filtered by accessible name', () => {
 test('accessible name comparison is case sensitive', () => {
   const {getByRole} = render(`<h1>Sign <em>up</em></h1>`)
 
-  // actual:  "Sign up", 
+  // actual:  "Sign up",
   // queried: "Sign Up"
   expect(() => getByRole('heading', {name: 'Sign Up'}))
     .toThrowErrorMatchingInlineSnapshot(`
