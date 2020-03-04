@@ -3,6 +3,7 @@
 exports[`logRoles calls console.log with output from prettyRoles 1`] = `
 "region:
 
+Name "":
 <section
   data-testid="a-section"
 />
@@ -10,6 +11,7 @@ exports[`logRoles calls console.log with output from prettyRoles 1`] = `
 --------------------------------------------------
 link:
 
+Name "link":
 <a
   data-testid="a-link"
   href="http://whatever.com"
@@ -18,6 +20,7 @@ link:
 --------------------------------------------------
 navigation:
 
+Name "":
 <nav
   data-testid="a-nav"
 />
@@ -25,14 +28,17 @@ navigation:
 --------------------------------------------------
 heading:
 
+Name "Main Heading":
 <h1
   data-testid="a-h1"
 />
 
+Name "Sub Heading":
 <h2
   data-testid="a-h2"
 />
 
+Name "Tertiary Heading":
 <h3
   data-testid="a-h3"
 />
@@ -40,6 +46,7 @@ heading:
 --------------------------------------------------
 article:
 
+Name "":
 <article
   data-testid="a-article"
 />
@@ -47,10 +54,12 @@ article:
 --------------------------------------------------
 command:
 
+Name "":
 <menuitem
   data-testid="a-menuitem-1"
 />
 
+Name "":
 <menuitem
   data-testid="a-menuitem-2"
 />
@@ -58,10 +67,12 @@ command:
 --------------------------------------------------
 menuitem:
 
+Name "":
 <menuitem
   data-testid="a-menuitem-1"
 />
 
+Name "":
 <menuitem
   data-testid="a-menuitem-2"
 />
@@ -69,10 +80,12 @@ menuitem:
 --------------------------------------------------
 list:
 
+Name "":
 <ul
   data-testid="a-list"
 />
 
+Name "":
 <ul
   data-testid="b-list"
 />
@@ -80,18 +93,22 @@ list:
 --------------------------------------------------
 listitem:
 
+Name "":
 <li
   data-testid="a-list-item-1"
 />
 
+Name "":
 <li
   data-testid="a-list-item-2"
 />
 
+Name "":
 <li
   data-testid="b-list-item-1"
 />
 
+Name "":
 <li
   data-testid="b-list-item-2"
 />
@@ -99,6 +116,7 @@ listitem:
 --------------------------------------------------
 table:
 
+Name "":
 <table
   data-testid="a-table"
 />
@@ -106,6 +124,7 @@ table:
 --------------------------------------------------
 rowgroup:
 
+Name "":
 <tbody
   data-testid="a-tbody"
 />
@@ -113,6 +132,7 @@ rowgroup:
 --------------------------------------------------
 row:
 
+Name "Cell 1 Cell 2 Cell 3":
 <tr
   data-testid="a-row"
 />
@@ -120,14 +140,17 @@ row:
 --------------------------------------------------
 cell:
 
+Name "Cell 1":
 <td
   data-testid="a-cell-1"
 />
 
+Name "Cell 2":
 <td
   data-testid="a-cell-2"
 />
 
+Name "Cell 3":
 <td
   data-testid="a-cell-3"
 />
@@ -135,6 +158,7 @@ cell:
 --------------------------------------------------
 form:
 
+Name "":
 <form
   data-testid="a-form"
 />
@@ -142,11 +166,13 @@ form:
 --------------------------------------------------
 radio:
 
+Name "":
 <input
   data-testid="a-radio-1"
   type="radio"
 />
 
+Name "":
 <input
   data-testid="a-radio-2"
   type="radio"
@@ -155,16 +181,19 @@ radio:
 --------------------------------------------------
 textbox:
 
+Name "":
 <input
   data-testid="a-input-1"
   type="text"
 />
 
+Name "":
 <input
   data-testid="a-input-2"
   type="text"
 />
 
+Name "":
 <textarea
   data-testid="a-textarea"
 />

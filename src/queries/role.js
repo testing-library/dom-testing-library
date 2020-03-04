@@ -1,3 +1,4 @@
+import {computeAccessibleName} from 'dom-accessibility-api'
 import {
   getImplicitAriaRoles,
   prettyRoles,
@@ -19,6 +20,7 @@ function queryAllByRole(
     exact = true,
     collapseWhitespace,
     hidden = getConfig().defaultHidden,
+    name,
     trim,
     normalizer,
     queryFallbacks = false,
@@ -70,6 +72,19 @@ function queryAllByRole(
           }) === false
         : true
     })
+    .filter(element => {
+      if (name === undefined) {
+        // Don't care
+        return true
+      }
+
+      return matches(
+        computeAccessibleName(element),
+        element,
+        name,
+        text => text,
+      )
+    })
 }
 
 const getMultipleError = (c, role) =>
@@ -78,9 +93,12 @@ const getMultipleError = (c, role) =>
 const getMissingError = (
   container,
   role,
-  {hidden = getConfig().defaultHidden} = {},
+  {hidden = getConfig().defaultHidden, name} = {},
 ) => {
-  const roles = prettyRoles(container, {hidden})
+  const roles = prettyRoles(container, {
+    hidden,
+    includeName: name !== undefined,
+  })
   let roleMessage
 
   if (roles.length === 0) {
@@ -100,10 +118,19 @@ Here are the ${hidden === false ? 'accessible' : 'available'} roles:
 `.trim()
   }
 
+  let nameHint = ''
+  if (name === undefined) {
+    nameHint = ''
+  } else if (typeof name === 'string') {
+    nameHint = ` and name "${name}"`
+  } else {
+    nameHint = ` and name \`${name}\``
+  }
+
   return `
 Unable to find an ${
     hidden === false ? 'accessible ' : ''
-  }element with the role "${role}"
+  }element with the role "${role}"${nameHint}
 
 ${roleMessage}`.trim()
 }
