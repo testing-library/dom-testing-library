@@ -3,7 +3,7 @@ cache: npm
 notifications:
   email: false
 node_js:
-  - 10.18
+  - 10
   - 12
   - node
 install: npm install
