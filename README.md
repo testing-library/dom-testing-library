@@ -236,6 +236,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://twitter.com/xgbuils"><img src="https://avatars2.githubusercontent.com/u/6483614?v=4" width="100px;" alt=""/><br /><sub><b>Xavier Garcia Buils</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=xgbuils" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=xgbuils" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/aw-davidson"><img src="https://avatars2.githubusercontent.com/u/32170938?v=4" width="100px;" alt=""/><br /><sub><b>aw-davidson</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=aw-davidson" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=aw-davidson" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://michaeldeboey.be"><img src="https://avatars3.githubusercontent.com/u/6643991?v=4" width="100px;" alt=""/><br /><sub><b>Michaël De Boey</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=MichaelDeBoey" title="Code">💻</a></td>
+    <td align="center"><a href="https://twitter.com/minh_ngvyen"><img src="https://avatars3.githubusercontent.com/u/2852660?v=4" width="100px;" alt=""/><br /><sub><b>Minh Nguyen</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=NMinhNguyen" title="Code">💻</a></td>
   </tr>
 </table>
 
