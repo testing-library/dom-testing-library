@@ -12,10 +12,9 @@ test('it waits for the data to be loaded', async () => {
 })
 
 test('wait defaults to a noop callback', async () => {
-  const handler = jest.fn()
-  Promise.resolve().then(handler)
-  await wait()
-  expect(handler).toHaveBeenCalledTimes(1)
+  await expect(wait()).rejects.toMatchInlineSnapshot(
+    `[Error: wait callback is required]`,
+  )
 })
 
 test('can timeout after the given timeout time', async () => {
