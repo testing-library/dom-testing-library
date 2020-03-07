@@ -27,3 +27,14 @@ test('can timeout after the given timeout time', async () => {
   ).catch(e => e)
   expect(result).toBe(error)
 })
+
+test('can timeout after the given timeout time', async () => {
+  const error = new Error('throws every time')
+  const result = await wait(
+    () => {
+      throw error
+    },
+    {timeout: 8, interval: 5},
+  ).catch(e => e)
+  expect(result).toBe(error)
+})
