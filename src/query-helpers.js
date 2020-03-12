@@ -1,5 +1,5 @@
 import {fuzzyMatches, matches, makeNormalizer} from './matches'
-import {waitForElement} from './wait-for-element'
+import {waitFor} from './wait-for'
 import {getConfig} from './config'
 
 function getMultipleElementsFoundError(message, container) {
@@ -65,13 +65,10 @@ function makeGetAllQuery(allQuery, getMissingError) {
 }
 
 // this accepts a getter query function and returns a function which calls
-// waitForElement and passing a function which invokes the getter.
+// waitFor and passing a function which invokes the getter.
 function makeFindQuery(getter) {
-  return (container, text, options, waitForElementOptions) =>
-    waitForElement(
-      () => getter(container, text, options),
-      waitForElementOptions,
-    )
+  return (container, text, options, waitForOptions) =>
+    waitFor(() => getter(container, text, options), waitForOptions)
 }
 
 function buildQueries(queryAllBy, getMultipleError, getMissingError) {
