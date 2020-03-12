@@ -18,9 +18,9 @@ export * from './pretty-dom'
 export {configure} from './config'
 
 export {
-  // The original name of bindElementToQueries was weird
-  // The new name is better. Remove this in the next major version bump.
-  getQueriesForElement as bindElementToQueries,
+  // "within" reads better in user-code
+  // "getQueriesForElement" reads better in library code
+  // so we have both
   getQueriesForElement as within,
   // export query utils under a namespace for convenience:
   queries,
