@@ -26,7 +26,7 @@ function waitForDomChange({
   if (!hasWarned) {
     hasWarned = true
     console.warn(
-      `\`waitForDomChange\` has been deprecated. Use \`wait\` instead: https://testing-library.com/docs/dom-testing-library/api-async#waitfor.`,
+      `\`waitForDomChange\` has been deprecated. Use \`waitFor\` instead: https://testing-library.com/docs/dom-testing-library/api-async#waitfor.`,
     )
   }
   return new Promise((resolve, reject) => {

@@ -38,7 +38,7 @@ test('waits for the dom to change in the document', async () => {
   expect(console.warn.mock.calls).toMatchInlineSnapshot(`
 Array [
   Array [
-    "\`waitForDomChange\` has been deprecated. Use \`wait\` instead: https://testing-library.com/docs/dom-testing-library/api-async#waitfor.",
+    "\`waitForDomChange\` has been deprecated. Use \`waitFor\` instead: https://testing-library.com/docs/dom-testing-library/api-async#waitfor.",
   ],
 ]
 `)
