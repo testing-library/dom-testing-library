@@ -141,6 +141,15 @@ test('rethrows non-testing-lib errors', () => {
   ).rejects.toBe(error)
 })
 
+test('logs timeout error when it times out', async () => {
+  const div = document.createElement('div')
+  await expect(
+    waitForElementToBeRemoved(() => div, {timeout: 1}),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"Timed out in waitForElementToBeRemoved."`,
+  )
+})
+
 test('accepts an element as an argument and waits for it to be removed from its top-most parent', async () => {
   const {queryByTestId} = renderIntoDocument(`
     <div data-testid="div"></div>

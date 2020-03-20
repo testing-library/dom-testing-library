@@ -21,3 +21,14 @@ test('can timeout after the given timeout time', async () => {
   ).catch(e => e)
   expect(result).toBe(error)
 })
+
+test('uses generic error if there was no last error', async () => {
+  const result = await waitFor(
+    () => {
+      // eslint-disable-next-line no-throw-literal
+      throw undefined
+    },
+    {timeout: 8, interval: 5},
+  ).catch(e => e)
+  expect(result).toMatchInlineSnapshot(`[Error: Timed out in waitFor.]`)
+})
