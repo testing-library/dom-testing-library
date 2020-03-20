@@ -23,7 +23,7 @@ function waitFor(
   } = {},
 ) {
   // created here so we get a nice stacktrace
-  const timedOutError = new Error('Timed out in wait.')
+  const timedOutError = new Error('Timed out in waitFor.')
   if (interval < 1) interval = 1
   return new Promise((resolve, reject) => {
     let lastError
