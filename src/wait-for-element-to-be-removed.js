@@ -13,8 +13,9 @@ function initialCheck(elements) {
 }
 
 async function waitForElementToBeRemoved(callback, options) {
+  // created here so we get a nice stacktrace
+  const timeoutError = new Error('Timed out in waitForElementToBeRemoved.')
   if (typeof callback !== 'function') {
-    // await waitForElementToBeRemoved(getAllByText('Hello'))
     initialCheck(callback)
     const elements = Array.isArray(callback) ? callback : [callback]
     const getRemainingElements = elements.map(element => {
@@ -38,7 +39,7 @@ async function waitForElementToBeRemoved(callback, options) {
       throw error
     }
     if (!isRemoved(result)) {
-      throw new Error('Timed out in waitForElementToBeRemoved.')
+      throw timeoutError
     }
     return true
   }, options)
