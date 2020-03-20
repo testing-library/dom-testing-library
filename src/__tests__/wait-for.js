@@ -30,5 +30,5 @@ test('uses generic error if there was no last error', async () => {
     },
     {timeout: 8, interval: 5},
   ).catch(e => e)
-  expect(result).toMatchInlineSnapshot(`[Error: Timed out in wait.]`)
+  expect(result).toMatchInlineSnapshot(`[Error: Timed out in waitFor.]`)
 })
