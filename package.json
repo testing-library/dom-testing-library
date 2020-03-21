@@ -20,7 +20,8 @@
   "author": "Kent C. Dodds <me@kentcdodds.com> (https://kentcdodds.com)",
   "license": "MIT",
   "engines": {
-    "node": ">=10"
+    "node": ">=10",
+    "npm": ">=6"
   },
   "scripts": {
     "build": "kcd-scripts build --ignore \"**/__tests__/**,**/__node_tests__/**,**/__mocks__/**\" && kcd-scripts build --bundle --no-clean",
@@ -31,17 +32,12 @@
     "test:update": "npm test -- --updateSnapshot --coverage",
     "validate": "kcd-scripts validate"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "kcd-scripts pre-commit"
-    }
-  },
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@babel/runtime": "^7.8.4",
-    "@types/testing-library__dom": "^6.12.1",
+    "@babel/runtime": "^7.9.2",
+    "@types/testing-library__dom": "^6.14.0",
     "aria-query": "^4.0.2",
     "dom-accessibility-api": "^0.3.0",
     "pretty-format": "^25.1.0"
@@ -51,8 +47,8 @@
     "jest-in-case": "^1.0.2",
     "jest-serializer-ansi": "^1.0.3",
     "jest-watch-select-projects": "^2.0.0",
-    "jsdom": "^16.2.0",
-    "kcd-scripts": "^5.4.0"
+    "jsdom": "^16.2.1",
+    "kcd-scripts": "^5.5.0"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",
