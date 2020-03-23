@@ -36,7 +36,7 @@
   ],
   "dependencies": {
     "@babel/runtime": "^7.9.2",
-    "@types/testing-library__dom": "^6.14.0",
+    "@types/testing-library__dom": "^7.0.0",
     "aria-query": "^4.0.2",
     "dom-accessibility-api": "^0.4.2",
     "pretty-format": "^25.1.0"
