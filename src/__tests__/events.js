@@ -3,7 +3,7 @@ import {fireEvent} from '..'
 const eventTypes = [
   {
     type: 'Clipboard',
-    events: ['copy', 'paste'],
+    events: ['copy', 'cut', 'paste'],
     elementType: 'input',
   },
   {
@@ -137,6 +137,12 @@ const eventTypes = [
   },
 ]
 
+const allEvents = eventTypes
+  .reduce((acc, curr) => {
+    acc.push(...curr.events)
+    return acc
+  }, [])
+
 const bubblingEvents = [
   'copy',
   'cut',
@@ -187,42 +193,57 @@ const bubblingEvents = [
   'pointerOut',
 ]
 
-const nonBubblingEvents = [
+const nonBubblingEvents = allEvents.filter(evt => !bubblingEvents.includes(evt))
+
+const composedEvents = [
+  'copy',
+  'cut',
+  'paste',
+  'compositionEnd',
+  'compositionStart',
+  'compositionUpdate',
+  'keyDown',
+  'keyPress',
+  'keyUp',
   'focus',
   'blur',
-  'invalid',
+  'focusIn',
+  'focusOut',
+  'input',
+  'click',
+  'contextMenu',
+  'dblClick',
+  'drag',
+  'dragEnd',
+  'dragEnter',
+  'dragExit',
+  'dragLeave',
+  'dragOver',
+  'dragStart',
+  'drop',
+  'mouseDown',
   'mouseEnter',
   'mouseLeave',
-  'scroll',
-  'abort',
-  'canPlay',
-  'canPlayThrough',
-  'durationChange',
-  'emptied',
-  'encrypted',
-  'ended',
-  'loadedData',
-  'loadedMetadata',
-  'loadStart',
-  'pause',
-  'play',
-  'playing',
-  'progress',
-  'rateChange',
-  'seeked',
-  'seeking',
-  'stalled',
-  'suspend',
-  'timeUpdate',
-  'volumeChange',
-  'waiting',
-  'load',
-  'error',
+  'mouseMove',
+  'mouseOut',
+  'mouseOver',
+  'mouseUp',
+  'touchCancel',
+  'touchEnd',
+  'touchMove',
+  'touchStart',
+  'wheel',
+  'pointerOver',
   'pointerEnter',
+  'pointerDown',
+  'pointerMove',
+  'pointerUp',
+  'pointerCancel',
+  'pointerOut',
   'pointerLeave',
-  'gotPointerCapture',
-  'lostPointerCapture',
 ]
+
+const nonComposedEvents = allEvents.filter(evt => !composedEvents.includes(evt))
 
 eventTypes.forEach(({type, events, elementType}) => {
   describe(`${type} Events`, () => {
@@ -261,6 +282,40 @@ describe(`Bubbling Events`, () => {
 
       const innerNode = document.createElement('div')
       node.appendChild(innerNode)
+
+      fireEvent[event](innerNode)
+      expect(spy).not.toHaveBeenCalled()
+    }),
+  )
+})
+
+describe(`Composed Events`, () => {
+  composedEvents.forEach(event =>
+    it(`${event} crosses shadow DOM boundary`, () => {
+      const node = document.createElement('div')
+      const spy = jest.fn()
+      node.addEventListener(event.toLowerCase(), spy)
+
+      const shadowRoot = node.attachShadow({ mode: 'open' })
+      const innerNode = document.createElement('div')
+
+      shadowRoot.appendChild(innerNode)
+
+      fireEvent[event](innerNode)
+      expect(spy).toHaveBeenCalledTimes(1)
+    }),
+  )
+
+  nonComposedEvents.forEach(event =>
+    it(`${event} does not cross shadow DOM boundary`, () => {
+      const node = document.createElement('div')
+      const spy = jest.fn()
+      node.addEventListener(event.toLowerCase(), spy)
+
+      const shadowRoot = node.attachShadow({ mode: 'open' })
+      const innerNode = document.createElement('div')
+      
+      shadowRoot.appendChild(innerNode)
 
       fireEvent[event](innerNode)
       expect(spy).not.toHaveBeenCalled()
