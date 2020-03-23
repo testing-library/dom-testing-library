@@ -296,9 +296,8 @@ describe(`Composed Events`, () => {
       const spy = jest.fn()
       node.addEventListener(event.toLowerCase(), spy)
 
-      const shadowRoot = node.attachShadow({ mode: 'open' })
+      const shadowRoot = node.attachShadow({ mode: 'closed' })
       const innerNode = document.createElement('div')
-
       shadowRoot.appendChild(innerNode)
 
       fireEvent[event](innerNode)
@@ -312,9 +311,8 @@ describe(`Composed Events`, () => {
       const spy = jest.fn()
       node.addEventListener(event.toLowerCase(), spy)
 
-      const shadowRoot = node.attachShadow({ mode: 'open' })
+      const shadowRoot = node.attachShadow({ mode: 'closed' })
       const innerNode = document.createElement('div')
-      
       shadowRoot.appendChild(innerNode)
 
       fireEvent[event](innerNode)
