@@ -304,7 +304,7 @@ export const eventMap = {
     },
     pointerEnter: {
       EventType: 'PointerEvent',
-      defaultInit: {bubbles: false, cancelable: false, composed: true},
+      defaultInit: {bubbles: false, cancelable: false},
     },
     pointerDown: {
       EventType: 'PointerEvent',
@@ -328,15 +328,15 @@ export const eventMap = {
     },
     pointerLeave: {
       EventType: 'PointerEvent',
-      defaultInit: {bubbles: false, cancelable: false, composed: true},
+      defaultInit: {bubbles: false, cancelable: false},
     },
     gotPointerCapture: {
       EventType: 'PointerEvent',
-      defaultInit: {bubbles: false, cancelable: false},
+      defaultInit: {bubbles: false, cancelable: false, composed: true},
     },
     lostPointerCapture: {
       EventType: 'PointerEvent',
-      defaultInit: {bubbles: false, cancelable: false},
+      defaultInit: {bubbles: false, cancelable: false, composed: true},
     },
     // history events
     popState: {

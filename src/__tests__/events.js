@@ -232,13 +232,13 @@ const composedEvents = [
   'touchStart',
   'wheel',
   'pointerOver',
-  'pointerEnter',
   'pointerDown',
   'pointerMove',
   'pointerUp',
   'pointerCancel',
   'pointerOut',
-  'pointerLeave',
+  'gotPointerCapture',
+  'lostPointerCapture',
 ]
 
 const nonComposedEvents = allEvents.filter(evt => !composedEvents.includes(evt))
