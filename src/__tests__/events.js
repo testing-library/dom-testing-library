@@ -1,3 +1,4 @@
+import {eventMap, eventAliasMap} from '../event-map'
 import {fireEvent} from '..'
 
 const eventTypes = [
@@ -137,11 +138,7 @@ const eventTypes = [
   },
 ]
 
-const allEvents = eventTypes
-  .reduce((acc, curr) => {
-    acc.push(...curr.events)
-    return acc
-  }, [])
+const allEvents = Object.keys(eventMap)
 
 const bubblingEvents = [
   'copy',
@@ -191,6 +188,7 @@ const bubblingEvents = [
   'pointerUp',
   'pointerCancel',
   'pointerOut',
+  'popState',
 ]
 
 const nonBubblingEvents = allEvents.filter(evt => !bubblingEvents.includes(evt))
@@ -322,12 +320,14 @@ describe(`Composed Events`, () => {
 })
 
 describe(`Aliased Events`, () => {
-  it(`fires doubleClick`, () => {
-    const node = document.createElement('div')
-    const spy = jest.fn()
-    node.addEventListener('dblclick', spy)
-    fireEvent.doubleClick(node)
-    expect(spy).toHaveBeenCalledTimes(1)
+  Object.keys(eventAliasMap).forEach(eventAlias => {
+    it(`fires ${eventAlias}`, () => {
+      const node = document.createElement('div')
+      const spy = jest.fn()
+      node.addEventListener(eventAliasMap[eventAlias].toLowerCase(), spy)
+      fireEvent.doubleClick(node)
+      expect(spy).toHaveBeenCalledTimes(1)
+    })
   })
 })
 
