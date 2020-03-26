@@ -325,7 +325,8 @@ describe(`Aliased Events`, () => {
       const node = document.createElement('div')
       const spy = jest.fn()
       node.addEventListener(eventAliasMap[eventAlias].toLowerCase(), spy)
-      fireEvent.doubleClick(node)
+      
+      fireEvent[eventAlias](node)
       expect(spy).toHaveBeenCalledTimes(1)
     })
   })
