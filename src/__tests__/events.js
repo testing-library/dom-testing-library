@@ -1,9 +1,10 @@
+import {eventMap, eventAliasMap} from '../event-map'
 import {fireEvent} from '..'
 
 const eventTypes = [
   {
     type: 'Clipboard',
-    events: ['copy', 'paste'],
+    events: ['copy', 'cut', 'paste'],
     elementType: 'input',
   },
   {
@@ -137,92 +138,19 @@ const eventTypes = [
   },
 ]
 
-const bubblingEvents = [
-  'copy',
-  'cut',
-  'paste',
-  'compositionEnd',
-  'compositionStart',
-  'compositionUpdate',
-  'keyDown',
-  'keyPress',
-  'keyUp',
-  'focusIn',
-  'focusOut',
-  'change',
-  'input',
-  'submit',
-  'reset',
-  'click',
-  'contextMenu',
-  'dblClick',
-  'drag',
-  'dragEnd',
-  'dragEnter',
-  'dragExit',
-  'dragLeave',
-  'dragOver',
-  'dragStart',
-  'drop',
-  'mouseDown',
-  'mouseMove',
-  'mouseOut',
-  'mouseOver',
-  'mouseUp',
-  'select',
-  'touchCancel',
-  'touchEnd',
-  'touchMove',
-  'touchStart',
-  'wheel',
-  'animationStart',
-  'animationEnd',
-  'animationIteration',
-  'transitionEnd',
-  'pointerOver',
-  'pointerDown',
-  'pointerMove',
-  'pointerUp',
-  'pointerCancel',
-  'pointerOut',
-]
+const allEvents = Object.keys(eventMap)
 
-const nonBubblingEvents = [
-  'focus',
-  'blur',
-  'invalid',
-  'mouseEnter',
-  'mouseLeave',
-  'scroll',
-  'abort',
-  'canPlay',
-  'canPlayThrough',
-  'durationChange',
-  'emptied',
-  'encrypted',
-  'ended',
-  'loadedData',
-  'loadedMetadata',
-  'loadStart',
-  'pause',
-  'play',
-  'playing',
-  'progress',
-  'rateChange',
-  'seeked',
-  'seeking',
-  'stalled',
-  'suspend',
-  'timeUpdate',
-  'volumeChange',
-  'waiting',
-  'load',
-  'error',
-  'pointerEnter',
-  'pointerLeave',
-  'gotPointerCapture',
-  'lostPointerCapture',
-]
+const bubblingEvents = allEvents
+  .filter(eventName => eventMap[eventName].defaultInit.bubbles)
+
+const composedEvents = allEvents
+  .filter(eventName => eventMap[eventName].defaultInit.composed)
+
+const nonBubblingEvents = allEvents
+  .filter(eventName => !bubblingEvents.includes(eventName))
+
+const nonComposedEvents = allEvents
+  .filter(eventName => !composedEvents.includes(eventName))
 
 eventTypes.forEach(({type, events, elementType}) => {
   describe(`${type} Events`, () => {
@@ -268,13 +196,48 @@ describe(`Bubbling Events`, () => {
   )
 })
 
+describe(`Composed Events`, () => {
+  composedEvents.forEach(event =>
+    it(`${event} crosses shadow DOM boundary`, () => {
+      const node = document.createElement('div')
+      const spy = jest.fn()
+      node.addEventListener(event.toLowerCase(), spy)
+
+      const shadowRoot = node.attachShadow({ mode: 'closed' })
+      const innerNode = document.createElement('div')
+      shadowRoot.appendChild(innerNode)
+
+      fireEvent[event](innerNode)
+      expect(spy).toHaveBeenCalledTimes(1)
+    }),
+  )
+
+  nonComposedEvents.forEach(event =>
+    it(`${event} does not cross shadow DOM boundary`, () => {
+      const node = document.createElement('div')
+      const spy = jest.fn()
+      node.addEventListener(event.toLowerCase(), spy)
+
+      const shadowRoot = node.attachShadow({ mode: 'closed' })
+      const innerNode = document.createElement('div')
+      shadowRoot.appendChild(innerNode)
+
+      fireEvent[event](innerNode)
+      expect(spy).not.toHaveBeenCalled()
+    }),
+  )
+})
+
 describe(`Aliased Events`, () => {
-  it(`fires doubleClick`, () => {
-    const node = document.createElement('div')
-    const spy = jest.fn()
-    node.addEventListener('dblclick', spy)
-    fireEvent.doubleClick(node)
-    expect(spy).toHaveBeenCalledTimes(1)
+  Object.keys(eventAliasMap).forEach(eventAlias => {
+    it(`fires ${eventAlias}`, () => {
+      const node = document.createElement('div')
+      const spy = jest.fn()
+      node.addEventListener(eventAliasMap[eventAlias].toLowerCase(), spy)
+      
+      fireEvent[eventAlias](node)
+      expect(spy).toHaveBeenCalledTimes(1)
+    })
   })
 })
 
