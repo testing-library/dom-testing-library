@@ -239,6 +239,9 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://twitter.com/minh_ngvyen"><img src="https://avatars3.githubusercontent.com/u/2852660?v=4" width="100px;" alt=""/><br /><sub><b>Minh Nguyen</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=NMinhNguyen" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/egilsster"><img src="https://avatars0.githubusercontent.com/u/5672257?v=4" width="100px;" alt=""/><br /><sub><b>Egill Sveinbjörnsson</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=egilsster" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="http://pustovalov.dev"><img src="https://avatars2.githubusercontent.com/u/1568885?v=4" width="100px;" alt=""/><br /><sub><b>Pavel Pustovalov</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=pustovalov" title="Documentation">📖</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
