@@ -140,108 +140,17 @@ const eventTypes = [
 
 const allEvents = Object.keys(eventMap)
 
-const bubblingEvents = [
-  'copy',
-  'cut',
-  'paste',
-  'compositionEnd',
-  'compositionStart',
-  'compositionUpdate',
-  'keyDown',
-  'keyPress',
-  'keyUp',
-  'focusIn',
-  'focusOut',
-  'change',
-  'input',
-  'submit',
-  'reset',
-  'click',
-  'contextMenu',
-  'dblClick',
-  'drag',
-  'dragEnd',
-  'dragEnter',
-  'dragExit',
-  'dragLeave',
-  'dragOver',
-  'dragStart',
-  'drop',
-  'mouseDown',
-  'mouseMove',
-  'mouseOut',
-  'mouseOver',
-  'mouseUp',
-  'select',
-  'touchCancel',
-  'touchEnd',
-  'touchMove',
-  'touchStart',
-  'wheel',
-  'animationStart',
-  'animationEnd',
-  'animationIteration',
-  'transitionEnd',
-  'pointerOver',
-  'pointerDown',
-  'pointerMove',
-  'pointerUp',
-  'pointerCancel',
-  'pointerOut',
-  'popState',
-]
+const bubblingEvents = allEvents
+  .filter(eventName => eventMap[eventName].defaultInit.bubbles)
 
-const nonBubblingEvents = allEvents.filter(evt => !bubblingEvents.includes(evt))
+const composedEvents = allEvents
+  .filter(eventName => eventMap[eventName].defaultInit.composed)
 
-const composedEvents = [
-  'copy',
-  'cut',
-  'paste',
-  'compositionEnd',
-  'compositionStart',
-  'compositionUpdate',
-  'keyDown',
-  'keyPress',
-  'keyUp',
-  'focus',
-  'blur',
-  'focusIn',
-  'focusOut',
-  'input',
-  'click',
-  'contextMenu',
-  'dblClick',
-  'drag',
-  'dragEnd',
-  'dragEnter',
-  'dragExit',
-  'dragLeave',
-  'dragOver',
-  'dragStart',
-  'drop',
-  'mouseDown',
-  'mouseEnter',
-  'mouseLeave',
-  'mouseMove',
-  'mouseOut',
-  'mouseOver',
-  'mouseUp',
-  'touchCancel',
-  'touchEnd',
-  'touchMove',
-  'touchStart',
-  'wheel',
-  'pointerOver',
-  'pointerDown',
-  'pointerMove',
-  'pointerUp',
-  'pointerCancel',
-  'pointerOut',
-  'gotPointerCapture',
-  'lostPointerCapture',
-]
+const nonBubblingEvents = allEvents
+  .filter(eventName => !bubblingEvents.includes(eventName))
 
-const nonComposedEvents = allEvents.filter(evt => !composedEvents.includes(evt))
+const nonComposedEvents = allEvents
+  .filter(eventName => !composedEvents.includes(eventName))
 
 eventTypes.forEach(({type, events, elementType}) => {
   describe(`${type} Events`, () => {
