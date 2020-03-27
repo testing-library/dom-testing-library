@@ -840,6 +840,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "apalaniuk",
+      "name": "Adam Palaniuk",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/17710124?v=4",
+      "profile": "https://github.com/apalaniuk",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
