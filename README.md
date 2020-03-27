@@ -261,7 +261,7 @@ Contributions of any kind welcome!
   https://img.shields.io/codecov/c/github/testing-library/dom-testing-library.svg?style=flat-square
 [coverage]: https://codecov.io/github/testing-library/dom-testing-library
 [version-badge]:
-  https://img.shields.io/npm/v/dom-testing-library.svg?style=flat-square
+  https://img.shields.io/npm/v/@testing-library/dom.svg?style=flat-square
 [package]: https://www.npmjs.com/package/@testing-library/dom
 [downloads-badge]:
   https://img.shields.io/npm/dm/@testing-library/dom.svg?style=flat-square
