@@ -2,8 +2,12 @@ import {fuzzyMatches, matches, makeNormalizer} from './matches'
 import {waitFor} from './wait-for'
 import {getConfig} from './config'
 
+function getElementError(message, container) {
+  return getConfig().getElementError(message, container)
+}
+
 function getMultipleElementsFoundError(message, container) {
-  return getConfig().getElementError(
+  return getElementError(
     `${message}\n\n(If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).`,
     container,
   )
@@ -82,6 +86,7 @@ function buildQueries(queryAllBy, getMultipleError, getMissingError) {
 }
 
 export {
+  getElementError,
   getMultipleElementsFoundError,
   queryAllByAttribute,
   queryByAttribute,
