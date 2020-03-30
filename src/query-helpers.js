@@ -7,7 +7,7 @@ function getElementError(message, container) {
 }
 
 function getMultipleElementsFoundError(message, container) {
-  return getConfig().getElementError(
+  return getElementError(
     `${message}\n\n(If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).`,
     container,
   )
