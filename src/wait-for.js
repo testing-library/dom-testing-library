@@ -22,6 +22,10 @@ function waitFor(
     },
   } = {},
 ) {
+  if (typeof callback !== 'function') {
+    throw new TypeError('Received `callback` arg must be a function')
+  }
+
   // created here so we get a nice stacktrace
   const timedOutError = new Error('Timed out in waitFor.')
   if (interval < 1) interval = 1

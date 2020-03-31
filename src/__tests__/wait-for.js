@@ -1,3 +1,4 @@
+import {renderIntoDocument} from './helpers/test-utils'
 import {waitFor} from '../'
 
 test('waits callback to not throw an error', async () => {
@@ -31,4 +32,14 @@ test('uses generic error if there was no last error', async () => {
     {timeout: 8, interval: 5},
   ).catch(e => e)
   expect(result).toMatchInlineSnapshot(`[Error: Timed out in waitFor.]`)
+})
+
+test('throws nice error if provided callback is not a function', () => {
+  const {queryByTestId} = renderIntoDocument(`
+    <div data-testid="div"></div>
+  `)
+  const someElement = queryByTestId('div')
+  expect(() => waitFor(someElement)).toThrow(
+    'Received `callback` arg must be a function',
+  )
 })
