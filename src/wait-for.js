@@ -23,7 +23,7 @@ function waitFor(
   } = {},
 ) {
   if (typeof callback !== 'function') {
-    throw new Error('Received `callback` arg must be a function')
+    throw new TypeError('Received `callback` arg must be a function')
   }
 
   // created here so we get a nice stacktrace
