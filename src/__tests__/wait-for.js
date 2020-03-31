@@ -32,3 +32,9 @@ test('uses generic error if there was no last error', async () => {
   ).catch(e => e)
   expect(result).toMatchInlineSnapshot(`[Error: Timed out in waitFor.]`)
 })
+
+test('throws nice error if provided callback is not a function', () => {
+  expect(() => waitFor('not a function')).toThrow(
+    'Received `callback` arg must be a function',
+  )
+})
