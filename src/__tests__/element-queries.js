@@ -230,7 +230,7 @@ test('can filter results of label query based on selector', () => {
 })
 
 test('can find any form control when label text is inside other elements', () => {
-  const {getAllByLabelText} = render(`
+  const {getByLabelText} = render(`
     <label>
       <span>Test</span>
       <span>Label</span>
@@ -244,8 +244,38 @@ test('can find any form control when label text is inside other elements', () =>
     </label>
   `)
 
-  const result = getAllByLabelText('Test Label')
-  expect(result).toHaveLength(7)
+  const nodeTypes = [
+    'button',
+    'input',
+    'meter',
+    'output',
+    'progress',
+    'select',
+    'textarea',
+  ]
+  nodeTypes.forEach(nodeType => {
+    expect(getByLabelText('Test Label', {selector: nodeType}).nodeName).toEqual(
+      nodeType.toUpperCase(),
+    )
+  })
+})
+
+test('returns the first form control inside a label', () => {
+  const {getByLabelText} = render(`
+    <label>
+      <span>Test</span>
+      <span>Label</span>
+      <button />
+      <input />
+      <meter />
+      <output />
+      <progress />
+      <select />
+      <textarea />
+    </label>
+  `)
+
+  expect(getByLabelText('Test Label').nodeName).toEqual('BUTTON')
 })
 
 test('can find non-input elements when aria-labelledby a label', () => {

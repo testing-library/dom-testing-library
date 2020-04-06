@@ -74,9 +74,10 @@ function queryAllByLabelText(
         // <label>text: <input /></label>
         const formControlSelector =
           'button, input, meter, output, progress, select, textarea'
-        Array.from(
+        const labelledFormControl = Array.from(
           label.querySelectorAll(formControlSelector),
-        ).forEach(element => elementsForLabel.push(element))
+        ).filter(element => element.matches(selector))[0]
+        if (labelledFormControl) elementsForLabel.push(labelledFormControl)
       }
       return matchedElements.concat(elementsForLabel)
     }, [])
