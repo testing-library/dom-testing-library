@@ -229,7 +229,7 @@ test('can filter results of label query based on selector', () => {
   expect(result[0].id).toBe('input1')
 })
 
-test('can find any form control when label text is inside other elements', () => {
+test('can find any labelable element when label text is inside other elements', () => {
   const {getByLabelText} = render(`
     <label>
       <span>Test</span>
@@ -260,7 +260,9 @@ test('can find any form control when label text is inside other elements', () =>
   })
 })
 
-test('returns the first form control inside a label', () => {
+// According to the spec, the first descendant of a label that is a labelable element is the labeled control
+// https://html.spec.whatwg.org/multipage/forms.html#the-label-element
+test('returns the labelable element control inside a label', () => {
   const {getByLabelText} = render(`
     <label>
       <span>Test</span>
