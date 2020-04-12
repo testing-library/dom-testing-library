@@ -7,14 +7,14 @@ function queryAllByAltText(
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-  return Array.from(container.querySelectorAll('img,input,area')).filter(node =>
+  return [...container.querySelectorAll('img,input,area')].filter(node =>
     matcher(node.getAttribute('alt'), node, alt, matchNormalizer),
   )
 }
 
-const getMultipleError = (c, alt) =>
+const getMultipleError = (_, alt) =>
   `Found multiple elements with the alt text: ${alt}`
-const getMissingError = (c, alt) =>
+const getMissingError = (_, alt) =>
   `Unable to find an element with the alt text: ${alt}`
 const [
   queryByAltText,
