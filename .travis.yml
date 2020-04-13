@@ -4,7 +4,7 @@ notifications:
   email: false
 node_js:
   - 10
-  - lts/erbium
+  - 12
   - node
 install: npm install
 script:
