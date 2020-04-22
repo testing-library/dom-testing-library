@@ -3,6 +3,7 @@
   "version": "0.0.0-semantically-released",
   "description": "Simple and complete DOM testing utilities that encourage good testing practices.",
   "main": "dist/index.js",
+  "types": "types/index.d.ts",
   "module": "dist/@testing-library/dom.esm.js",
   "umd:main": "dist/@testing-library/dom.umd.js",
   "source": "src/index.js",
@@ -32,11 +33,11 @@
     "validate": "kcd-scripts validate"
   },
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
   "dependencies": {
     "@babel/runtime": "^7.9.2",
-    "@types/testing-library__dom": "^7.0.0",
     "aria-query": "^4.0.2",
     "dom-accessibility-api": "^0.4.2",
     "pretty-format": "^25.1.0"
