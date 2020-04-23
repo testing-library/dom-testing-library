@@ -51,7 +51,6 @@ export interface ByRoleOptions extends MatcherOptions {
      * If true includes elements in the query set that are usually excluded from
      * the accessibility tree. `role="none"` or `role="presentation"` are included
      * in either case.
-     * @default false
      */
     hidden?: boolean;
     /**
