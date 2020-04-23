@@ -30,7 +30,8 @@
     "test": "kcd-scripts test",
     "test:debug": "node --inspect-brk ./node_modules/.bin/jest --watch --runInBand",
     "test:update": "npm test -- --updateSnapshot --coverage",
-    "validate": "kcd-scripts validate"
+    "validate": "npm run typecheck && kcd-scripts validate",
+    "typecheck": "dtslint ./types/"
   },
   "files": [
     "dist",
@@ -44,6 +45,8 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.1.1",
+    "conditional-type-checks": "^1.0.5",
+    "dtslint": "^3.4.2",
     "jest-in-case": "^1.0.2",
     "jest-serializer-ansi": "^1.0.3",
     "jest-watch-select-projects": "^2.0.0",
