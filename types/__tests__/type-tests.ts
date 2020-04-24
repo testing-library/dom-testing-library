@@ -116,7 +116,7 @@ async function testWaitFors() {
 
   element.innerHTML = '<span>apple</span>'
 
-  await waitForElementToBeRemoved(() => getByText(element, 'apple'))
+  await waitForElementToBeRemoved(() => getByText(element, 'apple'), {interval: 3000, container: element, timeout: 5000})
   await waitForElementToBeRemoved(getByText(element, 'apple'))
   await waitForElementToBeRemoved(getAllByText(element, 'apple'))
 }
