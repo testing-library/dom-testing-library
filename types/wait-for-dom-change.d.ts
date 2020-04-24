@@ -1,5 +1,3 @@
-export function waitForDomChange(options?: {
-    container?: HTMLElement;
-    timeout?: number;
-    mutationObserverOptions?: MutationObserverInit;
-}): Promise<any>;
+import { waitForOptions } from "index";
+
+export function waitForDomChange(options?: waitForOptions): Promise<any>;

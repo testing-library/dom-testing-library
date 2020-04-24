@@ -1,7 +1,3 @@
-export interface WaitForElementOptions {
-    container?: HTMLElement;
-    timeout?: number;
-    mutationObserverOptions?: MutationObserverInit;
-}
+import { waitForOptions } from "wait-for";
 
-export function waitForElement<T>(callback: () => T, options?: WaitForElementOptions): Promise<T>;
+export function waitForElement<T>(callback: () => T, options?: waitForOptions): Promise<T>;
