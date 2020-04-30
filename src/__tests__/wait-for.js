@@ -43,3 +43,18 @@ test('throws nice error if provided callback is not a function', () => {
     'Received `callback` arg must be a function',
   )
 })
+
+test('waits and returns an async element', async () => {
+  renderIntoDocument(`
+    <div data-testid="div"></div>
+  `)
+
+  setTimeout(() => {
+    const element = document.createElement('div')
+    element.id = 'test'
+    document.querySelector('div').appendChild(element)
+  }, 0)
+
+  const newElement = await waitFor(() => document.querySelector('[id="test"]'))
+  expect(newElement).toBeInTheDocument()
+})
