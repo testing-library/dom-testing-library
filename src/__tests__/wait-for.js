@@ -55,6 +55,12 @@ test('waits and returns an async element', async () => {
     document.querySelector('div').appendChild(element)
   }, 0)
 
-  const newElement = await waitFor(() => document.querySelector('[id="test"]'))
+  const newElement = await waitFor(() => {
+    const element = document.querySelector('[id="test"]')
+    if (!element) {
+      throw new Error('element with id of "test" not found')
+    }
+    return element
+  })
   expect(newElement).toBeInTheDocument()
 })
