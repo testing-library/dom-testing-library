@@ -63,7 +63,16 @@ function waitFor(
     }
 
     function onTimeout() {
-      onDone(lastError || timedOutError, null)
+      let error = timedOutError
+      if (lastError) {
+        error = lastError
+        const userStackTrace = timedOutError.stack
+          .split('\n')
+          .slice(1)
+          .join('\n')
+        error.stack = `${error.stack.split('\n')[0]}\n${userStackTrace}`
+      }
+      onDone(error, null)
     }
   })
 }
