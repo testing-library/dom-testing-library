@@ -13,6 +13,7 @@ function waitFor(
   {
     container = getDocument(),
     timeout = getConfig().asyncUtilTimeout,
+    showOriginalStackTrace = getConfig().showOriginalStackTrace,
     interval = 50,
     mutationObserverOptions = {
       subtree: true,
@@ -66,11 +67,13 @@ function waitFor(
       let error = timedOutError
       if (lastError) {
         error = lastError
-        const userStackTrace = timedOutError.stack
-          .split('\n')
-          .slice(1)
-          .join('\n')
-        error.stack = `${error.stack.split('\n')[0]}\n${userStackTrace}`
+        if (showOriginalStackTrace) {
+          const userStackTrace = timedOutError.stack
+            .split('\n')
+            .slice(1)
+            .join('\n')
+          error.stack = `${error.stack.split('\n')[0]}\n${userStackTrace}`
+        }
       }
       onDone(error, null)
     }

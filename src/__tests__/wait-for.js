@@ -34,6 +34,17 @@ test('uses generic error if there was no last error', async () => {
   expect(result).toMatchInlineSnapshot(`[Error: Timed out in waitFor.]`)
 })
 
+test('uses full stack error trace when showOriginalStackTrace present', async () => {
+  const error = new Error('Throws the full stack trace')
+  const result = await waitFor(
+    () => {
+      throw error
+    },
+    {timeout: 8, interval: 5, showOriginalStackTrace: true},
+  ).catch(e => e)
+  expect(result).toBe(error)
+})
+
 test('throws nice error if provided callback is not a function', () => {
   const {queryByTestId} = renderIntoDocument(`
     <div data-testid="div"></div>
