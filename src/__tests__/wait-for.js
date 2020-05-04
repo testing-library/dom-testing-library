@@ -42,7 +42,7 @@ test('uses full stack error trace when showOriginalStackTrace present', async ()
     },
     {timeout: 8, interval: 5, showOriginalStackTrace: true},
   ).catch(e => e)
-  expect(result).toBe(error)
+  expect(result.stack).toBe(error.stack)
 })
 
 test('throws nice error if provided callback is not a function', () => {
