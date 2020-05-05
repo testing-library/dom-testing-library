@@ -1,4 +1,4 @@
-// TypeScript Version: 3.1
+// TypeScript Version: 3.8
 
 import { getQueriesForElement } from './get-queries-for-element';
 import * as queries from './queries';
