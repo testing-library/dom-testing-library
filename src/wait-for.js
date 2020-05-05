@@ -28,7 +28,7 @@ function waitFor(
       attributes: true,
       characterData: true,
     },
-  } = {},
+  },
 ) {
   if (typeof callback !== 'function') {
     throw new TypeError('Received `callback` arg must be a function')

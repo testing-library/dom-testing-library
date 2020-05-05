@@ -23,7 +23,7 @@ test('can timeout after the given timeout time', async () => {
   expect(result).toBe(error)
 })
 
-test('uses generic error if there was no last error', async () => {
+test('if no error is thrown then throws a timeout error', async () => {
   const result = await waitFor(
     () => {
       // eslint-disable-next-line no-throw-literal
@@ -32,6 +32,17 @@ test('uses generic error if there was no last error', async () => {
     {timeout: 8, interval: 5},
   ).catch(e => e)
   expect(result).toMatchInlineSnapshot(`[Error: Timed out in waitFor.]`)
+})
+
+test('if showOriginalStackTrace on a timeout error then the stack trace does not include this file', async () => {
+  const result = await waitFor(
+    () => {
+      // eslint-disable-next-line no-throw-literal
+      throw undefined
+    },
+    {timeout: 8, interval: 5, showOriginalStackTrace: true},
+  ).catch(e => e)
+  expect(result.stack).not.toMatch(__dirname)
 })
 
 test('uses full stack error trace when showOriginalStackTrace present', async () => {
