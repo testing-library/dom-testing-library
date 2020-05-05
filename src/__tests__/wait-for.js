@@ -60,7 +60,7 @@ test('does not change the stack trace if the thrown error is not a TestingLibrar
   expect(result.stack).toBe(originalStackTrace)
 })
 
-test('provides a stack trace from the if the throw error is a TestingLibraryElementError', async () => {
+test('provides an improved stack trace if the thrown error is a TestingLibraryElementError', async () => {
   const error = new Error('Throws the full stack trace')
   error.name = 'TestingLibraryElementError'
   const originalStackTrace = error.stack
@@ -70,6 +70,8 @@ test('provides a stack trace from the if the throw error is a TestingLibraryElem
     },
     {timeout: 8, interval: 5},
   ).catch(e => e)
+  // too hard to test that the stack trace is what we want it to be
+  // so we'll just make sure that it's not the same as the origianl
   expect(result.stack).not.toBe(originalStackTrace)
 })
 
