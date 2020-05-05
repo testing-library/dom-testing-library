@@ -23,7 +23,7 @@ test('can timeout after the given timeout time', async () => {
   expect(result).toBe(error)
 })
 
-test('uses generic error if there was no last error', async () => {
+test('if no error is thrown then throws a timeout error', async () => {
   const result = await waitFor(
     () => {
       // eslint-disable-next-line no-throw-literal
@@ -32,6 +32,58 @@ test('uses generic error if there was no last error', async () => {
     {timeout: 8, interval: 5},
   ).catch(e => e)
   expect(result).toMatchInlineSnapshot(`[Error: Timed out in waitFor.]`)
+})
+
+test('if showOriginalStackTrace on a timeout error then the stack trace does not include this file', async () => {
+  const result = await waitFor(
+    () => {
+      // eslint-disable-next-line no-throw-literal
+      throw undefined
+    },
+    {timeout: 8, interval: 5, showOriginalStackTrace: true},
+  ).catch(e => e)
+  expect(result.stack).not.toMatch(__dirname)
+})
+
+test('uses full stack error trace when showOriginalStackTrace present', async () => {
+  const error = new Error('Throws the full stack trace')
+  // even if the error is a TestingLibraryElementError
+  error.name = 'TestingLibraryElementError'
+  const originalStackTrace = error.stack
+  const result = await waitFor(
+    () => {
+      throw error
+    },
+    {timeout: 8, interval: 5, showOriginalStackTrace: true},
+  ).catch(e => e)
+  expect(result.stack).toBe(originalStackTrace)
+})
+
+test('does not change the stack trace if the thrown error is not a TestingLibraryElementError', async () => {
+  const error = new Error('Throws the full stack trace')
+  const originalStackTrace = error.stack
+  const result = await waitFor(
+    () => {
+      throw error
+    },
+    {timeout: 8, interval: 5},
+  ).catch(e => e)
+  expect(result.stack).toBe(originalStackTrace)
+})
+
+test('provides an improved stack trace if the thrown error is a TestingLibraryElementError', async () => {
+  const error = new Error('Throws the full stack trace')
+  error.name = 'TestingLibraryElementError'
+  const originalStackTrace = error.stack
+  const result = await waitFor(
+    () => {
+      throw error
+    },
+    {timeout: 8, interval: 5},
+  ).catch(e => e)
+  // too hard to test that the stack trace is what we want it to be
+  // so we'll just make sure that it's not the same as the origianl
+  expect(result.stack).not.toBe(originalStackTrace)
 })
 
 test('throws nice error if provided callback is not a function', () => {
