@@ -20,6 +20,7 @@ function waitFor(
     container = getDocument(),
     timeout = getConfig().asyncUtilTimeout,
     showOriginalStackTrace = getConfig().showOriginalStackTrace,
+    stackTraceError,
     interval = 50,
     mutationObserverOptions = {
       subtree: true,
@@ -27,7 +28,6 @@ function waitFor(
       attributes: true,
       characterData: true,
     },
-    stackTraceError,
   } = {},
 ) {
   if (typeof callback !== 'function') {
