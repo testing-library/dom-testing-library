@@ -8,6 +8,12 @@ import {
 } from './helpers'
 import {getConfig} from './config'
 
+// This is so the stack trace the developer sees is one that's
+// closer to their code (because async stack traces are hard to follow).
+function copyStackTrace(target, source) {
+  target.stack = source.stack.replace(source.message, target.message)
+}
+
 function waitFor(
   callback,
   {
@@ -21,14 +27,13 @@ function waitFor(
       attributes: true,
       characterData: true,
     },
+    stackTraceError,
   } = {},
 ) {
   if (typeof callback !== 'function') {
     throw new TypeError('Received `callback` arg must be a function')
   }
 
-  // created here so we get a nice stacktrace
-  const timedOutError = new Error('Timed out in waitFor.')
   if (interval < 1) interval = 1
   return new Promise((resolve, reject) => {
     let lastError
@@ -64,15 +69,19 @@ function waitFor(
     }
 
     function onTimeout() {
-      let error = timedOutError
+      let error
       if (lastError) {
         error = lastError
-        if (showOriginalStackTrace) {
-          const userStackTrace = timedOutError.stack
-            .split('\n')
-            .slice(1)
-            .join('\n')
-          error.stack = `${error.stack.split('\n')[0]}\n${userStackTrace}`
+        if (
+          !showOriginalStackTrace &&
+          error.name === 'TestingLibraryElementError'
+        ) {
+          copyStackTrace(error, stackTraceError)
+        }
+      } else {
+        error = new Error('Timed out in waitFor.')
+        if (!showOriginalStackTrace) {
+          copyStackTrace(error, stackTraceError)
         }
       }
       onDone(error, null)
@@ -80,8 +89,13 @@ function waitFor(
   })
 }
 
-function waitForWrapper(...args) {
-  return getConfig().asyncWrapper(() => waitFor(...args))
+function waitForWrapper(callback, options) {
+  // create the error here so its stack trace is as close to the
+  // calling code as possible
+  const stackTraceError = new Error('STACK_TRACE_MESSAGE')
+  return getConfig().asyncWrapper(() =>
+    waitFor(callback, {stackTraceError, ...options}),
+  )
 }
 
 let hasWarned = false

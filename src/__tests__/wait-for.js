@@ -36,13 +36,41 @@ test('uses generic error if there was no last error', async () => {
 
 test('uses full stack error trace when showOriginalStackTrace present', async () => {
   const error = new Error('Throws the full stack trace')
+  // even if the error is a TestingLibraryElementError
+  error.name = 'TestingLibraryElementError'
+  const originalStackTrace = error.stack
   const result = await waitFor(
     () => {
       throw error
     },
     {timeout: 8, interval: 5, showOriginalStackTrace: true},
   ).catch(e => e)
-  expect(result.stack).toBe(error.stack)
+  expect(result.stack).toBe(originalStackTrace)
+})
+
+test('does not change the stack trace if the thrown error is not a TestingLibraryElementError', async () => {
+  const error = new Error('Throws the full stack trace')
+  const originalStackTrace = error.stack
+  const result = await waitFor(
+    () => {
+      throw error
+    },
+    {timeout: 8, interval: 5},
+  ).catch(e => e)
+  expect(result.stack).toBe(originalStackTrace)
+})
+
+test('provides a stack trace from the if the throw error is a TestingLibraryElementError', async () => {
+  const error = new Error('Throws the full stack trace')
+  error.name = 'TestingLibraryElementError'
+  const originalStackTrace = error.stack
+  const result = await waitFor(
+    () => {
+      throw error
+    },
+    {timeout: 8, interval: 5},
+  ).catch(e => e)
+  expect(result.stack).not.toBe(originalStackTrace)
 })
 
 test('throws nice error if provided callback is not a function', () => {
