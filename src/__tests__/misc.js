@@ -1,5 +1,5 @@
-import {render} from './helpers/test-utils'
 import {queryByAttribute} from '..'
+import {render} from './helpers/test-utils'
 
 // we used to use queryByAttribute internally, but we don't anymore. Some people
 // use it as an undocumented part of the API, so we'll keep it around.
