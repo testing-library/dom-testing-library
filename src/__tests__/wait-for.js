@@ -1,5 +1,5 @@
-import {renderIntoDocument} from './helpers/test-utils'
 import {waitFor} from '../'
+import {renderIntoDocument} from './helpers/test-utils'
 
 test('waits callback to not throw an error', async () => {
   const spy = jest.fn()

@@ -1,5 +1,5 @@
-import {renderIntoDocument} from './helpers/test-utils'
 import {screen} from '..'
+import {renderIntoDocument} from './helpers/test-utils'
 
 beforeEach(() => {
   jest.spyOn(console, 'log').mockImplementation(() => {})
