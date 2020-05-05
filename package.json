@@ -30,7 +30,7 @@
     "test": "kcd-scripts test",
     "test:debug": "node --inspect-brk ./node_modules/.bin/jest --watch --runInBand",
     "test:update": "npm test -- --updateSnapshot --coverage",
-    "validate": "npm run typecheck && kcd-scripts validate",
+    "validate": "kcd-scripts validate",
     "typecheck": "dtslint ./types/"
   },
   "files": [
@@ -38,19 +38,18 @@
     "types"
   ],
   "dependencies": {
-    "@babel/runtime": "^7.9.2",
+    "@babel/runtime": "^7.9.6",
     "aria-query": "^4.0.2",
-    "dom-accessibility-api": "^0.4.2",
-    "pretty-format": "^25.1.0"
+    "dom-accessibility-api": "^0.4.3",
+    "pretty-format": "^26.0.1"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.1.1",
     "dtslint": "^3.4.2",
+    "@testing-library/jest-dom": "^5.5.0",
     "jest-in-case": "^1.0.2",
     "jest-serializer-ansi": "^1.0.3",
     "jest-watch-select-projects": "^2.0.0",
-    "jsdom": "^16.2.1",
-    "kcd-scripts": "^5.6.0"
+    "kcd-scripts": "^6.0.0"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",

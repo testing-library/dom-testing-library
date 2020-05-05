@@ -176,7 +176,7 @@ test.each([
   ['<div style="visibility: visible" />', false],
   ['<div hidden />', true],
   ['<div style="display: none;"/>', true],
-  ['<div style="visibility: hidden;"/>', false], // bug in jsdom < 15.2
+  ['<div style="visibility: hidden;"/>', true],
   ['<div aria-hidden="true" />', true],
 ])('shouldExcludeFromA11yTree for %s returns %p', (html, expected) => {
   const {container} = render(html)

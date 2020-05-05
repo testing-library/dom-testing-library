@@ -22,7 +22,7 @@ test('waits for element to appear in the document', async () => {
   expect(console.warn.mock.calls).toMatchInlineSnapshot(`
     Array [
       Array [
-        "\`waitForElement\` has been deprecated. Use a \`find*\` query (preferred: https://testing-library.com/docs/dom-testing-library/api-queries#findby) or use \`wait\` instead (it's the same API, so you can find/replace): https://testing-library.com/docs/dom-testing-library/api-async#waitfor",
+        "\`waitForElement\` has been deprecated. Use a \`find*\` query (preferred: https://testing-library.com/docs/dom-testing-library/api-queries#findby) or use \`waitFor\` instead (it's the same API, so you can find/replace): https://testing-library.com/docs/dom-testing-library/api-async#waitfor",
       ],
     ]
   `)
