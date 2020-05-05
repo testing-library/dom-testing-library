@@ -25,10 +25,6 @@ test('`selected: true` matches `aria-selected="true"` on supported roles', () =>
   <div role="treeitem" aria-selected="false" id="unselected-treeitem" />
   <div role="treeitem" id="not-selectable-treeitem" />
 </div>
-<input type="radio" aria-selected="true" id="selected-native-radio" />
-<input type="radio" aria-selected="false" id="unselected-native-radio" />
-<div role="radio" aria-selected="true" id="selected-radio" />
-<div role="radio" aria-selected="false" id="unselected-radio" />
 <table>
   <thead>
     <tr>
@@ -73,11 +69,6 @@ test('`selected: true` matches `aria-selected="true"` on supported roles', () =>
   expect(getAllByRole('option', {selected: true}).map(({id}) => id)).toEqual([
     'selected-native-option',
     'selected-listbox-option',
-  ])
-
-  expect(getAllByRole('radio', {selected: true}).map(({id}) => id)).toEqual([
-    'selected-native-radio',
-    'selected-radio',
   ])
 
   expect(
