@@ -330,12 +330,6 @@ test('does not include the container in the queryable roles', () => {
 
 Here are the accessible roles:
 
-  list:
-
-  Name "":
-  <ul />
-
-  --------------------------------------------------
   listitem:
 
   Name "":
