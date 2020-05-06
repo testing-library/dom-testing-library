@@ -321,6 +321,28 @@ Here are the accessible roles:
 `)
 })
 
+test('does not include the container in the queryable roles', () => {
+  const {getByRole} = render(`<li />`, {
+    container: document.createElement('ul'),
+  })
+  expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an accessible element with the role "list"
+
+Here are the accessible roles:
+
+  listitem:
+
+  Name "":
+  <li />
+
+  --------------------------------------------------
+
+<ul>
+  <li />
+</ul>"
+`)
+})
+
 describe('configuration', () => {
   let originalConfig
   beforeEach(() => {

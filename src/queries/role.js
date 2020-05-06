@@ -95,9 +95,12 @@ const getMissingError = (
   role,
   {hidden = getConfig().defaultHidden, name} = {},
 ) => {
-  const roles = prettyRoles(container, {
-    hidden,
-    includeName: name !== undefined,
+  let roles = ''
+  Array.from(container.children).forEach(childElement => {
+    roles += prettyRoles(childElement, {
+      hidden,
+      includeName: name !== undefined,
+    })
   })
   let roleMessage
 
