@@ -1,5 +1,7 @@
 import {computeAccessibleName} from 'dom-accessibility-api'
+import {roles as allRoles} from 'aria-query'
 import {
+  computeAriaSelected,
   getImplicitAriaRoles,
   prettyRoles,
   isInaccessible,
@@ -24,10 +26,18 @@ function queryAllByRole(
     trim,
     normalizer,
     queryFallbacks = false,
+    selected,
   } = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
+
+  if (selected !== undefined) {
+    // guard against unknown roles
+    if (allRoles.get(role)?.props['aria-selected'] === undefined) {
+      throw new Error(`"aria-selected" is not supported on role "${role}".`)
+    }
+  }
 
   const subtreeIsInaccessibleCache = new WeakMap()
   function cachedIsSubtreeInaccessible(element) {
@@ -64,6 +74,13 @@ function queryAllByRole(
       return implicitRoles.some(implicitRole =>
         matcher(implicitRole, node, role, matchNormalizer),
       )
+    })
+    .filter(element => {
+      if (selected !== undefined) {
+        return selected === computeAriaSelected(element)
+      }
+      // don't care if aria attributes are unspecified
+      return true
     })
     .filter(element => {
       return hidden === false

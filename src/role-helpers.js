@@ -168,6 +168,27 @@ function prettyRoles(dom, {hidden}) {
 const logRoles = (dom, {hidden = false} = {}) =>
   console.log(prettyRoles(dom, {hidden}))
 
+/**
+ * @param {Element} element -
+ * @returns {boolean | undefined} - false/true if (not)selected, undefined if not selectable
+ */
+function computeAriaSelected(element) {
+  // implicit value from html-aam mappings: https://www.w3.org/TR/html-aam-1.0/#html-attribute-state-and-property-mappings
+  // https://www.w3.org/TR/html-aam-1.0/#details-id-97
+  if (element.tagName === 'OPTION') {
+    return element.selected
+  }
+  // explicit value
+  const attributeValue = element.getAttribute('aria-selected')
+  if (attributeValue === 'true') {
+    return true
+  }
+  if (attributeValue === 'false') {
+    return false
+  }
+  return undefined
+}
+
 export {
   getRoles,
   logRoles,
@@ -175,4 +196,5 @@ export {
   isSubtreeInaccessible,
   prettyRoles,
   isInaccessible,
+  computeAriaSelected,
 }
