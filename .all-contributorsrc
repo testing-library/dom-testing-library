@@ -879,6 +879,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rahulchavan30",
+      "name": "Rahul Suryakanth",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5296464?v=4",
+      "profile": "https://github.com/rahulchavan30",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
