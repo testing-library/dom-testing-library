@@ -889,6 +889,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "jamsinclair",
+      "name": "Jamie",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5964236?v=4",
+      "profile": "https://jamie.tokyo",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
