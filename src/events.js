@@ -60,6 +60,7 @@ Object.keys(eventMap).forEach(key => {
 
     const {dataTransfer} = eventInit
     if (typeof dataTransfer === 'object') {
+      // DataTransfer is not supported in jsdom: https://github.com/jsdom/jsdom/issues/1568
       /* istanbul ignore if  */
       if (typeof window.DataTransfer === 'function') {
         Object.defineProperty(event, 'dataTransfer', {
