@@ -282,6 +282,27 @@ test('assigning the files property on an input', () => {
   expect(node.files).toEqual([file])
 })
 
+test('assigns dataTransfer properties', () => {
+  const node = document.createElement('div')
+  const spy = jest.fn()
+  node.addEventListener('dragover', spy)
+  fireEvent.dragOver(node, {dataTransfer: {dropEffect: 'move'}})
+  expect(spy).toHaveBeenCalledTimes(1)
+  expect(spy.mock.calls[0][0]).toHaveProperty('dataTransfer.dropEffect', 'move')
+})
+
+test('assigning the files property on dataTransfer', () => {
+  const node = document.createElement('div')
+  const file = new document.defaultView.File(['(⌐□_□)'], 'chucknorris.png', {
+    type: 'image/png',
+  })
+  const spy = jest.fn()
+  node.addEventListener('drop', spy)
+  fireEvent.drop(node, {dataTransfer: {files: [file]}})
+  expect(spy).toHaveBeenCalledTimes(1)
+  expect(spy.mock.calls[0][0]).toHaveProperty('dataTransfer.files', [file])
+})
+
 test('fires events on Window', () => {
   const messageSpy = jest.fn()
   window.addEventListener('message', messageSpy)

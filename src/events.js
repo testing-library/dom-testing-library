@@ -44,19 +44,28 @@ Object.keys(eventMap).forEach(key => {
     Object.assign(node, targetProperties)
     const window = getWindowFromNode(node)
     const EventConstructor = window[EventType] || window.Event
+    let event
     /* istanbul ignore else  */
     if (typeof EventConstructor === 'function') {
-      return new EventConstructor(eventName, eventInit)
+      event = new EventConstructor(eventName, eventInit)
     } else {
       // IE11 polyfill from https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
-      const event = window.document.createEvent(EventType)
+      event = window.document.createEvent(EventType)
       const {bubbles, cancelable, detail, ...otherInit} = eventInit
       event.initEvent(eventName, bubbles, cancelable, detail)
       Object.keys(otherInit).forEach(eventKey => {
         event[eventKey] = otherInit[eventKey]
       })
-      return event
     }
+
+    // Approximate dataTransfer on the event object
+    // jsdom does not support DataTransfer constructor
+    // https://github.com/testing-library/react-testing-library/issues/339#issuecomment-526310225
+    const {dataTransfer} = eventInit
+    if (typeof dataTransfer === 'object') {
+      Object.assign(event, {dataTransfer})
+    }
+    return event
   }
 
   fireEvent[key] = (node, init) => fireEvent(node, createEvent[key](node, init))
