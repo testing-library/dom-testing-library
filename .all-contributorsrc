@@ -899,6 +899,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "nstepien",
+      "name": "Nicolas Stepien",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/567105?v=4",
+      "profile": "https://github.com/nstepien",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
