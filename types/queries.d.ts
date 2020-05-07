@@ -1,6 +1,6 @@
 import { Matcher, MatcherOptions } from './matches';
 import { SelectorMatcherOptions } from './query-helpers';
-import { waitForOptions } from 'wait-for';
+import { waitForOptions } from './wait-for';
 
 export type QueryByBoundAttribute = (
     container: HTMLElement,
