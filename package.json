@@ -3,6 +3,7 @@
   "version": "0.0.0-semantically-released",
   "description": "Simple and complete DOM testing utilities that encourage good testing practices.",
   "main": "dist/index.js",
+  "types": "types/index.d.ts",
   "module": "dist/@testing-library/dom.esm.js",
   "umd:main": "dist/@testing-library/dom.umd.js",
   "source": "src/index.js",
@@ -29,19 +30,21 @@
     "test": "kcd-scripts test",
     "test:debug": "node --inspect-brk ./node_modules/.bin/jest --watch --runInBand",
     "test:update": "npm test -- --updateSnapshot --coverage",
-    "validate": "kcd-scripts validate"
+    "validate": "kcd-scripts validate",
+    "typecheck": "dtslint ./types/"
   },
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
   "dependencies": {
     "@babel/runtime": "^7.9.6",
-    "@types/testing-library__dom": "^7.0.2",
     "aria-query": "^4.0.2",
     "dom-accessibility-api": "^0.4.3",
     "pretty-format": "^26.0.1"
   },
   "devDependencies": {
+    "dtslint": "^3.4.2",
     "@testing-library/jest-dom": "^5.5.0",
     "jest-in-case": "^1.0.2",
     "jest-serializer-ansi": "^1.0.3",
