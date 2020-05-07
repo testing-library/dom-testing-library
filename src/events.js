@@ -58,12 +58,18 @@ Object.keys(eventMap).forEach(key => {
       })
     }
 
-    // Approximate dataTransfer on the event object
-    // jsdom does not support DataTransfer constructor
-    // https://github.com/testing-library/react-testing-library/issues/339#issuecomment-526310225
     const {dataTransfer} = eventInit
     if (typeof dataTransfer === 'object') {
-      Object.assign(event, {dataTransfer})
+      /* istanbul ignore if  */
+      if (typeof window.DataTransfer === 'function') {
+        Object.defineProperty(event, 'dataTransfer', {
+          value: Object.assign(new window.DataTransfer(), dataTransfer)
+        })
+      } else {
+        Object.defineProperty(event, 'dataTransfer', {
+          value: dataTransfer
+        })
+      }
     }
     return event
   }
