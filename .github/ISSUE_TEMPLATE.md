@@ -16,9 +16,17 @@ https://github.com/testing-library/testing-library-docs
 
 -->
 
-- `dom-testing-library` version:
-- `node` version:
-- `npm` (or `yarn`) version:
+- `@testing-library/dom` version:
+- Testing Framework and version:
+  <!-- are you using jest, mocha, puppeteer, ava? And what version? -->
+- DOM Environment:
+  <!-- If you're using jsdom (the default with jest), what version? Otherwise, what browser and version are you running tests in? -->
+
+<!--
+Keep in mind that if you're using a version of node we don't support that
+could also be an issue. Check our package.json "engines" file for the
+supported version.
+-->
 
 Relevant code or config
 
