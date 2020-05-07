@@ -248,6 +248,9 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/rahulchavan30"><img src="https://avatars2.githubusercontent.com/u/5296464?v=4" width="100px;" alt=""/><br /><sub><b>Rahul Suryakanth</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=rahulchavan30" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=rahulchavan30" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://jamie.tokyo"><img src="https://avatars0.githubusercontent.com/u/5964236?v=4" width="100px;" alt=""/><br /><sub><b>Jamie</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=jamsinclair" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=jamsinclair" title="Tests">⚠️</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/nstepien"><img src="https://avatars0.githubusercontent.com/u/567105?v=4" width="100px;" alt=""/><br /><sub><b>Nicolas Stepien</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=nstepien" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
