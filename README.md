@@ -250,6 +250,7 @@ Thanks goes to these people ([emoji key][emojis]):
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/nstepien"><img src="https://avatars0.githubusercontent.com/u/567105?v=4" width="100px;" alt=""/><br /><sub><b>Nicolas Stepien</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=nstepien" title="Code">💻</a></td>
+    <td align="center"><a href="https://knpw.rs"><img src="https://avatars0.githubusercontent.com/u/174864?v=4" width="100px;" alt=""/><br /><sub><b>Ken Powers</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=knpwrs" title="Code">💻</a></td>
   </tr>
 </table>
 
