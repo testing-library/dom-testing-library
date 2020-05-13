@@ -41,7 +41,7 @@
     "@babel/runtime": "^7.9.6",
     "aria-query": "^4.0.2",
     "dom-accessibility-api": "^0.4.3",
-    "pretty-format": "^26.0.1"
+    "pretty-format": "^25.5.0"
   },
   "devDependencies": {
     "dtslint": "^3.4.2",
