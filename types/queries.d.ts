@@ -60,7 +60,7 @@ export interface ByRoleOptions extends MatcherOptions {
     selected?: boolean;
     /**
      * Includes every role used in the `role` attribute
-     * For example *ByRole('progressbar', {queryFallbacks: true})` will find <div role="meter progresbar">`.
+     * For example *ByRole('progressbar', {queryFallbacks: true})` will find <div role="meter progressbar">`.
      */
     queryFallbacks?: boolean;
     /**
