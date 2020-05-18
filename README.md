@@ -253,6 +253,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://knpw.rs"><img src="https://avatars0.githubusercontent.com/u/174864?v=4" width="100px;" alt=""/><br /><sub><b>Ken Powers</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=knpwrs" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/mzdunek93"><img src="https://avatars0.githubusercontent.com/u/10826511?v=4" width="100px;" alt=""/><br /><sub><b>Michał Zdunek</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=mzdunek93" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/Lagily"><img src="https://avatars2.githubusercontent.com/u/42535205?v=4" width="100px;" alt=""/><br /><sub><b>Ali Nasserzadeh</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=Lagily" title="Code">💻</a></td>
+    <td align="center"><a href="https://darekkay.com"><img src="https://avatars0.githubusercontent.com/u/3101914?v=4" width="100px;" alt=""/><br /><sub><b>Darek Kay</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=darekkay" title="Documentation">📖</a></td>
   </tr>
 </table>
 
