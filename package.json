@@ -40,7 +40,7 @@
   "dependencies": {
     "@babel/runtime": "^7.9.6",
     "aria-query": "^4.0.2",
-    "dom-accessibility-api": "https://pkg.csb.dev/eps1lon/dom-accessibility-api/commit/40da69b7/dom-accessibility-api",
+    "dom-accessibility-api": "^0.4.4",
     "pretty-format": "^25.5.0"
   },
   "devDependencies": {
