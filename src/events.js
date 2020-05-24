@@ -62,7 +62,7 @@ Object.keys(eventMap).forEach(key => {
     ['dataTransfer', 'clipboardData'].forEach(dataTransferKey => {
       const dataTransferValue = eventInit[dataTransferKey];
       
-      if (typeof dataTransfer === 'object') {
+      if (typeof dataTransferValue === 'object') {
         /* istanbul ignore if  */
         if (typeof window.DataTransfer === 'function') {
           Object.defineProperty(event, dataTransferKey, {
