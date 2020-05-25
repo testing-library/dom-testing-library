@@ -67,15 +67,43 @@ test('should suggest *ByRole when used with getAllBy', () => {
 })
 
 test('should suggest *ByLabelText when no role available', () => {
-  renderIntoDocument(`<label for="foo">Username</label><input id="foo" />`)
+  renderIntoDocument(
+    `<label for="foo">Username</label><input data-testid="foo" id="foo" />`,
+  )
+  expect(() => screen.getByTestId('foo')).toThrowError(
+    /\*ByLabelText\("Username"\)/,
+  )
 })
 
-it('should suggest *ByRole when even if label is available', () => {
-  renderIntoDocument(
-    `<label for="foo">Username</label><input id="foo" type="text" />`,
+test(`should suggest *ByLabel on non form elements`, () => {
+  renderIntoDocument(`
+  <div data-testid="foo" aria-labelledby="section-one-header">
+    <span id="section-one-header">Section One</span>
+    <p>some content</p>
+  </div>
+  `)
+
+  expect(() => screen.getByTestId('foo')).toThrowError(
+    /\*ByLabelText\("Section One"\)/,
   )
+})
+
+test.each([
+  `<label id="username-label">Username</label><input aria-labelledby="username-label" type="text" />`,
+  `<label><span>Username</span><input type="text" /></label>`,
+  `<label for="foo">Username</label><input id="foo" type="text" />`,
+])('should suggest *ByRole over label %s', html => {
+  renderIntoDocument(html)
 
   expect(() => screen.getByLabelText('Username')).toThrowError(
-    /\*ByRole\("textbox", \{name:\/Username\/\}\)/g,
+    /\*ByRole\("textbox", \{name:\/Username\/\}\)/,
+  )
+})
+
+test(`should recommend *ByText for simple elements`, () => {
+  renderIntoDocument(`<div data-testid="foo">hello there</div>`)
+
+  expect(() => screen.getByTestId('foo')).toThrowError(
+    /\*ByText\("hello there"\)/,
   )
 })
