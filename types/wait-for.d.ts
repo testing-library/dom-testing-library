@@ -1,11 +1,11 @@
 export interface waitForOptions {
-    container?: HTMLElement;
-    timeout?: number;
-    interval?: number;
-    mutationObserverOptions?: MutationObserverInit;
+  container?: HTMLElement
+  timeout?: number
+  interval?: number
+  mutationObserverOptions?: MutationObserverInit
 }
 
 export function waitFor<T>(
-    callback: () => T,
-    options?: waitForOptions,
-): Promise<T>;
+  callback: () => T extends Promise<any> ? never : T,
+  options?: waitForOptions,
+): Promise<T>
