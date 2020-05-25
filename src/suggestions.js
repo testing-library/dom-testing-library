@@ -1,4 +1,7 @@
 import {getRoles} from './role-helpers'
+import {getDefaultNormalizer} from './queries/all-utils'
+
+const normalize = getDefaultNormalizer()
 
 function getLabelTextFor(element) {
   let label
@@ -74,11 +77,24 @@ export function getSuggestedQuery(element) {
   }
 
   ;({textContent} = element)
+  textContent = normalize(textContent)
   if (textContent) {
     queryName = 'Text'
     return {
       queryName,
       textContent,
+      toString: getSerializer(queryName, textContent),
+    }
+  }
+
+  if (element.value) {
+    queryName = 'DisplayValue'
+
+    textContent = element.value
+    return {
+      queryName,
+      textContent,
+
       toString: getSerializer(queryName, textContent),
     }
   }

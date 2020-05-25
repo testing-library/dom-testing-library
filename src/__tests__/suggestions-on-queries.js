@@ -18,6 +18,14 @@ test('should not suggest when nothing available', () => {
   expect(() => screen.queryByTestId('foo')).not.toThrowError()
 })
 
+test(`should not suggest if the suggestion would give different results`, () => {
+  renderIntoDocument(`
+    <input type="text" data-testid="foo" /><span data-testid="foo" />
+  `)
+
+  expect(() => screen.getAllByTestId('foo')).not.toThrowError()
+})
+
 test('should suggest getByRole when used with getBy', () => {
   renderIntoDocument(`<button data-testid="foo">submit</button>`)
 
@@ -100,10 +108,20 @@ test.each([
   )
 })
 
-test(`should recommend *ByText for simple elements`, () => {
+test(`should suggest *ByText for simple elements`, () => {
   renderIntoDocument(`<div data-testid="foo">hello there</div>`)
 
   expect(() => screen.getByTestId('foo')).toThrowError(
     /\*ByText\("hello there"\)/,
+  )
+})
+
+test(`should suggest *ByDisplayValue`, () => {
+  renderIntoDocument(`<input id="lastName" data-testid="lastName" />`)
+
+  document.getElementById('lastName').value = 'Prine' // RIP John Prine
+
+  expect(() => screen.getByTestId('lastName')).toThrowError(
+    /\*ByDisplayValue\("Prine"\)/,
   )
 })
