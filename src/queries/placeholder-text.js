@@ -1,7 +1,8 @@
 import {queryAllByAttribute, buildQueries} from './all-utils'
 
-const queryAllByPlaceholderText = queryAllByAttribute.bind(null, 'placeholder')
-
+function queryAllByPlaceholderText(...args) {
+  return queryAllByAttribute('placeholder', ...args)
+}
 const getMultipleError = (c, text) =>
   `Found multiple elements with the placeholder text of: ${text}`
 const getMissingError = (c, text) =>

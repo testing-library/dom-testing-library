@@ -1,3 +1,4 @@
+import {getSuggestedQuery} from './suggestions'
 import {fuzzyMatches, matches, makeNormalizer} from './matches'
 import {waitFor} from './wait-for'
 import {getConfig} from './config'
@@ -49,8 +50,27 @@ function makeSingleQuery(allQuery, getMultipleError) {
         container,
       )
     }
-    return els[0] || null
+    const element = els[0] || null
+
+    if (getConfig().showSuggestions) {
+      const suggestion = getSuggestedQuery({element})
+
+      if (allQuery.name.endsWith(suggestion.queryName)) {
+        throw getSuggestionError(suggestion, container)
+      }
+    }
+
+    return element
   }
+}
+
+function getSuggestionError(suggestion, container) {
+  return getConfig().getElementError(
+    `A better query is available, try this:
+*By${suggestion.toString()}
+`,
+    container,
+  )
 }
 
 // this accepts a query function and returns a function which throws an error
@@ -63,6 +83,19 @@ function makeGetAllQuery(allQuery, getMissingError) {
         getMissingError(container, ...args),
         container,
       )
+    }
+    if (getConfig().showSuggestions) {
+      const rawSuggestions = els.map(element => getSuggestedQuery({element}))
+      const suggestions = [
+        ...new Set(els.map(element => getSuggestedQuery({element}).toString())),
+      ]
+
+      if (
+        suggestions.length === 1 &&
+        !allQuery.name.endsWith(rawSuggestions[0].queryName)
+      ) {
+        throw getSuggestionError(suggestions[0], container)
+      }
     }
     return els
   }

@@ -2,8 +2,9 @@ import {queryAllByAttribute, getConfig, buildQueries} from './all-utils'
 
 const getTestIdAttribute = () => getConfig().testIdAttribute
 
-const queryAllByTestId = (...args) =>
-  queryAllByAttribute(getTestIdAttribute(), ...args)
+function queryAllByTestId(...args) {
+  return queryAllByAttribute(getTestIdAttribute(), ...args)
+}
 
 const getMultipleError = (c, id) =>
   `Found multiple elements by: [${getTestIdAttribute()}="${id}"]`
