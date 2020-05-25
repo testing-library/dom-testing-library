@@ -7,7 +7,7 @@ describe('Unable to suggest', () => {
     const {container} = renderIntoDocument(`<span />`)
 
     const element = container.firstChild
-    expect(getSuggestedQuery({element})).not.toBeDefined()
+    expect(getSuggestedQuery(element)).not.toBeDefined()
   })
 
   it('should not recommend PlaceholderText on input with empty placeholder', () => {
@@ -15,7 +15,7 @@ describe('Unable to suggest', () => {
 
     const element = screen.getByTestId('foo')
 
-    expect(getSuggestedQuery({element})).not.toBeDefined()
+    expect(getSuggestedQuery(element)).not.toBeDefined()
   })
 })
 
@@ -24,7 +24,7 @@ describe('Role', () => {
     renderIntoDocument(`<button data-testid="foo">submit</button>`)
 
     const element = screen.getByTestId('foo') //omg the hypocrisy
-    const results = getSuggestedQuery({element})
+    const results = getSuggestedQuery(element)
     expect(results.toString()).toBe(`Role("button", {name:/submit/})`)
 
     expect(results).toEqual(
@@ -40,14 +40,14 @@ describe('Role', () => {
     renderIntoDocument(`<input type="checkbox" />`)
 
     const element = screen.getByRole('checkbox')
-    const results = getSuggestedQuery({element})
+    const results = getSuggestedQuery(element)
     expect(results.toString()).toBe(`Role("checkbox")`)
 
     expect(results).toEqual(
       expect.objectContaining({
         queryName: 'Role',
         role: 'checkbox',
-        textContent: '',
+        textContent: undefined,
       }),
     )
   })
@@ -61,7 +61,7 @@ describe('Form Fields (role not present)', () => {
 
     const element = screen.getByLabelText('Username')
 
-    const results = getSuggestedQuery({element})
+    const results = getSuggestedQuery(element)
     expect(results.toString()).toBe(`LabelText("Username")`)
     expect(results).toEqual(
       expect.objectContaining({
@@ -76,7 +76,7 @@ describe('Form Fields (role not present)', () => {
 
     const element = screen.getByLabelText('Username')
 
-    const results = getSuggestedQuery({element})
+    const results = getSuggestedQuery(element)
     expect(results.toString()).toBe(`LabelText("Username")`)
     expect(results).toEqual(
       expect.objectContaining({
@@ -91,7 +91,7 @@ describe('Form Fields (role not present)', () => {
 
     const element = screen.getByPlaceholderText('Username')
 
-    const results = getSuggestedQuery({element})
+    const results = getSuggestedQuery(element)
     expect(results.toString()).toBe(`PlaceholderText("Username")`)
     expect(results).toEqual(
       expect.objectContaining({
@@ -106,7 +106,7 @@ it('should recommend Text', () => {
   renderIntoDocument(`<div>hello there</div>`)
 
   const element = screen.getByText('hello there')
-  const results = getSuggestedQuery({element})
+  const results = getSuggestedQuery(element)
 
   expect(results.toString()).toBe(`Text("hello there")`)
   expect(results).toEqual(

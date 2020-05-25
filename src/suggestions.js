@@ -1,4 +1,3 @@
-/* eslint-disable babel/new-cap */
 import {getRoles} from './role-helpers'
 const FORM_ELEMENTS = [
   'button',
@@ -18,7 +17,7 @@ function getSerializer(queryName, primaryMatch, secondaryMatch) {
 }
 
 // eslint-disable-next-line consistent-return
-export function getSuggestedQuery({element}) {
+export function getSuggestedQuery(element) {
   const roles = getRoles(element)
 
   let queryName
@@ -27,7 +26,9 @@ export function getSuggestedQuery({element}) {
   if (roleNames.length) {
     queryName = 'Role'
     const [role] = roleNames
-
+    if (!textContent) {
+      textContent = getLabelTextFor(element)
+    }
     return {
       queryName,
       role,
@@ -38,10 +39,7 @@ export function getSuggestedQuery({element}) {
 
   if (FORM_ELEMENTS.includes(element.tagName.toLowerCase())) {
     if (element.hasAttribute('id')) {
-      const label = document.querySelector(
-        `label[for="${element.getAttribute('id')}"]`,
-      )
-      ;({textContent} = label)
+      textContent = getLabelTextFor(element)
 
       queryName = 'LabelText'
       return {
@@ -86,4 +84,15 @@ export function getSuggestedQuery({element}) {
       toString: getSerializer(queryName, textContent),
     }
   }
+}
+function getLabelTextFor(element) {
+  const label = document.querySelector(
+    `label[for="${element.getAttribute('id')}"]`,
+  )
+
+  if (label) {
+    return label.textContent
+  }
+
+  return undefined
 }

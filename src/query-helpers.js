@@ -50,7 +50,15 @@ function makeSingleQuery(allQuery, getMultipleError) {
         container,
       )
     }
-    return els[0] || null
+    const element = els[0] || null
+
+    if (getConfig().showSuggestions) {
+      const suggestion = getSuggestedQuery(element)
+      if (suggestion && !allQuery.name.endsWith(suggestion.queryName)) {
+        throw getSuggestionError(suggestion.toString(), container)
+      }
+    }
+    return element
   }
 }
 
@@ -75,16 +83,15 @@ function makeGetAllQuery(allQuery, getMissingError) {
       )
     }
     if (getConfig().showSuggestions) {
-      const rawSuggestions = els.map(element => getSuggestedQuery({element}))
-      const suggestions = [
-        ...new Set(els.map(element => getSuggestedQuery({element}).toString())),
+      const suggestionMessages = [
+        ...new Set(els.map(element => getSuggestedQuery(element).toString())),
       ]
-
       if (
-        suggestions.length === 1 &&
-        !allQuery.name.endsWith(rawSuggestions[0].queryName)
+        // only want to suggest if all the els have the same suggestion.
+        suggestionMessages.length === 1 &&
+        !allQuery.name.endsWith(getSuggestedQuery(els[0]).queryName)
       ) {
-        throw getSuggestionError(suggestions[0], container)
+        throw getSuggestionError(suggestionMessages[0], container)
       }
     }
     return els
@@ -101,6 +108,10 @@ function makeFindQuery(getter) {
 function buildQueries(queryAllBy, getMultipleError, getMissingError) {
   const queryBy = makeSingleQuery(queryAllBy, getMultipleError)
   const getAllBy = makeGetAllQuery(queryAllBy, getMissingError)
+  // Suggestions need to know how they're being used, so need to set the name of the allQuery
+  Object.defineProperty(getAllBy, 'name', {
+    value: queryAllBy.name.replace('query', 'get'),
+  })
   const getBy = makeSingleQuery(getAllBy, getMultipleError)
   const findAllBy = makeFindQuery(getAllBy)
   const findBy = makeFindQuery(getBy)

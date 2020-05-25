@@ -19,6 +19,8 @@ let config = {
   //showOriginalStackTrace flag to show the full error stack traces for async errors
   showOriginalStackTrace: false,
 
+  showSuggestions: false,
+
   // called when getBy* queries fail. (message, container) => Error
   getElementError(message, container) {
     const error = new Error(
