@@ -66,8 +66,9 @@ export function getSuggestedQuery({element}) {
       }
     }
 
-    if (element.hasAttribute('placeholder')) {
-      textContent = element.getAttribute('placeholder')
+    const placeholderText = element.getAttribute('placeholder')
+    if (placeholderText) {
+      textContent = placeholderText
       queryName = 'PlaceholderText'
       return {
         queryName,

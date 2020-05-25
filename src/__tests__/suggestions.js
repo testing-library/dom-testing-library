@@ -2,11 +2,21 @@ import {screen} from '../'
 import {getSuggestedQuery} from '../suggestions'
 import {renderIntoDocument} from './helpers/test-utils'
 
-it('should not recommend anything when not possible', () => {
-  const {container} = renderIntoDocument(`<span />`)
+describe('Unable to suggest', () => {
+  it('should not recommend anything on empty span', () => {
+    const {container} = renderIntoDocument(`<span />`)
 
-  const element = container.firstChild
-  expect(getSuggestedQuery({element})).not.toBeDefined()
+    const element = container.firstChild
+    expect(getSuggestedQuery({element})).not.toBeDefined()
+  })
+
+  it('should not recommend PlaceholderText on input with empty placeholder', () => {
+    renderIntoDocument(`<input placeholder="" data-testid="foo" />`)
+
+    const element = screen.getByTestId('foo')
+
+    expect(getSuggestedQuery({element})).not.toBeDefined()
+  })
 })
 
 describe('Role', () => {
@@ -76,7 +86,7 @@ describe('Form Fields (role not present)', () => {
     )
   })
 
-  it('should recommend PlaceholderText on nested input', () => {
+  it('should recommend PlaceholderText on input', () => {
     renderIntoDocument(`<input placeholder="Username" />`)
 
     const element = screen.getByPlaceholderText('Username')
@@ -92,19 +102,17 @@ describe('Form Fields (role not present)', () => {
   })
 })
 
-describe('Text', () => {
-  it('should recommend Text', () => {
-    renderIntoDocument(`<div>hello there</div>`)
+it('should recommend Text', () => {
+  renderIntoDocument(`<div>hello there</div>`)
 
-    const element = screen.getByText('hello there')
-    const results = getSuggestedQuery({element})
+  const element = screen.getByText('hello there')
+  const results = getSuggestedQuery({element})
 
-    expect(results.toString()).toBe(`Text("hello there")`)
-    expect(results).toEqual(
-      expect.objectContaining({
-        queryName: 'Text',
-        textContent: 'hello there',
-      }),
-    )
-  })
+  expect(results.toString()).toBe(`Text("hello there")`)
+  expect(results).toEqual(
+    expect.objectContaining({
+      queryName: 'Text',
+      textContent: 'hello there',
+    }),
+  )
 })

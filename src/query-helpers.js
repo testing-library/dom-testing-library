@@ -50,17 +50,7 @@ function makeSingleQuery(allQuery, getMultipleError) {
         container,
       )
     }
-    const element = els[0] || null
-
-    if (getConfig().showSuggestions) {
-      const suggestion = getSuggestedQuery({element})
-
-      if (allQuery.name.endsWith(suggestion.queryName)) {
-        throw getSuggestionError(suggestion, container)
-      }
-    }
-
-    return element
+    return els[0] || null
   }
 }
 
