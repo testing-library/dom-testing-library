@@ -62,21 +62,6 @@ export function getSuggestedQuery(element) {
     }
   }
 
-  // const allLabels = Array.from(document.querySelectorAll('label'))
-
-  // const labelWithControl = allLabels.find(label => label.control === element)
-
-  // if (labelWithControl) {
-  //   ; ({ textContent } = labelWithControl)
-
-  //   queryName = 'LabelText'
-  //   return {
-  //     queryName,
-  //     textContent,
-  //     toString: getSerializer(queryName, textContent),
-  //   }
-  // }
-
   const placeholderText = element.getAttribute('placeholder')
   if (placeholderText) {
     textContent = placeholderText
