@@ -16,6 +16,7 @@ export * from './query-helpers'
 export {getRoles, logRoles, isInaccessible} from './role-helpers'
 export * from './pretty-dom'
 export {configure} from './config'
+export * from './suggestions'
 
 export {
   // "within" reads better in user-code

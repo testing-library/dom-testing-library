@@ -22,3 +22,4 @@ export * from './get-queries-for-element';
 export * from './pretty-dom';
 export * from './role-helpers';
 export * from './config';
+export * from './suggestions';
