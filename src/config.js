@@ -19,6 +19,7 @@ let config = {
   //showOriginalStackTrace flag to show the full error stack traces for async errors
   showOriginalStackTrace: false,
 
+  //throw errors w/ suggestions for better queries.  opt in so off by default.
   showSuggestions: false,
 
   // called when getBy* queries fail. (message, container) => Error

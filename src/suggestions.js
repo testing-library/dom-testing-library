@@ -31,7 +31,6 @@ function getLabelTextFor(element) {
 function makeSuggestion(queryName, content, name) {
   return {
     queryName,
-    content,
     toString() {
       const options = name ? `, {name:/${name}/}` : ''
       return `${queryName}("${content}"${options})`
@@ -39,7 +38,6 @@ function makeSuggestion(queryName, content, name) {
   }
 }
 
-// eslint-disable-next-line consistent-return
 export function getSuggestedQuery(element) {
   const roles = getRoles(element)
 
@@ -80,4 +78,6 @@ export function getSuggestedQuery(element) {
   if (title) {
     return makeSuggestion('Title', title)
   }
+
+  return undefined
 }
