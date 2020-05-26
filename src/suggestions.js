@@ -1,6 +1,6 @@
-import {getRoles} from './role-helpers'
-import {getDefaultNormalizer} from './queries/all-utils'
 import {computeAccessibleName} from 'dom-accessibility-api'
+import {getRoles} from './role-helpers'
+import {getDefaultNormalizer} from './matches'
 
 const normalize = getDefaultNormalizer()
 

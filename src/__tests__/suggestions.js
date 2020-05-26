@@ -1,6 +1,6 @@
 import {configure} from '../config'
-import {renderIntoDocument} from './helpers/test-utils'
 import {screen} from '..'
+import {renderIntoDocument} from './helpers/test-utils'
 
 beforeEach(() => {
   configure({showSuggestions: true})
