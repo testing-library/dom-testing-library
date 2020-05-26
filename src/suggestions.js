@@ -1,5 +1,6 @@
 import {getRoles} from './role-helpers'
 import {getDefaultNormalizer} from './queries/all-utils'
+import {computeAccessibleName} from 'dom-accessibility-api'
 
 const normalize = getDefaultNormalizer()
 
@@ -27,10 +28,14 @@ function getLabelTextFor(element) {
   return undefined
 }
 
-function getSerializer(queryName, primaryMatch, secondaryMatch) {
-  return () => {
-    const options = secondaryMatch ? `, {name:/${secondaryMatch}/}` : ''
-    return `${queryName}("${primaryMatch}"${options})`
+function makeSuggestion(queryName, content, name) {
+  return {
+    queryName,
+    content,
+    toString() {
+      const options = name ? `, {name:/${name}/}` : ''
+      return `${queryName}("${content}"${options})`
+    },
   }
 }
 
@@ -38,64 +43,41 @@ function getSerializer(queryName, primaryMatch, secondaryMatch) {
 export function getSuggestedQuery(element) {
   const roles = getRoles(element)
 
-  let queryName
   const roleNames = Object.keys(roles)
-  let {textContent} = element
+  const name = computeAccessibleName(element)
   if (roleNames.length) {
-    queryName = 'Role'
     const [role] = roleNames
-    if (!textContent) {
-      textContent = getLabelTextFor(element)
-    }
-    return {
-      queryName,
-      role,
-      textContent,
-      toString: getSerializer(queryName, role, textContent),
-    }
+    return makeSuggestion('Role', role, name)
   }
 
-  textContent = getLabelTextFor(element)
-  if (textContent) {
-    queryName = 'LabelText'
-    return {
-      queryName,
-      textContent,
-      toString: getSerializer(queryName, textContent),
-    }
+  const labelText = getLabelTextFor(element)
+  if (labelText) {
+    return makeSuggestion('LabelText', labelText)
   }
 
   const placeholderText = element.getAttribute('placeholder')
   if (placeholderText) {
-    textContent = placeholderText
-    queryName = 'PlaceholderText'
-    return {
-      queryName,
-      textContent,
-      toString: getSerializer(queryName, textContent),
-    }
+    return makeSuggestion('PlaceholderText', placeholderText)
   }
 
-  ;({textContent} = element)
+  let {textContent} = element
   textContent = normalize(textContent)
   if (textContent) {
-    queryName = 'Text'
-    return {
-      queryName,
-      textContent,
-      toString: getSerializer(queryName, textContent),
-    }
+    return makeSuggestion('Text', textContent)
   }
 
   if (element.value) {
-    queryName = 'DisplayValue'
+    return makeSuggestion('DisplayValue', normalize(element.value))
+  }
 
-    textContent = element.value
-    return {
-      queryName,
-      textContent,
+  const alt = element.getAttribute('alt')
+  if (alt) {
+    return makeSuggestion('AltText', alt)
+  }
 
-      toString: getSerializer(queryName, textContent),
-    }
+  const title = element.getAttribute('title')
+
+  if (title) {
+    return makeSuggestion('Title', title)
   }
 }
