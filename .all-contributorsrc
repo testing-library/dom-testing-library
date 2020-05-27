@@ -954,6 +954,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "pelotom",
+      "name": "Tom Crockett",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/128019?v=4",
+      "profile": "https://twitter.com/pelotom",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
