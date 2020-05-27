@@ -112,6 +112,10 @@ const getMissingError = (
   role,
   {hidden = getConfig().defaultHidden, name} = {},
 ) => {
+  if (getConfig()._disableExpensiveErrorDiagnostics) {
+    return `Unable to find role="${role}"`
+  }
+
   let roles = ''
   Array.from(container.children).forEach(childElement => {
     roles += prettyRoles(childElement, {

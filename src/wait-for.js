@@ -6,7 +6,7 @@ import {
   clearTimeout,
   runWithRealTimers,
 } from './helpers'
-import {getConfig} from './config'
+import {getConfig, runWithExpensiveErrorDiagnosticsDisabled} from './config'
 
 // This is so the stack trace the developer sees is one that's
 // closer to their code (because async stack traces are hard to follow).
@@ -60,7 +60,7 @@ function waitFor(
 
     function checkCallback() {
       try {
-        onDone(null, callback())
+        onDone(null, runWithExpensiveErrorDiagnosticsDisabled(callback))
         // If `callback` throws, wait for the next mutation or timeout.
       } catch (error) {
         // Save the callback error to reject the promise with it.
