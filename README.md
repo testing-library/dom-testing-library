@@ -255,6 +255,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/Lagily"><img src="https://avatars2.githubusercontent.com/u/42535205?v=4" width="100px;" alt=""/><br /><sub><b>Ali Nasserzadeh</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=Lagily" title="Code">💻</a></td>
     <td align="center"><a href="https://darekkay.com"><img src="https://avatars0.githubusercontent.com/u/3101914?v=4" width="100px;" alt=""/><br /><sub><b>Darek Kay</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=darekkay" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/Lukas-Kullmann"><img src="https://avatars0.githubusercontent.com/u/387547?v=4" width="100px;" alt=""/><br /><sub><b>Lukas</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=Lukas-Kullmann" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=Lukas-Kullmann" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://twitter.com/pelotom"><img src="https://avatars2.githubusercontent.com/u/128019?v=4" width="100px;" alt=""/><br /><sub><b>Tom Crockett</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=pelotom" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=pelotom" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
