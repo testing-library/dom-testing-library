@@ -27,6 +27,16 @@ let config = {
     error.name = 'TestingLibraryElementError'
     return error
   },
+  _disableExpensiveErrorDiagnostics: false,
+}
+
+export function runWithExpensiveErrorDiagnosticsDisabled(callback) {
+  try {
+    config._disableExpensiveErrorDiagnostics = true
+    return callback()
+  } finally {
+    config._disableExpensiveErrorDiagnostics = false
+  }
 }
 
 export function configure(newConfig) {
