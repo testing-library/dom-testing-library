@@ -134,7 +134,13 @@ function getRoles(container, {hidden = false} = {}) {
       return hidden === false ? isInaccessible(element) === false : true
     })
     .reduce((acc, node) => {
-      const roles = getImplicitAriaRoles(node)
+      let roles = []
+      // TODO: This violates html-aria which does not allow any role on every element
+      if (node.hasAttribute('role')) {
+        roles = node.getAttribute('role').split(' ').slice(0, 1)
+      } else {
+        roles = getImplicitAriaRoles(node)
+      }
 
       return roles.reduce(
         (rolesAcc, role) =>

@@ -2,10 +2,13 @@ import {
   fireEvent,
   isInaccessible,
   queries,
+  buildQueries,
+  queryAllByAttribute,
   screen,
   waitFor,
   waitForElementToBeRemoved,
-} from '../index'
+  MatcherOptions,
+} from '@testing-library/dom'
 
 const {
   getByText,
@@ -40,6 +43,42 @@ async function testQueries() {
   screen.queryAllByText('bar')
   await screen.findAllByText('bar')
   await screen.findAllByText('bar', undefined, {timeout: 10})
+}
+
+async function testQueryHelpers() {
+  const element = document.createElement('div')
+  const includesAutomationId = (content: string, automationId: string) =>
+    content.split(/\s+/).some(id => id === automationId)
+  const queryAllByAutomationId = (
+    container: HTMLElement,
+    automationId: string | string[],
+    options?: MatcherOptions,
+  ) =>
+    queryAllByAttribute(
+      'testId',
+      container,
+      content =>
+        Array.isArray(automationId)
+          ? automationId.every(id => includesAutomationId(content, id))
+          : includesAutomationId(content, automationId),
+      options,
+    )
+  const [
+    queryByAutomationId,
+    getAllByAutomationId,
+    getByAutomationId,
+    findAllByAutomationId,
+    findByAutomationId,
+  ] = buildQueries(
+    queryAllByAutomationId,
+    () => 'Multiple Error',
+    () => 'Missing Error',
+  )
+  queryByAutomationId(element, 'id')
+  getAllByAutomationId(element, 'id')
+  getByAutomationId(element, ['id', 'automationId'])
+  findAllByAutomationId(element, 'id', {}, {timeout: 1000})
+  findByAutomationId(element, 'id', {}, {timeout: 1000})
 }
 
 async function testByRole() {
@@ -116,7 +155,14 @@ async function testWaitFors() {
 
   element.innerHTML = '<span>apple</span>'
 
-  await waitForElementToBeRemoved(() => getByText(element, 'apple'), {interval: 3000, container: element, timeout: 5000})
+  await waitForElementToBeRemoved(() => getByText(element, 'apple'), {
+    interval: 3000,
+    container: element,
+    timeout: 5000,
+  })
   await waitForElementToBeRemoved(getByText(element, 'apple'))
   await waitForElementToBeRemoved(getAllByText(element, 'apple'))
+
+  // $ExpectError
+  await waitFor(async () => {})
 }

@@ -917,6 +917,53 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mzdunek93",
+      "name": "Michał Zdunek",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/10826511?v=4",
+      "profile": "https://github.com/mzdunek93",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Lagily",
+      "name": "Ali Nasserzadeh",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/42535205?v=4",
+      "profile": "https://github.com/Lagily",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "darekkay",
+      "name": "Darek Kay",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3101914?v=4",
+      "profile": "https://darekkay.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Lukas-Kullmann",
+      "name": "Lukas",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/387547?v=4",
+      "profile": "https://github.com/Lukas-Kullmann",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "pelotom",
+      "name": "Tom Crockett",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/128019?v=4",
+      "profile": "https://twitter.com/pelotom",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"

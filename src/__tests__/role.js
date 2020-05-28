@@ -349,6 +349,35 @@ test('has no useful error message in findBy', async () => {
   await expect(findByRole('option', {timeout: 1})).rejects.toThrow('Unable to find role="option"')
 })
 
+test('explicit role is most specific', () => {
+  const {getByRole} = renderIntoDocument(
+    `<button role="tab" aria-label="my-tab" />`,
+  )
+
+  expect(() => getByRole('button')).toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an accessible element with the role "button"
+
+Here are the accessible roles:
+
+  tab:
+
+  Name "my-tab":
+  <button
+    aria-label="my-tab"
+    role="tab"
+  />
+
+  --------------------------------------------------
+
+<body>
+  <button
+    aria-label="my-tab"
+    role="tab"
+  />
+</body>"
+`)
+})
+
 describe('configuration', () => {
   let originalConfig
   beforeEach(() => {

@@ -40,8 +40,8 @@
   "dependencies": {
     "@babel/runtime": "^7.9.6",
     "aria-query": "^4.0.2",
-    "dom-accessibility-api": "^0.4.3",
-    "pretty-format": "^26.0.1"
+    "dom-accessibility-api": "^0.4.4",
+    "pretty-format": "^25.5.0"
   },
   "devDependencies": {
     "dtslint": "^3.4.2",
@@ -50,7 +50,7 @@
     "jest-serializer-ansi": "^1.0.3",
     "jest-watch-select-projects": "^2.0.0",
     "jsdom": "^16.2.2",
-    "kcd-scripts": "^6.0.0"
+    "kcd-scripts": "^6.2.0"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",
