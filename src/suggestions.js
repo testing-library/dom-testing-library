@@ -5,15 +5,13 @@ import {getDefaultNormalizer} from './matches'
 const normalize = getDefaultNormalizer()
 
 function getLabelTextFor(element) {
-  let label
+  let label =
+    element.labels &&
+    Array.from(element.labels).find(el => Boolean(normalize(el.textContent)))
 
-  const allLabels = Array.from(document.querySelectorAll('label'))
-
-  label = allLabels.find(lbl => lbl.control === element)
-
+  // non form elements that are using aria-labelledby won't be included in `element.labels`
   if (!label) {
     const ariaLabelledBy = element.getAttribute('aria-labelledby')
-
     if (ariaLabelledBy) {
       // we're using this notation because with the # selector we would have to escape special characters e.g. user.name
       // see https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector#Escaping_special_characters
