@@ -171,6 +171,16 @@ test.each([
   )
 })
 
+test(`should suggest label over placeholder text`, () => {
+  renderIntoDocument(
+    `<label for="foo">Username</label><input id="foo" data-testid="foo" placeholder="Username" />`,
+  )
+
+  expect(() => screen.getByPlaceholderText('Username')).toThrowError(
+    /getByLabelText\("Username"\)/,
+  )
+})
+
 test(`should suggest getByPlaceholderText`, () => {
   renderIntoDocument(`<input data-testid="foo" placeholder="Username" />`)
 
@@ -223,6 +233,21 @@ test(`should suggest getByTitle`, () => {
 
   expect(() => screen.getByTestId('delete')).toThrowError(
     /getByTitle\("Delete"\)/,
+  )
+  expect(() => screen.getAllByTestId('delete')).toThrowError(
+    /getAllByTitle\("Delete"\)/,
+  )
+  expect(() => screen.queryByTestId('delete')).toThrowError(
+    /queryByTitle\("Delete"\)/,
+  )
+  expect(() => screen.queryAllByTestId('delete')).toThrowError(
+    /queryAllByTitle\("Delete"\)/,
+  )
+  expect(() => screen.queryAllByTestId('delete')).toThrowError(
+    /queryAllByTitle\("Delete"\)/,
+  )
+  expect(() => screen.queryAllByTestId('delete')).toThrowError(
+    /queryAllByTitle\("Delete"\)/,
   )
 
   // Since `ByTitle` and `ByText` will both return the <title> element

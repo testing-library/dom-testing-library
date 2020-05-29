@@ -135,6 +135,8 @@ const wrapAllByQueryWithSuggestion = (query, queryAllByName, variant) => (
 function buildQueries(queryAllBy, getMultipleError, getMissingError) {
   const queryBy = wrapSingleQueryWithSuggestion(
     makeSingleQuery(queryAllBy, getMultipleError),
+    queryAllBy.name,
+    'query',
   )
   const getAllBy = makeGetAllQuery(queryAllBy, getMissingError)
 
