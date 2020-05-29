@@ -169,7 +169,7 @@ test(`should suggest *ByTitle`, () => {
     /\*ByTitle\("Delete"\)/,
   )
 
-  //Since `ByTitle` and `ByText` will both return the <title> element
-  //`getByText` will always be the suggested query as it is higher up the list.
+  // Since `ByTitle` and `ByText` will both return the <title> element
+  // `getByText` will always be the suggested query as it is higher up the list.
   expect(() => screen.getByTestId('svg')).toThrowError(/\*ByText\("Close"\)/)
 })
