@@ -5,7 +5,7 @@ import {renderIntoDocument} from './helpers/test-utils'
 beforeEach(() => {
   configure({showSuggestions: true})
 })
-it('should not suggest when using getByRole', () => {
+test('does not suggest when using getByRole', () => {
   renderIntoDocument(`<button data-testid="foo">submit</button>`)
 
   expect(() => screen.getByRole('button', {name: /submit/})).not.toThrowError()
