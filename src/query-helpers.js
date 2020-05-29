@@ -83,7 +83,9 @@ function makeGetAllQuery(allQuery, getMissingError) {
 // waitFor and passing a function which invokes the getter.
 function makeFindQuery(getter) {
   return (container, text, options, waitForOptions) =>
-    waitFor(() => getter(container, text, options), waitForOptions)
+    waitFor(() => {
+      return getter(container, text, options)
+    }, waitForOptions)
 }
 
 const wrapSingleQueryWithSuggestion = (query, queryAllByName, variant) => (
@@ -92,7 +94,6 @@ const wrapSingleQueryWithSuggestion = (query, queryAllByName, variant) => (
 ) => {
   const element = query(container, ...args)
   const [{suggest = true} = {}] = args.slice(-1)
-
   if (getConfig().showSuggestions && suggest) {
     const suggestion = getSuggestedQuery(element, variant)
     if (suggestion && !queryAllByName.endsWith(suggestion.queryName)) {
@@ -109,7 +110,7 @@ const wrapAllByQueryWithSuggestion = (query, queryAllByName, variant) => (
 ) => {
   const els = query(container, ...args)
 
-  const [{suggest = true}] = args.slice(-1)
+  const [{suggest = true} = {}] = args.slice(-1)
   if (suggest && getConfig().showSuggestions) {
     // get a unique list of all suggestion messages.  We are only going to make a suggestion if
     // all the suggestions are the same
@@ -137,22 +138,32 @@ function buildQueries(queryAllBy, getMultipleError, getMissingError) {
   )
   const getAllBy = makeGetAllQuery(queryAllBy, getMissingError)
 
-  const getBy = wrapSingleQueryWithSuggestion(
-    makeSingleQuery(getAllBy, getMultipleError),
+  const getBy = makeSingleQuery(getAllBy, getMultipleError)
+  const getByWithSuggestions = wrapSingleQueryWithSuggestion(
+    getBy,
     queryAllBy.name,
     'get',
   )
-
   const getAllWithSuggestions = wrapAllByQueryWithSuggestion(
     getAllBy,
     queryAllBy.name.replace('query', 'get'),
     'getAll',
   )
 
-  const findAllBy = makeFindQuery(getAllBy)
-  const findBy = makeFindQuery(getBy)
+  const findAllBy = makeFindQuery(
+    wrapAllByQueryWithSuggestion(getAllBy, queryAllBy.name, 'findAll'),
+  )
+  const findBy = makeFindQuery(
+    wrapSingleQueryWithSuggestion(getBy, queryAllBy.name, 'find'),
+  )
 
-  return [queryBy, getAllWithSuggestions, getBy, findAllBy, findBy]
+  return [
+    queryBy,
+    getAllWithSuggestions,
+    getByWithSuggestions,
+    findAllBy,
+    findBy,
+  ]
 }
 
 export {

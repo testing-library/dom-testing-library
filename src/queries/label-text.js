@@ -6,6 +6,7 @@ import {
   queryAllByAttribute,
   makeFindQuery,
   makeSingleQuery,
+  wrapAllByQueryWithSuggestion,
   wrapSingleQueryWithSuggestion,
 } from './all-utils'
 import {queryAllByText} from './text'
@@ -118,7 +119,7 @@ function queryAllByLabelText(
 // )
 // however, we can give a more helpful error message than the generic one,
 // so we're writing this one out by hand.
-function getAllByLabelText(container, text, ...rest) {
+const getAllByLabelText = (container, text, ...rest) => {
   const els = queryAllByLabelText(container, text, ...rest)
   if (!els.length) {
     const labels = queryAllLabelsByText(container, text, ...rest)
@@ -140,21 +141,45 @@ function getAllByLabelText(container, text, ...rest) {
 // the reason mentioned above is the same reason we're not using buildQueries
 const getMultipleError = (c, text) =>
   `Found multiple elements with the text of: ${text}`
-const queryByLabelText = makeSingleQuery(queryAllByLabelText, getMultipleError)
-const getByLabelText = wrapSingleQueryWithSuggestion(
-  makeSingleQuery(getAllByLabelText, getMultipleError),
+const queryByLabelText = wrapSingleQueryWithSuggestion(
+  makeSingleQuery(queryAllByLabelText, getMultipleError),
+  queryAllByLabelText.name,
+  'query',
+)
+const getByLabelText = makeSingleQuery(getAllByLabelText, getMultipleError)
+
+const findAllByLabelText = makeFindQuery(
+  wrapAllByQueryWithSuggestion(
+    getAllByLabelText,
+    getAllByLabelText.name,
+    'findAll',
+  ),
+)
+const findByLabelText = makeFindQuery(
+  wrapSingleQueryWithSuggestion(getByLabelText, getByLabelText.name, 'find'),
+)
+
+const getAllByLabelTextWithSuggestions = wrapAllByQueryWithSuggestion(
+  getAllByLabelText,
+  getAllByLabelText.name,
+  'getAll',
+)
+const getByLabelTextWithSuggestions = wrapSingleQueryWithSuggestion(
+  getByLabelText,
   getAllByLabelText.name,
   'get',
 )
 
-const findAllByLabelText = makeFindQuery(getAllByLabelText)
-const findByLabelText = makeFindQuery(getByLabelText)
-
-export {
+const queryAllByLabelTextWithSuggestions = wrapAllByQueryWithSuggestion(
   queryAllByLabelText,
+  queryAllByLabelText.name,
+  'queryAll',
+)
+export {
+  queryAllByLabelTextWithSuggestions as queryAllByLabelText,
   queryByLabelText,
-  getAllByLabelText,
-  getByLabelText,
+  getAllByLabelTextWithSuggestions as getAllByLabelText,
+  getByLabelTextWithSuggestions as getByLabelText,
   findAllByLabelText,
   findByLabelText,
 }

@@ -98,6 +98,19 @@ getAllByRole("button", {name: /submit/i})
 </body>"
 `)
 })
+test('should suggest findByRole when used with findByTestId', async () => {
+  renderIntoDocument(`
+  <button data-testid="foo">submit</button>
+  <button data-testid="foot">submit</button>
+  `)
+
+  await expect(screen.findByTestId('foo')).rejects.toThrowError(
+    /findByRole\("button", \{name: \/submit\/i\}\)/,
+  )
+  await expect(screen.findAllByTestId(/foo/)).rejects.toThrowError(
+    /findAllByRole\("button", \{name: \/submit\/i\}\)/,
+  )
+})
 
 test('should suggest img role w/ alt text', () => {
   renderIntoDocument(`<img data-testid="img" alt="Incredibles 2 Poster"  />`)
@@ -133,11 +146,28 @@ test.each([
   `<label id="username-label">Username</label><input aria-labelledby="username-label" type="text" />`,
   `<label><span>Username</span><input type="text" /></label>`,
   `<label for="foo">Username</label><input id="foo" type="text" />`,
-])('should suggest getByRole over label %s', html => {
+])('%s\nshould suggest getByRole over', async html => {
   renderIntoDocument(html)
 
   expect(() => screen.getByLabelText('Username')).toThrowError(
     /getByRole\("textbox", \{name: \/username\/i\}\)/,
+  )
+  expect(() => screen.getAllByLabelText('Username')).toThrowError(
+    /getAllByRole\("textbox", \{name: \/username\/i\}\)/,
+  )
+
+  expect(() => screen.queryByLabelText('Username')).toThrowError(
+    /queryByRole\("textbox", \{name: \/username\/i\}\)/,
+  )
+  expect(() => screen.queryAllByLabelText('Username')).toThrowError(
+    /queryAllByRole\("textbox", \{name: \/username\/i\}\)/,
+  )
+
+  await expect(screen.findByLabelText('Username')).rejects.toThrowError(
+    /findByRole\("textbox", \{name: \/username\/i\}\)/,
+  )
+  await expect(screen.findAllByLabelText(/Username/)).rejects.toThrowError(
+    /findAllByRole\("textbox", \{name: \/username\/i\}\)/,
   )
 })
 

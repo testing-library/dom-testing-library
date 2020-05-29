@@ -51,6 +51,7 @@ function waitFor(
       clearTimeout(overallTimeoutTimer)
       clearInterval(intervalId)
       setImmediate(() => observer.disconnect())
+
       if (error) {
         reject(error)
       } else {
