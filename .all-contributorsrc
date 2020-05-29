@@ -964,6 +964,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "appleJax",
+      "name": "Kevin Brewer",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/13618860?v=4",
+      "profile": "https://github.com/appleJax",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
