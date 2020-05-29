@@ -5,6 +5,7 @@ import {
   getNodeText,
   buildQueries,
 } from './all-utils'
+import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 
 function queryAllByText(
   container,
@@ -34,6 +35,12 @@ const getMultipleError = (c, text) =>
 const getMissingError = (c, text) =>
   `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`
 
+const queryAllByTextWithSuggestions = wrapAllByQueryWithSuggestion(
+  queryAllByText,
+  queryAllByText.name,
+  'queryAll',
+)
+
 const [
   queryByText,
   getAllByText,
@@ -44,7 +51,7 @@ const [
 
 export {
   queryByText,
-  queryAllByText,
+  queryAllByTextWithSuggestions as queryAllByText,
   getByText,
   getAllByText,
   findAllByText,

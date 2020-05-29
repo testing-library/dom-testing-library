@@ -1,14 +1,22 @@
 import {queryAllByAttribute, getConfig, buildQueries} from './all-utils'
+import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 
 const getTestIdAttribute = () => getConfig().testIdAttribute
 
-const queryAllByTestId = (...args) =>
-  queryAllByAttribute(getTestIdAttribute(), ...args)
+function queryAllByTestId(...args) {
+  return queryAllByAttribute(getTestIdAttribute(), ...args)
+}
 
 const getMultipleError = (c, id) =>
   `Found multiple elements by: [${getTestIdAttribute()}="${id}"]`
 const getMissingError = (c, id) =>
   `Unable to find an element by: [${getTestIdAttribute()}="${id}"]`
+
+const queryAllByTestIdWithSuggestions = wrapAllByQueryWithSuggestion(
+  queryAllByTestId,
+  queryAllByTestId.name,
+  'queryAll',
+)
 
 const [
   queryByTestId,
@@ -20,7 +28,7 @@ const [
 
 export {
   queryByTestId,
-  queryAllByTestId,
+  queryAllByTestIdWithSuggestions as queryAllByTestId,
   getByTestId,
   getAllByTestId,
   findAllByTestId,

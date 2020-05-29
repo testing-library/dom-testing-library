@@ -16,8 +16,11 @@ let config = {
   asyncWrapper: cb => cb(),
   // default value for the `hidden` option in `ByRole` queries
   defaultHidden: false,
-  //showOriginalStackTrace flag to show the full error stack traces for async errors
+  // showOriginalStackTrace flag to show the full error stack traces for async errors
   showOriginalStackTrace: false,
+
+  // throw errors w/ suggestions for better queries. Opt in so off by default.
+  throwSuggestions: false,
 
   // called when getBy* queries fail. (message, container) => Error
   getElementError(message, container) {

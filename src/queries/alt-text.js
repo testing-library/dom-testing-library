@@ -1,4 +1,5 @@
 import {matches, fuzzyMatches, makeNormalizer, buildQueries} from './all-utils'
+import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 
 function queryAllByAltText(
   container,
@@ -16,6 +17,12 @@ const getMultipleError = (c, alt) =>
   `Found multiple elements with the alt text: ${alt}`
 const getMissingError = (c, alt) =>
   `Unable to find an element with the alt text: ${alt}`
+
+const queryAllByAltTextWithSuggestions = wrapAllByQueryWithSuggestion(
+  queryAllByAltText,
+  queryAllByAltText.name,
+  'queryAll',
+)
 const [
   queryByAltText,
   getAllByAltText,
@@ -26,7 +33,7 @@ const [
 
 export {
   queryByAltText,
-  queryAllByAltText,
+  queryAllByAltTextWithSuggestions as queryAllByAltText,
   getByAltText,
   getAllByAltText,
   findAllByAltText,

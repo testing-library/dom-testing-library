@@ -5,6 +5,7 @@ import {
   makeNormalizer,
   buildQueries,
 } from './all-utils'
+import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 
 function queryAllByDisplayValue(
   container,
@@ -33,6 +34,13 @@ const getMultipleError = (c, value) =>
   `Found multiple elements with the display value: ${value}.`
 const getMissingError = (c, value) =>
   `Unable to find an element with the display value: ${value}.`
+
+const queryAllByDisplayValueWithSuggestions = wrapAllByQueryWithSuggestion(
+  queryAllByDisplayValue,
+  queryAllByDisplayValue.name,
+  'queryAll',
+)
+
 const [
   queryByDisplayValue,
   getAllByDisplayValue,
@@ -43,7 +51,7 @@ const [
 
 export {
   queryByDisplayValue,
-  queryAllByDisplayValue,
+  queryAllByDisplayValueWithSuggestions as queryAllByDisplayValue,
   getByDisplayValue,
   getAllByDisplayValue,
   findAllByDisplayValue,
