@@ -13,7 +13,7 @@ afterAll(() => {
 test('does not suggest when using getByRole', () => {
   renderIntoDocument(`<button data-testid="foo">submit</button>`)
 
-  expect(() => screen.getByRole('button', {name: /submit/})).not.toThrowError()
+  expect(() => screen.getByRole('button', {name: /submit/i})).not.toThrowError()
 })
 
 test('should not suggest when nothing available', () => {
@@ -48,7 +48,7 @@ test('should suggest getByRole when used with getBy', () => {
 
   expect(() => screen.getByTestId('foo')).toThrowErrorMatchingInlineSnapshot(`
 "A better query is available, try this:
-*ByRole("button", {name:/submit/})
+*ByRole("button", {name: /submit/i})
 
 
 <body>
@@ -69,7 +69,7 @@ test('should suggest *ByRole when used with getAllBy', () => {
   expect(() => screen.getAllByTestId('foo'))
     .toThrowErrorMatchingInlineSnapshot(`
 "A better query is available, try this:
-*ByRole("button", {name:/submit/})
+*ByRole("button", {name: /submit/i})
 
 
 <body>
@@ -95,7 +95,7 @@ test('should suggest img role w/ alt text', () => {
   renderIntoDocument(`<img data-testid="img" alt="Incredibles 2 Poster"  />`)
 
   expect(() => screen.getByAltText('Incredibles 2 Poster')).toThrowError(
-    /\*ByRole\("img", \{name:\/Incredibles 2 Poster\/\}\)/,
+    /\*ByRole\("img", \{name: \/incredibles 2 poster\/i\}\)/,
   )
 })
 
@@ -129,7 +129,7 @@ test.each([
   renderIntoDocument(html)
 
   expect(() => screen.getByLabelText('Username')).toThrowError(
-    /\*ByRole\("textbox", \{name:\/Username\/\}\)/,
+    /\*ByRole\("textbox", \{name: \/username\/i\}\)/,
   )
 })
 

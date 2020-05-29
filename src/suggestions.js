@@ -29,7 +29,7 @@ function makeSuggestion(queryName, content, name) {
   return {
     queryName,
     toString() {
-      const options = name ? `, {name:/${name}/}` : ''
+      const options = name ? `, {name: /${name.toLowerCase()}/i}` : ''
       return `${queryName}("${content}"${options})`
     },
   }
