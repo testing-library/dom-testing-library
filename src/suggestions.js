@@ -22,7 +22,6 @@ function getLabelTextFor(element) {
   if (label) {
     return label.textContent
   }
-
   return undefined
 }
 
