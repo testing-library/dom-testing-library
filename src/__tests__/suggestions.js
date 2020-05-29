@@ -3,11 +3,11 @@ import {screen} from '..'
 import {renderIntoDocument} from './helpers/test-utils'
 
 beforeAll(() => {
-  configure({showSuggestions: true})
+  configure({throwSuggestions: true})
 })
 
 afterAll(() => {
-  configure({showSuggestions: false})
+  configure({throwSuggestions: false})
 })
 
 test('does not suggest when using getByRole', () => {

@@ -20,7 +20,7 @@ let config = {
   showOriginalStackTrace: false,
 
   // throw errors w/ suggestions for better queries. Opt in so off by default.
-  showSuggestions: false,
+  throwSuggestions: false,
 
   // called when getBy* queries fail. (message, container) => Error
   getElementError(message, container) {
