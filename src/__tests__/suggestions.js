@@ -32,6 +32,14 @@ test(`should not suggest if the suggestion would give different results`, () => 
   ).not.toThrowError()
 })
 
+test('should not suggest if there would be mixed suggestions', () => {
+  renderIntoDocument(`
+  <button data-testid="foo">submit</button>
+  <label for="foo">Username</label><input data-testid="foo" id="foo" />`)
+
+  expect(() => screen.getAllByTestId('foo')).not.toThrowError()
+})
+
 test('should not suggest when suggest is turned off for a query', () => {
   renderIntoDocument(`
   <button data-testid="foo">submit</button>
@@ -48,7 +56,7 @@ test('should suggest getByRole when used with getBy', () => {
 
   expect(() => screen.getByTestId('foo')).toThrowErrorMatchingInlineSnapshot(`
 "A better query is available, try this:
-*ByRole("button", {name: /submit/i})
+getByRole("button", {name: /submit/i})
 
 
 <body>
@@ -61,7 +69,7 @@ test('should suggest getByRole when used with getBy', () => {
 `)
 })
 
-test('should suggest *ByRole when used with getAllBy', () => {
+test('should suggest getAllByRole when used with getAllByTestId', () => {
   renderIntoDocument(`
     <button data-testid="foo">submit</button>
     <button data-testid="foo">submit</button>`)
@@ -69,7 +77,7 @@ test('should suggest *ByRole when used with getAllBy', () => {
   expect(() => screen.getAllByTestId('foo'))
     .toThrowErrorMatchingInlineSnapshot(`
 "A better query is available, try this:
-*ByRole("button", {name: /submit/i})
+getAllByRole("button", {name: /submit/i})
 
 
 <body>
@@ -95,20 +103,20 @@ test('should suggest img role w/ alt text', () => {
   renderIntoDocument(`<img data-testid="img" alt="Incredibles 2 Poster"  />`)
 
   expect(() => screen.getByAltText('Incredibles 2 Poster')).toThrowError(
-    /\*ByRole\("img", \{name: \/incredibles 2 poster\/i\}\)/,
+    /getByRole\("img", \{name: \/incredibles 2 poster\/i\}\)/,
   )
 })
 
-test('should suggest *ByLabelText when no role available', () => {
+test('should suggest getByLabelText when no role available', () => {
   renderIntoDocument(
     `<label for="foo">Username</label><input data-testid="foo" id="foo" />`,
   )
   expect(() => screen.getByTestId('foo')).toThrowError(
-    /\*ByLabelText\("Username"\)/,
+    /getByLabelText\("Username"\)/,
   )
 })
 
-test(`should suggest *ByLabel on non form elements`, () => {
+test(`should suggest getByLabel on non form elements`, () => {
   renderIntoDocument(`
   <div data-testid="foo" aria-labelledby="section-one-header">
     <span id="section-one-header">Section One</span>
@@ -117,7 +125,7 @@ test(`should suggest *ByLabel on non form elements`, () => {
   `)
 
   expect(() => screen.getByTestId('foo')).toThrowError(
-    /\*ByLabelText\("Section One"\)/,
+    /getByLabelText\("Section One"\)/,
   )
 })
 
@@ -125,41 +133,41 @@ test.each([
   `<label id="username-label">Username</label><input aria-labelledby="username-label" type="text" />`,
   `<label><span>Username</span><input type="text" /></label>`,
   `<label for="foo">Username</label><input id="foo" type="text" />`,
-])('should suggest *ByRole over label %s', html => {
+])('should suggest getByRole over label %s', html => {
   renderIntoDocument(html)
 
   expect(() => screen.getByLabelText('Username')).toThrowError(
-    /\*ByRole\("textbox", \{name: \/username\/i\}\)/,
+    /getByRole\("textbox", \{name: \/username\/i\}\)/,
   )
 })
 
-test(`should suggest *ByPlaceholderText`, () => {
+test(`should suggest getByPlaceholderText`, () => {
   renderIntoDocument(`<input data-testid="foo" placeholder="Username" />`)
 
   expect(() => screen.getByTestId('foo')).toThrowError(
-    /\*ByPlaceholderText\("Username"\)/,
+    /getByPlaceholderText\("Username"\)/,
   )
 })
 
-test(`should suggest *ByText for simple elements`, () => {
+test(`should suggest getByText for simple elements`, () => {
   renderIntoDocument(`<div data-testid="foo">hello there</div>`)
 
   expect(() => screen.getByTestId('foo')).toThrowError(
-    /\*ByText\("hello there"\)/,
+    /getByText\("hello there"\)/,
   )
 })
 
-test(`should suggest *ByDisplayValue`, () => {
+test(`should suggest getByDisplayValue`, () => {
   renderIntoDocument(`<input id="lastName" data-testid="lastName" />`)
 
   document.getElementById('lastName').value = 'Prine' // RIP John Prine
 
   expect(() => screen.getByTestId('lastName')).toThrowError(
-    /\*ByDisplayValue\("Prine"\)/,
+    /getByDisplayValue\("Prine"\)/,
   )
 })
 
-test(`should suggest *ByAltText`, () => {
+test(`should suggest getByAltText`, () => {
   renderIntoDocument(`
     <input data-testid="input" alt="last name" />
     <map name="workmap">
@@ -168,14 +176,14 @@ test(`should suggest *ByAltText`, () => {
     `)
 
   expect(() => screen.getByTestId('input')).toThrowError(
-    /\*ByAltText\("last name"\)/,
+    /getByAltText\("last name"\)/,
   )
   expect(() => screen.getByTestId('area')).toThrowError(
-    /\*ByAltText\("Computer"\)/,
+    /getByAltText\("Computer"\)/,
   )
 })
 
-test(`should suggest *ByTitle`, () => {
+test(`should suggest getByTitle`, () => {
   renderIntoDocument(`
   <span title="Delete" data-testid="delete"></span>
   <svg>
@@ -184,10 +192,10 @@ test(`should suggest *ByTitle`, () => {
   </svg>`)
 
   expect(() => screen.getByTestId('delete')).toThrowError(
-    /\*ByTitle\("Delete"\)/,
+    /getByTitle\("Delete"\)/,
   )
 
   // Since `ByTitle` and `ByText` will both return the <title> element
   // `getByText` will always be the suggested query as it is higher up the list.
-  expect(() => screen.getByTestId('svg')).toThrowError(/\*ByText\("Close"\)/)
+  expect(() => screen.getByTestId('svg')).toThrowError(/getByText\("Close"\)/)
 })

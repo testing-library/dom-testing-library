@@ -50,24 +50,14 @@ function makeSingleQuery(allQuery, getMultipleError) {
         container,
       )
     }
-    const element = els[0] || null
-
-    const [{suggest = true} = {}] = args.slice(-1)
-
-    if (getConfig().showSuggestions && suggest) {
-      const suggestion = getSuggestedQuery(element)
-      if (suggestion && !allQuery.name.endsWith(suggestion.queryName)) {
-        throw getSuggestionError(suggestion.toString(), container)
-      }
-    }
-    return element
+    return els[0] || null
   }
 }
 
 function getSuggestionError(suggestion, container) {
   return getConfig().getElementError(
     `A better query is available, try this:
-*By${suggestion.toString()}
+${suggestion.toString()}
 `,
     container,
   )
@@ -84,22 +74,7 @@ function makeGetAllQuery(allQuery, getMissingError) {
         container,
       )
     }
-    const [{suggest = true} = {}] = args.slice(-1)
-    if (suggest && getConfig().showSuggestions) {
-      // get a unique list of all suggestion messages.  We are only going to make a suggestion if
-      // all the suggestions are the same
-      const uniqueSuggestionMessages = [
-        ...new Set(els.map(element => getSuggestedQuery(element)?.toString())),
-      ]
 
-      if (
-        // only want to suggest if all the els have the same suggestion.
-        uniqueSuggestionMessages.length === 1 &&
-        !allQuery.name.endsWith(getSuggestedQuery(els[0]).queryName)
-      ) {
-        throw getSuggestionError(uniqueSuggestionMessages[0], container)
-      }
-    }
     return els
   }
 }
@@ -111,22 +86,79 @@ function makeFindQuery(getter) {
     waitFor(() => getter(container, text, options), waitForOptions)
 }
 
+const wrapSingleQueryWithSuggestion = (query, queryAllByName, variant) => (
+  container,
+  ...args
+) => {
+  const element = query(container, ...args)
+  const [{suggest = true} = {}] = args.slice(-1)
+
+  if (getConfig().showSuggestions && suggest) {
+    const suggestion = getSuggestedQuery(element, variant)
+    if (suggestion && !queryAllByName.endsWith(suggestion.queryName)) {
+      throw getSuggestionError(suggestion.toString(), container)
+    }
+  }
+
+  return element
+}
+
+const wrapAllByQueryWithSuggestion = (query, queryAllByName, variant) => (
+  container,
+  ...args
+) => {
+  const els = query(container, ...args)
+
+  const [{suggest = true}] = args.slice(-1)
+  if (suggest && getConfig().showSuggestions) {
+    // get a unique list of all suggestion messages.  We are only going to make a suggestion if
+    // all the suggestions are the same
+    const uniqueSuggestionMessages = [
+      ...new Set(
+        els.map(element => getSuggestedQuery(element, variant)?.toString()),
+      ),
+    ]
+
+    if (
+      // only want to suggest if all the els have the same suggestion.
+      uniqueSuggestionMessages.length === 1 &&
+      !queryAllByName.endsWith(getSuggestedQuery(els[0], variant).queryName)
+    ) {
+      throw getSuggestionError(uniqueSuggestionMessages[0], container)
+    }
+  }
+
+  return els
+}
+
 function buildQueries(queryAllBy, getMultipleError, getMissingError) {
-  const queryBy = makeSingleQuery(queryAllBy, getMultipleError)
+  const queryBy = wrapSingleQueryWithSuggestion(
+    makeSingleQuery(queryAllBy, getMultipleError),
+  )
   const getAllBy = makeGetAllQuery(queryAllBy, getMissingError)
-  // Suggestions need to know how they're being used, so need to set the name of the allQuery
-  Object.defineProperty(getAllBy, 'name', {
-    value: queryAllBy.name.replace('query', 'get'),
-  })
-  const getBy = makeSingleQuery(getAllBy, getMultipleError)
+
+  const getBy = wrapSingleQueryWithSuggestion(
+    makeSingleQuery(getAllBy, getMultipleError),
+    queryAllBy.name,
+    'get',
+  )
+
+  const getAllWithSuggestions = wrapAllByQueryWithSuggestion(
+    getAllBy,
+    queryAllBy.name.replace('query', 'get'),
+    'getAll',
+  )
+
   const findAllBy = makeFindQuery(getAllBy)
   const findBy = makeFindQuery(getBy)
 
-  return [queryBy, getAllBy, getBy, findAllBy, findBy]
+  return [queryBy, getAllWithSuggestions, getBy, findAllBy, findBy]
 }
 
 export {
   getElementError,
+  wrapAllByQueryWithSuggestion,
+  wrapSingleQueryWithSuggestion,
   getMultipleElementsFoundError,
   queryAllByAttribute,
   queryByAttribute,

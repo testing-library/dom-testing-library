@@ -6,6 +6,7 @@ import {
   queryAllByAttribute,
   makeFindQuery,
   makeSingleQuery,
+  wrapSingleQueryWithSuggestion,
 } from './all-utils'
 import {queryAllByText} from './text'
 
@@ -140,7 +141,11 @@ function getAllByLabelText(container, text, ...rest) {
 const getMultipleError = (c, text) =>
   `Found multiple elements with the text of: ${text}`
 const queryByLabelText = makeSingleQuery(queryAllByLabelText, getMultipleError)
-const getByLabelText = makeSingleQuery(getAllByLabelText, getMultipleError)
+const getByLabelText = wrapSingleQueryWithSuggestion(
+  makeSingleQuery(getAllByLabelText, getMultipleError),
+  getAllByLabelText.name,
+  'get',
+)
 
 const findAllByLabelText = makeFindQuery(getAllByLabelText)
 const findByLabelText = makeFindQuery(getByLabelText)
