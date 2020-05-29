@@ -259,6 +259,7 @@ Thanks goes to these people ([emoji key][emojis]):
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/appleJax"><img src="https://avatars1.githubusercontent.com/u/13618860?v=4" width="100px;" alt=""/><br /><sub><b>Kevin Brewer</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=appleJax" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=appleJax" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/benmonro"><img src="https://avatars3.githubusercontent.com/u/399236?v=4" width="100px;" alt=""/><br /><sub><b>Ben Monro</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=benmonro" title="Code">💻</a> <a href="#ideas-benmonro" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=benmonro" title="Tests">⚠️</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=benmonro" title="Documentation">📖</a></td>
   </tr>
 </table>
 
