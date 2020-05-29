@@ -10,7 +10,7 @@ export interface MatcherOptions {
   /** Use normalizer with getDefaultNormalizer instead */
   collapseWhitespace?: boolean
   normalizer?: NormalizerFn
-  /** set query suppress suggestions */
+  /** suppress suggestions for a specific query */
   suggest?: boolean
 }
 
