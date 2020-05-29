@@ -14,6 +14,7 @@ import {
   makeNormalizer,
   matches,
 } from './all-utils'
+import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 
 function queryAllByRole(
   container,
@@ -154,7 +155,11 @@ Unable to find an ${
 
 ${roleMessage}`.trim()
 }
-
+const queryAllByRoleWithSuggestions = wrapAllByQueryWithSuggestion(
+  queryAllByRole,
+  queryAllByRole.name,
+  'queryAll',
+)
 const [
   queryByRole,
   getAllByRole,
@@ -165,7 +170,7 @@ const [
 
 export {
   queryByRole,
-  queryAllByRole,
+  queryAllByRoleWithSuggestions as queryAllByRole,
   getAllByRole,
   getByRole,
   findAllByRole,
