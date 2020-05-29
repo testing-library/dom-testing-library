@@ -42,10 +42,9 @@ export function getSuggestedQuery(element) {
   const roles = getRoles(element)
 
   const roleNames = Object.keys(roles)
-  const name = computeAccessibleName(element)
   if (roleNames.length) {
     const [role] = roleNames
-    return makeSuggestion('Role', role, name)
+    return makeSuggestion('Role', role, computeAccessibleName(element))
   }
 
   const labelText = getLabelTextFor(element)
