@@ -2,9 +2,14 @@ import {configure} from '../config'
 import {screen} from '..'
 import {renderIntoDocument} from './helpers/test-utils'
 
-beforeEach(() => {
+beforeAll(() => {
   configure({showSuggestions: true})
 })
+
+afterAll(() => {
+  configure({showSuggestions: false})
+})
+
 test('does not suggest when using getByRole', () => {
   renderIntoDocument(`<button data-testid="foo">submit</button>`)
 
@@ -22,7 +27,20 @@ test(`should not suggest if the suggestion would give different results`, () => 
     <input type="text" data-testid="foo" /><span data-testid="foo" />
   `)
 
-  expect(() => screen.getAllByTestId('foo')).not.toThrowError()
+  expect(() =>
+    screen.getAllByTestId('foo', {suggest: false}),
+  ).not.toThrowError()
+})
+
+test('should not suggest when suggest is turned off for a query', () => {
+  renderIntoDocument(`
+  <button data-testid="foo">submit</button>
+  <button data-testid="foot">another</button>`)
+
+  expect(() => screen.getByTestId('foo', {suggest: false})).not.toThrowError()
+  expect(() =>
+    screen.getAllByTestId(/foo/, {suggest: false}),
+  ).not.toThrowError()
 })
 
 test('should suggest getByRole when used with getBy', () => {

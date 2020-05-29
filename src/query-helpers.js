@@ -52,7 +52,9 @@ function makeSingleQuery(allQuery, getMultipleError) {
     }
     const element = els[0] || null
 
-    if (getConfig().showSuggestions) {
+    const [{suggest = true} = {}] = args.slice(-1)
+
+    if (getConfig().showSuggestions && suggest) {
       const suggestion = getSuggestedQuery(element)
       if (suggestion && !allQuery.name.endsWith(suggestion.queryName)) {
         throw getSuggestionError(suggestion.toString(), container)
@@ -82,7 +84,8 @@ function makeGetAllQuery(allQuery, getMissingError) {
         container,
       )
     }
-    if (getConfig().showSuggestions) {
+    const [{suggest = true} = {}] = args.slice(-1)
+    if (suggest && getConfig().showSuggestions) {
       // get a unique list of all suggestion messages.  We are only going to make a suggestion if
       // all the suggestions are the same
       const uniqueSuggestionMessages = [
