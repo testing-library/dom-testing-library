@@ -5,7 +5,7 @@ import {renderIntoDocument} from './helpers/test-utils'
 beforeEach(() => {
   configure({showSuggestions: true})
 })
-it('should not suggest when using getByRole', () => {
+test('does not suggest when using getByRole', () => {
   renderIntoDocument(`<button data-testid="foo">submit</button>`)
 
   expect(() => screen.getByRole('button', {name: /submit/})).not.toThrowError()
@@ -169,7 +169,7 @@ test(`should suggest *ByTitle`, () => {
     /\*ByTitle\("Delete"\)/,
   )
 
-  //Since `ByTitle` and `ByText` will both return the <title> element
-  //`getByText` will always be the suggested query as it is higher up the list.
+  // Since `ByTitle` and `ByText` will both return the <title> element
+  // `getByText` will always be the suggested query as it is higher up the list.
   expect(() => screen.getByTestId('svg')).toThrowError(/\*ByText\("Close"\)/)
 })

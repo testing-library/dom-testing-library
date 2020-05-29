@@ -83,7 +83,7 @@ function makeGetAllQuery(allQuery, getMissingError) {
       )
     }
     if (getConfig().showSuggestions) {
-      //get a unique list of all suggestion messages.  We are only going to make a suggestion if
+      // get a unique list of all suggestion messages.  We are only going to make a suggestion if
       // all the suggestions are the same
       const uniqueSuggestionMessages = [
         ...new Set(els.map(element => getSuggestedQuery(element)?.toString())),
