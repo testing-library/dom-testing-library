@@ -58,8 +58,7 @@ export function getSuggestedQuery(element) {
     return makeSuggestion('PlaceholderText', placeholderText)
   }
 
-  let {textContent} = element
-  textContent = normalize(textContent)
+  const textContent = normalize(element.textContent)
   if (textContent) {
     return makeSuggestion('Text', textContent)
   }
