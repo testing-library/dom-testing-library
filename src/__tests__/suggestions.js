@@ -28,7 +28,8 @@ test('does not suggest for inline script, style', () => {
   expect(() => screen.getByTestId('script')).not.toThrow()
   expect(() => screen.getByTestId('style')).not.toThrow()
 })
-it('respects ignores', () => {
+
+test('respects ignores', () => {
   renderIntoDocument(`<my-thing>foo</my-thing>`)
 
   expect(() =>
