@@ -10,13 +10,20 @@ afterAll(() => {
   configure({throwSuggestions: false})
 })
 
-test('dost not suggest for inline script, style', () => {
+test('does not suggest for inline script, style', () => {
   renderIntoDocument(
     `<script data-testid="script">alert('hello')</script><style data-testid="style">.hsuHs{margin:auto}.wFncld{margin-top:3px;color:#9AA0A6;height:20px;width:20px}</style>`,
   )
 
   expect(() => screen.getByTestId('script')).not.toThrow()
   expect(() => screen.getByTestId('style')).not.toThrow()
+})
+it('respects ignores', () => {
+  renderIntoDocument(`<my-thing>foo</my-thing>`)
+
+  expect(() =>
+    screen.queryByText('foo', {ignore: 'my-thing'}),
+  ).not.toThrowError()
 })
 
 test('does not suggest when using getByRole', () => {

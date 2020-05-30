@@ -94,7 +94,7 @@ const wrapSingleQueryWithSuggestion = (query, queryAllByName, variant) => (
 ) => {
   const element = query(container, ...args)
   const [{suggest = getConfig().throwSuggestions} = {}] = args.slice(-1)
-  if (suggest) {
+  if (element && suggest) {
     const suggestion = getSuggestedQuery(element, variant)
     if (suggestion && !queryAllByName.endsWith(suggestion.queryName)) {
       throw getSuggestionError(suggestion.toString(), container)
@@ -111,7 +111,7 @@ const wrapAllByQueryWithSuggestion = (query, queryAllByName, variant) => (
   const els = query(container, ...args)
 
   const [{suggest = getConfig().throwSuggestions} = {}] = args.slice(-1)
-  if (suggest) {
+  if (els.length && suggest) {
     // get a unique list of all suggestion messages.  We are only going to make a suggestion if
     // all the suggestions are the same
     const uniqueSuggestionMessages = [
