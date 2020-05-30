@@ -10,6 +10,16 @@ afterAll(() => {
   configure({throwSuggestions: false})
 })
 
+test('does not suggest for nested inline style', () => {
+  renderIntoDocument(
+    `<div data-testid="style"><style>.hsuHs{margin:auto}.wFncld{margin-top:3px;color:#9AA0A6;height:20px;width:20px}</style></div>`,
+  )
+
+  // screen.debug(screen.getByText(/hsus/))
+
+  expect(() => screen.getByTestId('style')).not.toThrow()
+})
+
 test('does not suggest for inline script, style', () => {
   renderIntoDocument(
     `<script data-testid="script">alert('hello')</script><style data-testid="style">.hsuHs{margin:auto}.wFncld{margin-top:3px;color:#9AA0A6;height:20px;width:20px}</style>`,
