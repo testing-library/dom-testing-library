@@ -58,7 +58,7 @@ export function getSuggestedQuery(element, variant) {
   }
 
   const textContent = normalize(element.textContent)
-  if (textContent) {
+  if (textContent && !element.matches('script, style')) {
     return makeSuggestion('Text', textContent, {variant})
   }
 
