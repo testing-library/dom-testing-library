@@ -15,8 +15,6 @@ test('does not suggest for nested inline style', () => {
     `<div data-testid="style"><style>.hsuHs{margin:auto}.wFncld{margin-top:3px;color:#9AA0A6;height:20px;width:20px}</style></div>`,
   )
 
-  // screen.debug(screen.getByText(/hsus/))
-
   expect(() => screen.getByTestId('style')).not.toThrow()
 })
 
