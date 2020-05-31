@@ -2,6 +2,8 @@ import {computeAccessibleName} from 'dom-accessibility-api'
 import {getRoles} from './role-helpers'
 import {getDefaultNormalizer} from './matches'
 import {getNodeText} from './get-node-text'
+// eslint-disable-next-line import/no-cycle
+import {DEFAULT_IGNORE_TAGS} from './config'
 
 const normalize = getDefaultNormalizer()
 
@@ -59,7 +61,7 @@ export function getSuggestedQuery(element, variant) {
   }
 
   const textContent = normalize(getNodeText(element))
-  if (textContent && !element.matches('script, style')) {
+  if (textContent && !element.matches(DEFAULT_IGNORE_TAGS)) {
     return makeSuggestion('Text', textContent, {variant})
   }
 

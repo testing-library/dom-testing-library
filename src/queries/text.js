@@ -1,4 +1,5 @@
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
+import {DEFAULT_IGNORE_TAGS} from '../config'
 import {
   fuzzyMatches,
   matches,
@@ -15,7 +16,7 @@ function queryAllByText(
     exact = true,
     collapseWhitespace,
     trim,
-    ignore = 'script, style',
+    ignore = DEFAULT_IGNORE_TAGS,
     normalizer,
   } = {},
 ) {
