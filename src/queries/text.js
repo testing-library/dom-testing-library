@@ -1,3 +1,5 @@
+import {wrapAllByQueryWithSuggestion} from '../query-helpers'
+import {DEFAULT_IGNORE_TAGS} from '../config'
 import {
   fuzzyMatches,
   matches,
@@ -5,7 +7,6 @@ import {
   getNodeText,
   buildQueries,
 } from './all-utils'
-import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 
 function queryAllByText(
   container,
@@ -15,7 +16,7 @@ function queryAllByText(
     exact = true,
     collapseWhitespace,
     trim,
-    ignore = 'script, style',
+    ignore = DEFAULT_IGNORE_TAGS,
     normalizer,
   } = {},
 ) {

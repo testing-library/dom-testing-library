@@ -33,6 +33,7 @@ let config = {
   _disableExpensiveErrorDiagnostics: false,
 }
 
+export const DEFAULT_IGNORE_TAGS = 'script, style'
 export function runWithExpensiveErrorDiagnosticsDisabled(callback) {
   try {
     config._disableExpensiveErrorDiagnostics = true

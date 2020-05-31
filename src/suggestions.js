@@ -1,6 +1,8 @@
 import {computeAccessibleName} from 'dom-accessibility-api'
 import {getRoles} from './role-helpers'
 import {getDefaultNormalizer} from './matches'
+import {getNodeText} from './get-node-text'
+import {DEFAULT_IGNORE_TAGS} from './config'
 
 const normalize = getDefaultNormalizer()
 
@@ -57,8 +59,8 @@ export function getSuggestedQuery(element, variant) {
     return makeSuggestion('PlaceholderText', placeholderText, {variant})
   }
 
-  const textContent = normalize(element.textContent)
-  if (textContent) {
+  const textContent = normalize(getNodeText(element))
+  if (textContent && !element.matches(DEFAULT_IGNORE_TAGS)) {
     return makeSuggestion('Text', textContent, {variant})
   }
 

@@ -10,6 +10,31 @@ afterAll(() => {
   configure({throwSuggestions: false})
 })
 
+test('does not suggest for nested inline style', () => {
+  renderIntoDocument(
+    `<div data-testid="style"><style>.hsuHs{margin:auto}.wFncld{margin-top:3px;color:#9AA0A6;height:20px;width:20px}</style></div>`,
+  )
+
+  expect(() => screen.getByTestId('style')).not.toThrow()
+})
+
+test('does not suggest for inline script, style', () => {
+  renderIntoDocument(
+    `<script data-testid="script">alert('hello')</script><style data-testid="style">.hsuHs{margin:auto}.wFncld{margin-top:3px;color:#9AA0A6;height:20px;width:20px}</style>`,
+  )
+
+  expect(() => screen.getByTestId('script')).not.toThrow()
+  expect(() => screen.getByTestId('style')).not.toThrow()
+})
+
+test('respects ignores', () => {
+  renderIntoDocument(`<my-thing>foo</my-thing>`)
+
+  expect(() =>
+    screen.queryByText('foo', {ignore: 'my-thing'}),
+  ).not.toThrowError()
+})
+
 test('does not suggest when using getByRole', () => {
   renderIntoDocument(`<button data-testid="foo">submit</button>`)
 
