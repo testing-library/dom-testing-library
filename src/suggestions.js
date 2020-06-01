@@ -1,8 +1,8 @@
 import {computeAccessibleName} from 'dom-accessibility-api'
-import {getRoles} from './role-helpers'
 import {getDefaultNormalizer} from './matches'
 import {getNodeText} from './get-node-text'
 import {DEFAULT_IGNORE_TAGS} from './config'
+import {getImplicitAriaRoles} from './role-helpers'
 
 const normalize = getDefaultNormalizer()
 
@@ -26,23 +26,25 @@ function getLabelTextFor(element) {
   }
   return undefined
 }
-
+function escapeRegExp(string) {
+  return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+}
 function makeSuggestion(queryName, content, {variant, name}) {
   return {
     queryName,
     toString() {
-      const options = name ? `, {name: /${name.toLowerCase()}/i}` : ''
+      const options = name
+        ? `, {name: /${escapeRegExp(name.toLowerCase())}/i}`
+        : ''
       return `${variant}By${queryName}("${content}"${options})`
     },
   }
 }
 
 export function getSuggestedQuery(element, variant) {
-  const roles = getRoles(element)
-
-  const roleNames = Object.keys(roles)
-  if (roleNames.length) {
-    const [role] = roleNames
+  const role =
+    element.getAttribute('role') ?? getImplicitAriaRoles(element)?.[0]
+  if (role) {
     return makeSuggestion('Role', role, {
       variant,
       name: computeAccessibleName(element),

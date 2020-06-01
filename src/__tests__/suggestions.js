@@ -35,6 +35,18 @@ test('respects ignores', () => {
   ).not.toThrowError()
 })
 
+test('does not suggest query that would give a different element', () => {
+  renderIntoDocument(`
+  <div data-testid="foo"><img src="foo" /></div>
+  <div data-testid="bar"><a href="/foo"><div role="figure"><img src="foo" /></div></a></div>
+  <a data-testid="baz"><h1>link text</h1></a>
+  `)
+
+  expect(() => screen.getByTestId('foo')).not.toThrowError()
+  expect(() => screen.getByTestId('bar')).not.toThrowError()
+  expect(() => screen.getByTestId('baz')).not.toThrowError()
+})
+
 test('does not suggest when using getByRole', () => {
   renderIntoDocument(`<button data-testid="foo">submit</button>`)
 
@@ -55,6 +67,12 @@ test(`should not suggest if the suggestion would give different results`, () => 
   expect(() =>
     screen.getAllByTestId('foo', {suggest: false}),
   ).not.toThrowError()
+})
+
+test('should suggest by label over title', () => {
+  renderIntoDocument(`<label><span>bar</span><input title="foo" /></label>`)
+
+  expect(() => screen.getByTitle('foo')).toThrowError(/getByLabelText\("bar"\)/)
 })
 
 test('should not suggest if there would be mixed suggestions', () => {
@@ -142,6 +160,16 @@ test('should suggest img role w/ alt text', () => {
 
   expect(() => screen.getByAltText('Incredibles 2 Poster')).toThrowError(
     /getByRole\("img", \{name: \/incredibles 2 poster\/i\}\)/,
+  )
+})
+
+test('escapes regular expressions in suggestion', () => {
+  renderIntoDocument(
+    `<img src="foo.png" alt="The Problem (picture of a question mark)" data-testid="foo" />`,
+  )
+
+  expect(() => screen.getByTestId('foo')).toThrowError(
+    /getByRole\("img", \{name: \/the problem \\\(picture of a question mark\\\)\/i\}\)/,
   )
 })
 
