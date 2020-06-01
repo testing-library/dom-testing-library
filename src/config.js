@@ -14,6 +14,7 @@ let config = {
   // react-testing-library to use. For that reason, this feature will remain
   // undocumented.
   asyncWrapper: cb => cb(),
+  eventWrapper: cb => cb(),
   // default value for the `hidden` option in `ByRole` queries
   defaultHidden: false,
   // showOriginalStackTrace flag to show the full error stack traces for async errors
