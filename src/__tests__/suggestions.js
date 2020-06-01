@@ -163,6 +163,16 @@ test('should suggest img role w/ alt text', () => {
   )
 })
 
+test('escapes regular expressions in suggestion', () => {
+  renderIntoDocument(
+    `<img src="foo.png" alt="The Problem (picture of a question mark)" data-testid="foo" />`,
+  )
+
+  expect(() => screen.getByTestId('foo')).toThrowError(
+    /getByRole\("img", \{name: \/the problem \\\(picture of a question mark\\\)\/i\}\)/,
+  )
+})
+
 test('should suggest getByLabelText when no role available', () => {
   renderIntoDocument(
     `<label for="foo">Username</label><input data-testid="foo" id="foo" />`,

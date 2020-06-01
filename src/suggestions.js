@@ -26,12 +26,16 @@ function getLabelTextFor(element) {
   }
   return undefined
 }
-
+function escapeRegExp(string) {
+  return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+}
 function makeSuggestion(queryName, content, {variant, name}) {
   return {
     queryName,
     toString() {
-      const options = name ? `, {name: /${name.toLowerCase()}/i}` : ''
+      const options = name
+        ? `, {name: /${escapeRegExp(name.toLowerCase())}/i}`
+        : ''
       return `${variant}By${queryName}("${content}"${options})`
     },
   }
