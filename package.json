@@ -38,14 +38,14 @@
     "types"
   ],
   "dependencies": {
-    "@babel/runtime": "^7.9.6",
+    "@babel/runtime": "^7.10.2",
     "aria-query": "^4.0.2",
     "dom-accessibility-api": "^0.4.4",
     "pretty-format": "^25.5.0"
   },
   "devDependencies": {
-    "dtslint": "^3.4.2",
-    "@testing-library/jest-dom": "^5.5.0",
+    "dtslint": "^3.6.9",
+    "@testing-library/jest-dom": "^5.9.0",
     "jest-in-case": "^1.0.2",
     "jest-serializer-ansi": "^1.0.3",
     "jest-watch-select-projects": "^2.0.0",
