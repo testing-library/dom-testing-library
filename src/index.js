@@ -15,7 +15,7 @@ export * from './screen'
 export * from './query-helpers'
 export {getRoles, logRoles, isInaccessible} from './role-helpers'
 export * from './pretty-dom'
-export {configure} from './config'
+export {configure, getConfig} from './config'
 export * from './suggestions'
 
 export {
