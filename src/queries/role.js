@@ -7,6 +7,8 @@ import {
   isInaccessible,
   isSubtreeInaccessible,
 } from '../role-helpers'
+import {wrapAllByQueryWithSuggestion} from '../query-helpers'
+import {checkContainerType} from '../helpers'
 import {
   buildQueries,
   fuzzyMatches,
@@ -14,7 +16,6 @@ import {
   makeNormalizer,
   matches,
 } from './all-utils'
-import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 
 function queryAllByRole(
   container,
@@ -30,6 +31,7 @@ function queryAllByRole(
     selected,
   } = {},
 ) {
+  checkContainerType(container)
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
 

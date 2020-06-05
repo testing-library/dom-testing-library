@@ -65,6 +65,27 @@ function getWindowFromNode(node) {
   }
 }
 
+function checkContainerType(container) {
+  if (
+    !container ||
+    !(typeof container.querySelector === 'function') ||
+    !(typeof container.querySelectorAll === 'function')
+  ) {
+    throw new TypeError(
+      `Expected container to be an Element, a Document or a DocumentFragment but got ${getTypeName(
+        container,
+      )}.`,
+    )
+  }
+
+  function getTypeName(object) {
+    if (typeof object === 'object') {
+      return object === null ? 'null' : object.constructor.name
+    }
+    return typeof object
+  }
+}
+
 export {
   getWindowFromNode,
   getDocument,
@@ -72,4 +93,5 @@ export {
   setImmediateFn as setImmediate,
   setTimeoutFn as setTimeout,
   runWithRealTimers,
+  checkContainerType,
 }

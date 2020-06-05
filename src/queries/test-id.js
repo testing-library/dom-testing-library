@@ -1,9 +1,11 @@
-import {queryAllByAttribute, getConfig, buildQueries} from './all-utils'
+import {checkContainerType} from '../helpers'
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
+import {queryAllByAttribute, getConfig, buildQueries} from './all-utils'
 
 const getTestIdAttribute = () => getConfig().testIdAttribute
 
 function queryAllByTestId(...args) {
+  checkContainerType(...args)
   return queryAllByAttribute(getTestIdAttribute(), ...args)
 }
 
