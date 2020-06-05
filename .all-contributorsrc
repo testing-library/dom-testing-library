@@ -995,6 +995,16 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "Jnforja",
+      "name": "João Forja",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7002157?v=4",
+      "profile": "https://joaoforja.com/",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
