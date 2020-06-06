@@ -12,6 +12,7 @@ export interface MatcherOptions {
   normalizer?: NormalizerFn
   /** suppress suggestions for a specific query */
   suggest?: boolean
+  concat?: boolean
 }
 
 export type Match = (
