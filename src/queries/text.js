@@ -1,4 +1,5 @@
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
+import {checkContainerType} from '../helpers'
 import {DEFAULT_IGNORE_TAGS} from '../config'
 import {
   fuzzyMatches,
@@ -20,6 +21,7 @@ function queryAllByText(
     normalizer,
   } = {},
 ) {
+  checkContainerType(container)
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   let baseArray = []

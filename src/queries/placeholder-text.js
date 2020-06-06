@@ -1,7 +1,9 @@
-import {queryAllByAttribute, buildQueries} from './all-utils'
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
+import {checkContainerType} from '../helpers'
+import {queryAllByAttribute, buildQueries} from './all-utils'
 
 function queryAllByPlaceholderText(...args) {
+  checkContainerType(...args)
   return queryAllByAttribute('placeholder', ...args)
 }
 const getMultipleError = (c, text) =>

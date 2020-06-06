@@ -1,4 +1,5 @@
 import {getConfig} from '../config'
+import {checkContainerType} from '../helpers'
 import {
   fuzzyMatches,
   matches,
@@ -52,6 +53,8 @@ function queryAllByLabelText(
     concat = false,
   } = {},
 ) {
+  checkContainerType(container)
+
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   const labels = queryAllLabelsByText(container, text, {
     exact,

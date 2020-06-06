@@ -40,7 +40,7 @@
   "dependencies": {
     "@babel/runtime": "^7.10.2",
     "aria-query": "^4.0.2",
-    "dom-accessibility-api": "^0.4.4",
+    "dom-accessibility-api": "^0.4.5",
     "pretty-format": "^25.5.0"
   },
   "devDependencies": {
