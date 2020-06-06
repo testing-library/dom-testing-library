@@ -14,7 +14,7 @@ import {queryAllByText} from './text'
 function queryAllLabelsByText(
   container,
   text,
-  {exact = true, trim, collapseWhitespace, normalizer} = {},
+  {exact = true, trim, collapseWhitespace, normalizer, concat = false} = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
@@ -36,20 +36,39 @@ function queryAllLabelsByText(
       textToMatch = textToMatch.replace(select.textContent, '')
     })
 
-    return matcher(textToMatch, node, text, matchNormalizer)
+    return matcher(textToMatch, node, text, matchNormalizer, concat)
   })
 }
 
 function queryAllByLabelText(
   container,
   text,
-  {selector = '*', exact = true, collapseWhitespace, trim, normalizer} = {},
+  {
+    selector = '*',
+    exact = true,
+    collapseWhitespace,
+    trim,
+    normalizer,
+    concat = false,
+  } = {},
 ) {
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   const labels = queryAllLabelsByText(container, text, {
     exact,
     normalizer: matchNormalizer,
+    concat,
   })
+  if (concat) {
+    const labelsValues = labels.map(label => label.textContent || label.value)
+    if (
+      labelsValues.reduce(
+        (agg, label) => agg.replace(`${label} `, ''),
+        `${text} `,
+      ) !== ''
+    ) {
+      return []
+    }
+  }
   const labelledElements = labels
     .reduce((matchedElements, label) => {
       const elementsForLabel = []

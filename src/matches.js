@@ -13,14 +13,16 @@ function fuzzyMatches(textToMatch, node, matcher, normalizer) {
   }
 }
 
-function matches(textToMatch, node, matcher, normalizer) {
+function matches(textToMatch, node, matcher, normalizer, concat = false) {
   if (typeof textToMatch !== 'string') {
     return false
   }
 
   const normalizedText = normalizer(textToMatch)
   if (typeof matcher === 'string') {
-    return normalizedText === matcher
+    return concat
+      ? matcher.toLowerCase().includes(normalizedText.toLowerCase())
+      : normalizedText === matcher
   } else if (typeof matcher === 'function') {
     return matcher(normalizedText, node)
   } else {

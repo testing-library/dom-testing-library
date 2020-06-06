@@ -185,6 +185,9 @@ test('can get form controls by label text', () => {
   expect(getByLabelText('6th one').id).toBe('sixth-id')
   expect(getByLabelText('6th two').id).toBe('sixth-id')
   expect(getByLabelText('6th three').id).toBe('sixth-id')
+  expect(getByLabelText('6th one 6th two 6th three', {concat: true}).id).toBe(
+    'sixth-id',
+  )
 })
 
 test('can get elements labelled with aria-labelledby attribute', () => {
