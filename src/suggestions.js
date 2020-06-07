@@ -29,16 +29,29 @@ function getLabelTextFor(element) {
 function escapeRegExp(string) {
   return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
-function makeSuggestion(queryName, content, {variant, name}) {
+
+function makeSuggestion(queryName, content, {
+  variant = 'get',
+  name
+}) {
+  const queryArgs = [content];
+
+  if (name) {
+    queryArgs.push({ name: new RegExp(escapeRegExp(name.toLowerCase()), 'i') })
+  }
+
+  const queryMethod = `${variant}By${queryName}`;
+
   return {
     queryName,
+    queryMethod,
+    queryArgs,
+    variant,
     toString() {
-      const options = name
-        ? `, {name: /${escapeRegExp(name.toLowerCase())}/i}`
-        : ''
-      return `${variant}By${queryName}("${content}"${options})`
-    },
-  }
+      const options = queryArgs[1] ? `, { ${Object.entries(queryArgs[1]).map(([k, v]) => `${k}: ${v}`).join(', ')} }` : '';
+      return `${queryMethod}("${content}"${options})`;
+    }
+  };
 }
 
 export function getSuggestedQuery(element, variant) {
