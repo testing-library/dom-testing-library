@@ -1,6 +1,6 @@
 import {configure} from '../config'
-import {screen} from '..'
-import {renderIntoDocument} from './helpers/test-utils'
+import {screen, getSuggestedQuery} from '..'
+import {renderIntoDocument, render} from './helpers/test-utils'
 
 beforeAll(() => {
   configure({throwSuggestions: true})
@@ -306,4 +306,46 @@ test(`should suggest getByTitle`, () => {
   // Since `ByTitle` and `ByText` will both return the <title> element
   // `getByText` will always be the suggested query as it is higher up the list.
   expect(() => screen.getByTestId('svg')).toThrowError(/getByText\('Close'\)/)
+})
+
+test('getSuggestedQuery handles `variant` and defaults to `get`', () => {
+  const button = render(`<button>submit</button>`).container.firstChild
+
+  expect(getSuggestedQuery(button).toString()).toMatch(/getByRole/)
+  expect(getSuggestedQuery(button, 'get').toString()).toMatch(/getByRole/)
+  expect(getSuggestedQuery(button, 'getAll').toString()).toMatch(/getAllByRole/)
+  expect(getSuggestedQuery(button, 'query').toString()).toMatch(/queryByRole/)
+  expect(getSuggestedQuery(button, 'queryAll').toString()).toMatch(
+    /queryAllByRole/,
+  )
+  expect(getSuggestedQuery(button, 'find').toString()).toMatch(/findByRole/)
+  expect(getSuggestedQuery(button, 'findAll').toString()).toMatch(
+    /findAllByRole/,
+  )
+})
+
+test('getSuggestedQuery returns rich data for tooling', () => {
+  const button = render(`<button>submit</button>`).container.firstChild
+
+  expect(getSuggestedQuery(button)).toMatchObject({
+    queryName: 'Role',
+    queryMethod: 'getByRole',
+    queryArgs: ['button', {name: /submit/i}],
+    variant: 'get',
+  })
+
+  expect(getSuggestedQuery(button).toString()).toEqual(
+    `getByRole('button', { name: /submit/i })`,
+  )
+
+  const div = render(`<a>cancel</a>`).container.firstChild
+
+  expect(getSuggestedQuery(div)).toMatchObject({
+    queryName: 'Text',
+    queryMethod: 'getByText',
+    queryArgs: ['cancel'],
+    variant: 'get',
+  })
+
+  expect(getSuggestedQuery(div).toString()).toEqual(`getByText('cancel')`)
 })
