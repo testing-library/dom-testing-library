@@ -1,6 +1,6 @@
 import {configure} from '../config'
-import {screen} from '..'
-import {renderIntoDocument} from './helpers/test-utils'
+import {screen, getSuggestedQuery} from '..'
+import {renderIntoDocument, render} from './helpers/test-utils'
 
 beforeAll(() => {
   configure({throwSuggestions: true})
@@ -72,7 +72,7 @@ test(`should not suggest if the suggestion would give different results`, () => 
 test('should suggest by label over title', () => {
   renderIntoDocument(`<label><span>bar</span><input title="foo" /></label>`)
 
-  expect(() => screen.getByTitle('foo')).toThrowError(/getByLabelText\("bar"\)/)
+  expect(() => screen.getByTitle('foo')).toThrowError(/getByLabelText\('bar'\)/)
 })
 
 test('should not suggest if there would be mixed suggestions', () => {
@@ -99,7 +99,7 @@ test('should suggest getByRole when used with getBy', () => {
 
   expect(() => screen.getByTestId('foo')).toThrowErrorMatchingInlineSnapshot(`
 "A better query is available, try this:
-getByRole("button", {name: /submit/i})
+getByRole('button', { name: /submit/i })
 
 
 <body>
@@ -120,7 +120,7 @@ test('should suggest getAllByRole when used with getAllByTestId', () => {
   expect(() => screen.getAllByTestId('foo'))
     .toThrowErrorMatchingInlineSnapshot(`
 "A better query is available, try this:
-getAllByRole("button", {name: /submit/i})
+getAllByRole('button', { name: /submit/i })
 
 
 <body>
@@ -148,10 +148,10 @@ test('should suggest findByRole when used with findByTestId', async () => {
   `)
 
   await expect(screen.findByTestId('foo')).rejects.toThrowError(
-    /findByRole\("button", \{name: \/submit\/i\}\)/,
+    /findByRole\('button', \{ name: \/submit\/i \}\)/,
   )
   await expect(screen.findAllByTestId(/foo/)).rejects.toThrowError(
-    /findAllByRole\("button", \{name: \/submit\/i\}\)/,
+    /findAllByRole\('button', \{ name: \/submit\/i \}\)/,
   )
 })
 
@@ -159,7 +159,7 @@ test('should suggest img role w/ alt text', () => {
   renderIntoDocument(`<img data-testid="img" alt="Incredibles 2 Poster"  />`)
 
   expect(() => screen.getByAltText('Incredibles 2 Poster')).toThrowError(
-    /getByRole\("img", \{name: \/incredibles 2 poster\/i\}\)/,
+    /getByRole\('img', \{ name: \/incredibles 2 poster\/i \}\)/,
   )
 })
 
@@ -169,7 +169,7 @@ test('escapes regular expressions in suggestion', () => {
   )
 
   expect(() => screen.getByTestId('foo')).toThrowError(
-    /getByRole\("img", \{name: \/the problem \\\(picture of a question mark\\\)\/i\}\)/,
+    /getByRole\('img', \{ name: \/the problem \\\(picture of a question mark\\\)\/i \}\)/,
   )
 })
 
@@ -178,7 +178,7 @@ test('should suggest getByLabelText when no role available', () => {
     `<label for="foo">Username</label><input data-testid="foo" id="foo" />`,
   )
   expect(() => screen.getByTestId('foo')).toThrowError(
-    /getByLabelText\("Username"\)/,
+    /getByLabelText\('Username'\)/,
   )
 })
 
@@ -191,7 +191,7 @@ test(`should suggest getByLabel on non form elements`, () => {
   `)
 
   expect(() => screen.getByTestId('foo')).toThrowError(
-    /getByLabelText\("Section One"\)/,
+    /getByLabelText\('Section One'\)/,
   )
 })
 
@@ -203,24 +203,24 @@ test.each([
   renderIntoDocument(html)
 
   expect(() => screen.getByLabelText('Username')).toThrowError(
-    /getByRole\("textbox", \{name: \/username\/i\}\)/,
+    /getByRole\('textbox', \{ name: \/username\/i \}\)/,
   )
   expect(() => screen.getAllByLabelText('Username')).toThrowError(
-    /getAllByRole\("textbox", \{name: \/username\/i\}\)/,
+    /getAllByRole\('textbox', \{ name: \/username\/i \}\)/,
   )
 
   expect(() => screen.queryByLabelText('Username')).toThrowError(
-    /queryByRole\("textbox", \{name: \/username\/i\}\)/,
+    /queryByRole\('textbox', \{ name: \/username\/i \}\)/,
   )
   expect(() => screen.queryAllByLabelText('Username')).toThrowError(
-    /queryAllByRole\("textbox", \{name: \/username\/i\}\)/,
+    /queryAllByRole\('textbox', \{ name: \/username\/i \}\)/,
   )
 
   await expect(screen.findByLabelText('Username')).rejects.toThrowError(
-    /findByRole\("textbox", \{name: \/username\/i\}\)/,
+    /findByRole\('textbox', \{ name: \/username\/i \}\)/,
   )
   await expect(screen.findAllByLabelText(/Username/)).rejects.toThrowError(
-    /findAllByRole\("textbox", \{name: \/username\/i\}\)/,
+    /findAllByRole\('textbox', \{ name: \/username\/i \}\)/,
   )
 })
 
@@ -230,7 +230,7 @@ test(`should suggest label over placeholder text`, () => {
   )
 
   expect(() => screen.getByPlaceholderText('Username')).toThrowError(
-    /getByLabelText\("Username"\)/,
+    /getByLabelText\('Username'\)/,
   )
 })
 
@@ -238,7 +238,7 @@ test(`should suggest getByPlaceholderText`, () => {
   renderIntoDocument(`<input data-testid="foo" placeholder="Username" />`)
 
   expect(() => screen.getByTestId('foo')).toThrowError(
-    /getByPlaceholderText\("Username"\)/,
+    /getByPlaceholderText\('Username'\)/,
   )
 })
 
@@ -246,7 +246,7 @@ test(`should suggest getByText for simple elements`, () => {
   renderIntoDocument(`<div data-testid="foo">hello there</div>`)
 
   expect(() => screen.getByTestId('foo')).toThrowError(
-    /getByText\("hello there"\)/,
+    /getByText\('hello there'\)/,
   )
 })
 
@@ -256,7 +256,7 @@ test(`should suggest getByDisplayValue`, () => {
   document.getElementById('lastName').value = 'Prine' // RIP John Prine
 
   expect(() => screen.getByTestId('lastName')).toThrowError(
-    /getByDisplayValue\("Prine"\)/,
+    /getByDisplayValue\('Prine'\)/,
   )
 })
 
@@ -269,10 +269,10 @@ test(`should suggest getByAltText`, () => {
     `)
 
   expect(() => screen.getByTestId('input')).toThrowError(
-    /getByAltText\("last name"\)/,
+    /getByAltText\('last name'\)/,
   )
   expect(() => screen.getByTestId('area')).toThrowError(
-    /getByAltText\("Computer"\)/,
+    /getByAltText\('Computer'\)/,
   )
 })
 
@@ -285,25 +285,67 @@ test(`should suggest getByTitle`, () => {
   </svg>`)
 
   expect(() => screen.getByTestId('delete')).toThrowError(
-    /getByTitle\("Delete"\)/,
+    /getByTitle\('Delete'\)/,
   )
   expect(() => screen.getAllByTestId('delete')).toThrowError(
-    /getAllByTitle\("Delete"\)/,
+    /getAllByTitle\('Delete'\)/,
   )
   expect(() => screen.queryByTestId('delete')).toThrowError(
-    /queryByTitle\("Delete"\)/,
+    /queryByTitle\('Delete'\)/,
   )
   expect(() => screen.queryAllByTestId('delete')).toThrowError(
-    /queryAllByTitle\("Delete"\)/,
+    /queryAllByTitle\('Delete'\)/,
   )
   expect(() => screen.queryAllByTestId('delete')).toThrowError(
-    /queryAllByTitle\("Delete"\)/,
+    /queryAllByTitle\('Delete'\)/,
   )
   expect(() => screen.queryAllByTestId('delete')).toThrowError(
-    /queryAllByTitle\("Delete"\)/,
+    /queryAllByTitle\('Delete'\)/,
   )
 
   // Since `ByTitle` and `ByText` will both return the <title> element
   // `getByText` will always be the suggested query as it is higher up the list.
-  expect(() => screen.getByTestId('svg')).toThrowError(/getByText\("Close"\)/)
+  expect(() => screen.getByTestId('svg')).toThrowError(/getByText\('Close'\)/)
+})
+
+test('getSuggestedQuery handles `variant` and defaults to `get`', () => {
+  const button = render(`<button>submit</button>`).container.firstChild
+
+  expect(getSuggestedQuery(button).toString()).toMatch(/getByRole/)
+  expect(getSuggestedQuery(button, 'get').toString()).toMatch(/getByRole/)
+  expect(getSuggestedQuery(button, 'getAll').toString()).toMatch(/getAllByRole/)
+  expect(getSuggestedQuery(button, 'query').toString()).toMatch(/queryByRole/)
+  expect(getSuggestedQuery(button, 'queryAll').toString()).toMatch(
+    /queryAllByRole/,
+  )
+  expect(getSuggestedQuery(button, 'find').toString()).toMatch(/findByRole/)
+  expect(getSuggestedQuery(button, 'findAll').toString()).toMatch(
+    /findAllByRole/,
+  )
+})
+
+test('getSuggestedQuery returns rich data for tooling', () => {
+  const button = render(`<button>submit</button>`).container.firstChild
+
+  expect(getSuggestedQuery(button)).toMatchObject({
+    queryName: 'Role',
+    queryMethod: 'getByRole',
+    queryArgs: ['button', {name: /submit/i}],
+    variant: 'get',
+  })
+
+  expect(getSuggestedQuery(button).toString()).toEqual(
+    `getByRole('button', { name: /submit/i })`,
+  )
+
+  const div = render(`<a>cancel</a>`).container.firstChild
+
+  expect(getSuggestedQuery(div)).toMatchObject({
+    queryName: 'Text',
+    queryMethod: 'getByText',
+    queryArgs: ['cancel'],
+    variant: 'get',
+  })
+
+  expect(getSuggestedQuery(div).toString()).toEqual(`getByText('cancel')`)
 })
