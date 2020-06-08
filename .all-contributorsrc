@@ -993,7 +993,9 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/1196524?v=4",
       "profile": "https://github.com/smeijer",
       "contributions": [
-        "ideas"
+        "ideas",
+        "code",
+        "test"
       ]
     },
     {
