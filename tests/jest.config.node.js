@@ -12,4 +12,10 @@ module.exports = {
     '/__node_tests__/',
   ],
   testMatch: ['**/__node_tests__/**.js'],
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': path.join(
+      __dirname,
+      '../node_modules/kcd-scripts/dist/config/babel-transform',
+    ),
+  },
 }

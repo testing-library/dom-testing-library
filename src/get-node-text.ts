@@ -2,9 +2,9 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType#Node_type_constants
 const TEXT_NODE = 3
 
-function getNodeText(node) {
+function getNodeText(node: HTMLElement): string {
   if (node.matches('input[type=submit], input[type=button]')) {
-    return node.value
+    return (node as HTMLInputElement).value
   }
 
   return Array.from(node.childNodes)

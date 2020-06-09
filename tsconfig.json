@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outDir": "./types/",
+    "allowJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": true
+  },
+  "include": ["./src/**/*.ts"]
+}
