@@ -1,8 +1,9 @@
-export type MatcherFunction = (content: string, element: HTMLElement) => boolean
-export type Matcher = string | RegExp | MatcherFunction
-
-export type NormalizerFn = (text: string) => string
-
+export declare type MatcherFunction = (
+  content: string,
+  element: HTMLElement,
+) => boolean
+export declare type Matcher = string | RegExp | MatcherFunction
+export declare type NormalizerFn = (text: string) => string
 export interface MatcherOptions {
   exact?: boolean
   /** Use normalizer with getDefaultNormalizer instead */
@@ -13,21 +14,42 @@ export interface MatcherOptions {
   /** suppress suggestions for a specific query */
   suggest?: boolean
 }
-
-export type Match = (
+declare function fuzzyMatches(
   textToMatch: string,
   node: HTMLElement | null,
   matcher: Matcher,
-  options?: MatcherOptions,
-) => boolean
-
+  normalizer: NormalizerFn,
+): boolean
+declare function matches(
+  textToMatch: string,
+  node: HTMLElement | null,
+  matcher: Matcher,
+  normalizer: NormalizerFn,
+): boolean
 export interface DefaultNormalizerOptions {
   trim?: boolean
   collapseWhitespace?: boolean
 }
-
-export function getDefaultNormalizer(
-  options?: DefaultNormalizerOptions,
-): NormalizerFn
-
-// N.B. Don't expose fuzzyMatches + matches here: they're not public API
+declare function getDefaultNormalizer({
+  trim,
+  collapseWhitespace,
+}?: DefaultNormalizerOptions): NormalizerFn
+/**
+ * Constructs a normalizer to pass to functions in matches.js
+ * @param {boolean|undefined} trim The user-specified value for `trim`, without
+ * any defaulting having been applied
+ * @param {boolean|undefined} collapseWhitespace The user-specified value for
+ * `collapseWhitespace`, without any defaulting having been applied
+ * @param {Function|undefined} normalizer The user-specified normalizer
+ * @returns {Function} A normalizer
+ */
+declare function makeNormalizer({
+  trim,
+  collapseWhitespace,
+  normalizer,
+}: {
+  trim: any
+  collapseWhitespace: any
+  normalizer: any
+}): NormalizerFn
+export {fuzzyMatches, matches, getDefaultNormalizer, makeNormalizer}

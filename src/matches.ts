@@ -1,4 +1,26 @@
-function fuzzyMatches(textToMatch, node, matcher, normalizer) {
+export type MatcherFunction = (content: string, element: HTMLElement) => boolean
+
+export type Matcher = string | RegExp | MatcherFunction
+
+export type NormalizerFn = (text: string) => string
+
+export interface MatcherOptions {
+  exact?: boolean
+  /** Use normalizer with getDefaultNormalizer instead */
+  trim?: boolean
+  /** Use normalizer with getDefaultNormalizer instead */
+  collapseWhitespace?: boolean
+  normalizer?: NormalizerFn
+  /** suppress suggestions for a specific query */
+  suggest?: boolean
+}
+
+function fuzzyMatches(
+  textToMatch: string,
+  node: HTMLElement | null,
+  matcher: Matcher,
+  normalizer: NormalizerFn,
+) {
   if (typeof textToMatch !== 'string') {
     return false
   }
@@ -13,7 +35,12 @@ function fuzzyMatches(textToMatch, node, matcher, normalizer) {
   }
 }
 
-function matches(textToMatch, node, matcher, normalizer) {
+function matches(
+  textToMatch: string,
+  node: HTMLElement | null,
+  matcher: Matcher,
+  normalizer: NormalizerFn,
+) {
   if (typeof textToMatch !== 'string') {
     return false
   }
@@ -28,7 +55,15 @@ function matches(textToMatch, node, matcher, normalizer) {
   }
 }
 
-function getDefaultNormalizer({trim = true, collapseWhitespace = true} = {}) {
+export interface DefaultNormalizerOptions {
+  trim?: boolean
+  collapseWhitespace?: boolean
+}
+
+function getDefaultNormalizer({
+  trim = true,
+  collapseWhitespace = true,
+}: DefaultNormalizerOptions = {}): NormalizerFn {
   return text => {
     let normalizedText = text
     normalizedText = trim ? normalizedText.trim() : normalizedText
@@ -48,7 +83,7 @@ function getDefaultNormalizer({trim = true, collapseWhitespace = true} = {}) {
  * @param {Function|undefined} normalizer The user-specified normalizer
  * @returns {Function} A normalizer
  */
-function makeNormalizer({trim, collapseWhitespace, normalizer}) {
+function makeNormalizer({trim, collapseWhitespace, normalizer}): NormalizerFn {
   if (normalizer) {
     // User has specified a custom normalizer
     if (
