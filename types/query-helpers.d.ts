@@ -1,5 +1,5 @@
-import { Matcher, MatcherOptions } from './matches'
-import { waitForOptions } from './wait-for'
+import {Matcher, MatcherOptions} from './matches'
+import {waitForOptions} from './wait-for'
 
 export interface SelectorMatcherOptions extends MatcherOptions {
   selector?: string

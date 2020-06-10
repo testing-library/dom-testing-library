@@ -1,2 +1,2 @@
-declare function getNodeText(node: HTMLElement): string;
-export { getNodeText };
+declare function getNodeText(node: HTMLElement): string
+export {getNodeText}

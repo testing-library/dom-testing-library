@@ -5,6 +5,7 @@
     "no-useless-files": false,
     "no-relative-import-in-test": false,
     "semicolon": false,
-    "strict-export-declare-modifiers": false
+    "strict-export-declare-modifiers": false,
+    "whitespace": false
   }
 }
