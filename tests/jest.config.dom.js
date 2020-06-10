@@ -11,10 +11,4 @@ module.exports = {
     '/__node_tests__/',
   ],
   testEnvironment: 'jest-environment-jsdom',
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': path.join(
-      __dirname,
-      '../node_modules/kcd-scripts/dist/config/babel-transform',
-    ),
-  },
 }
