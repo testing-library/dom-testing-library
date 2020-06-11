@@ -1,5 +1,5 @@
 import {wrapAsync} from '../wrap-async'
-import {fireEvent} from './tick-fire-event'
+import {fireEvent} from './utils'
 import {tick} from './tick'
 
 function wait(time) {
