@@ -7,19 +7,26 @@ test('fires correct events', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: select[name="select"][value="1"]
 
-    mouseover: Left (0)
-    mousemove: Left (0)
-    mousedown: Left (0)
-    focus
-    focusin
-    mouseup: Left (0)
-    click: Left (0)
-    mouseover: Left (0) (bubbled from option[value="1"])
-    mousemove: Left (0) (bubbled from option[value="1"])
-    mousedown: Left (0) (bubbled from option[value="1"])
-    mouseup: Left (0) (bubbled from option[value="1"])
-    click: Left (0) (bubbled from option[value="1"])
-    change
+    select[name="select"][value="1"] - mouseover: Left (0)
+      selectedOptions: ["1"] -> ["1"]
+    select[name="select"][value="1"] - mousemove: Left (0)
+      selectedOptions: ["1"] -> ["1"]
+    select[name="select"][value="1"] - mousedown: Left (0)
+      selectedOptions: ["1"] -> ["1"]
+    select[name="select"][value="1"] - focus
+    select[name="select"][value="1"] - focusin
+      selectedOptions: ["1"] -> ["1"]
+    select[name="select"][value="1"] - mouseup: Left (0)
+      selectedOptions: ["1"] -> ["1"]
+    select[name="select"][value="1"] - click: Left (0)
+      selectedOptions: ["1"] -> ["1"]
+    option[value="1"] - mouseover: Left (0)
+    option[value="1"] - mousemove: Left (0)
+    option[value="1"] - mousedown: Left (0)
+    option[value="1"] - mouseup: Left (0)
+    option[value="1"] - click: Left (0)
+    select[name="select"][value="1"] - change
+      selectedOptions: ["1"] -> ["1"]
   `)
   const [o1, o2, o3] = options
   expect(o1.selected).toBe(true)
@@ -33,25 +40,33 @@ test('fires correct events on multi-selects', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: select[name="select"][value=["1","3"]]
 
-    mouseover: Left (0)
-    mousemove: Left (0)
-    mousedown: Left (0)
-    focus
-    focusin
-    mouseup: Left (0)
-    click: Left (0)
-    mouseover: Left (0) (bubbled from option[value="1"])
-    mousemove: Left (0) (bubbled from option[value="1"])
-    mousedown: Left (0) (bubbled from option[value="1"])
-    mouseup: Left (0) (bubbled from option[value="1"])
-    click: Left (0) (bubbled from option[value="1"])
-    change
-    mouseover: Left (0) (bubbled from option[value="3"])
-    mousemove: Left (0) (bubbled from option[value="3"])
-    mousedown: Left (0) (bubbled from option[value="3"])
-    mouseup: Left (0) (bubbled from option[value="3"])
-    click: Left (0) (bubbled from option[value="3"])
-    change
+    select[name="select"][value=[]] - mouseover: Left (0)
+      selectedOptions: [] -> []
+    select[name="select"][value=[]] - mousemove: Left (0)
+      selectedOptions: [] -> []
+    select[name="select"][value=[]] - mousedown: Left (0)
+      selectedOptions: [] -> []
+    select[name="select"][value=[]] - focus
+    select[name="select"][value=[]] - focusin
+      selectedOptions: [] -> []
+    select[name="select"][value=[]] - mouseup: Left (0)
+      selectedOptions: [] -> []
+    select[name="select"][value=[]] - click: Left (0)
+      selectedOptions: [] -> []
+    option[value="1"] - mouseover: Left (0)
+    option[value="1"] - mousemove: Left (0)
+    option[value="1"] - mousedown: Left (0)
+    option[value="1"] - mouseup: Left (0)
+    option[value="1"] - click: Left (0)
+    select[name="select"][value=["1"]] - change
+      selectedOptions: ["1"] -> ["1"]
+    option[value="3"] - mouseover: Left (0)
+    option[value="3"] - mousemove: Left (0)
+    option[value="3"] - mousedown: Left (0)
+    option[value="3"] - mouseup: Left (0)
+    option[value="3"] - click: Left (0)
+    select[name="select"][value=["1","3"]] - change
+      selectedOptions: ["1","3"] -> ["1","3"]
   `)
   const [o1, o2, o3] = options
   expect(o1.selected).toBe(true)
@@ -59,7 +74,7 @@ test('fires correct events on multi-selects', async () => {
   expect(o3.selected).toBe(true)
 })
 
-test('sets the selected prop on the selected OPTION using option html elements', async () => {
+test('sets the selected prop on the selected option using option html elements', async () => {
   const {select, options} = setupSelect()
   const [o1, o2, o3] = options
   await userEvent.selectOptions(select, o1)
@@ -78,8 +93,8 @@ test('a previously focused input gets blurred', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: button
 
-    blur
-    focusout
+    button - blur
+    button - focusout
   `)
 })
 

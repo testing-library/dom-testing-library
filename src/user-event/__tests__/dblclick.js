@@ -7,16 +7,16 @@ test('fires the correct events on buttons', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: button
 
-    mouseover: Left (0)
-    mousemove: Left (0)
-    mousedown: Left (0)
-    focus
-    mouseup: Left (0)
-    click: Left (0)
-    mousedown: Left (0)
-    mouseup: Left (0)
-    click: Left (0)
-    dblclick: Left (0)
+    button - mouseover: Left (0)
+    button - mousemove: Left (0)
+    button - mousedown: Left (0)
+    button - focus
+    button - mouseup: Left (0)
+    button - click: Left (0)
+    button - mousedown: Left (0)
+    button - mouseup: Left (0)
+    button - click: Left (0)
+    button - dblclick: Left (0)
   `)
 })
 
@@ -26,19 +26,25 @@ test('fires the correct events on checkboxes', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[checked=false]
 
-    mouseover: Left (0)
-    mousemove: Left (0)
-    mousedown: Left (0)
-    focus
-    mouseup: Left (0)
-    click: unchecked -> checked
-    input: checked
-    change
-    mousedown: Left (0)
-    mouseup: Left (0)
-    click: checked -> unchecked
-    input: unchecked
-    change
+    input[checked=false] - mouseover: Left (0)
+    input[checked=false] - mousemove: Left (0)
+    input[checked=false] - mousedown: Left (0)
+    input[checked=false] - focus
+    input[checked=false] - mouseup: Left (0)
+    input[checked=false] - click: Left (0)
+      unchecked -> checked
+    input[checked=false] - input
+      unchecked -> checked
+    input[checked=false] - change
+      unchecked -> checked
+    input[checked=true] - mousedown: Left (0)
+    input[checked=true] - mouseup: Left (0)
+    input[checked=true] - click: Left (0)
+      checked -> unchecked
+    input[checked=true] - input
+      checked -> unchecked
+    input[checked=true] - change
+      checked -> unchecked
   `)
 })
 
@@ -48,16 +54,16 @@ test('fires the correct events on regular inputs', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
-    mouseover: Left (0)
-    mousemove: Left (0)
-    mousedown: Left (0)
-    focus
-    mouseup: Left (0)
-    click: Left (0)
-    mousedown: Left (0)
-    mouseup: Left (0)
-    click: Left (0)
-    dblclick: Left (0)
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - mousedown: Left (0)
+    input[value=""] - focus
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
+    input[value=""] - mousedown: Left (0)
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
+    input[value=""] - dblclick: Left (0)
   `)
 })
 
@@ -67,15 +73,15 @@ test('fires the correct events on divs', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: div
 
-    mouseover: Left (0)
-    mousemove: Left (0)
-    mousedown: Left (0)
-    mouseup: Left (0)
-    click: Left (0)
-    mousedown: Left (0)
-    mouseup: Left (0)
-    click: Left (0)
-    dblclick: Left (0)
+    div - mouseover: Left (0)
+    div - mousemove: Left (0)
+    div - mousedown: Left (0)
+    div - mouseup: Left (0)
+    div - click: Left (0)
+    div - mousedown: Left (0)
+    div - mouseup: Left (0)
+    div - click: Left (0)
+    div - dblclick: Left (0)
   `)
 })
 
@@ -98,7 +104,17 @@ test('blurs the previous element', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: button#button-a
 
-    blur
+    button#button-a - mouseover: Left (0)
+    button#button-a - mousemove: Left (0)
+    button#button-a - mousedown: Left (0)
+    button#button-a - focus
+    button#button-a - mouseup: Left (0)
+    button#button-a - click: Left (0)
+    button#button-a - mousedown: Left (0)
+    button#button-a - mouseup: Left (0)
+    button#button-a - click: Left (0)
+    button#button-a - dblclick: Left (0)
+    button#button-a - blur
   `)
 })
 
@@ -123,17 +139,17 @@ test('clicking an element in a label gives the control focus', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: div
 
-    mouseover: Left (0) (bubbled from span)
-    mousemove: Left (0) (bubbled from span)
-    mousedown: Left (0) (bubbled from span)
-    mouseup: Left (0) (bubbled from span)
-    click: Left (0) (bubbled from span)
-    click: Left (0) (bubbled from input#nested-input[value=""])
-    mousedown: Left (0) (bubbled from span)
-    mouseup: Left (0) (bubbled from span)
-    click: Left (0) (bubbled from span)
-    click: Left (0) (bubbled from input#nested-input[value=""])
-    dblclick: Left (0) (bubbled from span)
+    span - mouseover: Left (0)
+    span - mousemove: Left (0)
+    span - mousedown: Left (0)
+    span - mouseup: Left (0)
+    span - click: Left (0)
+    input#nested-input[value=""] - click: Left (0)
+    span - mousedown: Left (0)
+    span - mouseup: Left (0)
+    span - click: Left (0)
+    input#nested-input[value=""] - click: Left (0)
+    span - dblclick: Left (0)
   `)
 })
 
@@ -155,9 +171,20 @@ test('does not blur the previous element when mousedown prevents default', async
   await userEvent.dblClick(a)
   clearEventCalls()
   await userEvent.dblClick(b)
-  expect(getEventCalls()).toMatchInlineSnapshot(
-    `No events were fired on: button#button-a`,
-  )
+  expect(getEventCalls()).toMatchInlineSnapshot(`
+    Events fired on: button#button-a
+
+    button#button-a - mouseover: Left (0)
+    button#button-a - mousemove: Left (0)
+    button#button-a - mousedown: Left (0)
+    button#button-a - focus
+    button#button-a - mouseup: Left (0)
+    button#button-a - click: Left (0)
+    button#button-a - mousedown: Left (0)
+    button#button-a - mouseup: Left (0)
+    button#button-a - click: Left (0)
+    button#button-a - dblclick: Left (0)
+  `)
 })
 
 test('fires mouse events with the correct properties', async () => {

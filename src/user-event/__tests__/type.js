@@ -8,23 +8,26 @@ test('types text in input', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="Sup"]
 
-    focus
-    select
-    keydown: S (83)
-    keypress: S (83)
-    input: "{CURSOR}" -> "S"
-    select
-    keyup: S (83)
-    keydown: u (117)
-    keypress: u (117)
-    input: "S{CURSOR}" -> "Su"
-    select
-    keyup: u (117)
-    keydown: p (112)
-    keypress: p (112)
-    input: "Su{CURSOR}" -> "Sup"
-    select
-    keyup: p (112)
+    input[value=""] - focus
+    input[value=""] - select
+    input[value=""] - keydown: S (83)
+    input[value=""] - keypress: S (83)
+    input[value=""] - input
+      "{CURSOR}" -> "S{CURSOR}"
+    input[value="S"] - select
+    input[value="S"] - keyup: S (83)
+    input[value="S"] - keydown: u (117)
+    input[value="S"] - keypress: u (117)
+    input[value="S"] - input
+      "S{CURSOR}" -> "Su{CURSOR}"
+    input[value="Su"] - select
+    input[value="Su"] - keyup: u (117)
+    input[value="Su"] - keydown: p (112)
+    input[value="Su"] - keypress: p (112)
+    input[value="Su"] - input
+      "Su{CURSOR}" -> "Sup{CURSOR}"
+    input[value="Sup"] - select
+    input[value="Sup"] - keyup: p (112)
   `)
 })
 
@@ -34,10 +37,11 @@ test('types text in input with allAtOnce', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="Sup"]
 
-    focus
-    select
-    input: "{CURSOR}" -> "Sup"
-    select
+    input[value=""] - focus
+    input[value=""] - select
+    input[value=""] - input
+      "{CURSOR}" -> "Sup{CURSOR}"
+    input[value="Sup"] - select
   `)
 })
 
@@ -51,23 +55,26 @@ test('types text inside custom element', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="Sup"]
 
-    focus
-    select
-    keydown: S (83)
-    keypress: S (83)
-    input: "{CURSOR}" -> "S"
-    select
-    keyup: S (83)
-    keydown: u (117)
-    keypress: u (117)
-    input: "S{CURSOR}" -> "Su"
-    select
-    keyup: u (117)
-    keydown: p (112)
-    keypress: p (112)
-    input: "Su{CURSOR}" -> "Sup"
-    select
-    keyup: p (112)
+    input[value=""] - focus
+    input[value=""] - select
+    input[value=""] - keydown: S (83)
+    input[value=""] - keypress: S (83)
+    input[value=""] - input
+      "{CURSOR}" -> "S{CURSOR}"
+    input[value="S"] - select
+    input[value="S"] - keyup: S (83)
+    input[value="S"] - keydown: u (117)
+    input[value="S"] - keypress: u (117)
+    input[value="S"] - input
+      "S{CURSOR}" -> "Su{CURSOR}"
+    input[value="Su"] - select
+    input[value="Su"] - keyup: u (117)
+    input[value="Su"] - keydown: p (112)
+    input[value="Su"] - keypress: p (112)
+    input[value="Su"] - input
+      "Su{CURSOR}" -> "Sup{CURSOR}"
+    input[value="Sup"] - select
+    input[value="Sup"] - keyup: p (112)
   `)
 })
 
@@ -77,23 +84,26 @@ test('types text in textarea', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: textarea[value="Sup"]
 
-    focus
-    select
-    keydown: S (83)
-    keypress: S (83)
-    input: "{CURSOR}" -> "S"
-    select
-    keyup: S (83)
-    keydown: u (117)
-    keypress: u (117)
-    input: "S{CURSOR}" -> "Su"
-    select
-    keyup: u (117)
-    keydown: p (112)
-    keypress: p (112)
-    input: "Su{CURSOR}" -> "Sup"
-    select
-    keyup: p (112)
+    textarea[value=""] - focus
+    textarea[value=""] - select
+    textarea[value=""] - keydown: S (83)
+    textarea[value=""] - keypress: S (83)
+    textarea[value=""] - input
+      "{CURSOR}" -> "S{CURSOR}"
+    textarea[value="S"] - select
+    textarea[value="S"] - keyup: S (83)
+    textarea[value="S"] - keydown: u (117)
+    textarea[value="S"] - keypress: u (117)
+    textarea[value="S"] - input
+      "S{CURSOR}" -> "Su{CURSOR}"
+    textarea[value="Su"] - select
+    textarea[value="Su"] - keyup: u (117)
+    textarea[value="Su"] - keydown: p (112)
+    textarea[value="Su"] - keypress: p (112)
+    textarea[value="Su"] - input
+      "Su{CURSOR}" -> "Sup{CURSOR}"
+    textarea[value="Sup"] - select
+    textarea[value="Sup"] - keyup: p (112)
   `)
 })
 
@@ -103,10 +113,11 @@ test('should append text all at once', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="Sup"]
 
-    focus
-    select
-    input: "{CURSOR}" -> "Sup"
-    select
+    input[value=""] - focus
+    input[value=""] - select
+    input[value=""] - input
+      "{CURSOR}" -> "Sup{CURSOR}"
+    input[value="Sup"] - select
   `)
 })
 
@@ -119,11 +130,11 @@ test('does not fire input event when keypress calls prevent default', async () =
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
-    focus
-    select
-    keydown: a (97)
-    keypress: a (97)
-    keyup: a (97)
+    input[value=""] - focus
+    input[value=""] - select
+    input[value=""] - keydown: a (97)
+    input[value=""] - keypress: a (97)
+    input[value=""] - keyup: a (97)
   `)
 })
 
@@ -136,10 +147,10 @@ test('does not fire keypress or input events when keydown calls prevent default'
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
-    focus
-    select
-    keydown: a (97)
-    keyup: a (97)
+    input[value=""] - focus
+    input[value=""] - select
+    input[value=""] - keydown: a (97)
+    input[value=""] - keyup: a (97)
   `)
 })
 
@@ -159,11 +170,11 @@ test('does not fire input when readonly', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
-    focus
-    select
-    keydown: a (97)
-    keypress: a (97)
-    keyup: a (97)
+    input[value=""] - focus
+    input[value=""] - select
+    input[value=""] - keydown: a (97)
+    input[value=""] - keypress: a (97)
+    input[value=""] - keyup: a (97)
   `)
 })
 
@@ -174,8 +185,8 @@ test('does not fire input when readonly (with allAtOnce)', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
-    focus
-    select
+    input[value=""] - focus
+    input[value=""] - select
   `)
 })
 
@@ -218,21 +229,23 @@ test('honors maxlength', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="12"]
 
-    focus
-    select
-    keydown: 1 (49)
-    keypress: 1 (49)
-    input: "{CURSOR}" -> "1"
-    select
-    keyup: 1 (49)
-    keydown: 2 (50)
-    keypress: 2 (50)
-    input: "1{CURSOR}" -> "12"
-    select
-    keyup: 2 (50)
-    keydown: 3 (51)
-    keypress: 3 (51)
-    keyup: 3 (51)
+    input[value=""] - focus
+    input[value=""] - select
+    input[value=""] - keydown: 1 (49)
+    input[value=""] - keypress: 1 (49)
+    input[value=""] - input
+      "{CURSOR}" -> "1{CURSOR}"
+    input[value="1"] - select
+    input[value="1"] - keyup: 1 (49)
+    input[value="1"] - keydown: 2 (50)
+    input[value="1"] - keypress: 2 (50)
+    input[value="1"] - input
+      "1{CURSOR}" -> "12{CURSOR}"
+    input[value="12"] - select
+    input[value="12"] - keyup: 2 (50)
+    input[value="12"] - keydown: 3 (51)
+    input[value="12"] - keypress: 3 (51)
+    input[value="12"] - keyup: 3 (51)
   `)
 })
 
@@ -244,11 +257,11 @@ test('honors maxlength with existing text', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="12"]
 
-    focus
-    select
-    keydown: 3 (51)
-    keypress: 3 (51)
-    keyup: 3 (51)
+    input[value="12"] - focus
+    input[value="12"] - select
+    input[value="12"] - keydown: 3 (51)
+    input[value="12"] - keypress: 3 (51)
+    input[value="12"] - keyup: 3 (51)
   `)
 })
 
@@ -320,17 +333,19 @@ test('typing into a controlled input works', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="$23"]
 
-    focus
-    select
-    keydown: 2 (50)
-    keypress: 2 (50)
-    input: "{CURSOR}" -> "$2"
-    keyup: 2 (50)
-    keydown: 3 (51)
-    keypress: 3 (51)
-    input: "$2{CURSOR}" -> "$23"
-    select
-    keyup: 3 (51)
+    input[value=""] - focus
+    input[value=""] - select
+    input[value=""] - keydown: 2 (50)
+    input[value=""] - keypress: 2 (50)
+    input[value=""] - input
+      "{CURSOR}" -> "$2{CURSOR}"
+    input[value="$2"] - keyup: 2 (50)
+    input[value="$2"] - keydown: 3 (51)
+    input[value="$2"] - keypress: 3 (51)
+    input[value="$2"] - input
+      "$2{CURSOR}" -> "$23{CURSOR}"
+    input[value="$23"] - select
+    input[value="$23"] - keyup: 3 (51)
   `)
 })
 
@@ -344,13 +359,14 @@ test('typing in the middle of a controlled input works', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="$213"]
 
-    select
-    focus
-    keydown: 1 (49)
-    keypress: 1 (49)
-    input: "$2{CURSOR}3" -> "$213"
-    select
-    keyup: 1 (49)
+    input[value="$23"] - select
+    input[value="$23"] - focus
+    input[value="$23"] - keydown: 1 (49)
+    input[value="$23"] - keypress: 1 (49)
+    input[value="$23"] - input
+      "$2{CURSOR}3" -> "$213{CURSOR}"
+    input[value="$213"] - select
+    input[value="$213"] - keyup: 1 (49)
   `)
 })
 
@@ -374,16 +390,18 @@ test('ignored {backspace} in controlled input', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="$234"]
 
-    select
-    focus
-    keydown: Backspace (8)
-    input: "\${CURSOR}23" -> "$23"
-    keyup: Backspace (8)
-    keydown: 4 (52)
-    keypress: 4 (52)
-    input: "$23{CURSOR}" -> "$234"
-    select
-    keyup: 4 (52)
+    input[value="$23"] - select
+    input[value="$23"] - focus
+    input[value="$23"] - keydown: Backspace (8)
+    input[value="$23"] - input
+      "\${CURSOR}23" -> "$23{CURSOR}"
+    input[value="$23"] - keyup: Backspace (8)
+    input[value="$23"] - keydown: 4 (52)
+    input[value="$23"] - keypress: 4 (52)
+    input[value="$23"] - input
+      "$23{CURSOR}" -> "$234{CURSOR}"
+    input[value="$234"] - select
+    input[value="$234"] - keyup: 4 (52)
   `)
 })
 
@@ -395,18 +413,20 @@ test('typing in a textarea with existing text', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: textarea[value="Hello, 12"]
 
-    focus
-    select
-    keydown: 1 (49)
-    keypress: 1 (49)
-    input: "Hello, {CURSOR}" -> "Hello, 1"
-    select
-    keyup: 1 (49)
-    keydown: 2 (50)
-    keypress: 2 (50)
-    input: "Hello, 1{CURSOR}" -> "Hello, 12"
-    select
-    keyup: 2 (50)
+    textarea[value="Hello, "] - focus
+    textarea[value="Hello, "] - select
+    textarea[value="Hello, "] - keydown: 1 (49)
+    textarea[value="Hello, "] - keypress: 1 (49)
+    textarea[value="Hello, "] - input
+      "Hello, {CURSOR}" -> "Hello, 1{CURSOR}"
+    textarea[value="Hello, 1"] - select
+    textarea[value="Hello, 1"] - keyup: 1 (49)
+    textarea[value="Hello, 1"] - keydown: 2 (50)
+    textarea[value="Hello, 1"] - keypress: 2 (50)
+    textarea[value="Hello, 1"] - input
+      "Hello, 1{CURSOR}" -> "Hello, 12{CURSOR}"
+    textarea[value="Hello, 12"] - select
+    textarea[value="Hello, 12"] - keyup: 2 (50)
   `)
   expect(element).toHaveValue('Hello, 12')
 })
@@ -423,19 +443,21 @@ test('accepts an initialSelectionStart and initialSelectionEnd', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: textarea[value="12Hello, "]
 
-    select
-    focus
-    select
-    keydown: 1 (49)
-    keypress: 1 (49)
-    input: "{CURSOR}Hello, " -> "1Hello, "
-    select
-    keyup: 1 (49)
-    keydown: 2 (50)
-    keypress: 2 (50)
-    input: "1{CURSOR}Hello, " -> "12Hello, "
-    select
-    keyup: 2 (50)
+    textarea[value="Hello, "] - select
+    textarea[value="Hello, "] - focus
+    textarea[value="Hello, "] - select
+    textarea[value="Hello, "] - keydown: 1 (49)
+    textarea[value="Hello, "] - keypress: 1 (49)
+    textarea[value="Hello, "] - input
+      "{CURSOR}Hello, " -> "1Hello, {CURSOR}"
+    textarea[value="1Hello, "] - select
+    textarea[value="1Hello, "] - keyup: 1 (49)
+    textarea[value="1Hello, "] - keydown: 2 (50)
+    textarea[value="1Hello, "] - keypress: 2 (50)
+    textarea[value="1Hello, "] - input
+      "1{CURSOR}Hello, " -> "12Hello, {CURSOR}"
+    textarea[value="12Hello, "] - select
+    textarea[value="12Hello, "] - keyup: 2 (50)
   `)
   expect(element).toHaveValue('12Hello, ')
 })
@@ -461,15 +483,16 @@ test('can type "-" into number inputs', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="-3"]
 
-    focus
-    keydown: - (45)
-    keypress: - (45)
-    input: "{CURSOR}" -> ""
-    keyup: - (45)
-    keydown: 3 (51)
-    keypress: 3 (51)
-    input: "{CURSOR}" -> "-3"
-    keyup: 3 (51)
+    input[value=""] - focus
+    input[value=""] - keydown: - (45)
+    input[value=""] - keypress: - (45)
+    input[value=""] - input
+    input[value=""] - keyup: - (45)
+    input[value=""] - keydown: 3 (51)
+    input[value=""] - keypress: 3 (51)
+    input[value=""] - input
+      "{CURSOR}" -> "{CURSOR}-3"
+    input[value="-3"] - keyup: 3 (51)
   `)
 })
 
@@ -482,19 +505,22 @@ test('can type "." into number inputs', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value=".3"]
 
-    focus
-    keydown: 0 (48)
-    keypress: 0 (48)
-    input: "{CURSOR}" -> "0"
-    keyup: 0 (48)
-    keydown: . (46)
-    keypress: . (46)
-    input: "{CURSOR}0" -> ""
-    keyup: . (46)
-    keydown: 3 (51)
-    keypress: 3 (51)
-    input: "{CURSOR}" -> ".3"
-    keyup: 3 (51)
+    input[value=""] - focus
+    input[value=""] - keydown: 0 (48)
+    input[value=""] - keypress: 0 (48)
+    input[value=""] - input
+      "{CURSOR}" -> "{CURSOR}0"
+    input[value="0"] - keyup: 0 (48)
+    input[value="0"] - keydown: . (46)
+    input[value="0"] - keypress: . (46)
+    input[value="0"] - input
+      "{CURSOR}0" -> "{CURSOR}"
+    input[value=""] - keyup: . (46)
+    input[value=""] - keydown: 3 (51)
+    input[value=""] - keypress: 3 (51)
+    input[value=""] - input
+      "{CURSOR}" -> "{CURSOR}.3"
+    input[value=".3"] - keyup: 3 (51)
   `)
 })
 

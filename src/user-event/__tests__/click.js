@@ -7,13 +7,13 @@ test('click in input', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
-    mouseover: Left (0)
-    mousemove: Left (0)
-    mousedown: Left (0)
-    focus
-    focusin
-    mouseup: Left (0)
-    click: Left (0)
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - mousedown: Left (0)
+    input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
   `)
 })
 
@@ -23,13 +23,13 @@ test('click in textarea', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: textarea[value=""]
 
-    mouseover: Left (0)
-    mousemove: Left (0)
-    mousedown: Left (0)
-    focus
-    focusin
-    mouseup: Left (0)
-    click: Left (0)
+    textarea[value=""] - mouseover: Left (0)
+    textarea[value=""] - mousemove: Left (0)
+    textarea[value=""] - mousedown: Left (0)
+    textarea[value=""] - focus
+    textarea[value=""] - focusin
+    textarea[value=""] - mouseup: Left (0)
+    textarea[value=""] - click: Left (0)
   `)
 })
 
@@ -40,14 +40,17 @@ test('should fire the correct events for <input type="checkbox">', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[checked=true]
 
-    mouseover: Left (0)
-    mousemove: Left (0)
-    mousedown: Left (0)
-    focus
-    mouseup: Left (0)
-    click: unchecked -> checked
-    input: checked
-    change
+    input[checked=false] - mouseover: Left (0)
+    input[checked=false] - mousemove: Left (0)
+    input[checked=false] - mousedown: Left (0)
+    input[checked=false] - focus
+    input[checked=false] - mouseup: Left (0)
+    input[checked=false] - click: Left (0)
+      unchecked -> checked
+    input[checked=false] - input
+      unchecked -> checked
+    input[checked=false] - change
+      unchecked -> checked
   `)
 })
 
@@ -70,14 +73,17 @@ test('should fire the correct events for <input type="radio">', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[checked=true]
 
-    mouseover: Left (0)
-    mousemove: Left (0)
-    mousedown: Left (0)
-    focus
-    mouseup: Left (0)
-    click: unchecked -> checked
-    input: checked
-    change
+    input[checked=false] - mouseover: Left (0)
+    input[checked=false] - mousemove: Left (0)
+    input[checked=false] - mousedown: Left (0)
+    input[checked=false] - focus
+    input[checked=false] - mouseup: Left (0)
+    input[checked=false] - click: Left (0)
+      unchecked -> checked
+    input[checked=false] - input
+      unchecked -> checked
+    input[checked=false] - change
+      unchecked -> checked
   `)
 
   expect(element).toHaveProperty('checked', true)
@@ -102,12 +108,12 @@ test('should fire the correct events for <div>', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: div
 
-    mouseover: Left (0)
-    mousemove: Left (0)
-    mousedown: Left (0)
-    focusin
-    mouseup: Left (0)
-    click: Left (0)
+    div - mouseover: Left (0)
+    div - mousemove: Left (0)
+    div - mousedown: Left (0)
+    div - focusin
+    div - mouseup: Left (0)
+    div - click: Left (0)
   `)
 })
 
@@ -143,8 +149,15 @@ test('should blur the previous element', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[name="a"][value=""]
 
-    blur
-    focusout (bubbled from input[name="a"][value=""])
+    input[name="a"][value=""] - mouseover: Left (0)
+    input[name="a"][value=""] - mousemove: Left (0)
+    input[name="a"][value=""] - mousedown: Left (0)
+    input[name="a"][value=""] - focus
+    input[name="a"][value=""] - focusin
+    input[name="a"][value=""] - mouseup: Left (0)
+    input[name="a"][value=""] - click: Left (0)
+    input[name="a"][value=""] - blur
+    input[name="a"][value=""] - focusout
   `)
 })
 
@@ -161,9 +174,17 @@ test('should not blur the previous element when mousedown prevents default', asy
   await userEvent.click(a)
   clearEventCalls()
   await userEvent.click(b)
-  expect(getEventCalls()).toMatchInlineSnapshot(
-    `No events were fired on: input[name="a"][value=""]`,
-  )
+  expect(getEventCalls()).toMatchInlineSnapshot(`
+    Events fired on: input[name="a"][value=""]
+
+    input[name="a"][value=""] - mouseover: Left (0)
+    input[name="a"][value=""] - mousemove: Left (0)
+    input[name="a"][value=""] - mousedown: Left (0)
+    input[name="a"][value=""] - focus
+    input[name="a"][value=""] - focusin
+    input[name="a"][value=""] - mouseup: Left (0)
+    input[name="a"][value=""] - click: Left (0)
+  `)
 })
 
 test('does not lose focus when click updates focus', async () => {

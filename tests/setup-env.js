@@ -1,6 +1,8 @@
 import '@testing-library/jest-dom/extend-expect'
 import jestSerializerAnsi from 'jest-serializer-ansi'
 
+jest.mock('../src/user-event/utils')
+
 expect.addSnapshotSerializer(jestSerializerAnsi)
 // add serializer for MutationRecord
 expect.addSnapshotSerializer({

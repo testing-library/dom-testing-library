@@ -6,6 +6,7 @@ const {
 } = require('kcd-scripts/jest')
 
 module.exports = {
+  resetMocks: true,
   collectCoverageFrom,
   coveragePathIgnorePatterns: [
     ...coveragePathIgnorePatterns,

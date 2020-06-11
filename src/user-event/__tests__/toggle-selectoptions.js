@@ -9,19 +9,26 @@ test('should fire the correct events for multiple select', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: select[name="select"][value=["1"]]
 
-    mouseover: Left (0)
-    mousemove: Left (0)
-    mousedown: Left (0)
-    focus
-    focusin
-    mouseup: Left (0)
-    click: Left (0)
-    mouseover: Left (0) (bubbled from option[value="1"])
-    mousemove: Left (0) (bubbled from option[value="1"])
-    mousedown: Left (0) (bubbled from option[value="1"])
-    mouseup: Left (0) (bubbled from option[value="1"])
-    click: Left (0) (bubbled from option[value="1"])
-    change
+    select[name="select"][value=[]] - mouseover: Left (0)
+      selectedOptions: [] -> []
+    select[name="select"][value=[]] - mousemove: Left (0)
+      selectedOptions: [] -> []
+    select[name="select"][value=[]] - mousedown: Left (0)
+      selectedOptions: [] -> []
+    select[name="select"][value=[]] - focus
+    select[name="select"][value=[]] - focusin
+      selectedOptions: [] -> []
+    select[name="select"][value=[]] - mouseup: Left (0)
+      selectedOptions: [] -> []
+    select[name="select"][value=[]] - click: Left (0)
+      selectedOptions: [] -> []
+    option[value="1"] - mouseover: Left (0)
+    option[value="1"] - mousemove: Left (0)
+    option[value="1"] - mousedown: Left (0)
+    option[value="1"] - mouseup: Left (0)
+    option[value="1"] - click: Left (0)
+    select[name="select"][value=["1"]] - change
+      selectedOptions: ["1"] -> ["1"]
   `)
 
   expect(form).toHaveFormValues({select: ['1']})
@@ -41,19 +48,19 @@ test('should fire the correct events for multiple select when focus is in other 
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: form
 
-    mouseover: Left (0) (bubbled from select[name="select"][value=[]])
-    mousemove: Left (0) (bubbled from select[name="select"][value=[]])
-    mousedown: Left (0) (bubbled from select[name="select"][value=[]])
-    focusout (bubbled from button)
-    focusin (bubbled from select[name="select"][value=[]])
-    mouseup: Left (0) (bubbled from select[name="select"][value=[]])
-    click: Left (0) (bubbled from select[name="select"][value=[]])
-    mouseover: Left (0) (bubbled from option[value="1"])
-    mousemove: Left (0) (bubbled from option[value="1"])
-    mousedown: Left (0) (bubbled from option[value="1"])
-    mouseup: Left (0) (bubbled from option[value="1"])
-    click: Left (0) (bubbled from option[value="1"])
-    change (bubbled from select[name="select"][value=["1"]])
+    select[name="select"][value=[]] - mouseover: Left (0)
+    select[name="select"][value=[]] - mousemove: Left (0)
+    select[name="select"][value=[]] - mousedown: Left (0)
+    button - focusout
+    select[name="select"][value=[]] - focusin
+    select[name="select"][value=[]] - mouseup: Left (0)
+    select[name="select"][value=[]] - click: Left (0)
+    option[value="1"] - mouseover: Left (0)
+    option[value="1"] - mousemove: Left (0)
+    option[value="1"] - mousedown: Left (0)
+    option[value="1"] - mouseup: Left (0)
+    option[value="1"] - click: Left (0)
+    select[name="select"][value=["1"]] - change
   `)
 })
 

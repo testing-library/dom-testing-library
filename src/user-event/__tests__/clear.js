@@ -8,13 +8,14 @@ test('clears text', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
-    focus
-    select
-    select
-    keydown: Delete (46)
-    input: "{SELECTION}hello{/SELECTION}" -> ""
-    select
-    keyup: Delete (46)
+    input[value="hello"] - focus
+    input[value="hello"] - select
+    input[value="hello"] - select
+    input[value="hello"] - keydown: Delete (46)
+    input[value="hello"] - input
+      "{SELECTION}hello{/SELECTION}" -> "{CURSOR}"
+    input[value=""] - select
+    input[value=""] - keyup: Delete (46)
   `)
 })
 
@@ -40,11 +41,11 @@ test('does not clear text on readonly inputs', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="hello"]
 
-    focus
-    select
-    select
-    keydown: Delete (46)
-    keyup: Delete (46)
+    input[value="hello"] - focus
+    input[value="hello"] - select
+    input[value="hello"] - select
+    input[value="hello"] - keydown: Delete (46)
+    input[value="hello"] - keyup: Delete (46)
   `)
 })
 
