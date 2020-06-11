@@ -8,7 +8,10 @@ test('unhover', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: button
 
+    pointermove
     mousemove: Left (0)
+    pointerout
+    pointerleave
     mouseout: Left (0)
     mouseleave: Left (0)
   `)
