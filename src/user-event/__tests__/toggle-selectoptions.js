@@ -85,7 +85,7 @@ test('toggle options as expected', async () => {
   expect(element).toHaveFormValues({select: ['1', '2']})
 })
 
-test('sets the selected prop on the selected OPTION using nodes', async () => {
+test('sets the selected prop on the selected option using option html elements', async () => {
   const {select, options} = setupSelect({multiple: true})
   const [o1, o2, o3] = options
   await userEvent.toggleSelectOptions(select, [o3, o2])
