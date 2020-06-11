@@ -1,5 +1,5 @@
 import * as userEvent from '..'
-import {setupSelect} from './helpers/utils'
+import {setupSelect, addListeners} from './helpers/utils'
 
 test('fires correct events', async () => {
   const {select, options, getEventCalls} = setupSelect()
@@ -11,6 +11,7 @@ test('fires correct events', async () => {
     mousemove: Left (0)
     mousedown: Left (0)
     focus
+    focusin
     mouseup: Left (0)
     click: Left (0)
     mouseover: Left (0) (bubbled from option[value="1"])
@@ -36,6 +37,7 @@ test('fires correct events on multi-selects', async () => {
     mousemove: Left (0)
     mousedown: Left (0)
     focus
+    focusin
     mouseup: Left (0)
     click: Left (0)
     mouseover: Left (0) (bubbled from option[value="1"])
@@ -66,14 +68,31 @@ test('sets the selected prop on the selected OPTION using nodes', async () => {
   expect(o3.selected).toBe(false)
 })
 
-// TODO: throw an error instead
-test('does not select anything if no matching options are given', async () => {
-  const {select, options} = setupSelect()
-  const [o1, o2, o3] = options
-  expect(o1.selected).toBe(true) // NOTE: by default the first option is selected
-  await userEvent.selectOptions(select, 'Matches nothing')
-  expect(select.selectedIndex).toBe(0)
-  expect(o1.selected).toBe(true) // unchanged
-  expect(o2.selected).toBe(false)
-  expect(o3.selected).toBe(false)
+test('a previously focused input gets blurred', async () => {
+  const button = document.createElement('button')
+  document.body.append(button)
+  button.focus()
+  const {getEventCalls} = addListeners(button)
+  const {select} = setupSelect()
+  await userEvent.selectOptions(select, '1')
+  expect(getEventCalls()).toMatchInlineSnapshot(`
+    Events fired on: button
+
+    blur
+    focusout
+  `)
+})
+
+test('throws an error one selected option does not match', async () => {
+  const {select} = setupSelect({multiple: true})
+  const error = await userEvent
+    .selectOptions(select, ['3', 'Matches nothing'])
+    .catch(e => e)
+  expect(error.message).toMatch(/not found/i)
+})
+
+test('throws an error if multiple are passed but not a multiple select', async () => {
+  const {select} = setupSelect({multiple: false})
+  const error = await userEvent.selectOptions(select, ['2', '3']).catch(e => e)
+  expect(error.message).toMatch(/cannot select multiple/i)
 })

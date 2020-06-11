@@ -1,6 +1,10 @@
 import {fireEvent as baseFireEvent} from '../events'
 import {tick} from './tick'
 
+// we don't currently actually use this function directly
+// but it's very possible we'll want to in the future and it's less surprising
+// to have it here than to not, so we'll just ignore it in coverage
+// istanbul ignore next
 async function fireEvent(...args) {
   await tick()
   return baseFireEvent(...args)
@@ -14,10 +18,6 @@ Object.keys(baseFireEvent).forEach(key => {
   Object.defineProperty(asyncFireEventWrapper, 'name', {value: key})
   fireEvent[key] = asyncFireEventWrapper
 })
-
-function isInputElement(element) {
-  return element.tagName.toLowerCase() === 'input'
-}
 
 function isMousePressEvent(event) {
   return (
@@ -65,10 +65,14 @@ function convertMouseButtons(event, init, property, mapping) {
   }
 
   if (init.buttons != null) {
+    // not sure how to test this. Feel free to try and add a test if you want.
+    // istanbul ignore next
     return mapping[BUTTONS_TO_NAMES[init.buttons]] || 0
   }
 
   if (init.button != null) {
+    // not sure how to test this. Feel free to try and add a test if you want.
+    // istanbul ignore next
     return mapping[BUTTON_TO_NAMES[init.button]] || 0
   }
 
@@ -89,18 +93,4 @@ function getMouseEventOptions(event, init, clickCount = 0) {
   }
 }
 
-function getPreviouslyFocusedElement(element) {
-  const focusedElement = element.ownerDocument.activeElement
-  const wasAnotherElementFocused =
-    focusedElement &&
-    focusedElement !== element.ownerDocument.body &&
-    focusedElement !== element
-  return wasAnotherElementFocused ? focusedElement : null
-}
-
-export {
-  fireEvent,
-  isInputElement,
-  getMouseEventOptions,
-  getPreviouslyFocusedElement,
-}
+export {fireEvent, getMouseEventOptions}

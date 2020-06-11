@@ -13,6 +13,7 @@ test('should fire the correct events for multiple select', async () => {
     mousemove: Left (0)
     mousedown: Left (0)
     focus
+    focusin
     mouseup: Left (0)
     click: Left (0)
     mouseover: Left (0) (bubbled from option[value="1"])
@@ -27,40 +28,32 @@ test('should fire the correct events for multiple select', async () => {
 })
 
 test('should fire the correct events for multiple select when focus is in other element', async () => {
-  const {select} = setupSelect({multiple: true})
+  const {form, select} = setupSelect({multiple: true})
   const button = document.createElement('button')
-  document.body.append(button)
+  form.append(button)
 
-  const {getEventCalls: getSelectEventCalls} = addListeners(select)
-  const {getEventCalls: getButtonEventCalls} = addListeners(button)
-
+  const {getEventCalls, clearEventCalls} = addListeners(form)
   button.focus()
 
+  clearEventCalls()
   await userEvent.toggleSelectOptions(select, '1')
 
-  expect(getButtonEventCalls()).toMatchInlineSnapshot(`
-    Events fired on: button
+  expect(getEventCalls()).toMatchInlineSnapshot(`
+    Events fired on: form
 
-    focus
-    mousemove: Left (0)
-    mouseleave: Left (0)
-    blur
-  `)
-  expect(getSelectEventCalls()).toMatchInlineSnapshot(`
-    Events fired on: select[name="select"][value=["1"]]
-
-    mouseover: Left (0)
-    mousemove: Left (0)
-    mousedown: Left (0)
-    focus
-    mouseup: Left (0)
-    click: Left (0)
+    mouseover: Left (0) (bubbled from select[name="select"][value=[]])
+    mousemove: Left (0) (bubbled from select[name="select"][value=[]])
+    mousedown: Left (0) (bubbled from select[name="select"][value=[]])
+    focusout (bubbled from button)
+    focusin (bubbled from select[name="select"][value=[]])
+    mouseup: Left (0) (bubbled from select[name="select"][value=[]])
+    click: Left (0) (bubbled from select[name="select"][value=[]])
     mouseover: Left (0) (bubbled from option[value="1"])
     mousemove: Left (0) (bubbled from option[value="1"])
     mousedown: Left (0) (bubbled from option[value="1"])
     mouseup: Left (0) (bubbled from option[value="1"])
     click: Left (0) (bubbled from option[value="1"])
-    change
+    change (bubbled from select[name="select"][value=["1"]])
   `)
 })
 
@@ -92,11 +85,26 @@ test('toggle options as expected', async () => {
   expect(element).toHaveFormValues({select: ['1', '2']})
 })
 
-it('throws error when provided element is not a multiple select', async () => {
+test('sets the selected prop on the selected OPTION using nodes', async () => {
+  const {select, options} = setupSelect({multiple: true})
+  const [o1, o2, o3] = options
+  await userEvent.toggleSelectOptions(select, [o3, o2])
+  expect(o1.selected).toBe(false)
+  expect(o2.selected).toBe(true)
+  expect(o3.selected).toBe(true)
+})
+
+test('throws error when provided element is not a multiple select', async () => {
   const {element} = setup(`<select />`)
 
   const error = await userEvent.toggleSelectOptions(element).catch(e => e)
-  expect(error.message).toMatchInlineSnapshot(
-    `Unable to toggleSelectOptions - please provide a select element with multiple=true`,
-  )
+  expect(error.message).toMatch(/must be a multiple select/i)
+})
+
+test('throws an error one selected option does not match', async () => {
+  const {select} = setupSelect({multiple: true})
+  const error = await userEvent
+    .toggleSelectOptions(select, ['3', 'Matches nothing'])
+    .catch(e => e)
+  expect(error.message).toMatch(/not found/i)
 })

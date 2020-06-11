@@ -18,6 +18,12 @@ test('clears text', async () => {
   `)
 })
 
+test('works with textarea', async () => {
+  const {element} = setup('<textarea>hello</textarea>')
+  await userEvent.clear(element)
+  expect(element).toHaveValue('')
+})
+
 test('does not clear text on disabled inputs', async () => {
   const {element, getEventCalls} = setup('<input value="hello" disabled />')
   await userEvent.clear(element)
@@ -55,4 +61,12 @@ test('clears even on inputs that cannot (programmatically) have a selection', as
   await userEvent.clear(number)
   // jest-dom does funny stuff with toHaveValue on number inputs
   expect(number.value).toBe('')
+})
+
+test('non-inputs/textareas are currently unsupported', async () => {
+  const {element} = setup('<div />')
+  const error = await userEvent.clear(element).catch(e => e)
+  expect(error).toMatchInlineSnapshot(
+    `[Error: clear currently only supports input and textarea elements.]`,
+  )
 })

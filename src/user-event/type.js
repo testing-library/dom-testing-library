@@ -9,7 +9,7 @@ function wait(time) {
 const getActiveElement = document => {
   const activeElement = document.activeElement
   if (activeElement.shadowRoot) {
-    return getActiveElement(activeElement.shadowRoot) || activeElement
+    return getActiveElement(activeElement.shadowRoot)
   } else {
     return activeElement
   }
@@ -56,8 +56,8 @@ async function type(
     currentElement().selectionEnd === 0
   ) {
     currentElement().setSelectionRange(
-      initialSelectionStart ?? currentValue()?.length ?? 0,
-      initialSelectionEnd ?? currentValue()?.length ?? 0,
+      initialSelectionStart ?? currentValue().length,
+      initialSelectionEnd ?? currentValue().length,
     )
   }
 

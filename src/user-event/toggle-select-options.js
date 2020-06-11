@@ -1,9 +1,6 @@
+import {getConfig} from '../config'
 import {wrapAsync} from '../wrap-async'
-import {
-  fireEvent,
-  getMouseEventOptions,
-  getPreviouslyFocusedElement,
-} from './utils'
+import {fireEvent, getMouseEventOptions} from './utils'
 import {clickElement} from './click'
 
 async function toggleSelectOption(select, option, init) {
@@ -21,34 +18,34 @@ async function toggleSelectOption(select, option, init) {
 
 async function toggleSelectOptions(element, values, init) {
   if (!element || element.tagName !== 'SELECT' || !element.multiple) {
-    throw new Error(
-      `Unable to toggleSelectOptions - please provide a select element with multiple=true`,
+    throw getConfig().getElementError(
+      `Unable to toggleSelectOptions - must be a multiple select`,
+      element,
     )
   }
 
-  const previouslyFocusedElement = getPreviouslyFocusedElement(element)
-  if (previouslyFocusedElement) {
-    await fireEvent.mouseMove(
-      previouslyFocusedElement,
-      getMouseEventOptions('mousemove', init),
-    )
-    await fireEvent.mouseLeave(
-      previouslyFocusedElement,
-      getMouseEventOptions('mouseleave', init),
-    )
-  }
-
-  await clickElement(element, previouslyFocusedElement, init)
+  await clickElement(element, init)
 
   const valArray = Array.isArray(values) ? values : [values]
-  const selectedOptions = Array.from(element.querySelectorAll('option')).filter(
-    opt => valArray.includes(opt.value) || valArray.includes(opt),
-  )
-
-  if (selectedOptions.length > 0) {
-    for (const option of selectedOptions) {
-      await toggleSelectOption(element, option, init)
+  const allOptions = Array.from(element.querySelectorAll('option'))
+  const selectedOptions = valArray.map(val => {
+    if (allOptions.includes(val)) {
+      return val
+    } else {
+      const matchingOption = allOptions.find(o => o.value === val)
+      if (matchingOption) {
+        return matchingOption
+      } else {
+        throw getConfig().getElementError(
+          `Value "${val}" not found in options`,
+          element,
+        )
+      }
     }
+  })
+
+  for (const option of selectedOptions) {
+    await toggleSelectOption(element, option, init)
   }
 }
 toggleSelectOptions = wrapAsync(toggleSelectOptions)

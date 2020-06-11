@@ -7,20 +7,22 @@ async function upload(element, fileOrFiles, {clickInit, changeInit} = {}) {
   const focusedElement = element.ownerDocument.activeElement
 
   let files
+  let input = element
 
   if (element.tagName === 'LABEL') {
     await clickLabel(element)
     files = element.control.multiple ? fileOrFiles : [fileOrFiles]
+    input = element.control
   } else {
     files = element.multiple ? fileOrFiles : [fileOrFiles]
     await clickElement(element, focusedElement, clickInit)
   }
 
-  await fireEvent.change(element, {
+  await fireEvent.change(input, {
     target: {
       files: {
         length: files.length,
-        item: index => files[index] || null,
+        item: index => files[index],
         ...files,
       },
     },

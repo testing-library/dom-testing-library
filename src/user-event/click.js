@@ -1,9 +1,14 @@
 import {wrapAsync} from '../wrap-async'
-import {
-  fireEvent,
-  getMouseEventOptions,
-  getPreviouslyFocusedElement,
-} from './utils'
+import {fireEvent, getMouseEventOptions} from './utils'
+
+function getPreviouslyFocusedElement(element) {
+  const focusedElement = element.ownerDocument.activeElement
+  const wasAnotherElementFocused =
+    focusedElement &&
+    focusedElement !== element.ownerDocument.body &&
+    focusedElement !== element
+  return wasAnotherElementFocused ? focusedElement : null
+}
 
 async function clickLabel(label, init) {
   await fireEvent.mouseOver(label, getMouseEventOptions('mouseover', init))
@@ -29,7 +34,8 @@ async function clickBooleanElement(element, init) {
   await fireEvent.click(element, getMouseEventOptions('click', init))
 }
 
-async function clickElement(element, previousElement, init) {
+async function clickElement(element, init) {
+  const previousElement = getPreviouslyFocusedElement(element)
   await fireEvent.mouseOver(element, getMouseEventOptions('mouseover', init))
   await fireEvent.mouseMove(element, getMouseEventOptions('mousemove', init))
   const continueDefaultHandling = await fireEvent.mouseDown(
@@ -38,8 +44,14 @@ async function clickElement(element, previousElement, init) {
   )
   const shouldFocus = element.ownerDocument.activeElement !== element
   if (continueDefaultHandling) {
-    if (previousElement) previousElement.blur()
-    if (shouldFocus) element.focus()
+    if (previousElement) {
+      previousElement.blur()
+      await fireEvent.focusOut(previousElement)
+    }
+    if (shouldFocus) {
+      element.focus()
+      await fireEvent.focusIn(element)
+    }
   }
   await fireEvent.mouseUp(element, getMouseEventOptions('mouseup', init))
   await fireEvent.click(element, getMouseEventOptions('click', init, 1))
@@ -47,7 +59,8 @@ async function clickElement(element, previousElement, init) {
   if (parentLabel?.control) parentLabel?.control.focus?.()
 }
 
-async function dblClickElement(element, previousElement, init) {
+async function dblClickElement(element, init) {
+  const previousElement = getPreviouslyFocusedElement(element)
   await fireEvent.mouseOver(element, getMouseEventOptions('mouseover', init))
   await fireEvent.mouseMove(element, getMouseEventOptions('mousemove', init))
   const continueDefaultHandling = await fireEvent.mouseDown(
@@ -86,18 +99,6 @@ async function dblClickCheckbox(checkbox, init) {
 }
 
 async function click(element, init) {
-  const previouslyFocusedElement = getPreviouslyFocusedElement(element)
-  if (previouslyFocusedElement) {
-    await fireEvent.mouseMove(
-      previouslyFocusedElement,
-      getMouseEventOptions('mousemove', init),
-    )
-    await fireEvent.mouseLeave(
-      previouslyFocusedElement,
-      getMouseEventOptions('mouseleave', init),
-    )
-  }
-
   switch (element.tagName) {
     case 'LABEL':
       await clickLabel(element, init)
@@ -109,33 +110,21 @@ async function click(element, init) {
       }
     // eslint-disable-next-line no-fallthrough
     default:
-      await clickElement(element, previouslyFocusedElement, init)
+      await clickElement(element, init)
   }
 }
 click = wrapAsync(click)
 
 async function dblClick(element, init) {
-  const previouslyFocusedElement = getPreviouslyFocusedElement(element)
-  if (previouslyFocusedElement) {
-    await fireEvent.mouseMove(
-      previouslyFocusedElement,
-      getMouseEventOptions('mousemove', init),
-    )
-    await fireEvent.mouseLeave(
-      previouslyFocusedElement,
-      getMouseEventOptions('mouseleave', init),
-    )
-  }
-
   switch (element.tagName) {
     case 'INPUT':
       if (element.type === 'checkbox') {
-        await dblClickCheckbox(element, previouslyFocusedElement, init)
+        await dblClickCheckbox(element, init)
         break
       }
     // eslint-disable-next-line no-fallthrough
     default:
-      await dblClickElement(element, previouslyFocusedElement, init)
+      await dblClickElement(element, init)
   }
 }
 dblClick = wrapAsync(dblClick)

@@ -446,3 +446,29 @@ test('{del} with a selection range', async () => {
     keyup: Delete (46)
   `)
 })
+
+// TODO: eventually we'll want to support this, but currently we cannot
+// because selection ranges are (intentially) unsupported in certain input types
+// per the spec.
+test('{del} on an input that does not support selection range does not change the value', async () => {
+  const {element, eventWasFired} = setup(`<input type="email" value="a@b.c" />`)
+
+  await userEvent.type(element, '{del}')
+  expect(element).toHaveValue('a@b.c')
+  expect(eventWasFired('input')).not.toBe(true)
+})
+
+test('{del} does not delete if keydown is prevented', async () => {
+  const {element, eventWasFired} = setup(`<input value="hello" />`, {
+    eventHandlers: {keyDown: e => e.preventDefault()},
+  })
+
+  await userEvent.type(element, '{del}', {
+    initialSelectionStart: 2,
+    initialSelectionEnd: 2,
+  })
+  expect(element).toHaveValue('hello')
+  expect(element.selectionStart).toBe(2)
+  expect(element.selectionEnd).toBe(2)
+  expect(eventWasFired('input')).not.toBe(true)
+})

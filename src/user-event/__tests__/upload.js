@@ -14,6 +14,7 @@ test('should fire the correct events for input', async () => {
     mousemove: Left (0)
     mousedown: Left (0)
     focus
+    focusin
     mouseup: Left (0)
     click: Left (0)
     change
@@ -44,13 +45,13 @@ test('should fire the correct events with label', async () => {
     mousedown: Left (0)
     mouseup: Left (0)
     click: Left (0)
-    change
   `)
   expect(getInputEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input#element[value=""]
 
     click: Left (0)
     focus
+    change
   `)
 })
 
@@ -79,6 +80,30 @@ test('should upload multiple files', async () => {
   expect(element.files[1]).toStrictEqual(files[1])
   expect(element.files.item(1)).toStrictEqual(files[1])
   expect(element.files).toHaveLength(2)
+})
+
+test('should upload multiple files when firing on the label', async () => {
+  const files = [
+    new File(['hello'], 'hello.png', {type: 'image/png'}),
+    new File(['there'], 'there.png', {type: 'image/png'}),
+  ]
+  const {element} = setup(`
+    <div>
+      <label for="files">files</label>
+      <input id="files" type="file" multiple />
+    </div>
+  `)
+
+  const label = element.children[0]
+  const input = element.children[1]
+
+  await userEvent.upload(label, files)
+
+  expect(input.files[0]).toStrictEqual(files[0])
+  expect(input.files.item(0)).toStrictEqual(files[0])
+  expect(input.files[1]).toStrictEqual(files[1])
+  expect(input.files.item(1)).toStrictEqual(files[1])
+  expect(input.files).toHaveLength(2)
 })
 
 test('should not upload when is disabled', async () => {

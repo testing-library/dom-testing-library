@@ -11,6 +11,7 @@ test('click in input', async () => {
     mousemove: Left (0)
     mousedown: Left (0)
     focus
+    focusin
     mouseup: Left (0)
     click: Left (0)
   `)
@@ -26,6 +27,7 @@ test('click in textarea', async () => {
     mousemove: Left (0)
     mousedown: Left (0)
     focus
+    focusin
     mouseup: Left (0)
     click: Left (0)
   `)
@@ -103,13 +105,14 @@ test('should fire the correct events for <div>', async () => {
     mouseover: Left (0)
     mousemove: Left (0)
     mousedown: Left (0)
+    focusin
     mouseup: Left (0)
     click: Left (0)
   `)
 })
 
 test('toggles the focus', async () => {
-  const {element} = setup(`<div><input /><input /></div>`)
+  const {element} = setup(`<div><input name="a" /><input name="b" /></div>`)
 
   const a = element.children[0]
   const b = element.children[1]
@@ -127,7 +130,7 @@ test('toggles the focus', async () => {
 })
 
 test('should blur the previous element', async () => {
-  const {element} = setup(`<div><input /><input /></div>`)
+  const {element} = setup(`<div><input name="a" /><input name="b" /></div>`)
 
   const a = element.children[0]
   const b = element.children[1]
@@ -138,16 +141,15 @@ test('should blur the previous element', async () => {
   clearEventCalls()
   await userEvent.click(b)
   expect(getEventCalls()).toMatchInlineSnapshot(`
-    Events fired on: input[value=""]
+    Events fired on: input[name="a"][value=""]
 
-    mousemove: Left (0) (bubbled from input[value=""])
-    mouseleave: Left (0)
     blur
+    focusout (bubbled from input[name="a"][value=""])
   `)
 })
 
 test('should not blur the previous element when mousedown prevents default', async () => {
-  const {element} = setup(`<div><input /><input /></div>`)
+  const {element} = setup(`<div><input name="a" /><input name="b" /></div>`)
 
   const a = element.children[0]
   const b = element.children[1]
@@ -159,12 +161,9 @@ test('should not blur the previous element when mousedown prevents default', asy
   await userEvent.click(a)
   clearEventCalls()
   await userEvent.click(b)
-  expect(getEventCalls()).toMatchInlineSnapshot(`
-    Events fired on: input[value=""]
-
-    mousemove: Left (0) (bubbled from input[value=""])
-    mouseleave: Left (0)
-  `)
+  expect(getEventCalls()).toMatchInlineSnapshot(
+    `No events were fired on: input[name="a"][value=""]`,
+  )
 })
 
 test('does not lose focus when click updates focus', async () => {
@@ -210,6 +209,11 @@ test('gives focus to the form control when clicking within a label', async () =>
 
   await userEvent.click(span)
   expect(input).toHaveFocus()
+})
+
+test('does not crash if the label has no control', async () => {
+  const {element} = setup(`<label for="input">label</label>`)
+  await userEvent.click(element)
 })
 
 test('clicking a label checks the checkbox', async () => {
@@ -281,38 +285,20 @@ test('does not give focus when mouseDown is prevented', async () => {
 test('fires mouse events with the correct properties', async () => {
   const {element, getEvents} = setup('<div></div>')
   await userEvent.click(element)
-  expect(getEvents()).toEqual([
-    expect.objectContaining({
-      type: 'mouseover',
-      button: 0,
-      buttons: 0,
-      detail: 0,
-    }),
-    expect.objectContaining({
-      type: 'mousemove',
-      button: 0,
-      buttons: 0,
-      detail: 0,
-    }),
-    expect.objectContaining({
-      type: 'mousedown',
-      button: 0,
-      buttons: 1,
-      detail: 1,
-    }),
-    expect.objectContaining({
-      type: 'mouseup',
-      button: 0,
-      buttons: 1,
-      detail: 1,
-    }),
-    expect.objectContaining({
-      type: 'click',
-      button: 0,
-      buttons: 1,
-      detail: 1,
-    }),
-  ])
+  const events = getEvents().map(
+    ({constructor, type, button, buttons, detail}) =>
+      constructor.name === 'MouseEvent'
+        ? `${type} - button=${button}; buttons=${buttons}; detail=${detail}`
+        : type,
+  )
+  expect(events.join('\n')).toMatchInlineSnapshot(`
+    mouseover - button=0; buttons=0; detail=0
+    mousemove - button=0; buttons=0; detail=0
+    mousedown - button=0; buttons=1; detail=1
+    focusin
+    mouseup - button=0; buttons=1; detail=1
+    click - button=0; buttons=1; detail=1
+  `)
 })
 
 test('fires mouse events with custom button property', async () => {
@@ -321,80 +307,38 @@ test('fires mouse events with custom button property', async () => {
     button: 1,
     altKey: true,
   })
-  expect(getEvents()).toEqual([
-    expect.objectContaining({
-      type: 'mouseover',
-      button: 0,
-      buttons: 0,
-      detail: 0,
-      altKey: true,
-    }),
-    expect.objectContaining({
-      type: 'mousemove',
-      button: 0,
-      buttons: 0,
-      detail: 0,
-      altKey: true,
-    }),
-    expect.objectContaining({
-      type: 'mousedown',
-      button: 1,
-      buttons: 4,
-      detail: 1,
-      altKey: true,
-    }),
-    expect.objectContaining({
-      type: 'mouseup',
-      button: 1,
-      buttons: 4,
-      detail: 1,
-      altKey: true,
-    }),
-    expect.objectContaining({
-      type: 'click',
-      button: 1,
-      buttons: 4,
-      detail: 1,
-      altKey: true,
-    }),
-  ])
+  const events = getEvents().map(
+    ({constructor, type, button, buttons, detail}) =>
+      constructor.name === 'MouseEvent'
+        ? `${type} - button=${button}; buttons=${buttons}; detail=${detail}`
+        : type,
+  )
+  expect(events.join('\n')).toMatchInlineSnapshot(`
+    mouseover - button=0; buttons=0; detail=0
+    mousemove - button=0; buttons=0; detail=0
+    mousedown - button=1; buttons=4; detail=1
+    focusin
+    mouseup - button=1; buttons=4; detail=1
+    click - button=1; buttons=4; detail=1
+  `)
 })
 
 test('fires mouse events with custom buttons property', async () => {
   const {element, getEvents} = setup('<div></div>')
 
   await userEvent.click(element, {buttons: 4})
-
-  expect(getEvents()).toEqual([
-    expect.objectContaining({
-      type: 'mouseover',
-      button: 0,
-      buttons: 0,
-      detail: 0,
-    }),
-    expect.objectContaining({
-      type: 'mousemove',
-      button: 0,
-      buttons: 0,
-      detail: 0,
-    }),
-    expect.objectContaining({
-      type: 'mousedown',
-      button: 1,
-      buttons: 4,
-      detail: 1,
-    }),
-    expect.objectContaining({
-      type: 'mouseup',
-      button: 1,
-      buttons: 4,
-      detail: 1,
-    }),
-    expect.objectContaining({
-      type: 'click',
-      button: 1,
-      buttons: 4,
-      detail: 1,
-    }),
-  ])
+  const events = getEvents().map(
+    ({constructor, type, button, buttons, detail}) =>
+      constructor.name === 'MouseEvent'
+        ? `${type} - button=${button}; buttons=${buttons}; detail=${detail}`
+        : type,
+  )
+  expect(events.join('\n')).toMatchInlineSnapshot(`
+    mouseover - button=0; buttons=0; detail=0
+    mousemove - button=0; buttons=0; detail=0
+    mousedown - button=1; buttons=4; detail=1
+    focusin
+    mouseup - button=1; buttons=4; detail=1
+    click - button=1; buttons=4; detail=1
+  `)
 })
