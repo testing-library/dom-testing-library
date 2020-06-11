@@ -1,0 +1,6 @@
+{
+  "rules": {
+    // the wait in the loop is intentional and we don't want to parallelize
+    "no-await-in-loop": "off"
+  }
+}

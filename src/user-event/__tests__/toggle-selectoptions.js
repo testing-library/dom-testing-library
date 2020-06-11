@@ -1,10 +1,10 @@
 import * as userEvent from '..'
 import {addListeners, setupSelect, setup} from './helpers/utils'
 
-test('should fire the correct events for multiple select', () => {
+test('should fire the correct events for multiple select', async () => {
   const {form, select, getEventCalls} = setupSelect({multiple: true})
 
-  userEvent.toggleSelectOptions(select, '1')
+  await userEvent.toggleSelectOptions(select, '1')
 
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: select[name="select"][value=["1"]]
@@ -26,7 +26,7 @@ test('should fire the correct events for multiple select', () => {
   expect(form).toHaveFormValues({select: ['1']})
 })
 
-test('should fire the correct events for multiple select when focus is in other element', () => {
+test('should fire the correct events for multiple select when focus is in other element', async () => {
   const {select} = setupSelect({multiple: true})
   const button = document.createElement('button')
   document.body.append(button)
@@ -36,7 +36,7 @@ test('should fire the correct events for multiple select when focus is in other 
 
   button.focus()
 
-  userEvent.toggleSelectOptions(select, '1')
+  await userEvent.toggleSelectOptions(select, '1')
 
   expect(getButtonEventCalls()).toMatchInlineSnapshot(`
     Events fired on: button
@@ -64,7 +64,7 @@ test('should fire the correct events for multiple select when focus is in other 
   `)
 })
 
-test('toggle options as expected', () => {
+test('toggle options as expected', async () => {
   const {element} = setup(`
     <form>
       <select name="select" multiple>
@@ -80,24 +80,23 @@ test('toggle options as expected', () => {
   const select = element.querySelector('select')
 
   // select one
-  userEvent.toggleSelectOptions(select, ['1'])
+  await userEvent.toggleSelectOptions(select, ['1'])
   expect(element).toHaveFormValues({select: ['1']})
 
   // unselect one and select two
-  userEvent.toggleSelectOptions(select, ['1', '2'])
+  await userEvent.toggleSelectOptions(select, ['1', '2'])
   expect(element).toHaveFormValues({select: ['2']})
 
   // // select one
-  userEvent.toggleSelectOptions(select, ['1'])
+  await userEvent.toggleSelectOptions(select, ['1'])
   expect(element).toHaveFormValues({select: ['1', '2']})
 })
 
-it('throws error when provided element is not a multiple select', () => {
+it('throws error when provided element is not a multiple select', async () => {
   const {element} = setup(`<select />`)
 
-  expect(() => {
-    userEvent.toggleSelectOptions(element)
-  }).toThrowErrorMatchingInlineSnapshot(
+  const error = await userEvent.toggleSelectOptions(element).catch(e => e)
+  expect(error.message).toMatchInlineSnapshot(
     `Unable to toggleSelectOptions - please provide a select element with multiple=true`,
   )
 })

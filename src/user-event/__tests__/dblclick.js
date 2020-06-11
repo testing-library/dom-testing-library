@@ -1,9 +1,9 @@
 import * as userEvent from '..'
 import {setup, addEventListener, addListeners} from './helpers/utils'
 
-test('fires the correct events on buttons', () => {
+test('fires the correct events on buttons', async () => {
   const {element, getEventCalls} = setup('<button />')
-  userEvent.dblClick(element)
+  await userEvent.dblClick(element)
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: button
 
@@ -20,9 +20,9 @@ test('fires the correct events on buttons', () => {
   `)
 })
 
-test('fires the correct events on checkboxes', () => {
+test('fires the correct events on checkboxes', async () => {
   const {element, getEventCalls} = setup('<input type="checkbox" />')
-  userEvent.dblClick(element)
+  await userEvent.dblClick(element)
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[checked=false]
 
@@ -42,9 +42,9 @@ test('fires the correct events on checkboxes', () => {
   `)
 })
 
-test('fires the correct events on divs', () => {
+test('fires the correct events on divs', async () => {
   const {element, getEventCalls} = setup('<div></div>')
-  userEvent.dblClick(element)
+  await userEvent.dblClick(element)
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: div
 
@@ -60,7 +60,7 @@ test('fires the correct events on divs', () => {
   `)
 })
 
-test('blurs the previous element', () => {
+test('blurs the previous element', async () => {
   const {element} = setup(`
     <div>
       <button id="button-a" />
@@ -73,9 +73,9 @@ test('blurs the previous element', () => {
 
   const {getEventCalls, clearEventCalls} = addListeners(a)
 
-  userEvent.dblClick(a)
+  await userEvent.dblClick(a)
   clearEventCalls()
-  userEvent.dblClick(b)
+  await userEvent.dblClick(b)
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: button#button-a
 
@@ -85,7 +85,7 @@ test('blurs the previous element', () => {
   `)
 })
 
-test('does not blur the previous element when mousedown prevents default', () => {
+test('does not blur the previous element when mousedown prevents default', async () => {
   const {element} = setup(`
     <div>
       <button id="button-a" />
@@ -100,9 +100,9 @@ test('does not blur the previous element when mousedown prevents default', () =>
 
   const {getEventCalls, clearEventCalls} = addListeners(a)
 
-  userEvent.dblClick(a)
+  await userEvent.dblClick(a)
   clearEventCalls()
-  userEvent.dblClick(b)
+  await userEvent.dblClick(b)
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: button#button-a
 
@@ -111,9 +111,9 @@ test('does not blur the previous element when mousedown prevents default', () =>
   `)
 })
 
-test('fires mouse events with the correct properties', () => {
+test('fires mouse events with the correct properties', async () => {
   const {element, getEvents} = setup('<div></div>')
-  userEvent.dblClick(element)
+  await userEvent.dblClick(element)
   expect(getEvents()).toEqual([
     expect.objectContaining({
       type: 'mouseover',
@@ -172,9 +172,9 @@ test('fires mouse events with the correct properties', () => {
   ])
 })
 
-test('fires mouse events with custom button property', () => {
+test('fires mouse events with custom button property', async () => {
   const {element, getEvents} = setup('<div></div>')
-  userEvent.dblClick(element, {
+  await userEvent.dblClick(element, {
     button: 1,
     altKey: true,
   })
@@ -245,10 +245,10 @@ test('fires mouse events with custom button property', () => {
   ])
 })
 
-test('fires mouse events with custom buttons property', () => {
+test('fires mouse events with custom buttons property', async () => {
   const {element, getEvents} = setup('<div></div>')
 
-  userEvent.dblClick(element, {buttons: 4})
+  await userEvent.dblClick(element, {buttons: 4})
 
   expect(getEvents()).toEqual([
     expect.objectContaining({

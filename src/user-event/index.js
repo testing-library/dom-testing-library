@@ -1,4 +1,5 @@
-import {fireEvent} from '../events'
+import {wrapAsync} from '../wrap-async'
+import {fireEvent} from './tick-fire-event'
 import {type} from './type'
 import {tick} from './tick'
 
@@ -72,12 +73,12 @@ function getMouseEventOptions(event, init, clickCount = 0) {
   }
 }
 
-function clickLabel(label, init) {
-  fireEvent.mouseOver(label, getMouseEventOptions('mouseover', init))
-  fireEvent.mouseMove(label, getMouseEventOptions('mousemove', init))
-  fireEvent.mouseDown(label, getMouseEventOptions('mousedown', init))
-  fireEvent.mouseUp(label, getMouseEventOptions('mouseup', init))
-  fireEvent.click(label, getMouseEventOptions('click', init))
+async function clickLabel(label, init) {
+  await fireEvent.mouseOver(label, getMouseEventOptions('mouseover', init))
+  await fireEvent.mouseMove(label, getMouseEventOptions('mousemove', init))
+  await fireEvent.mouseDown(label, getMouseEventOptions('mousedown', init))
+  await fireEvent.mouseUp(label, getMouseEventOptions('mouseup', init))
+  await fireEvent.click(label, getMouseEventOptions('click', init))
 
   // clicking the label will trigger a click of the label.control
   // however, it will not focus the label.control so we have to do it
@@ -85,21 +86,21 @@ function clickLabel(label, init) {
   if (label.control) label.control.focus()
 }
 
-function clickBooleanElement(element, init) {
+async function clickBooleanElement(element, init) {
   if (element.disabled) return
 
-  fireEvent.mouseOver(element, getMouseEventOptions('mouseover', init))
-  fireEvent.mouseMove(element, getMouseEventOptions('mousemove', init))
-  fireEvent.mouseDown(element, getMouseEventOptions('mousedown', init))
-  fireEvent.focus(element)
-  fireEvent.mouseUp(element, getMouseEventOptions('mouseup', init))
-  fireEvent.click(element, getMouseEventOptions('click', init))
+  await fireEvent.mouseOver(element, getMouseEventOptions('mouseover', init))
+  await fireEvent.mouseMove(element, getMouseEventOptions('mousemove', init))
+  await fireEvent.mouseDown(element, getMouseEventOptions('mousedown', init))
+  await fireEvent.focus(element)
+  await fireEvent.mouseUp(element, getMouseEventOptions('mouseup', init))
+  await fireEvent.click(element, getMouseEventOptions('click', init))
 }
 
-function clickElement(element, previousElement, init) {
-  fireEvent.mouseOver(element, getMouseEventOptions('mouseover', init))
-  fireEvent.mouseMove(element, getMouseEventOptions('mousemove', init))
-  const continueDefaultHandling = fireEvent.mouseDown(
+async function clickElement(element, previousElement, init) {
+  await fireEvent.mouseOver(element, getMouseEventOptions('mouseover', init))
+  await fireEvent.mouseMove(element, getMouseEventOptions('mousemove', init))
+  const continueDefaultHandling = await fireEvent.mouseDown(
     element,
     getMouseEventOptions('mousedown', init),
   )
@@ -108,16 +109,16 @@ function clickElement(element, previousElement, init) {
     if (previousElement) previousElement.blur()
     if (shouldFocus) element.focus()
   }
-  fireEvent.mouseUp(element, getMouseEventOptions('mouseup', init))
-  fireEvent.click(element, getMouseEventOptions('click', init, 1))
+  await fireEvent.mouseUp(element, getMouseEventOptions('mouseup', init))
+  await fireEvent.click(element, getMouseEventOptions('click', init, 1))
   const parentLabel = element.closest('label')
   if (parentLabel?.control) parentLabel?.control.focus?.()
 }
 
-function dblClickElement(element, previousElement, init) {
-  fireEvent.mouseOver(element, getMouseEventOptions('mouseover', init))
-  fireEvent.mouseMove(element, getMouseEventOptions('mousemove', init))
-  const continueDefaultHandling = fireEvent.mouseDown(
+async function dblClickElement(element, previousElement, init) {
+  await fireEvent.mouseOver(element, getMouseEventOptions('mouseover', init))
+  await fireEvent.mouseMove(element, getMouseEventOptions('mousemove', init))
+  const continueDefaultHandling = await fireEvent.mouseDown(
     element,
     getMouseEventOptions('mousedown', init),
   )
@@ -126,83 +127,86 @@ function dblClickElement(element, previousElement, init) {
     if (previousElement) previousElement.blur()
     if (shouldFocus) element.focus()
   }
-  fireEvent.mouseUp(element, getMouseEventOptions('mouseup', init))
-  fireEvent.click(element, getMouseEventOptions('click', init, 1))
+  await fireEvent.mouseUp(element, getMouseEventOptions('mouseup', init))
+  await fireEvent.click(element, getMouseEventOptions('click', init, 1))
   const parentLabel = element.closest('label')
   if (parentLabel?.control) parentLabel?.control.focus?.()
 
-  fireEvent.mouseDown(element, getMouseEventOptions('mousedown', init, 1))
-  fireEvent.mouseUp(element, getMouseEventOptions('mouseup', init, 1))
-  fireEvent.click(element, getMouseEventOptions('click', init, 2))
-  fireEvent.dblClick(element, getMouseEventOptions('dblclick', init, 2))
+  await fireEvent.mouseDown(element, getMouseEventOptions('mousedown', init, 1))
+  await fireEvent.mouseUp(element, getMouseEventOptions('mouseup', init, 1))
+  await fireEvent.click(element, getMouseEventOptions('click', init, 2))
+  await fireEvent.dblClick(element, getMouseEventOptions('dblclick', init, 2))
 }
 
-function dblClickCheckbox(checkbox, init) {
-  fireEvent.mouseOver(checkbox, getMouseEventOptions('mouseover', init))
-  fireEvent.mouseMove(checkbox, getMouseEventOptions('mousemove', init))
-  fireEvent.mouseDown(checkbox, getMouseEventOptions('mousedown', init))
-  fireEvent.focus(checkbox)
-  fireEvent.mouseUp(checkbox, getMouseEventOptions('mouseup', init))
-  fireEvent.click(checkbox, getMouseEventOptions('click', init, 1))
-  fireEvent.mouseDown(checkbox, getMouseEventOptions('mousedown', init, 1))
-  fireEvent.mouseUp(checkbox, getMouseEventOptions('mouseup', init, 1))
-  fireEvent.click(checkbox, getMouseEventOptions('click', init, 2))
+async function dblClickCheckbox(checkbox, init) {
+  await fireEvent.mouseOver(checkbox, getMouseEventOptions('mouseover', init))
+  await fireEvent.mouseMove(checkbox, getMouseEventOptions('mousemove', init))
+  await fireEvent.mouseDown(checkbox, getMouseEventOptions('mousedown', init))
+  await fireEvent.focus(checkbox)
+  await fireEvent.mouseUp(checkbox, getMouseEventOptions('mouseup', init))
+  await fireEvent.click(checkbox, getMouseEventOptions('click', init, 1))
+  await fireEvent.mouseDown(
+    checkbox,
+    getMouseEventOptions('mousedown', init, 1),
+  )
+  await fireEvent.mouseUp(checkbox, getMouseEventOptions('mouseup', init, 1))
+  await fireEvent.click(checkbox, getMouseEventOptions('click', init, 2))
 }
 
-function selectOption(select, option, init) {
-  fireEvent.mouseOver(option, getMouseEventOptions('mouseover', init))
-  fireEvent.mouseMove(option, getMouseEventOptions('mousemove', init))
-  fireEvent.mouseDown(option, getMouseEventOptions('mousedown', init))
-  fireEvent.focus(option)
-  fireEvent.mouseUp(option, getMouseEventOptions('mouseup', init))
-  fireEvent.click(option, getMouseEventOptions('click', init, 1))
+async function selectOption(select, option, init) {
+  await fireEvent.mouseOver(option, getMouseEventOptions('mouseover', init))
+  await fireEvent.mouseMove(option, getMouseEventOptions('mousemove', init))
+  await fireEvent.mouseDown(option, getMouseEventOptions('mousedown', init))
+  await fireEvent.focus(option)
+  await fireEvent.mouseUp(option, getMouseEventOptions('mouseup', init))
+  await fireEvent.click(option, getMouseEventOptions('click', init, 1))
 
   option.selected = true
 
-  fireEvent.change(select)
+  await fireEvent.change(select)
 }
 
-function toggleSelectOption(select, option, init) {
-  fireEvent.mouseOver(option, getMouseEventOptions('mouseover', init))
-  fireEvent.mouseMove(option, getMouseEventOptions('mousemove', init))
-  fireEvent.mouseDown(option, getMouseEventOptions('mousedown', init))
-  fireEvent.focus(option)
-  fireEvent.mouseUp(option, getMouseEventOptions('mouseup', init))
-  fireEvent.click(option, getMouseEventOptions('click', init, 1))
+async function toggleSelectOption(select, option, init) {
+  await fireEvent.mouseOver(option, getMouseEventOptions('mouseover', init))
+  await fireEvent.mouseMove(option, getMouseEventOptions('mousemove', init))
+  await fireEvent.mouseDown(option, getMouseEventOptions('mousedown', init))
+  await fireEvent.focus(option)
+  await fireEvent.mouseUp(option, getMouseEventOptions('mouseup', init))
+  await fireEvent.click(option, getMouseEventOptions('click', init, 1))
 
   option.selected = !option.selected
 
-  fireEvent.change(select)
+  await fireEvent.change(select)
 }
 
 const Keys = {
   Backspace: {keyCode: 8, code: 'Backspace', key: 'Backspace'},
 }
 
-function backspace(element) {
+async function backspace(element) {
   const keyboardEventOptions = {
     key: Keys.Backspace.key,
     keyCode: Keys.Backspace.keyCode,
     which: Keys.Backspace.keyCode,
   }
-  fireEvent.keyDown(element, keyboardEventOptions)
-  fireEvent.keyUp(element, keyboardEventOptions)
+  await fireEvent.keyDown(element, keyboardEventOptions)
+  await fireEvent.keyUp(element, keyboardEventOptions)
 
   if (!element.readOnly) {
-    fireEvent.input(element, {
+    await fireEvent.input(element, {
       inputType: 'deleteContentBackward',
     })
 
-    // We need to call `fireEvent.change` _before_ we change `element.value`
-    // because `fireEvent.change` will use the element's native value setter
+    // We need to call `await fireEvent.change` _before_ we change `element.value`
+    // because `await fireEvent.change` will use the element's native value setter
     // (meaning it will avoid prototype overrides implemented by React). If we
     // call `input.value = ""` first, React will swallow the change event (this
-    // is checked in the tests). `fireEvent.change` will only call the native
+    // is checked in the tests). `await fireEvent.change` will only call the native
     // value setter method if the event options include `{ target: { value }}`
     // (https://github.com/testing-library/dom-testing-library/blob/8846eaf20972f8e41ed11f278948ac38a692c3f1/src/events.js#L29-L32).
     //
     // Also, we still must call `element.value = ""` after calling
-    // `fireEvent.change` because `fireEvent.change` will _only_ call the native
+    // `await fireEvent.change` because `await fireEvent.change` will _only_ call the native
     // `value` setter and not the prototype override defined by React, causing
     // React's internal represetation of this state to get out of sync with the
     // value set on `input.value`; calling `element.value` after will also call
@@ -210,13 +214,13 @@ function backspace(element) {
     //
     // Comment either of these out or re-order them and see what parts of the
     // tests fail for more context.
-    fireEvent.change(element, {target: {value: ''}})
+    await fireEvent.change(element, {target: {value: ''}})
     element.value = ''
   }
 }
 
-function selectAll(element) {
-  dblClick(element) // simulate events (will not actually select)
+async function selectAll(element) {
+  await dblClick(element) // simulate events (will not actually select)
   const elementType = element.type
   // type is a readonly property on textarea, so check if element is an input before trying to modify it
   if (isInputElement(element)) {
@@ -242,14 +246,14 @@ function getPreviouslyFocusedElement(element) {
   return wasAnotherElementFocused ? focusedElement : null
 }
 
-function click(element, init) {
+async function click(element, init) {
   const previouslyFocusedElement = getPreviouslyFocusedElement(element)
   if (previouslyFocusedElement) {
-    fireEvent.mouseMove(
+    await fireEvent.mouseMove(
       previouslyFocusedElement,
       getMouseEventOptions('mousemove', init),
     )
-    fireEvent.mouseLeave(
+    await fireEvent.mouseLeave(
       previouslyFocusedElement,
       getMouseEventOptions('mouseleave', init),
     )
@@ -257,27 +261,28 @@ function click(element, init) {
 
   switch (element.tagName) {
     case 'LABEL':
-      clickLabel(element, init)
+      await clickLabel(element, init)
       break
     case 'INPUT':
       if (element.type === 'checkbox' || element.type === 'radio') {
-        clickBooleanElement(element, init)
+        await clickBooleanElement(element, init)
         break
       }
     // eslint-disable-next-line no-fallthrough
     default:
-      clickElement(element, previouslyFocusedElement, init)
+      await clickElement(element, previouslyFocusedElement, init)
   }
 }
+click = wrapAsync(click)
 
-function dblClick(element, init) {
+async function dblClick(element, init) {
   const previouslyFocusedElement = getPreviouslyFocusedElement(element)
   if (previouslyFocusedElement) {
-    fireEvent.mouseMove(
+    await fireEvent.mouseMove(
       previouslyFocusedElement,
       getMouseEventOptions('mousemove', init),
     )
-    fireEvent.mouseLeave(
+    await fireEvent.mouseLeave(
       previouslyFocusedElement,
       getMouseEventOptions('mouseleave', init),
     )
@@ -286,29 +291,30 @@ function dblClick(element, init) {
   switch (element.tagName) {
     case 'INPUT':
       if (element.type === 'checkbox') {
-        dblClickCheckbox(element, previouslyFocusedElement, init)
+        await dblClickCheckbox(element, previouslyFocusedElement, init)
         break
       }
     // eslint-disable-next-line no-fallthrough
     default:
-      dblClickElement(element, previouslyFocusedElement, init)
+      await dblClickElement(element, previouslyFocusedElement, init)
   }
 }
+dblClick = wrapAsync(dblClick)
 
-function selectOptions(element, values, init) {
+async function selectOptions(element, values, init) {
   const previouslyFocusedElement = getPreviouslyFocusedElement(element)
   if (previouslyFocusedElement) {
-    fireEvent.mouseMove(
+    await fireEvent.mouseMove(
       previouslyFocusedElement,
       getMouseEventOptions('mousemove', init),
     )
-    fireEvent.mouseLeave(
+    await fireEvent.mouseLeave(
       previouslyFocusedElement,
       getMouseEventOptions('mouseleave', init),
     )
   }
 
-  clickElement(element, previouslyFocusedElement, init)
+  await clickElement(element, previouslyFocusedElement, init)
 
   const valArray = Array.isArray(values) ? values : [values]
   const selectedOptions = Array.from(element.querySelectorAll('option')).filter(
@@ -317,14 +323,17 @@ function selectOptions(element, values, init) {
 
   if (selectedOptions.length > 0) {
     if (element.multiple) {
-      selectedOptions.forEach(option => selectOption(element, option))
+      for (const option of selectedOptions) {
+        await selectOption(element, option)
+      }
     } else {
-      selectOption(element, selectedOptions[0])
+      await selectOption(element, selectedOptions[0])
     }
   }
 }
+selectOptions = wrapAsync(selectOptions)
 
-function toggleSelectOptions(element, values, init) {
+async function toggleSelectOptions(element, values, init) {
   if (!element || element.tagName !== 'SELECT' || !element.multiple) {
     throw new Error(
       `Unable to toggleSelectOptions - please provide a select element with multiple=true`,
@@ -333,17 +342,17 @@ function toggleSelectOptions(element, values, init) {
 
   const previouslyFocusedElement = getPreviouslyFocusedElement(element)
   if (previouslyFocusedElement) {
-    fireEvent.mouseMove(
+    await fireEvent.mouseMove(
       previouslyFocusedElement,
       getMouseEventOptions('mousemove', init),
     )
-    fireEvent.mouseLeave(
+    await fireEvent.mouseLeave(
       previouslyFocusedElement,
       getMouseEventOptions('mouseleave', init),
     )
   }
 
-  clickElement(element, previouslyFocusedElement, init)
+  await clickElement(element, previouslyFocusedElement, init)
 
   const valArray = Array.isArray(values) ? values : [values]
   const selectedOptions = Array.from(element.querySelectorAll('option')).filter(
@@ -351,32 +360,36 @@ function toggleSelectOptions(element, values, init) {
   )
 
   if (selectedOptions.length > 0) {
-    selectedOptions.forEach(option => toggleSelectOption(element, option, init))
+    for (const option of selectedOptions) {
+      await toggleSelectOption(element, option, init)
+    }
   }
 }
+toggleSelectOptions = wrapAsync(toggleSelectOptions)
 
-function clear(element) {
+async function clear(element) {
   if (element.disabled) return
 
-  selectAll(element)
-  backspace(element)
+  await selectAll(element)
+  await backspace(element)
 }
+clear = wrapAsync(clear)
 
-function upload(element, fileOrFiles, {clickInit, changeInit} = {}) {
+async function upload(element, fileOrFiles, {clickInit, changeInit} = {}) {
   if (element.disabled) return
   const focusedElement = element.ownerDocument.activeElement
 
   let files
 
   if (element.tagName === 'LABEL') {
-    clickLabel(element)
+    await clickLabel(element)
     files = element.control.multiple ? fileOrFiles : [fileOrFiles]
   } else {
     files = element.multiple ? fileOrFiles : [fileOrFiles]
-    clickElement(element, focusedElement, clickInit)
+    await clickElement(element, focusedElement, clickInit)
   }
 
-  fireEvent.change(element, {
+  await fireEvent.change(element, {
     target: {
       files: {
         length: files.length,
@@ -387,8 +400,9 @@ function upload(element, fileOrFiles, {clickInit, changeInit} = {}) {
     ...changeInit,
   })
 }
+upload = wrapAsync(upload)
 
-function tab({shift = false, focusTrap = document} = {}) {
+async function tab({shift = false, focusTrap = document} = {}) {
   const focusableElements = focusTrap.querySelectorAll(
     'input, button, select, textarea, a[href], [tabindex]',
   )
@@ -450,25 +464,31 @@ function tab({shift = false, focusTrap = document} = {}) {
   } else {
     next.focus()
   }
+  // everything in user-event must be actually async, but since we're not
+  // calling fireEvent in here, we'll add this tick here...
+  await tick()
 }
+tab = wrapAsync(tab)
 
 async function hover(element, init) {
   await tick()
-  fireEvent.mouseOver(element, getMouseEventOptions('mouseover', init))
+  await fireEvent.mouseOver(element, getMouseEventOptions('mouseover', init))
   await tick()
-  fireEvent.mouseEnter(element, getMouseEventOptions('mouseenter', init))
+  await fireEvent.mouseEnter(element, getMouseEventOptions('mouseenter', init))
   await tick()
-  fireEvent.mouseMove(element, getMouseEventOptions('mousemove', init))
+  await fireEvent.mouseMove(element, getMouseEventOptions('mousemove', init))
 }
+hover = wrapAsync(hover)
 
 async function unhover(element, init) {
   await tick()
-  fireEvent.mouseMove(element, getMouseEventOptions('mousemove', init))
+  await fireEvent.mouseMove(element, getMouseEventOptions('mousemove', init))
   await tick()
-  fireEvent.mouseOut(element, getMouseEventOptions('mouseout', init))
+  await fireEvent.mouseOut(element, getMouseEventOptions('mouseout', init))
   await tick()
-  fireEvent.mouseLeave(element, getMouseEventOptions('mouseleave', init))
+  await fireEvent.mouseLeave(element, getMouseEventOptions('mouseleave', init))
 }
+unhover = wrapAsync(unhover)
 
 export {
   click,

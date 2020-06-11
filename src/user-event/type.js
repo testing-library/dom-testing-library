@@ -1,18 +1,8 @@
-import {fireEvent} from '../events'
-import {getConfig} from '../config'
-import {tick} from './tick'
+import {wrapAsync} from '../wrap-async'
+import {fireEvent} from './tick-fire-event'
 
 function wait(time) {
   return new Promise(resolve => setTimeout(() => resolve(), time))
-}
-
-// this needs to be wrapped in the asyncWrapper for React's act and angular's change detection
-async function type(...args) {
-  let result
-  await getConfig().asyncWrapper(async () => {
-    result = await typeImpl(...args)
-  })
-  return result
 }
 
 const getActiveElement = document => {
@@ -25,7 +15,7 @@ const getActiveElement = document => {
 }
 
 // eslint-disable-next-line complexity
-async function typeImpl(
+async function type(
   element,
   text,
   {allAtOnce = false, delay, initialSelectionStart, initialSelectionEnd} = {},
@@ -40,9 +30,9 @@ async function typeImpl(
   const setSelectionRange = ({newValue, newSelectionStart}) => {
     // if we *can* change the selection start, then we will if the new value
     // is the same as the current value (so it wasn't programatically changed
-    // when the fireEvent.input was triggered).
+    // when the await fireEvent.input was triggered).
     // The reason we have to do this at all is because it actually *is*
-    // programmatically changed by fireEvent.input, so we have to simulate the
+    // programmatically changed by await fireEvent.input, so we have to simulate the
     // browser's default behavior
     if (
       currentElement().selectionStart !== null &&
@@ -73,7 +63,7 @@ async function typeImpl(
   if (allAtOnce) {
     if (!element.readOnly) {
       const {newValue, newSelectionStart} = calculateNewValue(text)
-      fireEvent.input(element, {
+      await fireEvent.input(element, {
         target: {value: newValue},
       })
       setSelectionRange({newValue, newSelectionStart})
@@ -108,17 +98,18 @@ async function typeImpl(
         const key = 'Enter'
         const keyCode = 13
 
-        const keyDownDefaultNotPrevented = fireEvent.keyDown(currentElement(), {
-          key,
-          keyCode,
-          which: keyCode,
-          ...eventOverrides,
-        })
+        const keyDownDefaultNotPrevented = await fireEvent.keyDown(
+          currentElement(),
+          {
+            key,
+            keyCode,
+            which: keyCode,
+            ...eventOverrides,
+          },
+        )
 
         if (keyDownDefaultNotPrevented) {
-          await tick()
-
-          fireEvent.keyPress(currentElement(), {
+          await fireEvent.keyPress(currentElement(), {
             key,
             keyCode,
             charCode: keyCode,
@@ -127,16 +118,14 @@ async function typeImpl(
         }
 
         if (currentElement().tagName === 'BUTTON') {
-          await tick()
-          fireEvent.click(currentElement(), {
+          await fireEvent.click(currentElement(), {
             ...eventOverrides,
           })
         }
 
         if (currentElement().tagName === 'TEXTAREA') {
-          await tick()
           const {newValue, newSelectionStart} = calculateNewValue('\n')
-          fireEvent.input(currentElement(), {
+          await fireEvent.input(currentElement(), {
             target: {value: newValue},
             inputType: 'insertLineBreak',
             ...eventOverrides,
@@ -144,9 +133,7 @@ async function typeImpl(
           setSelectionRange({newValue, newSelectionStart})
         }
 
-        await tick()
-
-        fireEvent.keyUp(currentElement(), {
+        await fireEvent.keyUp(currentElement(), {
           key,
           keyCode,
           which: keyCode,
@@ -157,18 +144,16 @@ async function typeImpl(
         const key = 'Escape'
         const keyCode = 27
 
-        fireEvent.keyDown(currentElement(), {
+        await fireEvent.keyDown(currentElement(), {
           key,
           keyCode,
           which: keyCode,
           ...eventOverrides,
         })
 
-        await tick()
-
         // NOTE: Browsers do not fire a keypress on meta key presses
 
-        fireEvent.keyUp(currentElement(), {
+        await fireEvent.keyUp(currentElement(), {
           key,
           keyCode,
           which: keyCode,
@@ -179,7 +164,7 @@ async function typeImpl(
         const key = 'Backspace'
         const keyCode = 8
 
-        const keyPressDefaultNotPrevented = fireEvent.keyDown(
+        const keyPressDefaultNotPrevented = await fireEvent.keyDown(
           currentElement(),
           {
             key,
@@ -199,9 +184,7 @@ async function typeImpl(
           })
         }
 
-        await tick()
-
-        fireEvent.keyUp(currentElement(), {
+        await fireEvent.keyUp(currentElement(), {
           key,
           keyCode,
           which: keyCode,
@@ -243,9 +226,7 @@ async function typeImpl(
   }) {
     const prevValue = currentValue()
     if (!currentElement().readOnly && newValue !== prevValue) {
-      await tick()
-
-      fireEvent.input(currentElement(), {
+      await fireEvent.input(currentElement(), {
         target: {value: newValue},
         ...eventOverrides,
       })
@@ -342,22 +323,26 @@ async function typeImpl(
     const keyCode = char.charCodeAt(0)
     let nextPrevWasMinus
 
-    const keyDownDefaultNotPrevented = fireEvent.keyDown(currentElement(), {
-      key,
-      keyCode,
-      which: keyCode,
-      ...eventOverrides,
-    })
-
-    if (keyDownDefaultNotPrevented) {
-      await tick()
-
-      const keyPressDefaultNotPrevented = fireEvent.keyPress(currentElement(), {
+    const keyDownDefaultNotPrevented = await fireEvent.keyDown(
+      currentElement(),
+      {
         key,
         keyCode,
-        charCode: keyCode,
+        which: keyCode,
         ...eventOverrides,
-      })
+      },
+    )
+
+    if (keyDownDefaultNotPrevented) {
+      const keyPressDefaultNotPrevented = await fireEvent.keyPress(
+        currentElement(),
+        {
+          key,
+          keyCode,
+          charCode: keyCode,
+          ...eventOverrides,
+        },
+      )
 
       if (keyPressDefaultNotPrevented) {
         const newEntry = prevWasMinus ? `-${char}` : char
@@ -387,9 +372,7 @@ async function typeImpl(
       }
     }
 
-    await tick()
-
-    fireEvent.keyUp(currentElement(), {
+    await fireEvent.keyUp(currentElement(), {
       key,
       keyCode,
       which: keyCode,
@@ -401,10 +384,10 @@ async function typeImpl(
 
   function modifier({name, key, keyCode, modifierProperty}) {
     return {
-      [`{${name}}`]: ({eventOverrides}) => {
+      [`{${name}}`]: async ({eventOverrides}) => {
         const newEventOverrides = {[modifierProperty]: true}
 
-        fireEvent.keyDown(currentElement(), {
+        await fireEvent.keyDown(currentElement(), {
           key,
           keyCode,
           which: keyCode,
@@ -414,10 +397,10 @@ async function typeImpl(
 
         return {eventOverrides: newEventOverrides}
       },
-      [`{/${name}}`]: ({eventOverrides}) => {
+      [`{/${name}}`]: async ({eventOverrides}) => {
         const newEventOverrides = {[modifierProperty]: false}
 
-        fireEvent.keyUp(currentElement(), {
+        await fireEvent.keyUp(currentElement(), {
           key,
           keyCode,
           which: keyCode,
@@ -431,11 +414,12 @@ async function typeImpl(
   }
 }
 
+type = wrapAsync(type)
+
 export {type}
 
 /*
 eslint
-  no-await-in-loop: "off",
   no-loop-func: "off",
   max-lines-per-function: "off",
 */

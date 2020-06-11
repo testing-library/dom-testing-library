@@ -1,9 +1,9 @@
 import * as userEvent from '..'
 import {setup} from './helpers/utils'
 
-test('clears text', () => {
+test('clears text', async () => {
   const {element, getEventCalls} = setup('<input value="hello" />')
-  userEvent.clear(element)
+  await userEvent.clear(element)
   expect(element).toHaveValue('')
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
@@ -25,18 +25,18 @@ test('clears text', () => {
   `)
 })
 
-test('does not clear text on disabled inputs', () => {
+test('does not clear text on disabled inputs', async () => {
   const {element, getEventCalls} = setup('<input value="hello" disabled />')
-  userEvent.clear(element)
+  await userEvent.clear(element)
   expect(element).toHaveValue('hello')
   expect(getEventCalls()).toMatchInlineSnapshot(
     `No events were fired on: input[value="hello"]`,
   )
 })
 
-test('does not clear text on readonly inputs', () => {
+test('does not clear text on readonly inputs', async () => {
   const {element, getEventCalls} = setup('<input value="hello" readonly />')
-  userEvent.clear(element)
+  await userEvent.clear(element)
   expect(element).toHaveValue('hello')
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="hello"]
@@ -56,17 +56,17 @@ test('does not clear text on readonly inputs', () => {
   `)
 })
 
-test('clears even on inputs that cannot (programmatically) have a selection', () => {
+test('clears even on inputs that cannot (programmatically) have a selection', async () => {
   const {element: email} = setup('<input value="a@b.c" type="email" />')
-  userEvent.clear(email)
+  await userEvent.clear(email)
   expect(email).toHaveValue('')
 
   const {element: password} = setup('<input value="pswrd" type="password" />')
-  userEvent.clear(password)
+  await userEvent.clear(password)
   expect(password).toHaveValue('')
 
   const {element: number} = setup('<input value="12" type="number" />')
-  userEvent.clear(number)
+  await userEvent.clear(number)
   // jest-dom does funny stuff with toHaveValue on number inputs
   expect(number.value).toBe('')
 })

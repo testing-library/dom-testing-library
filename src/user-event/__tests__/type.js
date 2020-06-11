@@ -1,6 +1,6 @@
 import * as userEvent from '..'
 import {setup, addListeners} from './helpers/utils'
-import './helpers/customElement'
+import './helpers/custom-element'
 
 test('types text in input', async () => {
   const {element, getEventCalls} = setup('<input />')

@@ -1,7 +1,7 @@
 import * as userEvent from '..'
 import {setup} from './helpers/utils'
 
-test('should cycle elements in document tab order', () => {
+test('should cycle elements in document tab order', async () => {
   setup(`
     <div>
       <input data-testid="element" type="checkbox" />
@@ -15,25 +15,25 @@ test('should cycle elements in document tab order', () => {
 
   expect(document.body).toHaveFocus()
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(checkbox).toHaveFocus()
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(radio).toHaveFocus()
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(number).toHaveFocus()
 
-  userEvent.tab()
+  await userEvent.tab()
 
   // cycle goes back to first element
   expect(checkbox).toHaveFocus()
 })
 
-test('should go backwards when shift = true', () => {
+test('should go backwards when shift = true', async () => {
   setup(`
     <div>
       <input data-testid="element" type="checkbox" />
@@ -47,16 +47,16 @@ test('should go backwards when shift = true', () => {
 
   radio.focus()
 
-  userEvent.tab({shift: true})
+  await userEvent.tab({shift: true})
 
   expect(checkbox).toHaveFocus()
 
-  userEvent.tab({shift: true})
+  await userEvent.tab({shift: true})
 
   expect(number).toHaveFocus()
 })
 
-test('should respect tabindex, regardless of dom position', () => {
+test('should respect tabindex, regardless of dom position', async () => {
   setup(`
     <div>
       <input data-testid="element" tabIndex="2" type="checkbox" />
@@ -68,24 +68,24 @@ test('should respect tabindex, regardless of dom position', () => {
     '[data-testid="element"]',
   )
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(radio).toHaveFocus()
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(checkbox).toHaveFocus()
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(number).toHaveFocus()
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(radio).toHaveFocus()
 })
 
-test('should respect dom order when tabindex are all the same', () => {
+test('should respect dom order when tabindex are all the same', async () => {
   setup(`
     <div>
       <input data-testid="element" tabIndex="0" type="checkbox" />
@@ -97,24 +97,24 @@ test('should respect dom order when tabindex are all the same', () => {
     '[data-testid="element"]',
   )
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(checkbox).toHaveFocus()
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(number).toHaveFocus()
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(radio).toHaveFocus()
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(checkbox).toHaveFocus()
 })
 
-test('should suport a mix of elements with/without tab index', () => {
+test('should suport a mix of elements with/without tab index', async () => {
   setup(`
     <div>
       <input data-testid="element" tabIndex="0" type="checkbox" />
@@ -126,18 +126,18 @@ test('should suport a mix of elements with/without tab index', () => {
     '[data-testid="element"]',
   )
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(checkbox).toHaveFocus()
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(number).toHaveFocus()
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(radio).toHaveFocus()
 })
 
-test('should not tab to <a> with no href', () => {
+test('should not tab to <a> with no href', async () => {
   setup(`
     <div>
       <input data-testid="element" tabIndex="0" type="checkbox" />
@@ -150,16 +150,16 @@ test('should not tab to <a> with no href', () => {
 
   const [checkbox, link] = document.querySelectorAll('[data-testid="element"]')
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(checkbox).toHaveFocus()
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(link).toHaveFocus()
 })
 
-test('should stay within a focus trap', () => {
+test('should stay within a focus trap', async () => {
   setup(`
     <>
       <div data-testid="div1">
@@ -189,36 +189,36 @@ test('should stay within a focus trap', () => {
 
   expect(document.body).toHaveFocus()
 
-  userEvent.tab({focusTrap: div1})
+  await userEvent.tab({focusTrap: div1})
 
   expect(checkbox1).toHaveFocus()
 
-  userEvent.tab({focusTrap: div1})
+  await userEvent.tab({focusTrap: div1})
 
   expect(radio1).toHaveFocus()
 
-  userEvent.tab({focusTrap: div1})
+  await userEvent.tab({focusTrap: div1})
 
   expect(number1).toHaveFocus()
 
-  userEvent.tab({focusTrap: div1})
+  await userEvent.tab({focusTrap: div1})
 
   // cycle goes back to first element
   expect(checkbox1).toHaveFocus()
 
-  userEvent.tab({focusTrap: div2})
+  await userEvent.tab({focusTrap: div2})
 
   expect(checkbox2).toHaveFocus()
 
-  userEvent.tab({focusTrap: div2})
+  await userEvent.tab({focusTrap: div2})
 
   expect(radio2).toHaveFocus()
 
-  userEvent.tab({focusTrap: div2})
+  await userEvent.tab({focusTrap: div2})
 
   expect(number2).toHaveFocus()
 
-  userEvent.tab({focusTrap: div2})
+  await userEvent.tab({focusTrap: div2})
 
   // cycle goes back to first element
   expect(checkbox2).toHaveFocus()
@@ -230,7 +230,7 @@ test('should stay within a focus trap', () => {
 // for example under node 10 in this test:
 // > 'abcdefghijklmnopqrstuvwxyz'.split('').sort(() => 0).join('')
 // will give you 'nacdefghijklmbopqrstuvwxyz'
-test('should support unstable sorting environments like node 10', () => {
+test('should support unstable sorting environments like node 10', async () => {
   const letters = 'abcdefghijklmnopqrstuvwxyz'
 
   setup(`
@@ -244,13 +244,13 @@ test('should support unstable sorting environments like node 10', () => {
 
   expect.assertions(26)
 
-  letters.split('').forEach(letter => {
-    userEvent.tab()
+  for (const letter of letters.split('')) {
+    await userEvent.tab()
     expect(document.querySelector(`[data-testid="${letter}"]`)).toHaveFocus()
-  })
+  }
 })
 
-test('should not focus disabled elements', () => {
+test('should not focus disabled elements', async () => {
   setup(`
     <div>
       <input data-testid="one" />
@@ -265,23 +265,23 @@ test('should not focus disabled elements', () => {
     document.querySelector('[data-testid="five"]'),
   ]
 
-  userEvent.tab()
+  await userEvent.tab()
   expect(one).toHaveFocus()
 
-  userEvent.tab()
+  await userEvent.tab()
   expect(five).toHaveFocus()
 })
 
-test('should keep focus on the document if there are no enabled, focusable elements', () => {
+test('should keep focus on the document if there are no enabled, focusable elements', async () => {
   setup(`<button disabled>no clicky</button>`)
-  userEvent.tab()
+  await userEvent.tab()
   expect(document.body).toHaveFocus()
 
-  userEvent.tab({shift: true})
+  await userEvent.tab({shift: true})
   expect(document.body).toHaveFocus()
 })
 
-test('should respect radio groups', () => {
+test('should respect radio groups', async () => {
   setup(`
     <div>
       <input
@@ -315,15 +315,15 @@ test('should respect radio groups', () => {
     '[data-testid="element"]',
   )
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(firstLeft).toHaveFocus()
 
-  userEvent.tab()
+  await userEvent.tab()
 
   expect(secondRight).toHaveFocus()
 
-  userEvent.tab({shift: true})
+  await userEvent.tab({shift: true})
 
   expect(firstRight).toHaveFocus()
 })

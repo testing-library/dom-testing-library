@@ -43,12 +43,6 @@ try {
   }
 }
 
-function tick() {
-  return {
-    then(resolve) {
-      enqueueTask(resolve)
-    },
-  }
-}
+const tick = () => new Promise(resolve => enqueueTask(resolve))
 
 export {tick}
