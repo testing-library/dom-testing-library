@@ -30,8 +30,12 @@ function escapeRegExp(string) {
   return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
 
+function getRegExpMatcher(string) {
+  return new RegExp(string.toLowerCase(), 'i')
+}
+
 function makeSuggestion(queryName, content, {variant = 'get', name}) {
-  const queryArgs = [content]
+  const queryArgs = [queryName === 'Role' ? content : getRegExpMatcher(content)]
 
   if (name) {
     queryArgs.push({name: new RegExp(escapeRegExp(name.toLowerCase()), 'i')})
@@ -45,12 +49,17 @@ function makeSuggestion(queryName, content, {variant = 'get', name}) {
     queryArgs,
     variant,
     toString() {
-      const options = queryArgs[1]
-        ? `, { ${Object.entries(queryArgs[1])
+      let [text, options] = queryArgs
+
+      text = typeof text === 'string' ? `'${text}'` : text
+
+      options = options
+        ? `, { ${Object.entries(options)
             .map(([k, v]) => `${k}: ${v}`)
             .join(', ')} }`
         : ''
-      return `${queryMethod}('${content}'${options})`
+
+      return `${queryMethod}(${text}${options})`
     },
   }
 }

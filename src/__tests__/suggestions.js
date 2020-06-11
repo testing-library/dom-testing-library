@@ -72,7 +72,9 @@ test(`should not suggest if the suggestion would give different results`, () => 
 test('should suggest by label over title', () => {
   renderIntoDocument(`<label><span>bar</span><input title="foo" /></label>`)
 
-  expect(() => screen.getByTitle('foo')).toThrowError(/getByLabelText\('bar'\)/)
+  expect(() => screen.getByTitle('foo')).toThrowError(
+    /getByLabelText\(\/bar\/i\)/,
+  )
 })
 
 test('should not suggest if there would be mixed suggestions', () => {
@@ -178,7 +180,7 @@ test('should suggest getByLabelText when no role available', () => {
     `<label for="foo">Username</label><input data-testid="foo" id="foo" />`,
   )
   expect(() => screen.getByTestId('foo')).toThrowError(
-    /getByLabelText\('Username'\)/,
+    /getByLabelText\(\/username\/i\)/,
   )
 })
 
@@ -191,7 +193,7 @@ test(`should suggest getByLabel on non form elements`, () => {
   `)
 
   expect(() => screen.getByTestId('foo')).toThrowError(
-    /getByLabelText\('Section One'\)/,
+    /getByLabelText\(\/section one\/i\)/,
   )
 })
 
@@ -230,7 +232,7 @@ test(`should suggest label over placeholder text`, () => {
   )
 
   expect(() => screen.getByPlaceholderText('Username')).toThrowError(
-    /getByLabelText\('Username'\)/,
+    /getByLabelText\(\/username\/i\)/,
   )
 })
 
@@ -238,7 +240,7 @@ test(`should suggest getByPlaceholderText`, () => {
   renderIntoDocument(`<input data-testid="foo" placeholder="Username" />`)
 
   expect(() => screen.getByTestId('foo')).toThrowError(
-    /getByPlaceholderText\('Username'\)/,
+    /getByPlaceholderText\(\/username\/i\)/,
   )
 })
 
@@ -246,7 +248,7 @@ test(`should suggest getByText for simple elements`, () => {
   renderIntoDocument(`<div data-testid="foo">hello there</div>`)
 
   expect(() => screen.getByTestId('foo')).toThrowError(
-    /getByText\('hello there'\)/,
+    /getByText\(\/hello there\/i\)/,
   )
 })
 
@@ -256,7 +258,7 @@ test(`should suggest getByDisplayValue`, () => {
   document.getElementById('lastName').value = 'Prine' // RIP John Prine
 
   expect(() => screen.getByTestId('lastName')).toThrowError(
-    /getByDisplayValue\('Prine'\)/,
+    /getByDisplayValue\(\/prine\/i\)/,
   )
 })
 
@@ -269,10 +271,10 @@ test(`should suggest getByAltText`, () => {
     `)
 
   expect(() => screen.getByTestId('input')).toThrowError(
-    /getByAltText\('last name'\)/,
+    /getByAltText\(\/last name\/i\)/,
   )
   expect(() => screen.getByTestId('area')).toThrowError(
-    /getByAltText\('Computer'\)/,
+    /getByAltText\(\/computer\/i\)/,
   )
 })
 
@@ -285,27 +287,29 @@ test(`should suggest getByTitle`, () => {
   </svg>`)
 
   expect(() => screen.getByTestId('delete')).toThrowError(
-    /getByTitle\('Delete'\)/,
+    /getByTitle\(\/delete\/i\)/,
   )
   expect(() => screen.getAllByTestId('delete')).toThrowError(
-    /getAllByTitle\('Delete'\)/,
+    /getAllByTitle\(\/delete\/i\)/,
   )
   expect(() => screen.queryByTestId('delete')).toThrowError(
-    /queryByTitle\('Delete'\)/,
+    /queryByTitle\(\/delete\/i\)/,
   )
   expect(() => screen.queryAllByTestId('delete')).toThrowError(
-    /queryAllByTitle\('Delete'\)/,
+    /queryAllByTitle\(\/delete\/i\)/,
   )
   expect(() => screen.queryAllByTestId('delete')).toThrowError(
-    /queryAllByTitle\('Delete'\)/,
+    /queryAllByTitle\(\/delete\/i\)/,
   )
   expect(() => screen.queryAllByTestId('delete')).toThrowError(
-    /queryAllByTitle\('Delete'\)/,
+    /queryAllByTitle\(\/delete\/i\)/,
   )
 
   // Since `ByTitle` and `ByText` will both return the <title> element
   // `getByText` will always be the suggested query as it is higher up the list.
-  expect(() => screen.getByTestId('svg')).toThrowError(/getByText\('Close'\)/)
+  expect(() => screen.getByTestId('svg')).toThrowError(
+    /getByText\(\/close\/i\)/,
+  )
 })
 
 test('getSuggestedQuery handles `variant` and defaults to `get`', () => {
@@ -343,9 +347,9 @@ test('getSuggestedQuery returns rich data for tooling', () => {
   expect(getSuggestedQuery(div)).toMatchObject({
     queryName: 'Text',
     queryMethod: 'getByText',
-    queryArgs: ['cancel'],
+    queryArgs: [/cancel/i],
     variant: 'get',
   })
 
-  expect(getSuggestedQuery(div).toString()).toEqual(`getByText('cancel')`)
+  expect(getSuggestedQuery(div).toString()).toEqual(`getByText(/cancel/i)`)
 })
