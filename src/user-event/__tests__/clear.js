@@ -18,6 +18,7 @@ test('clears text', async () => {
     mouseup: Left (0)
     click: Left (0)
     dblclick: Left (0)
+    select
     keydown: Backspace (8)
     keyup: Backspace (8)
     input: "{SELECTION}hello{/SELECTION}" -> "hello"
@@ -51,6 +52,7 @@ test('does not clear text on readonly inputs', async () => {
     mouseup: Left (0)
     click: Left (0)
     dblclick: Left (0)
+    select
     keydown: Backspace (8)
     keyup: Backspace (8)
   `)

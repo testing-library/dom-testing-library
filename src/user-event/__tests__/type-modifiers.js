@@ -24,6 +24,7 @@ test('{esc} triggers typing the escape character', async () => {
     Events fired on: input[value=""]
 
     focus
+    select
     keydown: Escape (27)
     keyup: Escape (27)
   `)
@@ -36,12 +37,15 @@ test('a{backspace}', async () => {
     Events fired on: input[value=""]
 
     focus
+    select
     keydown: a (97)
     keypress: a (97)
     input: "{CURSOR}" -> "a"
+    select
     keyup: a (97)
     keydown: Backspace (8)
     input: "a{CURSOR}" -> ""
+    select
     keyup: Backspace (8)
   `)
 })
@@ -53,11 +57,13 @@ test('{backspace}a', async () => {
     Events fired on: input[value="a"]
 
     focus
+    select
     keydown: Backspace (8)
     keyup: Backspace (8)
     keydown: a (97)
     keypress: a (97)
     input: "{CURSOR}" -> "a"
+    select
     keyup: a (97)
   `)
 })
@@ -71,9 +77,11 @@ test('{backspace} triggers typing the backspace character and deletes the charac
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="o"]
 
+    select
     focus
     keydown: Backspace (8)
     input: "y{CURSOR}o" -> "o"
+    select
     keyup: Backspace (8)
   `)
 })
@@ -87,6 +95,7 @@ test('{backspace} on a readOnly input', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="yo"]
 
+    select
     focus
     keydown: Backspace (8)
     keyup: Backspace (8)
@@ -104,6 +113,7 @@ test('{backspace} does not fire input if keydown prevents default', async () => 
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="yo"]
 
+    select
     focus
     keydown: Backspace (8)
     keyup: Backspace (8)
@@ -119,9 +129,11 @@ test('{backspace} deletes the selected range', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="Here"]
 
+    select
     focus
     keydown: Backspace (8)
     input: "H{SELECTION}i th{/SELECTION}ere" -> "Here"
+    select
     keyup: Backspace (8)
   `)
 })
@@ -143,10 +155,12 @@ test('{alt}a{/alt}', async () => {
     Events fired on: input[value="a"]
 
     focus
+    select
     keydown: Alt (18) {alt}
     keydown: a (97) {alt}
     keypress: a (97) {alt}
     input: "{CURSOR}" -> "a"
+    select
     keyup: a (97) {alt}
     keyup: Alt (18)
   `)
@@ -161,10 +175,12 @@ test('{meta}a{/meta}', async () => {
     Events fired on: input[value="a"]
 
     focus
+    select
     keydown: Meta (93) {meta}
     keydown: a (97) {meta}
     keypress: a (97) {meta}
     input: "{CURSOR}" -> "a"
+    select
     keyup: a (97) {meta}
     keyup: Meta (93)
   `)
@@ -179,10 +195,12 @@ test('{ctrl}a{/ctrl}', async () => {
     Events fired on: input[value="a"]
 
     focus
+    select
     keydown: Control (17) {ctrl}
     keydown: a (97) {ctrl}
     keypress: a (97) {ctrl}
     input: "{CURSOR}" -> "a"
+    select
     keyup: a (97) {ctrl}
     keyup: Control (17)
   `)
@@ -197,10 +215,12 @@ test('{shift}a{/shift}', async () => {
     Events fired on: input[value="a"]
 
     focus
+    select
     keydown: Shift (16) {shift}
     keydown: a (97) {shift}
     keypress: a (97) {shift}
     input: "{CURSOR}" -> "a"
+    select
     keyup: a (97) {shift}
     keyup: Shift (16)
   `)
@@ -215,9 +235,11 @@ test('a{enter}', async () => {
     Events fired on: input[value="a"]
 
     focus
+    select
     keydown: a (97)
     keypress: a (97)
     input: "{CURSOR}" -> "a"
+    select
     keyup: a (97)
     keydown: Enter (13)
     keypress: Enter (13)
@@ -238,6 +260,7 @@ test('{enter} with preventDefault keydown', async () => {
     Events fired on: input[value=""]
 
     focus
+    select
     keydown: Enter (13)
     keyup: Enter (13)
   `)
@@ -268,10 +291,12 @@ test('{enter} on a textarea', async () => {
     Events fired on: textarea[value="\\n"]
 
     focus
+    select
     keydown: Enter (13)
     keypress: Enter (13)
     input: "{CURSOR}" -> "
     "
+    select
     keyup: Enter (13)
   `)
 })
@@ -303,12 +328,14 @@ test('{meta}{alt}{ctrl}a{/ctrl}{/alt}{/meta}', async () => {
     Events fired on: input[value="a"]
 
     focus
+    select
     keydown: Meta (93) {meta}
     keydown: Alt (18) {alt}{meta}
     keydown: Control (17) {alt}{meta}{ctrl}
     keydown: a (97) {alt}{meta}{ctrl}
     keypress: a (97) {alt}{meta}{ctrl}
     input: "{CURSOR}" -> "a"
+    select
     keyup: a (97) {alt}{meta}{ctrl}
     keyup: Control (17) {alt}{meta}
     keyup: Alt (18) {meta}

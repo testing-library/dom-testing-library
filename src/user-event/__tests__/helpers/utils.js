@@ -1,5 +1,6 @@
+import {eventMap} from '../../../event-map'
 // this is pretty helpful:
-// https://jsbin.com/nimelileyo/edit?js,output
+// https://codesandbox.io/s/quizzical-worker-eo909
 
 // all of the stuff below is complex magic that makes the simpler tests work
 // sorrynotsorry...
@@ -105,33 +106,11 @@ function getElementDisplayName(element) {
 
 function addListeners(element, {eventHandlers = {}} = {}) {
   const generalListener = jest.fn().mockName('eventListener')
-  const listeners = [
-    'submit',
-    'keydown',
-    'keyup',
-    'keypress',
-    'input',
-    'change',
-    'blur',
-    'focus',
-    'focusin',
-    'focusout',
-    'click',
-    'dblclick',
-    'mouseover',
-    'mousemove',
-    'mouseenter',
-    'mouseleave',
-    'mouseup',
-    'mousedown',
-  ]
+  const listeners = Object.keys(eventMap)
 
   for (const name of listeners) {
-    addEventListener(element, name, (...args) => {
-      const [, handler] =
-        Object.entries(eventHandlers).find(
-          ([key]) => key.toLowerCase() === name,
-        ) ?? []
+    addEventListener(element, name.toLowerCase(), (...args) => {
+      const handler = eventHandlers[name]
       if (handler) {
         generalListener(...args)
         return handler(...args)
@@ -146,7 +125,7 @@ function addListeners(element, {eventHandlers = {}} = {}) {
   function getEventCalls() {
     const eventCalls = generalListener.mock.calls
       .map(([event]) => {
-        const window = event.target.ownerDocument.defaultView
+        const window = event.target?.ownerDocument.defaultView
         const modifiers = ['altKey', 'shiftKey', 'metaKey', 'ctrlKey']
           .filter(key => event[key])
           .map(k => `{${k.replace('Key', '')}}`)
@@ -161,9 +140,9 @@ function addListeners(element, {eventHandlers = {}} = {}) {
           log = getCheckboxOrRadioClickedLine(event)
         } else if (event.type === 'input' && event.hasOwnProperty('testData')) {
           log = getInputLine(element, event)
-        } else if (event instanceof window.KeyboardEvent) {
+        } else if (window && event instanceof window.KeyboardEvent) {
           log = getKeyboardEventLine(event)
-        } else if (event instanceof window.MouseEvent) {
+        } else if (window && event instanceof window.MouseEvent) {
           log = getMouseEventLine(event)
         }
 

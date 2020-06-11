@@ -9,6 +9,7 @@ test('unhover', async () => {
     Events fired on: button
 
     mousemove: Left (0)
+    mouseout: Left (0)
     mouseleave: Left (0)
   `)
 })

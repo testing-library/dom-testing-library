@@ -9,17 +9,21 @@ test('types text in input', async () => {
     Events fired on: input[value="Sup"]
 
     focus
+    select
     keydown: S (83)
     keypress: S (83)
     input: "{CURSOR}" -> "S"
+    select
     keyup: S (83)
     keydown: u (117)
     keypress: u (117)
     input: "S{CURSOR}" -> "Su"
+    select
     keyup: u (117)
     keydown: p (112)
     keypress: p (112)
     input: "Su{CURSOR}" -> "Sup"
+    select
     keyup: p (112)
   `)
 })
@@ -31,7 +35,9 @@ test('types text in input with allAtOnce', async () => {
     Events fired on: input[value="Sup"]
 
     focus
+    select
     input: "{CURSOR}" -> "Sup"
+    select
   `)
 })
 
@@ -46,17 +52,21 @@ test('types text inside custom element', async () => {
     Events fired on: input[value="Sup"]
 
     focus
+    select
     keydown: S (83)
     keypress: S (83)
     input: "{CURSOR}" -> "S"
+    select
     keyup: S (83)
     keydown: u (117)
     keypress: u (117)
     input: "S{CURSOR}" -> "Su"
+    select
     keyup: u (117)
     keydown: p (112)
     keypress: p (112)
     input: "Su{CURSOR}" -> "Sup"
+    select
     keyup: p (112)
   `)
 })
@@ -68,17 +78,21 @@ test('types text in textarea', async () => {
     Events fired on: textarea[value="Sup"]
 
     focus
+    select
     keydown: S (83)
     keypress: S (83)
     input: "{CURSOR}" -> "S"
+    select
     keyup: S (83)
     keydown: u (117)
     keypress: u (117)
     input: "S{CURSOR}" -> "Su"
+    select
     keyup: u (117)
     keydown: p (112)
     keypress: p (112)
     input: "Su{CURSOR}" -> "Sup"
+    select
     keyup: p (112)
   `)
 })
@@ -90,7 +104,9 @@ test('should append text all at once', async () => {
     Events fired on: input[value="Sup"]
 
     focus
+    select
     input: "{CURSOR}" -> "Sup"
+    select
   `)
 })
 
@@ -104,6 +120,7 @@ test('does not fire input event when keypress calls prevent default', async () =
     Events fired on: input[value=""]
 
     focus
+    select
     keydown: a (97)
     keypress: a (97)
     keyup: a (97)
@@ -120,6 +137,7 @@ test('does not fire keypress or input events when keydown calls prevent default'
     Events fired on: input[value=""]
 
     focus
+    select
     keydown: a (97)
     keyup: a (97)
   `)
@@ -142,6 +160,7 @@ test('does not fire input when readonly', async () => {
     Events fired on: input[value=""]
 
     focus
+    select
     keydown: a (97)
     keypress: a (97)
     keyup: a (97)
@@ -156,6 +175,7 @@ test('does not fire input when readonly (with allAtOnce)', async () => {
     Events fired on: input[value=""]
 
     focus
+    select
   `)
 })
 
@@ -199,13 +219,16 @@ test('honors maxlength', async () => {
     Events fired on: input[value="12"]
 
     focus
+    select
     keydown: 1 (49)
     keypress: 1 (49)
     input: "{CURSOR}" -> "1"
+    select
     keyup: 1 (49)
     keydown: 2 (50)
     keypress: 2 (50)
     input: "1{CURSOR}" -> "12"
+    select
     keyup: 2 (50)
     keydown: 3 (51)
     keypress: 3 (51)
@@ -222,6 +245,7 @@ test('honors maxlength with existing text', async () => {
     Events fired on: input[value="12"]
 
     focus
+    select
     keydown: 3 (51)
     keypress: 3 (51)
     keyup: 3 (51)
@@ -297,6 +321,7 @@ test('typing into a controlled input works', async () => {
     Events fired on: input[value="$23"]
 
     focus
+    select
     keydown: 2 (50)
     keypress: 2 (50)
     input: "{CURSOR}" -> "$2"
@@ -304,6 +329,7 @@ test('typing into a controlled input works', async () => {
     keydown: 3 (51)
     keypress: 3 (51)
     input: "$2{CURSOR}" -> "$23"
+    select
     keyup: 3 (51)
   `)
 })
@@ -318,10 +344,12 @@ test('typing in the middle of a controlled input works', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="$213"]
 
+    select
     focus
     keydown: 1 (49)
     keypress: 1 (49)
     input: "$2{CURSOR}3" -> "$213"
+    select
     keyup: 1 (49)
   `)
 })
@@ -346,6 +374,7 @@ test('ignored {backspace} in controlled input', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: input[value="$234"]
 
+    select
     focus
     keydown: Backspace (8)
     input: "\${CURSOR}23" -> "$23"
@@ -353,6 +382,7 @@ test('ignored {backspace} in controlled input', async () => {
     keydown: 4 (52)
     keypress: 4 (52)
     input: "$23{CURSOR}" -> "$234"
+    select
     keyup: 4 (52)
   `)
 })
@@ -366,13 +396,16 @@ test('typing in a textarea with existing text', async () => {
     Events fired on: textarea[value="Hello, 12"]
 
     focus
+    select
     keydown: 1 (49)
     keypress: 1 (49)
     input: "Hello, {CURSOR}" -> "Hello, 1"
+    select
     keyup: 1 (49)
     keydown: 2 (50)
     keypress: 2 (50)
     input: "Hello, 1{CURSOR}" -> "Hello, 12"
+    select
     keyup: 2 (50)
   `)
   expect(element).toHaveValue('Hello, 12')
@@ -390,14 +423,18 @@ test('accepts an initialSelectionStart and initialSelectionEnd', async () => {
   expect(getEventCalls()).toMatchInlineSnapshot(`
     Events fired on: textarea[value="12Hello, "]
 
+    select
     focus
+    select
     keydown: 1 (49)
     keypress: 1 (49)
     input: "{CURSOR}Hello, " -> "1Hello, "
+    select
     keyup: 1 (49)
     keydown: 2 (50)
     keypress: 2 (50)
     input: "1{CURSOR}Hello, " -> "12Hello, "
+    select
     keyup: 2 (50)
   `)
   expect(element).toHaveValue('12Hello, ')
