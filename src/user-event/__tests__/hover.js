@@ -1,4 +1,4 @@
-import userEvent from '..'
+import * as userEvent from '..'
 import {setup} from './helpers/utils'
 
 test('hover', async () => {

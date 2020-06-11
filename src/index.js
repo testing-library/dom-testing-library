@@ -1,6 +1,7 @@
 import {getQueriesForElement} from './get-queries-for-element'
 import * as queries from './queries'
 import * as queryHelpers from './query-helpers'
+import * as userEvent from './user-event'
 
 export * from './queries'
 export * from './wait-for'
@@ -26,4 +27,5 @@ export {
   // export query utils under a namespace for convenience:
   queries,
   queryHelpers,
+  userEvent,
 }

@@ -1,4 +1,5 @@
-import {getConfig, fireEvent} from '..'
+import {fireEvent} from '../events'
+import {getConfig} from '../config'
 import {tick} from './tick'
 
 function wait(time) {

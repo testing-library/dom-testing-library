@@ -1,4 +1,4 @@
-import userEvent from '..'
+import * as userEvent from '..'
 import {setup} from './helpers/utils'
 
 // Note, use the setup function at the bottom of the file...

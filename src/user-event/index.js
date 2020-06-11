@@ -1,4 +1,4 @@
-import {fireEvent} from '..'
+import {fireEvent} from '../events'
 import {type} from './type'
 import {tick} from './tick'
 
@@ -470,7 +470,7 @@ async function unhover(element, init) {
   fireEvent.mouseLeave(element, getMouseEventOptions('mouseleave', init))
 }
 
-const userEvent = {
+export {
   click,
   dblClick,
   selectOptions,
@@ -482,8 +482,6 @@ const userEvent = {
   hover,
   unhover,
 }
-
-export default userEvent
 
 /*
 eslint

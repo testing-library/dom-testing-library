@@ -1,4 +1,4 @@
-import userEvent from '..'
+import * as userEvent from '..'
 import {setupSelect} from './helpers/utils'
 
 test('fires correct events', () => {
