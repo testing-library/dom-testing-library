@@ -473,6 +473,31 @@ test('can type "-" into number inputs', async () => {
   `)
 })
 
+// https://github.com/testing-library/user-event/issues/336
+test('can type "." into number inputs', async () => {
+  const {element, getEventCalls} = setup('<input type="number" />')
+  await userEvent.type(element, '0.3')
+  expect(element).toHaveValue(0.3)
+
+  expect(getEventCalls()).toMatchInlineSnapshot(`
+    Events fired on: input[value=".3"]
+
+    focus
+    keydown: 0 (48)
+    keypress: 0 (48)
+    input: "{CURSOR}" -> "0"
+    keyup: 0 (48)
+    keydown: . (46)
+    keypress: . (46)
+    input: "{CURSOR}0" -> ""
+    keyup: . (46)
+    keydown: 3 (51)
+    keypress: 3 (51)
+    input: "{CURSOR}" -> ".3"
+    keyup: 3 (51)
+  `)
+})
+
 test('-{backspace}3', async () => {
   const {element} = setup('<input type="number" />')
   const negativeNumber = '-{backspace}3'
