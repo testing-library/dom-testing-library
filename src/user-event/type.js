@@ -1,5 +1,6 @@
 import {wrapAsync} from '../wrap-async'
 import {fireEvent} from './tick-fire-event'
+import {tick} from './tick'
 
 function wait(time) {
   return new Promise(resolve => setTimeout(() => resolve(), time))
@@ -160,6 +161,37 @@ async function type(
           ...eventOverrides,
         })
       },
+      '{del}': async ({eventOverrides}) => {
+        const key = 'Delete'
+        const keyCode = 46
+
+        const keyPressDefaultNotPrevented = await fireEvent.keyDown(
+          currentElement(),
+          {
+            key,
+            keyCode,
+            which: keyCode,
+            ...eventOverrides,
+          },
+        )
+
+        if (keyPressDefaultNotPrevented) {
+          await fireInputEventIfNeeded({
+            ...calculateNewDeleteValue(),
+            eventOverrides: {
+              inputType: 'deleteContentForward',
+              ...eventOverrides,
+            },
+          })
+        }
+
+        await fireEvent.keyUp(currentElement(), {
+          key,
+          keyCode,
+          which: keyCode,
+          ...eventOverrides,
+        })
+      },
       '{backspace}': async ({eventOverrides}) => {
         const key = 'Backspace'
         const keyCode = 8
@@ -190,6 +222,10 @@ async function type(
           which: keyCode,
           ...eventOverrides,
         })
+      },
+      '{selectall}': async () => {
+        await tick()
+        currentElement().setSelectionRange(0, currentValue().length)
       },
     }
     const eventCallbacks = []
@@ -255,6 +291,7 @@ async function type(
       if (selectionStart === 0) {
         // at the beginning of the input
         newValue = value
+        newSelectionStart = selectionStart
       } else if (selectionStart === value.length) {
         // at the end of the input
         newValue = value.slice(0, value.length - 1)
@@ -273,6 +310,36 @@ async function type(
     }
 
     return {newValue, newSelectionStart}
+  }
+
+  function calculateNewDeleteValue() {
+    const {selectionStart, selectionEnd} = currentElement()
+    const value = currentValue()
+    let newValue
+
+    if (selectionStart === null) {
+      // at the end of an input type that does not support selection ranges
+      // https://github.com/testing-library/user-event/issues/316#issuecomment-639744793
+      newValue = value
+    } else if (selectionStart === selectionEnd) {
+      if (selectionStart === 0) {
+        // at the beginning of the input
+        newValue = value.slice(1)
+      } else if (selectionStart === value.length) {
+        // at the end of the input
+        newValue = value
+      } else {
+        // in the middle of the input
+        newValue =
+          value.slice(0, selectionStart) + value.slice(selectionEnd + 1)
+      }
+    } else {
+      // we have something selected
+      const firstPart = value.slice(0, selectionStart)
+      newValue = firstPart + value.slice(selectionEnd)
+    }
+
+    return {newValue, newSelectionStart: selectionStart}
   }
 
   function calculateNewValue(newEntry) {

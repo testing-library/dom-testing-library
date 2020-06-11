@@ -342,3 +342,107 @@ test('{meta}{alt}{ctrl}a{/ctrl}{/alt}{/meta}', async () => {
     keyup: Meta (93)
   `)
 })
+
+test('{selectall} selects all the text', async () => {
+  const value = 'abcdefg'
+  const {element, clearEventCalls, getEventCalls} = setup(
+    `<input value="${value}" />`,
+  )
+  element.setSelectionRange(2, 6)
+
+  clearEventCalls()
+
+  await userEvent.type(element, '{selectall}')
+
+  expect(element.selectionStart).toBe(0)
+  expect(element.selectionEnd).toBe(value.length)
+  expect(getEventCalls()).toMatchInlineSnapshot(`
+    Events fired on: input[value="abcdefg"]
+
+    focus
+    select
+  `)
+})
+
+test('{del} at the start of the input', async () => {
+  const {element, getEventCalls} = setup(`<input value="hello" />`)
+
+  await userEvent.type(element, '{del}', {
+    initialSelectionStart: 0,
+    initialSelectionEnd: 0,
+  })
+
+  expect(element.selectionStart).toBe(0)
+  expect(element.selectionEnd).toBe(0)
+  expect(getEventCalls()).toMatchInlineSnapshot(`
+    Events fired on: input[value="ello"]
+
+    focus
+    select
+    keydown: Delete (46)
+    input: "{CURSOR}hello" -> "ello"
+    select
+    keyup: Delete (46)
+  `)
+})
+
+test('{del} at end of the input', async () => {
+  const {element, getEventCalls} = setup(`<input value="hello" />`)
+
+  await userEvent.type(element, '{del}')
+
+  expect(element.selectionStart).toBe(element.value.length)
+  expect(element.selectionEnd).toBe(element.value.length)
+  expect(getEventCalls()).toMatchInlineSnapshot(`
+    Events fired on: input[value="hello"]
+
+    focus
+    select
+    keydown: Delete (46)
+    keyup: Delete (46)
+  `)
+})
+
+test('{del} in the middle of the input', async () => {
+  const {element, getEventCalls} = setup(`<input value="hello" />`)
+
+  await userEvent.type(element, '{del}', {
+    initialSelectionStart: 2,
+    initialSelectionEnd: 2,
+  })
+
+  expect(element.selectionStart).toBe(2)
+  expect(element.selectionEnd).toBe(2)
+  expect(getEventCalls()).toMatchInlineSnapshot(`
+    Events fired on: input[value="helo"]
+
+    focus
+    select
+    keydown: Delete (46)
+    input: "he{CURSOR}llo" -> "helo"
+    select
+    keyup: Delete (46)
+  `)
+})
+
+test('{del} with a selection range', async () => {
+  const {element, getEventCalls} = setup(`<input value="hello" />`)
+
+  await userEvent.type(element, '{del}', {
+    initialSelectionStart: 1,
+    initialSelectionEnd: 3,
+  })
+
+  expect(element.selectionStart).toBe(1)
+  expect(element.selectionEnd).toBe(1)
+  expect(getEventCalls()).toMatchInlineSnapshot(`
+    Events fired on: input[value="hlo"]
+
+    focus
+    select
+    keydown: Delete (46)
+    input: "h{SELECTION}el{/SELECTION}lo" -> "hlo"
+    select
+    keyup: Delete (46)
+  `)
+})

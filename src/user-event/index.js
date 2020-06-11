@@ -403,6 +403,10 @@ async function upload(element, fileOrFiles, {clickInit, changeInit} = {}) {
 upload = wrapAsync(upload)
 
 async function tab({shift = false, focusTrap = document} = {}) {
+  // everything in user-event must be actually async, but since we're not
+  // calling fireEvent in here, we'll add this tick here...
+  await tick()
+
   const focusableElements = focusTrap.querySelectorAll(
     'input, button, select, textarea, a[href], [tabindex]',
   )
@@ -464,9 +468,6 @@ async function tab({shift = false, focusTrap = document} = {}) {
   } else {
     next.focus()
   }
-  // everything in user-event must be actually async, but since we're not
-  // calling fireEvent in here, we'll add this tick here...
-  await tick()
 }
 tab = wrapAsync(tab)
 
