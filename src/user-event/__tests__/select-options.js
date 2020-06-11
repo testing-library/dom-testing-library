@@ -59,7 +59,7 @@ test('fires correct events on multi-selects', async () => {
   expect(o3.selected).toBe(true)
 })
 
-test('sets the selected prop on the selected OPTION using nodes', async () => {
+test('sets the selected prop on the selected OPTION using option html elements', async () => {
   const {select, options} = setupSelect()
   const [o1, o2, o3] = options
   await userEvent.selectOptions(select, o1)
