@@ -1,5 +1,6 @@
 import {wrapAsync} from '../wrap-async'
 import {fireEvent} from './tick-fire-event'
+import {isInputElement} from './utils'
 import {type} from './type'
 import {tick} from './tick'
 
@@ -219,24 +220,6 @@ async function backspace(element) {
   }
 }
 
-async function selectAll(element) {
-  await dblClick(element) // simulate events (will not actually select)
-  const elementType = element.type
-  // type is a readonly property on textarea, so check if element is an input before trying to modify it
-  if (isInputElement(element)) {
-    // setSelectionRange is not supported on certain types of inputs, e.g. "number" or "email"
-    element.type = 'text'
-  }
-  element.setSelectionRange(0, element.value.length)
-  if (isInputElement(element)) {
-    element.type = elementType
-  }
-}
-
-function isInputElement(element) {
-  return element.tagName.toLowerCase() === 'input'
-}
-
 function getPreviouslyFocusedElement(element) {
   const focusedElement = element.ownerDocument.activeElement
   const wasAnotherElementFocused =
@@ -367,14 +350,6 @@ async function toggleSelectOptions(element, values, init) {
 }
 toggleSelectOptions = wrapAsync(toggleSelectOptions)
 
-async function clear(element) {
-  if (element.disabled) return
-
-  await selectAll(element)
-  await backspace(element)
-}
-clear = wrapAsync(clear)
-
 async function upload(element, fileOrFiles, {clickInit, changeInit} = {}) {
   if (element.disabled) return
   const focusedElement = element.ownerDocument.activeElement
@@ -496,13 +471,13 @@ export {
   dblClick,
   selectOptions,
   toggleSelectOptions,
-  clear,
   type,
   upload,
   tab,
   hover,
   unhover,
 }
+export {clear} from './clear'
 
 /*
 eslint
