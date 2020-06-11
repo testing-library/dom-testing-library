@@ -85,7 +85,7 @@ test('should respect tabindex, regardless of dom position', async () => {
   expect(radio).toHaveFocus()
 })
 
-test('should respect dom order when tabindex are all the same', async () => {
+test('should respect tab index order, then DOM order', async () => {
   setup(`
     <div>
       <input data-testid="element" tabIndex="0" type="checkbox" />
