@@ -85,7 +85,7 @@ function getMouseEventOptions(event, init, clickCount = 0) {
     ...init,
     // https://developer.mozilla.org/en-US/docs/Web/API/UIEvent/detail
     detail:
-      event === 'mousedown' || event === 'mouseup'
+      event === 'mousedown' || event === 'mouseup' || event === 'click'
         ? 1 + clickCount
         : clickCount,
     buttons: convertMouseButtons(event, init, 'buttons', NAMES_TO_BUTTONS),
