@@ -46,7 +46,7 @@ function getDocument() {
   }
   return window.document
 }
-function getWindowFromNode(node) {
+function getWindowFromNode(node): Window {
   // istanbul ignore next I'm not sure what could cause the final else so we'll leave it uncovered.
   if (node.defaultView) {
     // node is document

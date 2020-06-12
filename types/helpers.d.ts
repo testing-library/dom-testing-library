@@ -1,7 +1,7 @@
 declare function runWithRealTimers(callback: any): any
 declare const clearTimeoutFn: any, setImmediateFn: any, setTimeoutFn: any
 declare function getDocument(): Document
-declare function getWindowFromNode(node: any): any
+declare function getWindowFromNode(node: any): Window
 declare function checkContainerType(container: any): void
 export {
   getWindowFromNode,

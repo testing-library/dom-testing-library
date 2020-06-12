@@ -1,12 +1,19 @@
 import {OptionsReceived} from 'pretty-format'
-
-export function prettyDOM(
+declare global {
+  namespace NodeJS {
+    interface Global {
+      Cypress?: any
+    }
+  }
+}
+declare function prettyDOM(
+  dom?: Element | Document,
+  maxLength?: number,
+  options?: OptionsReceived,
+): string
+declare const logDOM: (
   dom?: Element | HTMLDocument,
   maxLength?: number,
   options?: OptionsReceived,
-): string | false
-export function logDOM(
-  dom?: Element | HTMLDocument,
-  maxLength?: number,
-  options?: OptionsReceived,
-): void
+) => void
+export {prettyDOM, logDOM}
