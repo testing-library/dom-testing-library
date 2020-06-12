@@ -40,11 +40,16 @@ async function type(
     // The reason we have to do this at all is because it actually *is*
     // programmatically changed by await fireEvent.input, so we have to simulate the
     // browser's default behavior
+    const el = currentElement()
+    const {selectionStart, selectionEnd} = el
     if (
-      currentElement().selectionStart !== null &&
-      currentValue() === newValue
+      selectionStart !== null &&
+      currentValue() === newValue &&
+      el.setSelectionRange &&
+      (selectionStart !== newSelectionStart ||
+        selectionEnd !== newSelectionStart)
     ) {
-      currentElement().setSelectionRange?.(newSelectionStart, newSelectionStart)
+      el.setSelectionRange(newSelectionStart, newSelectionStart)
     }
   }
 
