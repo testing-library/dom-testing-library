@@ -1,3 +1,5 @@
+// this helps us track what the state is before and after an event is fired
+// this is needed for determining the snapshot values
 const {getElementDisplayName} = require('../__tests__/helpers/utils')
 const actual = jest.requireActual('../utils')
 

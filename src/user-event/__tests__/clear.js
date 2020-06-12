@@ -2,10 +2,10 @@ import * as userEvent from '..'
 import {setup} from './helpers/utils'
 
 test('clears text', async () => {
-  const {element, getEventCalls} = setup('<input value="hello" />')
+  const {element, getEventSnapshot} = setup('<input value="hello" />')
   await userEvent.clear(element)
   expect(element).toHaveValue('')
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
     input[value="hello"] - focus
@@ -26,19 +26,19 @@ test('works with textarea', async () => {
 })
 
 test('does not clear text on disabled inputs', async () => {
-  const {element, getEventCalls} = setup('<input value="hello" disabled />')
+  const {element, getEventSnapshot} = setup('<input value="hello" disabled />')
   await userEvent.clear(element)
   expect(element).toHaveValue('hello')
-  expect(getEventCalls()).toMatchInlineSnapshot(
+  expect(getEventSnapshot()).toMatchInlineSnapshot(
     `No events were fired on: input[value="hello"]`,
   )
 })
 
 test('does not clear text on readonly inputs', async () => {
-  const {element, getEventCalls} = setup('<input value="hello" readonly />')
+  const {element, getEventSnapshot} = setup('<input value="hello" readonly />')
   await userEvent.clear(element)
   expect(element).toHaveValue('hello')
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="hello"]
 
     input[value="hello"] - focus

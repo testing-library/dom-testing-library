@@ -2,11 +2,11 @@ import * as userEvent from '..'
 import {addListeners, setupSelect, setup} from './helpers/utils'
 
 test('should fire the correct events for multiple select', async () => {
-  const {form, select, getEventCalls} = setupSelect({multiple: true})
+  const {form, select, getEventSnapshot} = setupSelect({multiple: true})
 
   await userEvent.toggleSelectOptions(select, '1')
 
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: select[name="select"][value=["1"]]
 
     select[name="select"][value=[]] - mouseover: Left (0)
@@ -39,13 +39,13 @@ test('should fire the correct events for multiple select when focus is in other 
   const button = document.createElement('button')
   form.append(button)
 
-  const {getEventCalls, clearEventCalls} = addListeners(form)
+  const {getEventSnapshot, clearEventCalls} = addListeners(form)
   button.focus()
 
   clearEventCalls()
   await userEvent.toggleSelectOptions(select, '1')
 
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: form
 
     select[name="select"][value=[]] - mouseover: Left (0)

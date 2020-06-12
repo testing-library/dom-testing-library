@@ -2,9 +2,9 @@ import * as userEvent from '..'
 import {setupSelect, addListeners} from './helpers/utils'
 
 test('fires correct events', async () => {
-  const {select, options, getEventCalls} = setupSelect()
+  const {select, options, getEventSnapshot} = setupSelect()
   await userEvent.selectOptions(select, '1')
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: select[name="select"][value="1"]
 
     select[name="select"][value="1"] - mouseover: Left (0)
@@ -35,9 +35,9 @@ test('fires correct events', async () => {
 })
 
 test('fires correct events on multi-selects', async () => {
-  const {select, options, getEventCalls} = setupSelect({multiple: true})
+  const {select, options, getEventSnapshot} = setupSelect({multiple: true})
   await userEvent.selectOptions(select, ['1', '3'])
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: select[name="select"][value=["1","3"]]
 
     select[name="select"][value=[]] - mouseover: Left (0)
@@ -87,10 +87,10 @@ test('a previously focused input gets blurred', async () => {
   const button = document.createElement('button')
   document.body.append(button)
   button.focus()
-  const {getEventCalls} = addListeners(button)
+  const {getEventSnapshot} = addListeners(button)
   const {select} = setupSelect()
   await userEvent.selectOptions(select, '1')
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: button
 
     button - blur

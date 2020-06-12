@@ -2,9 +2,9 @@ import * as userEvent from '..'
 import {setup, addEventListener, addListeners} from './helpers/utils'
 
 test('click in input', async () => {
-  const {element, getEventCalls} = setup('<input />')
+  const {element, getEventSnapshot} = setup('<input />')
   await userEvent.click(element)
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
     input[value=""] - mouseover: Left (0)
@@ -18,9 +18,9 @@ test('click in input', async () => {
 })
 
 test('click in textarea', async () => {
-  const {element, getEventCalls} = setup('<textarea></textarea>')
+  const {element, getEventSnapshot} = setup('<textarea></textarea>')
   await userEvent.click(element)
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: textarea[value=""]
 
     textarea[value=""] - mouseover: Left (0)
@@ -34,10 +34,10 @@ test('click in textarea', async () => {
 })
 
 test('should fire the correct events for <input type="checkbox">', async () => {
-  const {element, getEventCalls} = setup('<input type="checkbox" />')
+  const {element, getEventSnapshot} = setup('<input type="checkbox" />')
   expect(element).not.toBeChecked()
   await userEvent.click(element)
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[checked=true]
 
     input[checked=false] - mouseover: Left (0)
@@ -55,11 +55,13 @@ test('should fire the correct events for <input type="checkbox">', async () => {
 })
 
 test('should fire the correct events for <input type="checkbox" disabled>', async () => {
-  const {element, getEventCalls} = setup('<input type="checkbox" disabled />')
+  const {element, getEventSnapshot} = setup(
+    '<input type="checkbox" disabled />',
+  )
   await userEvent.click(element)
   expect(element).toBeDisabled()
   // no event calls is expected here:
-  expect(getEventCalls()).toMatchInlineSnapshot(
+  expect(getEventSnapshot()).toMatchInlineSnapshot(
     `No events were fired on: input[checked=false]`,
   )
   expect(element).toBeDisabled()
@@ -67,10 +69,10 @@ test('should fire the correct events for <input type="checkbox" disabled>', asyn
 })
 
 test('should fire the correct events for <input type="radio">', async () => {
-  const {element, getEventCalls} = setup('<input type="radio" />')
+  const {element, getEventSnapshot} = setup('<input type="radio" />')
   expect(element).not.toBeChecked()
   await userEvent.click(element)
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[checked=true]
 
     input[checked=false] - mouseover: Left (0)
@@ -90,11 +92,11 @@ test('should fire the correct events for <input type="radio">', async () => {
 })
 
 test('should fire the correct events for <input type="radio" disabled>', async () => {
-  const {element, getEventCalls} = setup('<input type="radio" disabled />')
+  const {element, getEventSnapshot} = setup('<input type="radio" disabled />')
   await userEvent.click(element)
   expect(element).toBeDisabled()
   // no event calls is expected here:
-  expect(getEventCalls()).toMatchInlineSnapshot(
+  expect(getEventSnapshot()).toMatchInlineSnapshot(
     `No events were fired on: input[checked=false]`,
   )
   expect(element).toBeDisabled()
@@ -103,9 +105,9 @@ test('should fire the correct events for <input type="radio" disabled>', async (
 })
 
 test('should fire the correct events for <div>', async () => {
-  const {element, getEventCalls} = setup('<div></div>')
+  const {element, getEventSnapshot} = setup('<div></div>')
   await userEvent.click(element)
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: div
 
     div - mouseover: Left (0)
@@ -141,12 +143,12 @@ test('should blur the previous element', async () => {
   const a = element.children[0]
   const b = element.children[1]
 
-  const {getEventCalls, clearEventCalls} = addListeners(a)
+  const {getEventSnapshot, clearEventCalls} = addListeners(a)
 
   await userEvent.click(a)
   clearEventCalls()
   await userEvent.click(b)
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[name="a"][value=""]
 
     input[name="a"][value=""] - mouseover: Left (0)
@@ -169,12 +171,12 @@ test('should not blur the previous element when mousedown prevents default', asy
 
   addEventListener(b, 'mousedown', e => e.preventDefault())
 
-  const {getEventCalls, clearEventCalls} = addListeners(a)
+  const {getEventSnapshot, clearEventCalls} = addListeners(a)
 
   await userEvent.click(a)
   clearEventCalls()
   await userEvent.click(b)
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[name="a"][value=""]
 
     input[name="a"][value=""] - mouseover: Left (0)
@@ -268,31 +270,31 @@ test('clicking a label checks the radio', async () => {
 })
 
 test('submits a form when clicking on a <button>', async () => {
-  const {element, getEventCalls} = setup(`<form><button>Submit</button></form>`)
+  const {element, eventWasFired} = setup(`<form><button>Submit</button></form>`)
   await userEvent.click(element.children[0])
-  expect(getEventCalls()).toContain('submit')
+  expect(eventWasFired('submit')).toBe(true)
 })
 
 test('does not submit a form when clicking on a <button type="button">', async () => {
-  const {element, getEventCalls} = setup(`
+  const {element, getEventSnapshot} = setup(`
     <form>
       <button type="button">Submit</button>
     </form>
   `)
   await userEvent.click(element.children[0])
-  expect(getEventCalls()).not.toContain('submit')
+  expect(getEventSnapshot()).not.toContain('submit')
 })
 
 test('does not fire blur on current element if is the same as previous', async () => {
-  const {element, getEventCalls, clearEventCalls} = setup('<button />')
+  const {element, getEventSnapshot, clearEventCalls} = setup('<button />')
 
   await userEvent.click(element)
-  expect(getEventCalls()).not.toContain('blur')
+  expect(getEventSnapshot()).not.toContain('blur')
 
   clearEventCalls()
 
   await userEvent.click(element)
-  expect(getEventCalls()).not.toContain('blur')
+  expect(getEventSnapshot()).not.toContain('blur')
 })
 
 test('does not give focus when mouseDown is prevented', async () => {
@@ -304,15 +306,9 @@ test('does not give focus when mouseDown is prevented', async () => {
 })
 
 test('fires mouse events with the correct properties', async () => {
-  const {element, getEvents} = setup('<div></div>')
+  const {element, getClickEventsSnapshot} = setup('<div></div>')
   await userEvent.click(element)
-  const events = getEvents().map(
-    ({constructor, type, button, buttons, detail}) =>
-      constructor.name === 'MouseEvent'
-        ? `${type} - button=${button}; buttons=${buttons}; detail=${detail}`
-        : type,
-  )
-  expect(events.join('\n')).toMatchInlineSnapshot(`
+  expect(getClickEventsSnapshot()).toMatchInlineSnapshot(`
     mouseover - button=0; buttons=0; detail=0
     mousemove - button=0; buttons=0; detail=0
     mousedown - button=0; buttons=1; detail=1
@@ -323,18 +319,12 @@ test('fires mouse events with the correct properties', async () => {
 })
 
 test('fires mouse events with custom button property', async () => {
-  const {element, getEvents} = setup('<div></div>')
+  const {element, getClickEventsSnapshot} = setup('<div></div>')
   await userEvent.click(element, {
     button: 1,
     altKey: true,
   })
-  const events = getEvents().map(
-    ({constructor, type, button, buttons, detail}) =>
-      constructor.name === 'MouseEvent'
-        ? `${type} - button=${button}; buttons=${buttons}; detail=${detail}`
-        : type,
-  )
-  expect(events.join('\n')).toMatchInlineSnapshot(`
+  expect(getClickEventsSnapshot()).toMatchInlineSnapshot(`
     mouseover - button=0; buttons=0; detail=0
     mousemove - button=0; buttons=0; detail=0
     mousedown - button=1; buttons=4; detail=1
@@ -345,16 +335,10 @@ test('fires mouse events with custom button property', async () => {
 })
 
 test('fires mouse events with custom buttons property', async () => {
-  const {element, getEvents} = setup('<div></div>')
+  const {element, getClickEventsSnapshot} = setup('<div></div>')
 
   await userEvent.click(element, {buttons: 4})
-  const events = getEvents().map(
-    ({constructor, type, button, buttons, detail}) =>
-      constructor.name === 'MouseEvent'
-        ? `${type} - button=${button}; buttons=${buttons}; detail=${detail}`
-        : type,
-  )
-  expect(events.join('\n')).toMatchInlineSnapshot(`
+  expect(getClickEventsSnapshot()).toMatchInlineSnapshot(`
     mouseover - button=0; buttons=0; detail=0
     mousemove - button=0; buttons=0; detail=0
     mousedown - button=1; buttons=4; detail=1

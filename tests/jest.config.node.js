@@ -3,6 +3,7 @@ const baseConfig = require('kcd-scripts/jest')
 
 module.exports = {
   ...baseConfig,
+  setupFilesAfterEnv: [],
   rootDir: path.join(__dirname, '..'),
   displayName: 'node',
   testEnvironment: 'jest-environment-node',

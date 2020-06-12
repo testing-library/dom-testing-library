@@ -3,11 +3,11 @@ import {setup, addListeners} from './helpers/utils'
 
 test('should fire the correct events for input', async () => {
   const file = new File(['hello'], 'hello.png', {type: 'image/png'})
-  const {element, getEventCalls} = setup('<input type="file" />')
+  const {element, getEventSnapshot} = setup('<input type="file" />')
 
   await userEvent.upload(element, file)
 
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
     input[value=""] - mouseover: Left (0)
@@ -32,8 +32,8 @@ test('should fire the correct events with label', async () => {
 
   const label = container.children[0]
   const input = container.children[1]
-  const {getEventCalls: getLabelEventCalls} = addListeners(label)
-  const {getEventCalls: getInputEventCalls} = addListeners(input)
+  const {getEventSnapshot: getLabelEventCalls} = addListeners(label)
+  const {getEventSnapshot: getInputEventCalls} = addListeners(input)
 
   await userEvent.upload(label, file)
 

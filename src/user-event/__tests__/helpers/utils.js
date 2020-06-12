@@ -8,8 +8,8 @@ import {eventMap} from '../../../event-map'
 // sorrynotsorry...
 
 const unstringSnapshotSerializer = {
-  test: val => typeof val === 'string',
-  print: val => val,
+  test: val => val && val.hasOwnProperty('snapshot'),
+  print: val => val.snapshot,
 }
 
 expect.addSnapshotSerializer(unstringSnapshotSerializer)
@@ -136,7 +136,7 @@ function addListeners(element, {eventHandlers = {}} = {}) {
     addEventListener(element, 'submit', e => e.preventDefault())
   }
 
-  function getEventCalls() {
+  function getEventSnapshot() {
     const eventCalls = eventHandlerCalls
       .map(({event, testData}) => {
         const eventLabel =
@@ -163,19 +163,35 @@ function addListeners(element, {eventHandlers = {}} = {}) {
       .join('\n')
       .trim()
     if (eventCalls.length) {
-      return [
-        `Events fired on: ${getElementDisplayName(element)}`,
-        eventCalls,
-      ].join('\n\n')
+      return {
+        snapshot: [
+          `Events fired on: ${getElementDisplayName(element)}`,
+          eventCalls,
+        ].join('\n\n'),
+      }
     } else {
-      return `No events were fired on: ${getElementDisplayName(element)}`
+      return {
+        snapshot: `No events were fired on: ${getElementDisplayName(element)}`,
+      }
     }
   }
   const clearEventCalls = () => generalListener.mockClear()
   const getEvents = () => generalListener.mock.calls.map(([e]) => e)
   const eventWasFired = eventType => getEvents().some(e => e.type === eventType)
+
+  function getClickEventsSnapshot() {
+    const lines = getEvents().map(
+      ({constructor, type, button, buttons, detail}) =>
+        constructor.name === 'MouseEvent'
+          ? `${type} - button=${button}; buttons=${buttons}; detail=${detail}`
+          : type,
+    )
+    return {snapshot: lines.join('\n')}
+  }
+
   return {
-    getEventCalls,
+    getEventSnapshot,
+    getClickEventsSnapshot,
     clearEventCalls,
     getEvents,
     eventWasFired,

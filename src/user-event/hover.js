@@ -1,8 +1,6 @@
 import {wrapAsync} from '../wrap-async'
 import {fireEvent, getMouseEventOptions} from './utils'
 
-jest.mock('./utils')
-
 async function hover(element, init) {
   await fireEvent.pointerOver(element, init)
   await fireEvent.pointerEnter(element, init)

@@ -2,9 +2,9 @@ import * as userEvent from '..'
 import {setup, addEventListener, addListeners} from './helpers/utils'
 
 test('fires the correct events on buttons', async () => {
-  const {element, getEventCalls} = setup('<button />')
+  const {element, getEventSnapshot} = setup('<button />')
   await userEvent.dblClick(element)
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: button
 
     button - mouseover: Left (0)
@@ -21,9 +21,9 @@ test('fires the correct events on buttons', async () => {
 })
 
 test('fires the correct events on checkboxes', async () => {
-  const {element, getEventCalls} = setup('<input type="checkbox" />')
+  const {element, getEventSnapshot} = setup('<input type="checkbox" />')
   await userEvent.dblClick(element)
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[checked=false]
 
     input[checked=false] - mouseover: Left (0)
@@ -49,9 +49,9 @@ test('fires the correct events on checkboxes', async () => {
 })
 
 test('fires the correct events on regular inputs', async () => {
-  const {element, getEventCalls} = setup('<input />')
+  const {element, getEventSnapshot} = setup('<input />')
   await userEvent.dblClick(element)
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
     input[value=""] - mouseover: Left (0)
@@ -68,9 +68,9 @@ test('fires the correct events on regular inputs', async () => {
 })
 
 test('fires the correct events on divs', async () => {
-  const {element, getEventCalls} = setup('<div></div>')
+  const {element, getEventSnapshot} = setup('<div></div>')
   await userEvent.dblClick(element)
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: div
 
     div - mouseover: Left (0)
@@ -96,12 +96,12 @@ test('blurs the previous element', async () => {
   const a = element.children[0]
   const b = element.children[1]
 
-  const {getEventCalls, clearEventCalls} = addListeners(a)
+  const {getEventSnapshot, clearEventCalls} = addListeners(a)
 
   await userEvent.dblClick(a)
   clearEventCalls()
   await userEvent.dblClick(b)
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: button#button-a
 
     button#button-a - mouseover: Left (0)
@@ -127,7 +127,7 @@ test('does not fire focus event if the element is already focused', async () => 
 })
 
 test('clicking an element in a label gives the control focus', async () => {
-  const {element, getEventCalls} = setup(`
+  const {element, getEventSnapshot} = setup(`
     <div>
       <label for="nested-input">
         <span>nested</span>
@@ -136,7 +136,7 @@ test('clicking an element in a label gives the control focus', async () => {
     </div>
   `)
   await userEvent.dblClick(element.querySelector('span'))
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: div
 
     span - mouseover: Left (0)
@@ -166,12 +166,12 @@ test('does not blur the previous element when mousedown prevents default', async
 
   addEventListener(b, 'mousedown', e => e.preventDefault())
 
-  const {getEventCalls, clearEventCalls} = addListeners(a)
+  const {getEventSnapshot, clearEventCalls} = addListeners(a)
 
   await userEvent.dblClick(a)
   clearEventCalls()
   await userEvent.dblClick(b)
-  expect(getEventCalls()).toMatchInlineSnapshot(`
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: button#button-a
 
     button#button-a - mouseover: Left (0)
@@ -188,15 +188,9 @@ test('does not blur the previous element when mousedown prevents default', async
 })
 
 test('fires mouse events with the correct properties', async () => {
-  const {element, getEvents} = setup('<div></div>')
+  const {element, getClickEventsSnapshot} = setup('<div></div>')
   await userEvent.dblClick(element)
-  const events = getEvents().map(
-    ({constructor, type, button, buttons, detail}) =>
-      constructor.name === 'MouseEvent'
-        ? `${type} - button=${button}; buttons=${buttons}; detail=${detail}`
-        : type,
-  )
-  expect(events.join('\n')).toMatchInlineSnapshot(`
+  expect(getClickEventsSnapshot()).toMatchInlineSnapshot(`
     mouseover - button=0; buttons=0; detail=0
     mousemove - button=0; buttons=0; detail=0
     mousedown - button=0; buttons=1; detail=1
@@ -210,18 +204,12 @@ test('fires mouse events with the correct properties', async () => {
 })
 
 test('fires mouse events with custom button property', async () => {
-  const {element, getEvents} = setup('<div></div>')
+  const {element, getClickEventsSnapshot} = setup('<div></div>')
   await userEvent.dblClick(element, {
     button: 1,
     altKey: true,
   })
-  const events = getEvents().map(
-    ({constructor, type, button, buttons, detail}) =>
-      constructor.name === 'MouseEvent'
-        ? `${type} - button=${button}; buttons=${buttons}; detail=${detail}`
-        : type,
-  )
-  expect(events.join('\n')).toMatchInlineSnapshot(`
+  expect(getClickEventsSnapshot()).toMatchInlineSnapshot(`
     mouseover - button=0; buttons=0; detail=0
     mousemove - button=0; buttons=0; detail=0
     mousedown - button=1; buttons=4; detail=1
@@ -235,17 +223,11 @@ test('fires mouse events with custom button property', async () => {
 })
 
 test('fires mouse events with custom buttons property', async () => {
-  const {element, getEvents} = setup('<div></div>')
+  const {element, getClickEventsSnapshot} = setup('<div></div>')
 
   await userEvent.dblClick(element, {buttons: 4})
 
-  const events = getEvents().map(
-    ({constructor, type, button, buttons, detail}) =>
-      constructor.name === 'MouseEvent'
-        ? `${type} - button=${button}; buttons=${buttons}; detail=${detail}`
-        : type,
-  )
-  expect(events.join('\n')).toMatchInlineSnapshot(`
+  expect(getClickEventsSnapshot()).toMatchInlineSnapshot(`
     mouseover - button=0; buttons=0; detail=0
     mousemove - button=0; buttons=0; detail=0
     mousedown - button=1; buttons=4; detail=1
