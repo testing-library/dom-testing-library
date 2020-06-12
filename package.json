@@ -44,13 +44,14 @@
     "pretty-format": "^25.5.0"
   },
   "devDependencies": {
-    "dtslint": "^3.6.9",
     "@testing-library/jest-dom": "^5.9.0",
+    "dtslint": "^3.6.9",
     "jest-in-case": "^1.0.2",
     "jest-serializer-ansi": "^1.0.3",
     "jest-watch-select-projects": "^2.0.0",
     "jsdom": "^16.2.2",
-    "kcd-scripts": "^6.2.0"
+    "kcd-scripts": "^6.2.0",
+    "typescript": "^3.9.5"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",
