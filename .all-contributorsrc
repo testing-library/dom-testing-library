@@ -1017,6 +1017,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "calebmer",
+      "name": "Caleb Meredith",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/8282507?v=4",
+      "profile": "http://calebmer.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
