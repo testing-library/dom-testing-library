@@ -1,9 +1,24 @@
 import {prettyDOM} from './pretty-dom'
 
+export interface Config {
+  testIdAttribute: string
+  asyncWrapper(cb: (...args: any[]) => any): Promise<any>
+  eventWrapper(cb: (...args: any[]) => any): void
+  getElementError: (message: string, container: Element) => Error
+  asyncUtilTimeout: number
+  defaultHidden: boolean
+  showOriginalStackTrace: boolean
+  throwSuggestions: boolean
+}
+
+interface InternalConfig {
+  _disableExpensiveErrorDiagnostics: boolean
+}
+
 // It would be cleaner for this to live inside './queries', but
 // other parts of the code assume that all exports from
 // './queries' are query functions.
-let config = {
+let config: Config & InternalConfig = {
   testIdAttribute: 'data-testid',
   asyncUtilTimeout: 1000,
   // this is to support React's async `act` function.
@@ -44,7 +59,11 @@ export function runWithExpensiveErrorDiagnosticsDisabled(callback) {
   }
 }
 
-export function configure(newConfig) {
+export interface ConfigFn {
+  (existingConfig: Config): Partial<Config>
+}
+
+export function configure(newConfig: Partial<Config> | ConfigFn): void {
   if (typeof newConfig === 'function') {
     // Pass the existing config out to the provided function
     // and accept a delta in return
