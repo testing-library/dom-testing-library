@@ -125,7 +125,7 @@ const FOCUSABLE_SELECTOR = [
 function isFocusable(element) {
   return (
     !isLabelWithInternallyDisabledControl(element) &&
-    element.matches(FOCUSABLE_SELECTOR)
+    element?.matches(FOCUSABLE_SELECTOR)
   )
 }
 

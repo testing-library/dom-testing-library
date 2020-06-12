@@ -1,11 +1,14 @@
 import {wrapAsync} from '../wrap-async'
-import {tick} from './tick'
-import {FOCUSABLE_SELECTOR} from './utils'
+import {fireEvent, getActiveElement, FOCUSABLE_SELECTOR} from './utils'
+import {focus} from './focus'
+import {blur} from './blur'
 
-async function tab({shift = false, focusTrap = document} = {}) {
-  // everything in user-event must be actually async, but since we're not
-  // calling fireEvent in here, we'll add this tick here...
-  await tick()
+async function tab({shift = false, focusTrap} = {}) {
+  const previousElement = getActiveElement(focusTrap?.ownerDocument ?? document)
+
+  if (!focusTrap) {
+    focusTrap = document
+  }
 
   const focusableElements = focusTrap.querySelectorAll(FOCUSABLE_SELECTOR)
 
@@ -57,16 +60,60 @@ async function tab({shift = false, focusTrap = document} = {}) {
   const nextIndex = shift ? index - 1 : index + 1
   const defaultIndex = shift ? prunedElements.length - 1 : 0
 
-  const next = prunedElements[nextIndex] || prunedElements[defaultIndex]
+  const nextElement = prunedElements[nextIndex] || prunedElements[defaultIndex]
 
-  if (next.getAttribute('tabindex') === null) {
-    next.setAttribute('tabindex', '0') // jsdom requires tabIndex=0 for an item to become 'document.activeElement'
-    next.focus()
-    next.removeAttribute('tabindex') // leave no trace. :)
-  } else {
-    next.focus()
+  const shiftKeyInit = {
+    key: 'Shift',
+    keyCode: 16,
+    shiftKey: true,
+  }
+  const tabKeyInit = {
+    key: 'Tab',
+    keyCode: 9,
+    shiftKey: shift,
+  }
+
+  let continueToTab = true
+
+  // not sure how to make it so there's no previous element...
+  // istanbul ignore else
+  if (previousElement) {
+    // preventDefault on the shift key makes no difference
+    if (shift) await fireEvent.keyDown(previousElement, {...shiftKeyInit})
+    continueToTab = await fireEvent.keyDown(previousElement, {...tabKeyInit})
+    if (continueToTab) {
+      await blur(previousElement)
+    }
+  }
+
+  const keyUpTarget =
+    !continueToTab && previousElement ? previousElement : nextElement
+
+  if (continueToTab) {
+    const hasTabIndex = nextElement.getAttribute('tabindex') !== null
+    if (!hasTabIndex) {
+      nextElement.setAttribute('tabindex', '0') // jsdom requires tabIndex=0 for an item to become 'document.activeElement'
+    }
+
+    await focus(nextElement)
+
+    if (!hasTabIndex) {
+      nextElement.removeAttribute('tabindex') // leave no trace. :)
+    }
+  }
+
+  await fireEvent.keyUp(keyUpTarget, {...tabKeyInit})
+
+  if (shift) {
+    await fireEvent.keyUp(keyUpTarget, {...shiftKeyInit, shiftKey: false})
   }
 }
 tab = wrapAsync(tab)
 
 export {tab}
+
+/*
+eslint
+  complexity: "off",
+  max-statements: "off",
+*/

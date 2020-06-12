@@ -1,5 +1,85 @@
 import {userEvent} from '../../'
-import {setup} from './helpers/utils'
+import {setup, addListeners} from './helpers/utils'
+
+test('fires events when tabbing between two elements', async () => {
+  const {element, getEventSnapshot, clearEventCalls} = setup(
+    `<div><input id="a" /><input id="b" /></div>`,
+  )
+  const a = element.children[0]
+  const b = element.children[1]
+  await userEvent.focus(a)
+  clearEventCalls()
+
+  const aListeners = addListeners(a)
+  const bListeners = addListeners(b)
+
+  await userEvent.tab()
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
+    Events fired on: div
+    
+    input#a[value=""] - keydown: Tab (9)
+    input#a[value=""] - focusout
+    input#b[value=""] - focusin
+    input#b[value=""] - keyup: Tab (9)
+  `)
+  // blur/focus do not bubble
+  expect(aListeners.eventWasFired('blur')).toBe(true)
+  expect(bListeners.eventWasFired('focus')).toBe(true)
+})
+
+test('does not change focus if default prevented on keydown', async () => {
+  const {element, getEventSnapshot, clearEventCalls} = setup(
+    `<div><input id="a" /><input id="b" /></div>`,
+  )
+  const a = element.children[0]
+  const b = element.children[1]
+  await userEvent.focus(a)
+  clearEventCalls()
+
+  const aListeners = addListeners(a, {
+    eventHandlers: {keyDown: e => e.preventDefault()},
+  })
+  const bListeners = addListeners(b)
+
+  await userEvent.tab()
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
+    Events fired on: div
+    
+    input#a[value=""] - keydown: Tab (9)
+    input#a[value=""] - keyup: Tab (9)
+  `)
+  // blur/focus do not bubble
+  expect(aListeners.eventWasFired('blur')).toBe(false)
+  expect(bListeners.eventWasFired('focus')).toBe(false)
+})
+
+test('fires correct events with shift key', async () => {
+  const {element, getEventSnapshot, clearEventCalls} = setup(
+    `<div><input id="a" /><input id="b" /></div>`,
+  )
+  const a = element.children[0]
+  const b = element.children[1]
+  await userEvent.focus(b)
+  clearEventCalls()
+
+  const aListeners = addListeners(a)
+  const bListeners = addListeners(b)
+
+  await userEvent.tab({shift: true})
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
+    Events fired on: div
+
+    input#b[value=""] - keydown: Shift (16) {shift}
+    input#b[value=""] - keydown: Tab (9) {shift}
+    input#b[value=""] - focusout
+    input#a[value=""] - focusin
+    input#a[value=""] - keyup: Tab (9) {shift}
+    input#a[value=""] - keyup: Shift (16)
+  `)
+  // blur/focus do not bubble
+  expect(aListeners.eventWasFired('focus')).toBe(true)
+  expect(bListeners.eventWasFired('blur')).toBe(true)
+})
 
 test('should cycle elements in document tab order', async () => {
   setup(`
