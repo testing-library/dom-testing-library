@@ -30,6 +30,8 @@ async function selectOptionsBase(newValue, select, values, init) {
     }
   })
 
+  if (select.disabled) return
+
   if (select.multiple) {
     for (const option of selectedOptions) {
       // events fired for multiple select are weird. Can't use hover...

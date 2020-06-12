@@ -107,3 +107,19 @@ test('throws an error if multiple are passed but not a multiple select', async (
   const error = await userEvent.selectOptions(select, ['2', '3']).catch(e => e)
   expect(error.message).toMatch(/cannot select multiple/i)
 })
+
+test('does not select anything if select is disabled', () => {
+  const {
+    container: {firstChild: select},
+  } = render(
+    <select disabled>
+      <option>No value selected</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>,
+  )
+
+  userEvent.selectOptions(select, '1')
+  expect(select.selectedIndex).toBe(0)
+})
