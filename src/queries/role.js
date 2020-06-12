@@ -7,6 +7,8 @@ import {
   isInaccessible,
   isSubtreeInaccessible,
 } from '../role-helpers'
+import {wrapAllByQueryWithSuggestion} from '../query-helpers'
+import {checkContainerType} from '../helpers'
 import {
   buildQueries,
   fuzzyMatches,
@@ -29,6 +31,7 @@ function queryAllByRole(
     selected,
   } = {},
 ) {
+  checkContainerType(container)
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
 
@@ -112,6 +115,10 @@ const getMissingError = (
   role,
   {hidden = getConfig().defaultHidden, name} = {},
 ) => {
+  if (getConfig()._disableExpensiveErrorDiagnostics) {
+    return `Unable to find role="${role}"`
+  }
+
   let roles = ''
   Array.from(container.children).forEach(childElement => {
     roles += prettyRoles(childElement, {
@@ -154,7 +161,11 @@ Unable to find an ${
 
 ${roleMessage}`.trim()
 }
-
+const queryAllByRoleWithSuggestions = wrapAllByQueryWithSuggestion(
+  queryAllByRole,
+  queryAllByRole.name,
+  'queryAll',
+)
 const [
   queryByRole,
   getAllByRole,
@@ -165,7 +176,7 @@ const [
 
 export {
   queryByRole,
-  queryAllByRole,
+  queryAllByRoleWithSuggestions as queryAllByRole,
   getAllByRole,
   getByRole,
   findAllByRole,

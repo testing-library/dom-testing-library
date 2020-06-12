@@ -1,3 +1,6 @@
+import {wrapAllByQueryWithSuggestion} from '../query-helpers'
+import {checkContainerType} from '../helpers'
+import {DEFAULT_IGNORE_TAGS} from '../config'
 import {
   fuzzyMatches,
   matches,
@@ -14,10 +17,11 @@ function queryAllByText(
     exact = true,
     collapseWhitespace,
     trim,
-    ignore = 'script, style',
+    ignore = DEFAULT_IGNORE_TAGS,
     normalizer,
   } = {},
 ) {
+  checkContainerType(container)
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   let baseArray = []
@@ -34,6 +38,12 @@ const getMultipleError = (c, text) =>
 const getMissingError = (c, text) =>
   `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`
 
+const queryAllByTextWithSuggestions = wrapAllByQueryWithSuggestion(
+  queryAllByText,
+  queryAllByText.name,
+  'queryAll',
+)
+
 const [
   queryByText,
   getAllByText,
@@ -44,7 +54,7 @@ const [
 
 export {
   queryByText,
-  queryAllByText,
+  queryAllByTextWithSuggestions as queryAllByText,
   getByText,
   getAllByText,
   findAllByText,

@@ -1,3 +1,5 @@
+import {wrapAllByQueryWithSuggestion} from '../query-helpers'
+import {checkContainerType} from '../helpers'
 import {
   fuzzyMatches,
   matches,
@@ -11,6 +13,7 @@ function queryAllByTitle(
   text,
   {exact = true, collapseWhitespace, trim, normalizer} = {},
 ) {
+  checkContainerType(container)
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(container.querySelectorAll('[title], svg > title')).filter(
@@ -25,6 +28,12 @@ const getMultipleError = (c, title) =>
 const getMissingError = (c, title) =>
   `Unable to find an element with the title: ${title}.`
 
+const queryAllByTitleWithSuggestions = wrapAllByQueryWithSuggestion(
+  queryAllByTitle,
+  queryAllByTitle.name,
+  'queryAll',
+)
+
 const [
   queryByTitle,
   getAllByTitle,
@@ -35,7 +44,7 @@ const [
 
 export {
   queryByTitle,
-  queryAllByTitle,
+  queryAllByTitleWithSuggestions as queryAllByTitle,
   getByTitle,
   getAllByTitle,
   findAllByTitle,

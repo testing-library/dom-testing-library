@@ -14,10 +14,14 @@ let config = {
   // react-testing-library to use. For that reason, this feature will remain
   // undocumented.
   asyncWrapper: cb => cb(),
+  eventWrapper: cb => cb(),
   // default value for the `hidden` option in `ByRole` queries
   defaultHidden: false,
-  //showOriginalStackTrace flag to show the full error stack traces for async errors
+  // showOriginalStackTrace flag to show the full error stack traces for async errors
   showOriginalStackTrace: false,
+
+  // throw errors w/ suggestions for better queries. Opt in so off by default.
+  throwSuggestions: false,
 
   // called when getBy* queries fail. (message, container) => Error
   getElementError(message, container) {
@@ -27,6 +31,17 @@ let config = {
     error.name = 'TestingLibraryElementError'
     return error
   },
+  _disableExpensiveErrorDiagnostics: false,
+}
+
+export const DEFAULT_IGNORE_TAGS = 'script, style'
+export function runWithExpensiveErrorDiagnosticsDisabled(callback) {
+  try {
+    config._disableExpensiveErrorDiagnostics = true
+    return callback()
+  } finally {
+    config._disableExpensiveErrorDiagnostics = false
+  }
 }
 
 export function configure(newConfig) {
