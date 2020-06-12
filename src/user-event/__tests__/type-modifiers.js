@@ -38,11 +38,11 @@ test('a{backspace}', async () => {
     input[value=""] - focus
     input[value=""] - keydown: a (97)
     input[value=""] - keypress: a (97)
-    input[value=""] - input
+    input[value="a"] - input
       "{CURSOR}" -> "a{CURSOR}"
     input[value="a"] - keyup: a (97)
     input[value="a"] - keydown: Backspace (8)
-    input[value="a"] - input
+    input[value=""] - input
       "a{CURSOR}" -> "{CURSOR}"
     input[value=""] - keyup: Backspace (8)
   `)
@@ -59,7 +59,7 @@ test('{backspace}a', async () => {
     input[value=""] - keyup: Backspace (8)
     input[value=""] - keydown: a (97)
     input[value=""] - keypress: a (97)
-    input[value=""] - input
+    input[value="a"] - input
       "{CURSOR}" -> "a{CURSOR}"
     input[value="a"] - keyup: a (97)
   `)
@@ -77,7 +77,7 @@ test('{backspace} triggers typing the backspace character and deletes the charac
     input[value="yo"] - select
     input[value="yo"] - focus
     input[value="yo"] - keydown: Backspace (8)
-    input[value="yo"] - input
+    input[value="o"] - input
       "y{CURSOR}o" -> "o{CURSOR}"
     input[value="o"] - select
     input[value="o"] - keyup: Backspace (8)
@@ -130,7 +130,7 @@ test('{backspace} deletes the selected range', async () => {
     input[value="Hi there"] - select
     input[value="Hi there"] - focus
     input[value="Hi there"] - keydown: Backspace (8)
-    input[value="Hi there"] - input
+    input[value="Here"] - input
       "H{SELECTION}i th{/SELECTION}ere" -> "Here{CURSOR}"
     input[value="Here"] - select
     input[value="Here"] - keyup: Backspace (8)
@@ -157,7 +157,7 @@ test('{alt}a{/alt}', async () => {
     input[value=""] - keydown: Alt (18) {alt}
     input[value=""] - keydown: a (97) {alt}
     input[value=""] - keypress: a (97) {alt}
-    input[value=""] - input
+    input[value="a"] - input
       "{CURSOR}" -> "a{CURSOR}"
     input[value="a"] - keyup: a (97) {alt}
     input[value="a"] - keyup: Alt (18)
@@ -176,7 +176,7 @@ test('{meta}a{/meta}', async () => {
     input[value=""] - keydown: Meta (93) {meta}
     input[value=""] - keydown: a (97) {meta}
     input[value=""] - keypress: a (97) {meta}
-    input[value=""] - input
+    input[value="a"] - input
       "{CURSOR}" -> "a{CURSOR}"
     input[value="a"] - keyup: a (97) {meta}
     input[value="a"] - keyup: Meta (93)
@@ -195,7 +195,7 @@ test('{ctrl}a{/ctrl}', async () => {
     input[value=""] - keydown: Control (17) {ctrl}
     input[value=""] - keydown: a (97) {ctrl}
     input[value=""] - keypress: a (97) {ctrl}
-    input[value=""] - input
+    input[value="a"] - input
       "{CURSOR}" -> "a{CURSOR}"
     input[value="a"] - keyup: a (97) {ctrl}
     input[value="a"] - keyup: Control (17)
@@ -214,7 +214,7 @@ test('{shift}a{/shift}', async () => {
     input[value=""] - keydown: Shift (16) {shift}
     input[value=""] - keydown: a (97) {shift}
     input[value=""] - keypress: a (97) {shift}
-    input[value=""] - input
+    input[value="a"] - input
       "{CURSOR}" -> "a{CURSOR}"
     input[value="a"] - keyup: a (97) {shift}
     input[value="a"] - keyup: Shift (16)
@@ -232,7 +232,7 @@ test('a{enter}', async () => {
     input[value=""] - focus
     input[value=""] - keydown: a (97)
     input[value=""] - keypress: a (97)
-    input[value=""] - input
+    input[value="a"] - input
       "{CURSOR}" -> "a{CURSOR}"
     input[value="a"] - keyup: a (97)
     input[value="a"] - keydown: Enter (13)
@@ -286,7 +286,7 @@ test('{enter} on a textarea', async () => {
     textarea[value=""] - focus
     textarea[value=""] - keydown: Enter (13)
     textarea[value=""] - keypress: Enter (13)
-    textarea[value=""] - input
+    textarea[value="\\n"] - input
       "{CURSOR}" -> "\\n{CURSOR}"
     textarea[value="\\n"] - keyup: Enter (13)
   `)
@@ -324,7 +324,7 @@ test('{meta}{alt}{ctrl}a{/ctrl}{/alt}{/meta}', async () => {
     input[value=""] - keydown: Control (17) {alt}{meta}{ctrl}
     input[value=""] - keydown: a (97) {alt}{meta}{ctrl}
     input[value=""] - keypress: a (97) {alt}{meta}{ctrl}
-    input[value=""] - input
+    input[value="a"] - input
       "{CURSOR}" -> "a{CURSOR}"
     input[value="a"] - keyup: a (97) {alt}{meta}{ctrl}
     input[value="a"] - keyup: Control (17) {alt}{meta}
@@ -349,7 +349,6 @@ test('{selectall} selects all the text', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="abcdefg"]
 
-    input[value="abcdefg"] - select
     input[value="abcdefg"] - focus
     input[value="abcdefg"] - select
   `)
@@ -370,7 +369,7 @@ test('{del} at the start of the input', async () => {
 
     input[value="hello"] - focus
     input[value="hello"] - keydown: Delete (46)
-    input[value="hello"] - input
+    input[value="ello"] - input
       "{CURSOR}hello" -> "ello{CURSOR}"
     input[value="ello"] - select
     input[value="ello"] - keyup: Delete (46)
@@ -410,7 +409,7 @@ test('{del} in the middle of the input', async () => {
     input[value="hello"] - focus
     input[value="hello"] - select
     input[value="hello"] - keydown: Delete (46)
-    input[value="hello"] - input
+    input[value="helo"] - input
       "he{CURSOR}llo" -> "helo{CURSOR}"
     input[value="helo"] - select
     input[value="helo"] - keyup: Delete (46)
@@ -433,7 +432,7 @@ test('{del} with a selection range', async () => {
     input[value="hello"] - focus
     input[value="hello"] - select
     input[value="hello"] - keydown: Delete (46)
-    input[value="hello"] - input
+    input[value="hlo"] - input
       "h{SELECTION}el{/SELECTION}lo" -> "hlo{CURSOR}"
     input[value="hlo"] - select
     input[value="hlo"] - keyup: Delete (46)

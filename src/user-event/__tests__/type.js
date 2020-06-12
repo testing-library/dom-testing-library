@@ -11,17 +11,17 @@ test('types text in input', async () => {
     input[value=""] - focus
     input[value=""] - keydown: S (83)
     input[value=""] - keypress: S (83)
-    input[value=""] - input
+    input[value="S"] - input
       "{CURSOR}" -> "S{CURSOR}"
     input[value="S"] - keyup: S (83)
     input[value="S"] - keydown: u (117)
     input[value="S"] - keypress: u (117)
-    input[value="S"] - input
+    input[value="Su"] - input
       "S{CURSOR}" -> "Su{CURSOR}"
     input[value="Su"] - keyup: u (117)
     input[value="Su"] - keydown: p (112)
     input[value="Su"] - keypress: p (112)
-    input[value="Su"] - input
+    input[value="Sup"] - input
       "Su{CURSOR}" -> "Sup{CURSOR}"
     input[value="Sup"] - keyup: p (112)
   `)
@@ -34,7 +34,7 @@ test('types text in input with allAtOnce', async () => {
     Events fired on: input[value="Sup"]
 
     input[value=""] - focus
-    input[value=""] - input
+    input[value="Sup"] - input
       "{CURSOR}" -> "Sup{CURSOR}"
   `)
 })
@@ -52,17 +52,17 @@ test('types text inside custom element', async () => {
     input[value=""] - focus
     input[value=""] - keydown: S (83)
     input[value=""] - keypress: S (83)
-    input[value=""] - input
+    input[value="S"] - input
       "{CURSOR}" -> "S{CURSOR}"
     input[value="S"] - keyup: S (83)
     input[value="S"] - keydown: u (117)
     input[value="S"] - keypress: u (117)
-    input[value="S"] - input
+    input[value="Su"] - input
       "S{CURSOR}" -> "Su{CURSOR}"
     input[value="Su"] - keyup: u (117)
     input[value="Su"] - keydown: p (112)
     input[value="Su"] - keypress: p (112)
-    input[value="Su"] - input
+    input[value="Sup"] - input
       "Su{CURSOR}" -> "Sup{CURSOR}"
     input[value="Sup"] - keyup: p (112)
   `)
@@ -77,17 +77,17 @@ test('types text in textarea', async () => {
     textarea[value=""] - focus
     textarea[value=""] - keydown: S (83)
     textarea[value=""] - keypress: S (83)
-    textarea[value=""] - input
+    textarea[value="S"] - input
       "{CURSOR}" -> "S{CURSOR}"
     textarea[value="S"] - keyup: S (83)
     textarea[value="S"] - keydown: u (117)
     textarea[value="S"] - keypress: u (117)
-    textarea[value="S"] - input
+    textarea[value="Su"] - input
       "S{CURSOR}" -> "Su{CURSOR}"
     textarea[value="Su"] - keyup: u (117)
     textarea[value="Su"] - keydown: p (112)
     textarea[value="Su"] - keypress: p (112)
-    textarea[value="Su"] - input
+    textarea[value="Sup"] - input
       "Su{CURSOR}" -> "Sup{CURSOR}"
     textarea[value="Sup"] - keyup: p (112)
   `)
@@ -100,7 +100,7 @@ test('should append text all at once', async () => {
     Events fired on: input[value="Sup"]
 
     input[value=""] - focus
-    input[value=""] - input
+    input[value="Sup"] - input
       "{CURSOR}" -> "Sup{CURSOR}"
   `)
 })
@@ -212,12 +212,12 @@ test('honors maxlength', async () => {
     input[value=""] - focus
     input[value=""] - keydown: 1 (49)
     input[value=""] - keypress: 1 (49)
-    input[value=""] - input
+    input[value="1"] - input
       "{CURSOR}" -> "1{CURSOR}"
     input[value="1"] - keyup: 1 (49)
     input[value="1"] - keydown: 2 (50)
     input[value="1"] - keypress: 2 (50)
-    input[value="1"] - input
+    input[value="12"] - input
       "1{CURSOR}" -> "12{CURSOR}"
     input[value="12"] - keyup: 2 (50)
     input[value="12"] - keydown: 3 (51)
@@ -315,12 +315,12 @@ test('typing into a controlled input works', async () => {
     input[value=""] - focus
     input[value=""] - keydown: 2 (50)
     input[value=""] - keypress: 2 (50)
-    input[value=""] - input
+    input[value="2"] - input
       "{CURSOR}" -> "$2{CURSOR}"
     input[value="$2"] - keyup: 2 (50)
     input[value="$2"] - keydown: 3 (51)
     input[value="$2"] - keypress: 3 (51)
-    input[value="$2"] - input
+    input[value="$23"] - input
       "$2{CURSOR}" -> "$23{CURSOR}"
     input[value="$23"] - keyup: 3 (51)
   `)
@@ -340,7 +340,7 @@ test('typing in the middle of a controlled input works', async () => {
     input[value="$23"] - focus
     input[value="$23"] - keydown: 1 (49)
     input[value="$23"] - keypress: 1 (49)
-    input[value="$23"] - input
+    input[value="$213"] - input
       "$2{CURSOR}3" -> "$213{CURSOR}"
     input[value="$213"] - select
     input[value="$213"] - keyup: 1 (49)
@@ -370,12 +370,12 @@ test('ignored {backspace} in controlled input', async () => {
     input[value="$23"] - select
     input[value="$23"] - focus
     input[value="$23"] - keydown: Backspace (8)
-    input[value="$23"] - input
+    input[value="23"] - input
       "\${CURSOR}23" -> "$23{CURSOR}"
     input[value="$23"] - keyup: Backspace (8)
     input[value="$23"] - keydown: 4 (52)
     input[value="$23"] - keypress: 4 (52)
-    input[value="$23"] - input
+    input[value="$234"] - input
       "$23{CURSOR}" -> "$234{CURSOR}"
     input[value="$234"] - keyup: 4 (52)
   `)
@@ -393,12 +393,12 @@ test('typing in a textarea with existing text', async () => {
     textarea[value="Hello, "] - select
     textarea[value="Hello, "] - keydown: 1 (49)
     textarea[value="Hello, "] - keypress: 1 (49)
-    textarea[value="Hello, "] - input
+    textarea[value="Hello, 1"] - input
       "Hello, {CURSOR}" -> "Hello, 1{CURSOR}"
     textarea[value="Hello, 1"] - keyup: 1 (49)
     textarea[value="Hello, 1"] - keydown: 2 (50)
     textarea[value="Hello, 1"] - keypress: 2 (50)
-    textarea[value="Hello, 1"] - input
+    textarea[value="Hello, 12"] - input
       "Hello, 1{CURSOR}" -> "Hello, 12{CURSOR}"
     textarea[value="Hello, 12"] - keyup: 2 (50)
   `)
@@ -421,13 +421,13 @@ test('accepts an initialSelectionStart and initialSelectionEnd', async () => {
     textarea[value="Hello, "] - focus
     textarea[value="Hello, "] - keydown: 1 (49)
     textarea[value="Hello, "] - keypress: 1 (49)
-    textarea[value="Hello, "] - input
+    textarea[value="1Hello, "] - input
       "{CURSOR}Hello, " -> "1Hello, {CURSOR}"
     textarea[value="1Hello, "] - select
     textarea[value="1Hello, "] - keyup: 1 (49)
     textarea[value="1Hello, "] - keydown: 2 (50)
     textarea[value="1Hello, "] - keypress: 2 (50)
-    textarea[value="1Hello, "] - input
+    textarea[value="12Hello, "] - input
       "1{CURSOR}Hello, " -> "12Hello, {CURSOR}"
     textarea[value="12Hello, "] - select
     textarea[value="12Hello, "] - keyup: 2 (50)
@@ -463,7 +463,7 @@ test('can type "-" into number inputs', async () => {
     input[value=""] - keyup: - (45)
     input[value=""] - keydown: 3 (51)
     input[value=""] - keypress: 3 (51)
-    input[value=""] - input
+    input[value="-3"] - input
       "{CURSOR}" -> "{CURSOR}-3"
     input[value="-3"] - keyup: 3 (51)
   `)
@@ -481,17 +481,17 @@ test('can type "." into number inputs', async () => {
     input[value=""] - focus
     input[value=""] - keydown: 0 (48)
     input[value=""] - keypress: 0 (48)
-    input[value=""] - input
+    input[value="0"] - input
       "{CURSOR}" -> "{CURSOR}0"
     input[value="0"] - keyup: 0 (48)
     input[value="0"] - keydown: . (46)
     input[value="0"] - keypress: . (46)
-    input[value="0"] - input
+    input[value=""] - input
       "{CURSOR}0" -> "{CURSOR}"
     input[value=""] - keyup: . (46)
     input[value=""] - keydown: 3 (51)
     input[value=""] - keypress: 3 (51)
-    input[value=""] - input
+    input[value=".3"] - input
       "{CURSOR}" -> "{CURSOR}.3"
     input[value=".3"] - keyup: 3 (51)
   `)

@@ -1,18 +1,9 @@
 import {wrapAsync} from '../wrap-async'
-import {fireEvent} from './utils'
+import {fireEvent, getActiveElement} from './utils'
 import {tick} from './tick'
 
 function wait(time) {
   return new Promise(resolve => setTimeout(() => resolve(), time))
-}
-
-const getActiveElement = document => {
-  const activeElement = document.activeElement
-  if (activeElement.shadowRoot) {
-    return getActiveElement(activeElement.shadowRoot)
-  } else {
-    return activeElement
-  }
 }
 
 function setSelectionRangeIfNecessary(

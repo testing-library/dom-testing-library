@@ -11,7 +11,7 @@ test('clears text', async () => {
     input[value="hello"] - focus
     input[value="hello"] - select
     input[value="hello"] - keydown: Delete (46)
-    input[value="hello"] - input
+    input[value=""] - input
       "{SELECTION}hello{/SELECTION}" -> "{CURSOR}"
     input[value=""] - keyup: Delete (46)
   `)

@@ -107,16 +107,22 @@ function getElementDisplayName(element) {
 }
 
 function addListeners(element, {eventHandlers = {}} = {}) {
-  const eventHandlerCalls = []
+  const eventHandlerCalls = {current: []}
   const generalListener = jest
     .fn(event => {
-      const testData = element.testData ?? {
+      const callData = {
+        event,
         elementDisplayName: getElementDisplayName(event.target),
       }
-      eventHandlerCalls.push({
-        event,
-        testData,
-      })
+      if (element.testData && !element.testData.handled) {
+        callData.testData = element.testData
+        // sometimes firing a single event (like click on a checkbox) will
+        // automatically fire more events (line input and change).
+        // and we don't want the test data applied to those, so we'll store
+        // this and not add the testData to our call if that was already handled
+        element.testData.handled = true
+      }
+      eventHandlerCalls.current.push(callData)
     })
     .mockName('eventListener')
   const listeners = Object.keys(eventMap)
@@ -137,8 +143,8 @@ function addListeners(element, {eventHandlers = {}} = {}) {
   }
 
   function getEventSnapshot() {
-    const eventCalls = eventHandlerCalls
-      .map(({event, testData}) => {
+    const eventCalls = eventHandlerCalls.current
+      .map(({event, testData, elementDisplayName}) => {
         const eventLabel =
           eventLabelGetters[event.constructor.name]?.(event) ?? ''
         const modifiers = ['altKey', 'shiftKey', 'metaKey', 'ctrlKey']
@@ -147,7 +153,7 @@ function addListeners(element, {eventHandlers = {}} = {}) {
           .join('')
 
         const firstLine = [
-          `${testData.elementDisplayName} - ${event.type}`,
+          `${elementDisplayName} - ${event.type}`,
           [eventLabel, modifiers].filter(Boolean).join(' '),
         ]
           .filter(Boolean)
@@ -155,7 +161,7 @@ function addListeners(element, {eventHandlers = {}} = {}) {
 
         return [
           firstLine,
-          testData.before ? redent(getChanges(testData), 2) : null,
+          testData?.before ? redent(getChanges(testData), 2) : null,
         ]
           .filter(Boolean)
           .join('\n')
@@ -175,7 +181,10 @@ function addListeners(element, {eventHandlers = {}} = {}) {
       }
     }
   }
-  const clearEventCalls = () => generalListener.mockClear()
+  const clearEventCalls = () => {
+    generalListener.mockClear()
+    eventHandlerCalls.current = []
+  }
   const getEvents = () => generalListener.mock.calls.map(([e]) => e)
   const eventWasFired = eventType => getEvents().some(e => e.type === eventType)
 
@@ -251,10 +260,4 @@ afterEach(() => {
   document.body.innerHTML = ''
 })
 
-export {
-  setup,
-  setupSelect,
-  addEventListener,
-  addListeners,
-  getElementDisplayName,
-}
+export {setup, setupSelect, addEventListener, addListeners}

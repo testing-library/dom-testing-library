@@ -1,14 +1,13 @@
 import {wrapAsync} from '../wrap-async'
 import {tick} from './tick'
+import {FOCUSABLE_SELECTOR} from './utils'
 
 async function tab({shift = false, focusTrap = document} = {}) {
   // everything in user-event must be actually async, but since we're not
   // calling fireEvent in here, we'll add this tick here...
   await tick()
 
-  const focusableElements = focusTrap.querySelectorAll(
-    'input, button, select, textarea, a[href], [tabindex]',
-  )
+  const focusableElements = focusTrap.querySelectorAll(FOCUSABLE_SELECTOR)
 
   const enabledElements = [...focusableElements].filter(
     el => el.getAttribute('tabindex') !== '-1' && !el.disabled,

@@ -1,104 +1,128 @@
 import {userEvent} from '../../'
 import {setup, addEventListener, addListeners} from './helpers/utils'
 
-test('click in input', async () => {
-  const {element, getEventSnapshot} = setup('<input />')
+test('click in button', async () => {
+  const {element, getEventSnapshot} = setup('<button />')
   await userEvent.click(element)
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
-    Events fired on: input[value=""]
+    Events fired on: button
 
-    input[value=""] - mouseover: Left (0)
-    input[value=""] - mousemove: Left (0)
-    input[value=""] - mousedown: Left (0)
-    input[value=""] - focus
-    input[value=""] - focusin
-    input[value=""] - mouseup: Left (0)
-    input[value=""] - click: Left (0)
+    button - pointerover
+    button - pointerenter
+    button - mouseover: Left (0)
+    button - mouseenter: Left (0)
+    button - pointermove
+    button - mousemove: Left (0)
+    button - pointerdown
+    button - mousedown: Left (0)
+    button - focus
+    button - focusin
+    button - pointerup
+    button - mouseup: Left (0)
+    button - click: Left (0)
   `)
 })
 
-test('click in textarea', async () => {
-  const {element, getEventSnapshot} = setup('<textarea></textarea>')
+test('only fires pointer events when clicking a disabled button', async () => {
+  const {element, getEventSnapshot} = setup('<button disabled />')
   await userEvent.click(element)
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
-    Events fired on: textarea[value=""]
+    Events fired on: button
 
-    textarea[value=""] - mouseover: Left (0)
-    textarea[value=""] - mousemove: Left (0)
-    textarea[value=""] - mousedown: Left (0)
-    textarea[value=""] - focus
-    textarea[value=""] - focusin
-    textarea[value=""] - mouseup: Left (0)
-    textarea[value=""] - click: Left (0)
+    button - pointerover
+    button - pointerenter
+    button - pointermove
+    button - pointerdown
+    button - pointerup
   `)
 })
 
-test('should fire the correct events for <input type="checkbox">', async () => {
+test('clicking a checkbox', async () => {
   const {element, getEventSnapshot} = setup('<input type="checkbox" />')
   expect(element).not.toBeChecked()
   await userEvent.click(element)
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[checked=true]
 
+    input[checked=false] - pointerover
+    input[checked=false] - pointerenter
     input[checked=false] - mouseover: Left (0)
+    input[checked=false] - mouseenter: Left (0)
+    input[checked=false] - pointermove
     input[checked=false] - mousemove: Left (0)
+    input[checked=false] - pointerdown
     input[checked=false] - mousedown: Left (0)
     input[checked=false] - focus
+    input[checked=false] - focusin
+    input[checked=false] - pointerup
     input[checked=false] - mouseup: Left (0)
-    input[checked=false] - click: Left (0)
+    input[checked=true] - click: Left (0)
       unchecked -> checked
-    input[checked=false] - input
-      unchecked -> checked
-    input[checked=false] - change
-      unchecked -> checked
+    input[checked=true] - input
+    input[checked=true] - change
   `)
 })
 
-test('should fire the correct events for <input type="checkbox" disabled>', async () => {
+test('clicking a disabled checkbox only fires pointer events', async () => {
   const {element, getEventSnapshot} = setup(
     '<input type="checkbox" disabled />',
   )
   await userEvent.click(element)
   expect(element).toBeDisabled()
-  // no event calls is expected here:
-  expect(getEventSnapshot()).toMatchInlineSnapshot(
-    `No events were fired on: input[checked=false]`,
-  )
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
+    Events fired on: input[checked=false]
+
+    input[checked=false] - pointerover
+    input[checked=false] - pointerenter
+    input[checked=false] - pointermove
+    input[checked=false] - pointerdown
+    input[checked=false] - pointerup
+  `)
   expect(element).toBeDisabled()
   expect(element).toHaveProperty('checked', false)
 })
 
-test('should fire the correct events for <input type="radio">', async () => {
+test('clicking a radio button', async () => {
   const {element, getEventSnapshot} = setup('<input type="radio" />')
   expect(element).not.toBeChecked()
   await userEvent.click(element)
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[checked=true]
 
+    input[checked=false] - pointerover
+    input[checked=false] - pointerenter
     input[checked=false] - mouseover: Left (0)
+    input[checked=false] - mouseenter: Left (0)
+    input[checked=false] - pointermove
     input[checked=false] - mousemove: Left (0)
+    input[checked=false] - pointerdown
     input[checked=false] - mousedown: Left (0)
     input[checked=false] - focus
+    input[checked=false] - focusin
+    input[checked=false] - pointerup
     input[checked=false] - mouseup: Left (0)
-    input[checked=false] - click: Left (0)
+    input[checked=true] - click: Left (0)
       unchecked -> checked
-    input[checked=false] - input
-      unchecked -> checked
-    input[checked=false] - change
-      unchecked -> checked
+    input[checked=true] - input
+    input[checked=true] - change
   `)
 
   expect(element).toHaveProperty('checked', true)
 })
 
-test('should fire the correct events for <input type="radio" disabled>', async () => {
+test('clicking a disabled radio button only fires pointer events', async () => {
   const {element, getEventSnapshot} = setup('<input type="radio" disabled />')
   await userEvent.click(element)
   expect(element).toBeDisabled()
-  // no event calls is expected here:
-  expect(getEventSnapshot()).toMatchInlineSnapshot(
-    `No events were fired on: input[checked=false]`,
-  )
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
+    Events fired on: input[checked=false]
+
+    input[checked=false] - pointerover
+    input[checked=false] - pointerenter
+    input[checked=false] - pointermove
+    input[checked=false] - pointerdown
+    input[checked=false] - pointerup
+  `)
   expect(element).toBeDisabled()
 
   expect(element).toHaveProperty('checked', false)
@@ -110,10 +134,15 @@ test('should fire the correct events for <div>', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: div
 
+    div - pointerover
+    div - pointerenter
     div - mouseover: Left (0)
+    div - mouseenter: Left (0)
+    div - pointermove
     div - mousemove: Left (0)
+    div - pointerdown
     div - mousedown: Left (0)
-    div - focusin
+    div - pointerup
     div - mouseup: Left (0)
     div - click: Left (0)
   `)
@@ -138,55 +167,75 @@ test('toggles the focus', async () => {
 })
 
 test('should blur the previous element', async () => {
-  const {element} = setup(`<div><input name="a" /><input name="b" /></div>`)
+  const {element, getEventSnapshot, clearEventCalls} = setup(
+    `<div><input name="a" /><input name="b" /></div>`,
+  )
 
   const a = element.children[0]
   const b = element.children[1]
 
-  const {getEventSnapshot, clearEventCalls} = addListeners(a)
+  const aListeners = addListeners(a)
+  const bListeners = addListeners(b)
 
   await userEvent.click(a)
   clearEventCalls()
   await userEvent.click(b)
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
-    Events fired on: input[name="a"][value=""]
+    Events fired on: div
 
-    input[name="a"][value=""] - mouseover: Left (0)
-    input[name="a"][value=""] - mousemove: Left (0)
-    input[name="a"][value=""] - mousedown: Left (0)
-    input[name="a"][value=""] - focus
-    input[name="a"][value=""] - focusin
-    input[name="a"][value=""] - mouseup: Left (0)
-    input[name="a"][value=""] - click: Left (0)
-    input[name="a"][value=""] - blur
+    input[name="b"][value=""] - pointerover
+    input[name="b"][value=""] - mouseover: Left (0)
+    input[name="b"][value=""] - pointermove
+    input[name="b"][value=""] - mousemove: Left (0)
+    input[name="b"][value=""] - pointerdown
+    input[name="b"][value=""] - mousedown: Left (0)
     input[name="a"][value=""] - focusout
+    input[name="b"][value=""] - focusin
+    input[name="b"][value=""] - pointerup
+    input[name="b"][value=""] - mouseup: Left (0)
+    input[name="b"][value=""] - click: Left (0)
   `)
+  // focus/blur events don't bubble (but the focusout/focusin do!)
+  // we just want to make sure the blur was fired on a
+  // and the focus was fired on b
+  expect(aListeners.eventWasFired('blur')).toBe(true)
+  expect(bListeners.eventWasFired('focus')).toBe(true)
 })
 
 test('should not blur the previous element when mousedown prevents default', async () => {
-  const {element} = setup(`<div><input name="a" /><input name="b" /></div>`)
+  const {element, getEventSnapshot, clearEventCalls} = setup(
+    `<div><input name="a" /><input name="b" /></div>`,
+  )
 
   const a = element.children[0]
   const b = element.children[1]
 
-  addEventListener(b, 'mousedown', e => e.preventDefault())
-
-  const {getEventSnapshot, clearEventCalls} = addListeners(a)
+  const aListeners = addListeners(a)
+  const bListeners = addListeners(b, {
+    eventHandlers: {mouseDown: e => e.preventDefault()},
+  })
 
   await userEvent.click(a)
   clearEventCalls()
   await userEvent.click(b)
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
-    Events fired on: input[name="a"][value=""]
+    Events fired on: div
 
-    input[name="a"][value=""] - mouseover: Left (0)
-    input[name="a"][value=""] - mousemove: Left (0)
-    input[name="a"][value=""] - mousedown: Left (0)
-    input[name="a"][value=""] - focus
-    input[name="a"][value=""] - focusin
-    input[name="a"][value=""] - mouseup: Left (0)
-    input[name="a"][value=""] - click: Left (0)
+    input[name="b"][value=""] - pointerover
+    input[name="b"][value=""] - mouseover: Left (0)
+    input[name="b"][value=""] - pointermove
+    input[name="b"][value=""] - mousemove: Left (0)
+    input[name="b"][value=""] - pointerdown
+    input[name="b"][value=""] - mousedown: Left (0)
+    input[name="b"][value=""] - pointerup
+    input[name="b"][value=""] - mouseup: Left (0)
+    input[name="b"][value=""] - click: Left (0)
   `)
+  // focus/blur events don't bubble (but the focusout do!)
+  // we just want to make sure the blur was fired on a
+  // and the focus was fired on b
+  expect(aListeners.eventWasFired('blur')).toBe(false)
+  expect(bListeners.eventWasFired('focus')).toBe(false)
 })
 
 test('does not lose focus when click updates focus', async () => {
@@ -232,6 +281,14 @@ test('gives focus to the form control when clicking within a label', async () =>
 
   await userEvent.click(span)
   expect(input).toHaveFocus()
+})
+
+test('fires no events when clicking a label with a nested control that is disabled', async () => {
+  const {element, getEventSnapshot} = setup(`<label><input disabled /></label>`)
+  await userEvent.click(element)
+  expect(getEventSnapshot()).toMatchInlineSnapshot(
+    `No events were fired on: label`,
+  )
 })
 
 test('does not crash if the label has no control', async () => {
@@ -309,10 +366,15 @@ test('fires mouse events with the correct properties', async () => {
   const {element, getClickEventsSnapshot} = setup('<div></div>')
   await userEvent.click(element)
   expect(getClickEventsSnapshot()).toMatchInlineSnapshot(`
+    pointerover
+    pointerenter
     mouseover - button=0; buttons=0; detail=0
+    mouseenter - button=0; buttons=0; detail=0
+    pointermove
     mousemove - button=0; buttons=0; detail=0
+    pointerdown
     mousedown - button=0; buttons=1; detail=1
-    focusin
+    pointerup
     mouseup - button=0; buttons=1; detail=1
     click - button=0; buttons=1; detail=1
   `)
@@ -325,10 +387,15 @@ test('fires mouse events with custom button property', async () => {
     altKey: true,
   })
   expect(getClickEventsSnapshot()).toMatchInlineSnapshot(`
+    pointerover
+    pointerenter
     mouseover - button=0; buttons=0; detail=0
+    mouseenter - button=0; buttons=0; detail=0
+    pointermove
     mousemove - button=0; buttons=0; detail=0
+    pointerdown
     mousedown - button=1; buttons=4; detail=1
-    focusin
+    pointerup
     mouseup - button=1; buttons=4; detail=1
     click - button=1; buttons=4; detail=1
   `)
@@ -339,10 +406,15 @@ test('fires mouse events with custom buttons property', async () => {
 
   await userEvent.click(element, {buttons: 4})
   expect(getClickEventsSnapshot()).toMatchInlineSnapshot(`
+    pointerover
+    pointerenter
     mouseover - button=0; buttons=0; detail=0
+    mouseenter - button=0; buttons=0; detail=0
+    pointermove
     mousemove - button=0; buttons=0; detail=0
+    pointerdown
     mousedown - button=1; buttons=4; detail=1
-    focusin
+    pointerup
     mouseup - button=1; buttons=4; detail=1
     click - button=1; buttons=4; detail=1
   `)

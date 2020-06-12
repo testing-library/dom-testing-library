@@ -1,6 +1,5 @@
 // this helps us track what the state is before and after an event is fired
 // this is needed for determining the snapshot values
-const {getElementDisplayName} = require('../__tests__/helpers/utils')
 const actual = jest.requireActual('../utils')
 
 function getTrackedElementValues(element) {
@@ -18,10 +17,7 @@ function getTrackedElementValues(element) {
 function wrapWithTestData(fn) {
   return async (element, init) => {
     const before = getTrackedElementValues(element)
-    const testData = {
-      before,
-      elementDisplayName: getElementDisplayName(element),
-    }
+    const testData = {before}
 
     // put it on the element so the event handler can grab it
     element.testData = testData

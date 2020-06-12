@@ -16,3 +16,25 @@ test('unhover', async () => {
     button - mouseleave: Left (0)
   `)
 })
+
+test('unhover on disabled element', async () => {
+  const {element, getEventSnapshot} = setup('<button disabled />')
+
+  await userEvent.unhover(element)
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
+    Events fired on: button
+
+    button - pointermove
+    button - pointerout
+    button - pointerleave
+  `)
+})
+
+test('no events fired on labels that contain disabled controls', async () => {
+  const {element, getEventSnapshot} = setup('<label><input disabled /></label>')
+
+  await userEvent.unhover(element)
+  expect(getEventSnapshot()).toMatchInlineSnapshot(
+    `No events were fired on: label`,
+  )
+})

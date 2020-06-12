@@ -10,11 +10,11 @@ test('should fire the correct events for input', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
-    input[value=""] - mouseover: Left (0)
-    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
     input[value=""] - mousedown: Left (0)
     input[value=""] - focus
     input[value=""] - focusin
+    input[value=""] - pointerup
     input[value=""] - mouseup: Left (0)
     input[value=""] - click: Left (0)
     input[value=""] - change
@@ -40,9 +40,9 @@ test('should fire the correct events with label', async () => {
   expect(getLabelEventCalls()).toMatchInlineSnapshot(`
     Events fired on: label[for="element"]
 
-    label[for="element"] - mouseover: Left (0)
-    label[for="element"] - mousemove: Left (0)
+    label[for="element"] - pointerdown
     label[for="element"] - mousedown: Left (0)
+    label[for="element"] - pointerup
     label[for="element"] - mouseup: Left (0)
     label[for="element"] - click: Left (0)
   `)
@@ -51,6 +51,7 @@ test('should fire the correct events with label', async () => {
 
     input#element[value=""] - click: Left (0)
     input#element[value=""] - focus
+    input#element[value=""] - focusin
     input#element[value=""] - change
   `)
 })

@@ -7,14 +7,14 @@ test('fires correct events', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: select[name="select"][value="1"]
 
-    select[name="select"][value="1"] - mouseover: Left (0)
-      selectedOptions: ["1"] -> ["1"]
-    select[name="select"][value="1"] - mousemove: Left (0)
+    select[name="select"][value="1"] - pointerdown
       selectedOptions: ["1"] -> ["1"]
     select[name="select"][value="1"] - mousedown: Left (0)
       selectedOptions: ["1"] -> ["1"]
     select[name="select"][value="1"] - focus
     select[name="select"][value="1"] - focusin
+      selectedOptions: ["1"] -> ["1"]
+    select[name="select"][value="1"] - pointerup
       selectedOptions: ["1"] -> ["1"]
     select[name="select"][value="1"] - mouseup: Left (0)
       selectedOptions: ["1"] -> ["1"]
@@ -40,14 +40,14 @@ test('fires correct events on multi-selects', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: select[name="select"][value=["1","3"]]
 
-    select[name="select"][value=[]] - mouseover: Left (0)
-      selectedOptions: [] -> []
-    select[name="select"][value=[]] - mousemove: Left (0)
+    select[name="select"][value=[]] - pointerdown
       selectedOptions: [] -> []
     select[name="select"][value=[]] - mousedown: Left (0)
       selectedOptions: [] -> []
     select[name="select"][value=[]] - focus
     select[name="select"][value=[]] - focusin
+      selectedOptions: [] -> []
+    select[name="select"][value=[]] - pointerup
       selectedOptions: [] -> []
     select[name="select"][value=[]] - mouseup: Left (0)
       selectedOptions: [] -> []

@@ -7,7 +7,8 @@ test('should cycle elements in document tab order', async () => {
       <input data-testid="element" type="checkbox" />
       <input data-testid="element" type="radio" />
       <input data-testid="element" type="number" />
-    </div>`)
+    </div>
+  `)
 
   const [checkbox, radio, number] = document.querySelectorAll(
     '[data-testid="element"]',

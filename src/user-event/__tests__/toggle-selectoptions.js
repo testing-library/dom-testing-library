@@ -9,14 +9,14 @@ test('should fire the correct events for multiple select', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: select[name="select"][value=["1"]]
 
-    select[name="select"][value=[]] - mouseover: Left (0)
-      selectedOptions: [] -> []
-    select[name="select"][value=[]] - mousemove: Left (0)
+    select[name="select"][value=[]] - pointerdown
       selectedOptions: [] -> []
     select[name="select"][value=[]] - mousedown: Left (0)
       selectedOptions: [] -> []
     select[name="select"][value=[]] - focus
     select[name="select"][value=[]] - focusin
+      selectedOptions: [] -> []
+    select[name="select"][value=[]] - pointerup
       selectedOptions: [] -> []
     select[name="select"][value=[]] - mouseup: Left (0)
       selectedOptions: [] -> []
@@ -48,11 +48,11 @@ test('should fire the correct events for multiple select when focus is in other 
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: form
 
-    select[name="select"][value=[]] - mouseover: Left (0)
-    select[name="select"][value=[]] - mousemove: Left (0)
+    select[name="select"][value=[]] - pointerdown
     select[name="select"][value=[]] - mousedown: Left (0)
     button - focusout
     select[name="select"][value=[]] - focusin
+    select[name="select"][value=[]] - pointerup
     select[name="select"][value=[]] - mouseup: Left (0)
     select[name="select"][value=[]] - click: Left (0)
     option[value="1"] - mouseover: Left (0)

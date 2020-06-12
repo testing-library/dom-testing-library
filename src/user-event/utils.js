@@ -93,4 +93,47 @@ function getMouseEventOptions(event, init, clickCount = 0) {
   }
 }
 
-export {fireEvent, getMouseEventOptions}
+// Absolutely NO events fire on label elements that contain their control
+// if that control is disabled. NUTS!
+// no joke. There are NO events for: <label><input disabled /><label>
+function isLabelWithInternallyDisabledControl(element) {
+  return (
+    element.tagName === 'LABEL' &&
+    element.control?.disabled &&
+    element.contains(element.control)
+  )
+}
+
+function getActiveElement(document) {
+  const activeElement = document.activeElement
+  if (activeElement?.shadowRoot) {
+    return getActiveElement(activeElement.shadowRoot)
+  } else {
+    return activeElement
+  }
+}
+
+const FOCUSABLE_SELECTOR = [
+  'input:not([disabled])',
+  'button:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  'a[href]',
+  '[tabindex]:not([disabled])',
+].join(', ')
+
+function isFocusable(element) {
+  return (
+    !isLabelWithInternallyDisabledControl(element) &&
+    element.matches(FOCUSABLE_SELECTOR)
+  )
+}
+
+export {
+  FOCUSABLE_SELECTOR,
+  isFocusable,
+  fireEvent,
+  getMouseEventOptions,
+  isLabelWithInternallyDisabledControl,
+  getActiveElement,
+}
