@@ -26,6 +26,11 @@ async function type(
   element.focus()
 
   // The focused element could change between each event, so get the currently active element each time
+  // This is why most of the utilities are within the type function itself. If
+  // they weren't, then we'd have to pass the "currentElement" function to them
+  // as an argument, which would be fine, but make sure that you pass the function
+  // and not just the element if the active element could change while the function
+  // is being run (for example, functions that are async and/or fire events).
   const currentElement = () => getActiveElement(element.ownerDocument)
   const currentValue = () => currentElement().value
   const setSelectionRange = ({newValue, newSelectionStart}) => {
@@ -63,7 +68,10 @@ async function type(
 
   if (allAtOnce) {
     if (!element.readOnly) {
-      const {newValue, newSelectionStart} = calculateNewValue(text)
+      const {newValue, newSelectionStart} = calculateNewValue(
+        text,
+        currentElement(),
+      )
       await fireEvent.input(element, {
         target: {value: newValue},
       })
@@ -125,7 +133,10 @@ async function type(
         }
 
         if (currentElement().tagName === 'TEXTAREA') {
-          const {newValue, newSelectionStart} = calculateNewValue('\n')
+          const {newValue, newSelectionStart} = calculateNewValue(
+            '\n',
+            currentElement(),
+          )
           await fireEvent.input(currentElement(), {
             target: {value: newValue},
             inputType: 'insertLineBreak',
@@ -177,7 +188,7 @@ async function type(
 
         if (keyPressDefaultNotPrevented) {
           await fireInputEventIfNeeded({
-            ...calculateNewDeleteValue(),
+            ...calculateNewDeleteValue(currentElement()),
             eventOverrides: {
               inputType: 'deleteContentForward',
               ...eventOverrides,
@@ -208,7 +219,7 @@ async function type(
 
         if (keyPressDefaultNotPrevented) {
           await fireInputEventIfNeeded({
-            ...calculateNewBackspaceValue(),
+            ...calculateNewBackspaceValue(currentElement()),
             eventOverrides: {
               inputType: 'deleteContentBackward',
               ...eventOverrides,
@@ -278,118 +289,6 @@ async function type(
     return {prevValue}
   }
 
-  // yes, calculateNewBackspaceValue and calculateNewValue look extremely similar
-  // and you may be tempted to create a shared abstraction.
-  // If you, brave soul, decide to so endevor, please increment this count
-  // when you inevitably fail: 1
-  function calculateNewBackspaceValue() {
-    const {selectionStart, selectionEnd} = currentElement()
-    const value = currentValue()
-    let newValue, newSelectionStart
-
-    if (selectionStart === null) {
-      // at the end of an input type that does not support selection ranges
-      // https://github.com/testing-library/user-event/issues/316#issuecomment-639744793
-      newValue = value.slice(0, value.length - 1)
-      newSelectionStart = selectionStart - 1
-    } else if (selectionStart === selectionEnd) {
-      if (selectionStart === 0) {
-        // at the beginning of the input
-        newValue = value
-        newSelectionStart = selectionStart
-      } else if (selectionStart === value.length) {
-        // at the end of the input
-        newValue = value.slice(0, value.length - 1)
-        newSelectionStart = selectionStart - 1
-      } else {
-        // in the middle of the input
-        newValue =
-          value.slice(0, selectionStart - 1) + value.slice(selectionEnd)
-        newSelectionStart = selectionStart - 1
-      }
-    } else {
-      // we have something selected
-      const firstPart = value.slice(0, selectionStart)
-      newValue = firstPart + value.slice(selectionEnd)
-      newSelectionStart = firstPart.length
-    }
-
-    return {newValue, newSelectionStart}
-  }
-
-  function calculateNewDeleteValue() {
-    const {selectionStart, selectionEnd} = currentElement()
-    const value = currentValue()
-    let newValue
-
-    if (selectionStart === null) {
-      // at the end of an input type that does not support selection ranges
-      // https://github.com/testing-library/user-event/issues/316#issuecomment-639744793
-      newValue = value
-    } else if (selectionStart === selectionEnd) {
-      if (selectionStart === 0) {
-        // at the beginning of the input
-        newValue = value.slice(1)
-      } else if (selectionStart === value.length) {
-        // at the end of the input
-        newValue = value
-      } else {
-        // in the middle of the input
-        newValue =
-          value.slice(0, selectionStart) + value.slice(selectionEnd + 1)
-      }
-    } else {
-      // we have something selected
-      const firstPart = value.slice(0, selectionStart)
-      newValue = firstPart + value.slice(selectionEnd)
-    }
-
-    return {newValue, newSelectionStart: selectionStart}
-  }
-
-  function calculateNewValue(newEntry) {
-    const {selectionStart, selectionEnd} = currentElement()
-    // can't use .maxLength property because of a jsdom bug:
-    // https://github.com/jsdom/jsdom/issues/2927
-    const maxLength = Number(currentElement().getAttribute('maxlength') ?? -1)
-    const value = currentValue()
-    let newValue, newSelectionStart
-
-    if (selectionStart === null) {
-      // at the end of an input type that does not support selection ranges
-      // https://github.com/testing-library/user-event/issues/316#issuecomment-639744793
-      newValue = value + newEntry
-    } else if (selectionStart === selectionEnd) {
-      if (selectionStart === 0) {
-        // at the beginning of the input
-        newValue = newEntry + value
-      } else if (selectionStart === value.length) {
-        // at the end of the input
-        newValue = value + newEntry
-      } else {
-        // in the middle of the input
-        newValue =
-          value.slice(0, selectionStart) + newEntry + value.slice(selectionEnd)
-      }
-      newSelectionStart = selectionStart + newEntry.length
-    } else {
-      // we have something selected
-      const firstPart = value.slice(0, selectionStart) + newEntry
-      newValue = firstPart + value.slice(selectionEnd)
-      newSelectionStart = firstPart.length
-    }
-
-    if (maxLength < 0) {
-      return {newValue, newSelectionStart}
-    } else {
-      return {
-        newValue: newValue.slice(0, maxLength),
-        newSelectionStart:
-          newSelectionStart > maxLength ? maxLength : newSelectionStart,
-      }
-    }
-  }
-
   async function typeCharacter(
     char,
     {prevWasMinus = false, prevWasPeriod = false, eventOverrides},
@@ -428,7 +327,7 @@ async function type(
         }
 
         const {prevValue} = await fireInputEventIfNeeded({
-          ...calculateNewValue(newEntry),
+          ...calculateNewValue(newEntry, currentElement()),
           eventOverrides: {
             data: key,
             inputType: 'insertText',
@@ -498,8 +397,114 @@ async function type(
     }
   }
 }
-
 type = wrapAsync(type)
+
+// yes, calculateNewBackspaceValue and calculateNewValue look extremely similar
+// and you may be tempted to create a shared abstraction.
+// If you, brave soul, decide to so endevor, please increment this count
+// when you inevitably fail: 1
+function calculateNewBackspaceValue(element) {
+  const {selectionStart, selectionEnd, value} = element
+  let newValue, newSelectionStart
+
+  if (selectionStart === null) {
+    // at the end of an input type that does not support selection ranges
+    // https://github.com/testing-library/user-event/issues/316#issuecomment-639744793
+    newValue = value.slice(0, value.length - 1)
+    newSelectionStart = selectionStart - 1
+  } else if (selectionStart === selectionEnd) {
+    if (selectionStart === 0) {
+      // at the beginning of the input
+      newValue = value
+      newSelectionStart = selectionStart
+    } else if (selectionStart === value.length) {
+      // at the end of the input
+      newValue = value.slice(0, value.length - 1)
+      newSelectionStart = selectionStart - 1
+    } else {
+      // in the middle of the input
+      newValue = value.slice(0, selectionStart - 1) + value.slice(selectionEnd)
+      newSelectionStart = selectionStart - 1
+    }
+  } else {
+    // we have something selected
+    const firstPart = value.slice(0, selectionStart)
+    newValue = firstPart + value.slice(selectionEnd)
+    newSelectionStart = firstPart.length
+  }
+
+  return {newValue, newSelectionStart}
+}
+
+function calculateNewDeleteValue(element) {
+  const {selectionStart, selectionEnd, value} = element
+  let newValue
+
+  if (selectionStart === null) {
+    // at the end of an input type that does not support selection ranges
+    // https://github.com/testing-library/user-event/issues/316#issuecomment-639744793
+    newValue = value
+  } else if (selectionStart === selectionEnd) {
+    if (selectionStart === 0) {
+      // at the beginning of the input
+      newValue = value.slice(1)
+    } else if (selectionStart === value.length) {
+      // at the end of the input
+      newValue = value
+    } else {
+      // in the middle of the input
+      newValue = value.slice(0, selectionStart) + value.slice(selectionEnd + 1)
+    }
+  } else {
+    // we have something selected
+    const firstPart = value.slice(0, selectionStart)
+    newValue = firstPart + value.slice(selectionEnd)
+  }
+
+  return {newValue, newSelectionStart: selectionStart}
+}
+
+function calculateNewValue(newEntry, element) {
+  const {selectionStart, selectionEnd, value} = element
+  // can't use .maxLength property because of a jsdom bug:
+  // https://github.com/jsdom/jsdom/issues/2927
+  const maxLength = Number(element.getAttribute('maxlength') ?? -1)
+  let newValue, newSelectionStart
+
+  if (selectionStart === null) {
+    // at the end of an input type that does not support selection ranges
+    // https://github.com/testing-library/user-event/issues/316#issuecomment-639744793
+    newValue = value + newEntry
+  } else if (selectionStart === selectionEnd) {
+    if (selectionStart === 0) {
+      // at the beginning of the input
+      newValue = newEntry + value
+    } else if (selectionStart === value.length) {
+      // at the end of the input
+      newValue = value + newEntry
+    } else {
+      // in the middle of the input
+      newValue =
+        value.slice(0, selectionStart) + newEntry + value.slice(selectionEnd)
+    }
+    newSelectionStart = selectionStart + newEntry.length
+  } else {
+    // we have something selected
+    const firstPart = value.slice(0, selectionStart) + newEntry
+    newValue = firstPart + value.slice(selectionEnd)
+    newSelectionStart = firstPart.length
+  }
+
+  if (maxLength < 0) {
+    return {newValue, newSelectionStart}
+  } else {
+    return {
+      newValue: newValue.slice(0, maxLength),
+      newSelectionStart:
+        newSelectionStart > maxLength ? maxLength : newSelectionStart,
+    }
+  }
+}
 
 export {type}
 
