@@ -3,34 +3,29 @@ import {setupSelect, addListeners} from './helpers/utils'
 
 test('fires correct events', async () => {
   const {select, options, getEventSnapshot} = setupSelect()
-  await userEvent.selectOptions(select, '1')
+  await userEvent.selectOptions(select, '2')
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
-    Events fired on: select[name="select"][value="1"]
+    Events fired on: select[name="select"][value="2"]
 
+    select[name="select"][value="1"] - pointerover
+    select[name="select"][value="1"] - pointerenter
+    select[name="select"][value="1"] - mouseover: Left (0)
+    select[name="select"][value="1"] - mouseenter: Left (0)
+    select[name="select"][value="1"] - pointermove
+    select[name="select"][value="1"] - mousemove: Left (0)
     select[name="select"][value="1"] - pointerdown
-      selectedOptions: ["1"] -> ["1"]
     select[name="select"][value="1"] - mousedown: Left (0)
-      selectedOptions: ["1"] -> ["1"]
     select[name="select"][value="1"] - focus
     select[name="select"][value="1"] - focusin
-      selectedOptions: ["1"] -> ["1"]
     select[name="select"][value="1"] - pointerup
-      selectedOptions: ["1"] -> ["1"]
     select[name="select"][value="1"] - mouseup: Left (0)
-      selectedOptions: ["1"] -> ["1"]
     select[name="select"][value="1"] - click: Left (0)
-      selectedOptions: ["1"] -> ["1"]
-    option[value="1"] - mouseover: Left (0)
-    option[value="1"] - mousemove: Left (0)
-    option[value="1"] - mousedown: Left (0)
-    option[value="1"] - mouseup: Left (0)
-    option[value="1"] - click: Left (0)
-    select[name="select"][value="1"] - change
-      selectedOptions: ["1"] -> ["1"]
+    select[name="select"][value="2"] - input
+    select[name="select"][value="2"] - change
   `)
   const [o1, o2, o3] = options
-  expect(o1.selected).toBe(true)
-  expect(o2.selected).toBe(false)
+  expect(o1.selected).toBe(false)
+  expect(o2.selected).toBe(true)
   expect(o3.selected).toBe(false)
 })
 
@@ -40,33 +35,34 @@ test('fires correct events on multi-selects', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: select[name="select"][value=["1","3"]]
 
-    select[name="select"][value=[]] - pointerdown
-      selectedOptions: [] -> []
-    select[name="select"][value=[]] - mousedown: Left (0)
-      selectedOptions: [] -> []
+    option[value="1"] - pointerover
+    select[name="select"][value=[]] - pointerenter
+    option[value="1"] - mouseover: Left (0)
+    select[name="select"][value=[]] - mouseenter: Left (0)
+    option[value="1"] - pointermove
+    option[value="1"] - mousemove: Left (0)
+    option[value="1"] - pointerdown
+    option[value="1"] - mousedown: Left (0)
     select[name="select"][value=[]] - focus
     select[name="select"][value=[]] - focusin
-      selectedOptions: [] -> []
-    select[name="select"][value=[]] - pointerup
-      selectedOptions: [] -> []
-    select[name="select"][value=[]] - mouseup: Left (0)
-      selectedOptions: [] -> []
-    select[name="select"][value=[]] - click: Left (0)
-      selectedOptions: [] -> []
-    option[value="1"] - mouseover: Left (0)
-    option[value="1"] - mousemove: Left (0)
-    option[value="1"] - mousedown: Left (0)
+    option[value="1"] - pointerup
     option[value="1"] - mouseup: Left (0)
-    option[value="1"] - click: Left (0)
+    select[name="select"][value=["1"]] - input
     select[name="select"][value=["1"]] - change
-      selectedOptions: ["1"] -> ["1"]
+    option[value="1"] - click: Left (0)
+    option[value="3"] - pointerover
+    select[name="select"][value=["1"]] - pointerenter
     option[value="3"] - mouseover: Left (0)
+    select[name="select"][value=["1"]] - mouseenter: Left (0)
+    option[value="3"] - pointermove
     option[value="3"] - mousemove: Left (0)
+    option[value="3"] - pointerdown
     option[value="3"] - mousedown: Left (0)
+    option[value="3"] - pointerup
     option[value="3"] - mouseup: Left (0)
-    option[value="3"] - click: Left (0)
+    select[name="select"][value=["1","3"]] - input
     select[name="select"][value=["1","3"]] - change
-      selectedOptions: ["1","3"] -> ["1","3"]
+    option[value="3"] - click: Left (0)
   `)
   const [o1, o2, o3] = options
   expect(o1.selected).toBe(true)

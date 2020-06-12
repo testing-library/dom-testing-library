@@ -232,6 +232,13 @@ const changeLabelGetter = {
       before.checked ? 'checked' : 'unchecked',
       after.checked ? 'checked' : 'unchecked',
     ].join(' -> '),
+  selectedOptions: ({before, after}) => {
+    const beforeString = JSON.stringify(before.selectedOptions)
+    const afterString = JSON.stringify(after.selectedOptions)
+    return beforeString === afterString
+      ? null
+      : [beforeString, afterString].join(' -> ')
+  },
 }
 changeLabelGetter.selectionStart = changeLabelGetter.value
 changeLabelGetter.selectionEnd = changeLabelGetter.value
@@ -248,7 +255,7 @@ function getChanges({before, after}) {
     }
   }
 
-  return Array.from(changes).join('\n')
+  return Array.from(changes).filter(Boolean).join('\n')
 }
 
 // eslint-disable-next-line jest/prefer-hooks-on-top

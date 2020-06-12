@@ -1,24 +1,41 @@
 import {wrapAsync} from '../wrap-async'
+import {createEvent} from '../events'
 import {getConfig} from '../config'
-import {fireEvent, getMouseEventOptions} from './utils'
-import {clickElement} from './click'
+import {fireEvent} from './utils'
+import {click} from './click'
+import {focus} from './focus'
 
 async function selectOption(select, option, init) {
-  await fireEvent.mouseOver(option, getMouseEventOptions('mouseover', init))
-  await fireEvent.mouseMove(option, getMouseEventOptions('mousemove', init))
-  await fireEvent.mouseDown(option, getMouseEventOptions('mousedown', init))
-  await fireEvent.focus(option)
-  await fireEvent.mouseUp(option, getMouseEventOptions('mouseup', init))
-  await fireEvent.click(option, getMouseEventOptions('click', init, 1))
-
   option.selected = true
+  await fireEvent(select, createEvent('input', select, init))
+  await fireEvent(select, createEvent('change', select, init))
+}
 
-  await fireEvent.change(select)
+async function selectOptionInMultiple(select, options, init) {
+  for (const option of options) {
+    // events fired for multiple select are weird. Can't use hover...
+    await fireEvent.pointerOver(option, init)
+    await fireEvent.pointerEnter(select, init)
+    await fireEvent.mouseOver(option)
+    await fireEvent.mouseEnter(select)
+    await fireEvent.pointerMove(option, init)
+    await fireEvent.mouseMove(option, init)
+    await fireEvent.pointerDown(option, init)
+    await fireEvent.mouseDown(option, init)
+    await focus(select, init)
+    await fireEvent.pointerUp(option, init)
+    await fireEvent.mouseUp(option, init)
+    await selectOption(select, option, init)
+    await fireEvent.click(option, init)
+  }
+}
+
+async function selectOptionInSingle(select, option, init) {
+  await click(select, init)
+  await selectOption(select, option, init)
 }
 
 async function selectOptions(element, values, init) {
-  await clickElement(element, init)
-
   const valArray = Array.isArray(values) ? values : [values]
   const allOptions = Array.from(element.querySelectorAll('option'))
   const selectedOptions = valArray.map(val => {
@@ -38,17 +55,14 @@ async function selectOptions(element, values, init) {
   })
 
   if (element.multiple) {
-    for (const option of selectedOptions) {
-      await selectOption(element, option)
-    }
+    await selectOptionInMultiple(element, selectedOptions, init)
+  } else if (selectedOptions.length === 1) {
+    await selectOptionInSingle(element, selectedOptions[0], init)
   } else {
-    if (selectedOptions.length !== 1) {
-      throw getConfig().getElementError(
-        `Cannot select multiple options on a non-multiple select`,
-        element,
-      )
-    }
-    await selectOption(element, selectedOptions[0])
+    throw getConfig().getElementError(
+      `Cannot select multiple options on a non-multiple select`,
+      element,
+    )
   }
 }
 selectOptions = wrapAsync(selectOptions)

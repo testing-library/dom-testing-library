@@ -10,25 +10,18 @@ test('should fire the correct events for multiple select', async () => {
     Events fired on: select[name="select"][value=["1"]]
 
     select[name="select"][value=[]] - pointerdown
-      selectedOptions: [] -> []
     select[name="select"][value=[]] - mousedown: Left (0)
-      selectedOptions: [] -> []
     select[name="select"][value=[]] - focus
     select[name="select"][value=[]] - focusin
-      selectedOptions: [] -> []
     select[name="select"][value=[]] - pointerup
-      selectedOptions: [] -> []
     select[name="select"][value=[]] - mouseup: Left (0)
-      selectedOptions: [] -> []
     select[name="select"][value=[]] - click: Left (0)
-      selectedOptions: [] -> []
     option[value="1"] - mouseover: Left (0)
     option[value="1"] - mousemove: Left (0)
     option[value="1"] - mousedown: Left (0)
     option[value="1"] - mouseup: Left (0)
     option[value="1"] - click: Left (0)
     select[name="select"][value=["1"]] - change
-      selectedOptions: ["1"] -> ["1"]
   `)
 
   expect(form).toHaveFormValues({select: ['1']})
