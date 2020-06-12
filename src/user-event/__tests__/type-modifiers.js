@@ -24,7 +24,6 @@ test('{esc} triggers typing the escape character', async () => {
     Events fired on: input[value=""]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: Escape (27)
     input[value=""] - keyup: Escape (27)
   `)
@@ -37,7 +36,6 @@ test('a{backspace}', async () => {
     Events fired on: input[value=""]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: a (97)
     input[value=""] - keypress: a (97)
     input[value=""] - input
@@ -57,7 +55,6 @@ test('{backspace}a', async () => {
     Events fired on: input[value="a"]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: Backspace (8)
     input[value=""] - keyup: Backspace (8)
     input[value=""] - keydown: a (97)
@@ -157,7 +154,6 @@ test('{alt}a{/alt}', async () => {
     Events fired on: input[value="a"]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: Alt (18) {alt}
     input[value=""] - keydown: a (97) {alt}
     input[value=""] - keypress: a (97) {alt}
@@ -177,7 +173,6 @@ test('{meta}a{/meta}', async () => {
     Events fired on: input[value="a"]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: Meta (93) {meta}
     input[value=""] - keydown: a (97) {meta}
     input[value=""] - keypress: a (97) {meta}
@@ -197,7 +192,6 @@ test('{ctrl}a{/ctrl}', async () => {
     Events fired on: input[value="a"]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: Control (17) {ctrl}
     input[value=""] - keydown: a (97) {ctrl}
     input[value=""] - keypress: a (97) {ctrl}
@@ -217,7 +211,6 @@ test('{shift}a{/shift}', async () => {
     Events fired on: input[value="a"]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: Shift (16) {shift}
     input[value=""] - keydown: a (97) {shift}
     input[value=""] - keypress: a (97) {shift}
@@ -237,7 +230,6 @@ test('a{enter}', async () => {
     Events fired on: input[value="a"]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: a (97)
     input[value=""] - keypress: a (97)
     input[value=""] - input
@@ -262,7 +254,6 @@ test('{enter} with preventDefault keydown', async () => {
     Events fired on: input[value=""]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: Enter (13)
     input[value=""] - keyup: Enter (13)
   `)
@@ -293,7 +284,6 @@ test('{enter} on a textarea', async () => {
     Events fired on: textarea[value="\\n"]
 
     textarea[value=""] - focus
-    textarea[value=""] - select
     textarea[value=""] - keydown: Enter (13)
     textarea[value=""] - keypress: Enter (13)
     textarea[value=""] - input
@@ -329,7 +319,6 @@ test('{meta}{alt}{ctrl}a{/ctrl}{/alt}{/meta}', async () => {
     Events fired on: input[value="a"]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: Meta (93) {meta}
     input[value=""] - keydown: Alt (18) {alt}{meta}
     input[value=""] - keydown: Control (17) {alt}{meta}{ctrl}
@@ -380,7 +369,6 @@ test('{del} at the start of the input', async () => {
     Events fired on: input[value="ello"]
 
     input[value="hello"] - focus
-    input[value="hello"] - select
     input[value="hello"] - keydown: Delete (46)
     input[value="hello"] - input
       "{CURSOR}hello" -> "ello{CURSOR}"

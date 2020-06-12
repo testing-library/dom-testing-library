@@ -18,7 +18,10 @@ async function clear(element) {
     // setSelectionRange is not supported on certain types of inputs, e.g. "number" or "email"
     element.type = 'text'
   }
-  await type(element, '{selectall}{del}')
+  await type(element, '{selectall}{del}', {
+    initialSelectionStart: element.selectionStart,
+    initialSelectionEnd: element.selectionEnd,
+  })
   if (element.tagName === 'INPUT') {
     element.type = elementType
   }

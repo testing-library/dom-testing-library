@@ -10,7 +10,6 @@ test('clears text', async () => {
 
     input[value="hello"] - focus
     input[value="hello"] - select
-    input[value="hello"] - select
     input[value="hello"] - keydown: Delete (46)
     input[value="hello"] - input
       "{SELECTION}hello{/SELECTION}" -> "{CURSOR}"
@@ -41,7 +40,6 @@ test('does not clear text on readonly inputs', async () => {
     Events fired on: input[value="hello"]
 
     input[value="hello"] - focus
-    input[value="hello"] - select
     input[value="hello"] - select
     input[value="hello"] - keydown: Delete (46)
     input[value="hello"] - keyup: Delete (46)

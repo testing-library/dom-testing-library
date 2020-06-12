@@ -15,6 +15,24 @@ const getActiveElement = document => {
   }
 }
 
+function setSelectionRangeIfNecessary(
+  element,
+  newSelectionStart,
+  newSelectionEnd,
+) {
+  const {selectionStart, selectionEnd} = element
+  if (!element.setSelectionRange || selectionStart === null) {
+    // cannot set selection
+    return
+  }
+  if (
+    selectionStart !== newSelectionStart ||
+    selectionEnd !== newSelectionStart
+  ) {
+    element.setSelectionRange(newSelectionStart, newSelectionEnd)
+  }
+}
+
 // eslint-disable-next-line complexity
 async function type(
   element,
@@ -40,16 +58,12 @@ async function type(
     // The reason we have to do this at all is because it actually *is*
     // programmatically changed by await fireEvent.input, so we have to simulate the
     // browser's default behavior
-    const el = currentElement()
-    const {selectionStart, selectionEnd} = el
-    if (
-      selectionStart !== null &&
-      currentValue() === newValue &&
-      el.setSelectionRange &&
-      (selectionStart !== newSelectionStart ||
-        selectionEnd !== newSelectionStart)
-    ) {
-      el.setSelectionRange(newSelectionStart, newSelectionStart)
+    if (currentValue() === newValue) {
+      setSelectionRangeIfNecessary(
+        currentElement(),
+        newSelectionStart,
+        newSelectionStart,
+      )
     }
   }
 
@@ -65,7 +79,8 @@ async function type(
     currentElement().selectionStart === 0 &&
     currentElement().selectionEnd === 0
   ) {
-    currentElement().setSelectionRange(
+    setSelectionRangeIfNecessary(
+      currentElement(),
       initialSelectionStart ?? currentValue().length,
       initialSelectionEnd ?? currentValue().length,
     )
@@ -239,6 +254,8 @@ async function type(
           ...eventOverrides,
         })
       },
+      // the user can actually select in several different ways
+      // we're not going to choose, so we'll *only* set the selection range
       '{selectall}': async () => {
         await tick()
         currentElement().setSelectionRange(0, currentValue().length)

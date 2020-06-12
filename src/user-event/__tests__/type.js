@@ -9,7 +9,6 @@ test('types text in input', async () => {
     Events fired on: input[value="Sup"]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: S (83)
     input[value=""] - keypress: S (83)
     input[value=""] - input
@@ -35,7 +34,6 @@ test('types text in input with allAtOnce', async () => {
     Events fired on: input[value="Sup"]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - input
       "{CURSOR}" -> "Sup{CURSOR}"
   `)
@@ -52,7 +50,6 @@ test('types text inside custom element', async () => {
     Events fired on: input[value="Sup"]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: S (83)
     input[value=""] - keypress: S (83)
     input[value=""] - input
@@ -78,7 +75,6 @@ test('types text in textarea', async () => {
     Events fired on: textarea[value="Sup"]
 
     textarea[value=""] - focus
-    textarea[value=""] - select
     textarea[value=""] - keydown: S (83)
     textarea[value=""] - keypress: S (83)
     textarea[value=""] - input
@@ -104,7 +100,6 @@ test('should append text all at once', async () => {
     Events fired on: input[value="Sup"]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - input
       "{CURSOR}" -> "Sup{CURSOR}"
   `)
@@ -120,7 +115,6 @@ test('does not fire input event when keypress calls prevent default', async () =
     Events fired on: input[value=""]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: a (97)
     input[value=""] - keypress: a (97)
     input[value=""] - keyup: a (97)
@@ -137,7 +131,6 @@ test('does not fire keypress or input events when keydown calls prevent default'
     Events fired on: input[value=""]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: a (97)
     input[value=""] - keyup: a (97)
   `)
@@ -160,7 +153,6 @@ test('does not fire input when readonly', async () => {
     Events fired on: input[value=""]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: a (97)
     input[value=""] - keypress: a (97)
     input[value=""] - keyup: a (97)
@@ -175,7 +167,6 @@ test('does not fire input when readonly (with allAtOnce)', async () => {
     Events fired on: input[value=""]
 
     input[value=""] - focus
-    input[value=""] - select
   `)
 })
 
@@ -219,7 +210,6 @@ test('honors maxlength', async () => {
     Events fired on: input[value="12"]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: 1 (49)
     input[value=""] - keypress: 1 (49)
     input[value=""] - input
@@ -323,7 +313,6 @@ test('typing into a controlled input works', async () => {
     Events fired on: input[value="$23"]
 
     input[value=""] - focus
-    input[value=""] - select
     input[value=""] - keydown: 2 (50)
     input[value=""] - keypress: 2 (50)
     input[value=""] - input
@@ -430,7 +419,6 @@ test('accepts an initialSelectionStart and initialSelectionEnd', async () => {
 
     textarea[value="Hello, "] - select
     textarea[value="Hello, "] - focus
-    textarea[value="Hello, "] - select
     textarea[value="Hello, "] - keydown: 1 (49)
     textarea[value="Hello, "] - keypress: 1 (49)
     textarea[value="Hello, "] - input
