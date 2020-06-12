@@ -8,7 +8,19 @@ test('types text in input', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="Sup"]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: S (83)
     input[value=""] - keypress: S (83)
     input[value="S"] - input
@@ -27,15 +39,29 @@ test('types text in input', async () => {
   `)
 })
 
-test('types text in input with allAtOnce', async () => {
-  const {element, getEventSnapshot} = setup('<input />')
-  await userEvent.type(element, 'Sup', {allAtOnce: true})
+test('can skip the initial click', async () => {
+  const {element, getEventSnapshot, clearEventCalls} = setup('<input />')
+  element.focus() // users MUST focus themselves if they wish to skip the click
+  clearEventCalls()
+  await userEvent.type(element, 'Sup', {skipClick: true})
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="Sup"]
 
-    input[value=""] - focus
+    input[value=""] - keydown: S (83)
+    input[value=""] - keypress: S (83)
+    input[value="S"] - input
+      "{CURSOR}" -> "S{CURSOR}"
+    input[value="S"] - keyup: S (83)
+    input[value="S"] - keydown: u (117)
+    input[value="S"] - keypress: u (117)
+    input[value="Su"] - input
+      "S{CURSOR}" -> "Su{CURSOR}"
+    input[value="Su"] - keyup: u (117)
+    input[value="Su"] - keydown: p (112)
+    input[value="Su"] - keypress: p (112)
     input[value="Sup"] - input
-      "{CURSOR}" -> "Sup{CURSOR}"
+      "Su{CURSOR}" -> "Sup{CURSOR}"
+    input[value="Sup"] - keyup: p (112)
   `)
 })
 
@@ -49,7 +75,19 @@ test('types text inside custom element', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="Sup"]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: S (83)
     input[value=""] - keypress: S (83)
     input[value="S"] - input
@@ -74,7 +112,19 @@ test('types text in textarea', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: textarea[value="Sup"]
 
+    textarea[value=""] - pointerover
+    textarea[value=""] - pointerenter
+    textarea[value=""] - mouseover: Left (0)
+    textarea[value=""] - mouseenter: Left (0)
+    textarea[value=""] - pointermove
+    textarea[value=""] - mousemove: Left (0)
+    textarea[value=""] - pointerdown
+    textarea[value=""] - mousedown: Left (0)
     textarea[value=""] - focus
+    textarea[value=""] - focusin
+    textarea[value=""] - pointerup
+    textarea[value=""] - mouseup: Left (0)
+    textarea[value=""] - click: Left (0)
     textarea[value=""] - keydown: S (83)
     textarea[value=""] - keypress: S (83)
     textarea[value="S"] - input
@@ -93,18 +143,6 @@ test('types text in textarea', async () => {
   `)
 })
 
-test('should append text all at once', async () => {
-  const {element, getEventSnapshot} = setup('<input />')
-  await userEvent.type(element, 'Sup', {allAtOnce: true})
-  expect(getEventSnapshot()).toMatchInlineSnapshot(`
-    Events fired on: input[value="Sup"]
-
-    input[value=""] - focus
-    input[value="Sup"] - input
-      "{CURSOR}" -> "Sup{CURSOR}"
-  `)
-})
-
 test('does not fire input event when keypress calls prevent default', async () => {
   const {element, getEventSnapshot} = setup('<input />', {
     eventHandlers: {keyPress: e => e.preventDefault()},
@@ -114,7 +152,19 @@ test('does not fire input event when keypress calls prevent default', async () =
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: a (97)
     input[value=""] - keypress: a (97)
     input[value=""] - keyup: a (97)
@@ -130,7 +180,19 @@ test('does not fire keypress or input events when keydown calls prevent default'
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: a (97)
     input[value=""] - keyup: a (97)
   `)
@@ -152,31 +214,23 @@ test('does not fire input when readonly', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: a (97)
     input[value=""] - keypress: a (97)
     input[value=""] - keyup: a (97)
   `)
-})
-
-test('does not fire input when readonly (with allAtOnce)', async () => {
-  const {element, getEventSnapshot} = setup('<input readonly />')
-
-  await userEvent.type(element, 'a', {allAtOnce: true})
-  expect(getEventSnapshot()).toMatchInlineSnapshot(`
-    Events fired on: input[value=""]
-
-    input[value=""] - focus
-  `)
-})
-
-test('does not fire any events when disabled (with allAtOnce)', async () => {
-  const {element, getEventSnapshot} = setup('<input disabled />')
-
-  await userEvent.type(element, 'a', {allAtOnce: true})
-  expect(getEventSnapshot()).toMatchInlineSnapshot(
-    `No events were fired on: input[value=""]`,
-  )
 })
 
 test('should delay the typing when opts.delay is not 0', async () => {
@@ -209,7 +263,19 @@ test('honors maxlength', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="12"]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: 1 (49)
     input[value=""] - keypress: 1 (49)
     input[value="1"] - input
@@ -236,7 +302,19 @@ test('honors maxlength with existing text', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="12"]
 
+    input[value="12"] - pointerover
+    input[value="12"] - pointerenter
+    input[value="12"] - mouseover: Left (0)
+    input[value="12"] - mouseenter: Left (0)
+    input[value="12"] - pointermove
+    input[value="12"] - mousemove: Left (0)
+    input[value="12"] - pointerdown
+    input[value="12"] - mousedown: Left (0)
     input[value="12"] - focus
+    input[value="12"] - focusin
+    input[value="12"] - pointerup
+    input[value="12"] - mouseup: Left (0)
+    input[value="12"] - click: Left (0)
     input[value="12"] - select
     input[value="12"] - keydown: 3 (51)
     input[value="12"] - keypress: 3 (51)
@@ -312,7 +390,19 @@ test('typing into a controlled input works', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="$23"]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: 2 (50)
     input[value=""] - keypress: 2 (50)
     input[value="2"] - input
@@ -337,7 +427,19 @@ test('typing in the middle of a controlled input works', async () => {
     Events fired on: input[value="$213"]
 
     input[value="$23"] - select
+    input[value="$23"] - pointerover
+    input[value="$23"] - pointerenter
+    input[value="$23"] - mouseover: Left (0)
+    input[value="$23"] - mouseenter: Left (0)
+    input[value="$23"] - pointermove
+    input[value="$23"] - mousemove: Left (0)
+    input[value="$23"] - pointerdown
+    input[value="$23"] - mousedown: Left (0)
     input[value="$23"] - focus
+    input[value="$23"] - focusin
+    input[value="$23"] - pointerup
+    input[value="$23"] - mouseup: Left (0)
+    input[value="$23"] - click: Left (0)
     input[value="$23"] - keydown: 1 (49)
     input[value="$23"] - keypress: 1 (49)
     input[value="$213"] - input
@@ -368,11 +470,34 @@ test('ignored {backspace} in controlled input', async () => {
     Events fired on: input[value="$234"]
 
     input[value="$23"] - select
+    input[value="$23"] - pointerover
+    input[value="$23"] - pointerenter
+    input[value="$23"] - mouseover: Left (0)
+    input[value="$23"] - mouseenter: Left (0)
+    input[value="$23"] - pointermove
+    input[value="$23"] - mousemove: Left (0)
+    input[value="$23"] - pointerdown
+    input[value="$23"] - mousedown: Left (0)
     input[value="$23"] - focus
+    input[value="$23"] - focusin
+    input[value="$23"] - pointerup
+    input[value="$23"] - mouseup: Left (0)
+    input[value="$23"] - click: Left (0)
     input[value="$23"] - keydown: Backspace (8)
     input[value="23"] - input
       "\${CURSOR}23" -> "$23{CURSOR}"
     input[value="$23"] - keyup: Backspace (8)
+    input[value="$23"] - pointerover
+    input[value="$23"] - pointerenter
+    input[value="$23"] - mouseover: Left (0)
+    input[value="$23"] - mouseenter: Left (0)
+    input[value="$23"] - pointermove
+    input[value="$23"] - mousemove: Left (0)
+    input[value="$23"] - pointerdown
+    input[value="$23"] - mousedown: Left (0)
+    input[value="$23"] - pointerup
+    input[value="$23"] - mouseup: Left (0)
+    input[value="$23"] - click: Left (0)
     input[value="$23"] - keydown: 4 (52)
     input[value="$23"] - keypress: 4 (52)
     input[value="$234"] - input
@@ -389,7 +514,19 @@ test('typing in a textarea with existing text', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: textarea[value="Hello, 12"]
 
+    textarea[value="Hello, "] - pointerover
+    textarea[value="Hello, "] - pointerenter
+    textarea[value="Hello, "] - mouseover: Left (0)
+    textarea[value="Hello, "] - mouseenter: Left (0)
+    textarea[value="Hello, "] - pointermove
+    textarea[value="Hello, "] - mousemove: Left (0)
+    textarea[value="Hello, "] - pointerdown
+    textarea[value="Hello, "] - mousedown: Left (0)
     textarea[value="Hello, "] - focus
+    textarea[value="Hello, "] - focusin
+    textarea[value="Hello, "] - pointerup
+    textarea[value="Hello, "] - mouseup: Left (0)
+    textarea[value="Hello, "] - click: Left (0)
     textarea[value="Hello, "] - select
     textarea[value="Hello, "] - keydown: 1 (49)
     textarea[value="Hello, "] - keypress: 1 (49)
@@ -418,7 +555,19 @@ test('accepts an initialSelectionStart and initialSelectionEnd', async () => {
     Events fired on: textarea[value="12Hello, "]
 
     textarea[value="Hello, "] - select
+    textarea[value="Hello, "] - pointerover
+    textarea[value="Hello, "] - pointerenter
+    textarea[value="Hello, "] - mouseover: Left (0)
+    textarea[value="Hello, "] - mouseenter: Left (0)
+    textarea[value="Hello, "] - pointermove
+    textarea[value="Hello, "] - mousemove: Left (0)
+    textarea[value="Hello, "] - pointerdown
+    textarea[value="Hello, "] - mousedown: Left (0)
     textarea[value="Hello, "] - focus
+    textarea[value="Hello, "] - focusin
+    textarea[value="Hello, "] - pointerup
+    textarea[value="Hello, "] - mouseup: Left (0)
+    textarea[value="Hello, "] - click: Left (0)
     textarea[value="Hello, "] - keydown: 1 (49)
     textarea[value="Hello, "] - keypress: 1 (49)
     textarea[value="1Hello, "] - input
@@ -456,7 +605,19 @@ test('can type "-" into number inputs', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="-3"]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: - (45)
     input[value=""] - keypress: - (45)
     input[value=""] - input
@@ -478,7 +639,19 @@ test('can type "." into number inputs', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value=".3"]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: 0 (48)
     input[value=""] - keypress: 0 (48)
     input[value="0"] - input

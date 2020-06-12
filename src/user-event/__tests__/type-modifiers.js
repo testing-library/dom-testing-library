@@ -23,7 +23,19 @@ test('{esc} triggers typing the escape character', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: Escape (27)
     input[value=""] - keyup: Escape (27)
   `)
@@ -35,7 +47,19 @@ test('a{backspace}', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: a (97)
     input[value=""] - keypress: a (97)
     input[value="a"] - input
@@ -54,7 +78,19 @@ test('{backspace}a', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="a"]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: Backspace (8)
     input[value=""] - keyup: Backspace (8)
     input[value=""] - keydown: a (97)
@@ -75,7 +111,19 @@ test('{backspace} triggers typing the backspace character and deletes the charac
     Events fired on: input[value="o"]
 
     input[value="yo"] - select
+    input[value="yo"] - pointerover
+    input[value="yo"] - pointerenter
+    input[value="yo"] - mouseover: Left (0)
+    input[value="yo"] - mouseenter: Left (0)
+    input[value="yo"] - pointermove
+    input[value="yo"] - mousemove: Left (0)
+    input[value="yo"] - pointerdown
+    input[value="yo"] - mousedown: Left (0)
     input[value="yo"] - focus
+    input[value="yo"] - focusin
+    input[value="yo"] - pointerup
+    input[value="yo"] - mouseup: Left (0)
+    input[value="yo"] - click: Left (0)
     input[value="yo"] - keydown: Backspace (8)
     input[value="o"] - input
       "y{CURSOR}o" -> "o{CURSOR}"
@@ -94,7 +142,19 @@ test('{backspace} on a readOnly input', async () => {
     Events fired on: input[value="yo"]
 
     input[value="yo"] - select
+    input[value="yo"] - pointerover
+    input[value="yo"] - pointerenter
+    input[value="yo"] - mouseover: Left (0)
+    input[value="yo"] - mouseenter: Left (0)
+    input[value="yo"] - pointermove
+    input[value="yo"] - mousemove: Left (0)
+    input[value="yo"] - pointerdown
+    input[value="yo"] - mousedown: Left (0)
     input[value="yo"] - focus
+    input[value="yo"] - focusin
+    input[value="yo"] - pointerup
+    input[value="yo"] - mouseup: Left (0)
+    input[value="yo"] - click: Left (0)
     input[value="yo"] - keydown: Backspace (8)
     input[value="yo"] - keyup: Backspace (8)
   `)
@@ -112,7 +172,19 @@ test('{backspace} does not fire input if keydown prevents default', async () => 
     Events fired on: input[value="yo"]
 
     input[value="yo"] - select
+    input[value="yo"] - pointerover
+    input[value="yo"] - pointerenter
+    input[value="yo"] - mouseover: Left (0)
+    input[value="yo"] - mouseenter: Left (0)
+    input[value="yo"] - pointermove
+    input[value="yo"] - mousemove: Left (0)
+    input[value="yo"] - pointerdown
+    input[value="yo"] - mousedown: Left (0)
     input[value="yo"] - focus
+    input[value="yo"] - focusin
+    input[value="yo"] - pointerup
+    input[value="yo"] - mouseup: Left (0)
+    input[value="yo"] - click: Left (0)
     input[value="yo"] - keydown: Backspace (8)
     input[value="yo"] - keyup: Backspace (8)
   `)
@@ -128,7 +200,19 @@ test('{backspace} deletes the selected range', async () => {
     Events fired on: input[value="Here"]
 
     input[value="Hi there"] - select
+    input[value="Hi there"] - pointerover
+    input[value="Hi there"] - pointerenter
+    input[value="Hi there"] - mouseover: Left (0)
+    input[value="Hi there"] - mouseenter: Left (0)
+    input[value="Hi there"] - pointermove
+    input[value="Hi there"] - mousemove: Left (0)
+    input[value="Hi there"] - pointerdown
+    input[value="Hi there"] - mousedown: Left (0)
     input[value="Hi there"] - focus
+    input[value="Hi there"] - focusin
+    input[value="Hi there"] - pointerup
+    input[value="Hi there"] - mouseup: Left (0)
+    input[value="Hi there"] - click: Left (0)
     input[value="Hi there"] - keydown: Backspace (8)
     input[value="Here"] - input
       "H{SELECTION}i th{/SELECTION}ere" -> "Here{CURSOR}"
@@ -153,7 +237,19 @@ test('{alt}a{/alt}', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="a"]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: Alt (18) {alt}
     input[value=""] - keydown: a (97) {alt}
     input[value=""] - keypress: a (97) {alt}
@@ -172,7 +268,19 @@ test('{meta}a{/meta}', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="a"]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: Meta (93) {meta}
     input[value=""] - keydown: a (97) {meta}
     input[value=""] - keypress: a (97) {meta}
@@ -191,7 +299,19 @@ test('{ctrl}a{/ctrl}', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="a"]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: Control (17) {ctrl}
     input[value=""] - keydown: a (97) {ctrl}
     input[value=""] - keypress: a (97) {ctrl}
@@ -210,7 +330,19 @@ test('{shift}a{/shift}', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="a"]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: Shift (16) {shift}
     input[value=""] - keydown: a (97) {shift}
     input[value=""] - keypress: a (97) {shift}
@@ -229,7 +361,19 @@ test('a{enter}', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="a"]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: a (97)
     input[value=""] - keypress: a (97)
     input[value="a"] - input
@@ -253,7 +397,19 @@ test('{enter} with preventDefault keydown', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: Enter (13)
     input[value=""] - keyup: Enter (13)
   `)
@@ -267,7 +423,19 @@ test('{enter} on a button', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: button
 
+    button - pointerover
+    button - pointerenter
+    button - mouseover: Left (0)
+    button - mouseenter: Left (0)
+    button - pointermove
+    button - mousemove: Left (0)
+    button - pointerdown
+    button - mousedown: Left (0)
     button - focus
+    button - focusin
+    button - pointerup
+    button - mouseup: Left (0)
+    button - click: Left (0)
     button - keydown: Enter (13)
     button - keypress: Enter (13)
     button - click: Left (0)
@@ -283,7 +451,19 @@ test('{enter} on a textarea', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: textarea[value="\\n"]
 
+    textarea[value=""] - pointerover
+    textarea[value=""] - pointerenter
+    textarea[value=""] - mouseover: Left (0)
+    textarea[value=""] - mouseenter: Left (0)
+    textarea[value=""] - pointermove
+    textarea[value=""] - mousemove: Left (0)
+    textarea[value=""] - pointerdown
+    textarea[value=""] - mousedown: Left (0)
     textarea[value=""] - focus
+    textarea[value=""] - focusin
+    textarea[value=""] - pointerup
+    textarea[value=""] - mouseup: Left (0)
+    textarea[value=""] - click: Left (0)
     textarea[value=""] - keydown: Enter (13)
     textarea[value=""] - keypress: Enter (13)
     textarea[value="\\n"] - input
@@ -300,7 +480,19 @@ test('{meta}{enter}{/meta} on a button', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: button
 
+    button - pointerover
+    button - pointerenter
+    button - mouseover: Left (0)
+    button - mouseenter: Left (0)
+    button - pointermove
+    button - mousemove: Left (0)
+    button - pointerdown
+    button - mousedown: Left (0)
     button - focus
+    button - focusin
+    button - pointerup
+    button - mouseup: Left (0)
+    button - click: Left (0)
     button - keydown: Meta (93) {meta}
     button - keydown: Enter (13) {meta}
     button - keypress: Enter (13) {meta}
@@ -318,7 +510,19 @@ test('{meta}{alt}{ctrl}a{/ctrl}{/alt}{/meta}', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="a"]
 
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
     input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
     input[value=""] - keydown: Meta (93) {meta}
     input[value=""] - keydown: Alt (18) {alt}{meta}
     input[value=""] - keydown: Control (17) {alt}{meta}{ctrl}
@@ -349,7 +553,19 @@ test('{selectall} selects all the text', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="abcdefg"]
 
+    input[value="abcdefg"] - pointerover
+    input[value="abcdefg"] - pointerenter
+    input[value="abcdefg"] - mouseover: Left (0)
+    input[value="abcdefg"] - mouseenter: Left (0)
+    input[value="abcdefg"] - pointermove
+    input[value="abcdefg"] - mousemove: Left (0)
+    input[value="abcdefg"] - pointerdown
+    input[value="abcdefg"] - mousedown: Left (0)
     input[value="abcdefg"] - focus
+    input[value="abcdefg"] - focusin
+    input[value="abcdefg"] - pointerup
+    input[value="abcdefg"] - mouseup: Left (0)
+    input[value="abcdefg"] - click: Left (0)
     input[value="abcdefg"] - select
   `)
 })
@@ -367,7 +583,19 @@ test('{del} at the start of the input', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="ello"]
 
+    input[value="hello"] - pointerover
+    input[value="hello"] - pointerenter
+    input[value="hello"] - mouseover: Left (0)
+    input[value="hello"] - mouseenter: Left (0)
+    input[value="hello"] - pointermove
+    input[value="hello"] - mousemove: Left (0)
+    input[value="hello"] - pointerdown
+    input[value="hello"] - mousedown: Left (0)
     input[value="hello"] - focus
+    input[value="hello"] - focusin
+    input[value="hello"] - pointerup
+    input[value="hello"] - mouseup: Left (0)
+    input[value="hello"] - click: Left (0)
     input[value="hello"] - keydown: Delete (46)
     input[value="ello"] - input
       "{CURSOR}hello" -> "ello{CURSOR}"
@@ -386,7 +614,19 @@ test('{del} at end of the input', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="hello"]
 
+    input[value="hello"] - pointerover
+    input[value="hello"] - pointerenter
+    input[value="hello"] - mouseover: Left (0)
+    input[value="hello"] - mouseenter: Left (0)
+    input[value="hello"] - pointermove
+    input[value="hello"] - mousemove: Left (0)
+    input[value="hello"] - pointerdown
+    input[value="hello"] - mousedown: Left (0)
     input[value="hello"] - focus
+    input[value="hello"] - focusin
+    input[value="hello"] - pointerup
+    input[value="hello"] - mouseup: Left (0)
+    input[value="hello"] - click: Left (0)
     input[value="hello"] - select
     input[value="hello"] - keydown: Delete (46)
     input[value="hello"] - keyup: Delete (46)
@@ -406,7 +646,19 @@ test('{del} in the middle of the input', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="helo"]
 
+    input[value="hello"] - pointerover
+    input[value="hello"] - pointerenter
+    input[value="hello"] - mouseover: Left (0)
+    input[value="hello"] - mouseenter: Left (0)
+    input[value="hello"] - pointermove
+    input[value="hello"] - mousemove: Left (0)
+    input[value="hello"] - pointerdown
+    input[value="hello"] - mousedown: Left (0)
     input[value="hello"] - focus
+    input[value="hello"] - focusin
+    input[value="hello"] - pointerup
+    input[value="hello"] - mouseup: Left (0)
+    input[value="hello"] - click: Left (0)
     input[value="hello"] - select
     input[value="hello"] - keydown: Delete (46)
     input[value="helo"] - input
@@ -429,7 +681,19 @@ test('{del} with a selection range', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="hlo"]
 
+    input[value="hello"] - pointerover
+    input[value="hello"] - pointerenter
+    input[value="hello"] - mouseover: Left (0)
+    input[value="hello"] - mouseenter: Left (0)
+    input[value="hello"] - pointermove
+    input[value="hello"] - mousemove: Left (0)
+    input[value="hello"] - pointerdown
+    input[value="hello"] - mousedown: Left (0)
     input[value="hello"] - focus
+    input[value="hello"] - focusin
+    input[value="hello"] - pointerup
+    input[value="hello"] - mouseup: Left (0)
+    input[value="hello"] - click: Left (0)
     input[value="hello"] - select
     input[value="hello"] - keydown: Delete (46)
     input[value="hlo"] - input

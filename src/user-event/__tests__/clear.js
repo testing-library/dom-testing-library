@@ -8,7 +8,19 @@ test('clears text', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
+    input[value="hello"] - pointerover
+    input[value="hello"] - pointerenter
+    input[value="hello"] - mouseover: Left (0)
+    input[value="hello"] - mouseenter: Left (0)
+    input[value="hello"] - pointermove
+    input[value="hello"] - mousemove: Left (0)
+    input[value="hello"] - pointerdown
+    input[value="hello"] - mousedown: Left (0)
     input[value="hello"] - focus
+    input[value="hello"] - focusin
+    input[value="hello"] - pointerup
+    input[value="hello"] - mouseup: Left (0)
+    input[value="hello"] - click: Left (0)
     input[value="hello"] - select
     input[value="hello"] - keydown: Delete (46)
     input[value=""] - input
@@ -39,7 +51,19 @@ test('does not clear text on readonly inputs', async () => {
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value="hello"]
 
+    input[value="hello"] - pointerover
+    input[value="hello"] - pointerenter
+    input[value="hello"] - mouseover: Left (0)
+    input[value="hello"] - mouseenter: Left (0)
+    input[value="hello"] - pointermove
+    input[value="hello"] - mousemove: Left (0)
+    input[value="hello"] - pointerdown
+    input[value="hello"] - mousedown: Left (0)
     input[value="hello"] - focus
+    input[value="hello"] - focusin
+    input[value="hello"] - pointerup
+    input[value="hello"] - mouseup: Left (0)
+    input[value="hello"] - click: Left (0)
     input[value="hello"] - select
     input[value="hello"] - keydown: Delete (46)
     input[value="hello"] - keyup: Delete (46)

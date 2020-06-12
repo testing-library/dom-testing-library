@@ -1,6 +1,7 @@
 import {wrapAsync} from '../wrap-async'
 import {fireEvent, getActiveElement} from './utils'
 import {tick} from './tick'
+import {click} from './click'
 
 function wait(time) {
   return new Promise(resolve => setTimeout(() => resolve(), time))
@@ -28,11 +29,11 @@ function setSelectionRangeIfNecessary(
 async function type(
   element,
   text,
-  {allAtOnce = false, delay, initialSelectionStart, initialSelectionEnd} = {},
+  {skipClick = false, delay, initialSelectionStart, initialSelectionEnd} = {},
 ) {
   if (element.disabled) return
 
-  element.focus()
+  if (!skipClick) await click(element)
 
   // The focused element could change between each event, so get the currently active element each time
   // This is why most of the utilities are within the type function itself. If
@@ -77,199 +78,38 @@ async function type(
     )
   }
 
-  if (allAtOnce) {
-    if (!element.readOnly) {
-      const {newValue, newSelectionStart} = calculateNewValue(
-        text,
-        currentElement(),
-      )
-      await fireEvent.input(element, {
-        target: {value: newValue},
-      })
-      setSelectionRange({newValue, newSelectionStart})
-    }
-  } else {
-    const eventCallbackMap = {
-      ...modifier({
-        name: 'shift',
-        key: 'Shift',
-        keyCode: 16,
-        modifierProperty: 'shiftKey',
-      }),
-      ...modifier({
-        name: 'ctrl',
-        key: 'Control',
-        keyCode: 17,
-        modifierProperty: 'ctrlKey',
-      }),
-      ...modifier({
-        name: 'alt',
-        key: 'Alt',
-        keyCode: 18,
-        modifierProperty: 'altKey',
-      }),
-      ...modifier({
-        name: 'meta',
-        key: 'Meta',
-        keyCode: 93,
-        modifierProperty: 'metaKey',
-      }),
-      '{enter}': async ({eventOverrides}) => {
-        const key = 'Enter'
-        const keyCode = 13
+  const eventCallbackMap = getEventCallbackMap({
+    currentElement,
+    fireInputEventIfNeeded,
+    setSelectionRange,
+  })
 
-        const keyDownDefaultNotPrevented = await fireEvent.keyDown(
-          currentElement(),
-          {
-            key,
-            keyCode,
-            which: keyCode,
-            ...eventOverrides,
-          },
-        )
+  const eventCallbacks = queueCallbacks()
+  await runCallbacks(eventCallbacks)
 
-        if (keyDownDefaultNotPrevented) {
-          await fireEvent.keyPress(currentElement(), {
-            key,
-            keyCode,
-            charCode: keyCode,
-            ...eventOverrides,
-          })
-        }
-
-        if (currentElement().tagName === 'BUTTON') {
-          await fireEvent.click(currentElement(), {
-            ...eventOverrides,
-          })
-        }
-
-        if (currentElement().tagName === 'TEXTAREA') {
-          const {newValue, newSelectionStart} = calculateNewValue(
-            '\n',
-            currentElement(),
-          )
-          await fireEvent.input(currentElement(), {
-            target: {value: newValue},
-            inputType: 'insertLineBreak',
-            ...eventOverrides,
-          })
-          setSelectionRange({newValue, newSelectionStart})
-        }
-
-        await fireEvent.keyUp(currentElement(), {
-          key,
-          keyCode,
-          which: keyCode,
-          ...eventOverrides,
-        })
-      },
-      '{esc}': async ({eventOverrides}) => {
-        const key = 'Escape'
-        const keyCode = 27
-
-        await fireEvent.keyDown(currentElement(), {
-          key,
-          keyCode,
-          which: keyCode,
-          ...eventOverrides,
-        })
-
-        // NOTE: Browsers do not fire a keypress on meta key presses
-
-        await fireEvent.keyUp(currentElement(), {
-          key,
-          keyCode,
-          which: keyCode,
-          ...eventOverrides,
-        })
-      },
-      '{del}': async ({eventOverrides}) => {
-        const key = 'Delete'
-        const keyCode = 46
-
-        const keyPressDefaultNotPrevented = await fireEvent.keyDown(
-          currentElement(),
-          {
-            key,
-            keyCode,
-            which: keyCode,
-            ...eventOverrides,
-          },
-        )
-
-        if (keyPressDefaultNotPrevented) {
-          await fireInputEventIfNeeded({
-            ...calculateNewDeleteValue(currentElement()),
-            eventOverrides: {
-              inputType: 'deleteContentForward',
-              ...eventOverrides,
-            },
-          })
-        }
-
-        await fireEvent.keyUp(currentElement(), {
-          key,
-          keyCode,
-          which: keyCode,
-          ...eventOverrides,
-        })
-      },
-      '{backspace}': async ({eventOverrides}) => {
-        const key = 'Backspace'
-        const keyCode = 8
-
-        const keyPressDefaultNotPrevented = await fireEvent.keyDown(
-          currentElement(),
-          {
-            key,
-            keyCode,
-            which: keyCode,
-            ...eventOverrides,
-          },
-        )
-
-        if (keyPressDefaultNotPrevented) {
-          await fireInputEventIfNeeded({
-            ...calculateNewBackspaceValue(currentElement()),
-            eventOverrides: {
-              inputType: 'deleteContentBackward',
-              ...eventOverrides,
-            },
-          })
-        }
-
-        await fireEvent.keyUp(currentElement(), {
-          key,
-          keyCode,
-          which: keyCode,
-          ...eventOverrides,
-        })
-      },
-      // the user can actually select in several different ways
-      // we're not going to choose, so we'll *only* set the selection range
-      '{selectall}': async () => {
-        await tick()
-        currentElement().setSelectionRange(0, currentValue().length)
-      },
-    }
-    const eventCallbacks = []
+  function queueCallbacks() {
+    const callbacks = []
     let remainingString = text
     while (remainingString) {
       const eventKey = Object.keys(eventCallbackMap).find(key =>
         remainingString.startsWith(key),
       )
       if (eventKey) {
-        eventCallbacks.push(eventCallbackMap[eventKey])
+        callbacks.push(eventCallbackMap[eventKey])
         remainingString = remainingString.slice(eventKey.length)
       } else {
         const character = remainingString[0]
-        eventCallbacks.push((...args) => typeCharacter(character, ...args))
+        callbacks.push((...args) => typeCharacter(character, ...args))
         remainingString = remainingString.slice(1)
       }
     }
+    return callbacks
+  }
+
+  async function runCallbacks(callbacks) {
     const eventOverrides = {}
     let prevWasMinus, prevWasPeriod
-    for (const callback of eventCallbacks) {
+    for (const callback of callbacks) {
       if (delay > 0) await wait(delay)
       if (!currentElement().disabled) {
         const returnValue = await callback({
@@ -378,37 +218,6 @@ async function type(
 
     return {prevWasMinus: nextPrevWasMinus, prevWasPeriod: nextPrevWasPeriod}
   }
-
-  function modifier({name, key, keyCode, modifierProperty}) {
-    return {
-      [`{${name}}`]: async ({eventOverrides}) => {
-        const newEventOverrides = {[modifierProperty]: true}
-
-        await fireEvent.keyDown(currentElement(), {
-          key,
-          keyCode,
-          which: keyCode,
-          ...eventOverrides,
-          ...newEventOverrides,
-        })
-
-        return {eventOverrides: newEventOverrides}
-      },
-      [`{/${name}}`]: async ({eventOverrides}) => {
-        const newEventOverrides = {[modifierProperty]: false}
-
-        await fireEvent.keyUp(currentElement(), {
-          key,
-          keyCode,
-          which: keyCode,
-          ...eventOverrides,
-          ...newEventOverrides,
-        })
-
-        return {eventOverrides: newEventOverrides}
-      },
-    }
-  }
 }
 type = wrapAsync(type)
 
@@ -515,6 +324,207 @@ function calculateNewValue(newEntry, element) {
       newValue: newValue.slice(0, maxLength),
       newSelectionStart:
         newSelectionStart > maxLength ? maxLength : newSelectionStart,
+    }
+  }
+}
+
+function getEventCallbackMap({
+  currentElement,
+  fireInputEventIfNeeded,
+  setSelectionRange,
+}) {
+  return {
+    ...modifier({
+      name: 'shift',
+      key: 'Shift',
+      keyCode: 16,
+      modifierProperty: 'shiftKey',
+    }),
+    ...modifier({
+      name: 'ctrl',
+      key: 'Control',
+      keyCode: 17,
+      modifierProperty: 'ctrlKey',
+    }),
+    ...modifier({
+      name: 'alt',
+      key: 'Alt',
+      keyCode: 18,
+      modifierProperty: 'altKey',
+    }),
+    ...modifier({
+      name: 'meta',
+      key: 'Meta',
+      keyCode: 93,
+      modifierProperty: 'metaKey',
+    }),
+    '{enter}': async ({eventOverrides}) => {
+      const key = 'Enter'
+      const keyCode = 13
+
+      const keyDownDefaultNotPrevented = await fireEvent.keyDown(
+        currentElement(),
+        {
+          key,
+          keyCode,
+          which: keyCode,
+          ...eventOverrides,
+        },
+      )
+
+      if (keyDownDefaultNotPrevented) {
+        await fireEvent.keyPress(currentElement(), {
+          key,
+          keyCode,
+          charCode: keyCode,
+          ...eventOverrides,
+        })
+      }
+
+      if (currentElement().tagName === 'BUTTON') {
+        await fireEvent.click(currentElement(), {
+          ...eventOverrides,
+        })
+      }
+
+      if (currentElement().tagName === 'TEXTAREA') {
+        const {newValue, newSelectionStart} = calculateNewValue(
+          '\n',
+          currentElement(),
+        )
+        await fireEvent.input(currentElement(), {
+          target: {value: newValue},
+          inputType: 'insertLineBreak',
+          ...eventOverrides,
+        })
+        setSelectionRange({newValue, newSelectionStart})
+      }
+
+      await fireEvent.keyUp(currentElement(), {
+        key,
+        keyCode,
+        which: keyCode,
+        ...eventOverrides,
+      })
+    },
+    '{esc}': async ({eventOverrides}) => {
+      const key = 'Escape'
+      const keyCode = 27
+
+      await fireEvent.keyDown(currentElement(), {
+        key,
+        keyCode,
+        which: keyCode,
+        ...eventOverrides,
+      })
+
+      // NOTE: Browsers do not fire a keypress on meta key presses
+
+      await fireEvent.keyUp(currentElement(), {
+        key,
+        keyCode,
+        which: keyCode,
+        ...eventOverrides,
+      })
+    },
+    '{del}': async ({eventOverrides}) => {
+      const key = 'Delete'
+      const keyCode = 46
+
+      const keyPressDefaultNotPrevented = await fireEvent.keyDown(
+        currentElement(),
+        {
+          key,
+          keyCode,
+          which: keyCode,
+          ...eventOverrides,
+        },
+      )
+
+      if (keyPressDefaultNotPrevented) {
+        await fireInputEventIfNeeded({
+          ...calculateNewDeleteValue(currentElement()),
+          eventOverrides: {
+            inputType: 'deleteContentForward',
+            ...eventOverrides,
+          },
+        })
+      }
+
+      await fireEvent.keyUp(currentElement(), {
+        key,
+        keyCode,
+        which: keyCode,
+        ...eventOverrides,
+      })
+    },
+    '{backspace}': async ({eventOverrides}) => {
+      const key = 'Backspace'
+      const keyCode = 8
+
+      const keyPressDefaultNotPrevented = await fireEvent.keyDown(
+        currentElement(),
+        {
+          key,
+          keyCode,
+          which: keyCode,
+          ...eventOverrides,
+        },
+      )
+
+      if (keyPressDefaultNotPrevented) {
+        await fireInputEventIfNeeded({
+          ...calculateNewBackspaceValue(currentElement()),
+          eventOverrides: {
+            inputType: 'deleteContentBackward',
+            ...eventOverrides,
+          },
+        })
+      }
+
+      await fireEvent.keyUp(currentElement(), {
+        key,
+        keyCode,
+        which: keyCode,
+        ...eventOverrides,
+      })
+    },
+    // the user can actually select in several different ways
+    // we're not going to choose, so we'll *only* set the selection range
+    '{selectall}': async () => {
+      await tick()
+      currentElement().setSelectionRange(0, currentElement().value.length)
+    },
+  }
+
+  function modifier({name, key, keyCode, modifierProperty}) {
+    return {
+      [`{${name}}`]: async ({eventOverrides}) => {
+        const newEventOverrides = {[modifierProperty]: true}
+
+        await fireEvent.keyDown(currentElement(), {
+          key,
+          keyCode,
+          which: keyCode,
+          ...eventOverrides,
+          ...newEventOverrides,
+        })
+
+        return {eventOverrides: newEventOverrides}
+      },
+      [`{/${name}}`]: async ({eventOverrides}) => {
+        const newEventOverrides = {[modifierProperty]: false}
+
+        await fireEvent.keyUp(currentElement(), {
+          key,
+          keyCode,
+          which: keyCode,
+          ...eventOverrides,
+          ...newEventOverrides,
+        })
+
+        return {eventOverrides: newEventOverrides}
+      },
     }
   }
 }
