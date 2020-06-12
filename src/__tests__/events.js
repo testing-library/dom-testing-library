@@ -140,17 +140,21 @@ const eventTypes = [
 
 const allEvents = Object.keys(eventMap)
 
-const bubblingEvents = allEvents
-  .filter(eventName => eventMap[eventName].defaultInit.bubbles)
+const bubblingEvents = allEvents.filter(
+  eventName => eventMap[eventName].defaultInit.bubbles,
+)
 
-const composedEvents = allEvents
-  .filter(eventName => eventMap[eventName].defaultInit.composed)
+const composedEvents = allEvents.filter(
+  eventName => eventMap[eventName].defaultInit.composed,
+)
 
-const nonBubblingEvents = allEvents
-  .filter(eventName => !bubblingEvents.includes(eventName))
+const nonBubblingEvents = allEvents.filter(
+  eventName => !bubblingEvents.includes(eventName),
+)
 
-const nonComposedEvents = allEvents
-  .filter(eventName => !composedEvents.includes(eventName))
+const nonComposedEvents = allEvents.filter(
+  eventName => !composedEvents.includes(eventName),
+)
 
 eventTypes.forEach(({type, events, elementType}) => {
   describe(`${type} Events`, () => {
@@ -203,7 +207,7 @@ describe(`Composed Events`, () => {
       const spy = jest.fn()
       node.addEventListener(event.toLowerCase(), spy)
 
-      const shadowRoot = node.attachShadow({ mode: 'closed' })
+      const shadowRoot = node.attachShadow({mode: 'closed'})
       const innerNode = document.createElement('div')
       shadowRoot.appendChild(innerNode)
 
@@ -218,7 +222,7 @@ describe(`Composed Events`, () => {
       const spy = jest.fn()
       node.addEventListener(event.toLowerCase(), spy)
 
-      const shadowRoot = node.attachShadow({ mode: 'closed' })
+      const shadowRoot = node.attachShadow({mode: 'closed'})
       const innerNode = document.createElement('div')
       shadowRoot.appendChild(innerNode)
 
@@ -234,7 +238,7 @@ describe(`Aliased Events`, () => {
       const node = document.createElement('div')
       const spy = jest.fn()
       node.addEventListener(eventAliasMap[eventAlias].toLowerCase(), spy)
-      
+
       fireEvent[eventAlias](node)
       expect(spy).toHaveBeenCalledTimes(1)
     })
@@ -301,6 +305,37 @@ test('assigning the files property on dataTransfer', () => {
   fireEvent.drop(node, {dataTransfer: {files: [file]}})
   expect(spy).toHaveBeenCalledTimes(1)
   expect(spy.mock.calls[0][0]).toHaveProperty('dataTransfer.files', [file])
+})
+
+test('assigns clipboardData properties', () => {
+  const node = document.createElement('div')
+  const spy = jest.fn()
+  node.addEventListener('paste', spy)
+  const clipboardData = {
+    dropEffect: 'none',
+    effectAllowed: 'uninitialized',
+    files: [],
+    items: [
+      {
+        kind: 'string',
+        type: 'text/plain',
+        file: {
+          getAsFile() {
+            return null
+          },
+        },
+      },
+    ],
+    types: ['text/plain'],
+    getData() {
+      return 'example'
+    },
+  }
+  fireEvent.paste(node, {clipboardData})
+  expect(spy).toHaveBeenCalledTimes(1)
+  expect(spy.mock.calls[0][0].clipboardData).toBe(clipboardData)
+  expect(clipboardData.items[0].file.getAsFile()).toBeNull()
+  expect(clipboardData.getData('text')).toBe('example')
 })
 
 test('fires events on Window', () => {

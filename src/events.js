@@ -62,21 +62,25 @@ Object.keys(eventMap).forEach(key => {
         event[eventKey] = otherInit[eventKey]
       })
     }
-
-    const {dataTransfer} = eventInit
-    if (typeof dataTransfer === 'object') {
-      // DataTransfer is not supported in jsdom: https://github.com/jsdom/jsdom/issues/1568
-      /* istanbul ignore if  */
-      if (typeof window.DataTransfer === 'function') {
-        Object.defineProperty(event, 'dataTransfer', {
-          value: Object.assign(new window.DataTransfer(), dataTransfer),
-        })
-      } else {
-        Object.defineProperty(event, 'dataTransfer', {
-          value: dataTransfer,
-        })
+    
+    // DataTransfer is not supported in jsdom: https://github.com/jsdom/jsdom/issues/1568
+    ['dataTransfer', 'clipboardData'].forEach(dataTransferKey => {
+      const dataTransferValue = eventInit[dataTransferKey];
+      
+      if (typeof dataTransferValue === 'object') {
+        /* istanbul ignore if  */
+        if (typeof window.DataTransfer === 'function') {
+          Object.defineProperty(event, dataTransferKey, {
+            value: Object.assign(new window.DataTransfer(), dataTransferValue)
+          })
+        } else {
+          Object.defineProperty(event, dataTransferKey, {
+            value: dataTransferValue
+          })
+        }
       }
-    }
+    })
+    
     return event
   }
 
