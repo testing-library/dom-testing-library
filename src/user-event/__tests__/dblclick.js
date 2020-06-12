@@ -1,4 +1,4 @@
-import * as userEvent from '..'
+import {userEvent} from '../../'
 import {setup, addEventListener, addListeners} from './helpers/utils'
 
 test('fires the correct events on buttons', async () => {

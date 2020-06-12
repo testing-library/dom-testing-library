@@ -1,4 +1,4 @@
-import * as userEvent from '..'
+import {userEvent} from '../../'
 import {addListeners, setupSelect, setup} from './helpers/utils'
 
 test('should fire the correct events for multiple select', async () => {

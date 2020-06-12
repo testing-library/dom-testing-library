@@ -1,4 +1,4 @@
-import * as userEvent from '..'
+import {userEvent} from '../../'
 import {setup} from './helpers/utils'
 
 test('clears text', async () => {
@@ -14,7 +14,6 @@ test('clears text', async () => {
     input[value="hello"] - keydown: Delete (46)
     input[value="hello"] - input
       "{SELECTION}hello{/SELECTION}" -> "{CURSOR}"
-    input[value=""] - select
     input[value=""] - keyup: Delete (46)
   `)
 })

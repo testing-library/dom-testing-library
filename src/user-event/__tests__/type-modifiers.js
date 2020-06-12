@@ -1,4 +1,4 @@
-import * as userEvent from '..'
+import {userEvent} from '../../'
 import {setup} from './helpers/utils'
 
 // Note, use the setup function at the bottom of the file...
@@ -42,12 +42,10 @@ test('a{backspace}', async () => {
     input[value=""] - keypress: a (97)
     input[value=""] - input
       "{CURSOR}" -> "a{CURSOR}"
-    input[value="a"] - select
     input[value="a"] - keyup: a (97)
     input[value="a"] - keydown: Backspace (8)
     input[value="a"] - input
       "a{CURSOR}" -> "{CURSOR}"
-    input[value=""] - select
     input[value=""] - keyup: Backspace (8)
   `)
 })
@@ -66,7 +64,6 @@ test('{backspace}a', async () => {
     input[value=""] - keypress: a (97)
     input[value=""] - input
       "{CURSOR}" -> "a{CURSOR}"
-    input[value="a"] - select
     input[value="a"] - keyup: a (97)
   `)
 })
@@ -166,7 +163,6 @@ test('{alt}a{/alt}', async () => {
     input[value=""] - keypress: a (97) {alt}
     input[value=""] - input
       "{CURSOR}" -> "a{CURSOR}"
-    input[value="a"] - select
     input[value="a"] - keyup: a (97) {alt}
     input[value="a"] - keyup: Alt (18)
   `)
@@ -187,7 +183,6 @@ test('{meta}a{/meta}', async () => {
     input[value=""] - keypress: a (97) {meta}
     input[value=""] - input
       "{CURSOR}" -> "a{CURSOR}"
-    input[value="a"] - select
     input[value="a"] - keyup: a (97) {meta}
     input[value="a"] - keyup: Meta (93)
   `)
@@ -208,7 +203,6 @@ test('{ctrl}a{/ctrl}', async () => {
     input[value=""] - keypress: a (97) {ctrl}
     input[value=""] - input
       "{CURSOR}" -> "a{CURSOR}"
-    input[value="a"] - select
     input[value="a"] - keyup: a (97) {ctrl}
     input[value="a"] - keyup: Control (17)
   `)
@@ -229,7 +223,6 @@ test('{shift}a{/shift}', async () => {
     input[value=""] - keypress: a (97) {shift}
     input[value=""] - input
       "{CURSOR}" -> "a{CURSOR}"
-    input[value="a"] - select
     input[value="a"] - keyup: a (97) {shift}
     input[value="a"] - keyup: Shift (16)
   `)
@@ -249,7 +242,6 @@ test('a{enter}', async () => {
     input[value=""] - keypress: a (97)
     input[value=""] - input
       "{CURSOR}" -> "a{CURSOR}"
-    input[value="a"] - select
     input[value="a"] - keyup: a (97)
     input[value="a"] - keydown: Enter (13)
     input[value="a"] - keypress: Enter (13)
@@ -306,7 +298,6 @@ test('{enter} on a textarea', async () => {
     textarea[value=""] - keypress: Enter (13)
     textarea[value=""] - input
       "{CURSOR}" -> "\\n{CURSOR}"
-    textarea[value="\\n"] - select
     textarea[value="\\n"] - keyup: Enter (13)
   `)
 })
@@ -346,7 +337,6 @@ test('{meta}{alt}{ctrl}a{/ctrl}{/alt}{/meta}', async () => {
     input[value=""] - keypress: a (97) {alt}{meta}{ctrl}
     input[value=""] - input
       "{CURSOR}" -> "a{CURSOR}"
-    input[value="a"] - select
     input[value="a"] - keyup: a (97) {alt}{meta}{ctrl}
     input[value="a"] - keyup: Control (17) {alt}{meta}
     input[value="a"] - keyup: Alt (18) {meta}

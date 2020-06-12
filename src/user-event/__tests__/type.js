@@ -1,4 +1,4 @@
-import * as userEvent from '..'
+import {userEvent} from '../../'
 import {setup, addListeners} from './helpers/utils'
 import './helpers/custom-element'
 
@@ -14,19 +14,16 @@ test('types text in input', async () => {
     input[value=""] - keypress: S (83)
     input[value=""] - input
       "{CURSOR}" -> "S{CURSOR}"
-    input[value="S"] - select
     input[value="S"] - keyup: S (83)
     input[value="S"] - keydown: u (117)
     input[value="S"] - keypress: u (117)
     input[value="S"] - input
       "S{CURSOR}" -> "Su{CURSOR}"
-    input[value="Su"] - select
     input[value="Su"] - keyup: u (117)
     input[value="Su"] - keydown: p (112)
     input[value="Su"] - keypress: p (112)
     input[value="Su"] - input
       "Su{CURSOR}" -> "Sup{CURSOR}"
-    input[value="Sup"] - select
     input[value="Sup"] - keyup: p (112)
   `)
 })
@@ -41,7 +38,6 @@ test('types text in input with allAtOnce', async () => {
     input[value=""] - select
     input[value=""] - input
       "{CURSOR}" -> "Sup{CURSOR}"
-    input[value="Sup"] - select
   `)
 })
 
@@ -61,19 +57,16 @@ test('types text inside custom element', async () => {
     input[value=""] - keypress: S (83)
     input[value=""] - input
       "{CURSOR}" -> "S{CURSOR}"
-    input[value="S"] - select
     input[value="S"] - keyup: S (83)
     input[value="S"] - keydown: u (117)
     input[value="S"] - keypress: u (117)
     input[value="S"] - input
       "S{CURSOR}" -> "Su{CURSOR}"
-    input[value="Su"] - select
     input[value="Su"] - keyup: u (117)
     input[value="Su"] - keydown: p (112)
     input[value="Su"] - keypress: p (112)
     input[value="Su"] - input
       "Su{CURSOR}" -> "Sup{CURSOR}"
-    input[value="Sup"] - select
     input[value="Sup"] - keyup: p (112)
   `)
 })
@@ -90,19 +83,16 @@ test('types text in textarea', async () => {
     textarea[value=""] - keypress: S (83)
     textarea[value=""] - input
       "{CURSOR}" -> "S{CURSOR}"
-    textarea[value="S"] - select
     textarea[value="S"] - keyup: S (83)
     textarea[value="S"] - keydown: u (117)
     textarea[value="S"] - keypress: u (117)
     textarea[value="S"] - input
       "S{CURSOR}" -> "Su{CURSOR}"
-    textarea[value="Su"] - select
     textarea[value="Su"] - keyup: u (117)
     textarea[value="Su"] - keydown: p (112)
     textarea[value="Su"] - keypress: p (112)
     textarea[value="Su"] - input
       "Su{CURSOR}" -> "Sup{CURSOR}"
-    textarea[value="Sup"] - select
     textarea[value="Sup"] - keyup: p (112)
   `)
 })
@@ -117,7 +107,6 @@ test('should append text all at once', async () => {
     input[value=""] - select
     input[value=""] - input
       "{CURSOR}" -> "Sup{CURSOR}"
-    input[value="Sup"] - select
   `)
 })
 
@@ -235,13 +224,11 @@ test('honors maxlength', async () => {
     input[value=""] - keypress: 1 (49)
     input[value=""] - input
       "{CURSOR}" -> "1{CURSOR}"
-    input[value="1"] - select
     input[value="1"] - keyup: 1 (49)
     input[value="1"] - keydown: 2 (50)
     input[value="1"] - keypress: 2 (50)
     input[value="1"] - input
       "1{CURSOR}" -> "12{CURSOR}"
-    input[value="12"] - select
     input[value="12"] - keyup: 2 (50)
     input[value="12"] - keydown: 3 (51)
     input[value="12"] - keypress: 3 (51)
@@ -346,7 +333,6 @@ test('typing into a controlled input works', async () => {
     input[value="$2"] - keypress: 3 (51)
     input[value="$2"] - input
       "$2{CURSOR}" -> "$23{CURSOR}"
-    input[value="$23"] - select
     input[value="$23"] - keyup: 3 (51)
   `)
 })
@@ -402,7 +388,6 @@ test('ignored {backspace} in controlled input', async () => {
     input[value="$23"] - keypress: 4 (52)
     input[value="$23"] - input
       "$23{CURSOR}" -> "$234{CURSOR}"
-    input[value="$234"] - select
     input[value="$234"] - keyup: 4 (52)
   `)
 })
@@ -421,13 +406,11 @@ test('typing in a textarea with existing text', async () => {
     textarea[value="Hello, "] - keypress: 1 (49)
     textarea[value="Hello, "] - input
       "Hello, {CURSOR}" -> "Hello, 1{CURSOR}"
-    textarea[value="Hello, 1"] - select
     textarea[value="Hello, 1"] - keyup: 1 (49)
     textarea[value="Hello, 1"] - keydown: 2 (50)
     textarea[value="Hello, 1"] - keypress: 2 (50)
     textarea[value="Hello, 1"] - input
       "Hello, 1{CURSOR}" -> "Hello, 12{CURSOR}"
-    textarea[value="Hello, 12"] - select
     textarea[value="Hello, 12"] - keyup: 2 (50)
   `)
   expect(element).toHaveValue('Hello, 12')
