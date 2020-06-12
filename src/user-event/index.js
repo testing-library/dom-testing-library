@@ -1,5 +1,6 @@
 export {click, dblClick} from './click'
 export {type} from './type'
+export {paste} from './paste'
 export {clear} from './clear'
 export {tab} from './tab'
 export {hover, unhover} from './hover'
