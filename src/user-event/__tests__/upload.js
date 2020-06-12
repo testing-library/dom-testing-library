@@ -1,5 +1,5 @@
 import {userEvent} from '../../'
-import {setup, addListeners} from './helpers/utils'
+import {setup} from './helpers/utils'
 
 test('should fire the correct events for input', async () => {
   const file = new File(['hello'], 'hello.png', {type: 'image/png'})
@@ -7,6 +7,9 @@ test('should fire the correct events for input', async () => {
 
   await userEvent.upload(element, file)
 
+  // NOTE: A known limitation is that it's impossible to set the
+  // value of the input programmatically. The value in the browser
+  // set by a user would be: `C:\\fakepath\\${file.name}`
   expect(getEventSnapshot()).toMatchInlineSnapshot(`
     Events fired on: input[value=""]
 
@@ -23,6 +26,11 @@ test('should fire the correct events for input', async () => {
     input[value=""] - pointerup
     input[value=""] - mouseup: Left (0)
     input[value=""] - click: Left (0)
+    input[value=""] - blur
+    input[value=""] - focusout
+    input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - input
     input[value=""] - change
   `)
 })
@@ -30,26 +38,20 @@ test('should fire the correct events for input', async () => {
 test('should fire the correct events with label', async () => {
   const file = new File(['hello'], 'hello.png', {type: 'image/png'})
 
-  const container = document.createElement('div')
-  container.innerHTML = `
-    <label for="element">Element</label>
-    <input type="file" id="element" />
-  `
+  const {element, getEventSnapshot} = setup(`
+    <form>
+      <label for="element">Element</label>
+      <input type="file" id="element" />
+    </form>
+  `)
 
-  const label = container.children[0]
-  const input = container.children[1]
-  const {getEventSnapshot: getLabelEventCalls} = addListeners(label)
-  const {getEventSnapshot: getInputEventCalls} = addListeners(input)
+  await userEvent.upload(element.querySelector('label'), file)
 
-  await userEvent.upload(label, file)
-
-  expect(getLabelEventCalls()).toMatchInlineSnapshot(`
-    Events fired on: label[for="element"]
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
+    Events fired on: form
 
     label[for="element"] - pointerover
-    label[for="element"] - pointerenter
     label[for="element"] - mouseover: Left (0)
-    label[for="element"] - mouseenter: Left (0)
     label[for="element"] - pointermove
     label[for="element"] - mousemove: Left (0)
     label[for="element"] - pointerdown
@@ -57,14 +59,8 @@ test('should fire the correct events with label', async () => {
     label[for="element"] - pointerup
     label[for="element"] - mouseup: Left (0)
     label[for="element"] - click: Left (0)
-  `)
-  expect(getInputEventCalls()).toMatchInlineSnapshot(`
-    Events fired on: input#element[value=""]
-
     input#element[value=""] - click: Left (0)
-    input#element[value=""] - focus
     input#element[value=""] - focusin
-    input#element[value=""] - change
   `)
 })
 

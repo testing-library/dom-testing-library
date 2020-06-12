@@ -18,72 +18,78 @@ function fireEvent(element, event) {
   })
 }
 
-const createEvent = {}
+function createEvent(
+  eventName,
+  node,
+  init,
+  {EventType = 'Event', defaultInit = {}} = {},
+) {
+  if (!node) {
+    throw new Error(
+      `Unable to fire a "${eventName}" event - please provide a DOM element.`,
+    )
+  }
+  const eventInit = {...defaultInit, ...init}
+  const {target: {value, files, ...targetProperties} = {}} = eventInit
+  if (value !== undefined) {
+    setNativeValue(node, value)
+  }
+  if (files !== undefined) {
+    // input.files is a read-only property so this is not allowed:
+    // input.files = [file]
+    // so we have to use this workaround to set the property
+    Object.defineProperty(node, 'files', {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: files,
+    })
+  }
+  Object.assign(node, targetProperties)
+  const window = getWindowFromNode(node)
+  const EventConstructor = window[EventType] || window.Event
+  let event
+  /* istanbul ignore else  */
+  if (typeof EventConstructor === 'function') {
+    event = new EventConstructor(eventName, eventInit)
+  } else {
+    // IE11 polyfill from https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
+    event = window.document.createEvent(EventType)
+    const {bubbles, cancelable, detail, ...otherInit} = eventInit
+    event.initEvent(eventName, bubbles, cancelable, detail)
+    Object.keys(otherInit).forEach(eventKey => {
+      event[eventKey] = otherInit[eventKey]
+    })
+  }
+
+  // DataTransfer is not supported in jsdom: https://github.com/jsdom/jsdom/issues/1568
+  const dataTransferProperties = ['dataTransfer', 'clipboardData']
+  dataTransferProperties.forEach(dataTransferKey => {
+    const dataTransferValue = eventInit[dataTransferKey]
+
+    if (typeof dataTransferValue === 'object') {
+      /* istanbul ignore if  */
+      if (typeof window.DataTransfer === 'function') {
+        Object.defineProperty(event, dataTransferKey, {
+          value: Object.assign(new window.DataTransfer(), dataTransferValue),
+        })
+      } else {
+        Object.defineProperty(event, dataTransferKey, {
+          value: dataTransferValue,
+        })
+      }
+    }
+  })
+
+  return event
+}
 
 Object.keys(eventMap).forEach(key => {
   const {EventType, defaultInit} = eventMap[key]
   const eventName = key.toLowerCase()
 
-  createEvent[key] = (node, init) => {
-    if (!node) {
-      throw new Error(
-        `Unable to fire a "${key}" event - please provide a DOM element.`,
-      )
-    }
-    const eventInit = {...defaultInit, ...init}
-    const {target: {value, files, ...targetProperties} = {}} = eventInit
-    if (value !== undefined) {
-      setNativeValue(node, value)
-    }
-    if (files !== undefined) {
-      // input.files is a read-only property so this is not allowed:
-      // input.files = [file]
-      // so we have to use this workaround to set the property
-      Object.defineProperty(node, 'files', {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: files,
-      })
-    }
-    Object.assign(node, targetProperties)
-    const window = getWindowFromNode(node)
-    const EventConstructor = window[EventType] || window.Event
-    let event
-    /* istanbul ignore else  */
-    if (typeof EventConstructor === 'function') {
-      event = new EventConstructor(eventName, eventInit)
-    } else {
-      // IE11 polyfill from https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
-      event = window.document.createEvent(EventType)
-      const {bubbles, cancelable, detail, ...otherInit} = eventInit
-      event.initEvent(eventName, bubbles, cancelable, detail)
-      Object.keys(otherInit).forEach(eventKey => {
-        event[eventKey] = otherInit[eventKey]
-      })
-    }
-    
-    // DataTransfer is not supported in jsdom: https://github.com/jsdom/jsdom/issues/1568
-    ['dataTransfer', 'clipboardData'].forEach(dataTransferKey => {
-      const dataTransferValue = eventInit[dataTransferKey];
-      
-      if (typeof dataTransferValue === 'object') {
-        /* istanbul ignore if  */
-        if (typeof window.DataTransfer === 'function') {
-          Object.defineProperty(event, dataTransferKey, {
-            value: Object.assign(new window.DataTransfer(), dataTransferValue)
-          })
-        } else {
-          Object.defineProperty(event, dataTransferKey, {
-            value: dataTransferValue
-          })
-        }
-      }
-    })
-    
-    return event
-  }
-
+  createEvent[key] = (node, init) =>
+    createEvent(eventName, node, init, {EventType, defaultInit})
   fireEvent[key] = (node, init) => fireEvent(node, createEvent[key](node, init))
 })
 

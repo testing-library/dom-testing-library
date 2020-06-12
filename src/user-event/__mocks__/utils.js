@@ -33,6 +33,7 @@ function wrapWithTestData(fn) {
 }
 
 const mockFireEvent = wrapWithTestData(actual.fireEvent)
+
 for (const key of Object.keys(actual.fireEvent)) {
   if (typeof actual.fireEvent[key] === 'function') {
     mockFireEvent[key] = wrapWithTestData(actual.fireEvent[key], key)
