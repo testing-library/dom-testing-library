@@ -35,7 +35,11 @@ function getRegExpMatcher(string) {
 }
 
 function makeSuggestion(queryName, content, {variant = 'get', name}) {
-  const queryArgs = [queryName === 'Role' ? content : getRegExpMatcher(content)]
+  const queryArgs = [
+    queryName === 'Role' || queryName === 'TestId'
+      ? content
+      : getRegExpMatcher(content),
+  ]
 
   if (name) {
     queryArgs.push({name: new RegExp(escapeRegExp(name.toLowerCase()), 'i')})
@@ -64,10 +68,19 @@ function makeSuggestion(queryName, content, {variant = 'get', name}) {
   }
 }
 
-export function getSuggestedQuery(element, variant) {
+function canSuggest(currentMethod, requestedMethod, data) {
+  return data && (!requestedMethod || requestedMethod === currentMethod)
+}
+
+export function getSuggestedQuery(element, variant, method) {
+  // don't create suggestions for script and style elements
+  if (element.matches(DEFAULT_IGNORE_TAGS)) {
+    return undefined
+  }
+
   const role =
     element.getAttribute('role') ?? getImplicitAriaRoles(element)?.[0]
-  if (role) {
+  if (canSuggest('Role', method, role)) {
     return makeSuggestion('Role', role, {
       variant,
       name: computeAccessibleName(element),
@@ -75,33 +88,37 @@ export function getSuggestedQuery(element, variant) {
   }
 
   const labelText = getLabelTextFor(element)
-  if (labelText) {
+  if (canSuggest('LabelText', method, labelText)) {
     return makeSuggestion('LabelText', labelText, {variant})
   }
 
   const placeholderText = element.getAttribute('placeholder')
-  if (placeholderText) {
+  if (canSuggest('PlaceholderText', method, placeholderText)) {
     return makeSuggestion('PlaceholderText', placeholderText, {variant})
   }
 
   const textContent = normalize(getNodeText(element))
-  if (textContent && !element.matches(DEFAULT_IGNORE_TAGS)) {
+  if (canSuggest('Text', method, textContent)) {
     return makeSuggestion('Text', textContent, {variant})
   }
 
-  if (element.value) {
+  if (canSuggest('DisplayValue', method, element.value)) {
     return makeSuggestion('DisplayValue', normalize(element.value), {variant})
   }
 
   const alt = element.getAttribute('alt')
-  if (alt) {
+  if (canSuggest('AltText', method, alt)) {
     return makeSuggestion('AltText', alt, {variant})
   }
 
   const title = element.getAttribute('title')
-
-  if (title) {
+  if (canSuggest('Title', method, title)) {
     return makeSuggestion('Title', title, {variant})
+  }
+
+  const testId = element.getAttribute('data-testid')
+  if (canSuggest('TestId', method, testId)) {
+    return makeSuggestion('TestId', testId, {variant})
   }
 
   return undefined

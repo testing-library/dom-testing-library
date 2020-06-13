@@ -353,3 +353,95 @@ test('getSuggestedQuery returns rich data for tooling', () => {
 
   expect(getSuggestedQuery(div).toString()).toEqual(`getByText(/cancel/i)`)
 })
+
+test('getSuggestedQuery can return specified methods in addition to the best', () => {
+  const {container} = render(`
+    <label for="username">label</label>
+    <input
+      id="username"
+      name="name"
+      placeholder="placeholder"
+      data-testid="testid"
+      title="title"
+      alt="alt"
+      value="value"
+      type="text"
+    />
+    <button>button</button>
+  `)
+
+  const input = container.querySelector('input')
+  const button = container.querySelector('button')
+
+  expect(getSuggestedQuery(input, 'get', 'Role')).toMatchObject({
+    queryName: 'Role',
+    queryMethod: 'getByRole',
+    queryArgs: ['textbox', {name: /label/i}],
+    variant: 'get',
+  })
+
+  expect(getSuggestedQuery(input, 'get', 'LabelText')).toMatchObject({
+    queryName: 'LabelText',
+    queryMethod: 'getByLabelText',
+    queryArgs: [/label/i],
+    variant: 'get',
+  })
+
+  expect(getSuggestedQuery(input, 'get', 'PlaceholderText')).toMatchObject({
+    queryName: 'PlaceholderText',
+    queryMethod: 'getByPlaceholderText',
+    queryArgs: [/placeholder/i],
+    variant: 'get',
+  })
+
+  expect(getSuggestedQuery(button, 'get', 'Text')).toMatchObject({
+    queryName: 'Text',
+    queryMethod: 'getByText',
+    queryArgs: [/button/],
+    variant: 'get',
+  })
+
+  expect(getSuggestedQuery(input, 'get', 'DisplayValue')).toMatchObject({
+    queryName: 'DisplayValue',
+    queryMethod: 'getByDisplayValue',
+    queryArgs: [/value/i],
+    variant: 'get',
+  })
+
+  expect(getSuggestedQuery(input, 'get', 'AltText')).toMatchObject({
+    queryName: 'AltText',
+    queryMethod: 'getByAltText',
+    queryArgs: [/alt/],
+    variant: 'get',
+  })
+
+  expect(getSuggestedQuery(input, 'get', 'Title')).toMatchObject({
+    queryName: 'Title',
+    queryMethod: 'getByTitle',
+    queryArgs: [/title/i],
+    variant: 'get',
+  })
+
+  expect(getSuggestedQuery(input, 'get', 'TestId')).toMatchObject({
+    queryName: 'TestId',
+    queryMethod: 'getByTestId',
+    queryArgs: ['testid'],
+    variant: 'get',
+  })
+
+  // return undefined if requested query can't be made
+  expect(getSuggestedQuery(button, 'get', 'TestId')).toBeUndefined()
+})
+
+test('getSuggestedQuery does not create suggestions for script and style elements', () => {
+  const {container} = render(`
+    <script data-testid="script"></script>
+    <style data-testid="style"></style>
+  `)
+
+  const script = container.querySelector('script')
+  const style = container.querySelector('style')
+
+  expect(getSuggestedQuery(script, 'get', 'TestId')).toBeUndefined()
+  expect(getSuggestedQuery(style, 'get', 'TestId')).toBeUndefined()
+})
