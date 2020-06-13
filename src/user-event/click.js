@@ -59,7 +59,7 @@ async function clickBooleanElement(element, init, clickCount) {
   }
 }
 
-async function clickElement(element, init, {clickCount} = {}) {
+async function clickElement(element, init, {clickCount}) {
   const previousElement = getPreviouslyFocusedElement(element)
   await fireEvent.pointerDown(element, init)
   if (!element.disabled) {
@@ -114,4 +114,4 @@ async function dblClick(element, init) {
 }
 dblClick = wrapAsync(dblClick)
 
-export {click, dblClick, clickLabel, clickElement}
+export {click, dblClick}
