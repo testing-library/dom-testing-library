@@ -373,7 +373,9 @@ test('getSuggestedQuery can return specified methods in addition to the best', (
   const input = container.querySelector('input')
   const button = container.querySelector('button')
 
-  expect(getSuggestedQuery(input, 'get', 'Role')).toMatchObject({
+  // this function should be insensitive for the method param.
+  // Role and role should work the same
+  expect(getSuggestedQuery(input, 'get', 'role')).toMatchObject({
     queryName: 'Role',
     queryMethod: 'getByRole',
     queryArgs: ['textbox', {name: /label/i}],
