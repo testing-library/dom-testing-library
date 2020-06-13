@@ -69,7 +69,11 @@ function makeSuggestion(queryName, content, {variant = 'get', name}) {
 }
 
 function canSuggest(currentMethod, requestedMethod, data) {
-  return data && (!requestedMethod || requestedMethod === currentMethod)
+  return (
+    data &&
+    (!requestedMethod ||
+      requestedMethod.toLowerCase() === currentMethod.toLowerCase())
+  )
 }
 
 export function getSuggestedQuery(element, variant, method) {
