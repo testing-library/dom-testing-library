@@ -101,6 +101,7 @@ function getElementDisplayName(element) {
     element.htmlFor ? `[for="${element.htmlFor}"]` : null,
     value ? `[value=${value}]` : null,
     hasChecked ? `[checked=${element.checked}]` : null,
+    element.tagName === 'OPTION' ? `[selected=${element.selected}]` : null,
   ]
     .filter(Boolean)
     .join('')
@@ -232,13 +233,11 @@ const changeLabelGetter = {
       before.checked ? 'checked' : 'unchecked',
       after.checked ? 'checked' : 'unchecked',
     ].join(' -> '),
-  selectedOptions: ({before, after}) => {
-    const beforeString = JSON.stringify(before.selectedOptions)
-    const afterString = JSON.stringify(after.selectedOptions)
-    return beforeString === afterString
-      ? null
-      : [beforeString, afterString].join(' -> ')
-  },
+
+  // unfortunately, changing a select option doesn't happen within fireEvent
+  // but rather imperatively via `options.selected = newValue`
+  // because of this we don't (currently) have a way to track before/after
+  // in a given fireEvent call.
 }
 changeLabelGetter.selectionStart = changeLabelGetter.value
 changeLabelGetter.selectionEnd = changeLabelGetter.value

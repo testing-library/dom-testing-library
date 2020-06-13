@@ -8,9 +8,11 @@ function getTrackedElementValues(element) {
     checked: element.checked,
     selectionStart: element.selectionStart,
     selectionEnd: element.selectionEnd,
-    selectedOptions: element.selectedOptions
-      ? Array.from(element.selectedOptions).map(o => o.value)
-      : null,
+
+    // unfortunately, changing a select option doesn't happen within fireEvent
+    // but rather imperatively via `options.selected = newValue`
+    // because of this we don't (currently) have a way to track before/after
+    // in a given fireEvent call.
   }
 }
 
