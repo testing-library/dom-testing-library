@@ -29,7 +29,13 @@ function setSelectionRangeIfNecessary(
 async function type(
   element,
   text,
-  {skipClick = false, delay, initialSelectionStart, initialSelectionEnd} = {},
+  {
+    skipClick = false,
+    skipAutoClose = false,
+    delay,
+    initialSelectionStart,
+    initialSelectionEnd,
+  } = {},
 ) {
   if (element.disabled) return
 
@@ -89,13 +95,26 @@ async function type(
 
   function queueCallbacks() {
     const callbacks = []
+    const modifierClosers = []
     let remainingString = text
     while (remainingString) {
       const eventKey = Object.keys(eventCallbackMap).find(key =>
         remainingString.startsWith(key),
       )
       if (eventKey) {
-        callbacks.push(eventCallbackMap[eventKey])
+        const modifierCallback = eventCallbackMap[eventKey]
+        callbacks.push(modifierCallback)
+
+        // if this modifier has an associated "close" callback and the developer
+        // doesn't close it themselves, then we close it for them automatically
+        // Effectively if they send in: '{alt}a' then we type: '{alt}a{/alt}'
+        if (
+          !skipAutoClose &&
+          modifierCallback.close &&
+          !remainingString.includes(modifierCallback.close.name)
+        ) {
+          modifierClosers.push(modifierCallback.close.fn)
+        }
         remainingString = remainingString.slice(eventKey.length)
       } else {
         const character = remainingString[0]
@@ -103,7 +122,7 @@ async function type(
         remainingString = remainingString.slice(1)
       }
     }
-    return callbacks
+    return [...callbacks, ...modifierClosers]
   }
 
   async function runCallbacks(callbacks) {
@@ -498,33 +517,36 @@ function getEventCallbackMap({
   }
 
   function modifier({name, key, keyCode, modifierProperty}) {
+    async function open({eventOverrides}) {
+      const newEventOverrides = {[modifierProperty]: true}
+
+      await fireEvent.keyDown(currentElement(), {
+        key,
+        keyCode,
+        which: keyCode,
+        ...eventOverrides,
+        ...newEventOverrides,
+      })
+
+      return {eventOverrides: newEventOverrides}
+    }
+    open.close = {name: [`{/${name}}`], fn: close}
+    async function close({eventOverrides}) {
+      const newEventOverrides = {[modifierProperty]: false}
+
+      await fireEvent.keyUp(currentElement(), {
+        key,
+        keyCode,
+        which: keyCode,
+        ...eventOverrides,
+        ...newEventOverrides,
+      })
+
+      return {eventOverrides: newEventOverrides}
+    }
     return {
-      [`{${name}}`]: async ({eventOverrides}) => {
-        const newEventOverrides = {[modifierProperty]: true}
-
-        await fireEvent.keyDown(currentElement(), {
-          key,
-          keyCode,
-          which: keyCode,
-          ...eventOverrides,
-          ...newEventOverrides,
-        })
-
-        return {eventOverrides: newEventOverrides}
-      },
-      [`{/${name}}`]: async ({eventOverrides}) => {
-        const newEventOverrides = {[modifierProperty]: false}
-
-        await fireEvent.keyUp(currentElement(), {
-          key,
-          keyCode,
-          which: keyCode,
-          ...eventOverrides,
-          ...newEventOverrides,
-        })
-
-        return {eventOverrides: newEventOverrides}
-      },
+      [`{${name}}`]: open,
+      [`{/${name}}`]: close,
     }
   }
 }

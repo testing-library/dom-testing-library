@@ -728,3 +728,68 @@ test('{del} does not delete if keydown is prevented', async () => {
   expect(element.selectionEnd).toBe(2)
   expect(eventWasFired('input')).not.toBe(true)
 })
+
+test('any remaining type modifiers are automatically released at the end', async () => {
+  const {element, getEventSnapshot} = setup('<input />')
+
+  await userEvent.type(element, '{meta}{alt}{ctrl}a{/alt}')
+
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
+    Events fired on: input[value="a"]
+
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
+    input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
+    input[value=""] - keydown: Meta (93) {meta}
+    input[value=""] - keydown: Alt (18) {alt}{meta}
+    input[value=""] - keydown: Control (17) {alt}{meta}{ctrl}
+    input[value=""] - keydown: a (97) {alt}{meta}{ctrl}
+    input[value=""] - keypress: a (97) {alt}{meta}{ctrl}
+    input[value="a"] - input
+      "{CURSOR}" -> "a{CURSOR}"
+    input[value="a"] - keyup: a (97) {alt}{meta}{ctrl}
+    input[value="a"] - keyup: Alt (18) {meta}{ctrl}
+    input[value="a"] - keyup: Meta (93) {ctrl}
+    input[value="a"] - keyup: Control (17)
+  `)
+})
+
+test('modifiers will not be closed if skipAutoClose is enabled', async () => {
+  const {element, getEventSnapshot} = setup('<input />')
+
+  await userEvent.type(element, '{meta}a', {skipAutoClose: true})
+
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
+    Events fired on: input[value="a"]
+
+    input[value=""] - pointerover
+    input[value=""] - pointerenter
+    input[value=""] - mouseover: Left (0)
+    input[value=""] - mouseenter: Left (0)
+    input[value=""] - pointermove
+    input[value=""] - mousemove: Left (0)
+    input[value=""] - pointerdown
+    input[value=""] - mousedown: Left (0)
+    input[value=""] - focus
+    input[value=""] - focusin
+    input[value=""] - pointerup
+    input[value=""] - mouseup: Left (0)
+    input[value=""] - click: Left (0)
+    input[value=""] - keydown: Meta (93) {meta}
+    input[value=""] - keydown: a (97) {meta}
+    input[value=""] - keypress: a (97) {meta}
+    input[value="a"] - input
+      "{CURSOR}" -> "a{CURSOR}"
+    input[value="a"] - keyup: a (97) {meta}
+  `)
+})
