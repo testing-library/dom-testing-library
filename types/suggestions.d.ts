@@ -3,4 +3,34 @@ export interface Suggestion {
   toString(): string
 }
 
-export function getSuggestedQuery(element: HTMLElement): Suggestion | undefined
+export type Variant =
+  | 'get'
+  | 'getAll'
+  | 'query'
+  | 'queryAll'
+  | 'find'
+  | 'findAll'
+
+export type Method =
+  | 'Role'
+  | 'role'
+  | 'LabelText'
+  | 'labeltext'
+  | 'PlaceholderText'
+  | 'placeholdertext'
+  | 'Text'
+  | 'text'
+  | 'DisplayValue'
+  | 'displayvalue'
+  | 'AltText'
+  | 'alttext'
+  | 'Title'
+  | 'title'
+  | 'TestId'
+  | 'testtd'
+
+export function getSuggestedQuery(
+  element: HTMLElement,
+  variant?: Variant,
+  method?: Method,
+): Suggestion | undefined
