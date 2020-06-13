@@ -13,16 +13,24 @@ export type Variant =
 
 export type Method =
   | 'Role'
+  | 'role'
   | 'LabelText'
+  | 'labeltext'
   | 'PlaceholderText'
+  | 'placeholdertext'
   | 'Text'
+  | 'text'
   | 'DisplayValue'
+  | 'displayvalue'
   | 'AltText'
+  | 'alttext'
   | 'Title'
+  | 'title'
   | 'TestId'
+  | 'testtd'
 
 export function getSuggestedQuery(
   element: HTMLElement,
-  variant: Variant,
+  variant?: Variant,
   method?: Method,
 ): Suggestion | undefined
