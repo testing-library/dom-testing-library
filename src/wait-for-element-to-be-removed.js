@@ -34,14 +34,14 @@ async function waitForElementToBeRemoved(callback, options) {
       result = callback()
     } catch (error) {
       if (error.name === 'TestingLibraryElementError') {
-        return true
+        return undefined
       }
       throw error
     }
     if (!isRemoved(result)) {
       throw timeoutError
     }
-    return true
+    return undefined
   }, options)
 }
 
