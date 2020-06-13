@@ -1,6 +1,8 @@
 {
   "rules": {
-    // the wait in the loop is intentional and we don't want to parallelize
+    // everything in this directory is intentionally running in series, not parallel
+    // because user's cannot fire multiple events at the same time and we need
+    // all events fired in a predictable order.
     "no-await-in-loop": "off"
   }
 }
