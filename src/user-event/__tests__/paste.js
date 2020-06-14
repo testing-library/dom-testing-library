@@ -1,157 +1,94 @@
-import React from 'react'
-import {render, screen} from '@testing-library/react'
-import userEvent from '..'
+import {userEvent} from '../../'
 import {setup} from './helpers/utils'
-import './helpers/customElement'
 
-test('should paste text', async () => {
-  const {element, getEventCalls} = setup(<input />)
-  await userEvent.paste(element, 'Sup')
-  expect(getEventCalls()).toMatchInlineSnapshot(`
-    focus
-    input: "{CURSOR}" -> "Sup"
+test('should paste text in input', async () => {
+  const {element, getEventSnapshot} = setup('<input />')
+
+  const text = 'Hello, world!'
+  await userEvent.paste(element, text)
+  expect(element).toHaveValue(text)
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
+    Events fired on: input[value="Hello, world!"]
+
+    input[value=""] - focus
+    input[value=""] - select
+    input[value="Hello, world!"] - input
+    input[value="Hello, world!"] - select
   `)
 })
 
-test('does not paste when readOnly', () => {
-  const handleChange = jest.fn()
-  render(<input data-testid="input" readOnly onChange={handleChange} />)
-  userEvent.paste(screen.getByTestId('input'), 'hi')
-  expect(handleChange).not.toHaveBeenCalled()
-})
+test('should paste text in textarea', async () => {
+  const {element, getEventSnapshot} = setup('<textarea />')
 
-test('does not paste when disabled', () => {
-  const handleChange = jest.fn()
-  render(<input data-testid="input" disabled onChange={handleChange} />)
-  userEvent.paste(screen.getByTestId('input'), 'hi')
-  expect(handleChange).not.toHaveBeenCalled()
-})
-
-test.each(['input', 'textarea'])('should paste text in <%s>', type => {
-  const onChange = jest.fn()
-  render(
-    React.createElement(type, {
-      'data-testid': 'input',
-      onChange,
-    }),
-  )
   const text = 'Hello, world!'
-  userEvent.paste(screen.getByTestId('input'), text)
+  await userEvent.paste(element, text)
+  expect(element).toHaveValue(text)
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
+    Events fired on: textarea[value="Hello, world!"]
 
-  expect(onChange).toHaveBeenCalledTimes(1)
-  expect(screen.getByTestId('input')).toHaveProperty('value', text)
+    textarea[value=""] - focus
+    textarea[value=""] - select
+    textarea[value="Hello, world!"] - input
+    textarea[value="Hello, world!"] - select
+  `)
+})
+
+test('does not paste when readOnly', async () => {
+  const {element, getEventSnapshot} = setup('<input readonly />')
+
+  await userEvent.paste(element, 'hi')
+  expect(getEventSnapshot()).toMatchInlineSnapshot(`
+    Events fired on: input[value=""]
+
+    input[value=""] - focus
+    input[value=""] - select
+  `)
+})
+
+test('does not paste when disabled', async () => {
+  const {element, getEventSnapshot} = setup('<input disabled />')
+
+  await userEvent.paste(element, 'hi')
+  expect(getEventSnapshot()).toMatchInlineSnapshot(
+    `No events were fired on: input[value=""]`,
+  )
 })
 
 test.each(['input', 'textarea'])(
   'should paste text in <%s> up to maxLength if provided',
   async type => {
-    const onChange = jest.fn()
-    const onKeyDown = jest.fn()
-    const onKeyPress = jest.fn()
-    const onKeyUp = jest.fn()
-    const maxLength = 10
+    const {element} = setup(`<${type} maxlength="10" />`)
 
-    render(
-      React.createElement(type, {
-        'data-testid': 'input',
-        onChange,
-        onKeyDown,
-        onKeyPress,
-        onKeyUp,
-        maxLength,
-      }),
-    )
+    await userEvent.type(element, 'superlongtext')
+    expect(element).toHaveValue('superlongt')
 
-    const text = 'superlongtext'
-    const slicedText = text.slice(0, maxLength)
-
-    const inputEl = screen.getByTestId('input')
-
-    await userEvent.type(inputEl, text)
-
-    expect(inputEl).toHaveProperty('value', slicedText)
-    expect(onChange).toHaveBeenCalledTimes(slicedText.length)
-    expect(onKeyPress).toHaveBeenCalledTimes(text.length)
-    expect(onKeyDown).toHaveBeenCalledTimes(text.length)
-    expect(onKeyUp).toHaveBeenCalledTimes(text.length)
-
-    inputEl.value = ''
-    onChange.mockClear()
-    onKeyPress.mockClear()
-    onKeyDown.mockClear()
-    onKeyUp.mockClear()
-
-    userEvent.paste(inputEl, text)
-
-    expect(inputEl).toHaveProperty('value', slicedText)
-    expect(onChange).toHaveBeenCalledTimes(1)
-    expect(onKeyPress).not.toHaveBeenCalled()
-    expect(onKeyDown).not.toHaveBeenCalled()
-    expect(onKeyUp).not.toHaveBeenCalled()
+    element.value = ''
+    await userEvent.paste(element, 'superlongtext')
+    expect(element).toHaveValue('superlongt')
   },
 )
 
 test.each(['input', 'textarea'])(
   'should append text in <%s> up to maxLength if provided',
   async type => {
-    const onChange = jest.fn()
-    const onKeyDown = jest.fn()
-    const onKeyPress = jest.fn()
-    const onKeyUp = jest.fn()
-    const maxLength = 10
+    const {element} = setup(`<${type} maxlength="10" />`)
 
-    render(
-      React.createElement(type, {
-        'data-testid': 'input',
-        onChange,
-        onKeyDown,
-        onKeyPress,
-        onKeyUp,
-        maxLength,
-      }),
-    )
+    await userEvent.type(element, 'superlong')
+    await userEvent.type(element, 'text')
+    expect(element).toHaveValue('superlongt')
 
-    const text1 = 'superlong'
-    const text2 = 'text'
-    const text = text1 + text2
-    const slicedText = text.slice(0, maxLength)
-
-    const inputEl = screen.getByTestId('input')
-
-    await userEvent.type(inputEl, text1)
-    await userEvent.type(inputEl, text2)
-
-    expect(inputEl).toHaveProperty('value', slicedText)
-    expect(onChange).toHaveBeenCalledTimes(slicedText.length)
-    expect(onKeyPress).toHaveBeenCalledTimes(text.length)
-    expect(onKeyDown).toHaveBeenCalledTimes(text.length)
-    expect(onKeyUp).toHaveBeenCalledTimes(text.length)
-
-    inputEl.value = ''
-    onChange.mockClear()
-    onKeyPress.mockClear()
-    onKeyDown.mockClear()
-    onKeyUp.mockClear()
-
-    userEvent.paste(inputEl, text)
-
-    expect(inputEl).toHaveProperty('value', slicedText)
-    expect(onChange).toHaveBeenCalledTimes(1)
-    expect(onKeyPress).not.toHaveBeenCalled()
-    expect(onKeyDown).not.toHaveBeenCalled()
-    expect(onKeyUp).not.toHaveBeenCalled()
+    element.value = ''
+    await userEvent.paste(element, 'superlongtext')
+    expect(element).toHaveValue('superlongt')
   },
 )
 
 test('should replace selected text all at once', async () => {
-  const onChange = jest.fn()
-  const {
-    container: {firstChild: input},
-  } = render(<input defaultValue="hello world" onChange={onChange} />)
+  const {element} = setup('<input value="hello world" />')
+
   const selectionStart = 'hello world'.search('world')
   const selectionEnd = selectionStart + 'world'.length
-  input.setSelectionRange(selectionStart, selectionEnd)
-  await userEvent.paste(input, 'friend')
-  expect(onChange).toHaveBeenCalledTimes(1)
-  expect(input).toHaveValue('hello friend')
+  element.setSelectionRange(selectionStart, selectionEnd)
+  await userEvent.paste(element, 'friend')
+  expect(element).toHaveValue('hello friend')
 })

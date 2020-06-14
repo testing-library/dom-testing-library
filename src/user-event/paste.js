@@ -1,7 +1,5 @@
-import {
-  getConfig as getDOMTestingLibraryConfig,
-  fireEvent,
-} from '@testing-library/dom'
+import {getConfig as getDOMTestingLibraryConfig} from '../config'
+import {fireEvent} from '../events'
 
 // this needs to be wrapped in the asyncWrapper for React's act and angular's change detection
 async function paste(...args) {
