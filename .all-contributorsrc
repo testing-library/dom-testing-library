@@ -1056,6 +1056,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "geoffharcourt",
+      "name": "Geoff Harcourt",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/319471?v=4",
+      "profile": "https://commonlit.org",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
