@@ -269,6 +269,7 @@ Thanks goes to these people ([emoji key][emojis]):
   <tr>
     <td align="center"><a href="https://github.com/tjefferson08"><img src="https://avatars2.githubusercontent.com/u/3535390?v=4" width="100px;" alt=""/><br /><sub><b>Travis Jefferson</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=tjefferson08" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=tjefferson08" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/mdjastrzebski"><img src="https://avatars2.githubusercontent.com/u/6368606?v=4" width="100px;" alt=""/><br /><sub><b>Maciej Jastrzebski</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3Amdjastrzebski" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://commonlit.org"><img src="https://avatars3.githubusercontent.com/u/319471?v=4" width="100px;" alt=""/><br /><sub><b>Geoff Harcourt</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=geoffharcourt" title="Code">💻</a></td>
   </tr>
 </table>
 
