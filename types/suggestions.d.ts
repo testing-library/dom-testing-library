@@ -27,7 +27,7 @@ export type Method =
   | 'Title'
   | 'title'
   | 'TestId'
-  | 'testtd'
+  | 'testid'
 
 export function getSuggestedQuery(
   element: HTMLElement,
