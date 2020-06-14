@@ -1047,6 +1047,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "mdjastrzebski",
+      "name": "Maciej Jastrzebski",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6368606?v=4",
+      "profile": "https://github.com/mdjastrzebski",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoHost": "https://github.com"
