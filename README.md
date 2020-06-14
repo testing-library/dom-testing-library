@@ -266,6 +266,9 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="http://calebmer.com"><img src="https://avatars1.githubusercontent.com/u/8282507?v=4" width="100px;" alt=""/><br /><sub><b>Caleb Meredith</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=calebmer" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/marcosvega91"><img src="https://avatars2.githubusercontent.com/u/5365582?v=4" width="100px;" alt=""/><br /><sub><b>Marco Moretti</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=marcosvega91" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=marcosvega91" title="Tests">⚠️</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/tjefferson08"><img src="https://avatars2.githubusercontent.com/u/3535390?v=4" width="100px;" alt=""/><br /><sub><b>Travis Jefferson</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=tjefferson08" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=tjefferson08" title="Tests">⚠️</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
