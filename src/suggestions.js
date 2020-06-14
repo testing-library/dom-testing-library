@@ -34,7 +34,7 @@ function getRegExpMatcher(string) {
   return new RegExp(string.toLowerCase(), 'i')
 }
 
-function makeSuggestion(queryName, content, {variant = 'get', name}) {
+function makeSuggestion(queryName, content, {variant, name}) {
   const queryArgs = [
     queryName === 'Role' || queryName === 'TestId'
       ? content
