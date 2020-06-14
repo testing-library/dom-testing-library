@@ -212,6 +212,7 @@ async function type(
         // `-${newEntry}`
         // we also preserve the prevWasMinus when the value is unchanged due
         // to typing an invalid character (typing "-a3" results in "-3")
+        // same applies for the decimal character.
         if (currentElement().type === 'number') {
           const newValue = currentValue()
           if (newValue === prevValue && newEntry !== '-') {
