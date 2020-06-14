@@ -77,6 +77,18 @@ test('requires an unempty array of elements to exist first (function form)', () 
   )
 })
 
+test('after successful removal, fullfills promise with empty value (undefined)', () => {
+  const {getByTestId} = renderIntoDocument(`
+  <div data-testid="div"></div>
+`)
+  const div = getByTestId('div')
+  const waitResult = waitForElementToBeRemoved(() => getByTestId('div'), {
+    timeout: 100,
+  })
+  div.parentElement.removeChild(div)
+  return expect(waitResult).resolves.toBeUndefined()
+})
+
 describe('timers', () => {
   const expectElementToBeRemoved = async () => {
     const importedWaitForElementToBeRemoved = importModule()
