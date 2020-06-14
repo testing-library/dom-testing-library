@@ -1037,6 +1037,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "tjefferson08",
+      "name": "Travis Jefferson",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/3535390?v=4",
+      "profile": "https://github.com/tjefferson08",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
