@@ -4,7 +4,8 @@ const globalObj = typeof window === 'undefined' ? global : window
 function runWithRealTimers(callback) {
   const usingJestFakeTimers =
     globalObj.setTimeout &&
-    globalObj.setTimeout._isMockFunction &&
+    (globalObj.setTimeout._isMockFunction ||
+      typeof globalObj.setTimeout.clock !== 'undefined') &&
     typeof jest !== 'undefined'
 
   if (usingJestFakeTimers) {
