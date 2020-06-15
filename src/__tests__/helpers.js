@@ -1,4 +1,11 @@
-import {getDocument, getWindowFromNode, checkContainerType} from '../helpers'
+import {
+  getDocument,
+  getWindowFromNode,
+  checkContainerType,
+  runWithRealTimers,
+} from '../helpers'
+
+const globalObj = typeof window === 'undefined' ? global : window
 
 test('returns global document if exists', () => {
   expect(getDocument()).toBe(document)
@@ -41,5 +48,21 @@ describe('query container validation throws when validation fails', () => {
     expect(() => checkContainerType({})).toThrowErrorMatchingInlineSnapshot(
       `"Expected container to be an Element, a Document or a DocumentFragment but got Object."`,
     )
+  })
+})
+
+test('should always use realTimers before using callback', () => {
+  const originalSetTimeout = globalObj.setTimeout
+
+  jest.useFakeTimers('legacy')
+  runWithRealTimers(() => {
+    expect(originalSetTimeout).toEqual(globalObj.setTimeout)
+  })
+
+  jest.useRealTimers()
+
+  jest.useFakeTimers('modern')
+  runWithRealTimers(() => {
+    expect(originalSetTimeout).toEqual(globalObj.setTimeout)
   })
 })
