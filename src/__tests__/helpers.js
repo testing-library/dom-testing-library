@@ -7,6 +7,8 @@ import {
 
 const globalObj = typeof window === 'undefined' ? global : window
 
+afterEach(() => jest.useRealTimers())
+
 test('returns global document if exists', () => {
   expect(getDocument()).toBe(document)
 })
