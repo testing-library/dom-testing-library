@@ -24,7 +24,11 @@ function setup(ui, {eventHandlers} = {}) {
   return {element, ...addListeners(element, {eventHandlers})}
 }
 
-function setupSelect({disabled = false, multiple = false} = {}) {
+function setupSelect({
+  disabled = false,
+  disabledOptions = false,
+  multiple = false,
+} = {}) {
   const form = document.createElement('form')
   form.innerHTML = `
     <select
@@ -32,9 +36,9 @@ function setupSelect({disabled = false, multiple = false} = {}) {
       ${disabled ? 'disabled' : ''}
       ${multiple ? 'multiple' : ''}
     >
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
+      <option value="1" ${disabledOptions ? 'disabled' : ''}>1</option>
+      <option value="2" ${disabledOptions ? 'disabled' : ''}>2</option>
+      <option value="3" ${disabledOptions ? 'disabled' : ''}>3</option>
     </select>
   `
   document.body.append(form)

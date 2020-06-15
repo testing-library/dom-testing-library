@@ -119,3 +119,17 @@ test('does not select anything if select is disabled', async () => {
   expect(o2.selected).toBe(false)
   expect(o3.selected).toBe(false)
 })
+
+test('does not select anything if options are disabled', async () => {
+  const {select, options, getEventSnapshot} = setupSelect({
+    disabledOptions: true,
+  })
+  await userEvent.selectOptions(select, '2')
+  expect(getEventSnapshot()).toMatchInlineSnapshot(
+    `No events were fired on: select[name="select"][value=""]`,
+  )
+  const [o1, o2, o3] = options
+  expect(o1.selected).toBe(false)
+  expect(o2.selected).toBe(false)
+  expect(o3.selected).toBe(false)
+})

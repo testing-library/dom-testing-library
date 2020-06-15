@@ -14,23 +14,25 @@ async function selectOptionsBase(newValue, select, values, init) {
   }
   const valArray = Array.isArray(values) ? values : [values]
   const allOptions = Array.from(select.querySelectorAll('option'))
-  const selectedOptions = valArray.map(val => {
-    if (allOptions.includes(val)) {
-      return val
-    } else {
-      const matchingOption = allOptions.find(o => o.value === val)
-      if (matchingOption) {
-        return matchingOption
+  const selectedOptions = valArray
+    .map(val => {
+      if (allOptions.includes(val)) {
+        return val
       } else {
-        throw getConfig().getElementError(
-          `Value "${val}" not found in options`,
-          select,
-        )
+        const matchingOption = allOptions.find(o => o.value === val)
+        if (matchingOption) {
+          return matchingOption
+        } else {
+          throw getConfig().getElementError(
+            `Value "${val}" not found in options`,
+            select,
+          )
+        }
       }
-    }
-  })
+    })
+    .filter(option => !option.disabled)
 
-  if (select.disabled) return
+  if (select.disabled || !selectedOptions.length) return
 
   if (select.multiple) {
     for (const option of selectedOptions) {
