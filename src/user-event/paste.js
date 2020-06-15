@@ -1,5 +1,5 @@
 import {getConfig as getDOMTestingLibraryConfig} from '../config'
-import {fireEvent} from '../events'
+import {fireEvent} from './utils'
 
 // this needs to be wrapped in the asyncWrapper for React's act and angular's change detection
 async function paste(...args) {
@@ -20,7 +20,7 @@ const getActiveElement = document => {
 }
 
 // eslint-disable-next-line complexity
-function pasteImpl(
+async function pasteImpl(
   element,
   text,
   {initialSelectionStart, initialSelectionEnd} = {},
@@ -67,7 +67,7 @@ function pasteImpl(
 
   if (!element.readOnly) {
     const {newValue, newSelectionStart} = calculateNewValue(text)
-    fireEvent.input(element, {
+    await fireEvent.input(element, {
       target: {value: newValue},
     })
     setSelectionRange({newValue, newSelectionStart})

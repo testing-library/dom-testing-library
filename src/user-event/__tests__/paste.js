@@ -13,6 +13,7 @@ test('should paste text in input', async () => {
     input[value=""] - focus
     input[value=""] - select
     input[value="Hello, world!"] - input
+      "{CURSOR}" -> "Hello, world!{CURSOR}"
     input[value="Hello, world!"] - select
   `)
 })
@@ -29,6 +30,7 @@ test('should paste text in textarea', async () => {
     textarea[value=""] - focus
     textarea[value=""] - select
     textarea[value="Hello, world!"] - input
+      "{CURSOR}" -> "Hello, world!{CURSOR}"
     textarea[value="Hello, world!"] - select
   `)
 })
