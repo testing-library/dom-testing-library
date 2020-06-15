@@ -58,7 +58,7 @@ function getWindowFromNode(node) {
     return node.window
   } else if (node.then instanceof Function) {
     throw new Error(
-      `It looks like you passed a Promise object instead of a DOM node. Did you use a "find" search instead of a "get" or "query"?`,
+      `It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to do \`fireEvent.click(await screen.getBy...\`?`,
     )
   } else {
     // The user passed something unusual to a calling function

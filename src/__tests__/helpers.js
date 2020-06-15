@@ -9,7 +9,7 @@ describe('window retrieval throws when given something other than a node', () =>
     expect(() =>
       getWindowFromNode(new Promise(jest.fn())),
     ).toThrowErrorMatchingInlineSnapshot(
-      `"It looks like you passed a Promise object instead of a DOM node. Did you use a \\"find\\" search instead of a \\"get\\" or \\"query\\"?"`,
+      `"It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to do \`fireEvent.click(await screen.getBy...\`?"`,
     )
   })
   test('unknown as node', () => {
