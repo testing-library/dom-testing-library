@@ -47,7 +47,6 @@ function getDocument() {
   return window.document
 }
 function getWindowFromNode(node) {
-  // istanbul ignore next I'm not sure what could cause the final else so we'll leave it uncovered.
   if (node.defaultView) {
     // node is document
     return node.defaultView
@@ -57,8 +56,12 @@ function getWindowFromNode(node) {
   } else if (node.window) {
     // node is window
     return node.window
+  } else if (node.then instanceof Function) {
+    throw new Error(
+      `It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to do \`fireEvent.click(await screen.getBy...\`?`,
+    )
   } else {
-    // no idea...
+    // The user passed something unusual to a calling function
     throw new Error(
       `Unable to find the "window" object for the given node. Please file an issue with the code that's causing you to see this error: https://github.com/testing-library/dom-testing-library/issues/new`,
     )

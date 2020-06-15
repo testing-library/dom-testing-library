@@ -1,7 +1,22 @@
-import {getDocument, checkContainerType} from '../helpers'
+import {getDocument, getWindowFromNode, checkContainerType} from '../helpers'
 
 test('returns global document if exists', () => {
   expect(getDocument()).toBe(document)
+})
+
+describe('window retrieval throws when given something other than a node', () => {
+  test('Promise as node', () => {
+    expect(() =>
+      getWindowFromNode(new Promise(jest.fn())),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to do \`fireEvent.click(await screen.getBy...\`?"`,
+    )
+  })
+  test('unknown as node', () => {
+    expect(() => getWindowFromNode({})).toThrowErrorMatchingInlineSnapshot(
+      `"Unable to find the \\"window\\" object for the given node. Please file an issue with the code that's causing you to see this error: https://github.com/testing-library/dom-testing-library/issues/new"`,
+    )
+  })
 })
 
 describe('query container validation throws when validation fails', () => {
