@@ -1,5 +1,5 @@
 import {getConfig as getDOMTestingLibraryConfig} from '../config'
-import {fireEvent} from './utils'
+import {fireEvent, getActiveElement, calculateNewValue} from './utils'
 
 // this needs to be wrapped in the asyncWrapper for React's act and angular's change detection
 async function paste(...args) {
@@ -8,15 +8,6 @@ async function paste(...args) {
     result = await pasteImpl(...args)
   })
   return result
-}
-
-const getActiveElement = document => {
-  const activeElement = document.activeElement
-  if (activeElement.shadowRoot) {
-    return getActiveElement(activeElement.shadowRoot) || activeElement
-  } else {
-    return activeElement
-  }
 }
 
 // eslint-disable-next-line complexity
@@ -66,54 +57,14 @@ async function pasteImpl(
   }
 
   if (!element.readOnly) {
-    const {newValue, newSelectionStart} = calculateNewValue(text)
+    const {newValue, newSelectionStart} = calculateNewValue(
+      text,
+      currentElement(),
+    )
     await fireEvent.input(element, {
       target: {value: newValue},
     })
     setSelectionRange({newValue, newSelectionStart})
-  }
-
-  function calculateNewValue(newEntry) {
-    const {selectionStart, selectionEnd} = currentElement()
-    // can't use .maxLength property because of a jsdom bug:
-    // https://github.com/jsdom/jsdom/issues/2927
-    const maxLength = Number(currentElement().getAttribute('maxlength') ?? -1)
-    const value = currentValue()
-    let newValue, newSelectionStart
-
-    if (selectionStart === null) {
-      // at the end of an input type that does not support selection ranges
-      // https://github.com/testing-library/user-event/issues/316#issuecomment-639744793
-      newValue = value + newEntry
-    } else if (selectionStart === selectionEnd) {
-      if (selectionStart === 0) {
-        // at the beginning of the input
-        newValue = newEntry + value
-      } else if (selectionStart === value.length) {
-        // at the end of the input
-        newValue = value + newEntry
-      } else {
-        // in the middle of the input
-        newValue =
-          value.slice(0, selectionStart) + newEntry + value.slice(selectionEnd)
-      }
-      newSelectionStart = selectionStart + newEntry.length
-    } else {
-      // we have something selected
-      const firstPart = value.slice(0, selectionStart) + newEntry
-      newValue = firstPart + value.slice(selectionEnd)
-      newSelectionStart = firstPart.length
-    }
-
-    if (maxLength < 0) {
-      return {newValue, newSelectionStart}
-    } else {
-      return {
-        newValue: newValue.slice(0, maxLength),
-        newSelectionStart:
-          newSelectionStart > maxLength ? maxLength : newSelectionStart,
-      }
-    }
   }
 }
 

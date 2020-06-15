@@ -129,6 +129,48 @@ function isFocusable(element) {
   )
 }
 
+function calculateNewValue(newEntry, element) {
+  const {selectionStart, selectionEnd, value} = element
+  // can't use .maxLength property because of a jsdom bug:
+  // https://github.com/jsdom/jsdom/issues/2927
+  const maxLength = Number(element.getAttribute('maxlength') ?? -1)
+  let newValue, newSelectionStart
+
+  if (selectionStart === null) {
+    // at the end of an input type that does not support selection ranges
+    // https://github.com/testing-library/user-event/issues/316#issuecomment-639744793
+    newValue = value + newEntry
+  } else if (selectionStart === selectionEnd) {
+    if (selectionStart === 0) {
+      // at the beginning of the input
+      newValue = newEntry + value
+    } else if (selectionStart === value.length) {
+      // at the end of the input
+      newValue = value + newEntry
+    } else {
+      // in the middle of the input
+      newValue =
+        value.slice(0, selectionStart) + newEntry + value.slice(selectionEnd)
+    }
+    newSelectionStart = selectionStart + newEntry.length
+  } else {
+    // we have something selected
+    const firstPart = value.slice(0, selectionStart) + newEntry
+    newValue = firstPart + value.slice(selectionEnd)
+    newSelectionStart = firstPart.length
+  }
+
+  if (maxLength < 0) {
+    return {newValue, newSelectionStart}
+  } else {
+    return {
+      newValue: newValue.slice(0, maxLength),
+      newSelectionStart:
+        newSelectionStart > maxLength ? maxLength : newSelectionStart,
+    }
+  }
+}
+
 export {
   FOCUSABLE_SELECTOR,
   isFocusable,
@@ -136,4 +178,5 @@ export {
   getMouseEventOptions,
   isLabelWithInternallyDisabledControl,
   getActiveElement,
+  calculateNewValue,
 }
