@@ -108,18 +108,14 @@ test('throws an error if multiple are passed but not a multiple select', async (
   expect(error.message).toMatch(/cannot select multiple/i)
 })
 
-test('does not select anything if select is disabled', () => {
-  const {
-    container: {firstChild: select},
-  } = render(
-    <select disabled>
-      <option>No value selected</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-    </select>,
+test('does not select anything if select is disabled', async () => {
+  const {select, options, getEventSnapshot} = setupSelect({disabled: true})
+  await userEvent.selectOptions(select, '2')
+  expect(getEventSnapshot()).toMatchInlineSnapshot(
+    `No events were fired on: select[name="select"][value="1"]`,
   )
-
-  userEvent.selectOptions(select, '1')
-  expect(select.selectedIndex).toBe(0)
+  const [o1, o2, o3] = options
+  expect(o1.selected).toBe(true)
+  expect(o2.selected).toBe(false)
+  expect(o3.selected).toBe(false)
 })
