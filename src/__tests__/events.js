@@ -1,5 +1,5 @@
 import {eventMap, eventAliasMap} from '../event-map'
-import {fireEvent} from '..'
+import {fireEvent, createEvent} from '..'
 
 const eventTypes = [
   {
@@ -389,4 +389,15 @@ test('fires events on Document', () => {
   fireEvent.keyDown(document, {key: 'Escape'})
   expect(keyDownSpy).toHaveBeenCalledTimes(1)
   document.removeEventListener('keydown', keyDownSpy)
+})
+
+test('can create generic events', () => {
+  const el = document.createElement('div')
+  const eventName = 'my-custom-event'
+  const handler = jest.fn()
+  el.addEventListener(eventName, handler)
+  const event = createEvent(eventName, el)
+  fireEvent(el, event)
+  expect(handler).toHaveBeenCalledTimes(1)
+  expect(handler).toHaveBeenCalledWith(event)
 })
