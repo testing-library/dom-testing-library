@@ -1,7 +1,7 @@
 import {computeAccessibleName} from 'dom-accessibility-api'
 import {getDefaultNormalizer} from './matches'
 import {getNodeText} from './get-node-text'
-import {DEFAULT_IGNORE_TAGS} from './config'
+import {DEFAULT_IGNORE_TAGS, getConfig} from './config'
 import {getImplicitAriaRoles} from './role-helpers'
 
 const normalize = getDefaultNormalizer()
@@ -120,7 +120,7 @@ export function getSuggestedQuery(element, variant = 'get', method) {
     return makeSuggestion('Title', title, {variant})
   }
 
-  const testId = element.getAttribute('data-testid')
+  const testId = element.getAttribute(getConfig().testIdAttribute)
   if (canSuggest('TestId', method, testId)) {
     return makeSuggestion('TestId', testId, {variant})
   }
