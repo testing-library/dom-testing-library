@@ -6,6 +6,10 @@ beforeAll(() => {
   configure({throwSuggestions: true})
 })
 
+afterEach(() => {
+  configure({testIdAttribute: 'data-testid'})
+})
+
 afterAll(() => {
   configure({throwSuggestions: false})
 })
@@ -433,6 +437,34 @@ test('getSuggestedQuery can return specified methods in addition to the best', (
 
   // return undefined if requested query can't be made
   expect(getSuggestedQuery(button, 'get', 'TestId')).toBeUndefined()
+})
+
+test('getSuggestedQuery works with custom testIdAttribute', () => {
+  configure({testIdAttribute: 'data-test'})
+
+  const {container} = render(`
+    <label for="username">label</label>
+    <input
+      id="username"
+      name="name"
+      placeholder="placeholder"
+      data-test="testid"
+      title="title"
+      alt="alt"
+      value="value"
+      type="text"
+    />
+    <button>button</button>
+  `)
+
+  const input = container.querySelector('input')
+
+  expect(getSuggestedQuery(input, 'get', 'TestId')).toMatchObject({
+    queryName: 'TestId',
+    queryMethod: 'getByTestId',
+    queryArgs: ['testid'],
+    variant: 'get',
+  })
 })
 
 test('getSuggestedQuery does not create suggestions for script and style elements', () => {
