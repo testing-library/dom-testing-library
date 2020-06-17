@@ -1075,6 +1075,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "kgregory",
+      "name": "Ken Gregory",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3155127?v=4",
+      "profile": "http://kengregory.com",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
