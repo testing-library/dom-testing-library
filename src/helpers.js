@@ -2,11 +2,26 @@ const globalObj = typeof window === 'undefined' ? global : window
 
 // Currently this fn only supports jest timers, but it could support other test runners in the future.
 function runWithRealTimers(callback) {
+  const usingJestAndTimers = typeof jest !== 'undefined' && typeof globalObj.setTimeout !== 'undefined';
+  const usingLegacyJestFakeTimers = usingJestAndTimers && typeof globalObj.setTimeout._isMockFunction !== 'undefined' && globalObj.setTimeout._isMockFunction;
+
+  let usingModernJestFakeTimers = false;
+  if (
+    usingJestAndTimers &&
+    typeof globalObj.setTimeout.clock !== "undefined" &&
+    typeof jest.getRealSystemTime !== "undefined"
+  ) {
+    try {
+      // jest.getRealSystemTime is only supported for Jest's `modern` fake timers and otherwise throws
+      jest.getRealSystemTime();
+      usingModernJestFakeTimers = true;
+    } catch {
+      // not using Jest's modern fake timers
+    }
+  }
+
   const usingJestFakeTimers =
-    globalObj.setTimeout &&
-    (globalObj.setTimeout._isMockFunction ||
-      typeof globalObj.setTimeout.clock !== 'undefined') &&
-    typeof jest !== 'undefined'
+    usingLegacyJestFakeTimers || usingModernJestFakeTimers;
 
   if (usingJestFakeTimers) {
     jest.useRealTimers()
@@ -15,7 +30,7 @@ function runWithRealTimers(callback) {
   const callbackReturnValue = callback()
 
   if (usingJestFakeTimers) {
-    jest.useFakeTimers()
+    jest.useFakeTimers(usingModernJestFakeTimers ? 'modern' : 'legacy')
   }
 
   return callbackReturnValue
@@ -36,7 +51,7 @@ function getTimeFunctions() {
   }
 }
 
-const {clearTimeoutFn, setImmediateFn, setTimeoutFn} = runWithRealTimers(
+const { clearTimeoutFn, setImmediateFn, setTimeoutFn } = runWithRealTimers(
   getTimeFunctions,
 )
 
