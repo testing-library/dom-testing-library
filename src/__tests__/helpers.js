@@ -53,18 +53,42 @@ describe('query container validation throws when validation fails', () => {
   })
 })
 
-test('should always use realTimers before using callback', () => {
+test('should always use realTimers before using callback when timers are faked with useFakeTimers', () => {
   const originalSetTimeout = globalObj.setTimeout
 
+  // legacy timers use mocks and do not rely on a clock instance
   jest.useFakeTimers('legacy')
   runWithRealTimers(() => {
     expect(originalSetTimeout).toEqual(globalObj.setTimeout)
   })
+  expect(globalObj.setTimeout._isMockFunction).toBe(true);
+  expect(globalObj.setTimeout.clock).toBeUndefined();
 
   jest.useRealTimers()
 
+  // modern timers use a clock instance instead of a mock
   jest.useFakeTimers('modern')
   runWithRealTimers(() => {
     expect(originalSetTimeout).toEqual(globalObj.setTimeout)
   })
+  expect(globalObj.setTimeout._isMockFunction).toBeUndefined();
+  expect(globalObj.setTimeout.clock).toBeDefined();
 })
+
+test('should not use realTimers when timers are not faked with useFakeTimers', () => {
+  const originalSetTimeout = globalObj.setTimeout;
+  
+  // useFakeTimers is not used, timers are faked in some other way
+  const fakedSetTimeout = (callback) => {
+    callback();
+  };
+  fakedSetTimeout.clock = jest.fn();
+
+  globalObj.setTimeout = fakedSetTimeout;
+
+  runWithRealTimers(() => {
+    expect(fakedSetTimeout).toEqual(globalObj.setTimeout)
+  })
+
+  globalObj.setTimeout = originalSetTimeout;
+});
