@@ -18,7 +18,7 @@ describe('window retrieval throws when given something other than a node', () =>
     expect(() =>
       getWindowFromNode(new Promise(jest.fn())),
     ).toThrowErrorMatchingInlineSnapshot(
-      `"It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to do \`fireEvent.click(await screen.getBy...\`?"`,
+      `"It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`, or await the findBy query \`fireEvent.click(await screen.findBy...\`?"`,
     )
   })
   test('unknown as node', () => {
@@ -61,8 +61,8 @@ test('should always use realTimers before using callback when timers are faked w
   runWithRealTimers(() => {
     expect(originalSetTimeout).toEqual(globalObj.setTimeout)
   })
-  expect(globalObj.setTimeout._isMockFunction).toBe(true);
-  expect(globalObj.setTimeout.clock).toBeUndefined();
+  expect(globalObj.setTimeout._isMockFunction).toBe(true)
+  expect(globalObj.setTimeout.clock).toBeUndefined()
 
   jest.useRealTimers()
 
@@ -71,24 +71,24 @@ test('should always use realTimers before using callback when timers are faked w
   runWithRealTimers(() => {
     expect(originalSetTimeout).toEqual(globalObj.setTimeout)
   })
-  expect(globalObj.setTimeout._isMockFunction).toBeUndefined();
-  expect(globalObj.setTimeout.clock).toBeDefined();
+  expect(globalObj.setTimeout._isMockFunction).toBeUndefined()
+  expect(globalObj.setTimeout.clock).toBeDefined()
 })
 
 test('should not use realTimers when timers are not faked with useFakeTimers', () => {
-  const originalSetTimeout = globalObj.setTimeout;
-  
-  // useFakeTimers is not used, timers are faked in some other way
-  const fakedSetTimeout = (callback) => {
-    callback();
-  };
-  fakedSetTimeout.clock = jest.fn();
+  const originalSetTimeout = globalObj.setTimeout
 
-  globalObj.setTimeout = fakedSetTimeout;
+  // useFakeTimers is not used, timers are faked in some other way
+  const fakedSetTimeout = callback => {
+    callback()
+  }
+  fakedSetTimeout.clock = jest.fn()
+
+  globalObj.setTimeout = fakedSetTimeout
 
   runWithRealTimers(() => {
     expect(fakedSetTimeout).toEqual(globalObj.setTimeout)
   })
 
-  globalObj.setTimeout = originalSetTimeout;
-});
+  globalObj.setTimeout = originalSetTimeout
+})
