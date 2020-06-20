@@ -2,26 +2,30 @@ const globalObj = typeof window === 'undefined' ? global : window
 
 // Currently this fn only supports jest timers, but it could support other test runners in the future.
 function runWithRealTimers(callback) {
-  const usingJestAndTimers = typeof jest !== 'undefined' && typeof globalObj.setTimeout !== 'undefined';
-  const usingLegacyJestFakeTimers = usingJestAndTimers && typeof globalObj.setTimeout._isMockFunction !== 'undefined' && globalObj.setTimeout._isMockFunction;
+  const usingJestAndTimers =
+    typeof jest !== 'undefined' && typeof globalObj.setTimeout !== 'undefined'
+  const usingLegacyJestFakeTimers =
+    usingJestAndTimers &&
+    typeof globalObj.setTimeout._isMockFunction !== 'undefined' &&
+    globalObj.setTimeout._isMockFunction
 
-  let usingModernJestFakeTimers = false;
+  let usingModernJestFakeTimers = false
   if (
     usingJestAndTimers &&
-    typeof globalObj.setTimeout.clock !== "undefined" &&
-    typeof jest.getRealSystemTime !== "undefined"
+    typeof globalObj.setTimeout.clock !== 'undefined' &&
+    typeof jest.getRealSystemTime !== 'undefined'
   ) {
     try {
       // jest.getRealSystemTime is only supported for Jest's `modern` fake timers and otherwise throws
-      jest.getRealSystemTime();
-      usingModernJestFakeTimers = true;
+      jest.getRealSystemTime()
+      usingModernJestFakeTimers = true
     } catch {
       // not using Jest's modern fake timers
     }
   }
 
   const usingJestFakeTimers =
-    usingLegacyJestFakeTimers || usingModernJestFakeTimers;
+    usingLegacyJestFakeTimers || usingModernJestFakeTimers
 
   if (usingJestFakeTimers) {
     jest.useRealTimers()
@@ -51,7 +55,7 @@ function getTimeFunctions() {
   }
 }
 
-const { clearTimeoutFn, setImmediateFn, setTimeoutFn } = runWithRealTimers(
+const {clearTimeoutFn, setImmediateFn, setTimeoutFn} = runWithRealTimers(
   getTimeFunctions,
 )
 
@@ -74,7 +78,7 @@ function getWindowFromNode(node) {
     return node.window
   } else if (node.then instanceof Function) {
     throw new Error(
-      `It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to do \`fireEvent.click(await screen.getBy...\`?`,
+      `It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`, or await the findBy query \`fireEvent.click(await screen.findBy...\`?`,
     )
   } else {
     // The user passed something unusual to a calling function
