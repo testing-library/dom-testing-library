@@ -12,8 +12,7 @@ and feature requests so we recommend not using this medium to ask them here 😁
 
 ## ❓ Support Forums
 
-- React Spectrum https://spectrum.chat/testing-library
-- Reactiflux on Discord https://www.reactiflux.com
+- Discord https://discord.gg/c6JN9fM
 - Stack Overflow
   https://stackoverflow.com/questions/tagged/react-testing-library
 
