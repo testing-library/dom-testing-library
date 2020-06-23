@@ -52,14 +52,25 @@ function waitFor(
       // waiting or when we've timed out.
       // eslint-disable-next-line no-unmodified-loop-condition
       while (!finished) {
+        // we *could* (maybe should?) use `advanceTimersToNextTimer` but it's
+        // possible that could make this loop go on forever if someone is using
+        // third party code that's setting up recursive timers so rapidly that
+        // the user's timer's don't get a chance to resolve. So we'll advance
+        // by an interval instead. (We have a test for this case).
         jest.advanceTimersByTime(interval)
-        // in this rare case, we *need* to wait for in-flight promises
+
+        // It's really important that checkCallback is run *before* we flush
+        // in-flight promises. To be honest, I'm not sure why, and I can't quite
+        // think of a way to reproduce the problem in a test, but I spent
+        // an entire day banging my head against a wall on this.
+        checkCallback()
+
+        // In this rare case, we *need* to wait for in-flight promises
         // to resolve before continuing. We don't need to take advantage
         // of parallelization so we're fine.
         // https://stackoverflow.com/a/59243586/971592
         // eslint-disable-next-line no-await-in-loop
         await new Promise(r => setImmediate(r))
-        checkCallback()
       }
     } else {
       intervalId = setInterval(checkCallback, interval)

@@ -9,14 +9,14 @@ afterAll(() => {
   jest.useRealTimers()
 })
 
-async function runWaitFor() {
+async function runWaitFor({time = 300} = {}, options) {
   const response = 'data'
   const doAsyncThing = () =>
-    new Promise(r => setTimeout(() => r(response), 300))
+    new Promise(r => setTimeout(() => r(response), time))
   let result
   doAsyncThing().then(r => (result = r))
 
-  await waitFor(() => expect(result).toBe(response))
+  await waitFor(() => expect(result).toBe(response), options)
 }
 
 test('real timers', async () => {
@@ -63,4 +63,18 @@ test('times out after 1000ms by default', async () => {
   // that it's greater than or equal to 900ms. That's enough to be confident
   // that we're using real timers.
   expect(performance.now() - start).toBeGreaterThanOrEqual(900)
+})
+
+test('recursive timers do not cause issues', async () => {
+  let recurse = true
+  function startTimer() {
+    setTimeout(() => {
+      if (recurse) startTimer()
+    }, 1)
+  }
+
+  startTimer()
+  await runWaitFor({time: 800}, {timeout: 100})
+
+  recurse = false
 })
