@@ -531,15 +531,11 @@ test('queryAllByRole returns semantic html elements', () => {
   expect(queryAllByRole(/heading/i)).toHaveLength(6)
   expect(queryAllByRole('list')).toHaveLength(2)
   expect(queryAllByRole(/listitem/i)).toHaveLength(3)
-  // TODO: with https://github.com/A11yance/aria-query/pull/42
-  // the actual value will match `toHaveLength(2)`
   expect(queryAllByRole(/textbox/i)).toHaveLength(2)
   expect(queryAllByRole(/checkbox/i)).toHaveLength(1)
   expect(queryAllByRole(/radio/i)).toHaveLength(1)
   expect(queryAllByRole('row')).toHaveLength(3)
   expect(queryAllByRole(/rowgroup/i)).toHaveLength(2)
-  // TODO: with https://github.com/A11yance/aria-query/pull/42
-  // the actual value will match `toHaveLength(3)`
   expect(queryAllByRole(/(table)|(textbox)/i)).toHaveLength(3)
   expect(queryAllByRole(/img/i)).toHaveLength(1)
   expect(queryAllByRole('meter')).toHaveLength(1)
