@@ -695,15 +695,13 @@ test('using jest helpers to check element attributes', () => {
     </button>
   `)
 
-  expect(getByTestId('ok-button')).toHaveAttribute('disabled')
+  expect(getByTestId('ok-button')).toBeDisabled()
   expect(getByTestId('ok-button')).toHaveAttribute('type')
   expect(getByTestId('ok-button')).not.toHaveAttribute('class')
   expect(getByTestId('ok-button')).toHaveAttribute('type', 'submit')
   expect(getByTestId('ok-button')).not.toHaveAttribute('type', 'button')
 
-  expect(() =>
-    expect(getByTestId('ok-button')).not.toHaveAttribute('disabled'),
-  ).toThrowError()
+  expect(() => expect(getByTestId('ok-button')).toBeEnabled()).toThrowError()
   expect(() =>
     expect(getByTestId('ok-button')).not.toHaveAttribute('type'),
   ).toThrowError()
