@@ -2,43 +2,52 @@ const globalObj = typeof window === 'undefined' ? global : window
 
 // Currently this fn only supports jest timers, but it could support other test runners in the future.
 function runWithRealTimers(callback) {
-  const usingJestAndTimers =
-    typeof jest !== 'undefined' && typeof globalObj.setTimeout !== 'undefined'
-  const usingLegacyJestFakeTimers =
-    usingJestAndTimers &&
+  const fakeTimersType = getJestFakeTimersType()
+  if (fakeTimersType) {
+    jest.useRealTimers()
+  }
+
+  const callbackReturnValue = callback()
+
+  if (fakeTimersType) {
+    jest.useFakeTimers(fakeTimersType)
+  }
+
+  return callbackReturnValue
+}
+
+function getJestFakeTimersType() {
+  // istanbul ignore if
+  if (
+    typeof jest === 'undefined' ||
+    typeof globalObj.setTimeout === 'undefined'
+  ) {
+    return null
+  }
+
+  if (
     typeof globalObj.setTimeout._isMockFunction !== 'undefined' &&
     globalObj.setTimeout._isMockFunction
+  ) {
+    return 'legacy'
+  }
 
-  let usingModernJestFakeTimers = false
   if (
-    usingJestAndTimers &&
     typeof globalObj.setTimeout.clock !== 'undefined' &&
     typeof jest.getRealSystemTime !== 'undefined'
   ) {
     try {
       // jest.getRealSystemTime is only supported for Jest's `modern` fake timers and otherwise throws
       jest.getRealSystemTime()
-      usingModernJestFakeTimers = true
+      return 'modern'
     } catch {
       // not using Jest's modern fake timers
     }
   }
-
-  const usingJestFakeTimers =
-    usingLegacyJestFakeTimers || usingModernJestFakeTimers
-
-  if (usingJestFakeTimers) {
-    jest.useRealTimers()
-  }
-
-  const callbackReturnValue = callback()
-
-  if (usingJestFakeTimers) {
-    jest.useFakeTimers(usingModernJestFakeTimers ? 'modern' : 'legacy')
-  }
-
-  return callbackReturnValue
+  return null
 }
+
+const jestFakeTimersAreEnabled = () => Boolean(getJestFakeTimersType())
 
 // we only run our tests in node, and setImmediate is supported in node.
 // istanbul ignore next
@@ -117,4 +126,5 @@ export {
   setTimeoutFn as setTimeout,
   runWithRealTimers,
   checkContainerType,
+  jestFakeTimersAreEnabled,
 }

@@ -1,10 +1,13 @@
 import {
   getWindowFromNode,
   getDocument,
+  jestFakeTimersAreEnabled,
+  // We import these from the helpers rather than using the global version
+  // because these will be *real* timers, regardless of whether we're in
+  // an environment that's faked the timers out.
   setImmediate,
   setTimeout,
   clearTimeout,
-  runWithRealTimers,
 } from './helpers'
 import {getConfig, runWithExpensiveErrorDiagnosticsDisabled} from './config'
 
@@ -34,23 +37,46 @@ function waitFor(
     throw new TypeError('Received `callback` arg must be a function')
   }
 
-  if (interval < 1) interval = 1
-  return new Promise((resolve, reject) => {
-    let lastError
-    const overallTimeoutTimer = setTimeout(onTimeout, timeout)
-    const intervalId = setInterval(checkCallback, interval)
+  return new Promise(async (resolve, reject) => {
+    let lastError, intervalId, observer
+    let finished = false
 
-    const {MutationObserver} = getWindowFromNode(container)
-    const observer = new MutationObserver(checkCallback)
-    runWithRealTimers(() =>
-      observer.observe(container, mutationObserverOptions),
-    )
-    checkCallback()
+    const overallTimeoutTimer = setTimeout(onTimeout, timeout)
+
+    const usingFakeTimers = jestFakeTimersAreEnabled()
+    if (usingFakeTimers) {
+      checkCallback()
+      // this is a dangerous rule to disable because it could lead to an
+      // infinite loop. However, eslint isn't smart enough to know that we're
+      // setting finished inside `onDone` which will be called when we're done
+      // waiting or when we've timed out.
+      // eslint-disable-next-line no-unmodified-loop-condition
+      while (!finished) {
+        jest.advanceTimersByTime(interval)
+        // in this rare case, we *need* to wait for in-flight promises
+        // to resolve before continuing. We don't need to take advantage
+        // of parallelization so we're fine.
+        // https://stackoverflow.com/a/59243586/971592
+        // eslint-disable-next-line no-await-in-loop
+        await new Promise(r => setImmediate(r))
+        checkCallback()
+      }
+    } else {
+      intervalId = setInterval(checkCallback, interval)
+      const {MutationObserver} = getWindowFromNode(container)
+      observer = new MutationObserver(checkCallback)
+      observer.observe(container, mutationObserverOptions)
+      checkCallback()
+    }
 
     function onDone(error, result) {
+      finished = true
       clearTimeout(overallTimeoutTimer)
-      clearInterval(intervalId)
-      setImmediate(() => observer.disconnect())
+
+      if (!usingFakeTimers) {
+        clearInterval(intervalId)
+        setImmediate(() => observer.disconnect())
+      }
 
       if (error) {
         reject(error)
@@ -62,9 +88,9 @@ function waitFor(
     function checkCallback() {
       try {
         onDone(null, runWithExpensiveErrorDiagnosticsDisabled(callback))
-        // If `callback` throws, wait for the next mutation or timeout.
+        // If `callback` throws, wait for the next mutation, interval, or timeout.
       } catch (error) {
-        // Save the callback error to reject the promise with it.
+        // Save the most recent callback error to reject the promise with it in the event of a timeout
         lastError = error
       }
     }

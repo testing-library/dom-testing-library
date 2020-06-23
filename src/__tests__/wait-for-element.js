@@ -1,16 +1,8 @@
+import {waitForElement} from '..'
 import {render, renderIntoDocument} from './helpers/test-utils'
 
-function importModule() {
-  return require('../').waitForElement
-}
-
-let waitForElement
-
-beforeEach(() => {
+afterEach(() => {
   jest.useRealTimers()
-  jest.resetModules()
-  waitForElement = importModule()
-  console.warn.mockClear()
 })
 
 test('waits for element to appear in the document', async () => {
@@ -19,13 +11,12 @@ test('waits for element to appear in the document', async () => {
   setTimeout(() => rerender('<div data-testid="div" />'))
   const element = await promise
   expect(element).toBeInTheDocument()
-  expect(console.warn.mock.calls).toMatchInlineSnapshot(`
-    Array [
-      Array [
-        "\`waitForElement\` has been deprecated. Use a \`find*\` query (preferred: https://testing-library.com/docs/dom-testing-library/api-queries#findby) or use \`waitFor\` instead: https://testing-library.com/docs/dom-testing-library/api-async#waitfor",
-      ],
-    ]
-  `)
+})
+
+test('can time out', async () => {
+  await expect(waitForElement(() => {}, {timeout: 1})).rejects.toThrow(
+    /timed out/i,
+  )
 })
 
 test('waits for element to appear in a specified container', async () => {
@@ -66,35 +57,4 @@ test('waits until callback does not return null', async () => {
 
 test('throws error if no callback is provided', async () => {
   await expect(waitForElement()).rejects.toThrow(/callback/i)
-})
-
-describe('timers', () => {
-  const expectElementToExist = async () => {
-    const importedWaitForElement = importModule()
-
-    const {rerender, getByTestId} = renderIntoDocument('<div />')
-
-    setTimeout(() => rerender('<div data-testid="div" />'), 100)
-
-    const promise = importedWaitForElement(() => getByTestId('div'), {
-      timeout: 200,
-    })
-
-    if (setTimeout._isMockFunction) {
-      jest.advanceTimersByTime(110)
-    }
-
-    const element = await promise
-
-    await expect(element).toBeInTheDocument()
-  }
-
-  it('works with real timers', async () => {
-    jest.useRealTimers()
-    await expectElementToExist()
-  })
-  it('works with fake timers', async () => {
-    jest.useFakeTimers()
-    await expectElementToExist()
-  })
 })
