@@ -82,9 +82,10 @@ export function getSuggestedQuery(element, variant = 'get', method) {
     return undefined
   }
 
+  //We prefer to suggest something else if the role is generic
   const role =
     element.getAttribute('role') ?? getImplicitAriaRoles(element)?.[0]
-  if (canSuggest('Role', method, role)) {
+  if (role !== 'generic' && canSuggest('Role', method, role)) {
     return makeSuggestion('Role', role, {
       variant,
       name: computeAccessibleName(element),
