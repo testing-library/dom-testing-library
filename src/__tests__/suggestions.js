@@ -74,7 +74,9 @@ test(`should not suggest if the suggestion would give different results`, () => 
 })
 
 test('should suggest by label over title', () => {
-  renderIntoDocument(`<label><span>bar</span><input title="foo" /></label>`)
+  renderIntoDocument(
+    `<label><span>bar</span><input type="password" title="foo" /></label>`,
+  )
 
   expect(() => screen.getByTitle('foo')).toThrowError(
     /getByLabelText\(\/bar\/i\)/,
@@ -181,7 +183,7 @@ test('escapes regular expressions in suggestion', () => {
 
 test('should suggest getByLabelText when no role available', () => {
   renderIntoDocument(
-    `<label for="foo">Username</label><input data-testid="foo" id="foo" />`,
+    `<label for="foo">Username</label><input type="password" data-testid="foo" id="foo" />`,
   )
   expect(() => screen.getByTestId('foo')).toThrowError(
     /getByLabelText\(\/username\/i\)/,
@@ -232,19 +234,21 @@ test.each([
 
 test(`should suggest label over placeholder text`, () => {
   renderIntoDocument(
-    `<label for="foo">Username</label><input id="foo" data-testid="foo" placeholder="Username" />`,
+    `<label for="foo">Password</label><input type="password" id="foo" data-testid="foo" placeholder="Password" />`,
   )
 
-  expect(() => screen.getByPlaceholderText('Username')).toThrowError(
-    /getByLabelText\(\/username\/i\)/,
+  expect(() => screen.getByPlaceholderText('Password')).toThrowError(
+    /getByLabelText\(\/password\/i\)/,
   )
 })
 
 test(`should suggest getByPlaceholderText`, () => {
-  renderIntoDocument(`<input data-testid="foo" placeholder="Username" />`)
+  renderIntoDocument(
+    `<input type="password" data-testid="foo" placeholder="Password" />`,
+  )
 
   expect(() => screen.getByTestId('foo')).toThrowError(
-    /getByPlaceholderText\(\/username\/i\)/,
+    /getByPlaceholderText\(\/password\/i\)/,
   )
 })
 
@@ -257,25 +261,27 @@ test(`should suggest getByText for simple elements`, () => {
 })
 
 test(`should suggest getByDisplayValue`, () => {
-  renderIntoDocument(`<input id="lastName" data-testid="lastName" />`)
+  renderIntoDocument(
+    `<input type="password" id="password" data-testid="password" />`,
+  )
 
-  document.getElementById('lastName').value = 'Prine' // RIP John Prine
+  document.getElementById('password').value = 'Prine' // RIP John Prine
 
-  expect(() => screen.getByTestId('lastName')).toThrowError(
+  expect(() => screen.getByTestId('password')).toThrowError(
     /getByDisplayValue\(\/prine\/i\)/,
   )
 })
 
 test(`should suggest getByAltText`, () => {
   renderIntoDocument(`
-    <input data-testid="input" alt="last name" />
+    <input type="password" data-testid="input" alt="password" />
     <map name="workmap">
       <area data-testid="area" shape="rect" coords="34,44,270,350" alt="Computer">
     </map>
     `)
 
   expect(() => screen.getByTestId('input')).toThrowError(
-    /getByAltText\(\/last name\/i\)/,
+    /getByAltText\(\/password\/i\)/,
   )
   expect(() => screen.getByTestId('area')).toThrowError(
     /getByAltText\(\/computer\/i\)/,
