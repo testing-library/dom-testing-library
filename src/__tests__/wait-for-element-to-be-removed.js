@@ -1,16 +1,5 @@
+import {waitForElementToBeRemoved} from '..'
 import {renderIntoDocument} from './helpers/test-utils'
-
-function importModule() {
-  return require('../').waitForElementToBeRemoved
-}
-
-let waitForElementToBeRemoved
-
-beforeEach(() => {
-  jest.useRealTimers()
-  jest.resetModules()
-  waitForElementToBeRemoved = importModule()
-})
 
 test('resolves on mutation only when the element is removed', async () => {
   const {queryAllByTestId} = renderIntoDocument(`
@@ -87,55 +76,6 @@ test('after successful removal, fullfills promise with empty value (undefined)',
   })
   div.parentElement.removeChild(div)
   return expect(waitResult).resolves.toBeUndefined()
-})
-
-describe('timers', () => {
-  const expectElementToBeRemoved = async () => {
-    const importedWaitForElementToBeRemoved = importModule()
-
-    const {queryAllByTestId} = renderIntoDocument(`
-  <div data-testid="div"></div>
-  <div data-testid="div"></div>
-`)
-    const divs = queryAllByTestId('div')
-    // first mutation
-    setTimeout(() => {
-      divs.forEach(d => d.setAttribute('id', 'mutated'))
-    })
-    // removal
-    setTimeout(() => {
-      divs.forEach(div => div.parentElement.removeChild(div))
-    }, 100)
-
-    const promise = importedWaitForElementToBeRemoved(
-      () => queryAllByTestId('div'),
-      {
-        timeout: 200,
-      },
-    )
-
-    if (setTimeout._isMockFunction) {
-      jest.advanceTimersByTime(110)
-    }
-
-    await promise
-  }
-
-  it('works with real timers', async () => {
-    jest.useRealTimers()
-    await expectElementToBeRemoved()
-  })
-  it('works with fake timers', async () => {
-    jest.useFakeTimers()
-    await expectElementToBeRemoved()
-  })
-})
-
-test("doesn't change jest's timers value when importing the module", () => {
-  jest.useFakeTimers()
-  importModule()
-
-  expect(window.setTimeout._isMockFunction).toEqual(true)
 })
 
 test('rethrows non-testing-lib errors', () => {

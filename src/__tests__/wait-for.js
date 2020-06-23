@@ -12,6 +12,12 @@ test('waits callback to not throw an error', async () => {
   expect(spy).toHaveBeenCalledWith()
 })
 
+// we used to have a limitation where we had to set an interval of 0 to 1
+// otherwise there would be problems. I don't think this limitation exists
+// anymore, but we'll keep this test around to make sure a problem doesn't
+// crop up.
+test('can accept an interval of 0', () => waitFor(() => {}, {interval: 0}))
+
 test('can timeout after the given timeout time', async () => {
   const error = new Error('throws every time')
   const result = await waitFor(
