@@ -35,7 +35,7 @@ test('if no error is thrown then throws a timeout error', async () => {
       // eslint-disable-next-line no-throw-literal
       throw undefined
     },
-    {timeout: 8, interval: 5},
+    {timeout: 8, interval: 5, onTimeout: e => e},
   ).catch(e => e)
   expect(result).toMatchInlineSnapshot(`[Error: Timed out in waitFor.]`)
 })
@@ -100,4 +100,28 @@ test('throws nice error if provided callback is not a function', () => {
   expect(() => waitFor(someElement)).toThrow(
     'Received `callback` arg must be a function',
   )
+})
+
+test('timeout logs a pretty DOM', async () => {
+  renderIntoDocument(`<div id="pretty">how pretty</div>`)
+  const error = await waitFor(
+    () => {
+      throw new Error('always throws')
+    },
+    {timeout: 1},
+  ).catch(e => e)
+  expect(error.message).toMatchInlineSnapshot(`
+    "always throws
+
+    <html>
+      <head />
+      <body>
+        <div
+          id="pretty"
+        >
+          how pretty
+        </div>
+      </body>
+    </html>"
+  `)
 })

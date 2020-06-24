@@ -10,6 +10,7 @@ import {
   clearTimeout,
 } from './helpers'
 import {getConfig, runWithExpensiveErrorDiagnosticsDisabled} from './config'
+import {prettyDOM} from './pretty-dom'
 
 // This is so the stack trace the developer sees is one that's
 // closer to their code (because async stack traces are hard to follow).
@@ -25,6 +26,10 @@ function waitFor(
     showOriginalStackTrace = getConfig().showOriginalStackTrace,
     stackTraceError,
     interval = 50,
+    onTimeout = error => {
+      error.message = `${error.message}\n\n${prettyDOM(container)}`
+      return error
+    },
     mutationObserverOptions = {
       subtree: true,
       childList: true,
@@ -41,7 +46,7 @@ function waitFor(
     let lastError, intervalId, observer
     let finished = false
 
-    const overallTimeoutTimer = setTimeout(onTimeout, timeout)
+    const overallTimeoutTimer = setTimeout(handleTimeout, timeout)
 
     const usingFakeTimers = jestFakeTimersAreEnabled()
     if (usingFakeTimers) {
@@ -106,7 +111,7 @@ function waitFor(
       }
     }
 
-    function onTimeout() {
+    function handleTimeout() {
       let error
       if (lastError) {
         error = lastError
@@ -122,7 +127,7 @@ function waitFor(
           copyStackTrace(error, stackTraceError)
         }
       }
-      onDone(error, null)
+      onDone(onTimeout(error), null)
     }
   })
 }

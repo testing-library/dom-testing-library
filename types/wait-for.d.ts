@@ -2,6 +2,7 @@ export interface waitForOptions {
   container?: HTMLElement
   timeout?: number
   interval?: number
+  onTimeout?: (error: Error) => Error
   mutationObserverOptions?: MutationObserverInit
 }
 
