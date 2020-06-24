@@ -42,7 +42,7 @@ test('fake timer timeout', async () => {
       () => {
         throw new Error('always throws')
       },
-      {timeout: 10},
+      {timeout: 10, onTimeout: e => e},
     ),
   ).rejects.toMatchInlineSnapshot(`[Error: always throws]`)
 })
@@ -53,7 +53,7 @@ test('times out after 1000ms by default', async () => {
   // there's a bug with this rule here...
   // eslint-disable-next-line jest/valid-expect
   await expect(
-    waitForElementToBeRemoved(() => container),
+    waitForElementToBeRemoved(() => container, {onTimeout: e => e}),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
     `"Timed out in waitForElementToBeRemoved."`,
   )

@@ -96,7 +96,7 @@ test('rethrows non-testing-lib errors', () => {
 test('logs timeout error when it times out', async () => {
   const div = document.createElement('div')
   await expect(
-    waitForElementToBeRemoved(() => div, {timeout: 1}),
+    waitForElementToBeRemoved(() => div, {timeout: 1, onTimeout: e => e}),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
     `"Timed out in waitForElementToBeRemoved."`,
   )

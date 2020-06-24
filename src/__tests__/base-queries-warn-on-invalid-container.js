@@ -112,7 +112,7 @@ describe('asynchronous queries throw on invalid container type', () => {
     ['findAllByTestId', findAllByTestId],
   ])('%s', (_queryName, query) => {
     const queryOptions = {}
-    const waitOptions = {timeout: 1}
+    const waitOptions = {timeout: 1, onTimeout: e => e}
     return expect(
       query(
         'invalid type for container',
