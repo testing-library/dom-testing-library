@@ -113,6 +113,9 @@ async function testByRole() {
         name === 'Login' && element.hasAttribute('disabled'),
     }) === null,
   )
+
+  // allow to query for a role that isn't included in the types
+  console.assert(queryByRole(element, 'foo') === null)
 }
 
 function testA11yHelper() {
