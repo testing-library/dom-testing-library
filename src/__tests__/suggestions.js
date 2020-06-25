@@ -486,28 +486,25 @@ test('getSuggestedQuery does not create suggestions for script and style element
   expect(getSuggestedQuery(style, 'get', 'TestId')).toBeUndefined()
 })
 
-test('should not thrown when getting query byLabelText if ID has special chars or spaces', () => {
-  const {container, rerender} = renderIntoDocument(`
-    <div id="not usual id">One</div>
+// this is only a temporary fix. The problem is that at the moment @testing-library/dom
+// not support label concatenation
+// see https://github.com/testing-library/dom-testing-library/issues/545
+test('should get the first label with aria-labelledby contains multiple ids', () => {
+  const {container} = renderIntoDocument(`
+    <div id="one">One</div>
+    <div id="two">One</div>
     <input
       type="text"
-      aria-labelledby="not usual id"
+      aria-labelledby="one two"
     />
   `)
 
-  expect(() =>
+  expect(
     getSuggestedQuery(container.querySelector('input'), 'get', 'labelText'),
-  ).not.toThrow()
-
-  rerender(`
-    <div id="why you need to use \\/|"£$ ?">One</div>
-    <input
-      type="text"
-      aria-labelledby="why you need to use \\/|"£$ ?"
-    />
-  `)
-
-  expect(() =>
-    getSuggestedQuery(container.querySelector('input'), 'get', 'labelText'),
-  ).not.toThrow()
+  ).toMatchObject({
+    queryName: 'LabelText',
+    queryMethod: 'getByLabelText',
+    queryArgs: [/one/i],
+    variant: 'get',
+  })
 })
