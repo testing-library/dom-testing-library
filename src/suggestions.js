@@ -15,9 +15,13 @@ function getLabelTextFor(element) {
   if (!label) {
     const ariaLabelledBy = element.getAttribute('aria-labelledby')
     if (ariaLabelledBy) {
+      // this is only a temporary fix. The problem is that at the moment @testing-library/dom
+      // not support label concatenation
+      // see https://github.com/testing-library/dom-testing-library/issues/545
+      const firstId = ariaLabelledBy.split(' ')[0]
       // we're using this notation because with the # selector we would have to escape special characters e.g. user.name
       // see https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector#Escaping_special_characters
-      label = document.querySelector(`[id=${ariaLabelledBy}]`)
+      label = document.querySelector(`[id="${firstId}"]`)
     }
   }
 
