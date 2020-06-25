@@ -17,7 +17,7 @@ function getLabelTextFor(element) {
     if (ariaLabelledBy) {
       // we're using this notation because with the # selector we would have to escape special characters e.g. user.name
       // see https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector#Escaping_special_characters
-      label = document.querySelector(`[id=${ariaLabelledBy}]`)
+      label = document.querySelector(`[id="${ariaLabelledBy}"]`)
     }
   }
 
