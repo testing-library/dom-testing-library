@@ -485,3 +485,29 @@ test('getSuggestedQuery does not create suggestions for script and style element
   expect(getSuggestedQuery(script, 'get', 'TestId')).toBeUndefined()
   expect(getSuggestedQuery(style, 'get', 'TestId')).toBeUndefined()
 })
+
+test('should not thrown when getting query byLabelText if ID has special chars or spaces', () => {
+  const {container, rerender} = renderIntoDocument(`
+    <div id="not usual id">One</div>
+    <input
+      type="text"
+      aria-labelledby="not usual id"
+    />
+  `)
+
+  expect(() =>
+    getSuggestedQuery(container.querySelector('input'), 'get', 'labelText'),
+  ).not.toThrow()
+
+  rerender(`
+    <div id="why you need to use \\/|"£$ ?">One</div>
+    <input
+      type="text"
+      aria-labelledby="why you need to use \\/|"£$ ?"
+    />
+  `)
+
+  expect(() =>
+    getSuggestedQuery(container.querySelector('input'), 'get', 'labelText'),
+  ).not.toThrow()
+})
