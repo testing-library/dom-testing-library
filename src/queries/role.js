@@ -6,6 +6,7 @@ import {
   prettyRoles,
   isInaccessible,
   isSubtreeInaccessible,
+  getRolesAndSuperClassByRoles,
 } from '../role-helpers'
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 import {checkContainerType} from '../helpers'
@@ -58,22 +59,24 @@ function queryAllByRole(
       if (isRoleSpecifiedExplicitly) {
         const roleValue = node.getAttribute('role')
         if (queryFallbacks) {
-          return roleValue
-            .split(' ')
-            .filter(Boolean)
-            .some(text => matcher(text, node, role, matchNormalizer))
+          const roles = roleValue.split(' ').filter(Boolean)
+          return getRolesAndSuperClassByRoles(roles).some(text =>
+            matcher(text, node, role, matchNormalizer),
+          )
         }
         // if a custom normalizer is passed then let normalizer handle the role value
         if (normalizer) {
-          return matcher(roleValue, node, role, matchNormalizer)
+          return getRolesAndSuperClassByRoles(roleValue).some(text =>
+            matcher(text, node, role, matchNormalizer),
+          )
         }
         // other wise only send the first word to match
-        const [firstWord] = roleValue.split(' ')
-        return matcher(firstWord, node, role, matchNormalizer)
+        const roles = getRolesAndSuperClassByRoles(roleValue.split(' ')[0])
+        return roles.some(text => matcher(text, node, role, matchNormalizer))
       }
 
-      const implicitRoles = getImplicitAriaRoles(node)
-
+      let implicitRoles = getImplicitAriaRoles(node)
+      implicitRoles = getRolesAndSuperClassByRoles(implicitRoles)
       return implicitRoles.some(implicitRole =>
         matcher(implicitRole, node, role, matchNormalizer),
       )

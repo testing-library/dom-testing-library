@@ -346,7 +346,9 @@ Here are the accessible roles:
 test('has no useful error message in findBy', async () => {
   const {findByRole} = render(`<li />`)
 
-  await expect(findByRole('option', {timeout: 1})).rejects.toThrow('Unable to find role="option"')
+  await expect(findByRole('option', {timeout: 1})).rejects.toThrow(
+    'Unable to find role="option"',
+  )
 })
 
 test('explicit role is most specific', () => {
@@ -376,6 +378,46 @@ Here are the accessible roles:
   />
 </body>"
 `)
+})
+
+test('superclass roles are retrieved when are abstract roles', () => {
+  const {getAllByRole} = render(`
+   <>
+      <input type="text" />
+      <input type="checkbox" />
+      <textarea />
+    </>`)
+  expect(getAllByRole('textbox')).toHaveLength(2)
+  expect(getAllByRole('input')).toHaveLength(3)
+})
+
+test('superclass roles are retrieved for explicitly defined roles', () => {
+  const {getAllByRole} = render(`
+    <>
+      <input type="checkbox" />
+      <span role="switch" aria-checked="true" />
+    </>
+  `)
+  expect(getAllByRole('switch')).toHaveLength(1)
+  expect(getAllByRole('checkbox')).toHaveLength(2)
+})
+
+test('superclass list has found when the defined role is feed', () => {
+  const {getAllByRole} = render(`
+    <>
+      <ul>
+        <li>abc</li>
+      </ul>
+      <div role="feed">
+        <article role="listitem">xyz</article>
+      </div>
+      <ul role="feed">
+        <li role="article">def</li>
+      </ul>
+    </>
+  `)
+  expect(getAllByRole('list')).toHaveLength(3)
+  expect(getAllByRole('feed')).toHaveLength(2)
 })
 
 describe('configuration', () => {
