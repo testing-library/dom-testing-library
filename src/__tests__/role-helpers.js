@@ -3,6 +3,7 @@ import {
   logRoles,
   getImplicitAriaRoles,
   isInaccessible,
+  getRolesAndSuperClassByRoles,
 } from '../role-helpers'
 import {render} from './helpers/test-utils'
 
@@ -181,6 +182,48 @@ test.each([
 ])('shouldExcludeFromA11yTree for %s returns %p', (html, expected) => {
   const {container} = render(html)
   container.firstChild.appendChild(document.createElement('button'))
-
   expect(isInaccessible(container.querySelector('button'))).toBe(expected)
 })
+
+test.each([
+  ['', []],
+  ['roletype', ['roletype']],
+  ['switch', ['roletype', 'widget', 'input', 'checkbox', 'switch']],
+  ['input', ['roletype', 'widget', 'input']],
+  [
+    'select',
+    [
+      'roletype',
+      'widget',
+      'composite',
+      'structure',
+      'section',
+      'group',
+      'select',
+    ],
+  ],
+  [
+    ['switch', 'input'],
+    ['roletype', 'widget', 'input', 'checkbox', 'switch'],
+  ],
+  [
+    ['switch', 'select'],
+    [
+      'roletype',
+      'widget',
+      'input',
+      'checkbox',
+      'composite',
+      'structure',
+      'section',
+      'group',
+      'switch',
+      'select',
+    ],
+  ],
+])(
+  'getSuperClassByRole returns expected roles as super class for given roles',
+  (roles, expected) => {
+    expect(getRolesAndSuperClassByRoles(roles).sort()).toEqual(expected.sort())
+  },
+)

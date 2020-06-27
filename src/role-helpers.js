@@ -1,4 +1,4 @@
-import {elementRoles} from 'aria-query'
+import {elementRoles, roles as rolesMap} from 'aria-query'
 import {computeAccessibleName} from 'dom-accessibility-api'
 import {prettyDOM} from './pretty-dom'
 
@@ -196,6 +196,28 @@ function computeAriaSelected(element) {
   return undefined
 }
 
+function getRolesAndSuperClassByRoles(roles) {
+  if (!roles || roles.length === 0) {
+    return []
+  }
+  const rolesList = Array.isArray(roles) ? roles : [roles]
+  const superClasses = rolesList.reduce(
+    (acc, role) => {
+      const roleDefinition = rolesMap.get(role)
+      if (!roleDefinition) {
+        return acc
+      }
+      const superClassesFlatten = roleDefinition.superClass.reduce(
+        (superClassesList, superClass) => [...superClassesList, ...superClass],
+        [],
+      )
+      return [...acc, ...superClassesFlatten]
+    },
+    [...rolesList],
+  )
+  return Array.from(new Set(superClasses))
+}
+
 export {
   getRoles,
   logRoles,
@@ -204,4 +226,5 @@ export {
   prettyRoles,
   isInaccessible,
   computeAriaSelected,
+  getRolesAndSuperClassByRoles,
 }
