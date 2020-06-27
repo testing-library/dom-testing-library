@@ -521,11 +521,11 @@ test('queryAllByRole returns semantic html elements', () => {
     </form>
   `)
 
-  expect(queryAllByRole(/table/i)).toHaveLength(1)
-  expect(queryAllByRole(/tabl/i, {exact: false})).toHaveLength(1)
+  expect(queryAllByRole(/table/i)).toHaveLength(2)
+  expect(queryAllByRole(/tabl/i, {exact: false})).toHaveLength(2)
   expect(queryAllByRole(/columnheader/i)).toHaveLength(1)
   expect(queryAllByRole(/rowheader/i)).toHaveLength(1)
-  expect(queryAllByRole(/grid/i)).toHaveLength(1)
+  expect(queryAllByRole(/grid/i)).toHaveLength(3)
   expect(queryAllByRole(/form/i)).toHaveLength(0)
   expect(queryAllByRole(/button/i)).toHaveLength(1)
   expect(queryAllByRole(/heading/i)).toHaveLength(6)
@@ -536,7 +536,7 @@ test('queryAllByRole returns semantic html elements', () => {
   expect(queryAllByRole(/radio/i)).toHaveLength(1)
   expect(queryAllByRole('row')).toHaveLength(3)
   expect(queryAllByRole(/rowgroup/i)).toHaveLength(2)
-  expect(queryAllByRole(/(table)|(textbox)/i)).toHaveLength(3)
+  expect(queryAllByRole(/(table)|(textbox)/i)).toHaveLength(4)
   expect(queryAllByRole(/img/i)).toHaveLength(1)
   expect(queryAllByRole('meter')).toHaveLength(1)
   expect(queryAllByRole('progressbar')).toHaveLength(0)
