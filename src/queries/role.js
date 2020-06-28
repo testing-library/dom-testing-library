@@ -107,8 +107,18 @@ function queryAllByRole(
     })
 }
 
-const getMultipleError = (c, role) =>
-  `Found multiple elements with the role "${role}"`
+const getMultipleError = (c, role, {name} = {}) => {
+  let nameHint = ''
+  if (name === undefined) {
+    nameHint = ''
+  } else if (typeof name === 'string') {
+    nameHint = ` and name "${name}"`
+  } else {
+    nameHint = ` and name \`${name}\``
+  }
+
+  return `Found multiple elements with the role "${role}"${nameHint}`
+}
 
 const getMissingError = (
   container,
