@@ -1,3 +1,4 @@
+import {prettyDOM} from './pretty-dom'
 import {getSuggestedQuery} from './suggestions'
 import {fuzzyMatches, matches, makeNormalizer} from './matches'
 import {waitFor} from './wait-for'
@@ -45,8 +46,14 @@ function makeSingleQuery(allQuery, getMultipleError) {
   return (container, ...args) => {
     const els = allQuery(container, ...args)
     if (els.length > 1) {
+      const elementStrings = els.map(element => prettyDOM(element)).join('\n\n')
+
       throw getMultipleElementsFoundError(
-        getMultipleError(container, ...args),
+        `${getMultipleError(container, ...args)}
+
+Here are the matching elements:
+
+${elementStrings}`,
         container,
       )
     }

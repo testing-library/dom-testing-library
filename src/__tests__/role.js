@@ -392,6 +392,20 @@ test('accessible regex name in error message for multiple found', () => {
     .toThrowErrorMatchingInlineSnapshot(`
 "Found multiple elements with the role "button" and name \`/value/i\`
 
+Here are the matching elements:
+
+<button>
+  Increment value
+</button>
+
+<button>
+  Decrement value
+</button>
+
+<button>
+  Reset value
+</button>
+
 (If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
 
 <div>
@@ -420,6 +434,20 @@ test('accessible string name in error message for multiple found', () => {
     .toThrowErrorMatchingInlineSnapshot(`
 "Found multiple elements with the role "button" and name "Submit"
 
+Here are the matching elements:
+
+<button>
+  Submit
+</button>
+
+<button>
+  Submit
+</button>
+
+<button>
+  Submit
+</button>
+
 (If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
 
 <div>
@@ -431,6 +459,48 @@ test('accessible string name in error message for multiple found', () => {
   </button>
   <button>
     Submit
+  </button>
+</div>"
+`)
+})
+
+test('matching elements in error for multiple found', () => {
+  const {getByRole} = render(
+    `<button>Increment value</button
+      ><button>Different label</button
+      ><p>Wrong role</p
+      ><button>Reset value</button
+    >`,
+  )
+
+  expect(() => getByRole('button', {name: /value/i}))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Found multiple elements with the role "button" and name \`/value/i\`
+
+Here are the matching elements:
+
+<button>
+  Increment value
+</button>
+
+<button>
+  Reset value
+</button>
+
+(If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
+
+<div>
+  <button>
+    Increment value
+  </button>
+  <button>
+    Different label
+  </button>
+  <p>
+    Wrong role
+  </p>
+  <button>
+    Reset value
   </button>
 </div>"
 `)
