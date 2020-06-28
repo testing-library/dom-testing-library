@@ -46,7 +46,7 @@ function makeSingleQuery(allQuery, getMultipleError) {
     const els = allQuery(container, ...args)
     if (els.length > 1) {
       throw getMultipleElementsFoundError(
-        getMultipleError(container, ...args),
+        getMultipleError({container, elements: els}, ...args),
         container,
       )
     }
