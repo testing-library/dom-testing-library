@@ -107,8 +107,8 @@ function queryAllByRole(
     })
 }
 
-const getMultipleError = (c, role) =>
-  `Found multiple elements with the role "${role}"`
+const getMultipleError = (c, role, {name} = {}) =>
+  `Found multiple elements with the role "${role}" matching ${name}`
 
 const getMissingError = (
   container,
