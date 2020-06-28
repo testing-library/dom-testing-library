@@ -381,13 +381,12 @@ Here are the accessible roles:
 })
 
 test('accessible name in error message for multiple found', () => {
-  const {getByRole} = render(`
-    <div>
-      <button> Increment value </button>
-      <button> Decrement value </button>
-      <button> Reset value </button>
-    </div>
-  `)
+  const {getByRole} = render(
+    `<button>Increment value</button
+      ><button>Decrement value</button
+      ><button>Reset value</button
+    >`,
+  )
 
   expect(() => getByRole('button', {name: /value/i}))
     .toThrowErrorMatchingInlineSnapshot(`
@@ -396,29 +395,15 @@ test('accessible name in error message for multiple found', () => {
 (If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
 
 <div>
-  
-    
-  <div>
-    
-      
-    <button>
-       Increment value 
-    </button>
-    
-      
-    <button>
-       Decrement value 
-    </button>
-    
-      
-    <button>
-       Reset value 
-    </button>
-    
-    
-  </div>
-  
-  
+  <button>
+    Increment value
+  </button>
+  <button>
+    Decrement value
+  </button>
+  <button>
+    Reset value
+  </button>
 </div>"
 `)
 })
