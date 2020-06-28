@@ -346,7 +346,9 @@ Here are the accessible roles:
 test('has no useful error message in findBy', async () => {
   const {findByRole} = render(`<li />`)
 
-  await expect(findByRole('option', {timeout: 1})).rejects.toThrow('Unable to find role="option"')
+  await expect(findByRole('option', {timeout: 1})).rejects.toThrow(
+    'Unable to find role="option"',
+  )
 })
 
 test('explicit role is most specific', () => {
@@ -375,6 +377,49 @@ Here are the accessible roles:
     role="tab"
   />
 </body>"
+`)
+})
+
+test('accessible name in error message for multiple found', () => {
+  const {getByRole} = render(`
+    <div>
+      <button> Increment value </button>
+      <button> Decrement value </button>
+      <button> Reset value </button>
+    </div>
+  `)
+
+  expect(() => getByRole('button', {name: /value/i}))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Found multiple elements with the role "button" and name \`/value/i\`
+
+(If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
+
+<div>
+  
+    
+  <div>
+    
+      
+    <button>
+       Increment value 
+    </button>
+    
+      
+    <button>
+       Decrement value 
+    </button>
+    
+      
+    <button>
+       Reset value 
+    </button>
+    
+    
+  </div>
+  
+  
+</div>"
 `)
 })
 
