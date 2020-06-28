@@ -9,7 +9,6 @@ import {
 } from '../role-helpers'
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 import {checkContainerType} from '../helpers'
-import {prettyDOM} from '../pretty-dom'
 import {
   buildQueries,
   fuzzyMatches,
@@ -108,11 +107,8 @@ function queryAllByRole(
     })
 }
 
-const getMultipleError = ({elements}, role) => {
-  const suggestions = elements.map(element => prettyDOM(element)).join('\n')
-
-  return `Found multiple elements with the role "${role}"
-  ${suggestions}`
+const getMultipleError = (c, role) => {
+  return `Found multiple elements with the role "${role}"`
 }
 
 const getMissingError = (
