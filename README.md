@@ -273,12 +273,12 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://commonlit.org"><img src="https://avatars3.githubusercontent.com/u/319471?v=4" width="100px;" alt=""/><br /><sub><b>Geoff Harcourt</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=geoffharcourt" title="Code">💻</a></td>
     <td align="center"><a href="http://www.joshuakgoldberg.com"><img src="https://avatars1.githubusercontent.com/u/3335181?v=4" width="100px;" alt=""/><br /><sub><b>Josh Goldberg</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=JoshuaKGoldberg" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=JoshuaKGoldberg" title="Tests">⚠️</a></td>
     <td align="center"><a href="http://kengregory.com"><img src="https://avatars0.githubusercontent.com/u/3155127?v=4" width="100px;" alt=""/><br /><sub><b>Ken Gregory</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=kgregory" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=kgregory" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://www.jacobparis.com/"><img src="https://avatars2.githubusercontent.com/u/5633704?v=4" width="100px;" alt=""/><br /><sub><b>Jacob Paris</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=JacobParis" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=JacobParis" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors][all-contributors] specification.

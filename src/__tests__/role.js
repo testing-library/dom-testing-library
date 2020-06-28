@@ -380,6 +380,73 @@ Here are the accessible roles:
 `)
 })
 
+test('accessible regex name in error message for multiple found', () => {
+  const {getByRole} = render(
+    `<button>Increment value</button
+      ><button>Decrement value</button
+      ><button>Reset value</button
+    >`,
+  )
+
+  expect(() => getByRole('button', {name: /value/i}))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Found multiple elements with the role "button"
+
+Here are the matching elements:
+
+<button>
+  Increment value
+</button>
+
+<button>
+  Reset value
+</button>
+"Found multiple elements with the role "button" and name \`/value/i\`
+
+(If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
+
+<div>
+  <button>
+    Increment value
+  </button>
+  <button>
+    Decrement value
+  </button>
+  <button>
+    Reset value
+  </button>
+</div>"
+`)
+})
+
+test('accessible string name in error message for multiple found', () => {
+  const {getByRole} = render(
+    `<button>Submit</button
+      ><button>Submit</button
+      ><button>Submit</button
+    >`,
+  )
+
+  expect(() => getByRole('button', {name: 'Submit'}))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Found multiple elements with the role "button" and name "Submit"
+
+(If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
+
+<div>
+  <button>
+    Submit
+  </button>
+  <button>
+    Submit
+  </button>
+  <button>
+    Submit
+  </button>
+</div>"
+`)
+})
+
 test('matching elements in error for multiple found', () => {
   const {getByRole} = render(
     `<button>Increment value</button
