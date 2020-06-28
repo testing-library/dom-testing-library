@@ -390,7 +390,7 @@ test('accessible regex name in error message for multiple found', () => {
 
   expect(() => getByRole('button', {name: /value/i}))
     .toThrowErrorMatchingInlineSnapshot(`
-"Found multiple elements with the role "button"
+"Found multiple elements with the role "button" and name \`/value/i\`
 
 Here are the matching elements:
 
@@ -399,9 +399,12 @@ Here are the matching elements:
 </button>
 
 <button>
+  Decrement value
+</button>
+
+<button>
   Reset value
 </button>
-"Found multiple elements with the role "button" and name \`/value/i\`
 
 (If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
 
@@ -431,6 +434,20 @@ test('accessible string name in error message for multiple found', () => {
     .toThrowErrorMatchingInlineSnapshot(`
 "Found multiple elements with the role "button" and name "Submit"
 
+Here are the matching elements:
+
+<button>
+  Submit
+</button>
+
+<button>
+  Submit
+</button>
+
+<button>
+  Submit
+</button>
+
 (If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
 
 <div>
@@ -458,7 +475,7 @@ test('matching elements in error for multiple found', () => {
 
   expect(() => getByRole('button', {name: /value/i}))
     .toThrowErrorMatchingInlineSnapshot(`
-"Found multiple elements with the role "button"
+"Found multiple elements with the role "button" and name \`/value/i\`
 
 Here are the matching elements:
 
