@@ -1087,6 +1087,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "JacobParis",
+      "name": "Jacob Paris",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5633704?v=4",
+      "profile": "https://www.jacobparis.com/",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
