@@ -1,6 +1,7 @@
-import { Matcher, MatcherOptions, ByRoleMatcher } from './matches'
+import { Matcher, MatcherOptions } from './matches'
 import { SelectorMatcherOptions } from './query-helpers'
 import { waitForOptions } from './wait-for'
+import { ARIARole } from 'aria-query'
 
 export type QueryByBoundAttribute = (
   container: HTMLElement,
@@ -92,37 +93,64 @@ export interface ByRoleOptions extends MatcherOptions {
     | ((accessibleName: string, element: Element) => boolean)
 }
 
-export type AllByRole = (
+export declare function AllByRole(
   container: HTMLElement,
-  role: ByRoleMatcher,
+  role: Matcher,
   options?: ByRoleOptions,
-) => HTMLElement[]
-
-export type GetByRole = (
+): HTMLElement[]
+export declare function AllByRole(
   container: HTMLElement,
-  role: ByRoleMatcher,
+  role: ARIARole,
   options?: ByRoleOptions,
-) => HTMLElement
+): HTMLElement[]
 
-export type QueryByRole = (
+export declare function GetByRole(
   container: HTMLElement,
-  role: ByRoleMatcher,
+  role: Matcher,
   options?: ByRoleOptions,
-) => HTMLElement | null
-
-export type FindByRole = (
+): HTMLElement
+export declare function GetByRole(
   container: HTMLElement,
-  role: ByRoleMatcher,
+  role: ARIARole,
+  options?: ByRoleOptions,
+): HTMLElement
+
+export declare function QueryByRole(
+  container: HTMLElement,
+  role: Matcher | ByRoleOptions,
+  options?: ByRoleOptions,
+): HTMLElement | null
+export declare function QueryByRole(
+  container: HTMLElement,
+  role: ARIARole,
+  options?: ByRoleOptions,
+): HTMLElement | null
+
+export declare function FindByRole(
+  container: HTMLElement,
+  role: Matcher,
   options?: ByRoleOptions,
   waitForElementOptions?: waitForOptions,
-) => Promise<HTMLElement>
-
-export type FindAllByRole = (
+): Promise<HTMLElement>
+export declare function FindByRole(
   container: HTMLElement,
-  role: ByRoleMatcher,
+  role: ARIARole,
   options?: ByRoleOptions,
   waitForElementOptions?: waitForOptions,
-) => Promise<HTMLElement[]>
+): Promise<HTMLElement>
+
+export declare function FindAllByRole(
+  container: HTMLElement,
+  role: Matcher,
+  options?: ByRoleOptions,
+  waitForElementOptions?: waitForOptions,
+): Promise<HTMLElement[]>
+export declare function FindAllByRole(
+  container: HTMLElement,
+  role: Matcher,
+  options?: ByRoleOptions,
+  waitForElementOptions?: waitForOptions,
+): Promise<HTMLElement[]>
 
 export const getByLabelText: GetByText
 export const getAllByLabelText: AllByText
@@ -160,12 +188,12 @@ export const queryByDisplayValue: QueryByBoundAttribute
 export const queryAllByDisplayValue: AllByBoundAttribute
 export const findByDisplayValue: FindByBoundAttribute
 export const findAllByDisplayValue: FindAllByBoundAttribute
-export const getByRole: GetByRole
-export const getAllByRole: AllByRole
-export const queryByRole: QueryByRole
-export const queryAllByRole: AllByRole
-export const findByRole: FindByRole
-export const findAllByRole: FindAllByRole
+export const getByRole: typeof GetByRole
+export const getAllByRole: typeof AllByRole
+export const queryByRole: typeof QueryByRole
+export const queryAllByRole: typeof AllByRole
+export const findByRole: typeof FindByRole
+export const findAllByRole: typeof FindAllByRole
 export const getByTestId: GetByBoundAttribute
 export const getAllByTestId: AllByBoundAttribute
 export const queryByTestId: QueryByBoundAttribute
