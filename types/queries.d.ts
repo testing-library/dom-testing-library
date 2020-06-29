@@ -1,6 +1,6 @@
-import {Matcher, MatcherOptions, ByRoleMatcher} from './matches'
-import {SelectorMatcherOptions} from './query-helpers'
-import {waitForOptions} from './wait-for'
+import { Matcher, MatcherOptions, ByRoleMatcher } from './matches'
+import { SelectorMatcherOptions } from './query-helpers'
+import { waitForOptions } from './wait-for'
 
 export type QueryByBoundAttribute = (
   container: HTMLElement,
