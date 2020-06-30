@@ -12,6 +12,29 @@ import {
 } from './all-utils'
 import {queryAllByText} from './text'
 
+function queryAllLabels(container) {
+  return Array.from(container.querySelectorAll('label,input'))
+    .map(node => {
+      let textToMatch =
+        node.tagName.toLowerCase() === 'label'
+          ? node.textContent
+          : node.value || null
+      // The children of a textarea are part of `textContent` as well. We
+      // need to remove them from the string so we can match it afterwards.
+      Array.from(node.querySelectorAll('textarea')).forEach(textarea => {
+        textToMatch = textToMatch.replace(textarea.value, '')
+      })
+
+      // The children of a select are also part of `textContent`, so we
+      // need also to remove their text.
+      Array.from(node.querySelectorAll('select')).forEach(select => {
+        textToMatch = textToMatch.replace(select.textContent, '')
+      })
+      return {node, textToMatch}
+    })
+    .filter(({textToMatch}) => textToMatch !== null)
+}
+
 function queryAllLabelsByText(
   container,
   text,
@@ -19,25 +42,14 @@ function queryAllLabelsByText(
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-  return Array.from(container.querySelectorAll('label,input')).filter(node => {
-    let textToMatch =
-      node.tagName.toLowerCase() === 'label'
-        ? node.textContent
-        : node.value || null
-    // The children of a textarea are part of `textContent` as well. We
-    // need to remove them from the string so we can match it afterwards.
-    Array.from(node.querySelectorAll('textarea')).forEach(textarea => {
-      textToMatch = textToMatch.replace(textarea.value, '')
-    })
 
-    // The children of a select are also part of `textContent`, so we
-    // need also to remove their text.
-    Array.from(node.querySelectorAll('select')).forEach(select => {
-      textToMatch = textToMatch.replace(select.textContent, '')
-    })
+  const textToMatchByLabels = queryAllLabels(container)
 
-    return matcher(textToMatch, node, text, matchNormalizer)
-  })
+  return textToMatchByLabels
+    .filter(({node, textToMatch}) =>
+      matcher(textToMatch, node, text, matchNormalizer),
+    )
+    .map(({node}) => node)
 }
 
 function queryAllByLabelText(
@@ -52,6 +64,7 @@ function queryAllByLabelText(
     exact,
     normalizer: matchNormalizer,
   })
+
   const labelledElements = labels
     .reduce((matchedElements, label) => {
       const elementsForLabel = []
