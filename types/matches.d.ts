@@ -14,6 +14,32 @@ export interface MatcherOptions {
   suggest?: boolean
 }
 
+export interface ByRoleOptions extends MatcherOptions {
+  /**
+   * If true includes elements in the query set that are usually excluded from
+   * the accessibility tree. `role="none"` or `role="presentation"` are included
+   * in either case.
+   */
+  hidden?: boolean
+  /**
+   * If true only includes elements in the query set that are marked as
+   * selected in the accessibility tree, i.e., `aria-selected="true"`
+   */
+  selected?: boolean
+  /**
+   * Includes every role used in the `role` attribute
+   * For example *ByRole('progressbar', {queryFallbacks: true})` will find <div role="meter progressbar">`.
+   */
+  queryFallbacks?: boolean
+  /**
+   * Only considers  elements with the specified accessible name.
+   */
+  name?:
+    | string
+    | RegExp
+    | ((accessibleName: string, element: Element) => boolean)
+}
+
 export type Match = (
   textToMatch: string,
   node: HTMLElement | null,
