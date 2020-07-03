@@ -12,6 +12,21 @@ import {
 } from './all-utils'
 import {queryAllByText} from './text'
 
+function getCombinations(labels, matcher) {
+  const combs = [[]]
+  const matching = []
+  for (const label of labels) {
+    const copy = [...combs] // See note below.
+    for (const prefix of copy) {
+      const combination = prefix.concat(label.textToMatch)
+      combs.push(combination)
+      if (matcher(combination.join(' '), label.node)) {
+        matching.push(label.node)
+      }
+    }
+  }
+  return matching
+}
 function queryAllLabels(container) {
   return Array.from(container.querySelectorAll('label,input'))
     .map(node => {
@@ -45,11 +60,25 @@ function queryAllLabelsByText(
 
   const textToMatchByLabels = queryAllLabels(container)
 
-  return textToMatchByLabels
+  const nodesByLabelMatchingText = textToMatchByLabels
     .filter(({node, textToMatch}) =>
       matcher(textToMatch, node, text, matchNormalizer),
     )
     .map(({node}) => node)
+  const labelsNotMatchingTextAndNotEmpty = textToMatchByLabels.filter(
+    ({node, textToMatch}) =>
+      Boolean(textToMatch) &&
+      nodesByLabelMatchingText.findIndex(nodeByLabelByText =>
+        nodeByLabelByText.isEqualNode(node),
+      ) === -1,
+  )
+
+  const concatLabelsMatching = getCombinations(
+    labelsNotMatchingTextAndNotEmpty,
+    (textToMatch, node) => matcher(textToMatch, node, text, matchNormalizer),
+  )
+
+  return nodesByLabelMatchingText.concat(concatLabelsMatching)
 }
 
 function queryAllByLabelText(
