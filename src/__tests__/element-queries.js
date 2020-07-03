@@ -174,6 +174,10 @@ test('can get form controls by label text', () => {
         <label id="sixth-label-three">6th three</label>
         <input aria-labelledby="sixth-label-one sixth-label-two sixth-label-three" id="sixth-id" />
       </div>
+      <div>
+        <span id="seventh-label-one">7th one</span>
+        <input aria-labelledby="seventh-label-one" id="seventh-id" />
+      </div>
     </div>
   `)
   expect(getByLabelText('1st').id).toBe('first-id')
@@ -185,6 +189,7 @@ test('can get form controls by label text', () => {
   expect(getByLabelText('6th one').id).toBe('sixth-id')
   expect(getByLabelText('6th two').id).toBe('sixth-id')
   expect(getByLabelText('6th one 6th two 6th three').id).toBe('sixth-id')
+  expect(getByLabelText('7th one').id).toBe('seventh-id')
 })
 
 test('can get elements labelled with aria-labelledby attribute', () => {
