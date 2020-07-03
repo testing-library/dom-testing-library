@@ -16,7 +16,7 @@ function getCombinations(labels, matcher) {
   const combs = [[]]
   const matching = []
   for (const label of labels) {
-    const copy = [...combs] // See note below.
+    const copy = [...combs]
     for (const prefix of copy) {
       const combination = prefix.concat(label.textToMatch)
       combs.push(combination)
@@ -67,10 +67,7 @@ function queryAllLabelsByText(
     .map(({node}) => node)
   const labelsNotMatchingTextAndNotEmpty = textToMatchByLabels.filter(
     ({node, textToMatch}) =>
-      Boolean(textToMatch) &&
-      nodesByLabelMatchingText.findIndex(nodeByLabelByText =>
-        nodeByLabelByText.isEqualNode(node),
-      ) === -1,
+      textToMatch && !nodesByLabelMatchingText.some(n => n.isEqualNode(node)),
   )
 
   const concatLabelsMatching = getCombinations(
