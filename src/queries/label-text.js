@@ -118,7 +118,8 @@ function queryAllByLabelText(
           if (matcher(labelValue, labelledElement, text, matchNormalizer))
             labelledElements.push(labelledElement)
 
-          const labelsFiltered = [...labelsValue].splice(index, 1)
+          const labelsFiltered = [...labelsValue]
+          labelsFiltered.splice(index, 1)
 
           if (labelsFiltered.length > 1) {
             if (
