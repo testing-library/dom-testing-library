@@ -188,6 +188,7 @@ test('can get form controls by label text', () => {
   expect(getByLabelText('5th two').id).toBe('fifth-id')
   expect(getByLabelText('6th one').id).toBe('sixth-id')
   expect(getByLabelText('6th two').id).toBe('sixth-id')
+  expect(getByLabelText('6th one 6th two').id).toBe('sixth-id')
   expect(getByLabelText('6th one 6th two 6th three').id).toBe('sixth-id')
   expect(getByLabelText('7th one').id).toBe('seventh-id')
 })
@@ -341,6 +342,61 @@ test('label with no form control', () => {
 <div>
   <label>
     All alone
+  </label>
+</div>"
+`)
+})
+
+test('label with no form control and fuzzy matcher', () => {
+  const {getByLabelText, queryByLabelText} = render(
+    `<label>All alone label</label>`,
+  )
+  expect(queryByLabelText('alone', {exact: false})).toBeNull()
+  expect(() => getByLabelText('alone', {exact: false}))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Found a label with the text of: alone, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
+
+<div>
+  <label>
+    All alone label
+  </label>
+</div>"
+`)
+})
+
+test('label with children with no form control', () => {
+  const {getByLabelText, queryByLabelText} = render(`
+  <label>
+    All alone but with children
+    <textarea>Hello</textarea>
+    <select><option value="0">zero</option></select>
+  </label>`)
+  expect(queryByLabelText(/alone/, {selector: 'input'})).toBeNull()
+  expect(() => getByLabelText(/alone/, {selector: 'input'}))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
+
+<div>
+  
+  
+  <label>
+    
+    All alone but with children
+    
+    <textarea>
+      Hello
+    </textarea>
+    
+    
+    <select>
+      <option
+        value="0"
+      >
+        zero
+      </option>
+    </select>
+    
+  
   </label>
 </div>"
 `)
@@ -960,4 +1016,27 @@ test('can get a select with options', () => {
     </label>
   `)
   getByLabelText('Label')
+})
+
+test('can get an element with aria-labelledby when label has a child', () => {
+  const {getByLabelText} = render(`
+    <div>
+      <label id='label-with-textarea'>
+        First Label
+        <textarea>Value</textarea>
+      </label>
+      <input aria-labelledby='label-with-textarea' id='1st-input'/>
+      <label id='label-with-select'>
+        Second Label
+        <select><option value="1">one</option></select>
+      </label>
+      <input aria-labelledby='label-with-select' id='2nd-input'/>
+    </div>
+  `)
+  expect(getByLabelText('First Label', {selector: 'input'}).id).toBe(
+    '1st-input',
+  )
+  expect(getByLabelText('Second Label', {selector: 'input'}).id).toBe(
+    '2nd-input',
+  )
 })
