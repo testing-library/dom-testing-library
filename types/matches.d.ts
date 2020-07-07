@@ -3,12 +3,9 @@ import {ARIARole} from 'aria-query'
 export type MatcherFunction = (content: string, element: HTMLElement) => boolean
 export type Matcher = string | RegExp | MatcherFunction
 
-// Allow `String` to have intellisense for roles while writing ByRole queries
-// If `string` is used it overrules the ARIARole string union types
-// resulting in no intellisense
-// We still want to support roles not included in the union type
-/* tslint:disable:ban-types */
-export type ByRoleMatcher = ARIARole | String | RegExp | MatcherFunction
+// Get autocomplete for ARIARole union types, while still supporting another string
+// Ref: https://github.com/microsoft/TypeScript/issues/29729#issuecomment-505826972
+export type ByRoleMatcher = ARIARole | (string & {}) | RegExp | MatcherFunction
 
 export type NormalizerFn = (text: string) => string
 
