@@ -1,7 +1,6 @@
-import {Matcher, MatcherOptions} from './matches'
+import {Matcher, MatcherOptions, ByRoleMatcher} from './matches'
 import {SelectorMatcherOptions} from './query-helpers'
 import {waitForOptions} from './wait-for'
-import {ARIARole} from 'aria-query'
 
 export type QueryByBoundAttribute = (
   container: HTMLElement,
@@ -93,67 +92,37 @@ export interface ByRoleOptions extends MatcherOptions {
     | ((accessibleName: string, element: Element) => boolean)
 }
 
-// disable unified-signatures to have intellisense for aria roles
-/* tslint:disable:unified-signatures */
-export function AllByRole(
+export type AllByRole = (
   container: HTMLElement,
-  role: Matcher,
+  role: ByRoleMatcher,
   options?: ByRoleOptions,
-): HTMLElement[]
-export function AllByRole(
-  container: HTMLElement,
-  role: ARIARole,
-  options?: ByRoleOptions,
-): HTMLElement[]
+) => HTMLElement[]
 
-export function GetByRole(
+export type GetByRole = (
   container: HTMLElement,
-  role: Matcher,
+  role: ByRoleMatcher,
   options?: ByRoleOptions,
-): HTMLElement
-export function GetByRole(
-  container: HTMLElement,
-  role: ARIARole,
-  options?: ByRoleOptions,
-): HTMLElement
+) => HTMLElement
 
-export function QueryByRole(
+export type QueryByRole = (
   container: HTMLElement,
-  role: Matcher | ByRoleOptions,
+  role: ByRoleMatcher,
   options?: ByRoleOptions,
-): HTMLElement | null
-export function QueryByRole(
-  container: HTMLElement,
-  role: ARIARole,
-  options?: ByRoleOptions,
-): HTMLElement | null
+) => HTMLElement | null
 
-export function FindByRole(
+export type FindByRole = (
   container: HTMLElement,
-  role: Matcher,
+  role: ByRoleMatcher,
   options?: ByRoleOptions,
   waitForElementOptions?: waitForOptions,
-): Promise<HTMLElement>
-export function FindByRole(
-  container: HTMLElement,
-  role: ARIARole,
-  options?: ByRoleOptions,
-  waitForElementOptions?: waitForOptions,
-): Promise<HTMLElement>
+) => Promise<HTMLElement>
 
-export function FindAllByRole(
+export type FindAllByRole = (
   container: HTMLElement,
-  role: Matcher,
+  role: ByRoleMatcher,
   options?: ByRoleOptions,
   waitForElementOptions?: waitForOptions,
-): Promise<HTMLElement[]>
-export function FindAllByRole(
-  container: HTMLElement,
-  role: Matcher,
-  options?: ByRoleOptions,
-  waitForElementOptions?: waitForOptions,
-): Promise<HTMLElement[]>
-/* tslint:enable */
+) => Promise<HTMLElement[]>
 
 export const getByLabelText: GetByText
 export const getAllByLabelText: AllByText
@@ -191,12 +160,12 @@ export const queryByDisplayValue: QueryByBoundAttribute
 export const queryAllByDisplayValue: AllByBoundAttribute
 export const findByDisplayValue: FindByBoundAttribute
 export const findAllByDisplayValue: FindAllByBoundAttribute
-export const getByRole: typeof GetByRole
-export const getAllByRole: typeof AllByRole
-export const queryByRole: typeof QueryByRole
-export const queryAllByRole: typeof AllByRole
-export const findByRole: typeof FindByRole
-export const findAllByRole: typeof FindAllByRole
+export const getByRole: GetByRole
+export const getAllByRole: AllByRole
+export const queryByRole: QueryByRole
+export const queryAllByRole: AllByRole
+export const findByRole: FindByRole
+export const findAllByRole: FindAllByRole
 export const getByTestId: GetByBoundAttribute
 export const getAllByTestId: AllByBoundAttribute
 export const queryByTestId: QueryByBoundAttribute
