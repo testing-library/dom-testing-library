@@ -88,7 +88,7 @@ test('provides an improved stack trace if the thrown error is a TestingLibraryEl
     {timeout: 8, interval: 5},
   ).catch(e => e)
   // too hard to test that the stack trace is what we want it to be
-  // so we'll just make sure that it's not the same as the origianl
+  // so we'll just make sure that it's not the same as the original
   expect(result.stack).not.toBe(originalStackTrace)
 })
 
