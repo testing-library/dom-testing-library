@@ -20,6 +20,7 @@ test('can accept an interval of 0', () => waitFor(() => {}, {interval: 0}))
 
 test('can timeout after the given timeout time', async () => {
   const error = new Error('throws every time')
+  const originalStackTrace = error.stack
   const result = await waitFor(
     () => {
       throw error
@@ -27,6 +28,7 @@ test('can timeout after the given timeout time', async () => {
     {timeout: 8, interval: 5},
   ).catch(e => e)
   expect(result).toBe(error)
+  expect(result.stack).toBe(originalStackTrace)
 })
 
 test('if no error is thrown then throws a timeout error', async () => {
@@ -61,18 +63,6 @@ test('uses full stack error trace when showOriginalStackTrace present', async ()
       throw error
     },
     {timeout: 8, interval: 5, showOriginalStackTrace: true},
-  ).catch(e => e)
-  expect(result.stack).toBe(originalStackTrace)
-})
-
-test('does not change the stack trace if the thrown error is not a TestingLibraryElementError', async () => {
-  const error = new Error('Throws the full stack trace')
-  const originalStackTrace = error.stack
-  const result = await waitFor(
-    () => {
-      throw error
-    },
-    {timeout: 8, interval: 5},
   ).catch(e => e)
   expect(result.stack).toBe(originalStackTrace)
 })
