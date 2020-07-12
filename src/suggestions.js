@@ -35,7 +35,7 @@ function escapeRegExp(string) {
 }
 
 function getRegExpMatcher(string) {
-  return new RegExp(string.toLowerCase(), 'i')
+  return new RegExp(escapeRegExp(string.toLowerCase()), 'i')
 }
 
 function makeSuggestion(queryName, content, {variant, name}) {
@@ -46,7 +46,7 @@ function makeSuggestion(queryName, content, {variant, name}) {
   ]
 
   if (name) {
-    queryArgs.push({name: new RegExp(escapeRegExp(name.toLowerCase()), 'i')})
+    queryArgs.push({name: getRegExpMatcher(name)})
   }
 
   const queryMethod = `${variant}By${queryName}`

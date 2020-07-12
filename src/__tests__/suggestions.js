@@ -172,13 +172,54 @@ test('should suggest img role w/ alt text', () => {
 })
 
 test('escapes regular expressions in suggestion', () => {
-  renderIntoDocument(
-    `<img src="foo.png" alt="The Problem (picture of a question mark)" data-testid="foo" />`,
-  )
+  const {container} = renderIntoDocument(`
+      <label for="superInput">inp-t lab^l w{th c+ars to esc\\pe</label>
+      <input id="superInput" type="text" value="my super string +-('{}^$)" placeholder="should escape +-'(/" />
+      <p>
+        Loading ... (1)
+      </p>
+      <img src="foo.png" alt="The Problem (picture of a question mark)" data-testid="foo" />
+    `)
 
   expect(() => screen.getByTestId('foo')).toThrowError(
     /getByRole\('img', \{ name: \/the problem \\\(picture of a question mark\\\)\/i \}\)/,
   )
+
+  expect(
+    getSuggestedQuery(
+      container.querySelector('img'),
+      'get',
+      'altText',
+    ).toString(),
+  ).toEqual(`getByAltText(/the problem \\(picture of a question mark\\)/i)`)
+
+  expect(getSuggestedQuery(container.querySelector('p')).toString()).toEqual(
+    `getByText(/loading \\.\\.\\. \\(1\\)/i)`,
+  )
+
+  expect(
+    getSuggestedQuery(
+      container.querySelector('input'),
+      'get',
+      'placeholderText',
+    ).toString(),
+  ).toEqual(`getByPlaceholderText(/should escape \\+\\-'\\(\\//i)`)
+
+  expect(
+    getSuggestedQuery(
+      container.querySelector('input'),
+      'get',
+      'displayValue',
+    ).toString(),
+  ).toEqual(`getByDisplayValue(/my super string \\+\\-\\('\\{\\}\\^\\$\\)/i)`)
+
+  expect(
+    getSuggestedQuery(
+      container.querySelector('input'),
+      'get',
+      'labelText',
+    ).toString(),
+  ).toEqual(`getByLabelText(/inp\\-t lab\\^l w\\{th c\\+ars to esc\\\\pe/i)`)
 })
 
 test('should suggest getByLabelText when no role available', () => {
