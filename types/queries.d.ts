@@ -76,7 +76,7 @@ export interface ByRoleOptions extends MatcherOptions {
   hidden?: boolean
   /**
    * If true only includes elements in the query set that are marked as
-   * selected in the accessibility tree, i.e., `aria-selected="true"`
+   * selected or checked in the accessibility tree, i.e., `aria-selected="true"`
    */
   selected?: boolean
   /**
