@@ -37,7 +37,10 @@ function queryAllByRole(
 
   if (selected !== undefined) {
     // guard against unknown roles
-    if (allRoles.get(role)?.props['aria-selected'] === undefined) {
+    if (
+      allRoles.get(role)?.props['aria-selected'] === undefined &&
+      allRoles.get(role)?.props['aria-checked'] === undefined
+    ) {
       throw new Error(`"aria-selected" is not supported on role "${role}".`)
     }
   }

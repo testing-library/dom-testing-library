@@ -1,4 +1,4 @@
-import {render} from './helpers/test-utils'
+import {render, renderIntoDocument} from './helpers/test-utils'
 
 test('`selected` throws on unsupported roles', () => {
   const {getByRole} = render(`<input aria-selected="true" type="text">`)
@@ -7,6 +7,11 @@ test('`selected` throws on unsupported roles', () => {
   ).toThrowErrorMatchingInlineSnapshot(
     `"\\"aria-selected\\" is not supported on role \\"textbox\\"."`,
   )
+})
+
+test('`selected: true` matches `checked` checkboxes', () => {
+  const {getByRole} = renderIntoDocument(`<input type="checkbox" checked />`)
+  expect(getByRole('checkbox', {selected: true})).toBeInTheDocument()
 })
 
 test('`selected: true` matches `aria-selected="true"` on supported roles', () => {

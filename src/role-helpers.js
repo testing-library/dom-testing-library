@@ -185,6 +185,9 @@ function computeAriaSelected(element) {
   if (element.tagName === 'OPTION') {
     return element.selected
   }
+  if ('checked' in element) {
+    return element.checked
+  }
   // explicit value
   const attributeValue = element.getAttribute('aria-selected')
   if (attributeValue === 'true') {
