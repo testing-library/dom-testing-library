@@ -188,8 +188,11 @@ function computeAriaSelected(element) {
   if ('checked' in element) {
     return element.checked
   }
+
   // explicit value
-  const attributeValue = element.getAttribute('aria-selected')
+  const attributeValue =
+    element.getAttribute('aria-selected') ||
+    element.getAttribute('aria-checked')
   if (attributeValue === 'true') {
     return true
   }
