@@ -187,14 +187,7 @@ function computeAriaSelected(element) {
   }
 
   // explicit value
-  const attributeValue = element.getAttribute('aria-selected')
-  if (attributeValue === 'true') {
-    return true
-  }
-  if (attributeValue === 'false') {
-    return false
-  }
-  return undefined
+  return checkBooleanAttribute(element, 'aria-selected')
 }
 
 /**
@@ -210,7 +203,11 @@ function computeAriaChecked(element) {
   }
 
   // explicit value
-  const attributeValue = element.getAttribute('aria-checked')
+  return checkBooleanAttribute(element, 'aria-checked')
+}
+
+function checkBooleanAttribute(element, attribute) {
+  const attributeValue = element.getAttribute(attribute)
   if (attributeValue === 'true') {
     return true
   }

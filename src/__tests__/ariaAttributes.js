@@ -9,6 +9,15 @@ test('`selected` throws on unsupported roles', () => {
   )
 })
 
+test('`checked` throws on unsupported roles', () => {
+  const {getByRole} = render(`<input aria-checked="true" type="text">`)
+  expect(() =>
+    getByRole('textbox', {checked: true}),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"\\"aria-checked\\" is not supported on role \\"textbox\\"."`,
+  )
+})
+
 test('`checked: true|false` matches `checked` checkboxes', () => {
   const {getByRole} = renderIntoDocument(
     `<div>
