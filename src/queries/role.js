@@ -2,6 +2,7 @@ import {computeAccessibleName} from 'dom-accessibility-api'
 import {roles as allRoles} from 'aria-query'
 import {
   computeAriaSelected,
+  computeAriaChecked,
   getImplicitAriaRoles,
   prettyRoles,
   isInaccessible,
@@ -29,6 +30,7 @@ function queryAllByRole(
     normalizer,
     queryFallbacks = false,
     selected,
+    checked,
   } = {},
 ) {
   checkContainerType(container)
@@ -37,11 +39,15 @@ function queryAllByRole(
 
   if (selected !== undefined) {
     // guard against unknown roles
-    if (
-      allRoles.get(role)?.props['aria-selected'] === undefined &&
-      allRoles.get(role)?.props['aria-checked'] === undefined
-    ) {
+    if (allRoles.get(role)?.props['aria-selected'] === undefined) {
       throw new Error(`"aria-selected" is not supported on role "${role}".`)
+    }
+  }
+
+  if (checked !== undefined) {
+    // guard against unknown roles
+    if (allRoles.get(role)?.props['aria-checked'] === undefined) {
+      throw new Error(`"aria-checked" is not supported on role "${role}".`)
     }
   }
 
@@ -84,6 +90,9 @@ function queryAllByRole(
     .filter(element => {
       if (selected !== undefined) {
         return selected === computeAriaSelected(element)
+      }
+      if (checked !== undefined) {
+        return checked === computeAriaChecked(element)
       }
       // don't care if aria attributes are unspecified
       return true

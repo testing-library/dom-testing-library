@@ -9,26 +9,26 @@ test('`selected` throws on unsupported roles', () => {
   )
 })
 
-test('`selected: true` matches `checked` checkboxes', () => {
+test('`checked: true|false` matches `checked` checkboxes', () => {
   const {getByRole} = renderIntoDocument(
     `<div>
       <input type="checkbox" checked />
       <input type="checkbox" />
     </div>`,
   )
-  expect(getByRole('checkbox', {selected: true})).toBeInTheDocument()
-  expect(getByRole('checkbox', {selected: false})).toBeInTheDocument()
+  expect(getByRole('checkbox', {checked: true})).toBeInTheDocument()
+  expect(getByRole('checkbox', {checked: false})).toBeInTheDocument()
 })
 
-test('`selected: true` matches `checked` elements with proper role', () => {
+test('`checked: true|false` matches `checked` elements with proper role', () => {
   const {getByRole} = renderIntoDocument(
     `<div>
       <span role="checkbox" aria-checked="true">✔</span>
       <span role="checkbox" aria-checked="false">𝒙</span>
     </div>`,
   )
-  expect(getByRole('checkbox', {selected: true})).toBeInTheDocument()
-  expect(getByRole('checkbox', {selected: false})).toBeInTheDocument()
+  expect(getByRole('checkbox', {checked: true})).toBeInTheDocument()
+  expect(getByRole('checkbox', {checked: false})).toBeInTheDocument()
 })
 
 test('`selected: true` matches `aria-selected="true"` on supported roles', () => {
