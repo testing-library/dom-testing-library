@@ -40,6 +40,28 @@ test('`checked: true|false` matches `checked` elements with proper role', () => 
   expect(getByRole('checkbox', {checked: false})).toBeInTheDocument()
 })
 
+test('`checked: true|false` does not match element in `indeterminate` state', () => {
+  const {queryByRole, getByLabelText} = renderIntoDocument(
+    `<div>
+      <span role="checkbox" aria-checked="mixed">not so much</span>
+      <input type="checkbox" checked aria-label="indeteminate yes" />
+      <input type="checkbox" aria-label="indeteminate no" />
+    </div>`,
+  )
+  getByLabelText(/indeteminate yes/i).indeterminate = true
+  getByLabelText(/indeteminate no/i).indeterminate = true
+
+  expect(
+    queryByRole('checkbox', {checked: true, name: /indeteminate yes/i}),
+  ).toBeNull()
+  expect(
+    queryByRole('checkbox', {checked: true, name: /indeteminate no/i}),
+  ).toBeNull()
+  expect(
+    queryByRole('checkbox', {checked: true, name: /not so much/i}),
+  ).toBeNull()
+})
+
 test('`selected: true` matches `aria-selected="true"` on supported roles', () => {
   const {getAllByRole} = render(`
 <select>
