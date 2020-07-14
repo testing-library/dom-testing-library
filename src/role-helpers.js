@@ -199,7 +199,7 @@ function computeAriaChecked(element) {
   // https://www.w3.org/TR/html-aam-1.0/#details-id-56
   // https://www.w3.org/TR/html-aam-1.0/#details-id-67
   if ('indeterminate' in element && element.indeterminate) {
-    return false
+    return undefined
   }
   if ('checked' in element) {
     return element.checked

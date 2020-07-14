@@ -55,7 +55,7 @@ test('`checked: true|false` does not match element in `indeterminate` state', ()
     queryByRole('checkbox', {checked: true, name: /indeteminate yes/i}),
   ).toBeNull()
   expect(
-    queryByRole('checkbox', {checked: true, name: /indeteminate no/i}),
+    queryByRole('checkbox', {checked: false, name: /indeteminate no/i}),
   ).toBeNull()
   expect(
     queryByRole('checkbox', {checked: true, name: /not so much/i}),
