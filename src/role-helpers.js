@@ -185,8 +185,32 @@ function computeAriaSelected(element) {
   if (element.tagName === 'OPTION') {
     return element.selected
   }
+
   // explicit value
-  const attributeValue = element.getAttribute('aria-selected')
+  return checkBooleanAttribute(element, 'aria-selected')
+}
+
+/**
+ * @param {Element} element -
+ * @returns {boolean | undefined} - false/true if (not)checked, undefined if not checked-able
+ */
+function computeAriaChecked(element) {
+  // implicit value from html-aam mappings: https://www.w3.org/TR/html-aam-1.0/#html-attribute-state-and-property-mappings
+  // https://www.w3.org/TR/html-aam-1.0/#details-id-56
+  // https://www.w3.org/TR/html-aam-1.0/#details-id-67
+  if ('indeterminate' in element && element.indeterminate) {
+    return undefined
+  }
+  if ('checked' in element) {
+    return element.checked
+  }
+
+  // explicit value
+  return checkBooleanAttribute(element, 'aria-checked')
+}
+
+function checkBooleanAttribute(element, attribute) {
+  const attributeValue = element.getAttribute(attribute)
   if (attributeValue === 'true') {
     return true
   }
@@ -204,4 +228,5 @@ export {
   prettyRoles,
   isInaccessible,
   computeAriaSelected,
+  computeAriaChecked,
 }

@@ -276,6 +276,9 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://www.jacobparis.com/"><img src="https://avatars2.githubusercontent.com/u/5633704?v=4" width="100px;" alt=""/><br /><sub><b>Jacob Paris</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=JacobParis" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=JacobParis" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://keiya01.github.io/portfolio"><img src="https://avatars1.githubusercontent.com/u/34934510?v=4" width="100px;" alt=""/><br /><sub><b>keiya sasaki</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=keiya01" title="Documentation">📖</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/idanen"><img src="https://avatars2.githubusercontent.com/u/1687893?v=4" width="100px;" alt=""/><br /><sub><b>Idan Entin</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=idanen" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=idanen" title="Tests">⚠️</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->

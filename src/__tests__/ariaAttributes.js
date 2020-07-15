@@ -1,4 +1,4 @@
-import {render} from './helpers/test-utils'
+import {render, renderIntoDocument} from './helpers/test-utils'
 
 test('`selected` throws on unsupported roles', () => {
   const {getByRole} = render(`<input aria-selected="true" type="text">`)
@@ -7,6 +7,59 @@ test('`selected` throws on unsupported roles', () => {
   ).toThrowErrorMatchingInlineSnapshot(
     `"\\"aria-selected\\" is not supported on role \\"textbox\\"."`,
   )
+})
+
+test('`checked` throws on unsupported roles', () => {
+  const {getByRole} = render(`<input aria-checked="true" type="text">`)
+  expect(() =>
+    getByRole('textbox', {checked: true}),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"\\"aria-checked\\" is not supported on role \\"textbox\\"."`,
+  )
+})
+
+test('`checked: true|false` matches `checked` checkboxes', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <input type="checkbox" checked />
+      <input type="checkbox" />
+    </div>`,
+  )
+  expect(getByRole('checkbox', {checked: true})).toBeInTheDocument()
+  expect(getByRole('checkbox', {checked: false})).toBeInTheDocument()
+})
+
+test('`checked: true|false` matches `checked` elements with proper role', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <span role="checkbox" aria-checked="true">✔</span>
+      <span role="checkbox" aria-checked="false">𝒙</span>
+    </div>`,
+  )
+  expect(getByRole('checkbox', {checked: true})).toBeInTheDocument()
+  expect(getByRole('checkbox', {checked: false})).toBeInTheDocument()
+})
+
+test('`checked: true|false` does not match element in `indeterminate` state', () => {
+  const {queryByRole, getByLabelText} = renderIntoDocument(
+    `<div>
+      <span role="checkbox" aria-checked="mixed">not so much</span>
+      <input type="checkbox" checked aria-label="indeteminate yes" />
+      <input type="checkbox" aria-label="indeteminate no" />
+    </div>`,
+  )
+  getByLabelText(/indeteminate yes/i).indeterminate = true
+  getByLabelText(/indeteminate no/i).indeterminate = true
+
+  expect(
+    queryByRole('checkbox', {checked: true, name: /indeteminate yes/i}),
+  ).toBeNull()
+  expect(
+    queryByRole('checkbox', {checked: false, name: /indeteminate no/i}),
+  ).toBeNull()
+  expect(
+    queryByRole('checkbox', {checked: true, name: /not so much/i}),
+  ).toBeNull()
 })
 
 test('`selected: true` matches `aria-selected="true"` on supported roles', () => {
