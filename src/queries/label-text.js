@@ -51,6 +51,17 @@ function queryAllLabelsByText(
     .map(({node}) => node)
 }
 
+function getLabelContent(label) {
+  let labelContent = label.getAttribute('value') || label.textContent
+  Array.from(label.querySelectorAll('textarea')).forEach(textarea => {
+    labelContent = labelContent.replace(textarea.value, '')
+  })
+  Array.from(label.querySelectorAll('select')).forEach(select => {
+    labelContent = labelContent.replace(select.textContent, '')
+  })
+  return labelContent
+}
+
 function queryAllByLabelText(
   container,
   text,
@@ -60,29 +71,34 @@ function queryAllByLabelText(
 
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-
   const matchingLabelledElements = Array.from(container.querySelectorAll('*'))
-    .filter(element => element.hasAttribute('aria-labelledby'))
+    .filter(
+      element => element.labels || element.hasAttribute('aria-labelledby'),
+    )
     .reduce((labelledElements, labelledElement) => {
-      const labelsId = labelledElement
-        .getAttribute('aria-labelledby')
-        .split(' ')
-      const labelsValue = labelsId.map(labelId => {
-        const labellingElement = container.querySelector(`[id=${labelId}]`)
-        let labelValue =
-          labellingElement.getAttribute('value') || labellingElement.textContent
-        Array.from(labellingElement.querySelectorAll('textarea')).forEach(
-          textarea => {
-            labelValue = labelValue.replace(textarea.value, '')
-          },
-        )
-        Array.from(labellingElement.querySelectorAll('select')).forEach(
-          select => {
-            labelValue = labelValue.replace(select.textContent, '')
-          },
-        )
-        return labelValue
-      })
+      const labelsId = labelledElement.getAttribute('aria-labelledby')
+        ? labelledElement.getAttribute('aria-labelledby').split(' ')
+        : []
+      const labelsValue = labelsId.length
+        ? labelsId.map(labelId => {
+            const labellingElement = container.querySelector(`[id=${labelId}]`)
+            return getLabelContent(labellingElement)
+          })
+        : Array.from(labelledElement.labels).map(label => {
+            const textToMatch = getLabelContent(label)
+            const formControlSelector =
+              'button, input, meter, output, progress, select, textarea'
+            const labelledFormControl = Array.from(
+              label.querySelectorAll(formControlSelector),
+            ).filter(element => element.matches(selector))[0]
+            if (labelledFormControl) {
+              if (
+                matcher(textToMatch, labelledFormControl, text, matchNormalizer)
+              )
+                labelledElements.push(labelledFormControl)
+            }
+            return textToMatch
+          })
       if (
         matcher(labelsValue.join(' '), labelledElement, text, matchNormalizer)
       )
@@ -113,40 +129,9 @@ function queryAllByLabelText(
     }, [])
     .concat(queryAllByAttribute('aria-label', container, text, {exact}))
 
-  const matchingElementsByLabels = Array.from(
-    container.querySelectorAll('label'),
-  ).reduce((labelledElements, label) => {
-    let textToMatch = label.textContent
-    Array.from(label.querySelectorAll('textarea')).forEach(textarea => {
-      textToMatch = textToMatch.replace(textarea.value, '')
-    })
-    Array.from(label.querySelectorAll('select')).forEach(select => {
-      textToMatch = textToMatch.replace(select.textContent, '')
-    })
-    if (label.hasAttribute('for')) {
-      const node = container.querySelector(
-        `[id="${label.getAttribute('for')}"]`,
-      )
-      if (matcher(textToMatch, node, text, matchNormalizer))
-        labelledElements.push(node)
-    }
-    if (label.childNodes.length) {
-      const formControlSelector =
-        'button, input, meter, output, progress, select, textarea'
-      const labelledFormControl = Array.from(
-        label.querySelectorAll(formControlSelector),
-      ).filter(element => element.matches(selector))[0]
-      if (labelledFormControl) {
-        if (matcher(textToMatch, labelledFormControl, text, matchNormalizer))
-          labelledElements.push(labelledFormControl)
-      }
-    }
-    return labelledElements
-  }, [])
-
-  return Array.from(
-    new Set([...matchingLabelledElements, ...matchingElementsByLabels]),
-  ).filter(element => element.matches(selector))
+  return Array.from(new Set(matchingLabelledElements)).filter(element =>
+    element.matches(selector),
+  )
 }
 
 // the getAll* query would normally look like this:
