@@ -2,7 +2,7 @@ node_modules
 coverage
 dist
 .DS_Store
-
+.idea
 # these cause more harm than good
 # when working with contributors
 package-lock.json
