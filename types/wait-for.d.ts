@@ -1,11 +1,19 @@
-export interface waitForOptions {
-  container?: HTMLElement
+export interface WaitForOptions {
+  container?: Node
+  timeout?: number
+  interval?: number
+  mutationObserverOptions?: MutationObserverInit
+  showOriginalStackTrace?: boolean
+}
+declare function waitForWrapper(
+  callback: any,
+  options?: WaitForOptions,
+): Promise<any>
+interface WaitOptions {
+  container?: Node
   timeout?: number
   interval?: number
   mutationObserverOptions?: MutationObserverInit
 }
-
-export function waitFor<T>(
-  callback: () => T extends Promise<any> ? never : T,
-  options?: waitForOptions,
-): Promise<T>
+declare function wait(first?: () => void, options?: WaitOptions): Promise<void>
+export {waitForWrapper as waitFor, wait}

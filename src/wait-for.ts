@@ -17,7 +17,7 @@ function copyStackTrace(target, source) {
 function waitFor(
   callback,
   {
-    container = getDocument(),
+    container = getDocument() as Node,
     timeout = getConfig().asyncUtilTimeout,
     showOriginalStackTrace = getConfig().showOriginalStackTrace,
     stackTraceError,
@@ -27,7 +27,7 @@ function waitFor(
       childList: true,
       attributes: true,
       characterData: true,
-    },
+    } as MutationObserverInit,
   },
 ) {
   if (typeof callback !== 'function') {
@@ -40,7 +40,9 @@ function waitFor(
     const overallTimeoutTimer = setTimeout(onTimeout, timeout)
     const intervalId = setInterval(checkCallback, interval)
 
-    const {MutationObserver} = getWindowFromNode(container)
+    const {MutationObserver} = (getWindowFromNode(container) as unknown) as {
+      MutationObserver: (callback: MutationCallback) => void
+    }
     const observer = new MutationObserver(checkCallback)
     runWithRealTimers(() =>
       observer.observe(container, mutationObserverOptions),
@@ -90,7 +92,15 @@ function waitFor(
   })
 }
 
-function waitForWrapper(callback, options) {
+export interface WaitForOptions {
+  container?: Node
+  timeout?: number
+  interval?: number
+  mutationObserverOptions?: MutationObserverInit
+  showOriginalStackTrace?: boolean
+}
+
+function waitForWrapper(callback, options?: WaitForOptions) {
   // create the error here so its stack trace is as close to the
   // calling code as possible
   const stackTraceError = new Error('STACK_TRACE_MESSAGE')
@@ -103,16 +113,24 @@ let hasWarned = false
 
 // deprecated... TODO: remove this method. We renamed this to `waitFor` so the
 // code people write reads more clearly.
-function wait(...args) {
+interface WaitOptions {
+  container?: Node
+  timeout?: number
+  interval?: number
+  mutationObserverOptions?: MutationObserverInit
+}
+function wait(
+  first: () => void = () => {},
+  options?: WaitOptions,
+): Promise<void> {
   // istanbul ignore next
-  const [first = () => {}, ...rest] = args
   if (!hasWarned) {
     hasWarned = true
     console.warn(
       `\`wait\` has been deprecated and replaced by \`waitFor\` instead. In most cases you should be able to find/replace \`wait\` with \`waitFor\`. Learn more: https://testing-library.com/docs/dom-testing-library/api-async#waitfor.`,
     )
   }
-  return waitForWrapper(first, ...rest)
+  return waitForWrapper(first, options)
 }
 
 export {waitForWrapper as waitFor, wait}

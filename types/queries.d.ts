@@ -1,6 +1,6 @@
 import {Matcher, MatcherOptions} from './matches'
 import {SelectorMatcherOptions} from './query-helpers'
-import {waitForOptions} from './wait-for'
+import {WaitForOptions} from './wait-for'
 
 export type QueryByBoundAttribute = (
   container: HTMLElement,
@@ -18,7 +18,7 @@ export type FindAllByBoundAttribute = (
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
-  waitForElementOptions?: waitForOptions,
+  waitForElementOptions?: WaitForOptions,
 ) => Promise<HTMLElement[]>
 
 export type GetByBoundAttribute = (
@@ -31,7 +31,7 @@ export type FindByBoundAttribute = (
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
-  waitForElementOptions?: waitForOptions,
+  waitForElementOptions?: WaitForOptions,
 ) => Promise<HTMLElement>
 
 export type QueryByText = (
@@ -50,7 +50,7 @@ export type FindAllByText = (
   container: HTMLElement,
   id: Matcher,
   options?: SelectorMatcherOptions,
-  waitForElementOptions?: waitForOptions,
+  waitForElementOptions?: WaitForOptions,
 ) => Promise<HTMLElement[]>
 
 export type GetByText = (
@@ -63,7 +63,7 @@ export type FindByText = (
   container: HTMLElement,
   id: Matcher,
   options?: SelectorMatcherOptions,
-  waitForElementOptions?: waitForOptions,
+  waitForElementOptions?: WaitForOptions,
 ) => Promise<HTMLElement>
 
 export interface ByRoleOptions extends MatcherOptions {
@@ -114,14 +114,14 @@ export type FindByRole = (
   container: HTMLElement,
   role: Matcher,
   options?: ByRoleOptions,
-  waitForElementOptions?: waitForOptions,
+  waitForElementOptions?: WaitForOptions,
 ) => Promise<HTMLElement>
 
 export type FindAllByRole = (
   container: HTMLElement,
   role: Matcher,
   options?: ByRoleOptions,
-  waitForElementOptions?: waitForOptions,
+  waitForElementOptions?: WaitForOptions,
 ) => Promise<HTMLElement[]>
 
 export const getByLabelText: GetByText
