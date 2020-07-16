@@ -5,10 +5,10 @@ export interface WaitForOptions {
   mutationObserverOptions?: MutationObserverInit
   showOriginalStackTrace?: boolean
 }
-declare function waitForWrapper(
-  callback: any,
+declare function waitForWrapper<T>(
+  callback: () => T extends Promise<any> ? never : T,
   options?: WaitForOptions,
-): Promise<any>
+): Promise<T>
 interface WaitOptions {
   container?: Node
   timeout?: number

@@ -100,7 +100,10 @@ export interface WaitForOptions {
   showOriginalStackTrace?: boolean
 }
 
-function waitForWrapper(callback, options?: WaitForOptions) {
+function waitForWrapper<T>(
+  callback: () => T extends Promise<any> ? never : T,
+  options?: WaitForOptions,
+): Promise<T> {
   // create the error here so its stack trace is as close to the
   // calling code as possible
   const stackTraceError = new Error('STACK_TRACE_MESSAGE')

@@ -1,3 +1,3 @@
-import {waitForOptions} from './wait-for'
+import {WaitForOptions} from './wait-for'
 
-export function waitForDomChange(options?: waitForOptions): Promise<any>
+export function waitForDomChange(options?: WaitForOptions): Promise<any>

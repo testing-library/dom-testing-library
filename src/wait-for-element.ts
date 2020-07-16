@@ -1,11 +1,14 @@
-import {waitFor} from './wait-for'
+import {waitFor, WaitForOptions} from './wait-for'
 
 let hasWarned = false
 
 // deprecated... TODO: remove this method. People should use a find* query or
 // wait instead the reasoning is that this doesn't really do anything useful
 // that you can't get from using find* or wait.
-async function waitForElement(callback, options) {
+async function waitForElement<T>(
+  callback: () => T extends Promise<any> ? never : T,
+  options?: WaitForOptions,
+): Promise<T> {
   if (!hasWarned) {
     hasWarned = true
     console.warn(
