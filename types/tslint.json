@@ -2,6 +2,7 @@
   "extends": ["dtslint/dtslint.json"],
   "rules": {
     "one-variable-per-declaration": false,
+    "max-line-length": false,
     "no-redundant-jsdoc": false,
     "no-useless-files": false,
     "no-relative-import-in-test": false,

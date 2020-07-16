@@ -1,8 +1,16 @@
 import {getConfig} from './config'
 import {getWindowFromNode} from './helpers'
-import {eventMap, eventAliasMap} from './event-map'
+import {eventMap, EventMapKey, eventAliasMap, EventType} from './event-map'
 
-function fireEvent(element, event) {
+declare global {
+  // FIXME we should not augment the interface here
+  interface Window {
+    DataTransfer: () => void
+    Event: () => void
+  }
+}
+
+function internalfireEvent(element: EventTarget, event: Event) {
   return getConfig().eventWrapper(() => {
     if (!event) {
       throw new Error(
@@ -18,9 +26,26 @@ function fireEvent(element, event) {
   })
 }
 
-const createEvent = {}
+function isDragEventInit(eventInit: unknown): eventInit is DragEventInit {
+  return typeof (eventInit as DragEventInit).dataTransfer === 'object'
+}
 
-Object.keys(eventMap).forEach(key => {
+type EventTargetWithFiles = HTMLInputElement
+type EventTargetWithValue =
+  | HTMLInputElement
+  | HTMLButtonElement
+  | HTMLOutputElement
+
+type CreateObject = {
+  [K in EventType]: (
+    //element: Document | Element | Window | Node,
+    element: EventTarget,
+    options?: {},
+  ) => Event
+}
+const createEvent = {} as CreateObject
+
+Object.keys(eventMap).forEach((key: EventMapKey) => {
   const {EventType, defaultInit} = eventMap[key]
   const eventName = key.toLowerCase()
 
@@ -30,8 +55,11 @@ Object.keys(eventMap).forEach(key => {
         `Unable to fire a "${key}" event - please provide a DOM element.`,
       )
     }
-    const eventInit = {...defaultInit, ...init}
-    const {target: {value, files, ...targetProperties} = {}} = eventInit
+    const eventInit: EventInit = {...defaultInit, ...init}
+    const {target = {}} = eventInit as Event
+    const {value, files, ...targetProperties} = target as Partial<
+      EventTargetWithValue & EventTargetWithFiles
+    >
     if (value !== undefined) {
       setNativeValue(node, value)
     }
@@ -56,15 +84,17 @@ Object.keys(eventMap).forEach(key => {
     } else {
       // IE11 polyfill from https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
       event = window.document.createEvent(EventType)
-      const {bubbles, cancelable, detail, ...otherInit} = eventInit
+      const {bubbles, cancelable, detail, ...otherInit} = eventInit as Partial<
+        UIEvent
+      >
       event.initEvent(eventName, bubbles, cancelable, detail)
       Object.keys(otherInit).forEach(eventKey => {
         event[eventKey] = otherInit[eventKey]
       })
     }
 
-    const {dataTransfer} = eventInit
-    if (typeof dataTransfer === 'object') {
+    if (isDragEventInit(eventInit)) {
+      const {dataTransfer} = eventInit
       // DataTransfer is not supported in jsdom: https://github.com/jsdom/jsdom/issues/1568
       /* istanbul ignore if  */
       if (typeof window.DataTransfer === 'function') {
@@ -80,7 +110,8 @@ Object.keys(eventMap).forEach(key => {
     return event
   }
 
-  fireEvent[key] = (node, init) => fireEvent(node, createEvent[key](node, init))
+  internalfireEvent[key] = (node: EventTarget, init) =>
+    internalfireEvent(node, createEvent[key](node, init))
 })
 
 // function written after some investigation here:
@@ -102,9 +133,17 @@ function setNativeValue(element, value) {
 
 Object.keys(eventAliasMap).forEach(aliasKey => {
   const key = eventAliasMap[aliasKey]
-  fireEvent[aliasKey] = (...args) => fireEvent[key](...args)
+  internalfireEvent[aliasKey] = (...args) => fireEvent[key](...args)
 })
 
+type FireEventAsFunction = (element: EventTarget, event: Event) => boolean
+type FireEventAsHelper = Record<
+  EventType,
+  (element: EventTarget, init?: unknown) => boolean
+>
+type FireEvent = FireEventAsFunction & FireEventAsHelper
+
+const fireEvent = internalfireEvent as FireEvent
 export {fireEvent, createEvent}
 
 /* eslint complexity:["error", 9] */
