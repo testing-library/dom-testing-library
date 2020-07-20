@@ -1125,6 +1125,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "delca85",
+      "name": "Bianca Del Carretto",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4076043?v=4",
+      "profile": "https://github.com/delca85",
+      "contributions": [
+        "test",
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
