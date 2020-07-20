@@ -278,6 +278,7 @@ Thanks goes to these people ([emoji key][emojis]):
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/idanen"><img src="https://avatars2.githubusercontent.com/u/1687893?v=4" width="100px;" alt=""/><br /><sub><b>Idan Entin</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=idanen" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=idanen" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/deniz-susman-92b40a145/"><img src="https://avatars1.githubusercontent.com/u/39295979?v=4" width="100px;" alt=""/><br /><sub><b>Deniz Susman</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=DenrizSusam" title="Code">💻</a></td>
   </tr>
 </table>
 
