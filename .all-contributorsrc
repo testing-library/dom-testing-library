@@ -1135,6 +1135,16 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "ryuuji3",
+      "name": "Josh Lalonde",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/9097492?v=4",
+      "profile": "https://www.linkedin.com/in/joshlalonde3/",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
