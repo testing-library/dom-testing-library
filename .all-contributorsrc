@@ -1116,6 +1116,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "DenrizSusam",
+      "name": "Deniz Susman",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/39295979?v=4",
+      "profile": "https://www.linkedin.com/in/deniz-susman-92b40a145/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
