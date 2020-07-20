@@ -81,7 +81,7 @@ function queryAllByLabelText(
         : []
       const labelsValue = labelsId.length
         ? labelsId.map(labelId => {
-            const labellingElement = container.querySelector(`[id=${labelId}]`)
+            const labellingElement = container.querySelector(`[id="${labelId}"]`)
             return getLabelContent(labellingElement)
           })
         : Array.from(labelledElement.labels).map(label => {
