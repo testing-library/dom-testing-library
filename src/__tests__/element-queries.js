@@ -1045,3 +1045,30 @@ test('can get an element with aria-labelledby when label has a child', () => {
     '2nd-input',
   )
 })
+test('gets an element when there is an aria-labelledby a not found id', () => {
+  const {getByLabelText} = render(`
+    <div>
+      <input aria-labelledby="not-existing-label"/>
+      <label id="existing-label">Test</label>
+      <input aria-labelledby="existing-label" id="input-id" />
+    </div>
+  `)
+  expect(getByLabelText('Test').id).toBe('input-id')
+})
+
+test('return a proper error message when no label is found and there is an aria-labelledby a not found id', () => {
+  const {getByLabelText} = render(
+    '<input aria-labelledby="not-existing-label"/>',
+  )
+
+  expect(() => getByLabelText('LucyRicardo'))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Unable to find a label with the text of: LucyRicardo
+
+<div>
+  <input
+    aria-labelledby="not-existing-label"
+  />
+</div>"
+`)
+})

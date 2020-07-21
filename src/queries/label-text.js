@@ -79,10 +79,12 @@ function queryAllByLabelText(
       const labelsId = labelledElement.getAttribute('aria-labelledby')
         ? labelledElement.getAttribute('aria-labelledby').split(' ')
         : []
-      const labelsValue = labelsId.length
+      let labelsValue = labelsId.length
         ? labelsId.map(labelId => {
-            const labellingElement = container.querySelector(`[id="${labelId}"]`)
-            return getLabelContent(labellingElement)
+            const labellingElement = container.querySelector(
+              `[id="${labelId}"]`,
+            )
+            return labellingElement ? getLabelContent(labellingElement) : ''
           })
         : Array.from(labelledElement.labels).map(label => {
             const textToMatch = getLabelContent(label)
@@ -99,6 +101,7 @@ function queryAllByLabelText(
             }
             return textToMatch
           })
+      labelsValue = labelsValue.filter(Boolean)
       if (
         matcher(labelsValue.join(' '), labelledElement, text, matchNormalizer)
       )
