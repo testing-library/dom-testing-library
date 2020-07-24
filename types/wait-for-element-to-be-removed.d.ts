@@ -1,6 +1,6 @@
 import {WaitForOptions} from './wait-for'
-
-export function waitForElementToBeRemoved<T>(
-  callback: (() => T) | T,
+declare function waitForElementToBeRemoved<T extends Node>(
+  callback: (() => T | T[]) | T | T[],
   options?: WaitForOptions,
-): Promise<T>
+): Promise<boolean>
+export {waitForElementToBeRemoved}

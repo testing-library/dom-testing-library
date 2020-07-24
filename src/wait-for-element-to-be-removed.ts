@@ -1,4 +1,4 @@
-import {waitFor} from './wait-for'
+import {waitFor, WaitForOptions} from './wait-for'
 
 const isRemoved = result => !result || (Array.isArray(result) && !result.length)
 
@@ -12,26 +12,32 @@ function initialCheck(elements) {
   }
 }
 
-async function waitForElementToBeRemoved(callback, options) {
+async function waitForElementToBeRemoved<T extends Node>(
+  callback: (() => T | T[]) | T | T[],
+  options?: WaitForOptions,
+) {
   // created here so we get a nice stacktrace
   const timeoutError = new Error('Timed out in waitForElementToBeRemoved.')
+  let cb
   if (typeof callback !== 'function') {
     initialCheck(callback)
-    const elements = Array.isArray(callback) ? callback : [callback]
+    const elements: Array<T> = Array.isArray(callback) ? callback : [callback]
     const getRemainingElements = elements.map(element => {
       let parent = element.parentElement
       while (parent.parentElement) parent = parent.parentElement
       return () => (parent.contains(element) ? element : null)
     })
-    callback = () => getRemainingElements.map(c => c()).filter(Boolean)
+    cb = () => getRemainingElements.map(c => c()).filter(Boolean)
+  } else {
+    cb = callback
   }
 
-  initialCheck(callback())
+  initialCheck(cb())
 
   return waitFor(() => {
     let result
     try {
-      result = callback()
+      result = cb()
     } catch (error) {
       if (error.name === 'TestingLibraryElementError') {
         return true
