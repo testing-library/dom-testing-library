@@ -8,7 +8,7 @@ const elementRoleList = buildElementRoleList(elementRoles)
  * @param {Element} element -
  * @returns {boolean} - `true` if `element` and its subtree are inaccessible
  */
-function isSubtreeInaccessible(element) {
+function isSubtreeInaccessible(element: HTMLElement): boolean {
   if (element.hidden === true) {
     return true
   }
@@ -25,6 +25,9 @@ function isSubtreeInaccessible(element) {
   return false
 }
 
+interface IsInaccessibleOptions {
+  isSubtreeInaccessible?: typeof isSubtreeInaccessible
+}
 /**
  * Partial implementation https://www.w3.org/TR/wai-aria-1.2/#tree_exclusion
  * which should only be used for elements with a non-presentational role i.e.
@@ -39,7 +42,10 @@ function isSubtreeInaccessible(element) {
  * can be used to return cached results from previous isSubtreeInaccessible calls
  * @returns {boolean} true if excluded, otherwise false
  */
-function isInaccessible(element, options = {}) {
+function isInaccessible(
+  element: HTMLElement,
+  options: IsInaccessibleOptions = {},
+): boolean {
   const {
     isSubtreeInaccessible: isSubtreeInaccessibleImpl = isSubtreeInaccessible,
   } = options
@@ -118,8 +124,8 @@ function buildElementRoleList(elementRolesMap) {
   return result.sort(bySelectorSpecificity)
 }
 
-function getRoles(container, {hidden = false} = {}) {
-  function flattenDOM(node) {
+function getRoles(container, {hidden = false} = {}): Record<string, Element[]> {
+  function flattenDOM(node: ParentNode) {
     return [
       node,
       ...Array.from(node.children).reduce(
@@ -133,8 +139,8 @@ function getRoles(container, {hidden = false} = {}) {
     .filter(element => {
       return hidden === false ? isInaccessible(element) === false : true
     })
-    .reduce((acc, node) => {
-      let roles = []
+    .reduce((acc, node: Element) => {
+      let roles: Array<string> = []
       // TODO: This violates html-aria which does not allow any role on every element
       if (node.hasAttribute('role')) {
         roles = node.getAttribute('role').split(' ').slice(0, 1)
@@ -152,7 +158,7 @@ function getRoles(container, {hidden = false} = {}) {
     }, {})
 }
 
-function prettyRoles(dom, {hidden}) {
+function prettyRoles(dom: HTMLElement, {hidden}) {
   const roles = getRoles(dom, {hidden})
 
   return Object.entries(roles)
@@ -161,7 +167,7 @@ function prettyRoles(dom, {hidden}) {
       const elementsString = elements
         .map(el => {
           const nameString = `Name "${computeAccessibleName(el)}":\n`
-          const domString = prettyDOM(el.cloneNode(false))
+          const domString = prettyDOM(el.cloneNode(false) as Element)
           return `${nameString}${domString}`
         })
         .join('\n\n')
@@ -171,7 +177,7 @@ function prettyRoles(dom, {hidden}) {
     .join('\n')
 }
 
-const logRoles = (dom, {hidden = false} = {}) =>
+const logRoles = (dom: HTMLElement, {hidden = false} = {}) =>
   console.log(prettyRoles(dom, {hidden}))
 
 /**
