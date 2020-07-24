@@ -1,4 +1,7 @@
-import {wrapAllByQueryWithSuggestion} from '../query-helpers'
+import {
+  SelectorMatcherOptions,
+  wrapAllByQueryWithSuggestion,
+} from '../query-helpers'
 import {checkContainerType} from '../helpers'
 import {DEFAULT_IGNORE_TAGS} from '../config'
 import {
@@ -7,11 +10,16 @@ import {
   makeNormalizer,
   getNodeText,
   buildQueries,
+  Matcher,
 } from './all-utils'
 
+interface ByTextSelectorMatcherOptions extends SelectorMatcherOptions {
+  ignore?: string
+}
+
 function queryAllByText(
-  container,
-  text,
+  container: HTMLElement,
+  text: Matcher,
   {
     selector = '*',
     exact = true,
@@ -19,7 +27,7 @@ function queryAllByText(
     trim,
     ignore = DEFAULT_IGNORE_TAGS,
     normalizer,
-  } = {},
+  }: ByTextSelectorMatcherOptions = {},
 ) {
   checkContainerType(container)
   const matcher = exact ? matches : fuzzyMatches
@@ -30,7 +38,9 @@ function queryAllByText(
   }
   return [...baseArray, ...Array.from(container.querySelectorAll(selector))]
     .filter(node => !ignore || !node.matches(ignore))
-    .filter(node => matcher(getNodeText(node), node, text, matchNormalizer))
+    .filter(node =>
+      matcher(getNodeText(node), node, text, matchNormalizer),
+    ) as HTMLElement[]
 }
 
 const getMultipleError = (c, text) =>

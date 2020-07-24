@@ -6,30 +6,37 @@ import {
   fuzzyMatches,
   makeNormalizer,
   buildQueries,
+  Matcher,
+  MatcherOptions,
 } from './all-utils'
 
+function getElementValue(element: Element): string | undefined {
+  return (element as any).value
+}
+
 function queryAllByDisplayValue(
-  container,
-  value,
-  {exact = true, collapseWhitespace, trim, normalizer} = {},
+  container: HTMLElement,
+  value: Matcher,
+  {exact = true, collapseWhitespace, trim, normalizer}: MatcherOptions = {},
 ) {
   checkContainerType(container)
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(container.querySelectorAll(`input,textarea,select`)).filter(
-    node => {
+    (node: HTMLElement) => {
       if (node.tagName === 'SELECT') {
-        const selectedOptions = Array.from(node.options).filter(
+        const selectElement = node as HTMLSelectElement
+        const selectedOptions = Array.from(selectElement.options).filter(
           option => option.selected,
         )
         return selectedOptions.some(optionNode =>
           matcher(getNodeText(optionNode), optionNode, value, matchNormalizer),
         )
       } else {
-        return matcher(node.value, node, value, matchNormalizer)
+        return matcher(getElementValue(node), node, value, matchNormalizer)
       }
     },
-  )
+  ) as HTMLElement[]
 }
 
 const getMultipleError = (c, value) =>

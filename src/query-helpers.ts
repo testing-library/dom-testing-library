@@ -1,13 +1,27 @@
 import {getSuggestedQuery} from './suggestions'
-import {fuzzyMatches, matches, makeNormalizer} from './matches'
-import {waitFor} from './wait-for'
+import {
+  fuzzyMatches,
+  matches,
+  makeNormalizer,
+  Matcher,
+  MatcherOptions,
+} from './matches'
+import {waitFor, WaitForOptions} from './wait-for'
 import {getConfig} from './config'
 
-function getElementError(message, container) {
+export interface SelectorMatcherOptions extends MatcherOptions {
+  ignore?: string
+  selector?: string
+}
+
+function getElementError(message: string, container: HTMLElement): Error {
   return getConfig().getElementError(message, container)
 }
 
-function getMultipleElementsFoundError(message, container) {
+function getMultipleElementsFoundError(
+  message: string,
+  container: HTMLElement,
+): Error {
   return getElementError(
     `${message}\n\n(If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).`,
     container,
@@ -15,20 +29,30 @@ function getMultipleElementsFoundError(message, container) {
 }
 
 function queryAllByAttribute(
-  attribute,
-  container,
-  text,
-  {exact = true, collapseWhitespace, trim, normalizer} = {},
-) {
+  attribute: string,
+  container: HTMLElement,
+  text: Matcher,
+  {exact = true, collapseWhitespace, trim, normalizer}: MatcherOptions = {},
+): HTMLElement[] {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(container.querySelectorAll(`[${attribute}]`)).filter(node =>
-    matcher(node.getAttribute(attribute), node, text, matchNormalizer),
-  )
+    matcher(
+      node.getAttribute(attribute),
+      node as HTMLElement,
+      text,
+      matchNormalizer,
+    ),
+  ) as HTMLElement[]
 }
 
-function queryByAttribute(attribute, container, text, ...args) {
-  const els = queryAllByAttribute(attribute, container, text, ...args)
+function queryByAttribute(
+  attribute: string,
+  container: HTMLElement,
+  text: Matcher,
+  options?: MatcherOptions,
+): HTMLElement | null {
+  const els = queryAllByAttribute(attribute, container, text, options)
   if (els.length > 1) {
     throw getMultipleElementsFoundError(
       `Found multiple elements by [${attribute}=${text}]`,
@@ -115,6 +139,7 @@ const wrapAllByQueryWithSuggestion = (query, queryAllByName, variant) => (
     // get a unique list of all suggestion messages.  We are only going to make a suggestion if
     // all the suggestions are the same
     const uniqueSuggestionMessages = [
+      // @ts-ignore FIXME with the right tsconfig settings
       ...new Set(
         els.map(element => getSuggestedQuery(element, variant)?.toString()),
       ),
@@ -132,7 +157,43 @@ const wrapAllByQueryWithSuggestion = (query, queryAllByName, variant) => (
   return els
 }
 
-function buildQueries(queryAllBy, getMultipleError, getMissingError) {
+/**
+ * query methods have a common call signature. Only the return type differs.
+ */
+export type QueryMethod<Arguments extends any[], Return> = (
+  container: HTMLElement,
+  ...args: Arguments
+) => Return
+export type QueryBy<Arguments extends any[]> = QueryMethod<
+  Arguments,
+  HTMLElement | null
+>
+export type GetAllBy<Arguments extends any[]> = QueryMethod<
+  Arguments,
+  HTMLElement[]
+>
+export type FindAllBy<Arguments extends any[]> = QueryMethod<
+  [Arguments[0], Arguments[1], WaitForOptions],
+  Promise<HTMLElement[]>
+>
+export type GetBy<Arguments extends any[]> = QueryMethod<Arguments, HTMLElement>
+export type FindBy<Arguments extends any[]> = QueryMethod<
+  [Arguments[0], Arguments[1], WaitForOptions],
+  Promise<HTMLElement>
+>
+export type BuiltQueryMethods<Arguments extends any[]> = [
+  QueryBy<Arguments>,
+  GetAllBy<Arguments>,
+  GetBy<Arguments>,
+  FindAllBy<Arguments>,
+  FindBy<Arguments>,
+]
+
+function buildQueries<Arguments extends any[]>(
+  queryAllBy: GetAllBy<Arguments>,
+  getMultipleError: (container: HTMLElement, ...args: Arguments) => string,
+  getMissingError: (container: HTMLElement, ...args: Arguments) => string,
+): BuiltQueryMethods<Arguments> {
   const queryBy = wrapSingleQueryWithSuggestion(
     makeSingleQuery(queryAllBy, getMultipleError),
     queryAllBy.name,

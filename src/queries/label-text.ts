@@ -9,13 +9,16 @@ import {
   makeSingleQuery,
   wrapAllByQueryWithSuggestion,
   wrapSingleQueryWithSuggestion,
+  Matcher,
+  MatcherOptions,
+  SelectorMatcherOptions,
 } from './all-utils'
 import {queryAllByText} from './text'
 
 function queryAllLabelsByText(
-  container,
-  text,
-  {exact = true, trim, collapseWhitespace, normalizer} = {},
+  container: HTMLElement,
+  text: Matcher,
+  {exact = true, trim, collapseWhitespace, normalizer}: MatcherOptions = {},
 ) {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
@@ -35,13 +38,19 @@ function queryAllLabelsByText(
     })
 
     return matcher(textToMatch, label, text, matchNormalizer)
-  })
+  }) as HTMLElement[]
 }
 
 function queryAllByLabelText(
-  container,
-  text,
-  {selector = '*', exact = true, collapseWhitespace, trim, normalizer} = {},
+  container: HTMLElement,
+  text: Matcher,
+  {
+    selector = '*',
+    exact = true,
+    collapseWhitespace,
+    trim,
+    normalizer,
+  }: SelectorMatcherOptions = {},
 ) {
   checkContainerType(container)
 
@@ -51,7 +60,7 @@ function queryAllByLabelText(
     normalizer: matchNormalizer,
   })
   const labelledElements = labels
-    .reduce((matchedElements, label) => {
+    .reduce((matchedElements, label: HTMLLabelElement) => {
       const elementsForLabel = []
       if (label.control) {
         elementsForLabel.push(label.control)
@@ -112,7 +121,7 @@ function queryAllByLabelText(
 
   return Array.from(
     new Set([...labelledElements, ...ariaLabelledElements]),
-  ).filter(element => element.matches(selector))
+  ).filter(element => element.matches(selector)) as HTMLElement[]
 }
 
 // the getAll* query would normally look like this:

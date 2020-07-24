@@ -1,4 +1,4 @@
-import * as queries from './queries'
+import * as defaultQueries from './queries'
 
 export type BoundFunction<T> = T extends (
   attribute: string,
@@ -34,7 +34,22 @@ export interface Queries {
   [T: string]: Query
 }
 
-export function getQueriesForElement<T extends Queries = typeof queries>(
+/**
+ * @param {HTMLElement} element container
+ * @param {FuncMap} queries object of functions
+ * @param {Object} initialValue for reducer
+ * @returns {FuncMap} returns object of functions bound to container
+ */
+function getQueriesForElement<T extends Queries>(
   element: HTMLElement,
-  queriesToBind?: T,
-): BoundFunctions<T>
+  queries: Queries = defaultQueries,
+  initialValue = {},
+): BoundFunctions<T> {
+  return Object.keys(queries).reduce((helpers, key) => {
+    const fn: Query = queries[key]
+    helpers[key] = fn.bind(null, element)
+    return helpers
+  }, initialValue) as BoundFunctions<T>
+}
+
+export {getQueriesForElement}

@@ -1,12 +1,22 @@
 import {checkContainerType} from '../helpers'
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
-import {queryAllByAttribute, getConfig, buildQueries} from './all-utils'
+import {
+  queryAllByAttribute,
+  getConfig,
+  buildQueries,
+  Matcher,
+  MatcherOptions,
+} from './all-utils'
 
 const getTestIdAttribute = () => getConfig().testIdAttribute
 
-function queryAllByTestId(...args) {
-  checkContainerType(...args)
-  return queryAllByAttribute(getTestIdAttribute(), ...args)
+function queryAllByTestId(
+  container: HTMLElement,
+  testId: Matcher,
+  options?: MatcherOptions,
+) {
+  checkContainerType(container)
+  return queryAllByAttribute(getTestIdAttribute(), container, testId, options)
 }
 
 const getMultipleError = (c, id) =>

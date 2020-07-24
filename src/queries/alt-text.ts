@@ -1,18 +1,27 @@
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 import {checkContainerType} from '../helpers'
-import {matches, fuzzyMatches, makeNormalizer, buildQueries} from './all-utils'
+import {
+  matches,
+  fuzzyMatches,
+  makeNormalizer,
+  buildQueries,
+  MatcherOptions,
+  Matcher,
+} from './all-utils'
 
 function queryAllByAltText(
-  container,
-  alt,
-  {exact = true, collapseWhitespace, trim, normalizer} = {},
+  container: HTMLElement,
+  alt: Matcher,
+  {exact = true, collapseWhitespace, trim, normalizer}: MatcherOptions = {},
 ) {
   checkContainerType(container)
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-  return Array.from(container.querySelectorAll('img,input,area')).filter(node =>
+  return Array.from(
+    container.querySelectorAll('img,input,area'),
+  ).filter((node: HTMLElement) =>
     matcher(node.getAttribute('alt'), node, alt, matchNormalizer),
-  )
+  ) as HTMLElement[]
 }
 
 const getMultipleError = (c, alt) =>

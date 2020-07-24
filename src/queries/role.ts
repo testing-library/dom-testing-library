@@ -14,12 +14,40 @@ import {
   fuzzyMatches,
   getConfig,
   makeNormalizer,
+  Matcher,
+  MatcherOptions,
   matches,
 } from './all-utils'
 
+export interface ByRoleOptions extends MatcherOptions {
+  /**
+   * If true includes elements in the query set that are usually excluded from
+   * the accessibility tree. `role="none"` or `role="presentation"` are included
+   * in either case.
+   */
+  hidden?: boolean
+  /**
+   * If true only includes elements in the query set that are marked as
+   * selected in the accessibility tree, i.e., `aria-selected="true"`
+   */
+  selected?: boolean
+  /**
+   * Includes every role used in the `role` attribute
+   * For example *ByRole('progressbar', {queryFallbacks: true})` will find <div role="meter progressbar">`.
+   */
+  queryFallbacks?: boolean
+  /**
+   * Only considers  elements with the specified accessible name.
+   */
+  name?:
+    | string
+    | RegExp
+    | ((accessibleName: string, element: Element) => boolean)
+}
+
 function queryAllByRole(
-  container,
-  role,
+  container: HTMLElement,
+  role: Matcher,
   {
     exact = true,
     collapseWhitespace,
@@ -29,7 +57,7 @@ function queryAllByRole(
     normalizer,
     queryFallbacks = false,
     selected,
-  } = {},
+  }: ByRoleOptions = {},
 ) {
   checkContainerType(container)
   const matcher = exact ? matches : fuzzyMatches
@@ -52,7 +80,7 @@ function queryAllByRole(
   }
 
   return Array.from(container.querySelectorAll('*'))
-    .filter(node => {
+    .filter((node: HTMLElement) => {
       const isRoleSpecifiedExplicitly = node.hasAttribute('role')
 
       if (isRoleSpecifiedExplicitly) {
@@ -85,14 +113,14 @@ function queryAllByRole(
       // don't care if aria attributes are unspecified
       return true
     })
-    .filter(element => {
+    .filter((element: HTMLElement) => {
       return hidden === false
         ? isInaccessible(element, {
             isSubtreeInaccessible: cachedIsSubtreeInaccessible,
           }) === false
         : true
     })
-    .filter(element => {
+    .filter((element: HTMLElement) => {
       if (name === undefined) {
         // Don't care
         return true
@@ -104,7 +132,7 @@ function queryAllByRole(
         name,
         text => text,
       )
-    })
+    }) as HTMLElement[]
 }
 
 const getMultipleError = (c, role) =>
@@ -113,16 +141,17 @@ const getMultipleError = (c, role) =>
 const getMissingError = (
   container,
   role,
-  {hidden = getConfig().defaultHidden, name} = {},
+  {hidden = getConfig().defaultHidden, name}: ByRoleOptions = {},
 ) => {
   if (getConfig()._disableExpensiveErrorDiagnostics) {
     return `Unable to find role="${role}"`
   }
 
   let roles = ''
-  Array.from(container.children).forEach(childElement => {
+  Array.from(container.children).forEach((childElement: HTMLElement) => {
     roles += prettyRoles(childElement, {
       hidden,
+      // @ts-ignore FIXME remove this code? prettyRoles does not seem handle 'includeName'
       includeName: name !== undefined,
     })
   })

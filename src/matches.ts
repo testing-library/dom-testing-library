@@ -36,7 +36,7 @@ function fuzzyMatches(
 }
 
 function matches(
-  textToMatch: string,
+  textToMatch: string | undefined,
   node: HTMLElement | null,
   matcher: Matcher,
   normalizer: NormalizerFn,

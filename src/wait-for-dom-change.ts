@@ -7,6 +7,7 @@ import {
   runWithRealTimers,
 } from './helpers'
 import {getConfig} from './config'
+import {WaitForOptions} from './wait-for'
 
 let hasWarned = false
 
@@ -22,7 +23,7 @@ function waitForDomChange({
     attributes: true,
     characterData: true,
   },
-} = {}) {
+}: WaitForOptions = {}) {
   if (!hasWarned) {
     hasWarned = true
     console.warn(
@@ -31,7 +32,9 @@ function waitForDomChange({
   }
   return new Promise((resolve, reject) => {
     const timer = setTimeout(onTimeout, timeout)
-    const {MutationObserver} = getWindowFromNode(container)
+    const {MutationObserver} = getWindowFromNode(container) as Window & {
+      MutationObserver: (callback: MutationCallback) => void
+    }
     const observer = new MutationObserver(onMutation)
     runWithRealTimers(() =>
       observer.observe(container, mutationObserverOptions),
@@ -47,7 +50,7 @@ function waitForDomChange({
       }
     }
 
-    function onMutation(mutationsList) {
+    function onMutation(mutationsList: MutationRecord[]) {
       onDone(null, mutationsList)
     }
 

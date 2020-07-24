@@ -6,21 +6,23 @@ import {
   makeNormalizer,
   getNodeText,
   buildQueries,
+  Matcher,
+  MatcherOptions,
 } from './all-utils'
 
 function queryAllByTitle(
-  container,
-  text,
-  {exact = true, collapseWhitespace, trim, normalizer} = {},
+  container: HTMLElement,
+  text: Matcher,
+  {exact = true, collapseWhitespace, trim, normalizer}: MatcherOptions = {},
 ) {
   checkContainerType(container)
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(container.querySelectorAll('[title], svg > title')).filter(
-    node =>
+    (node: HTMLElement) =>
       matcher(node.getAttribute('title'), node, text, matchNormalizer) ||
       matcher(getNodeText(node), node, text, matchNormalizer),
-  )
+  ) as HTMLElement[]
 }
 
 const getMultipleError = (c, title) =>
