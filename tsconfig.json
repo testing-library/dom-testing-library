@@ -3,7 +3,7 @@
     "outDir": "./types/",
     "allowJs": true,
     "declaration": true,
-    "emitDeclarationOnly": true,
+    "noEmit": true,
     "allowSyntheticDefaultImports": true
   },
   "include": ["./src/**/*.ts"]

@@ -24,15 +24,16 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "kcd-scripts build --ignore \"**/__tests__/**,**/__node_tests__/**,**/__mocks__/**\" && kcd-scripts build --bundle --no-clean",
+    "build": "npm run build:bundles ; npm run build:types",
+    "build:bundles": "kcd-scripts build --ignore \"**/__tests__/**,**/__node_tests__/**,**/__mocks__/**\" && kcd-scripts build --bundle --no-clean",
+    "build:types": "tsc --build tsconfig.build.json",
     "lint": "kcd-scripts lint",
     "setup": "npm install && npm run validate -s",
     "test": "kcd-scripts test",
     "test:debug": "node --inspect-brk ./node_modules/.bin/jest --watch --runInBand",
     "test:update": "npm test -- --updateSnapshot --coverage",
     "validate": "kcd-scripts validate",
-    "generate-types": "tsc",
-    "typecheck": "dtslint ./types/"
+    "typecheck-DISABLED": "dtslint ./types/"
   },
   "files": [
     "dist",

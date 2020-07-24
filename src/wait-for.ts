@@ -122,10 +122,7 @@ interface WaitOptions {
   interval?: number
   mutationObserverOptions?: MutationObserverInit
 }
-function wait(
-  first: () => void = () => {},
-  options?: WaitOptions,
-): Promise<void> {
+function wait(first: () => void, options?: WaitOptions): Promise<void> {
   // istanbul ignore next
   if (!hasWarned) {
     hasWarned = true

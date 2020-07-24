@@ -346,7 +346,9 @@ Here are the accessible roles:
 test('has no useful error message in findBy', async () => {
   const {findByRole} = render(`<li />`)
 
-  await expect(findByRole('option', {timeout: 1})).rejects.toThrow('Unable to find role="option"')
+  await expect(findByRole('option', {timeout: 1})).rejects.toThrow(
+    'Unable to find role="option"',
+  )
 })
 
 test('explicit role is most specific', () => {
