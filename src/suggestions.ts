@@ -6,10 +6,19 @@ import {getImplicitAriaRoles} from './role-helpers'
 
 const normalize = getDefaultNormalizer()
 
-function getLabelTextFor(element) {
-  let label =
-    element.labels &&
-    Array.from(element.labels).find(el => Boolean(normalize(el.textContent)))
+function isElementWithLabels(
+  element: HTMLElement,
+): element is HTMLInputElement {
+  // We cast with HTMLInputElement, but it could be a HTMLSelectElement
+  return (element as HTMLInputElement).labels !== undefined
+}
+
+function getLabelTextFor(element: HTMLElement): string | undefined {
+  let label: HTMLLabelElement | undefined =
+    isElementWithLabels(element) &&
+    Array.from(element.labels).find((el: HTMLLabelElement) =>
+      Boolean(normalize(el.textContent)),
+    )
 
   // non form elements that are using aria-labelledby won't be included in `element.labels`
   if (!label) {
@@ -30,7 +39,16 @@ function escapeRegExp(string) {
   return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
 
-function makeSuggestion(queryName, content, {variant = 'get', name}) {
+interface MakeSuggestionOptions {
+  variant?: string
+  name?: string
+}
+
+function makeSuggestion(
+  queryName,
+  content,
+  {variant = 'get', name}: MakeSuggestionOptions,
+) {
   const queryArgs = [content]
 
   if (name) {
@@ -55,7 +73,20 @@ function makeSuggestion(queryName, content, {variant = 'get', name}) {
   }
 }
 
-export function getSuggestedQuery(element, variant) {
+function isElementWithValue(element: HTMLElement): element is HTMLInputElement {
+  // We cast with HTMLInputElement, but it could be a HTMLSelectElement
+  return Boolean((element as HTMLInputElement).value)
+}
+
+export interface Suggestion {
+  queryName: string
+  toString(): string
+}
+
+export function getSuggestedQuery(
+  element: HTMLElement,
+  variant?: string,
+): Suggestion | undefined {
   const role =
     element.getAttribute('role') ?? getImplicitAriaRoles(element)?.[0]
   if (role) {
@@ -80,7 +111,7 @@ export function getSuggestedQuery(element, variant) {
     return makeSuggestion('Text', textContent, {variant})
   }
 
-  if (element.value) {
+  if (isElementWithValue(element)) {
     return makeSuggestion('DisplayValue', normalize(element.value), {variant})
   }
 

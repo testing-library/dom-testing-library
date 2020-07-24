@@ -2,5 +2,7 @@ export interface Suggestion {
   queryName: string
   toString(): string
 }
-
-export function getSuggestedQuery(element: HTMLElement): Suggestion | undefined
+export declare function getSuggestedQuery(
+  element: HTMLElement,
+  variant?: string,
+): Suggestion | undefined
