@@ -1,7 +1,7 @@
 function assertNotNullOrUndefined(matcher) {
   if (matcher == null) {
     throw new Error(
-      `It looks like ${matcher} was passed instead of a matcher. Did you do something like getByText("${matcher}")?`,
+      `It looks like ${matcher} was passed instead of a matcher. Did you do something like getByText(${matcher})?`,
     )
   }
 }
