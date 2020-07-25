@@ -1,7 +1,17 @@
+function assertNotNullOrUndefined(matcher) {
+  if (matcher == null) {
+    throw new Error(
+      `It looks like ${matcher} was passed instead of a matcher. Did you do something like getByText(${matcher})?`,
+    )
+  }
+}
+
 function fuzzyMatches(textToMatch, node, matcher, normalizer) {
   if (typeof textToMatch !== 'string') {
     return false
   }
+
+  assertNotNullOrUndefined(matcher)
 
   const normalizedText = normalizer(textToMatch)
   if (typeof matcher === 'string') {
@@ -17,6 +27,8 @@ function matches(textToMatch, node, matcher, normalizer) {
   if (typeof textToMatch !== 'string') {
     return false
   }
+
+  assertNotNullOrUndefined(matcher)
 
   const normalizedText = normalizer(textToMatch)
   if (typeof matcher === 'string') {
