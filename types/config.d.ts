@@ -4,7 +4,9 @@ export interface Config {
   eventWrapper(cb: (...args: any[]) => any): void
   asyncUtilTimeout: number
   defaultHidden: boolean
+  showOriginalStrackTrace: boolean
   throwSuggestions: boolean
+  getElementError: (message: string, container: HTMLElement) => Error
 }
 
 export interface ConfigFn {
