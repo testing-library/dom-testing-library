@@ -149,10 +149,27 @@ const getAllByLabelText = (container, text, ...rest) => {
   if (!els.length) {
     const labels = queryAllLabelsByText(container, text, ...rest)
     if (labels.length) {
-      throw getConfig().getElementError(
-        `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.`,
-        container,
-      )
+      const tagNames = labels
+        .map(label =>
+          getTagNameOfElementAssociatedWithLabelViaFor(container, label),
+        )
+        .filter(tagName => !!tagName)
+      if (tagNames.length) {
+        throw getConfig().getElementError(
+          tagNames
+            .map(
+              tagName =>
+                `Found a label with the text of: ${text}, however the element associated with this label (<${tagName} />) is non-labellable [https://html.spec.whatwg.org/multipage/forms.html#category-label]. If you really need to label a <${tagName} />, you can use aria-label or aria-labelledby instead.`,
+            )
+            .join('\n\n'),
+          container,
+        )
+      } else {
+        throw getConfig().getElementError(
+          `Found a label with the text of: ${text}, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.`,
+          container,
+        )
+      }
     } else {
       throw getConfig().getElementError(
         `Unable to find a label with the text of: ${text}`,
@@ -161,6 +178,16 @@ const getAllByLabelText = (container, text, ...rest) => {
     }
   }
   return els
+}
+
+function getTagNameOfElementAssociatedWithLabelViaFor(container, label) {
+  const htmlFor = label.getAttribute('for')
+  if (!htmlFor) {
+    return null
+  }
+
+  const element = container.querySelector(`[id="${htmlFor}"]`)
+  return element ? element.tagName.toLowerCase() : null
 }
 
 // the reason mentioned above is the same reason we're not using buildQueries

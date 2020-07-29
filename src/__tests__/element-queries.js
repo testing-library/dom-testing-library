@@ -352,9 +352,9 @@ test('label with no form control', () => {
 `)
 })
 
-test('label with no form control and fuzzy matcher', () => {
+test('label with "for" attribute but no form control and fuzzy matcher', () => {
   const {getByLabelText, queryByLabelText} = render(
-    `<label>All alone label</label>`,
+    `<label for="foo">All alone label</label>`,
   )
   expect(queryByLabelText('alone', {exact: false})).toBeNull()
   expect(() => getByLabelText('alone', {exact: false}))
@@ -362,7 +362,9 @@ test('label with no form control and fuzzy matcher', () => {
 "Found a label with the text of: alone, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
 
 <div>
-  <label>
+  <label
+    for="foo"
+  >
     All alone label
   </label>
 </div>"
@@ -403,6 +405,114 @@ test('label with children with no form control', () => {
     
   
   </label>
+</div>"
+`)
+})
+
+test('label with non-labellable element', () => {
+  const {getByLabelText, queryByLabelText} = render(`
+  <div>
+    <label for="div1">Label 1</label>
+    <div id="div1">
+      Hello
+    </div>
+  </div>
+  `)
+
+  expect(queryByLabelText(/Label/)).toBeNull()
+  expect(() => getByLabelText(/Label/)).toThrowErrorMatchingInlineSnapshot(`
+"Found a label with the text of: /Label/, however the element associated with this label (<div />) is non-labellable [https://html.spec.whatwg.org/multipage/forms.html#category-label]. If you really need to label a <div />, you can use aria-label or aria-labelledby instead.
+
+<div>
+  
+  
+  <div>
+    
+    
+    <label
+      for="div1"
+    >
+      Label 1
+    </label>
+    
+    
+    <div
+      id="div1"
+    >
+      
+      Hello
+    
+    </div>
+    
+  
+  </div>
+  
+  
+</div>"
+`)
+})
+
+test('multiple labels with non-labellable elements', () => {
+  const {getAllByLabelText, queryAllByLabelText} = render(`
+  <div>
+    <label for="span1">Label 1</label>
+    <span id="span1">
+      Hello
+    </span>
+    <label for="p1">Label 2</label>
+    <p id="p1">
+      World
+    </p>
+  </div>
+  `)
+
+  expect(queryAllByLabelText(/Label/)).toEqual([])
+  expect(() => getAllByLabelText(/Label/)).toThrowErrorMatchingInlineSnapshot(`
+"Found a label with the text of: /Label/, however the element associated with this label (<span />) is non-labellable [https://html.spec.whatwg.org/multipage/forms.html#category-label]. If you really need to label a <span />, you can use aria-label or aria-labelledby instead.
+
+Found a label with the text of: /Label/, however the element associated with this label (<p />) is non-labellable [https://html.spec.whatwg.org/multipage/forms.html#category-label]. If you really need to label a <p />, you can use aria-label or aria-labelledby instead.
+
+<div>
+  
+  
+  <div>
+    
+    
+    <label
+      for="span1"
+    >
+      Label 1
+    </label>
+    
+    
+    <span
+      id="span1"
+    >
+      
+      Hello
+    
+    </span>
+    
+    
+    <label
+      for="p1"
+    >
+      Label 2
+    </label>
+    
+    
+    <p
+      id="p1"
+    >
+      
+      World
+    
+    </p>
+    
+  
+  </div>
+  
+  
 </div>"
 `)
 })
