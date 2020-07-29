@@ -352,9 +352,9 @@ test('label with no form control', () => {
 `)
 })
 
-test('label with no form control and fuzzy matcher', () => {
+test('label with "for" attribute but no form control and fuzzy matcher', () => {
   const {getByLabelText, queryByLabelText} = render(
-    `<label>All alone label</label>`,
+    `<label for="foo">All alone label</label>`,
   )
   expect(queryByLabelText('alone', {exact: false})).toBeNull()
   expect(() => getByLabelText('alone', {exact: false}))
@@ -362,7 +362,9 @@ test('label with no form control and fuzzy matcher', () => {
 "Found a label with the text of: alone, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
 
 <div>
-  <label>
+  <label
+    for="foo"
+  >
     All alone label
   </label>
 </div>"
