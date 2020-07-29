@@ -1145,6 +1145,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "ipap360",
+      "name": "Ioannis Papadopoulos",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/11017666?v=4",
+      "profile": "https://github.com/ipap360",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
