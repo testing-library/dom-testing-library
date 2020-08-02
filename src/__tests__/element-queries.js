@@ -1182,3 +1182,65 @@ test('return a proper error message when no label is found and there is an aria-
 </div>"
 `)
 })
+
+// https://github.com/testing-library/dom-testing-library/issues/723
+it('gets form controls by label text on IE and other legacy browsers', () => {
+  // Simulate lack of support for HTMLInputElement.prototype.labels
+  const inputLabelsSpy = jest
+    .spyOn(HTMLInputElement.prototype, 'labels', 'get')
+    .mockReturnValue(undefined)
+
+  const {getByLabelText} = renderIntoDocument(`
+    <div>
+      <label>
+        1st<input id="first-id" />
+      </label>
+      <div>
+        <label for="second-id">2nd</label>
+        <input id="second-id" />
+      </div>
+      <div>
+        <label id="third-label">3rd</label>
+        <input aria-labelledby="third-label" id="third-id" />
+      </div>
+      <div>
+        <label for="fourth.id">4th</label>
+        <input id="fourth.id" />
+      </div>
+      <div>
+      <div>
+        <label id="fifth-label-one">5th one</label>
+        <label id="fifth-label-two">5th two</label>
+        <input aria-labelledby="fifth-label-one fifth-label-two" id="fifth-id" />
+      </div>
+      <div>
+        <input id="sixth-label-one" value="6th one"/>
+        <input id="sixth-label-two" value="6th two"/>
+        <label id="sixth-label-three">6th three</label>
+        <input aria-labelledby="sixth-label-one sixth-label-two sixth-label-three" id="sixth-id" />
+      </div>
+      <div>
+        <span id="seventh-label-one">7th one</span>
+        <input aria-labelledby="seventh-label-one" id="seventh-id" />
+      </div>
+      <div>
+        <label id="eighth.label">8th one</label>
+        <input aria-labelledby="eighth.label" id="eighth.id" />
+      </div>
+    </div>
+  `)
+  expect(getByLabelText('1st').id).toBe('first-id')
+  expect(getByLabelText('2nd').id).toBe('second-id')
+  expect(getByLabelText('3rd').id).toBe('third-id')
+  expect(getByLabelText('4th').id).toBe('fourth.id')
+  expect(getByLabelText('5th one').id).toBe('fifth-id')
+  expect(getByLabelText('5th two').id).toBe('fifth-id')
+  expect(getByLabelText('6th one').id).toBe('sixth-id')
+  expect(getByLabelText('6th two').id).toBe('sixth-id')
+  expect(getByLabelText('6th one 6th two').id).toBe('sixth-id')
+  expect(getByLabelText('6th one 6th two 6th three').id).toBe('sixth-id')
+  expect(getByLabelText('7th one').id).toBe('seventh-id')
+  expect(getByLabelText('8th one').id).toBe('eighth.id')
+
+  inputLabelsSpy.mockRestore()
+})
