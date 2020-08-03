@@ -1186,7 +1186,7 @@ test('return a proper error message when no label is found and there is an aria-
 // https://github.com/testing-library/dom-testing-library/issues/723
 it('gets form controls by label text on IE and other legacy browsers', () => {
   // Simulate lack of support for HTMLInputElement.prototype.labels
-  const inputLabelsSpy = jest
+  jest
     .spyOn(HTMLInputElement.prototype, 'labels', 'get')
     .mockReturnValue(undefined)
 
@@ -1241,6 +1241,4 @@ it('gets form controls by label text on IE and other legacy browsers', () => {
   expect(getByLabelText('6th one 6th two 6th three').id).toBe('sixth-id')
   expect(getByLabelText('7th one').id).toBe('seventh-id')
   expect(getByLabelText('8th one').id).toBe('eighth.id')
-
-  inputLabelsSpy.mockRestore()
 })
