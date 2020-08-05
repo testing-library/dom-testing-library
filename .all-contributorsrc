@@ -1155,6 +1155,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "maxnewlands",
+      "name": "Maxwell Newlands",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1304166?v=4",
+      "profile": "https://github.com/maxnewlands",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
