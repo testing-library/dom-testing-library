@@ -72,9 +72,9 @@ function queryAllByLabelText(
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   const matchingLabelledElements = Array.from(container.querySelectorAll('*'))
-    .filter(
-      element => element.labels || element.hasAttribute('aria-labelledby'),
-    )
+    .filter(element => {
+      return getLabels(element) || element.hasAttribute('aria-labelledby')
+    })
     .reduce((labelledElements, labelledElement) => {
       const labelsId = labelledElement.getAttribute('aria-labelledby')
         ? labelledElement.getAttribute('aria-labelledby').split(' ')
@@ -86,7 +86,7 @@ function queryAllByLabelText(
             )
             return labellingElement ? getLabelContent(labellingElement) : ''
           })
-        : Array.from(labelledElement.labels).map(label => {
+        : Array.from(getLabels(labelledElement)).map(label => {
             const textToMatch = getLabelContent(label)
             const formControlSelector =
               'button, input, meter, output, progress, select, textarea'
@@ -234,4 +234,21 @@ export {
   getByLabelTextWithSuggestions as getByLabelText,
   findAllByLabelText,
   findByLabelText,
+}
+
+// Based on https://github.com/eps1lon/dom-accessibility-api/pull/352
+function getLabels(element) {
+  if (element.labels !== undefined) return element.labels
+
+  if (!isLabelable(element)) return null
+
+  const labels = element.ownerDocument.querySelectorAll('label')
+  return Array.from(labels).filter(label => label.control === element)
+}
+
+function isLabelable(element) {
+  return (
+    element.tagName.match(/BUTTON|METER|OUTPUT|PROGRESS|SELECT|TEXTAREA/) ||
+    (element.tagName === 'INPUT' && element.getAttribute('type') !== 'hidden')
+  )
 }

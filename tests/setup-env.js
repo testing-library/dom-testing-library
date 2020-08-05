@@ -37,5 +37,5 @@ beforeAll(() => {
 })
 
 afterAll(() => {
-  console.warn.mockRestore()
+  jest.restoreAllMocks()
 })
