@@ -1165,6 +1165,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "jluxenberg",
+      "name": "Jared Luxenberg",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/450478?v=4",
+      "profile": "http://www.jaredlux.com",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
