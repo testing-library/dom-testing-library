@@ -84,6 +84,11 @@ export interface ByRoleOptions extends MatcherOptions {
    */
   checked?: boolean
   /**
+   * If true only includes elements in the query set that are marked as
+   * pressed in the accessibility tree, i.e., `aria-pressed="true"`
+   */
+  pressed?: boolean
+  /**
    * Includes every role used in the `role` attribute
    * For example *ByRole('progressbar', {queryFallbacks: true})` will find <div role="meter progressbar">`.
    */

@@ -3,6 +3,7 @@ import {roles as allRoles} from 'aria-query'
 import {
   computeAriaSelected,
   computeAriaChecked,
+  computeAriaPressed,
   getImplicitAriaRoles,
   prettyRoles,
   isInaccessible,
@@ -31,6 +32,7 @@ function queryAllByRole(
     queryFallbacks = false,
     selected,
     checked,
+    pressed,
   } = {},
 ) {
   checkContainerType(container)
@@ -48,6 +50,13 @@ function queryAllByRole(
     // guard against unknown roles
     if (allRoles.get(role)?.props['aria-checked'] === undefined) {
       throw new Error(`"aria-checked" is not supported on role "${role}".`)
+    }
+  }
+
+  if (pressed !== undefined) {
+    // guard against unknown roles
+    if (allRoles.get(role)?.props['aria-pressed'] === undefined) {
+      throw new Error(`"aria-pressed" is not supported on role "${role}".`)
     }
   }
 
@@ -93,6 +102,9 @@ function queryAllByRole(
       }
       if (checked !== undefined) {
         return checked === computeAriaChecked(element)
+      }
+      if (pressed !== undefined) {
+        return pressed === computeAriaPressed(element)
       }
       // don't care if aria attributes are unspecified
       return true

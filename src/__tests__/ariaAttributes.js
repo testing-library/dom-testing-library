@@ -9,6 +9,15 @@ test('`selected` throws on unsupported roles', () => {
   )
 })
 
+test('`pressed` throws on unsupported roles', () => {
+  const {getByRole} = render(`<input aria-pressed="true" type="text" />`)
+  expect(() =>
+    getByRole('textbox', {pressed: true}),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"\\"aria-pressed\\" is not supported on role \\"textbox\\"."`,
+  )
+})
+
 test('`checked` throws on unsupported roles', () => {
   const {getByRole} = render(`<input aria-checked="true" type="text">`)
   expect(() =>
@@ -135,4 +144,26 @@ test('`selected: true` matches `aria-selected="true"` on supported roles', () =>
   expect(getAllByRole('tab', {selected: true}).map(({id}) => id)).toEqual([
     'selected-tab',
   ])
+})
+
+test('`pressed: true|false` matches `pressed` buttons', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <button aria-pressed="true" />
+      <button aria-pressed="false" />
+    </div>`,
+  )
+  expect(getByRole('button', {pressed: true})).toBeInTheDocument()
+  expect(getByRole('button', {pressed: false})).toBeInTheDocument()
+})
+
+test('`pressed: true|false` matches `pressed` elements with proper role', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <span role="button" aria-pressed="true">✔</span>
+      <span role="button" aria-pressed="false">𝒙</span>
+    </div>`,
+  )
+  expect(getByRole('button', {pressed: true})).toBeInTheDocument()
+  expect(getByRole('button', {pressed: false})).toBeInTheDocument()
 })
