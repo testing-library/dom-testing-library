@@ -209,6 +209,15 @@ function computeAriaChecked(element) {
   return checkBooleanAttribute(element, 'aria-checked')
 }
 
+/**
+ * @param {Element} element -
+ * @returns {boolean | undefined} - false/true if (not)pressed, undefined if not press-able
+ */
+function computeAriaPressed(element) {
+  // https://www.w3.org/TR/wai-aria-1.1/#aria-pressed
+  return checkBooleanAttribute(element, 'aria-pressed')
+}
+
 function checkBooleanAttribute(element, attribute) {
   const attributeValue = element.getAttribute(attribute)
   if (attributeValue === 'true') {
@@ -229,4 +238,5 @@ export {
   isInaccessible,
   computeAriaSelected,
   computeAriaChecked,
+  computeAriaPressed,
 }
