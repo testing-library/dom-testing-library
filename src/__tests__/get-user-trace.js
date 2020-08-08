@@ -1,5 +1,9 @@
 import {getUserTrace} from '../get-user-trace'
 
+jest.mock('chalk', () => ({
+  gray: msg => msg,
+}))
+
 let globalErrorMock
 
 beforeEach(() => {
