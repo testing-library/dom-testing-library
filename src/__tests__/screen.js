@@ -1,6 +1,10 @@
 import {screen} from '..'
 import {renderIntoDocument} from './helpers/test-utils'
 
+jest.mock('../get-user-trace', () => ({
+  getUserTrace: () => '',
+}))
+
 beforeEach(() => {
   jest.spyOn(console, 'log').mockImplementation(() => {})
 })
