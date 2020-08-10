@@ -32,6 +32,7 @@ let config = {
     return error
   },
   _disableExpensiveErrorDiagnostics: false,
+  computedStyleSupportsPseudoElements: false,
 }
 
 export const DEFAULT_IGNORE_TAGS = 'script, style'

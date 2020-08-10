@@ -92,7 +92,10 @@ export function getSuggestedQuery(element, variant = 'get', method) {
   if (role !== 'generic' && canSuggest('Role', method, role)) {
     return makeSuggestion('Role', role, {
       variant,
-      name: computeAccessibleName(element),
+      name: computeAccessibleName(element, {
+        computedStyleSupportsPseudoElements: getConfig()
+          .computedStyleSupportsPseudoElements,
+      }),
     })
   }
 

@@ -3,6 +3,7 @@ export interface Config {
   asyncWrapper(cb: (...args: any[]) => any): Promise<any>
   eventWrapper(cb: (...args: any[]) => any): void
   asyncUtilTimeout: number
+  computedStyleSupportsPseudoElements: boolean
   defaultHidden: boolean
   showOriginalStrackTrace: boolean
   throwSuggestions: boolean

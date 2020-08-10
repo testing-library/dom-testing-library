@@ -522,4 +522,24 @@ describe('configuration', () => {
     const {getByRole} = render('<div hidden><ul  /></div>')
     expect(getByRole('list')).not.toBeNull()
   })
+
+  test('can be configured to consider ::before and ::after for accessible names which logs errors in jsdom', () => {
+    try {
+      jest.spyOn(console, 'error').mockImplementation(() => {})
+      configure({computedStyleSupportsPseudoElements: true})
+      const {queryByRole} = render('<button>Hello, Dave!</button>')
+
+      queryByRole('button', {name: 'Hello, Dave!'})
+
+      expect(console.error).toHaveBeenCalledTimes(2)
+      expect(console.error.mock.calls[0][0]).toMatch(
+        'Error: Not implemented: window.computedStyle(elt, pseudoElt)',
+      )
+      expect(console.error.mock.calls[1][0]).toMatch(
+        'Error: Not implemented: window.computedStyle(elt, pseudoElt)',
+      )
+    } finally {
+      jest.restoreAllMocks()
+    }
+  })
 })
