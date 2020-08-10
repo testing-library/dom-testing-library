@@ -1,6 +1,7 @@
 import {elementRoles} from 'aria-query'
 import {computeAccessibleName} from 'dom-accessibility-api'
 import {prettyDOM} from './pretty-dom'
+import {getConfig} from './config'
 
 const elementRoleList = buildElementRoleList(elementRoles)
 
@@ -161,7 +162,10 @@ function prettyRoles(dom, {hidden}) {
       const delimiterBar = '-'.repeat(50)
       const elementsString = elements
         .map(el => {
-          const nameString = `Name "${computeAccessibleName(el)}":\n`
+          const nameString = `Name "${computeAccessibleName(el, {
+            computedStyleSupportsPseudoElements: getConfig()
+              .computedStyleSupportsPseudoElements,
+          })}":\n`
           const domString = prettyDOM(el.cloneNode(false))
           return `${nameString}${domString}`
         })

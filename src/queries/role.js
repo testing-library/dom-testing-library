@@ -123,7 +123,10 @@ function queryAllByRole(
       }
 
       return matches(
-        computeAccessibleName(element),
+        computeAccessibleName(element, {
+          computedStyleSupportsPseudoElements: getConfig()
+            .computedStyleSupportsPseudoElements,
+        }),
         element,
         name,
         text => text,
