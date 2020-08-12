@@ -299,9 +299,7 @@ test('assigns dataTransfer non-enumerable properties', () => {
   window.DataTransfer = function DataTransfer() {}
   const node = document.createElement('div')
   const spy = jest.fn()
-  const item = {
-    webkitGetAsEntry: () => ({})
-  };
+  const item = {};
   const dataTransfer = new window.DataTransfer();
 
   Object.defineProperty(dataTransfer, 'items', {
