@@ -287,6 +287,7 @@ Thanks goes to these people ([emoji key][emojis]):
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/Snizhana"><img src="https://avatars3.githubusercontent.com/u/18139946?v=4" width="100px;" alt=""/><br /><sub><b>snizhana</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=Snizhana" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=Snizhana" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/micha149"><img src="https://avatars2.githubusercontent.com/u/298880?v=4" width="100px;" alt=""/><br /><sub><b>Michael van Engelshoven</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/pulls?q=is%3Apr+reviewed-by%3Amicha149" title="Reviewed Pull Requests">👀</a></td>
   </tr>
 </table>
 
