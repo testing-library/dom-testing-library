@@ -1175,6 +1175,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "Snizhana",
+      "name": "snizhana",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/18139946?v=4",
+      "profile": "https://github.com/Snizhana",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
