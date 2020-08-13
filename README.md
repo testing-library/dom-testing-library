@@ -285,6 +285,9 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/maxnewlands"><img src="https://avatars3.githubusercontent.com/u/1304166?v=4" width="100px;" alt=""/><br /><sub><b>Maxwell Newlands</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=maxnewlands" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=maxnewlands" title="Tests">⚠️</a></td>
     <td align="center"><a href="http://www.jaredlux.com"><img src="https://avatars0.githubusercontent.com/u/450478?v=4" width="100px;" alt=""/><br /><sub><b>Jared Luxenberg</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=jluxenberg" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=jluxenberg" title="Tests">⚠️</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/Snizhana"><img src="https://avatars3.githubusercontent.com/u/18139946?v=4" width="100px;" alt=""/><br /><sub><b>snizhana</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=Snizhana" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=Snizhana" title="Tests">⚠️</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
