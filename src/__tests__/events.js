@@ -295,6 +295,26 @@ test('assigns dataTransfer properties', () => {
   expect(spy.mock.calls[0][0]).toHaveProperty('dataTransfer.dropEffect', 'move')
 })
 
+test('assigns dataTransfer non-enumerable properties', () => {
+  window.DataTransfer = function DataTransfer() {}
+  const node = document.createElement('div')
+  const spy = jest.fn()
+  const item = {};
+  const dataTransfer = new window.DataTransfer();
+
+  Object.defineProperty(dataTransfer, 'items', {
+    value: [item],
+    enumerable: false
+  })
+  node.addEventListener('drop', spy)
+  fireEvent.drop(node, {dataTransfer})
+
+  expect(spy).toHaveBeenCalledTimes(1)
+  expect(spy.mock.calls[0][0].dataTransfer.items).toHaveLength(1)
+
+  delete window.DataTransfer
+})
+
 test('assigning the files property on dataTransfer', () => {
   const node = document.createElement('div')
   const file = new document.defaultView.File(['(⌐□_□)'], 'chucknorris.png', {
