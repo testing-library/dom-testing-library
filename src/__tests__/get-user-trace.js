@@ -1,7 +1,9 @@
+import fs from 'fs'
 import {getUserTrace} from '../get-user-trace'
 
 jest.mock('fs', () => ({
-  readFileSync: () => `
+  readFileSync: jest.fn(
+    () => `
     import { screen } from '@testing-library/dom'
 
     it('renders', () => {
@@ -9,11 +11,12 @@ jest.mock('fs', () => ({
         document.createTextNode('Hello world')
       )
       screen.debug()
-      
-      
+
+
       expect(screen.getByText('Hello world')).toBeInTheDocument()
     })
   `,
+  ),
 }))
 
 let globalErrorMock
@@ -64,4 +67,26 @@ test('it returns only client error when node frames are present afterwards', () 
         |       ^
     "
   `)
+})
+
+test("it returns empty string if file from frame can't be read", () => {
+  const consoleWarnSpy = jest
+    .spyOn(global.console, 'warn')
+    .mockImplementationOnce(jest.fn)
+
+  // Make fire read purposely fail
+  fs.readFileSync.mockImplementationOnce(() => {
+    throw Error()
+  })
+  const filePath = '/home/john/projects/sample-error/error-example.js'
+  const stack = `Error: Kaboom
+      at somethingWrong (${filePath}:8:7)
+  `
+  globalErrorMock.mockImplementationOnce(() => ({stack}))
+
+  expect(getUserTrace(stack)).toEqual('')
+  expect(consoleWarnSpy).toHaveBeenCalledTimes(1)
+  expect(consoleWarnSpy).toHaveBeenCalledWith(
+    `Couldn't read file ${filePath} for displaying the code frame`,
+  )
 })
