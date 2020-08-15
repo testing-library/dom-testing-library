@@ -1,7 +1,19 @@
 import {getUserTrace} from '../get-user-trace'
 
-jest.mock('chalk', () => ({
-  gray: msg => msg,
+jest.mock('fs', () => ({
+  readFileSync: () => `
+    import { screen } from '@testing-library/dom'
+
+    it('renders', () => {
+      document.body.appendChild(
+        document.createTextNode('Hello world')
+      )
+      screen.debug()
+      
+      
+      expect(screen.getByText('Hello world')).toBeInTheDocument()
+    })
+  `,
 }))
 
 let globalErrorMock
@@ -18,19 +30,23 @@ afterEach(() => {
 test('it returns only client error when frames from node_modules are first', () => {
   const stack = `Error: Kaboom
       at Object.<anonymous> (/home/john/projects/projects/sample-error/node_modules/@es2050/console/build/index.js:4:10)
-      at somethingWrong (/home/john/projects/sample-error/error-example.js:2:13)
+      at somethingWrong (/home/john/projects/sample-error/error-example.js:8:7)
   `
   globalErrorMock.mockImplementationOnce(() => ({stack}))
   const userTrace = getUserTrace(stack)
-  expect(userTrace).toEqual(
-    '/home/john/projects/sample-error/error-example.js:2:13\n',
-  )
+  expect(userTrace).toMatchInlineSnapshot(`
+    "  6 |         document.createTextNode('Hello world')
+      7 |       )
+    > 8 |       screen.debug()
+        |       ^
+    "
+  `)
 })
 
 test('it returns only client error when node frames are present afterwards', () => {
   const stack = `Error: Kaboom
       at Object.<anonymous> (/home/john/projects/projects/sample-error/node_modules/@es2050/console/build/index.js:4:10)
-      at somethingWrong (/home/john/projects/sample-error/error-example.js:2:13)
+      at somethingWrong (/home/john/projects/sample-error/error-example.js:8:7)
       at Object.<anonymous> (/home/user/Documents/projects/sample-error/error-example.js:14:1)
       at Module._compile (internal/modules/cjs/loader.js:1151:30)
       at Object.Module._extensions..js (internal/modules/cjs/loader.js:1171:10)
@@ -41,7 +57,11 @@ test('it returns only client error when node frames are present afterwards', () 
   `
   globalErrorMock.mockImplementationOnce(() => ({stack}))
   const userTrace = getUserTrace()
-  expect(userTrace).toEqual(
-    '/home/john/projects/sample-error/error-example.js:2:13\n',
-  )
+  expect(userTrace).toMatchInlineSnapshot(`
+    "  6 |         document.createTextNode('Hello world')
+      7 |       )
+    > 8 |       screen.debug()
+        |       ^
+    "
+  `)
 })

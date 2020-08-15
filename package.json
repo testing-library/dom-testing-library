@@ -38,6 +38,7 @@
     "types"
   ],
   "dependencies": {
+    "@babel/code-frame": "^7.10.4",
     "@babel/runtime": "^7.10.3",
     "@types/aria-query": "^4.2.0",
     "aria-query": "^4.2.2",
