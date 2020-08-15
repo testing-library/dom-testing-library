@@ -9,6 +9,7 @@ try {
     .codeFrameColumns
 } catch {
   // We're in a browser environment
+  /* istanbul ignore next */
   console.warn(
     'Printing the user trace is not supported in a browser environment',
   )
@@ -50,6 +51,7 @@ function getCodeFrame(frame) {
 
 function getUserTrace() {
   // If we couldn't load dependencies, we can't generate a user trace
+  /* istanbul ignore next */
   if (!readFileSync || !codeFrameColumns) {
     return ''
   }
