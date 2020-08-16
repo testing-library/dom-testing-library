@@ -46,7 +46,7 @@ function getCodeFrame(frame) {
       linesBelow: 0,
     },
   )
-  return `${codeFrame}\n`
+  return `${frameLocation}\n${codeFrame}\n`
 }
 
 function getUserCodeFrame() {

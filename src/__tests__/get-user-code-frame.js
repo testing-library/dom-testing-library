@@ -40,7 +40,8 @@ test('it returns only client code frame when code frames from node_modules are f
   const userTrace = getUserCodeFrame(stack)
 
   expect(userTrace).toMatchInlineSnapshot(`
-    "  5 |         document.createTextNode('Hello world')
+    "/home/john/projects/sample-error/error-example.js:7:14
+      5 |         document.createTextNode('Hello world')
       6 |       )
     > 7 |       screen.debug()
         |              ^
@@ -59,7 +60,8 @@ test('it returns only client code frame when node code frames are present afterw
   const userTrace = getUserCodeFrame()
 
   expect(userTrace).toMatchInlineSnapshot(`
-    "  5 |         document.createTextNode('Hello world')
+    "/home/john/projects/sample-error/error-example.js:7:14
+      5 |         document.createTextNode('Hello world')
       6 |       )
     > 7 |       screen.debug()
         |              ^

@@ -62,7 +62,13 @@ function prettyDOM(dom, maxLength, options) {
     : debugContent
 }
 
-const logDOM = (...args) =>
-  console.log(`${getUserCodeFrame()}${prettyDOM(...args)}`)
+const logDOM = (...args) => {
+  const userCodeFrame = getUserCodeFrame()
+  if (userCodeFrame) {
+    console.log(`${prettyDOM(...args)}\n\n${userCodeFrame}`)
+  } else {
+    console.log(prettyDOM(...args))
+  }
+}
 
 export {prettyDOM, logDOM}
