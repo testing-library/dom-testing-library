@@ -1,11 +1,11 @@
 import fs from 'fs'
-import {getUserTrace} from '../get-user-trace'
+import {getUserCodeFrame} from '../get-user-code-frame'
 
 jest.mock('fs', () => ({
   // We setup the contents of a sample file
   readFileSync: jest.fn(
     () => `
-    import { screen } from '@testing-library/dom'
+    import {screen} from '@testing-library/dom'
     it('renders', () => {
       document.body.appendChild(
         document.createTextNode('Hello world')
@@ -37,7 +37,7 @@ test('it returns only client code frame when code frames from node_modules are f
       ${userStackFrame}
   `
   globalErrorMock.mockImplementationOnce(() => ({stack}))
-  const userTrace = getUserTrace(stack)
+  const userTrace = getUserCodeFrame(stack)
 
   expect(userTrace).toMatchInlineSnapshot(`
     "  5 |         document.createTextNode('Hello world')
@@ -56,7 +56,7 @@ test('it returns only client code frame when node code frames are present afterw
       at internal/main/run_main_module.js:17:47
   `
   globalErrorMock.mockImplementationOnce(() => ({stack}))
-  const userTrace = getUserTrace()
+  const userTrace = getUserCodeFrame()
 
   expect(userTrace).toMatchInlineSnapshot(`
     "  5 |         document.createTextNode('Hello world')
@@ -81,7 +81,7 @@ test("it returns empty string if file from code frame can't be read", () => {
   `
   globalErrorMock.mockImplementationOnce(() => ({stack}))
 
-  expect(getUserTrace(stack)).toEqual('')
+  expect(getUserCodeFrame(stack)).toEqual('')
   expect(consoleWarnSpy).toHaveBeenCalledTimes(1)
   expect(consoleWarnSpy).toHaveBeenCalledWith(
     `Couldn't read file /home/john/projects/sample-error/error-example.js for displaying the code frame`,

@@ -1,8 +1,9 @@
 import {screen} from '..'
 import {renderIntoDocument} from './helpers/test-utils'
 
-jest.mock('../get-user-trace', () => ({
-  getUserTrace: () => '',
+// Since screen.debug internally calls getUserCodeFrame, we mock it so it doesn't affect these tests
+jest.mock('../get-user-code-frame', () => ({
+  getUserCodeFrame: () => '',
 }))
 
 beforeEach(() => {

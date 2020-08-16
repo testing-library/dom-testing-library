@@ -1,8 +1,8 @@
 import {prettyDOM, logDOM} from '../pretty-dom'
 import {render, renderIntoDocument} from './helpers/test-utils'
 
-jest.mock('../get-user-trace', () => ({
-  getUserTrace: () => '',
+jest.mock('../get-user-code-frame', () => ({
+  getUserCodeFrame: () => '',
 }))
 
 beforeEach(() => {

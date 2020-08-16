@@ -49,7 +49,7 @@ function getCodeFrame(frame) {
   return `${codeFrame}\n`
 }
 
-function getUserTrace() {
+function getUserCodeFrame() {
   // If we couldn't load dependencies, we can't generate a user trace
   /* istanbul ignore next */
   if (!readFileSync || !codeFrameColumns) {
@@ -64,4 +64,4 @@ function getUserTrace() {
   return getCodeFrame(firstClientCodeFrame)
 }
 
-export {getUserTrace}
+export {getUserCodeFrame}
