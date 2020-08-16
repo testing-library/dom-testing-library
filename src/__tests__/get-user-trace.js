@@ -2,22 +2,23 @@ import fs from 'fs'
 import {getUserTrace} from '../get-user-trace'
 
 jest.mock('fs', () => ({
+  // We setup the contents of a sample file
   readFileSync: jest.fn(
     () => `
     import { screen } from '@testing-library/dom'
-
     it('renders', () => {
       document.body.appendChild(
         document.createTextNode('Hello world')
       )
       screen.debug()
-
-
       expect(screen.getByText('Hello world')).toBeInTheDocument()
     })
   `,
   ),
 }))
+
+const userStackFrame =
+  'at somethingWrong (/home/john/projects/sample-error/error-example.js:7:14)'
 
 let globalErrorMock
 
@@ -30,46 +31,43 @@ afterEach(() => {
   global.Error.mockRestore()
 })
 
-test('it returns only client error when frames from node_modules are first', () => {
+test('it returns only client code frame when code frames from node_modules are first', () => {
   const stack = `Error: Kaboom
       at Object.<anonymous> (/home/john/projects/projects/sample-error/node_modules/@es2050/console/build/index.js:4:10)
-      at somethingWrong (/home/john/projects/sample-error/error-example.js:8:7)
+      ${userStackFrame}
   `
   globalErrorMock.mockImplementationOnce(() => ({stack}))
   const userTrace = getUserTrace(stack)
+
   expect(userTrace).toMatchInlineSnapshot(`
-    "  6 |         document.createTextNode('Hello world')
-      7 |       )
-    > 8 |       screen.debug()
-        |       ^
+    "  5 |         document.createTextNode('Hello world')
+      6 |       )
+    > 7 |       screen.debug()
+        |              ^
     "
   `)
 })
 
-test('it returns only client error when node frames are present afterwards', () => {
+test('it returns only client code frame when node code frames are present afterwards', () => {
   const stack = `Error: Kaboom
       at Object.<anonymous> (/home/john/projects/projects/sample-error/node_modules/@es2050/console/build/index.js:4:10)
-      at somethingWrong (/home/john/projects/sample-error/error-example.js:8:7)
+      ${userStackFrame}
       at Object.<anonymous> (/home/user/Documents/projects/sample-error/error-example.js:14:1)
-      at Module._compile (internal/modules/cjs/loader.js:1151:30)
-      at Object.Module._extensions..js (internal/modules/cjs/loader.js:1171:10)
-      at Module.load (internal/modules/cjs/loader.js:1000:32)
-      at Function.Module._load (internal/modules/cjs/loader.js:899:14)
-      at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:71:12)
       at internal/main/run_main_module.js:17:47
   `
   globalErrorMock.mockImplementationOnce(() => ({stack}))
   const userTrace = getUserTrace()
+
   expect(userTrace).toMatchInlineSnapshot(`
-    "  6 |         document.createTextNode('Hello world')
-      7 |       )
-    > 8 |       screen.debug()
-        |       ^
+    "  5 |         document.createTextNode('Hello world')
+      6 |       )
+    > 7 |       screen.debug()
+        |              ^
     "
   `)
 })
 
-test("it returns empty string if file from frame can't be read", () => {
+test("it returns empty string if file from code frame can't be read", () => {
   const consoleWarnSpy = jest
     .spyOn(global.console, 'warn')
     .mockImplementationOnce(jest.fn)
@@ -78,15 +76,14 @@ test("it returns empty string if file from frame can't be read", () => {
   fs.readFileSync.mockImplementationOnce(() => {
     throw Error()
   })
-  const filePath = '/home/john/projects/sample-error/error-example.js'
   const stack = `Error: Kaboom
-      at somethingWrong (${filePath}:8:7)
+      ${userStackFrame}
   `
   globalErrorMock.mockImplementationOnce(() => ({stack}))
 
   expect(getUserTrace(stack)).toEqual('')
   expect(consoleWarnSpy).toHaveBeenCalledTimes(1)
   expect(consoleWarnSpy).toHaveBeenCalledWith(
-    `Couldn't read file ${filePath} for displaying the code frame`,
+    `Couldn't read file /home/john/projects/sample-error/error-example.js for displaying the code frame`,
   )
 })
