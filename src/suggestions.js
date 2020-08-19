@@ -2,7 +2,7 @@ import {computeAccessibleName} from 'dom-accessibility-api'
 import {getDefaultNormalizer} from './matches'
 import {getNodeText} from './get-node-text'
 import {DEFAULT_IGNORE_TAGS, getConfig} from './config'
-import {getImplicitAriaRoles} from './role-helpers'
+import {getImplicitAriaRoles, isInaccessible} from './role-helpers'
 
 const normalize = getDefaultNormalizer()
 
@@ -38,7 +38,7 @@ function getRegExpMatcher(string) {
   return new RegExp(escapeRegExp(string.toLowerCase()), 'i')
 }
 
-function makeSuggestion(queryName, content, {variant, name}) {
+function makeSuggestion(queryName, element, content, {variant, name}) {
   const queryArgs = [
     queryName === 'Role' || queryName === 'TestId'
       ? content
@@ -47,6 +47,10 @@ function makeSuggestion(queryName, content, {variant, name}) {
 
   if (name) {
     queryArgs.push({name: getRegExpMatcher(name)})
+  }
+
+  if (queryName === 'Role' && isInaccessible(element)) {
+    queryArgs.push({hidden: true})
   }
 
   const queryMethod = `${variant}By${queryName}`
@@ -90,7 +94,7 @@ export function getSuggestedQuery(element, variant = 'get', method) {
   const role =
     element.getAttribute('role') ?? getImplicitAriaRoles(element)?.[0]
   if (role !== 'generic' && canSuggest('Role', method, role)) {
-    return makeSuggestion('Role', role, {
+    return makeSuggestion('Role', element, role, {
       variant,
       name: computeAccessibleName(element, {
         computedStyleSupportsPseudoElements: getConfig()
@@ -101,36 +105,40 @@ export function getSuggestedQuery(element, variant = 'get', method) {
 
   const labelText = getLabelTextFor(element)
   if (canSuggest('LabelText', method, labelText)) {
-    return makeSuggestion('LabelText', labelText, {variant})
+    return makeSuggestion('LabelText', element, labelText, {variant})
   }
 
   const placeholderText = element.getAttribute('placeholder')
   if (canSuggest('PlaceholderText', method, placeholderText)) {
-    return makeSuggestion('PlaceholderText', placeholderText, {variant})
+    return makeSuggestion('PlaceholderText', element, placeholderText, {
+      variant,
+    })
   }
 
   const textContent = normalize(getNodeText(element))
   if (canSuggest('Text', method, textContent)) {
-    return makeSuggestion('Text', textContent, {variant})
+    return makeSuggestion('Text', element, textContent, {variant})
   }
 
   if (canSuggest('DisplayValue', method, element.value)) {
-    return makeSuggestion('DisplayValue', normalize(element.value), {variant})
+    return makeSuggestion('DisplayValue', element, normalize(element.value), {
+      variant,
+    })
   }
 
   const alt = element.getAttribute('alt')
   if (canSuggest('AltText', method, alt)) {
-    return makeSuggestion('AltText', alt, {variant})
+    return makeSuggestion('AltText', element, alt, {variant})
   }
 
   const title = element.getAttribute('title')
   if (canSuggest('Title', method, title)) {
-    return makeSuggestion('Title', title, {variant})
+    return makeSuggestion('Title', element, title, {variant})
   }
 
   const testId = element.getAttribute(getConfig().testIdAttribute)
   if (canSuggest('TestId', method, testId)) {
-    return makeSuggestion('TestId', testId, {variant})
+    return makeSuggestion('TestId', element, testId, {variant})
   }
 
   return undefined
