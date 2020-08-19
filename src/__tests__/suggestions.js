@@ -549,3 +549,18 @@ test('should get the first label with aria-labelledby contains multiple ids', ()
     variant: 'get',
   })
 })
+
+test('should suggest hidden option if element is not in the accessibilty tree', () => {
+  const {container} = renderIntoDocument(`
+    <input type="text" aria-hidden=true />
+  `)
+
+  expect(
+    getSuggestedQuery(container.querySelector('input'), 'get', 'role'),
+  ).toMatchObject({
+    queryName: 'Role',
+    queryMethod: 'getByRole',
+    queryArgs: ['textbox', {hidden: true}],
+    variant: 'get',
+  })
+})
