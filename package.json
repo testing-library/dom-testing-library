@@ -41,7 +41,7 @@
     "@babel/runtime": "^7.10.3",
     "@types/aria-query": "^4.2.0",
     "aria-query": "^4.2.2",
-    "dom-accessibility-api": "^0.5.0",
+    "dom-accessibility-api": "^0.5.1",
     "pretty-format": "^25.5.0"
   },
   "devDependencies": {
