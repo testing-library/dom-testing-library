@@ -12,10 +12,6 @@ try {
   chalk = nodeRequire.call(module, 'chalk')
 } catch {
   // We're in a browser environment
-  /* istanbul ignore next */
-  console.warn(
-    'Printing the user trace is not supported in a browser environment',
-  )
 }
 
 // frame has the form "at myMethod (location/to/my/file.js:10:2)"
@@ -35,7 +31,6 @@ function getCodeFrame(frame) {
   try {
     rawFileContents = readFileSync(filename, 'utf-8')
   } catch {
-    console.warn(`Couldn't read file ${filename} for displaying the code frame`)
     return ''
   }
 
@@ -53,7 +48,7 @@ function getCodeFrame(frame) {
 }
 
 function getUserCodeFrame() {
-  // If we couldn't load dependencies, we can't generate a user trace
+  // If we couldn't load dependencies, we can't generate the user trace
   /* istanbul ignore next */
   if (!readFileSync || !codeFrameColumns) {
     return ''

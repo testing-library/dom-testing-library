@@ -69,10 +69,6 @@ test('it returns only user code frame when node code frames are present afterwar
 })
 
 test("it returns empty string if file from code frame can't be read", () => {
-  const consoleWarnSpy = jest
-    .spyOn(global.console, 'warn')
-    .mockImplementationOnce(jest.fn)
-
   // Make fire read purposely fail
   fs.readFileSync.mockImplementationOnce(() => {
     throw Error()
@@ -83,8 +79,4 @@ test("it returns empty string if file from code frame can't be read", () => {
   globalErrorMock.mockImplementationOnce(() => ({stack}))
 
   expect(getUserCodeFrame(stack)).toEqual('')
-  expect(consoleWarnSpy).toHaveBeenCalledTimes(1)
-  expect(consoleWarnSpy).toHaveBeenCalledWith(
-    `Couldn't read file /sample-error/error-example.js for displaying the code frame`,
-  )
 })
