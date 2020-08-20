@@ -543,3 +543,10 @@ describe('configuration', () => {
     }
   })
 })
+
+test('should get button using his text content when title is empty', () => {
+  const {getByRole} = renderIntoDocument(
+    '<button title="">click on me</button>',
+  )
+  expect(getByRole('button', {name: 'click on me'})).toBeInTheDocument()
+})
