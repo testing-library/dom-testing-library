@@ -39,6 +39,8 @@ function getRegExpMatcher(string) {
 }
 
 function makeSuggestion(queryName, element, content, {variant, name}) {
+  let warning = ''
+  const queryOptions = {}
   const queryArgs = [
     queryName === 'Role' || queryName === 'TestId'
       ? content
@@ -46,11 +48,18 @@ function makeSuggestion(queryName, element, content, {variant, name}) {
   ]
 
   if (name) {
-    queryArgs.push({name: getRegExpMatcher(name)})
+    queryOptions.name = getRegExpMatcher(name)
   }
 
   if (queryName === 'Role' && isInaccessible(element)) {
-    queryArgs.push({hidden: true})
+    queryOptions.hidden = true
+    warning = `Element is inaccessible. This means that the element and all its children are invisible to screen readers.
+    If you are using the aria-hidden prop, make sure this is the right choice for your case.
+    `
+    console.warn(warning)
+  }
+  if (Object.keys(queryOptions).length > 0) {
+    queryArgs.push(queryOptions)
   }
 
   const queryMethod = `${variant}By${queryName}`
@@ -60,6 +69,7 @@ function makeSuggestion(queryName, element, content, {variant, name}) {
     queryMethod,
     queryArgs,
     variant,
+    warning,
     toString() {
       let [text, options] = queryArgs
 
