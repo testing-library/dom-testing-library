@@ -8,6 +8,7 @@ beforeAll(() => {
 
 afterEach(() => {
   configure({testIdAttribute: 'data-testid'})
+  console.warn.mockClear()
 })
 
 afterAll(() => {
@@ -562,5 +563,18 @@ test('should suggest hidden option if element is not in the accessibilty tree', 
     queryMethod: 'getByRole',
     queryArgs: ['textbox', {hidden: true}],
     variant: 'get',
+    warning: `Element is inaccessible. This means that the element and all its children are invisible to screen readers.
+    If you are using the aria-hidden prop, make sure this is the right choice for your case.
+    `,
   })
+
+  expect(console.warn.mock.calls).toMatchInlineSnapshot(`
+    Array [
+      Array [
+        "Element is inaccessible. This means that the element and all its children are invisible to screen readers.
+        If you are using the aria-hidden prop, make sure this is the right choice for your case.
+        ",
+      ],
+    ]
+  `)
 })
