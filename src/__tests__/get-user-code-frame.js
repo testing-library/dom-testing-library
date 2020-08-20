@@ -17,8 +17,7 @@ jest.mock('fs', () => ({
   ),
 }))
 
-const userStackFrame =
-  'at somethingWrong (/home/john/projects/sample-error/error-example.js:7:14)'
+const userStackFrame = 'at somethingWrong (/sample-error/error-example.js:7:14)'
 
 let globalErrorMock
 
@@ -31,16 +30,16 @@ afterEach(() => {
   global.Error.mockRestore()
 })
 
-test('it returns only client code frame when code frames from node_modules are first', () => {
+test('it returns only user code frame when code frames from node_modules are first', () => {
   const stack = `Error: Kaboom
-      at Object.<anonymous> (/home/john/projects/projects/sample-error/node_modules/@es2050/console/build/index.js:4:10)
+      at Object.<anonymous> (/sample-error/node_modules/@es2050/console/build/index.js:4:10)
       ${userStackFrame}
   `
   globalErrorMock.mockImplementationOnce(() => ({stack}))
   const userTrace = getUserCodeFrame(stack)
 
   expect(userTrace).toMatchInlineSnapshot(`
-    "/home/john/projects/sample-error/error-example.js:7:14
+    "/sample-error/error-example.js:7:14
       5 |         document.createTextNode('Hello world')
       6 |       )
     > 7 |       screen.debug()
@@ -49,18 +48,18 @@ test('it returns only client code frame when code frames from node_modules are f
   `)
 })
 
-test('it returns only client code frame when node code frames are present afterwards', () => {
+test('it returns only user code frame when node code frames are present afterwards', () => {
   const stack = `Error: Kaboom
-      at Object.<anonymous> (/home/john/projects/projects/sample-error/node_modules/@es2050/console/build/index.js:4:10)
+      at Object.<anonymous> (/sample-error/node_modules/@es2050/console/build/index.js:4:10)
       ${userStackFrame}
-      at Object.<anonymous> (/home/user/Documents/projects/sample-error/error-example.js:14:1)
+      at Object.<anonymous> (/sample-error/error-example.js:14:1)
       at internal/main/run_main_module.js:17:47
   `
   globalErrorMock.mockImplementationOnce(() => ({stack}))
   const userTrace = getUserCodeFrame()
 
   expect(userTrace).toMatchInlineSnapshot(`
-    "/home/john/projects/sample-error/error-example.js:7:14
+    "/sample-error/error-example.js:7:14
       5 |         document.createTextNode('Hello world')
       6 |       )
     > 7 |       screen.debug()
@@ -86,6 +85,6 @@ test("it returns empty string if file from code frame can't be read", () => {
   expect(getUserCodeFrame(stack)).toEqual('')
   expect(consoleWarnSpy).toHaveBeenCalledTimes(1)
   expect(consoleWarnSpy).toHaveBeenCalledWith(
-    `Couldn't read file /home/john/projects/sample-error/error-example.js for displaying the code frame`,
+    `Couldn't read file /sample-error/error-example.js for displaying the code frame`,
   )
 })
