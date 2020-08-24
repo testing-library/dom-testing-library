@@ -551,12 +551,14 @@ test('query/get element by its title', () => {
         <span title="Ignore this" id="1"/>
         <span title="Delete" id="2"/>
         <span title="Ignore this as well" id="3"/>
+        <div title="WrongTitle" id="4">HelloWorld</div>
     </div>
   `)
 
   expect(getByTitle('Delete').id).toEqual('2')
   expect(queryByTitle('Delete').id).toEqual('2')
   expect(queryByTitle('Del', {exact: false}).id).toEqual('2')
+  expect(queryByTitle("HelloWorld")).toBeNull()
 })
 
 test('query/get title element of SVG', () => {
