@@ -558,7 +558,7 @@ test('query/get element by its title', () => {
   expect(getByTitle('Delete').id).toEqual('2')
   expect(queryByTitle('Delete').id).toEqual('2')
   expect(queryByTitle('Del', {exact: false}).id).toEqual('2')
-  expect(queryByTitle("HelloWorld")?.id).not.toEqual('4')
+  expect(queryByTitle("HelloWorld")).toBeNull()
 })
 
 test('query/get title element of SVG', () => {
