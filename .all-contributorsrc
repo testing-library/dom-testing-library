@@ -1194,6 +1194,15 @@
       "contributions": [
         "review"
       ]
+    },
+    {
+      "login": "awesomeunleashed",
+      "name": "Asher Tuggle",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/10679635?v=4",
+      "profile": "https://ashertuggle.wixsite.com/portfolio",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoHost": "https://github.com"
