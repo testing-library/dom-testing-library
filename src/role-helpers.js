@@ -233,6 +233,29 @@ function checkBooleanAttribute(element, attribute) {
   return undefined
 }
 
+/**
+ * @param {Element} element -
+ * @returns {number | undefined} - number if implicit heading or aria-level present, otherwise undefined
+ */
+function computeHeadingLevel(element) {
+  // assign level to implicit headings
+  const implicitHeadingLevels = {
+    H1: 1,
+    H2: 2,
+    H3: 3,
+    H4: 4,
+    H5: 5,
+    H6: 6,
+  }
+  // explicit aria-level value
+  // https://www.w3.org/TR/wai-aria-1.1/#aria-level
+  const ariaLevelAttribute =
+    element.getAttribute('aria-level') &&
+    Number(element.getAttribute('aria-level'))
+
+  return ariaLevelAttribute || implicitHeadingLevels[element.tagName]
+}
+
 export {
   getRoles,
   logRoles,
@@ -243,4 +266,5 @@ export {
   computeAriaSelected,
   computeAriaChecked,
   computeAriaPressed,
+  computeHeadingLevel,
 }
