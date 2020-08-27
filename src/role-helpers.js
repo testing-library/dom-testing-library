@@ -238,7 +238,7 @@ function checkBooleanAttribute(element, attribute) {
  * @returns {number | undefined} - number if implicit heading or aria-level present, otherwise undefined
  */
 function computeHeadingLevel(element) {
-  // assign level to implicit headings
+  // https://w3c.github.io/html-aam/#el-h1-h6
   // https://w3c.github.io/html-aam/#el-h1-h6
   const implicitHeadingLevels = {
     H1: 1,
