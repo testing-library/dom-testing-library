@@ -316,7 +316,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/186971?v=4",
       "profile": "https://neilkistner.com/",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -1193,6 +1194,15 @@
       "profile": "https://github.com/micha149",
       "contributions": [
         "review"
+      ]
+    },
+    {
+      "login": "awesomeunleashed",
+      "name": "Asher Tuggle",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/10679635?v=4",
+      "profile": "https://ashertuggle.wixsite.com/portfolio",
+      "contributions": [
+        "bug"
       ]
     }
   ],

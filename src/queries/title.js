@@ -8,6 +8,10 @@ import {
   buildQueries,
 } from './all-utils'
 
+const isSvgTitle = node =>
+  node.tagName.toLowerCase() === 'title' &&
+  node.parentElement?.tagName.toLowerCase() === 'svg'
+
 function queryAllByTitle(
   container,
   text,
@@ -19,7 +23,8 @@ function queryAllByTitle(
   return Array.from(container.querySelectorAll('[title], svg > title')).filter(
     node =>
       matcher(node.getAttribute('title'), node, text, matchNormalizer) ||
-      matcher(getNodeText(node), node, text, matchNormalizer),
+      (isSvgTitle(node) &&
+        matcher(getNodeText(node), node, text, matchNormalizer)),
   )
 }
 
