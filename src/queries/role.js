@@ -4,6 +4,7 @@ import {
   computeAriaSelected,
   computeAriaChecked,
   computeAriaPressed,
+  computeHeadingLevel,
   getImplicitAriaRoles,
   prettyRoles,
   isInaccessible,
@@ -33,6 +34,7 @@ function queryAllByRole(
     selected,
     checked,
     pressed,
+    level,
   } = {},
 ) {
   checkContainerType(container)
@@ -57,6 +59,13 @@ function queryAllByRole(
     // guard against unknown roles
     if (allRoles.get(role)?.props['aria-pressed'] === undefined) {
       throw new Error(`"aria-pressed" is not supported on role "${role}".`)
+    }
+  }
+
+  if (level !== undefined) {
+    // guard against using `level` option with any role other than `heading`
+    if (role !== 'heading') {
+      throw new Error(`Role "${role}" cannot have "level" property.`)
     }
   }
 
@@ -105,6 +114,9 @@ function queryAllByRole(
       }
       if (pressed !== undefined) {
         return pressed === computeAriaPressed(element)
+      }
+      if (level !== undefined) {
+        return level === computeHeadingLevel(element)
       }
       // don't care if aria attributes are unspecified
       return true

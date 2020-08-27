@@ -89,6 +89,12 @@ export interface ByRoleOptions extends MatcherOptions {
    */
   pressed?: boolean
   /**
+   * Includes elements with the `"heading"` role matching the indicated level,
+   * either by the semantic HTML heading elements `<h1>-<h6>` or matching
+   * the `aria-level` attribute.
+   */
+  level?: number
+  /**
    * Includes every role used in the `role` attribute
    * For example *ByRole('progressbar', {queryFallbacks: true})` will find <div role="meter progressbar">`.
    */

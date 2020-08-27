@@ -167,3 +167,38 @@ test('`pressed: true|false` matches `pressed` elements with proper role', () => 
   expect(getByRole('button', {pressed: true})).toBeInTheDocument()
   expect(getByRole('button', {pressed: false})).toBeInTheDocument()
 })
+
+test('`level` matches elements with `heading` role', () => {
+  const {getAllByRole, queryByRole} = renderIntoDocument(
+    `<div>
+      <h1 id="heading-one">H1</h1>
+      <h2 id="first-heading-two">First H2</h2>
+      <h3 id="heading-three">H3</h3>
+      <div role="heading" aria-level="2" id="second-heading-two">Second H2</div>
+    </div>`,
+  )
+
+  expect(getAllByRole('heading', {level: 1}).map(({id}) => id)).toEqual([
+    'heading-one',
+  ])
+
+  expect(getAllByRole('heading', {level: 2}).map(({id}) => id)).toEqual([
+    'first-heading-two',
+    'second-heading-two',
+  ])
+
+  expect(getAllByRole('heading', {level: 3}).map(({id}) => id)).toEqual([
+    'heading-three',
+  ])
+
+  expect(queryByRole('heading', {level: 4})).not.toBeInTheDocument()
+})
+
+test('`level` throws on unsupported roles', () => {
+  const {getByRole} = render(`<button>Button</button>`)
+  expect(() =>
+    getByRole('button', {level: 3}),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"Role \\"button\\" cannot have \\"level\\" property."`,
+  )
+})
