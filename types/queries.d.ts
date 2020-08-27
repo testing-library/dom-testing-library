@@ -91,7 +91,7 @@ export interface ByRoleOptions extends MatcherOptions {
   /**
    * Includes elements with the `"heading"` role matching the indicated level,
    * either by the semantic HTML heading elements `<h1>-<h6>` or matching
-   * the `aria-level` attribute
+   * the `aria-level` attribute.
    */
   level?: number
   /**

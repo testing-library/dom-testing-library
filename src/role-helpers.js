@@ -239,6 +239,7 @@ function checkBooleanAttribute(element, attribute) {
  */
 function computeHeadingLevel(element) {
   // assign level to implicit headings
+  // https://w3c.github.io/html-aam/#el-h1-h6
   const implicitHeadingLevels = {
     H1: 1,
     H2: 2,
@@ -248,7 +249,7 @@ function computeHeadingLevel(element) {
     H6: 6,
   }
   // explicit aria-level value
-  // https://www.w3.org/TR/wai-aria-1.1/#aria-level
+  // https://www.w3.org/TR/wai-aria-1.2/#aria-level
   const ariaLevelAttribute =
     element.getAttribute('aria-level') &&
     Number(element.getAttribute('aria-level'))

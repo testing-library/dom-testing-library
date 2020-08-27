@@ -65,7 +65,7 @@ function queryAllByRole(
   if (level !== undefined) {
     // guard against using `level` option with any role other than `heading`
     if (role !== 'heading') {
-      throw new Error(`Role "${role}" cannot have "level" option.`)
+      throw new Error(`Role "${role}" cannot have "level" property.`)
     }
   }
 
