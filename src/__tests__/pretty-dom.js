@@ -1,5 +1,8 @@
 import {prettyDOM, logDOM} from '../pretty-dom'
+import {getUserCodeFrame} from '../get-user-code-frame'
 import {render, renderIntoDocument} from './helpers/test-utils'
+
+jest.mock('../get-user-code-frame')
 
 beforeEach(() => {
   jest.spyOn(console, 'log').mockImplementation(() => {})
@@ -57,6 +60,36 @@ test('logDOM logs prettyDOM to the console', () => {
         Hello World!
       </div>
     </div>"
+  `)
+})
+
+test('logDOM logs prettyDOM with code frame to the console', () => {
+  getUserCodeFrame.mockImplementationOnce(
+    () => `"/home/john/projects/sample-error/error-example.js:7:14
+      5 |         document.createTextNode('Hello World!')
+      6 |       )
+    > 7 |       screen.debug()
+        |              ^
+    "
+  `,
+  )
+  const {container} = render('<div>Hello World!</div>')
+  logDOM(container)
+  expect(console.log).toHaveBeenCalledTimes(1)
+  expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
+    "<div>
+      <div>
+        Hello World!
+      </div>
+    </div>
+
+    "/home/john/projects/sample-error/error-example.js:7:14
+          5 |         document.createTextNode('Hello World!')
+          6 |       )
+        > 7 |       screen.debug()
+            |              ^
+        "
+      "
   `)
 })
 

@@ -38,11 +38,13 @@
     "types"
   ],
   "dependencies": {
+    "@babel/code-frame": "^7.10.4",
     "@babel/runtime": "^7.10.3",
     "@types/aria-query": "^4.2.0",
     "aria-query": "^4.2.2",
     "dom-accessibility-api": "^0.5.1",
-    "pretty-format": "^26.4.2"
+    "pretty-format": "^26.4.2",
+    "chalk": "^4.1.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.10.1",

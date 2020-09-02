@@ -1,4 +1,5 @@
 import prettyFormat from 'pretty-format'
+import {getUserCodeFrame} from './get-user-code-frame'
 import {getDocument} from './helpers'
 
 function inCypress(dom) {
@@ -61,6 +62,13 @@ function prettyDOM(dom, maxLength, options) {
     : debugContent
 }
 
-const logDOM = (...args) => console.log(prettyDOM(...args))
+const logDOM = (...args) => {
+  const userCodeFrame = getUserCodeFrame()
+  if (userCodeFrame) {
+    console.log(`${prettyDOM(...args)}\n\n${userCodeFrame}`)
+  } else {
+    console.log(prettyDOM(...args))
+  }
+}
 
 export {prettyDOM, logDOM}
