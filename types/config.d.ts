@@ -5,7 +5,7 @@ export interface Config {
   asyncUtilTimeout: number
   computedStyleSupportsPseudoElements: boolean
   defaultHidden: boolean
-  showOriginalStrackTrace: boolean
+  showOriginalStackTrace: boolean
   throwSuggestions: boolean
   getElementError: (message: string, container: HTMLElement) => Error
 }
