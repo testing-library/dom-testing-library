@@ -1224,6 +1224,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "slowselfip",
+      "name": "slowselfip",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/9762906?v=4",
+      "profile": "https://github.com/slowselfip",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoHost": "https://github.com"
