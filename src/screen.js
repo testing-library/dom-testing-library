@@ -14,7 +14,7 @@ export const screen =
         (helpers, key) => {
           helpers[key] = () => {
             throw new TypeError(
-              'For queries bound to document.body a global document has to be available... Learn more: https://testing-library.com/s/screen-global-error',
+              'For queries bound to document.body a global document has to be available... Learn more: https://testing-library.com/docs/dom-testing-library/api-queries#screen',
             )
           }
           return helpers
