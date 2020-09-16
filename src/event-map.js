@@ -332,11 +332,11 @@ export const eventMap = {
     },
     gotPointerCapture: {
       EventType: 'PointerEvent',
-      defaultInit: {bubbles: false, cancelable: false, composed: true},
+      defaultInit: {bubbles: true, cancelable: false, composed: true},
     },
     lostPointerCapture: {
       EventType: 'PointerEvent',
-      defaultInit: {bubbles: false, cancelable: false, composed: true},
+      defaultInit: {bubbles: true, cancelable: false, composed: true},
     },
     // history events
     popState: {
