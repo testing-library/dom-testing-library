@@ -1,4 +1,5 @@
 import {
+  createEvent,
   fireEvent,
   isInaccessible,
   queries,
@@ -144,6 +145,10 @@ function eventTest() {
     throw new Error(`Can't find firstChild`)
   }
   fireEvent.click(element.firstChild)
+
+  // Custom event
+  const customEvent = createEvent('customEvent', element)
+  fireEvent(element, customEvent)
 }
 
 async function testWaitFors() {

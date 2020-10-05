@@ -94,7 +94,7 @@ export type FireObject = {
   ) => boolean
 }
 export type CreateFunction = (
-  eventName: EventType,
+  eventName: string,
   node: Document | Element | Window | Node,
   init?: {},
   options?: {EventType?: string; defaultInit?: {}},
@@ -106,5 +106,5 @@ export type CreateObject = {
   ) => Event
 }
 
-export const createEvent: CreateObject
+export const createEvent: CreateObject & CreateFunction
 export const fireEvent: FireFunction & FireObject
