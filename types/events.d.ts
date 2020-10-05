@@ -106,5 +106,5 @@ export type CreateObject = {
   ) => Event
 }
 
-export const createEvent: CreateObject
+export const createEvent: CreateObject & CreateFunction
 export const fireEvent: FireFunction & FireObject
