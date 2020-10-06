@@ -1242,6 +1242,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Tismas",
+      "name": "Adam",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/13601275?v=4",
+      "profile": "https://github.com/Tismas",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
