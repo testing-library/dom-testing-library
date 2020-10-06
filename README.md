@@ -294,6 +294,9 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/slowselfip"><img src="https://avatars3.githubusercontent.com/u/9762906?v=4" width="100px;" alt=""/><br /><sub><b>slowselfip</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3Aslowselfip" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/Semigradsky"><img src="https://avatars3.githubusercontent.com/u/1198848?v=4" width="100px;" alt=""/><br /><sub><b>Dmitry Semigradsky</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=Semigradsky" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/Tismas"><img src="https://avatars2.githubusercontent.com/u/13601275?v=4" width="100px;" alt=""/><br /><sub><b>Adam</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=Tismas" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=Tismas" title="Tests">⚠️</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
