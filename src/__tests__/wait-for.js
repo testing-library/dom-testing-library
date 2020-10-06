@@ -1,4 +1,5 @@
 import {waitFor} from '../'
+import {configure, getConfig} from '../config'
 import {renderIntoDocument} from './helpers/test-utils'
 
 test('waits callback to not throw an error', async () => {
@@ -124,4 +125,23 @@ test('timeout logs a pretty DOM', async () => {
       </body>
     </html>"
   `)
+})
+
+test('should delegate to config.getElementError', async () => {
+  const originalConfig = getConfig()
+  const elementError = new Error('Custom element error')
+  const getElementError = jest.fn().mockImplementation(() => elementError)
+  configure({getElementError})
+
+  renderIntoDocument(`<div id="pretty">how pretty</div>`)
+  const error = await waitFor(
+    () => {
+      throw new Error('always throws')
+    },
+    {timeout: 1},
+  ).catch(e => e)
+
+  expect(getElementError).toBeCalledTimes(1)
+  expect(error.message).toMatchInlineSnapshot(`"Custom element error"`)
+  configure(originalConfig)
 })
