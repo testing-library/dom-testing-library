@@ -10,7 +10,6 @@ import {
   clearTimeout,
 } from './helpers'
 import {getConfig, runWithExpensiveErrorDiagnosticsDisabled} from './config'
-import {prettyDOM} from './pretty-dom'
 
 // This is so the stack trace the developer sees is one that's
 // closer to their code (because async stack traces are hard to follow).
@@ -27,7 +26,10 @@ function waitFor(
     stackTraceError,
     interval = 50,
     onTimeout = error => {
-      error.message = `${error.message}\n\n${prettyDOM(container)}`
+      error.message = getConfig().getElementError(
+        error.message,
+        container,
+      ).message
       return error
     },
     mutationObserverOptions = {
