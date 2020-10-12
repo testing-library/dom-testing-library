@@ -7,6 +7,6 @@ export interface waitForOptions {
 }
 
 export function waitFor<T>(
-  callback: () => T extends Promise<any> ? never : T,
+  callback: () => T | Promise<T>,
   options?: waitForOptions,
 ): Promise<T>
