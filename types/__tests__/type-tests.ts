@@ -174,6 +174,5 @@ async function testWaitFors() {
   await waitForElementToBeRemoved(getByText(element, 'apple'))
   await waitForElementToBeRemoved(getAllByText(element, 'apple'))
 
-  // $ExpectError
   await waitFor(async () => {})
 }

@@ -47,6 +47,7 @@ function waitFor(
   return new Promise(async (resolve, reject) => {
     let lastError, intervalId, observer
     let finished = false
+    let promiseStatus = 'idle'
 
     const overallTimeoutTimer = setTimeout(handleTimeout, timeout)
 
@@ -104,8 +105,24 @@ function waitFor(
     }
 
     function checkCallback() {
+      if (promiseStatus === 'pending') return
       try {
-        onDone(null, runWithExpensiveErrorDiagnosticsDisabled(callback))
+        const result = runWithExpensiveErrorDiagnosticsDisabled(callback)
+        if (typeof result?.then === 'function') {
+          promiseStatus = 'pending'
+          result.then(
+            resolvedValue => {
+              promiseStatus = 'resolved'
+              onDone(null, resolvedValue)
+            },
+            rejectedValue => {
+              promiseStatus = 'rejected'
+              lastError = rejectedValue
+            },
+          )
+        } else {
+          onDone(null, result)
+        }
         // If `callback` throws, wait for the next mutation, interval, or timeout.
       } catch (error) {
         // Save the most recent callback error to reject the promise with it in the event of a timeout

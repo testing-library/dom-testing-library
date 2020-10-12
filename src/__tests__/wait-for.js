@@ -2,6 +2,15 @@ import {waitFor} from '../'
 import {configure, getConfig} from '../config'
 import {renderIntoDocument} from './helpers/test-utils'
 
+function deferred() {
+  let resolve, reject
+  const promise = new Promise((res, rej) => {
+    resolve = res
+    reject = rej
+  })
+  return {promise, resolve, reject}
+}
+
 test('waits callback to not throw an error', async () => {
   const spy = jest.fn()
   // we are using random timeout here to simulate a real-time example
@@ -144,4 +153,42 @@ test('should delegate to config.getElementError', async () => {
   expect(getElementError).toBeCalledTimes(1)
   expect(error.message).toMatchInlineSnapshot(`"Custom element error"`)
   configure(originalConfig)
+})
+
+test('when a promise is returned, it does not call the callback again until that promise rejects', async () => {
+  const sleep = t => new Promise(r => setTimeout(r, t))
+  const p1 = deferred()
+  const waitForCb = jest.fn(() => p1.promise)
+  const waitForPromise = waitFor(waitForCb, {interval: 1})
+  expect(waitForCb).toHaveBeenCalledTimes(1)
+  waitForCb.mockClear()
+  await sleep(50)
+  expect(waitForCb).toHaveBeenCalledTimes(0)
+
+  const p2 = deferred()
+  waitForCb.mockImplementation(() => p2.promise)
+
+  p1.reject('p1 rejection (should not fail this test)')
+  await sleep(50)
+
+  expect(waitForCb).toHaveBeenCalledTimes(1)
+  p2.resolve()
+
+  await waitForPromise
+})
+
+test('when a promise is returned, if that is not resolved within the timeout, then waitFor is rejected', async () => {
+  const sleep = t => new Promise(r => setTimeout(r, t))
+  const {promise} = deferred()
+  const waitForPromise = waitFor(() => promise, {timeout: 1}).catch(e => e)
+  await sleep(5)
+
+  expect((await waitForPromise).message).toMatchInlineSnapshot(`
+    "Timed out in waitFor.
+
+    <html>
+      <head />
+      <body />
+    </html>"
+  `)
 })
