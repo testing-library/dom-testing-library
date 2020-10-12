@@ -7,15 +7,15 @@ import {getDocument} from './helpers'
 function unindent(string) {
   // remove white spaces first, to save a few bytes.
   // testing-playground will reformat on load any ways.
-  return (string || '').replace(/[ \t]*[\n][ \t]*/g, '\n')
+  return string.replace(/[ \t]*[\n][ \t]*/g, '\n')
 }
 
 function encode(value) {
   return compressToEncodedURIComponent(unindent(value))
 }
 
-function getPlaygroundUrl(element) {
-  return `https://testing-playground.com/#markup=${encode(element.innerHTML)}`
+function getPlaygroundUrl(markup) {
+  return `https://testing-playground.com/#markup=${encode(markup)}`
 }
 
 const debug = (element, maxLength, options) =>
@@ -24,7 +24,17 @@ const debug = (element, maxLength, options) =>
     : logDOM(element, maxLength, options)
 
 const logTestingPlaygroundURL = (element = getDocument().body) => {
-  console.log(`Open this URL in your browser\n\n${getPlaygroundUrl(element)}`)
+  if (!element || !('innerHTML' in element)) {
+    console.log(`The element you're providing isn't a valid DOM element.`)
+    return
+  }
+  if (!element.innerHTML) {
+    console.log(`The provided element doesn't have any children.`)
+    return
+  }
+  console.log(
+    `Open this URL in your browser\n\n${getPlaygroundUrl(element.innerHTML)}`,
+  )
 }
 
 const initialValue = {debug, logTestingPlaygroundURL}
