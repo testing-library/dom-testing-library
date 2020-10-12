@@ -33,7 +33,7 @@ test('logs Playground URL that are attached to document.body', () => {
 })
 
 test('logs messsage when element is empty', () => {
-  screen.logTestingPlaygroundURL(render('').container)
+  screen.logTestingPlaygroundURL(document.createElement('div'))
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(
     `"The provided element doesn't have any children."`,
