@@ -42,9 +42,10 @@
     "@babel/runtime": "^7.10.3",
     "@types/aria-query": "^4.2.0",
     "aria-query": "^4.2.2",
+    "chalk": "^4.1.0",
     "dom-accessibility-api": "^0.5.1",
-    "pretty-format": "^26.4.2",
-    "chalk": "^4.1.0"
+    "lz-string": "^1.4.4",
+    "pretty-format": "^26.4.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.10.1",

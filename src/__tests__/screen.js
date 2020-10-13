@@ -1,5 +1,5 @@
 import {screen} from '..'
-import {renderIntoDocument} from './helpers/test-utils'
+import {render, renderIntoDocument} from './helpers/test-utils'
 
 // Since screen.debug internally calls getUserCodeFrame, we mock it so it doesn't affect these tests
 jest.mock('../get-user-code-frame', () => ({
@@ -19,6 +19,49 @@ test('exposes queries that are attached to document.body', async () => {
   screen.getByText(/hello world/i)
   await screen.findByText(/hello world/i)
   expect(screen.queryByText(/hello world/i)).not.toBeNull()
+})
+
+test('logs Playground URL that are attached to document.body', () => {
+  renderIntoDocument(`<div>hello world</div>`)
+  screen.logTestingPlaygroundURL()
+  expect(console.log).toHaveBeenCalledTimes(1)
+  expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
+    "Open this URL in your browser
+
+    https://testing-playground.com/#markup=DwEwlgbgfAFgpgGwQewAQHdkCcEmAenGiA"
+  `)
+})
+
+test('logs messsage when element is empty', () => {
+  screen.logTestingPlaygroundURL(document.createElement('div'))
+  expect(console.log).toHaveBeenCalledTimes(1)
+  expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(
+    `"The provided element doesn't have any children."`,
+  )
+})
+
+test('logs messsage when element is not a valid HTML', () => {
+  screen.logTestingPlaygroundURL(null)
+  expect(console.log).toHaveBeenCalledTimes(1)
+  expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(
+    `"The element you're providing isn't a valid DOM element."`,
+  )
+  console.log.mockClear()
+  screen.logTestingPlaygroundURL({})
+  expect(console.log).toHaveBeenCalledTimes(1)
+  expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(
+    `"The element you're providing isn't a valid DOM element."`,
+  )
+})
+
+test('logs Playground URL that are passed as element', () => {
+  screen.logTestingPlaygroundURL(render(`<h1>Sign <em>up</em></h1>`).container)
+  expect(console.log).toHaveBeenCalledTimes(1)
+  expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
+    "Open this URL in your browser
+
+    https://testing-playground.com/#markup=DwCwjAfAyglg5gOwATAKYFsIFcAOwD0GEB4EQA"
+  `)
 })
 
 test('exposes debug method', () => {
