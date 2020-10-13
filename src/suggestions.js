@@ -96,7 +96,10 @@ function canSuggest(currentMethod, requestedMethod, data) {
 
 export function getSuggestedQuery(element, variant = 'get', method) {
   // don't create suggestions for script and style elements
-  if (element.matches(DEFAULT_IGNORE_TAGS)) {
+  if (
+    typeof element.matches !== 'function' ||
+    element.matches(DEFAULT_IGNORE_TAGS)
+  ) {
     return undefined
   }
 
