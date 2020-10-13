@@ -1,17 +1,22 @@
-import { BoundFunctions, Queries } from './get-queries-for-element';
-import * as queries from './queries';
-import { OptionsReceived } from 'pretty-format';
+import {BoundFunctions, Queries} from './get-queries-for-element'
+import * as queries from './queries'
+import {OptionsReceived} from 'pretty-format'
 
 export type Screen<Q extends Queries = typeof queries> = BoundFunctions<Q> & {
-    /**
-     * Convenience function for `pretty-dom` which also allows an array
-     * of elements
-     */
-    debug: (
-        element?: Element | HTMLDocument | Array<Element | HTMLDocument>,
-        maxLength?: number,
-        options?: OptionsReceived,
-    ) => void;
-};
+  /**
+   * Convenience function for `pretty-dom` which also allows an array
+   * of elements
+   */
+  debug: (
+    element?: Element | HTMLDocument | Array<Element | HTMLDocument>,
+    maxLength?: number,
+    options?: OptionsReceived,
+  ) => void
+  /**
+   * Convenience function for `Testing Playground` which logs URL that
+   * can be opened in a browser
+   */
+  logTestingPlaygroundURL: (element?: Element | HTMLDocument) => void
+}
 
-export const screen: Screen;
+export const screen: Screen
