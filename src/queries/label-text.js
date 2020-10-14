@@ -14,22 +14,7 @@ import {
 function queryAllLabels(container) {
   return Array.from(container.querySelectorAll('label,input'))
     .map(node => {
-      let textToMatch =
-        node.tagName.toLowerCase() === 'label'
-          ? node.textContent
-          : node.value || null
-      // The children of a textarea are part of `textContent` as well. We
-      // need to remove them from the string so we can match it afterwards.
-      Array.from(node.querySelectorAll('textarea')).forEach(textarea => {
-        textToMatch = textToMatch.replace(textarea.value, '')
-      })
-
-      // The children of a select are also part of `textContent`, so we
-      // need also to remove their text.
-      Array.from(node.querySelectorAll('select')).forEach(select => {
-        textToMatch = textToMatch.replace(select.textContent, '')
-      })
-      return {node, textToMatch}
+      return {node, textToMatch: getLabelContent(node)}
     })
     .filter(({textToMatch}) => textToMatch !== null)
 }
@@ -51,15 +36,38 @@ function queryAllLabelsByText(
     .map(({node}) => node)
 }
 
-function getLabelContent(label) {
-  let labelContent = label.getAttribute('value') || label.textContent
-  Array.from(label.querySelectorAll('textarea')).forEach(textarea => {
-    labelContent = labelContent.replace(textarea.value, '')
-  })
-  Array.from(label.querySelectorAll('select')).forEach(select => {
-    labelContent = labelContent.replace(select.textContent, '')
-  })
-  return labelContent
+function getTextContent(node) {
+  const TEXT_NODE = 3
+  const labelledNodeNames = [
+    'button',
+    'meter',
+    'output',
+    'progress',
+    'select',
+    'textarea',
+    'input',
+  ]
+  if (
+    labelledNodeNames.some(nodeName => node.nodeName.toLowerCase() === nodeName)
+  ) {
+    return ''
+  }
+
+  if (node.nodeType === TEXT_NODE) return node.textContent
+
+  return Array.from(node.childNodes)
+    .map(childNode => getTextContent(childNode))
+    .join('')
+}
+
+function getLabelContent(node) {
+  let textContent
+  if (node.tagName.toLowerCase() === 'label') {
+    textContent = getTextContent(node)
+  } else {
+    textContent = node.value || node.textContent
+  }
+  return textContent
 }
 
 function queryAllByLabelText(
