@@ -1224,7 +1224,7 @@ it(`get the output element by it's label`, () => {
 it(`should get element by it's label when there are elements with same text`, () => {
   const {getByLabelText} = renderIntoDocument(`
     <label>test 1
-      <textarea defaultValue="test"></textarea>
+      <textarea>test</textarea>
     </label>
   `)
   expect(getByLabelText('test 1')).toBeInTheDocument()
