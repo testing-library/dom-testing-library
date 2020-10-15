@@ -47,9 +47,7 @@ function getTextContent(node) {
     'textarea',
     'input',
   ]
-  if (
-    labelledNodeNames.some(nodeName => node.nodeName.toLowerCase() === nodeName)
-  ) {
+  if (labelledNodeNames.includes(node.nodeName.toLowerCase())) {
     return ''
   }
 
