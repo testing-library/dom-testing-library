@@ -1203,11 +1203,20 @@ it('gets form controls by label text on IE and other legacy browsers', () => {
 
 // https://github.com/testing-library/dom-testing-library/issues/787
 it(`get the output element by it's label`, () => {
-  const {getByLabelText} = renderIntoDocument(`
+  const {getByLabelText, rerender} = renderIntoDocument(`
     <label>foo
       <output>bar</output>
     </label>
   `)
+  expect(getByLabelText('foo')).toBeInTheDocument()
+
+  rerender(`
+    <label>
+      <small>foo</small>
+      <output>bar</output>
+    </label>
+  `)
+
   expect(getByLabelText('foo')).toBeInTheDocument()
 })
 
