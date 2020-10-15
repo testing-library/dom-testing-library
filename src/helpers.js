@@ -1,4 +1,7 @@
 const globalObj = typeof window === 'undefined' ? global : window
+// Constant node.nodeType for text nodes, see:
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType#Node_type_constants
+const TEXT_NODE = 3
 
 // Currently this fn only supports jest timers, but it could support other test runners in the future.
 function runWithRealTimers(callback) {
@@ -127,4 +130,5 @@ export {
   runWithRealTimers,
   checkContainerType,
   jestFakeTimersAreEnabled,
+  TEXT_NODE,
 }

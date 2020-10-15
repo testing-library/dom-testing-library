@@ -1,5 +1,5 @@
 import {getConfig} from '../config'
-import {checkContainerType} from '../helpers'
+import {checkContainerType, TEXT_NODE} from '../helpers'
 import {
   fuzzyMatches,
   matches,
@@ -47,8 +47,6 @@ function queryAllLabelsByText(
 }
 
 function getTextContent(node) {
-  const TEXT_NODE = 3
-
   if (labelledNodeNames.includes(node.nodeName.toLowerCase())) {
     return ''
   }
