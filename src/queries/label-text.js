@@ -11,6 +11,16 @@ import {
   wrapSingleQueryWithSuggestion,
 } from './all-utils'
 
+const labelledNodeNames = [
+  'button',
+  'meter',
+  'output',
+  'progress',
+  'select',
+  'textarea',
+  'input',
+]
+
 function queryAllLabels(container) {
   return Array.from(container.querySelectorAll('label,input'))
     .map(node => {
@@ -38,15 +48,7 @@ function queryAllLabelsByText(
 
 function getTextContent(node) {
   const TEXT_NODE = 3
-  const labelledNodeNames = [
-    'button',
-    'meter',
-    'output',
-    'progress',
-    'select',
-    'textarea',
-    'input',
-  ]
+
   if (labelledNodeNames.includes(node.nodeName.toLowerCase())) {
     return ''
   }
@@ -94,8 +96,7 @@ function queryAllByLabelText(
           })
         : Array.from(getLabels(labelledElement)).map(label => {
             const textToMatch = getLabelContent(label)
-            const formControlSelector =
-              'button, input, meter, output, progress, select, textarea'
+            const formControlSelector = labelledNodeNames.join(',')
             const labelledFormControl = Array.from(
               label.querySelectorAll(formControlSelector),
             ).filter(element => element.matches(selector))[0]
