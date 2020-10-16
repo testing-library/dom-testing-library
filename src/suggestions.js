@@ -92,7 +92,7 @@ export function getSuggestedQuery(element, variant = 'get', method) {
 
   const labelText = getLabels(document, element)
     .map(label => label.content)
-    .join('')
+    .join(' ')
   if (canSuggest('LabelText', method, labelText)) {
     return makeSuggestion('LabelText', element, labelText, {variant})
   }

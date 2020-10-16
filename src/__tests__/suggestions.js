@@ -578,3 +578,44 @@ test('should suggest hidden option if element is not in the accessibilty tree', 
     ]
   `)
 })
+
+test('should find label text using the aria-labelledby', () => {
+  const {container} = renderIntoDocument(`
+  <div>
+      <div>
+        <input id="sixth-label-one" value="6th one"/>
+        <input id="sixth-label-two" value="6th two"/>
+        <label id="sixth-label-three">6th three</label>
+        <input aria-labelledby="sixth-label-one sixth-label-two sixth-label-three" id="sixth-id" />
+      </div>
+    </div>
+  `)
+
+  expect(
+    getSuggestedQuery(
+      container.querySelector('[id="sixth-id"]'),
+      'get',
+      'labelText',
+    ),
+  ).toMatchInlineSnapshot(
+    {
+      queryArgs: [/6th one 6th two 6th three/i],
+      queryMethod: 'getByLabelText',
+      queryName: 'LabelText',
+      variant: 'get',
+      warning: '',
+    },
+    `
+    Object {
+      "queryArgs": Array [
+        Object {},
+      ],
+      "queryMethod": "getByLabelText",
+      "queryName": "LabelText",
+      "toString": [Function],
+      "variant": "get",
+      "warning": "",
+    }
+  `,
+  )
+})
