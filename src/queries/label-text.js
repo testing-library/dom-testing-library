@@ -1,5 +1,6 @@
 import {getConfig} from '../config'
-import {checkContainerType, TEXT_NODE} from '../helpers'
+import {checkContainerType} from '../helpers'
+import {getLabels, getRealLabels, getLabelContent} from '../label-helpers'
 import {
   fuzzyMatches,
   matches,
@@ -10,16 +11,6 @@ import {
   wrapAllByQueryWithSuggestion,
   wrapSingleQueryWithSuggestion,
 } from './all-utils'
-
-const labelledNodeNames = [
-  'button',
-  'meter',
-  'output',
-  'progress',
-  'select',
-  'textarea',
-  'input',
-]
 
 function queryAllLabels(container) {
   return Array.from(container.querySelectorAll('label,input'))
@@ -46,28 +37,6 @@ function queryAllLabelsByText(
     .map(({node}) => node)
 }
 
-function getTextContent(node) {
-  if (labelledNodeNames.includes(node.nodeName.toLowerCase())) {
-    return ''
-  }
-
-  if (node.nodeType === TEXT_NODE) return node.textContent
-
-  return Array.from(node.childNodes)
-    .map(childNode => getTextContent(childNode))
-    .join('')
-}
-
-function getLabelContent(node) {
-  let textContent
-  if (node.tagName.toLowerCase() === 'label') {
-    textContent = getTextContent(node)
-  } else {
-    textContent = node.value || node.textContent
-  }
-  return textContent
-}
-
 function queryAllByLabelText(
   container,
   text,
@@ -79,34 +48,21 @@ function queryAllByLabelText(
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   const matchingLabelledElements = Array.from(container.querySelectorAll('*'))
     .filter(element => {
-      return getLabels(element) || element.hasAttribute('aria-labelledby')
+      return (
+        getRealLabels(element).length || element.hasAttribute('aria-labelledby')
+      )
     })
     .reduce((labelledElements, labelledElement) => {
-      const labelsId = labelledElement.getAttribute('aria-labelledby')
-        ? labelledElement.getAttribute('aria-labelledby').split(' ')
-        : []
-      let labelsValue = labelsId.length
-        ? labelsId.map(labelId => {
-            const labellingElement = container.querySelector(
-              `[id="${labelId}"]`,
-            )
-            return labellingElement ? getLabelContent(labellingElement) : ''
-          })
-        : Array.from(getLabels(labelledElement)).map(label => {
-            const textToMatch = getLabelContent(label)
-            const formControlSelector = labelledNodeNames.join(',')
-            const labelledFormControl = Array.from(
-              label.querySelectorAll(formControlSelector),
-            ).filter(element => element.matches(selector))[0]
-            if (labelledFormControl) {
-              if (
-                matcher(textToMatch, labelledFormControl, text, matchNormalizer)
-              )
-                labelledElements.push(labelledFormControl)
-            }
-            return textToMatch
-          })
-      labelsValue = labelsValue.filter(Boolean)
+      const labelList = getLabels(container, labelledElement, {selector})
+      labelList
+        .filter(label => Boolean(label.formControl))
+        .forEach(label => {
+          if (matcher(label.content, label.formControl, text, matchNormalizer))
+            labelledElements.push(label.formControl)
+        })
+      const labelsValue = labelList
+        .filter(label => Boolean(label.content))
+        .map(label => label.content)
       if (
         matcher(labelsValue.join(' '), labelledElement, text, matchNormalizer)
       )
@@ -232,6 +188,7 @@ const queryAllByLabelTextWithSuggestions = wrapAllByQueryWithSuggestion(
   queryAllByLabelText.name,
   'queryAll',
 )
+
 export {
   queryAllByLabelTextWithSuggestions as queryAllByLabelText,
   queryByLabelText,
@@ -239,21 +196,4 @@ export {
   getByLabelTextWithSuggestions as getByLabelText,
   findAllByLabelText,
   findByLabelText,
-}
-
-// Based on https://github.com/eps1lon/dom-accessibility-api/pull/352
-function getLabels(element) {
-  if (element.labels !== undefined) return element.labels
-
-  if (!isLabelable(element)) return null
-
-  const labels = element.ownerDocument.querySelectorAll('label')
-  return Array.from(labels).filter(label => label.control === element)
-}
-
-function isLabelable(element) {
-  return (
-    element.tagName.match(/BUTTON|METER|OUTPUT|PROGRESS|SELECT|TEXTAREA/) ||
-    (element.tagName === 'INPUT' && element.getAttribute('type') !== 'hidden')
-  )
 }
