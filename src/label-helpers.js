@@ -53,7 +53,7 @@ function getLabels(container, element, {selector = '*'} = {}) {
   const labelsId = element.getAttribute('aria-labelledby')
     ? element.getAttribute('aria-labelledby').split(' ')
     : []
-  let labelsList = labelsId.length
+  return labelsId.length
     ? labelsId.map(labelId => {
         const labellingElement = container.querySelector(`[id="${labelId}"]`)
         return labellingElement
@@ -70,9 +70,6 @@ function getLabels(container, element, {selector = '*'} = {}) {
 
         return {content: textToMatch, formControl: labelledFormControl}
       })
-  labelsList = labelsList.filter(Boolean)
-
-  return labelsList
 }
 
 export {getLabels, getRealLabels, getLabelContent}
