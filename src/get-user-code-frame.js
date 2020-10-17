@@ -10,7 +10,8 @@ try {
   codeFrameColumns = nodeRequire.call(module, '@babel/code-frame')
     .codeFrameColumns
   chalk = nodeRequire.call(module, 'chalk')
-} catch {
+} catch (error){
+
   // We're in a browser environment
 }
 
@@ -30,7 +31,7 @@ function getCodeFrame(frame) {
   let rawFileContents = ''
   try {
     rawFileContents = readFileSync(filename, 'utf-8')
-  } catch {
+  } catch (error){
     return ''
   }
 

@@ -40,7 +40,7 @@ function getJestFakeTimersType() {
       // jest.getRealSystemTime is only supported for Jest's `modern` fake timers and otherwise throws
       jest.getRealSystemTime()
       return 'modern'
-    } catch {
+    } catch (e){
       // not using Jest's modern fake timers
     }
   }
