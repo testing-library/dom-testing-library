@@ -293,7 +293,7 @@ test('returns the labelable element control inside a label', () => {
       <output />
       <progress />
       <select />
-      <textarea />
+      <textarea ></textarea>
     </label>
   `)
 
@@ -558,7 +558,7 @@ test('query/get element by its title', () => {
   expect(getByTitle('Delete').id).toEqual('2')
   expect(queryByTitle('Delete').id).toEqual('2')
   expect(queryByTitle('Del', {exact: false}).id).toEqual('2')
-  expect(queryByTitle("HelloWorld")).toBeNull()
+  expect(queryByTitle('HelloWorld')).toBeNull()
 })
 
 test('query/get title element of SVG', () => {
@@ -1199,4 +1199,33 @@ it('gets form controls by label text on IE and other legacy browsers', () => {
     </label>
   `)
   expect(getByLabelText('Label text').id).toBe('input-id')
+})
+
+// https://github.com/testing-library/dom-testing-library/issues/787
+it(`get the output element by it's label`, () => {
+  const {getByLabelText, rerender} = renderIntoDocument(`
+    <label>foo
+      <output>bar</output>
+    </label>
+  `)
+  expect(getByLabelText('foo')).toBeInTheDocument()
+
+  rerender(`
+    <label>
+      <small>foo</small>
+      <output>bar</output>
+    </label>
+  `)
+
+  expect(getByLabelText('foo')).toBeInTheDocument()
+})
+
+// https://github.com/testing-library/dom-testing-library/issues/343#issuecomment-555385756
+it(`should get element by it's label when there are elements with same text`, () => {
+  const {getByLabelText} = renderIntoDocument(`
+    <label>test 1
+      <textarea>test</textarea>
+    </label>
+  `)
+  expect(getByLabelText('test 1')).toBeInTheDocument()
 })

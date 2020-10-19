@@ -1,6 +1,4 @@
-// Constant node.nodeType for text nodes, see:
-// https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType#Node_type_constants
-const TEXT_NODE = 3
+const {TEXT_NODE} = require('./helpers')
 
 function getNodeText(node) {
   if (node.matches('input[type=submit], input[type=button]')) {
