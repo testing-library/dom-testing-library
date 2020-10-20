@@ -80,6 +80,11 @@ async function testQueryHelpers() {
   getByAutomationId(element, ['id', 'automationId'])
   findAllByAutomationId(element, 'id', {}, {timeout: 1000})
   findByAutomationId(element, 'id', {}, {timeout: 1000})
+  // test optional params too
+  findAllByAutomationId(element, 'id', {})
+  findByAutomationId(element, 'id', {})
+  findAllByAutomationId(element, 'id')
+  findByAutomationId(element, 'id')
 }
 
 async function testByRole() {
