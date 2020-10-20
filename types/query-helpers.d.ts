@@ -1,5 +1,5 @@
-import { Matcher, MatcherOptions } from './matches'
-import { waitForOptions } from './wait-for'
+import {Matcher, MatcherOptions} from './matches'
+import {waitForOptions} from './wait-for'
 
 export interface SelectorMatcherOptions extends MatcherOptions {
   selector?: string
@@ -39,12 +39,12 @@ export type GetAllBy<Arguments extends any[]> = QueryMethod<
   HTMLElement[]
 >
 export type FindAllBy<Arguments extends any[]> = QueryMethod<
-  [Arguments[0], Arguments[1], waitForOptions],
+  [Arguments[0], Arguments[1]?, waitForOptions?],
   Promise<HTMLElement[]>
 >
 export type GetBy<Arguments extends any[]> = QueryMethod<Arguments, HTMLElement>
 export type FindBy<Arguments extends any[]> = QueryMethod<
-  [Arguments[0], Arguments[1], waitForOptions],
+  [Arguments[0], Arguments[1]?, waitForOptions?],
   Promise<HTMLElement>
 >
 
