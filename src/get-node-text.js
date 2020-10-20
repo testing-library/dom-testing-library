@@ -1,4 +1,4 @@
-const {TEXT_NODE} = require('./helpers')
+import {TEXT_NODE} from './helpers'
 
 function getNodeText(node) {
   if (node.matches('input[type=submit], input[type=button]')) {
