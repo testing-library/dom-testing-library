@@ -1262,6 +1262,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "zorfling",
+      "name": "Chris Colborne",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/101371?v=4",
+      "profile": "https://chriscolborne.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
