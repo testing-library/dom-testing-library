@@ -3,33 +3,10 @@ import {getDefaultNormalizer} from './matches'
 import {getNodeText} from './get-node-text'
 import {DEFAULT_IGNORE_TAGS, getConfig} from './config'
 import {getImplicitAriaRoles, isInaccessible} from './role-helpers'
+import {getLabels} from './label-helpers'
 
 const normalize = getDefaultNormalizer()
 
-function getLabelTextFor(element) {
-  let label =
-    element.labels &&
-    Array.from(element.labels).find(el => Boolean(normalize(el.textContent)))
-
-  // non form elements that are using aria-labelledby won't be included in `element.labels`
-  if (!label) {
-    const ariaLabelledBy = element.getAttribute('aria-labelledby')
-    if (ariaLabelledBy) {
-      // this is only a temporary fix. The problem is that at the moment @testing-library/dom
-      // not support label concatenation
-      // see https://github.com/testing-library/dom-testing-library/issues/545
-      const firstId = ariaLabelledBy.split(' ')[0]
-      // we're using this notation because with the # selector we would have to escape special characters e.g. user.name
-      // see https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector#Escaping_special_characters
-      label = document.querySelector(`[id="${firstId}"]`)
-    }
-  }
-
-  if (label) {
-    return label.textContent
-  }
-  return undefined
-}
 function escapeRegExp(string) {
   return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
@@ -113,7 +90,9 @@ export function getSuggestedQuery(element, variant = 'get', method) {
     })
   }
 
-  const labelText = getLabelTextFor(element)
+  const labelText = getLabels(document, element)
+    .map(label => label.content)
+    .join(' ')
   if (canSuggest('LabelText', method, labelText)) {
     return makeSuggestion('LabelText', element, labelText, {variant})
   }
