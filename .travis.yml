@@ -3,11 +3,15 @@ cache: npm
 notifications:
   email: false
 node_js:
-  - 10
+  # technically we support 10.0.0, but some of our tooling doesn't
+  - 10.14.2
   - 12
   - 14
-  - node
-install: npm install
+  - 15
+before_install:
+  - nvm install-latest-npm
+install:
+  - npm install
 script:
   - npm run validate
   - npx codecov@3
