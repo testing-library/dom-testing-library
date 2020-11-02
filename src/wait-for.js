@@ -95,10 +95,6 @@ function waitFor(
       if (!usingFakeTimers) {
         clearInterval(intervalId)
         observer.disconnect()
-
-        // Call also the disconnect method on setImmediate for projects not using the MutationObersver implementation of jsdom.
-        // But using for example `@sheerun/mutationobserver-shim` which  provokes infinite loop when being called immediately on `onDone` function
-        setImmediate(() => observer.disconnect())
       }
 
       if (error) {
