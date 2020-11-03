@@ -35,6 +35,7 @@ test('find asynchronously finds elements', async () => {
       <div role="dialog"></div>
       <div role="meter progressbar"></div>
       <header>header</header>
+      <input type="hidden" />
     </div>
   `)
   await expect(findByLabelText('test-label')).resolves.toBeTruthy()

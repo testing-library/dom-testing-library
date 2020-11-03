@@ -34,9 +34,9 @@ function getLabelContent(node) {
 
 // Based on https://github.com/eps1lon/dom-accessibility-api/pull/352
 function getRealLabels(element) {
-  if (element.labels !== undefined) return element.labels
-
   if (!isLabelable(element)) return []
+
+  if (element.labels !== undefined) return element.labels
 
   const labels = element.ownerDocument.querySelectorAll('label')
   return Array.from(labels).filter(label => label.control === element)
