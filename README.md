@@ -299,6 +299,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/balavishnuvj"><img src="https://avatars3.githubusercontent.com/u/13718688?v=4" width="100px;" alt=""/><br /><sub><b>balavishnuvj</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=balavishnuvj" title="Code">💻</a></td>
     <td align="center"><a href="https://chriscolborne.com"><img src="https://avatars2.githubusercontent.com/u/101371?v=4" width="100px;" alt=""/><br /><sub><b>Chris Colborne</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=zorfling" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/romain-trotard"><img src="https://avatars0.githubusercontent.com/u/17161484?v=4" width="100px;" alt=""/><br /><sub><b>Romain Trotard</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=romain-trotard" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.thomasmarshall.com"><img src="https://avatars0.githubusercontent.com/u/770763?v=4" width="100px;" alt=""/><br /><sub><b>Thomas Marshall</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=thomasmarshall" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=thomasmarshall" title="Tests">⚠️</a></td>
   </tr>
 </table>
 

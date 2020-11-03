@@ -1280,6 +1280,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "thomasmarshall",
+      "name": "Thomas Marshall",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/770763?v=4",
+      "profile": "http://www.thomasmarshall.com",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
