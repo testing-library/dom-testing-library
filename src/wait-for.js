@@ -94,7 +94,7 @@ function waitFor(
 
       if (!usingFakeTimers) {
         clearInterval(intervalId)
-        setImmediate(() => observer.disconnect())
+        observer.disconnect()
       }
 
       if (error) {
