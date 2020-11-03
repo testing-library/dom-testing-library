@@ -1271,6 +1271,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "romain-trotard",
+      "name": "Romain Trotard",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/17161484?v=4",
+      "profile": "https://github.com/romain-trotard",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
