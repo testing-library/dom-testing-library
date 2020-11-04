@@ -26,8 +26,7 @@ practices.</p>
 [![version][version-badge]][package]
 [![downloads][downloads-badge]][npmtrends]
 [![MIT License][license-badge]][license]
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-76-orange.svg?style=flat-square)](#contributors)
+[![All Contributors][all-contributors-badge]](#contributors)
 [![PRs Welcome][prs-badge]][prs]
 [![Code of Conduct][coc-badge]][coc]
 [![Discord][discord-badge]][discord]
@@ -305,6 +304,7 @@ Thanks goes to these people ([emoji key][emojis]):
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors][all-contributors] specification.
@@ -314,49 +314,37 @@ Contributions of any kind welcome!
 
 [MIT](LICENSE)
 
+<!-- prettier-ignore-start -->
+
 [npm]: https://www.npmjs.com/
 [node]: https://nodejs.org
-[build-badge]:
-  https://img.shields.io/travis/testing-library/dom-testing-library.svg?style=flat-square
-[build]: https://travis-ci.org/testing-library/dom-testing-library
-[coverage-badge]:
-  https://img.shields.io/codecov/c/github/testing-library/dom-testing-library.svg?style=flat-square
+[build-badge]: https://img.shields.io/github/workflow/status/testing-library/dom-testing-library/validate/master?logo=github&style=flat-square
+[build]: https://github.com/testing-library/dom-testing-library/actions?query=workflow%3Avalidate
+[coverage-badge]: https://img.shields.io/codecov/c/github/testing-library/dom-testing-library.svg?style=flat-square
 [coverage]: https://codecov.io/github/testing-library/dom-testing-library
-[version-badge]:
-  https://img.shields.io/npm/v/@testing-library/dom.svg?style=flat-square
+[version-badge]: https://img.shields.io/npm/v/@testing-library/dom.svg?style=flat-square
 [package]: https://www.npmjs.com/package/@testing-library/dom
-[downloads-badge]:
-  https://img.shields.io/npm/dm/@testing-library/dom.svg?style=flat-square
+[downloads-badge]: https://img.shields.io/npm/dm/@testing-library/dom.svg?style=flat-square
 [npmtrends]: http://www.npmtrends.com/@testing-library/dom
-[license-badge]:
-  https://img.shields.io/npm/l/@testing-library/dom.svg?style=flat-square
-[license]:
-  https://github.com/testing-library/dom-testing-library/blob/master/LICENSE
-[prs-badge]:
-  https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+[license-badge]: https://img.shields.io/npm/l/@testing-library/dom.svg?style=flat-square
+[license]: https://github.com/testing-library/dom-testing-library/blob/master/LICENSE
+[prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs]: http://makeapullrequest.com
-[donate-badge]:
-  https://img.shields.io/badge/$-support-green.svg?style=flat-square
-[coc-badge]:
-  https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
-[coc]:
-  https://github.com/testing-library/dom-testing-library/blob/master/CODE_OF_CONDUCT.md
-[github-watch-badge]:
-  https://img.shields.io/github/watchers/testing-library/dom-testing-library.svg?style=social
+[coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
+[coc]: https://github.com/testing-library/dom-testing-library/blob/master/CODE_OF_CONDUCT.md
+[github-watch-badge]: https://img.shields.io/github/watchers/testing-library/dom-testing-library.svg?style=social
 [github-watch]: https://github.com/testing-library/dom-testing-library/watchers
-[github-star-badge]:
-  https://img.shields.io/github/stars/testing-library/dom-testing-library.svg?style=social
+[github-star-badge]: https://img.shields.io/github/stars/testing-library/dom-testing-library.svg?style=social
 [github-star]: https://github.com/testing-library/dom-testing-library/stargazers
-[twitter]:
-  https://twitter.com/intent/tweet?text=Check%20out%20dom-testing-library%20by%20%40testing-library%20https%3A%2F%2Fgithub.com%2Ftesting-library%2Fdom-testing-library%20%F0%9F%91%8D
-[twitter-badge]:
-  https://img.shields.io/twitter/url/https/github.com/testing-library/dom-testing-library.svg?style=social
+[twitter]: https://twitter.com/intent/tweet?text=Check%20out%20dom-testing-library%20by%20%40testing-library%20https%3A%2F%2Fgithub.com%2Ftesting-library%2Fdom-testing-library%20%F0%9F%91%8D
+[twitter-badge]: https://img.shields.io/twitter/url/https/github.com/testing-library/dom-testing-library.svg?style=social
 [emojis]: https://github.com/all-contributors/all-contributors#emoji-key
 [all-contributors]: https://github.com/all-contributors/all-contributors
-[set-immediate]:
-  https://developer.mozilla.org/en-US/docs/Web/API/Window/setImmediate
+[all-contributors-badge]: https://img.shields.io/github/all-contributors/testing-library/dom-testing-library?color=orange&style=flat-square
+[set-immediate]: https://developer.mozilla.org/en-US/docs/Web/API/Window/setImmediate
 [guiding-principle]: https://twitter.com/kentcdodds/status/977018512689455106
 [jest]: https://facebook.github.io/jest
-[discord-badge]:
-  https://img.shields.io/discord/723559267868737556.svg?color=7389D8&labelColor=6A7EC2&logo=discord&logoColor=ffffff&style=flat-square
+[discord-badge]: https://img.shields.io/discord/723559267868737556.svg?color=7389D8&labelColor=6A7EC2&logo=discord&logoColor=ffffff&style=flat-square
 [discord]: https://discord.gg/c6JN9fM
+
+<!-- prettier-ignore-end -->
