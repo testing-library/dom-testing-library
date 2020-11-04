@@ -31,8 +31,9 @@ jobs:
     needs: main
     runs-on: ubuntu-latest
     if:
-      ${{ contains('master,beta,next,alpha', github.base_ref) &&
-      github.event_name == 'push' }}
+      ${{
+      contains('refs/heads/master,refs/heads/beta,refs/heads/next,refs/heads/alpha',
+      github.ref) && github.event_name == 'push' }}
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v2
