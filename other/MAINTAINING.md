@@ -1,7 +1,6 @@
 # Maintaining
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 **Table of Contents**
@@ -48,7 +47,7 @@ own fork. Either way is fine.
 
 When we receive a pull request, a GitHub Action is kicked off automatically (see
 the `.github/workflows/validate.yml` for what runs in the Action). We avoid
-merging anything that breaks the GitHub Action.
+merging anything that breaks the validate Action.
 
 Please review PRs and focus on the code rather than the individual. You never
 know when this is someone's first ever PR and we want their experience to be as
