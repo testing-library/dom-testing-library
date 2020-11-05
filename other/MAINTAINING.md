@@ -1,5 +1,18 @@
 # Maintaining
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+**Table of Contents**
+
+- [Code of Conduct](#code-of-conduct)
+- [Issues](#issues)
+- [Pull Requests](#pull-requests)
+- [Release](#release)
+- [Thanks!](#thanks)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 This is documentation for maintainers of this project.
 
 ## Code of Conduct
@@ -32,9 +45,9 @@ any more of you than that.
 As a maintainer, you're fine to make your branches on the main repo or on your
 own fork. Either way is fine.
 
-When we receive a pull request, a github action is kicked off automatically (see
-the `.github/workflows/validate.yml` for what runs in the action). We avoid
-merging anything that breaks the github action.
+When we receive a pull request, a GitHub Action is kicked off automatically (see
+the `.github/workflows/validate.yml` for what runs in the Action). We avoid
+merging anything that breaks the GitHub Action.
 
 Please review PRs and focus on the code rather than the individual. You never
 know when this is someone's first ever PR and we want their experience to be as
@@ -49,7 +62,7 @@ to release. See the next section on Releases for more about that.
 ## Release
 
 Our releases are automatic. They happen whenever code lands into `master`. A
-github action gets kicked off and if it's successful, a tool called
+GitHub Action gets kicked off and if it's successful, a tool called
 [`semantic-release`](https://github.com/semantic-release/semantic-release) is
 used to automatically publish a new release to npm as well as a changelog to
 GitHub. It is only able to determine the version and whether a release is
@@ -66,5 +79,6 @@ necessary by the git commit messages. With this in mind, **please brush up on
 
 Thank you so much for helping to maintain this project!
 
-[commit]:
-  https://github.com/conventional-changelog-archived-repos/conventional-changelog-angular/blob/ed32559941719a130bb0327f886d6a32a8cbc2ba/convention.md
+<!-- prettier-ignore-start -->
+[commit]: https://github.com/conventional-changelog-archived-repos/conventional-changelog-angular/blob/ed32559941719a130bb0327f886d6a32a8cbc2ba/convention.md
+<!-- prettier-ignore-end -->
