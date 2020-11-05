@@ -19,7 +19,7 @@ function makeSuggestion(queryName, element, content, {variant, name}) {
   let warning = ''
   const queryOptions = {}
   const queryArgs = [
-    queryName === 'Role' || queryName === 'TestId'
+    ['Role', 'TestId'].includes(queryName)
       ? content
       : getRegExpMatcher(content),
   ]
