@@ -318,7 +318,7 @@ Contributions of any kind welcome!
 
 [npm]: https://www.npmjs.com/
 [node]: https://nodejs.org
-[build-badge]: https://img.shields.io/github/workflow/status/testing-library/dom-testing-library/validate/master?logo=github&style=flat-square
+[build-badge]: https://img.shields.io/github/workflow/status/testing-library/dom-testing-library/validate?logo=github&style=flat-square
 [build]: https://github.com/testing-library/dom-testing-library/actions?query=workflow%3Avalidate
 [coverage-badge]: https://img.shields.io/codecov/c/github/testing-library/dom-testing-library.svg?style=flat-square
 [coverage]: https://codecov.io/github/testing-library/dom-testing-library
