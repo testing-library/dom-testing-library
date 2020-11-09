@@ -13,7 +13,7 @@
 <p>Simple and complete DOM testing utilities that encourage good testing
 practices.</p>
 
-[**Read the docs**](https://testing-library.com/) |
+[**Read the docs**](https://testing-library.com/dom) |
 [Edit the docs](https://github.com/testing-library/testing-library-docs)
 
 </div>
@@ -97,7 +97,7 @@ npm install --save-dev @testing-library/dom
 ## Documentation
 
 Read the docs (and discover framework and tool-specific implementations) at
-[testing-library.com](https://testing-library.com)
+[testing-library.com](https://testing-library.com/dom)
 
 ## Guiding Principles
 
