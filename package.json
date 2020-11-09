@@ -39,23 +39,24 @@
   ],
   "dependencies": {
     "@babel/code-frame": "^7.10.4",
-    "@babel/runtime": "^7.10.3",
+    "@babel/runtime": "^7.12.5",
     "@types/aria-query": "^4.2.0",
     "aria-query": "^4.2.2",
     "chalk": "^4.1.0",
-    "dom-accessibility-api": "^0.5.1",
+    "dom-accessibility-api": "^0.5.4",
     "lz-string": "^1.4.4",
-    "pretty-format": "^26.4.2"
+    "pretty-format": "^26.6.2"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.10.1",
-    "dtslint": "^3.6.12",
+    "@testing-library/jest-dom": "^5.11.5",
+    "@types/estree": "0.0.45",
+    "dtslint": "^4.0.5",
     "jest-in-case": "^1.0.2",
     "jest-serializer-ansi": "^1.0.3",
     "jest-watch-select-projects": "^2.0.0",
-    "jsdom": "^16.2.2",
-    "kcd-scripts": "^6.2.3",
-    "typescript": "^3.9.5"
+    "jsdom": "^16.4.0",
+    "kcd-scripts": "^6.7.0",
+    "typescript": "^4.0.5"
   },
   "eslintConfig": {
     "extends": "./node_modules/kcd-scripts/eslint.js",
