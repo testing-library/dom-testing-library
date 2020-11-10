@@ -71,4 +71,4 @@ const logDOM = (...args) => {
   }
 }
 
-export {prettyDOM, logDOM}
+export {prettyDOM, logDOM, prettyFormat}
