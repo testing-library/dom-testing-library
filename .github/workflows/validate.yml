@@ -9,8 +9,10 @@ on:
         'next-major',
         'beta',
         'alpha',
+        '!all-contributors/**',
       ]
-  pull_request: {}
+  pull_request:
+    branches-ignore: ['all-contributors/**']
 jobs:
   main:
     strategy:
