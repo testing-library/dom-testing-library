@@ -227,7 +227,7 @@ function computeAriaPressed(element) {
  * @returns {boolean | undefined} - false/true if (not)expanded, undefined if not expand-able
  */
 function computeAriaExpanded(element) {
-  // https://www.w3.org/TR/wai-aria-1.1/#aria-pressed
+  // https://www.w3.org/TR/wai-aria-1.1/#aria-expanded
   return checkBooleanAttribute(element, 'aria-expanded')
 }
 
