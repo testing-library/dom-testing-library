@@ -222,6 +222,15 @@ function computeAriaPressed(element) {
   return checkBooleanAttribute(element, 'aria-pressed')
 }
 
+/**
+ * @param {Element} element -
+ * @returns {boolean | undefined} - false/true if (not)expanded, undefined if not expand-able
+ */
+function computeAriaExpanded(element) {
+  // https://www.w3.org/TR/wai-aria-1.1/#aria-pressed
+  return checkBooleanAttribute(element, 'aria-expanded')
+}
+
 function checkBooleanAttribute(element, attribute) {
   const attributeValue = element.getAttribute(attribute)
   if (attributeValue === 'true') {
@@ -267,5 +276,6 @@ export {
   computeAriaSelected,
   computeAriaChecked,
   computeAriaPressed,
+  computeAriaExpanded,
   computeHeadingLevel,
 }
