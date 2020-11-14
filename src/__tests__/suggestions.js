@@ -552,6 +552,8 @@ test('should get the first label with aria-labelledby contains multiple ids', ()
 })
 
 test('should suggest hidden option if element is not in the accessibilty tree', () => {
+  console.warn.mockImplementation(() => {})
+
   const {container} = renderIntoDocument(`
     <input type="text" aria-hidden=true />
   `)
