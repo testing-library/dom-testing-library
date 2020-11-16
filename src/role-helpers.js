@@ -75,7 +75,7 @@ function getImplicitAriaRoles(currentNode) {
 }
 
 function buildElementRoleList(elementRolesMap) {
-  function makeElementSelector({name, attributes = []}) {
+  function makeElementSelector({name, attributes}) {
     return `${name}${attributes
       .map(({name: attributeName, value, constraints = []}) => {
         const shouldNotExist = constraints.indexOf('undefined') !== -1
