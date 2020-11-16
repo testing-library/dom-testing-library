@@ -543,3 +543,8 @@ describe('configuration', () => {
     }
   })
 })
+
+test('should find the input using type property instead of attribute', () => {
+  const {getByRole} = render('<input type="124">')
+  expect(getByRole('textbox')).not.toBeNull()
+})
