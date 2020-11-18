@@ -27,6 +27,7 @@ export async function testQueries() {
   // element queries
   const element = document.createElement('div')
   getByText(element, 'foo')
+  getByText(element, 1)
   queryByText(element, 'foo')
   await findByText(element, 'foo')
   await findByText(element, 'foo', undefined, {timeout: 10})

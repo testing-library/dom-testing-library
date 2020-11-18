@@ -1,11 +1,11 @@
 import {ARIARole} from 'aria-query'
 
 export type MatcherFunction = (content: string, element: HTMLElement) => boolean
-export type Matcher = string | RegExp | MatcherFunction
+export type Matcher = MatcherFunction | {}
 
 // Get autocomplete for ARIARole union types, while still supporting another string
 // Ref: https://github.com/microsoft/TypeScript/issues/29729#issuecomment-505826972
-export type ByRoleMatcher = ARIARole | (string & {}) | RegExp | MatcherFunction
+export type ByRoleMatcher = ARIARole | MatcherFunction | {}
 
 export type NormalizerFn = (text: string) => string
 
