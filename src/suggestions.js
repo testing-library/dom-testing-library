@@ -33,7 +33,6 @@ function makeSuggestion(queryName, element, content, {variant, name}) {
     warning = `Element is inaccessible. This means that the element and all its children are invisible to screen readers.
     If you are using the aria-hidden prop, make sure this is the right choice for your case.
     `
-    console.warn(warning)
   }
   if (Object.keys(queryOptions).length > 0) {
     queryArgs.push(queryOptions)
@@ -48,6 +47,9 @@ function makeSuggestion(queryName, element, content, {variant, name}) {
     variant,
     warning,
     toString() {
+      if (warning) {
+        console.warn(warning)
+      }
       let [text, options] = queryArgs
 
       text = typeof text === 'string' ? `'${text}'` : text
