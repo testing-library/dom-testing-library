@@ -8,6 +8,7 @@
     "noImplicitThis": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
+    "skipLibCheck": true,
     "noEmit": true,
     "baseUrl": ".",
     "paths": {"@testing-library/dom": ["."]}
