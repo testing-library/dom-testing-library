@@ -1,14 +1,6 @@
 import {waitFor, waitForElementToBeRemoved} from '..'
 import {render} from './helpers/test-utils'
 
-beforeAll(() => {
-  jest.useFakeTimers()
-})
-
-afterAll(() => {
-  jest.useRealTimers()
-})
-
 async function runWaitFor({time = 300} = {}, options) {
   const response = 'data'
   const doAsyncThing = () =>
@@ -48,6 +40,7 @@ test('fake timer timeout', async () => {
 })
 
 test('times out after 1000ms by default', async () => {
+  jest.useFakeTimers()
   const {container} = render(`<div></div>`)
   const start = performance.now()
   // there's a bug with this rule here...
@@ -66,6 +59,7 @@ test('times out after 1000ms by default', async () => {
 })
 
 test('recursive timers do not cause issues', async () => {
+  jest.useFakeTimers()
   let recurse = true
   function startTimer() {
     setTimeout(() => {

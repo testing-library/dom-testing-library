@@ -60,6 +60,14 @@ function waitFor(
       // waiting or when we've timed out.
       // eslint-disable-next-line no-unmodified-loop-condition
       while (!finished) {
+        if (!jestFakeTimersAreEnabled()) {
+          const error = new Error(
+            `Changed from using fake timers to real timers while using waitFor. This is not allowed and will result in very strange behavior. Please ensure you're awaiting all async things your test is doing before changing to real timers. For more info, please go to https://github.com/testing-library/dom-testing-library/issues/830`,
+          )
+          if (!showOriginalStackTrace) copyStackTrace(error, stackTraceError)
+          reject(error)
+          return
+        }
         // we *could* (maybe should?) use `advanceTimersToNextTimer` but it's
         // possible that could make this loop go on forever if someone is using
         // third party code that's setting up recursive timers so rapidly that
@@ -81,9 +89,9 @@ function waitFor(
         await new Promise(r => setImmediate(r))
       }
     } else {
-      intervalId = setInterval(checkCallback, interval)
+      intervalId = setInterval(checkRealTimersCallback, interval)
       const {MutationObserver} = getWindowFromNode(container)
-      observer = new MutationObserver(checkCallback)
+      observer = new MutationObserver(checkRealTimersCallback)
       observer.observe(container, mutationObserverOptions)
       checkCallback()
     }
@@ -101,6 +109,18 @@ function waitFor(
         reject(error)
       } else {
         resolve(result)
+      }
+    }
+
+    function checkRealTimersCallback() {
+      if (jestFakeTimersAreEnabled()) {
+        const error = new Error(
+          `Changed from using real timers to fake timers while using waitFor. This is not allowed and will result in very strange behavior. Please ensure you're awaiting all async things your test is doing before changing to fake timers. For more info, please go to https://github.com/testing-library/dom-testing-library/issues/830`,
+        )
+        if (!showOriginalStackTrace) copyStackTrace(error, stackTraceError)
+        return reject(error)
+      } else {
+        return checkCallback()
       }
     }
 
@@ -177,3 +197,8 @@ function wait(...args) {
 }
 
 export {waitForWrapper as waitFor, wait}
+
+/*
+eslint
+  max-lines-per-function: ["error", {"max": 200}],
+*/

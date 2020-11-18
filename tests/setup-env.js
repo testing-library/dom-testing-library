@@ -36,6 +36,12 @@ beforeAll(() => {
   })
 })
 
+afterEach(() => {
+  if (jest.isMockFunction(global.setTimeout)) {
+    jest.useRealTimers()
+  }
+})
+
 afterAll(() => {
   jest.restoreAllMocks()
 })
