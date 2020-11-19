@@ -1019,7 +1019,8 @@
       "contributions": [
         "doc",
         "code",
-        "test"
+        "test",
+        "review"
       ]
     },
     {
