@@ -180,10 +180,10 @@ test('when a promise is returned, it does not call the callback again until that
 test('when a promise is returned, if that is not resolved within the timeout, then waitFor is rejected', async () => {
   const sleep = t => new Promise(r => setTimeout(r, t))
   const {promise} = deferred()
-  const waitForPromise = waitFor(() => promise, {timeout: 1}).catch(e => e)
+  const waitForError = waitFor(() => promise, {timeout: 1}).catch(e => e)
   await sleep(5)
 
-  expect((await waitForPromise).message).toMatchInlineSnapshot(`
+  expect((await waitForError).message).toMatchInlineSnapshot(`
     "Timed out in waitFor.
 
     <html>
@@ -191,4 +191,65 @@ test('when a promise is returned, if that is not resolved within the timeout, th
       <body />
     </html>"
   `)
+})
+
+test('if you switch from fake timers to real timers during the wait period you get an error', async () => {
+  jest.useFakeTimers()
+  const waitForError = waitFor(() => {
+    throw new Error('this error message does not matter...')
+  }).catch(e => e)
+
+  // this is the problem...
+  jest.useRealTimers()
+
+  const error = await waitForError
+
+  expect(error.message).toMatchInlineSnapshot(
+    `"Changed from using fake timers to real timers while using waitFor. This is not allowed and will result in very strange behavior. Please ensure you're awaiting all async things your test is doing before changing to real timers. For more info, please go to https://github.com/testing-library/dom-testing-library/issues/830"`,
+  )
+  // stack trace has this file in it
+  expect(error.stack).toMatch(__dirname)
+})
+
+test('if you switch from real timers to fake timers during the wait period you get an error', async () => {
+  const waitForError = waitFor(() => {
+    throw new Error('this error message does not matter...')
+  }).catch(e => e)
+
+  // this is the problem...
+  jest.useFakeTimers()
+  const error = await waitForError
+
+  expect(error.message).toMatchInlineSnapshot(
+    `"Changed from using real timers to fake timers while using waitFor. This is not allowed and will result in very strange behavior. Please ensure you're awaiting all async things your test is doing before changing to fake timers. For more info, please go to https://github.com/testing-library/dom-testing-library/issues/830"`,
+  )
+  // stack trace has this file in it
+  expect(error.stack).toMatch(__dirname)
+})
+
+test('the fake timers => real timers error shows the original stack trace when configured to do so', async () => {
+  jest.useFakeTimers()
+  const waitForError = waitFor(
+    () => {
+      throw new Error('this error message does not matter...')
+    },
+    {showOriginalStackTrace: true},
+  ).catch(e => e)
+
+  jest.useRealTimers()
+
+  expect((await waitForError).stack).not.toMatch(__dirname)
+})
+
+test('the real timers => fake timers error shows the original stack trace when configured to do so', async () => {
+  const waitForError = waitFor(
+    () => {
+      throw new Error('this error message does not matter...')
+    },
+    {showOriginalStackTrace: true},
+  ).catch(e => e)
+
+  jest.useFakeTimers()
+
+  expect((await waitForError).stack).not.toMatch(__dirname)
 })
