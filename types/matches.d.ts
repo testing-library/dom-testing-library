@@ -1,6 +1,6 @@
 import {ARIARole} from 'aria-query'
 
-export type MatcherFunction = (content: string, element: HTMLElement) => boolean
+export type MatcherFunction = (content: string, element: Element) => boolean
 export type Matcher = MatcherFunction | {}
 
 // Get autocomplete for ARIARole union types, while still supporting another string
@@ -22,7 +22,7 @@ export interface MatcherOptions {
 
 export type Match = (
   textToMatch: string,
-  node: HTMLElement | null,
+  node: Element | null,
   matcher: Matcher,
   options?: MatcherOptions,
 ) => boolean

@@ -1,7 +1,7 @@
-export function logRoles(container: HTMLElement): string
+export function logRoles(container: Element): string
 export function getRoles(
-  container: HTMLElement,
-): {[index: string]: HTMLElement[]}
+  container: Element,
+): {[index: string]: Element[]}
 /**
  * https://testing-library.com/docs/dom-testing-library/api-helpers#isinaccessible
  */

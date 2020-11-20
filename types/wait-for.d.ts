@@ -1,5 +1,5 @@
 export interface waitForOptions {
-  container?: HTMLElement
+  container?: Element
   timeout?: number
   interval?: number
   onTimeout?: (error: Error) => Error

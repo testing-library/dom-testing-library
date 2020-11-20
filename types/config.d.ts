@@ -7,7 +7,7 @@ export interface Config {
   defaultHidden: boolean
   showOriginalStackTrace: boolean
   throwSuggestions: boolean
-  getElementError: (message: string, container: HTMLElement) => Error
+  getElementError: (message: string, container: Element) => Error
 }
 
 export interface ConfigFn {

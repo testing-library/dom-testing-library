@@ -52,7 +52,7 @@ export async function testQueryHelpers() {
   const includesAutomationId = (content: string, automationId: string) =>
     content.split(/\s+/).some(id => id === automationId)
   const queryAllByAutomationId = (
-    container: HTMLElement,
+    container: Element,
     automationId: string | string[],
     options?: MatcherOptions,
   ) =>
@@ -138,7 +138,7 @@ export function eventTest() {
     state: {page: 1},
   })
 
-  // HTMLElement
+  // Element
   const element = document.createElement('div')
   fireEvent.click(getByText(element, 'foo'))
 
