@@ -232,6 +232,16 @@ test('should suggest getByLabelText when no role available', () => {
   )
 })
 
+it('should not suggest by label when using by label', async () => {
+  renderIntoDocument(
+    `<label><span>bar</span><input type="password" title="foo" /></label>`,
+  )
+
+  // if a suggestion is made, this call will throw, thus failing the test.
+  const password = await screen.findByLabelText(/bar/i)
+  expect(password).toHaveAttribute('type', 'password')
+})
+
 test(`should suggest getByLabel on non form elements`, () => {
   renderIntoDocument(`
   <div data-testid="foo" aria-labelledby="section-one-header">
