@@ -18,16 +18,12 @@ const getMissingError = (
   {computeCloseMatches = false, ...options} = {},
 ) => {
   const defaultMessage = `Unable to find an element by: [${getTestIdAttribute()}="${id}"]`
-  if (!computeCloseMatches || typeof id !== 'string') {
-    return defaultMessage
-  }
 
-  const closeMatches = getCloseMatchesByAttribute(
-    getTestIdAttribute(),
-    c,
-    id,
-    options,
-  )
+  const closeMatches =
+    !computeCloseMatches || typeof id !== 'string'
+      ? []
+      : getCloseMatchesByAttribute(getTestIdAttribute(), c, id, options)
+
   return closeMatches.length === 0
     ? defaultMessage
     : `${defaultMessage}. Did you mean one of the following?\n${closeMatches.join(
