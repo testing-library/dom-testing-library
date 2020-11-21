@@ -64,6 +64,8 @@ describe('getCloseMatchesByAttribute', () => {
       <div data-testid="very-cool-div"></div>
       <div data-testid="too-diferent-to-match"></div>
       <div data-testid="not-even-close"></div>
+      <div data-testid></div>
+      <div></div>
     `)
     expect(
       getCloseMatchesByAttribute('data-testid', container, 'normal-div'),

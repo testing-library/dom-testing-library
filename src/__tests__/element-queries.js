@@ -1312,3 +1312,41 @@ meerkat
 </div>"
 `)
 })
+
+test('returns default error message when computeCloseMatches = true but cant find any good suggestions', () => {
+  const {getByTestId} = render(`
+<div>
+  <div data-testid="cat-dog"></div>
+  <div data-testid="meerkat"></div>
+  <div data-testid="tamandua"></div>
+</div>`)
+
+  expect(() => getByTestId('white-shark', {computeCloseMatches: true}))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an element by: [data-testid="white-shark"]
+
+<div>
+  
+
+  <div>
+    
+  
+    <div
+      data-testid="cat-dog"
+    />
+    
+  
+    <div
+      data-testid="meerkat"
+    />
+    
+  
+    <div
+      data-testid="tamandua"
+    />
+    
+
+  </div>
+</div>"
+`)
+})
