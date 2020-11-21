@@ -3,21 +3,17 @@ import {makeNormalizer} from './matches'
 const initializeDpTable = (rows, columns) => {
   const dp = Array(rows + 1)
     .fill()
-
     .map(() => Array(columns + 1).fill())
 
   // fill rows
-
   for (let i = 0; i <= rows; i++) {
     dp[i][0] = i
   }
 
   // fill columns
-
   for (let i = 0; i <= columns; i++) {
     dp[0][i] = i
   }
-
   return dp
 }
 
@@ -32,9 +28,7 @@ export const calculateLevenshteinDistance = (text1, text2) => {
         dp[row][column] =
           Math.min(
             dp[row - 1][column - 1],
-
             dp[row][column - 1],
-
             dp[row - 1][column],
           ) + 1
       }
@@ -47,11 +41,8 @@ const MAX_LEVENSHTEIN_DISTANCE = 4
 
 export const getCloseMatchesByAttribute = (
   attribute,
-
   container,
-
   searchText,
-
   {collapseWhitespace, trim, normalizer} = {},
 ) => {
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
@@ -91,6 +82,5 @@ export const getCloseMatchesByAttribute = (
     }
     closestValues.push(normalizedText)
   }
-
   return closestValues
 }
