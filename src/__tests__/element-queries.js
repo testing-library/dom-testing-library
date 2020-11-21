@@ -1273,3 +1273,42 @@ it(`should get element by it's label when there are elements with same text`, ()
   `)
   expect(getByLabelText('test 1')).toBeInTheDocument()
 })
+
+test('returns closest match when computeCloseMatches = true', () => {
+  const {getByTestId} = render(`
+<div>
+  <div data-testid="cat-dog"></div>
+  <div data-testid="meerkat"></div>
+  <div data-testid="tamandua"></div>
+</div>`)
+
+  expect(() => getByTestId('meercat', {computeCloseMatches: true}))
+    .toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an element by: [data-testid="meercat"]. Did you mean one of the following?
+meerkat
+
+<div>
+  
+
+  <div>
+    
+  
+    <div
+      data-testid="cat-dog"
+    />
+    
+  
+    <div
+      data-testid="meerkat"
+    />
+    
+  
+    <div
+      data-testid="tamandua"
+    />
+    
+
+  </div>
+</div>"
+`)
+})
