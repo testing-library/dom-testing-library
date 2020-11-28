@@ -15,7 +15,7 @@ const getMultipleError = (c, id) =>
 const getMissingError = (
   c,
   id,
-  {computeCloseMatches = false, ...options} = {},
+  {computeCloseMatches = getConfig().computeCloseMatches, ...options} = {},
 ) => {
   const defaultMessage = `Unable to find an element by: [${getTestIdAttribute()}="${id}"]`
 
