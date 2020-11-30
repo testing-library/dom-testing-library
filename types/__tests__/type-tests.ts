@@ -161,9 +161,7 @@ export async function testWaitFors() {
 
   await waitFor(() => getByText(element, 'apple'))
   await waitFor(() => getAllByText(element, 'apple'))
-  const result: HTMLSpanElement = await waitFor(() =>
-    getByText(element, 'apple'),
-  )
+  const result: Element = await waitFor(() => getByText(element, 'apple'))
   if (!result) {
     // Use value
     throw new Error(`Can't find result`)
@@ -185,4 +183,5 @@ export async function testWaitFors() {
 /*
 eslint
   @typescript-eslint/no-unnecessary-condition: "off",
+  import/no-extraneous-dependencies: "off",
 */
