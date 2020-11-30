@@ -7,45 +7,45 @@ export interface SelectorMatcherOptions extends MatcherOptions {
 
 export type QueryByAttribute = (
   attribute: string,
-  container: HTMLElement,
+  container: Element,
   id: Matcher,
   options?: MatcherOptions,
-) => HTMLElement | null
+) => Element | null
 
 export type AllByAttribute = (
   attribute: string,
-  container: HTMLElement,
+  container: Element,
   id: Matcher,
   options?: MatcherOptions,
-) => HTMLElement[]
+) => Element[]
 
 export const queryByAttribute: QueryByAttribute
 export const queryAllByAttribute: AllByAttribute
-export function getElementError(message: string, container: HTMLElement): Error
+export function getElementError(message: string, container: Element): Error
 
 /**
  * query methods have a common call signature. Only the return type differs.
  */
 export type QueryMethod<Arguments extends any[], Return> = (
-  container: HTMLElement,
+  container: Element,
   ...args: Arguments
 ) => Return
 export type QueryBy<Arguments extends any[]> = QueryMethod<
   Arguments,
-  HTMLElement | null
+  Element | null
 >
 export type GetAllBy<Arguments extends any[]> = QueryMethod<
   Arguments,
-  HTMLElement[]
+  Element[]
 >
 export type FindAllBy<Arguments extends any[]> = QueryMethod<
   [Arguments[0], Arguments[1]?, waitForOptions?],
-  Promise<HTMLElement[]>
+  Promise<Element[]>
 >
-export type GetBy<Arguments extends any[]> = QueryMethod<Arguments, HTMLElement>
+export type GetBy<Arguments extends any[]> = QueryMethod<Arguments, Element>
 export type FindBy<Arguments extends any[]> = QueryMethod<
   [Arguments[0], Arguments[1]?, waitForOptions?],
-  Promise<HTMLElement>
+  Promise<Element>
 >
 
 export type BuiltQueryMethods<Arguments extends any[]> = [
@@ -57,6 +57,6 @@ export type BuiltQueryMethods<Arguments extends any[]> = [
 ]
 export function buildQueries<Arguments extends any[]>(
   queryByAll: GetAllBy<Arguments>,
-  getMultipleError: (container: HTMLElement, ...args: Arguments) => string,
-  getMissingError: (container: HTMLElement, ...args: Arguments) => string,
+  getMultipleError: (container: Element, ...args: Arguments) => string,
+  getMissingError: (container: Element, ...args: Arguments) => string,
 ): BuiltQueryMethods<Arguments>

@@ -63,7 +63,8 @@
       "import/prefer-default-export": "off",
       "import/no-unassigned-import": "off",
       "import/no-useless-path-segments": "off",
-      "no-console": "off"
+      "no-console": "off",
+      "jest-dom/prefer-in-document": "off"
     }
   },
   "eslintIgnore": [

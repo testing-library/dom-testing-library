@@ -40,7 +40,7 @@ export type Method =
   | 'testid'
 
 export function getSuggestedQuery(
-  element: HTMLElement,
+  element: Element,
   variant?: Variant,
   method?: Method,
 ): Suggestion | undefined

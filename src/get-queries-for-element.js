@@ -5,7 +5,7 @@ import * as defaultQueries from './queries'
  */
 
 /**
- * @param {HTMLElement} element container
+ * @param {Element} element container
  * @param {FuncMap} queries object of functions
  * @param {Object} initialValue for reducer
  * @returns {FuncMap} returns object of functions bound to container
