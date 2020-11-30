@@ -62,13 +62,13 @@ test('`checked: true|false` does not match element in `indeterminate` state', ()
 
   expect(
     queryByRole('checkbox', {checked: true, name: /indeteminate yes/i}),
-  ).toBeNull()
+  ).not.toBeInTheDocument()
   expect(
     queryByRole('checkbox', {checked: false, name: /indeteminate no/i}),
-  ).toBeNull()
+  ).not.toBeInTheDocument()
   expect(
     queryByRole('checkbox', {checked: true, name: /not so much/i}),
-  ).toBeNull()
+  ).not.toBeInTheDocument()
 })
 
 test('`selected: true` matches `aria-selected="true"` on supported roles', () => {

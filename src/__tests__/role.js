@@ -173,7 +173,7 @@ test('considers the computed visibility style not the parent', () => {
     '<div style="visibility: hidden;"><main style="visibility: visible;"><ul /></main></div>',
   )
 
-  expect(getByRole('list')).not.toBeNull()
+  expect(getByRole('list')).toBeInTheDocument()
 })
 
 test('can include inaccessible roles', () => {
@@ -183,7 +183,7 @@ test('can include inaccessible roles', () => {
   // https://github.com/w3c/aria/issues/1055 is resolved.
   const {getByRole} = render('<div hidden><ul  /></div>')
 
-  expect(getByRole('list', {hidden: true})).not.toBeNull()
+  expect(getByRole('list', {hidden: true})).toBeInTheDocument()
 })
 
 test('can be filtered by accessible name', () => {
@@ -211,18 +211,18 @@ test('can be filtered by accessible name', () => {
   )
 
   const deliveryForm = getByRole('form', {name: 'Delivery Adress'})
-  expect(deliveryForm).not.toBeNull()
+  expect(deliveryForm).toBeInTheDocument()
 
   expect(
     getQueriesForElement(deliveryForm).getByRole('button', {name: 'Submit'}),
-  ).not.toBeNull()
+  ).toBeInTheDocument()
 
   const invoiceForm = getByRole('form', {name: 'Delivery Adress'})
-  expect(invoiceForm).not.toBeNull()
+  expect(invoiceForm).toBeInTheDocument()
 
   expect(
     getQueriesForElement(invoiceForm).getByRole('textbox', {name: 'Street'}),
-  ).not.toBeNull()
+  ).toBeInTheDocument()
 })
 
 test('accessible name comparison is case sensitive', () => {
@@ -258,9 +258,9 @@ test('accessible name filter implements TextMatch', () => {
   )
 
   // subset via regex
-  expect(getByRole('heading', {name: /gn u/})).not.toBeNull()
+  expect(getByRole('heading', {name: /gn u/})).toBeInTheDocument()
   // regex
-  expect(getByRole('heading', {name: /^sign/i})).not.toBeNull()
+  expect(getByRole('heading', {name: /^sign/i})).toBeInTheDocument()
   // function
   expect(
     getByRole('heading', {
@@ -268,7 +268,7 @@ test('accessible name filter implements TextMatch', () => {
         return element.nodeName === 'H2' && name === 'Your Signature'
       },
     }),
-  ).not.toBeNull()
+  ).toBeInTheDocument()
 })
 
 test('TextMatch serialization in error message', () => {
@@ -520,7 +520,7 @@ describe('configuration', () => {
     configure({defaultHidden: true})
 
     const {getByRole} = render('<div hidden><ul  /></div>')
-    expect(getByRole('list')).not.toBeNull()
+    expect(getByRole('list')).toBeInTheDocument()
   })
 
   test('can be configured to consider ::before and ::after for accessible names which logs errors in jsdom', () => {
@@ -546,5 +546,5 @@ describe('configuration', () => {
 
 test('should find the input using type property instead of attribute', () => {
   const {getByRole} = render('<input type="124">')
-  expect(getByRole('textbox')).not.toBeNull()
+  expect(getByRole('textbox')).toBeInTheDocument()
 })

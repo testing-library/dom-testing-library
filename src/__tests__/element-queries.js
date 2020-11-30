@@ -14,12 +14,12 @@ test('query can return null', () => {
     queryByTestId,
     queryByAltText,
   } = render('<div />')
-  expect(queryByTestId('LucyRicardo')).toBeNull()
-  expect(queryByLabelText('LucyRicardo')).toBeNull()
-  expect(queryByDisplayValue('LucyRicardo')).toBeNull()
-  expect(queryByPlaceholderText('LucyRicardo')).toBeNull()
-  expect(queryByText('LucyRicardo')).toBeNull()
-  expect(queryByAltText('LucyRicardo')).toBeNull()
+  expect(queryByTestId('LucyRicardo')).not.toBeInTheDocument()
+  expect(queryByLabelText('LucyRicardo')).not.toBeInTheDocument()
+  expect(queryByDisplayValue('LucyRicardo')).not.toBeInTheDocument()
+  expect(queryByPlaceholderText('LucyRicardo')).not.toBeInTheDocument()
+  expect(queryByText('LucyRicardo')).not.toBeInTheDocument()
+  expect(queryByAltText('LucyRicardo')).not.toBeInTheDocument()
 })
 
 test('get throws a useful error message', () => {
@@ -233,7 +233,7 @@ test('can get sibling elements with aria-labelledby attribute', () => {
   `)
 
   const result = getAllByLabelText('Tacos')
-  expect(result).toHaveLength(1)
+  expect(result).toBeInTheDocument()
   expect(result[0].id).toBe('icon')
 })
 
@@ -250,7 +250,7 @@ test('can filter results of label query based on selector', () => {
   `)
 
   const result = getAllByLabelText('Test Label', {selector: '.fancy-input'})
-  expect(result).toHaveLength(1)
+  expect(result).toBeInTheDocument()
   expect(result[0].id).toBe('input1')
 })
 
@@ -316,7 +316,7 @@ test('can find non-input elements when aria-labelledby a label', () => {
   `)
 
   const result = getAllByLabelText('Test Label')
-  expect(result).toHaveLength(1)
+  expect(result).toBeInTheDocument()
   expect(result[0].nodeName).toBe('UL')
 })
 
@@ -350,7 +350,7 @@ test('queryByPlaceholderText matches case with non-string matcher', () => {
 
 test('label with no form control', () => {
   const {getByLabelText, queryByLabelText} = render(`<label>All alone</label>`)
-  expect(queryByLabelText(/alone/)).toBeNull()
+  expect(queryByLabelText(/alone/)).not.toBeInTheDocument()
   expect(() => getByLabelText(/alone/)).toThrowErrorMatchingInlineSnapshot(`
 "Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
 
@@ -366,7 +366,7 @@ test('label with "for" attribute but no form control and fuzzy matcher', () => {
   const {getByLabelText, queryByLabelText} = render(
     `<label for="foo">All alone label</label>`,
   )
-  expect(queryByLabelText('alone', {exact: false})).toBeNull()
+  expect(queryByLabelText('alone', {exact: false})).not.toBeInTheDocument()
   expect(() => getByLabelText('alone', {exact: false}))
     .toThrowErrorMatchingInlineSnapshot(`
 "Found a label with the text of: alone, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
@@ -388,7 +388,7 @@ test('label with children with no form control', () => {
     <textarea>Hello</textarea>
     <select><option value="0">zero</option></select>
   </label>`)
-  expect(queryByLabelText(/alone/, {selector: 'input'})).toBeNull()
+  expect(queryByLabelText(/alone/, {selector: 'input'})).not.toBeInTheDocument()
   expect(() => getByLabelText(/alone/, {selector: 'input'}))
     .toThrowErrorMatchingInlineSnapshot(`
 "Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
@@ -429,7 +429,7 @@ test('label with non-labellable element', () => {
   </div>
   `)
 
-  expect(queryByLabelText(/Label/)).toBeNull()
+  expect(queryByLabelText(/Label/)).not.toBeInTheDocument()
   expect(() => getByLabelText(/Label/)).toThrowErrorMatchingInlineSnapshot(`
 "Found a label with the text of: /Label/, however the element associated with this label (<div />) is non-labellable [https://html.spec.whatwg.org/multipage/forms.html#category-label]. If you really need to label a <div />, you can use aria-label or aria-labelledby instead.
 
@@ -529,7 +529,7 @@ Found a label with the text of: /Label/, however the element associated with thi
 
 test('totally empty label', () => {
   const {getByLabelText, queryByLabelText} = render(`<label />`)
-  expect(queryByLabelText('')).toBeNull()
+  expect(queryByLabelText('')).not.toBeInTheDocument()
   expect(() => getByLabelText('')).toThrowErrorMatchingInlineSnapshot(`
 "Found a label with the text of: , however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
 
@@ -578,7 +578,7 @@ test('query/get element by its title', () => {
   expect(getByTitle('Delete').id).toEqual('2')
   expect(queryByTitle('Delete').id).toEqual('2')
   expect(queryByTitle('Del', {exact: false}).id).toEqual('2')
-  expect(queryByTitle('HelloWorld')).toBeNull()
+  expect(queryByTitle('HelloWorld')).not.toBeInTheDocument()
 })
 
 test('query/get title element of SVG', () => {
@@ -747,28 +747,28 @@ test('queryAllByRole returns semantic html elements', () => {
     </form>
   `)
 
-  expect(queryAllByRole(/table/i)).toHaveLength(1)
-  expect(queryAllByRole(/tabl/i, {exact: false})).toHaveLength(1)
-  expect(queryAllByRole(/columnheader/i)).toHaveLength(1)
-  expect(queryAllByRole(/rowheader/i)).toHaveLength(1)
-  expect(queryAllByRole(/grid/i)).toHaveLength(1)
-  expect(queryAllByRole(/form/i)).toHaveLength(0)
-  expect(queryAllByRole(/button/i)).toHaveLength(1)
+  expect(queryAllByRole(/table/i)).toBeInTheDocument()
+  expect(queryAllByRole(/tabl/i, {exact: false})).toBeInTheDocument()
+  expect(queryAllByRole(/columnheader/i)).toBeInTheDocument()
+  expect(queryAllByRole(/rowheader/i)).toBeInTheDocument()
+  expect(queryAllByRole(/grid/i)).toBeInTheDocument()
+  expect(queryAllByRole(/form/i)).not.toBeInTheDocument()
+  expect(queryAllByRole(/button/i)).toBeInTheDocument()
   expect(queryAllByRole(/heading/i)).toHaveLength(6)
   expect(queryAllByRole('list')).toHaveLength(2)
   expect(queryAllByRole(/listitem/i)).toHaveLength(3)
   expect(queryAllByRole(/textbox/i)).toHaveLength(2)
-  expect(queryAllByRole(/checkbox/i)).toHaveLength(1)
-  expect(queryAllByRole(/radio/i)).toHaveLength(1)
+  expect(queryAllByRole(/checkbox/i)).toBeInTheDocument()
+  expect(queryAllByRole(/radio/i)).toBeInTheDocument()
   expect(queryAllByRole('row')).toHaveLength(3)
   expect(queryAllByRole(/rowgroup/i)).toHaveLength(2)
   expect(queryAllByRole(/(table)|(textbox)/i)).toHaveLength(3)
-  expect(queryAllByRole(/img/i)).toHaveLength(1)
-  expect(queryAllByRole('meter')).toHaveLength(1)
-  expect(queryAllByRole('progressbar')).toHaveLength(0)
-  expect(queryAllByRole('progressbar', {queryFallbacks: true})).toHaveLength(1)
-  expect(queryAllByRole('combobox')).toHaveLength(1)
-  expect(queryAllByRole('listbox')).toHaveLength(1)
+  expect(queryAllByRole(/img/i)).toBeInTheDocument()
+  expect(queryAllByRole('meter')).toBeInTheDocument()
+  expect(queryAllByRole('progressbar')).not.toBeInTheDocument()
+  expect(queryAllByRole('progressbar', {queryFallbacks: true})).toBeInTheDocument()
+  expect(queryAllByRole('combobox')).toBeInTheDocument()
+  expect(queryAllByRole('listbox')).toBeInTheDocument()
 })
 
 test('queryByRole matches case with non-string matcher', () => {
@@ -816,16 +816,16 @@ test('getAll* matchers return an array', () => {
     </div>,
   `)
   expect(getAllByAltText(/finding.*poster$/i)).toHaveLength(2)
-  expect(getAllByAltText(/jumanji/)).toHaveLength(1)
+  expect(getAllByAltText(/jumanji/)).toBeInTheDocument()
   expect(getAllByTestId('poster')).toHaveLength(3)
-  expect(getAllByPlaceholderText(/The Rock/)).toHaveLength(1)
-  expect(getAllByLabelText('User Name')).toHaveLength(1)
-  expect(getAllByDisplayValue('Japanese cars')).toHaveLength(1)
+  expect(getAllByPlaceholderText(/The Rock/)).toBeInTheDocument()
+  expect(getAllByLabelText('User Name')).toBeInTheDocument()
+  expect(getAllByDisplayValue('Japanese cars')).toBeInTheDocument()
   expect(getAllByDisplayValue(/cars$/)).toHaveLength(2)
-  expect(getAllByText(/^where/i)).toHaveLength(1)
-  expect(getAllByRole(/container/i)).toHaveLength(1)
-  expect(getAllByRole('meter')).toHaveLength(1)
-  expect(getAllByRole('progressbar', {queryFallbacks: true})).toHaveLength(1)
+  expect(getAllByText(/^where/i)).toBeInTheDocument()
+  expect(getAllByRole(/container/i)).toBeInTheDocument()
+  expect(getAllByRole('meter')).toBeInTheDocument()
+  expect(getAllByRole('progressbar', {queryFallbacks: true})).toBeInTheDocument()
 })
 
 test('getAll* matchers throw for 0 matches', () => {
@@ -867,29 +867,29 @@ test('queryAll* matchers return an array for 0 matches', () => {
     <div>
     </div>,
   `)
-  expect(queryAllByTestId('nope')).toHaveLength(0)
-  expect(queryAllByAltText('nope')).toHaveLength(0)
-  expect(queryAllByLabelText('nope')).toHaveLength(0)
-  expect(queryAllByDisplayValue('nope')).toHaveLength(0)
-  expect(queryAllByPlaceholderText('nope')).toHaveLength(0)
-  expect(queryAllByText('nope')).toHaveLength(0)
-  expect(queryAllByRole('nope')).toHaveLength(0)
+  expect(queryAllByTestId('nope')).not.toBeInTheDocument()
+  expect(queryAllByAltText('nope')).not.toBeInTheDocument()
+  expect(queryAllByLabelText('nope')).not.toBeInTheDocument()
+  expect(queryAllByDisplayValue('nope')).not.toBeInTheDocument()
+  expect(queryAllByPlaceholderText('nope')).not.toBeInTheDocument()
+  expect(queryAllByText('nope')).not.toBeInTheDocument()
+  expect(queryAllByRole('nope')).not.toBeInTheDocument()
 })
 
 test('queryAllByText can query dom nodes', () => {
   const {queryAllByText} = render('hi')
-  expect(queryAllByText('hi')).toHaveLength(1)
-  expect(queryAllByText('not here')).toHaveLength(0)
-  expect(queryAllByText('hi', {selector: 'span'})).toHaveLength(0)
+  expect(queryAllByText('hi')).toBeInTheDocument()
+  expect(queryAllByText('not here')).not.toBeInTheDocument()
+  expect(queryAllByText('hi', {selector: 'span'})).not.toBeInTheDocument()
 })
 
 test('queryAllByText works with document container', () => {
   // This is required for Cypress as it uses `document`
   // as the container for all methods
   const {queryAllByText} = renderIntoDocument('<p>hello</p>')
-  expect(queryAllByText('hello')).toHaveLength(1)
-  expect(queryAllByText('not here')).toHaveLength(0)
-  expect(queryAllByText('hello', {selector: 'span'})).toHaveLength(0)
+  expect(queryAllByText('hello')).toBeInTheDocument()
+  expect(queryAllByText('not here')).not.toBeInTheDocument()
+  expect(queryAllByText('hello', {selector: 'span'})).not.toBeInTheDocument()
 })
 
 test('using jest helpers to assert element states', () => {
@@ -1089,7 +1089,7 @@ test('getByText ignores script tags by default', () => {
     '<script>Hello</script><div>Hello</div><style>.Hello{}</style>',
   )
   const divOnly = getAllByText(/hello/i)
-  expect(divOnly).toHaveLength(1)
+  expect(divOnly).toBeInTheDocument()
   expect(divOnly[0].tagName).toBe('DIV')
   const noScript = getAllByText(/hello/i, {ignore: 'script'})
   expect(noScript[0].tagName).toBe('DIV')

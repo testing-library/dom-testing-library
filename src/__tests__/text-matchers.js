@@ -267,14 +267,14 @@ test('normalizer works with both exact and non-exact matching', () => {
 
   expect(
     queryAllByText('mixed case', {exact: false, normalizer: removeUCC}),
-  ).toHaveLength(1)
+  ).toBeInTheDocument()
   expect(
     queryAllByText('mixed case', {exact: true, normalizer: removeUCC}),
-  ).toHaveLength(0)
+  ).not.toBeInTheDocument()
   expect(
     queryAllByText('MiXeD CaSe', {exact: true, normalizer: removeUCC}),
-  ).toHaveLength(1)
-  expect(queryAllByText('MiXeD CaSe', {exact: true})).toHaveLength(0)
+  ).toBeInTheDocument()
+  expect(queryAllByText('MiXeD CaSe', {exact: true})).not.toBeInTheDocument()
 })
 
 test('top-level trim and collapseWhitespace options are not supported if normalizer is specified', () => {
@@ -315,9 +315,9 @@ test('getDefaultNormalizer returns a normalizer that supports trim and collapseW
 
 test('we support an older API with trim and collapseWhitespace instead of a normalizer', () => {
   const {queryAllByText} = render('<div>  x  y  </div>')
-  expect(queryAllByText('x y')).toHaveLength(1)
-  expect(queryAllByText('x y', {trim: false})).toHaveLength(0)
-  expect(queryAllByText(' x y ', {trim: false})).toHaveLength(1)
-  expect(queryAllByText('x y', {collapseWhitespace: false})).toHaveLength(0)
-  expect(queryAllByText('x  y', {collapseWhitespace: false})).toHaveLength(1)
+  expect(queryAllByText('x y')).toBeInTheDocument()
+  expect(queryAllByText('x y', {trim: false})).not.toBeInTheDocument()
+  expect(queryAllByText(' x y ', {trim: false})).toBeInTheDocument()
+  expect(queryAllByText('x y', {collapseWhitespace: false})).not.toBeInTheDocument()
+  expect(queryAllByText('x  y', {collapseWhitespace: false})).toBeInTheDocument()
 })
