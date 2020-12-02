@@ -185,4 +185,5 @@ export async function testWaitFors() {
 /*
 eslint
   @typescript-eslint/no-unnecessary-condition: "off",
+  import/no-extraneous-dependencies: "off"
 */

@@ -1,0 +1,7 @@
+{
+  "rules": {
+    // this rule doesn't properly detect that our custom `render` does not
+    // insert elements into the document.
+    "jest-dom/prefer-in-document": "off"
+  }
+}

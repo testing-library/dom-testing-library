@@ -1,16 +1,4 @@
-// this additional tsconfig is required by dtslint
-// see: https://github.com/Microsoft/dtslint#typestsconfigjson
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "lib": ["es6", "dom"],
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "skipLibCheck": true,
-    "noEmit": true,
-    "baseUrl": ".",
-    "paths": {"@testing-library/dom": ["."]}
-  }
+  "extends": "../node_modules/kcd-scripts/shared-tsconfig.json",
+  "include": ["."]
 }
