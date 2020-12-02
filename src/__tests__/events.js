@@ -252,7 +252,7 @@ test('assigns target properties', () => {
   node.addEventListener('change', spy)
   fireEvent.change(node, {target: {value}})
   expect(spy).toHaveBeenCalledTimes(1)
-  expect(node.value).toBe(value)
+  expect(node).toHaveValue(value)
 })
 
 test('assigns selection-related target properties', () => {
@@ -263,7 +263,7 @@ test('assigns selection-related target properties', () => {
   const selectionEnd = 2
   node.addEventListener('change', spy)
   fireEvent.change(node, {target: {value, selectionStart, selectionEnd}})
-  expect(node.value).toBe(value)
+  expect(node).toHaveValue(value)
   expect(node.selectionStart).toBe(selectionStart)
   expect(node.selectionEnd).toBe(selectionEnd)
 })
@@ -299,12 +299,12 @@ test('assigns dataTransfer non-enumerable properties', () => {
   window.DataTransfer = function DataTransfer() {}
   const node = document.createElement('div')
   const spy = jest.fn()
-  const item = {};
-  const dataTransfer = new window.DataTransfer();
+  const item = {}
+  const dataTransfer = new window.DataTransfer()
 
   Object.defineProperty(dataTransfer, 'items', {
     value: [item],
-    enumerable: false
+    enumerable: false,
   })
   node.addEventListener('drop', spy)
   fireEvent.drop(node, {dataTransfer})
