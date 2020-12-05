@@ -1,41 +1,5 @@
 import {makeNormalizer} from './matches'
-
-const initializeDpTable = (rows, columns) => {
-  const dp = Array(rows + 1)
-    .fill()
-    .map(() => Array(columns + 1).fill())
-
-  // fill rows
-  for (let i = 0; i <= rows; i++) {
-    dp[i][0] = i
-  }
-
-  // fill columns
-  for (let i = 0; i <= columns; i++) {
-    dp[0][i] = i
-  }
-  return dp
-}
-
-export const calculateLevenshteinDistance = (text1, text2) => {
-  const dp = initializeDpTable(text1.length, text2.length)
-
-  for (let row = 1; row < dp.length; row++) {
-    for (let column = 1; column < dp[row].length; column++) {
-      if (text1[row - 1] === text2[column - 1]) {
-        dp[row][column] = dp[row - 1][column - 1]
-      } else {
-        dp[row][column] =
-          Math.min(
-            dp[row - 1][column - 1],
-            dp[row][column - 1],
-            dp[row - 1][column],
-          ) + 1
-      }
-    }
-  }
-  return dp[text1.length][text2.length]
-}
+import calculateLevenshteinDistance from 'leven'
 
 const MAX_LEVENSHTEIN_DISTANCE = 4
 
