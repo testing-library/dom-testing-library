@@ -1,5 +1,5 @@
 import {computeAccessibleName} from 'dom-accessibility-api'
-import {getDefaultNormalizer} from './matches'
+import {getDefaultNormalizer} from './matches.ts'
 import {getNodeText} from './get-node-text'
 import {DEFAULT_IGNORE_TAGS, getConfig} from './config.ts'
 import {getImplicitAriaRoles, isInaccessible} from './role-helpers'

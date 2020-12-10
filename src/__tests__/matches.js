@@ -1,4 +1,4 @@
-import {fuzzyMatches, matches} from '../matches'
+import {fuzzyMatches, matches} from '../matches.ts'
 
 // unit tests for text match utils
 

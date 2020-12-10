@@ -1,19 +1,61 @@
-function assertNotNullOrUndefined(matcher) {
-  if (matcher == null) {
+import {ARIARole} from 'aria-query'
+import {Nullish} from './types'
+
+export type ByRoleMatcher = ARIARole | MatcherFunction | {}
+
+export type Matcher = MatcherFunction | RegExp | string
+
+export type MatcherFunction = (
+  content: string,
+  element: Nullish<Element>,
+) => boolean
+
+export type NormalizerFn = (text: string) => string
+
+export interface DefaultNormalizerOptions {
+  trim?: boolean
+  collapseWhitespace?: boolean
+}
+
+export interface MatcherOptions {
+  exact?: boolean
+  /** Use normalizer with getDefaultNormalizer instead */
+  trim?: boolean
+  /** Use normalizer with getDefaultNormalizer instead */
+  collapseWhitespace?: boolean
+  normalizer?: NormalizerFn
+  /** suppress suggestions for a specific query */
+  suggest?: boolean
+}
+
+export type NormalizerOptions = DefaultNormalizerOptions & {
+  normalizer?: NormalizerFn
+}
+
+function assertNotNullOrUndefined<T>(
+  matcher: T,
+): asserts matcher is NonNullable<T> {
+  if (matcher === null || matcher === undefined) {
     throw new Error(
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       `It looks like ${matcher} was passed instead of a matcher. Did you do something like getByText(${matcher})?`,
     )
   }
 }
 
-function fuzzyMatches(textToMatch, node, matcher, normalizer) {
+function fuzzyMatches(
+  textToMatch: Nullish<string>,
+  node: Nullish<Element>,
+  matcher: Nullish<Matcher>,
+  normalizer: NormalizerFn,
+) {
   if (typeof textToMatch !== 'string') {
     return false
   }
-
   assertNotNullOrUndefined(matcher)
 
   const normalizedText = normalizer(textToMatch)
+
   if (typeof matcher === 'string') {
     return normalizedText.toLowerCase().includes(matcher.toLowerCase())
   } else if (typeof matcher === 'function') {
@@ -23,7 +65,12 @@ function fuzzyMatches(textToMatch, node, matcher, normalizer) {
   }
 }
 
-function matches(textToMatch, node, matcher, normalizer) {
+function matches(
+  textToMatch: Nullish<string>,
+  node: Nullish<Element>,
+  matcher: Nullish<Matcher>,
+  normalizer: NormalizerFn,
+) {
   if (typeof textToMatch !== 'string') {
     return false
   }
@@ -40,7 +87,10 @@ function matches(textToMatch, node, matcher, normalizer) {
   }
 }
 
-function getDefaultNormalizer({trim = true, collapseWhitespace = true} = {}) {
+function getDefaultNormalizer({
+  trim = true,
+  collapseWhitespace = true,
+}: DefaultNormalizerOptions = {}): NormalizerFn {
   return text => {
     let normalizedText = text
     normalizedText = trim ? normalizedText.trim() : normalizedText
@@ -60,7 +110,12 @@ function getDefaultNormalizer({trim = true, collapseWhitespace = true} = {}) {
  * @param {Function|undefined} normalizer The user-specified normalizer
  * @returns {Function} A normalizer
  */
-function makeNormalizer({trim, collapseWhitespace, normalizer}) {
+
+function makeNormalizer({
+  trim,
+  collapseWhitespace,
+  normalizer,
+}: NormalizerOptions) {
   if (normalizer) {
     // User has specified a custom normalizer
     if (

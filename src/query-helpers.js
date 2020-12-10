@@ -1,5 +1,5 @@
 import {getSuggestedQuery} from './suggestions'
-import {fuzzyMatches, matches, makeNormalizer} from './matches'
+import {fuzzyMatches, matches, makeNormalizer} from './matches.ts'
 import {waitFor} from './wait-for'
 import {getConfig} from './config.ts'
 
