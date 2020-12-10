@@ -1,36 +1,10 @@
-import {ARIARole} from 'aria-query'
-import {Nullish} from './types'
-
-export type ByRoleMatcher = ARIARole | MatcherFunction | {}
-
-export type Matcher = MatcherFunction | RegExp | string
-
-export type MatcherFunction = (
-  content: string,
-  element: Nullish<Element>,
-) => boolean
-
-export type NormalizerFn = (text: string) => string
-
-export interface DefaultNormalizerOptions {
-  trim?: boolean
-  collapseWhitespace?: boolean
-}
-
-export interface MatcherOptions {
-  exact?: boolean
-  /** Use normalizer with getDefaultNormalizer instead */
-  trim?: boolean
-  /** Use normalizer with getDefaultNormalizer instead */
-  collapseWhitespace?: boolean
-  normalizer?: NormalizerFn
-  /** suppress suggestions for a specific query */
-  suggest?: boolean
-}
-
-export type NormalizerOptions = DefaultNormalizerOptions & {
-  normalizer?: NormalizerFn
-}
+import {
+  Matcher,
+  NormalizerFn,
+  NormalizerOptions,
+  DefaultNormalizerOptions,
+} from '../types'
+import {Nullish} from '../types/utils'
 
 function assertNotNullOrUndefined<T>(
   matcher: T,

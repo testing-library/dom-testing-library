@@ -1,23 +1,6 @@
+import {Config, ConfigFn} from '../types/config'
+import {Callback} from '../types/utils'
 import {prettyDOM} from './pretty-dom'
-import {Callback} from './types'
-
-export interface Config {
-  testIdAttribute: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  asyncWrapper(cb: (...args: any[]) => any): Promise<any>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  eventWrapper(cb: (...args: any[]) => any): void
-  asyncUtilTimeout: number
-  computedStyleSupportsPseudoElements: boolean
-  defaultHidden: boolean
-  showOriginalStackTrace: boolean
-  throwSuggestions: boolean
-  getElementError: (message: string | null, container: Element) => Error
-}
-
-export interface ConfigFn {
-  (existingConfig: Config): Partial<Config>
-}
 
 interface InternalConfig {
   _disableExpensiveErrorDiagnostics: boolean
