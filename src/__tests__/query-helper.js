@@ -1,5 +1,5 @@
 import * as queryHelpers from '../query-helpers'
-import {configure, getConfig} from '../config'
+import {configure, getConfig} from '../config.ts'
 
 const originalConfig = getConfig()
 beforeEach(() => {

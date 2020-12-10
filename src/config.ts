@@ -1,9 +1,32 @@
 import {prettyDOM} from './pretty-dom'
+import {Callback} from './types'
+
+export interface Config {
+  testIdAttribute: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  asyncWrapper(cb: (...args: any[]) => any): Promise<any>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  eventWrapper(cb: (...args: any[]) => any): void
+  asyncUtilTimeout: number
+  computedStyleSupportsPseudoElements: boolean
+  defaultHidden: boolean
+  showOriginalStackTrace: boolean
+  throwSuggestions: boolean
+  getElementError: (message: string | null, container: Element) => Error
+}
+
+export interface ConfigFn {
+  (existingConfig: Config): Partial<Config>
+}
+
+interface InternalConfig {
+  _disableExpensiveErrorDiagnostics: boolean
+}
 
 // It would be cleaner for this to live inside './queries', but
 // other parts of the code assume that all exports from
 // './queries' are query functions.
-let config = {
+let config: Config & InternalConfig = {
   testIdAttribute: 'data-testid',
   asyncUtilTimeout: 1000,
   // this is to support React's async `act` function.
@@ -36,7 +59,9 @@ let config = {
 }
 
 export const DEFAULT_IGNORE_TAGS = 'script, style'
-export function runWithExpensiveErrorDiagnosticsDisabled(callback) {
+export function runWithExpensiveErrorDiagnosticsDisabled<T>(
+  callback: Callback<T>,
+) {
   try {
     config._disableExpensiveErrorDiagnostics = true
     return callback()
@@ -45,7 +70,7 @@ export function runWithExpensiveErrorDiagnosticsDisabled(callback) {
   }
 }
 
-export function configure(newConfig) {
+export function configure(newConfig: Partial<Config> | ConfigFn) {
   if (typeof newConfig === 'function') {
     // Pass the existing config out to the provided function
     // and accept a delta in return

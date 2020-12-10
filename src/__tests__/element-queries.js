@@ -1,4 +1,4 @@
-import {configure} from '../config'
+import {configure} from '../config.ts'
 import {render, renderIntoDocument} from './helpers/test-utils'
 
 beforeEach(() => {

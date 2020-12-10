@@ -1,4 +1,4 @@
-import {getConfig} from './config'
+import {getConfig} from './config.ts'
 import {getWindowFromNode} from './helpers'
 import {eventMap, eventAliasMap} from './event-map'
 
@@ -71,12 +71,15 @@ function createEvent(
       /* istanbul ignore if  */
       if (typeof window.DataTransfer === 'function') {
         Object.defineProperty(event, dataTransferKey, {
-          value: Object
-            .getOwnPropertyNames(dataTransferValue)
-            .reduce((acc, propName) => {
-              Object.defineProperty(acc, propName, {value: dataTransferValue[propName]});
-              return acc;
-            }, new window.DataTransfer())
+          value: Object.getOwnPropertyNames(dataTransferValue).reduce(
+            (acc, propName) => {
+              Object.defineProperty(acc, propName, {
+                value: dataTransferValue[propName],
+              })
+              return acc
+            },
+            new window.DataTransfer(),
+          ),
         })
       } else {
         Object.defineProperty(event, dataTransferKey, {

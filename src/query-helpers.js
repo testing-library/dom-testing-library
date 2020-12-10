@@ -1,7 +1,7 @@
 import {getSuggestedQuery} from './suggestions'
 import {fuzzyMatches, matches, makeNormalizer} from './matches'
 import {waitFor} from './wait-for'
-import {getConfig} from './config'
+import {getConfig} from './config.ts'
 
 function getElementError(message, container) {
   return getConfig().getElementError(message, container)

@@ -1,6 +1,6 @@
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 import {checkContainerType} from '../helpers'
-import {DEFAULT_IGNORE_TAGS} from '../config'
+import {DEFAULT_IGNORE_TAGS} from '../config.ts'
 import {
   fuzzyMatches,
   matches,

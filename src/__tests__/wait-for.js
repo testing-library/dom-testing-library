@@ -1,5 +1,5 @@
 import {waitFor} from '../'
-import {configure, getConfig} from '../config'
+import {configure, getConfig} from '../config.ts'
 import {renderIntoDocument} from './helpers/test-utils'
 
 function deferred() {

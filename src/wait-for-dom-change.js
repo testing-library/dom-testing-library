@@ -6,7 +6,7 @@ import {
   clearTimeout,
   runWithRealTimers,
 } from './helpers'
-import {getConfig} from './config'
+import {getConfig} from './config.ts'
 
 let hasWarned = false
 
