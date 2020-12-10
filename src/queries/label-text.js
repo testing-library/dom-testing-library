@@ -1,6 +1,6 @@
 import {getConfig} from '../config.ts'
 import {checkContainerType} from '../helpers'
-import {getLabels, getRealLabels, getLabelContent} from '../label-helpers'
+import {getLabels, getRealLabels, getLabelContent} from '../label-helpers.ts'
 import {
   fuzzyMatches,
   matches,

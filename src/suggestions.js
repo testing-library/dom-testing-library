@@ -3,7 +3,7 @@ import {getDefaultNormalizer} from './matches.ts'
 import {getNodeText} from './get-node-text'
 import {DEFAULT_IGNORE_TAGS, getConfig} from './config.ts'
 import {getImplicitAriaRoles, isInaccessible} from './role-helpers'
-import {getLabels} from './label-helpers'
+import {getLabels} from './label-helpers.ts'
 
 const normalize = getDefaultNormalizer()
 
