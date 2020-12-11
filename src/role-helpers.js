@@ -65,8 +65,8 @@ function isInaccessible(element, options = {}) {
 function getImplicitAriaRoles(currentNode) {
   // eslint bug here:
   // eslint-disable-next-line no-unused-vars
-  for (const {selector, roles} of elementRoleList) {
-    if (currentNode.matches(selector)) {
+  for (const {match, roles} of elementRoleList) {
+    if (match(currentNode)) {
       return [...roles]
     }
   }
@@ -75,7 +75,7 @@ function getImplicitAriaRoles(currentNode) {
 }
 
 function buildElementRoleList(elementRolesMap) {
-  function makeElementSelector({name, attributes = []}) {
+  function makeElementSelector({name, attributes}) {
     return `${name}${attributes
       .map(({name: attributeName, value, constraints = []}) => {
         const shouldNotExist = constraints.indexOf('undefined') !== -1
@@ -101,6 +101,31 @@ function buildElementRoleList(elementRolesMap) {
     return rightSpecificity - leftSpecificity
   }
 
+  function match(element) {
+    return node => {
+      let {attributes = []} = element
+      // https://github.com/testing-library/dom-testing-library/issues/814
+      const typeTextIndex = attributes.findIndex(
+        attribute =>
+          attribute.value &&
+          attribute.name === 'type' &&
+          attribute.value === 'text',
+      )
+      if (typeTextIndex >= 0) {
+        // not using splice to not mutate the attributes array
+        attributes = [
+          ...attributes.slice(0, typeTextIndex),
+          ...attributes.slice(typeTextIndex + 1),
+        ]
+        if (node.type !== 'text') {
+          return false
+        }
+      }
+
+      return node.matches(makeElementSelector({...element, attributes}))
+    }
+  }
+
   let result = []
 
   // eslint bug here:
@@ -109,7 +134,7 @@ function buildElementRoleList(elementRolesMap) {
     result = [
       ...result,
       {
-        selector: makeElementSelector(element),
+        match: match(element),
         roles: Array.from(roles),
         specificity: getSelectorSpecificity(element),
       },

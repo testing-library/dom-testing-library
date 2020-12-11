@@ -232,6 +232,16 @@ test('should suggest getByLabelText when no role available', () => {
   )
 })
 
+it('should not suggest by label when using by label', async () => {
+  renderIntoDocument(
+    `<label><span>bar</span><input type="password" title="foo" /></label>`,
+  )
+
+  // if a suggestion is made, this call will throw, thus failing the test.
+  const password = await screen.findByLabelText(/bar/i)
+  expect(password).toHaveAttribute('type', 'password')
+})
+
 test(`should suggest getByLabel on non form elements`, () => {
   renderIntoDocument(`
   <div data-testid="foo" aria-labelledby="section-one-header">
@@ -551,14 +561,44 @@ test('should get the first label with aria-labelledby contains multiple ids', ()
   })
 })
 
-test('should suggest hidden option if element is not in the accessibilty tree', () => {
-  const {container} = renderIntoDocument(`
+test('should not suggest or warn about hidden element when suggested query is already used.', () => {
+  console.warn.mockImplementation(() => {})
+
+  renderIntoDocument(`
     <input type="text" aria-hidden=true />
   `)
 
-  expect(
-    getSuggestedQuery(container.querySelector('input'), 'get', 'role'),
-  ).toMatchObject({
+  expect(() => screen.getByRole('textbox', {hidden: true})).not.toThrowError()
+  expect(console.warn).not.toHaveBeenCalled()
+})
+test('should suggest and warn about if element is not in the accessibility tree', () => {
+  console.warn.mockImplementation(() => {})
+
+  renderIntoDocument(`
+    <input type="text" data-testid="foo" aria-hidden=true />
+  `)
+
+  expect(() => screen.getByTestId('foo', {hidden: true})).toThrowError(
+    /getByRole\('textbox', \{ hidden: true \}\)/,
+  )
+  expect(console.warn).toHaveBeenCalledWith(
+    expect.stringContaining(`Element is inaccessible.`),
+  )
+})
+
+test('should suggest hidden option if element is not in the accessibility tree', () => {
+  console.warn.mockImplementation(() => {})
+
+  const {container} = renderIntoDocument(`
+    <input type="text" data-testid="foo" aria-hidden=true />
+  `)
+
+  const suggestion = getSuggestedQuery(
+    container.querySelector('input'),
+    'get',
+    'role',
+  )
+  expect(suggestion).toMatchObject({
     queryName: 'Role',
     queryMethod: 'getByRole',
     queryArgs: ['textbox', {hidden: true}],
@@ -567,6 +607,7 @@ test('should suggest hidden option if element is not in the accessibilty tree', 
     If you are using the aria-hidden prop, make sure this is the right choice for your case.
     `,
   })
+  suggestion.toString()
 
   expect(console.warn.mock.calls).toMatchInlineSnapshot(`
     Array [

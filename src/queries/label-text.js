@@ -169,7 +169,7 @@ const findAllByLabelText = makeFindQuery(
   ),
 )
 const findByLabelText = makeFindQuery(
-  wrapSingleQueryWithSuggestion(getByLabelText, getByLabelText.name, 'find'),
+  wrapSingleQueryWithSuggestion(getByLabelText, getAllByLabelText.name, 'find'),
 )
 
 const getAllByLabelTextWithSuggestions = wrapAllByQueryWithSuggestion(

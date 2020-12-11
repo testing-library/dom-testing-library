@@ -23,10 +23,11 @@ const {
   findByRole,
 } = queries
 
-async function testQueries() {
+export async function testQueries() {
   // element queries
   const element = document.createElement('div')
   getByText(element, 'foo')
+  getByText(element, 1)
   queryByText(element, 'foo')
   await findByText(element, 'foo')
   await findByText(element, 'foo', undefined, {timeout: 10})
@@ -46,7 +47,7 @@ async function testQueries() {
   await screen.findAllByText('bar', undefined, {timeout: 10})
 }
 
-async function testQueryHelpers() {
+export async function testQueryHelpers() {
   const element = document.createElement('div')
   const includesAutomationId = (content: string, automationId: string) =>
     content.split(/\s+/).some(id => id === automationId)
@@ -78,16 +79,16 @@ async function testQueryHelpers() {
   queryByAutomationId(element, 'id')
   getAllByAutomationId(element, 'id')
   getByAutomationId(element, ['id', 'automationId'])
-  findAllByAutomationId(element, 'id', {}, {timeout: 1000})
-  findByAutomationId(element, 'id', {}, {timeout: 1000})
+  await findAllByAutomationId(element, 'id', {}, {timeout: 1000})
+  await findByAutomationId(element, 'id', {}, {timeout: 1000})
   // test optional params too
-  findAllByAutomationId(element, 'id', {})
-  findByAutomationId(element, 'id', {})
-  findAllByAutomationId(element, 'id')
-  findByAutomationId(element, 'id')
+  await findAllByAutomationId(element, 'id', {})
+  await findByAutomationId(element, 'id', {})
+  await findAllByAutomationId(element, 'id')
+  await findByAutomationId(element, 'id')
 }
 
-async function testByRole() {
+export async function testByRole() {
   const element = document.createElement('button')
   element.setAttribute('aria-hidden', 'true')
 
@@ -115,8 +116,7 @@ async function testByRole() {
   console.assert(queryByRole(element, 'button', {name: /^Log/}) === null)
   console.assert(
     queryByRole(element, 'button', {
-      name: (name, element) =>
-        name === 'Login' && element.hasAttribute('disabled'),
+      name: (name, el) => name === 'Login' && el.hasAttribute('disabled'),
     }) === null,
   )
 
@@ -127,12 +127,12 @@ async function testByRole() {
   console.assert(screen.queryByRole(/foo/) === null)
 }
 
-function testA11yHelper() {
+export function testA11yHelper() {
   const element = document.createElement('svg')
   console.assert(!isInaccessible(element))
 }
 
-function eventTest() {
+export function eventTest() {
   fireEvent.popState(window, {
     location: 'http://www.example.com/?page=1',
     state: {page: 1},
@@ -156,7 +156,7 @@ function eventTest() {
   fireEvent(element, customEvent)
 }
 
-async function testWaitFors() {
+export async function testWaitFors() {
   const element = document.createElement('div')
 
   await waitFor(() => getByText(element, 'apple'))
@@ -181,3 +181,9 @@ async function testWaitFors() {
 
   await waitFor(async () => {})
 }
+
+/*
+eslint
+  @typescript-eslint/no-unnecessary-condition: "off",
+  import/no-extraneous-dependencies: "off"
+*/

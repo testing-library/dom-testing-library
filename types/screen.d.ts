@@ -1,6 +1,6 @@
+import {OptionsReceived} from 'pretty-format'
 import {BoundFunctions, Queries} from './get-queries-for-element'
 import * as queries from './queries'
-import {OptionsReceived} from 'pretty-format'
 
 export type Screen<Q extends Queries = typeof queries> = BoundFunctions<Q> & {
   /**

@@ -144,6 +144,11 @@ test('matches case with RegExp matcher', () => {
   expect(queryByText(/Step 1 of 4/)).not.toBeTruthy()
 })
 
+test('queryByText matches case with non-string matcher', () => {
+  const {queryByText} = render(`<span>1</span>`)
+  expect(queryByText(1)).toBeTruthy()
+})
+
 test('can get form controls by label text', () => {
   const {getByLabelText} = render(`
     <div>
@@ -336,6 +341,11 @@ test('get can get form controls by placeholder', () => {
     <input id="username-id" placeholder="username" />,
   `)
   expect(getByPlaceholderText('username').id).toBe('username-id')
+})
+
+test('queryByPlaceholderText matches case with non-string matcher', () => {
+  const {queryByPlaceholderText} = render(`<input placeholder="1" />`)
+  expect(queryByPlaceholderText(1)).toBeTruthy()
 })
 
 test('label with no form control', () => {
@@ -535,6 +545,11 @@ test('getByLabelText with aria-label', () => {
   expect(queryByLabelText(/bat/)).toBeTruthy()
 })
 
+test('queryByLabelText matches case with non-string matcher', () => {
+  const {queryByLabelText} = render(`<input aria-label="1" />`)
+  expect(queryByLabelText(1)).toBeTruthy()
+})
+
 test('get element by its alt text', () => {
   const {getByAltText} = render(`
     <div>
@@ -543,6 +558,11 @@ test('get element by its alt text', () => {
     </div>,
   `)
   expect(getByAltText(/fin.*nem.*poster$/i).src).toContain('/finding-nemo.png')
+})
+
+test('queryByAltText matches case with non-string matcher', () => {
+  const {queryByAltText} = render(`<img alt="1" src="/finding-nemo.png" />`)
+  expect(queryByAltText(1)).toBeTruthy()
 })
 
 test('query/get element by its title', () => {
@@ -575,6 +595,11 @@ test('query/get title element of SVG', () => {
 
   expect(getByTitle('Close').id).toEqual('svg-title')
   expect(queryByTitle('Close').id).toEqual('svg-title')
+})
+
+test('queryByTitle matches case with non-string matcher', () => {
+  const {queryByTitle} = render(`<span title="1" />`)
+  expect(queryByTitle(1)).toBeTruthy()
 })
 
 test('query/get element by its value', () => {
@@ -632,6 +657,15 @@ test('query/get select by text with multiple options selected', () => {
   expect(queryByDisplayValue('Alaska').id).toEqual('state-select')
 })
 
+test('queryByDisplayValue matches case with non-string matcher', () => {
+  const {queryByDisplayValue} = render(`
+  <select multiple id="state-select">
+    <option selected value="one">1</option>
+  </select>
+  `)
+  expect(queryByDisplayValue(1)).toBeTruthy()
+})
+
 describe('query by test id', () => {
   afterEach(() => {
     // Restore the default test id attribute
@@ -649,6 +683,11 @@ describe('query by test id', () => {
     expect(queryByTestId('first')).not.toBeTruthy()
     expect(queryByTestId('firstNamePlusMore')).not.toBeTruthy()
     expect(queryByTestId('first-name')).not.toBeTruthy()
+  })
+
+  test('queryByTestId matches case with non-string matcher', () => {
+    const {queryByTestId} = render(`<span data-testid="1" />`)
+    expect(queryByTestId(1)).toBeTruthy()
   })
 
   test('can override test id attribute', () => {
@@ -730,6 +769,11 @@ test('queryAllByRole returns semantic html elements', () => {
   expect(queryAllByRole('progressbar', {queryFallbacks: true})).toHaveLength(1)
   expect(queryAllByRole('combobox')).toHaveLength(1)
   expect(queryAllByRole('listbox')).toHaveLength(1)
+})
+
+test('queryByRole matches case with non-string matcher', () => {
+  const {queryByRole} = render(`<span role="1" />`)
+  expect(queryByRole(1)).toBeTruthy()
 })
 
 test('getAll* matchers return an array', () => {

@@ -31,12 +31,12 @@ function matches(textToMatch, node, matcher, normalizer) {
   assertNotNullOrUndefined(matcher)
 
   const normalizedText = normalizer(textToMatch)
-  if (typeof matcher === 'string') {
-    return normalizedText === matcher
-  } else if (typeof matcher === 'function') {
+  if (matcher instanceof Function) {
     return matcher(normalizedText, node)
-  } else {
+  } else if (matcher instanceof RegExp) {
     return matcher.test(normalizedText)
+  } else {
+    return normalizedText === String(matcher)
   }
 }
 
