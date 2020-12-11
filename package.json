@@ -24,7 +24,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "kcd-scripts build --ignore \"**/__tests__/**,**/__node_tests__/**,**/__mocks__/**\" && kcd-scripts build --bundle --no-clean",
+    "build": "kcd-scripts build  --no-ts-defs --ignore \"**/__tests__/**,**/__node_tests__/**,**/__mocks__/**\" && kcd-scripts build --no-ts-defs --bundle --no-clean",
     "lint": "kcd-scripts lint",
     "setup": "npm install && npm run validate -s",
     "test": "kcd-scripts test",
@@ -53,11 +53,14 @@
     "jest-serializer-ansi": "^1.0.3",
     "jest-watch-select-projects": "^2.0.0",
     "jsdom": "^16.4.0",
-    "kcd-scripts": "^7.5.1",
+    "kcd-scripts": "^7.5.3",
     "typescript": "^4.1.2"
   },
   "eslintConfig": {
-    "extends": "./node_modules/kcd-scripts/eslint.js",
+    "extends": [
+      "./node_modules/kcd-scripts/eslint.js",
+      "plugin:import/typescript"
+    ],
     "rules": {
       "import/prefer-default-export": "off",
       "import/no-unassigned-import": "off",

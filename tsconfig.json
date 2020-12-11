@@ -1,0 +1,7 @@
+{
+  "extends": "./node_modules/kcd-scripts/shared-tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "include": ["./src", "./types"]
+}

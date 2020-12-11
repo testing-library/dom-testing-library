@@ -1,9 +1,15 @@
+import {Config, ConfigFn} from '../types/config'
 import {prettyDOM} from './pretty-dom'
+
+type Callback<T> = () => T
+interface InternalConfig extends Config {
+  _disableExpensiveErrorDiagnostics: boolean
+}
 
 // It would be cleaner for this to live inside './queries', but
 // other parts of the code assume that all exports from
 // './queries' are query functions.
-let config = {
+let config: InternalConfig = {
   testIdAttribute: 'data-testid',
   asyncUtilTimeout: 1000,
   // this is to support React's async `act` function.
@@ -36,7 +42,9 @@ let config = {
 }
 
 export const DEFAULT_IGNORE_TAGS = 'script, style'
-export function runWithExpensiveErrorDiagnosticsDisabled(callback) {
+export function runWithExpensiveErrorDiagnosticsDisabled<T>(
+  callback: Callback<T>,
+) {
   try {
     config._disableExpensiveErrorDiagnostics = true
     return callback()
@@ -45,7 +53,7 @@ export function runWithExpensiveErrorDiagnosticsDisabled(callback) {
   }
 }
 
-export function configure(newConfig) {
+export function configure(newConfig: Partial<Config> | ConfigFn) {
   if (typeof newConfig === 'function') {
     // Pass the existing config out to the provided function
     // and accept a delta in return

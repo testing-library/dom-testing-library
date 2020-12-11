@@ -10,7 +10,9 @@ const labelledNodeNames = [
   'input',
 ]
 
-function getTextContent(node) {
+function getTextContent(
+  node: Node | Element | HTMLInputElement,
+): string | null {
   if (labelledNodeNames.includes(node.nodeName.toLowerCase())) {
     return ''
   }
@@ -22,19 +24,22 @@ function getTextContent(node) {
     .join('')
 }
 
-function getLabelContent(node) {
-  let textContent
-  if (node.tagName.toLowerCase() === 'label') {
-    textContent = getTextContent(node)
+function getLabelContent(element: Element): string | null {
+  let textContent: string | null
+  if (element.tagName.toLowerCase() === 'label') {
+    textContent = getTextContent(element)
   } else {
-    textContent = node.value || node.textContent
+    textContent = (element as HTMLInputElement).value || element.textContent
   }
   return textContent
 }
 
 // Based on https://github.com/eps1lon/dom-accessibility-api/pull/352
-function getRealLabels(element) {
-  if (element.labels !== undefined) return element.labels ?? []
+function getRealLabels(element: Element) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- types are not aware of older browsers that don't implement `labels`
+  if ((element as HTMLInputElement).labels !== undefined) {
+    return (element as HTMLInputElement).labels ?? []
+  }
 
   if (!isLabelable(element)) return []
 
@@ -42,17 +47,20 @@ function getRealLabels(element) {
   return Array.from(labels).filter(label => label.control === element)
 }
 
-function isLabelable(element) {
+function isLabelable(element: Element) {
   return (
-    element.tagName.match(/BUTTON|METER|OUTPUT|PROGRESS|SELECT|TEXTAREA/) ||
+    /BUTTON|METER|OUTPUT|PROGRESS|SELECT|TEXTAREA/.test(element.tagName) ||
     (element.tagName === 'INPUT' && element.getAttribute('type') !== 'hidden')
   )
 }
 
-function getLabels(container, element, {selector = '*'} = {}) {
-  const labelsId = element.getAttribute('aria-labelledby')
-    ? element.getAttribute('aria-labelledby').split(' ')
-    : []
+function getLabels(
+  container: Element,
+  element: Element,
+  {selector = '*'} = {},
+) {
+  const ariaLabelledBy = element.getAttribute('aria-labelledby')
+  const labelsId = ariaLabelledBy ? ariaLabelledBy.split(' ') : []
   return labelsId.length
     ? labelsId.map(labelId => {
         const labellingElement = container.querySelector(`[id="${labelId}"]`)
@@ -67,7 +75,6 @@ function getLabels(container, element, {selector = '*'} = {}) {
         const labelledFormControl = Array.from(
           label.querySelectorAll(formControlSelector),
         ).filter(formControlElement => formControlElement.matches(selector))[0]
-
         return {content: textToMatch, formControl: labelledFormControl}
       })
 }

@@ -1,19 +1,36 @@
-function assertNotNullOrUndefined(matcher) {
-  if (matcher == null) {
+import {
+  Matcher,
+  NormalizerFn,
+  NormalizerOptions,
+  DefaultNormalizerOptions,
+} from '../types'
+
+type Nullish<T> = T | null | undefined
+
+function assertNotNullOrUndefined<T>(
+  matcher: T,
+): asserts matcher is NonNullable<T> {
+  if (matcher === null || matcher === undefined) {
     throw new Error(
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions -- implicitly converting `T` to `string`
       `It looks like ${matcher} was passed instead of a matcher. Did you do something like getByText(${matcher})?`,
     )
   }
 }
 
-function fuzzyMatches(textToMatch, node, matcher, normalizer) {
+function fuzzyMatches(
+  textToMatch: Nullish<string>,
+  node: Nullish<Element>,
+  matcher: Nullish<Matcher>,
+  normalizer: NormalizerFn,
+) {
   if (typeof textToMatch !== 'string') {
     return false
   }
-
   assertNotNullOrUndefined(matcher)
 
   const normalizedText = normalizer(textToMatch)
+
   if (typeof matcher === 'string') {
     return normalizedText.toLowerCase().includes(matcher.toLowerCase())
   } else if (typeof matcher === 'function') {
@@ -23,7 +40,12 @@ function fuzzyMatches(textToMatch, node, matcher, normalizer) {
   }
 }
 
-function matches(textToMatch, node, matcher, normalizer) {
+function matches(
+  textToMatch: Nullish<string>,
+  node: Nullish<Element>,
+  matcher: Nullish<Matcher>,
+  normalizer: NormalizerFn,
+) {
   if (typeof textToMatch !== 'string') {
     return false
   }
@@ -40,7 +62,10 @@ function matches(textToMatch, node, matcher, normalizer) {
   }
 }
 
-function getDefaultNormalizer({trim = true, collapseWhitespace = true} = {}) {
+function getDefaultNormalizer({
+  trim = true,
+  collapseWhitespace = true,
+}: DefaultNormalizerOptions = {}): NormalizerFn {
   return text => {
     let normalizedText = text
     normalizedText = trim ? normalizedText.trim() : normalizedText
@@ -60,7 +85,12 @@ function getDefaultNormalizer({trim = true, collapseWhitespace = true} = {}) {
  * @param {Function|undefined} normalizer The user-specified normalizer
  * @returns {Function} A normalizer
  */
-function makeNormalizer({trim, collapseWhitespace, normalizer}) {
+
+function makeNormalizer({
+  trim,
+  collapseWhitespace,
+  normalizer,
+}: NormalizerOptions) {
   if (normalizer) {
     // User has specified a custom normalizer
     if (
