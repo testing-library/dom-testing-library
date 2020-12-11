@@ -1,4 +1,4 @@
-import {configure, getConfig} from '../config.ts'
+import {configure, getConfig} from '../config'
 import {getQueriesForElement} from '../get-queries-for-element'
 import {render, renderIntoDocument} from './helpers/test-utils'
 

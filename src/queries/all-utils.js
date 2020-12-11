@@ -1,4 +1,4 @@
-export * from '../matches.ts'
+export * from '../matches'
 export * from '../get-node-text'
 export * from '../query-helpers'
-export * from '../config.ts'
+export * from '../config'

@@ -1,6 +1,6 @@
 import cases from 'jest-in-case'
 import {screen} from '../'
-import {configure, getConfig} from '../config.ts'
+import {configure, getConfig} from '../config'
 import {render} from './helpers/test-utils'
 
 const originalConfig = getConfig()

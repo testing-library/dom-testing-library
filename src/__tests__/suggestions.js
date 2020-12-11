@@ -1,4 +1,4 @@
-import {configure} from '../config.ts'
+import {configure} from '../config'
 import {screen, getSuggestedQuery} from '..'
 import {renderIntoDocument, render} from './helpers/test-utils'
 

@@ -9,7 +9,7 @@ import {
   setTimeout,
   clearTimeout,
 } from './helpers'
-import {getConfig, runWithExpensiveErrorDiagnosticsDisabled} from './config.ts'
+import {getConfig, runWithExpensiveErrorDiagnosticsDisabled} from './config'
 
 // This is so the stack trace the developer sees is one that's
 // closer to their code (because async stack traces are hard to follow).

@@ -1,4 +1,4 @@
-import {getConfig} from './config.ts'
+import {getConfig} from './config'
 import {getWindowFromNode} from './helpers'
 import {eventMap, eventAliasMap} from './event-map'
 

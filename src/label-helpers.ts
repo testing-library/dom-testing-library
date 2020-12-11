@@ -24,23 +24,22 @@ function getTextContent(
     .join('')
 }
 
-function getLabelContent(element: Element | HTMLInputElement) {
-  let textContent
+function getLabelContent(element: Element): string | null {
+  let textContent: string | null
   if (element.tagName.toLowerCase() === 'label') {
     textContent = getTextContent(element)
-  } else if ('value' in element) {
-    return element.value
   } else {
-    textContent = element.textContent
+    textContent = (element as HTMLInputElement).value || element.textContent
   }
   return textContent
 }
 
 // Based on https://github.com/eps1lon/dom-accessibility-api/pull/352
-function getRealLabels(element: Element | HTMLInputElement) {
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if ('labels' in element && element.labels !== undefined)
-    return element.labels ?? []
+function getRealLabels(element: Element) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- types are not aware of older browsers that don't implement `labels`
+  if ((element as HTMLInputElement).labels !== undefined) {
+    return (element as HTMLInputElement).labels ?? []
+  }
 
   if (!isLabelable(element)) return []
 
@@ -49,9 +48,8 @@ function getRealLabels(element: Element | HTMLInputElement) {
 }
 
 function isLabelable(element: Element) {
-  const labelableRegex = /BUTTON|METER|OUTPUT|PROGRESS|SELECT|TEXTAREA/
   return (
-    labelableRegex.test(element.tagName) ||
+    /BUTTON|METER|OUTPUT|PROGRESS|SELECT|TEXTAREA/.test(element.tagName) ||
     (element.tagName === 'INPUT' && element.getAttribute('type') !== 'hidden')
   )
 }

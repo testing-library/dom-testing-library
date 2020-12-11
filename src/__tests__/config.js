@@ -1,4 +1,4 @@
-import {configure, getConfig} from '../config.ts'
+import {configure, getConfig} from '../config'
 
 describe('configuration API', () => {
   let originalConfig
