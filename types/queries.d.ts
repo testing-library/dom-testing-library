@@ -89,6 +89,11 @@ export interface ByRoleOptions extends MatcherOptions {
    */
   pressed?: boolean
   /**
+   * If true only includes elements in the query set that are marked as
+   * expanded in the accessibility tree, i.e., `aria-expanded="true"`
+   */
+  expanded?: boolean
+  /**
    * Includes elements with the `"heading"` role matching the indicated level,
    * either by the semantic HTML heading elements `<h1>-<h6>` or matching
    * the `aria-level` attribute.
