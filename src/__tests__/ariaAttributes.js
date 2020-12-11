@@ -27,6 +27,15 @@ test('`checked` throws on unsupported roles', () => {
   )
 })
 
+test('`expanded` throws on unsupported roles', () => {
+  const {getByRole} = render(`<h1 aria-expanded="true">Heading</h1>`)
+  expect(() =>
+    getByRole('heading', {expanded: true}),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"\\"aria-expanded\\" is not supported on role \\"heading\\"."`,
+  )
+})
+
 test('`checked: true|false` matches `checked` checkboxes', () => {
   const {getByRole} = renderIntoDocument(
     `<div>
@@ -201,4 +210,26 @@ test('`level` throws on unsupported roles', () => {
   ).toThrowErrorMatchingInlineSnapshot(
     `"Role \\"button\\" cannot have \\"level\\" property."`,
   )
+})
+
+test('`expanded: true|false` matches `expanded` buttons', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <button aria-expanded="true" />
+      <button aria-expanded="false" />
+    </div>`,
+  )
+  expect(getByRole('button', {expanded: true})).toBeInTheDocument()
+  expect(getByRole('button', {expanded: false})).toBeInTheDocument()
+})
+
+test('`expanded: true|false` matches `expanded` elements with proper role', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <span role="button" aria-expanded="true">✔</span>
+      <span role="button" aria-expanded="false">𝒙</span>
+    </div>`,
+  )
+  expect(getByRole('button', {expanded: true})).toBeInTheDocument()
+  expect(getByRole('button', {expanded: false})).toBeInTheDocument()
 })
