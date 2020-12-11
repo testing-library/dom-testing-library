@@ -3,8 +3,6 @@ const baseConfig = require('kcd-scripts/jest')
 
 module.exports = {
   ...baseConfig,
-  moduleFileExtensions: [...baseConfig.moduleFileExtensions, 'd.ts'],
-  moduleDirectories: [...baseConfig.moduleDirectories, 'types'],
   rootDir: path.join(__dirname, '..'),
   displayName: 'node',
   testEnvironment: 'jest-environment-node',

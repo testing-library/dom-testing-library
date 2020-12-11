@@ -1,4 +1,3 @@
-import {isNotNull} from './utils'
 import {TEXT_NODE} from './helpers'
 
 const labelledNodeNames = [
@@ -25,21 +24,20 @@ function getTextContent(
     .join('')
 }
 
-function getLabelContent(node: Node | Element | HTMLInputElement) {
+function getLabelContent(element: Element | HTMLInputElement) {
   let textContent
-  if ('tagName' in node && node.tagName.toLowerCase() === 'label') {
-    textContent = getTextContent(node)
-  } else if ('value' in node) {
-    textContent = node.value
+  if (element.tagName.toLowerCase() === 'label') {
+    textContent = getTextContent(element)
+  } else if ('value' in element) {
+    return element.value
   } else {
-    textContent = node.textContent
+    textContent = element.textContent
   }
   return textContent
 }
 
 // Based on https://github.com/eps1lon/dom-accessibility-api/pull/352
 function getRealLabels(element: Element | HTMLInputElement) {
-  // for old browsers
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if ('labels' in element && element.labels !== undefined)
     return element.labels ?? []
@@ -64,7 +62,7 @@ function getLabels(
   {selector = '*'} = {},
 ) {
   const ariaLabelledBy = element.getAttribute('aria-labelledby')
-  const labelsId = isNotNull(ariaLabelledBy) ? ariaLabelledBy.split(' ') : []
+  const labelsId = ariaLabelledBy ? ariaLabelledBy.split(' ') : []
   return labelsId.length
     ? labelsId.map(labelId => {
         const labellingElement = container.querySelector(`[id="${labelId}"]`)

@@ -1,15 +1,15 @@
 import {Config, ConfigFn} from '../types/config'
-import {Callback} from '../types/utils'
 import {prettyDOM} from './pretty-dom'
 
-interface InternalConfig {
+type Callback<T> = () => T
+interface InternalConfig extends Config {
   _disableExpensiveErrorDiagnostics: boolean
 }
 
 // It would be cleaner for this to live inside './queries', but
 // other parts of the code assume that all exports from
 // './queries' are query functions.
-let config: Config & InternalConfig = {
+let config: InternalConfig = {
   testIdAttribute: 'data-testid',
   asyncUtilTimeout: 1000,
   // this is to support React's async `act` function.

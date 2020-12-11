@@ -1,5 +1,6 @@
 import {ARIARole} from 'aria-query'
-import {Nullish} from './utils'
+
+type Nullish<T> = T | null | undefined
 
 export type MatcherFunction = (
   content: string,
@@ -13,7 +14,7 @@ export type ByRoleMatcher = ARIARole | MatcherFunction | {}
 
 export type NormalizerFn = (text: string) => string
 
-export type NormalizerOptions = DefaultNormalizerOptions & {
+export interface NormalizerOptions extends DefaultNormalizerOptions {
   normalizer?: NormalizerFn
 }
 

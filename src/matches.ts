@@ -4,7 +4,8 @@ import {
   NormalizerOptions,
   DefaultNormalizerOptions,
 } from '../types'
-import {Nullish} from '../types/utils'
+
+type Nullish<T> = T | null | undefined
 
 function assertNotNullOrUndefined<T>(
   matcher: T,
