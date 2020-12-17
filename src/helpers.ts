@@ -118,7 +118,7 @@ function checkContainerType(container?: Element) {
     )
   }
 
-  function getTypeName<T>(object: T) {
+  function getTypeName(object: unknown) {
     if (typeof object === 'object') {
       return object === null ? 'null' : (object as Object).constructor.name
     }
