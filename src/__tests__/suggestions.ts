@@ -1,6 +1,5 @@
 import {configure} from '../config'
 import {screen, getSuggestedQuery} from '..'
-import {Suggestion} from '../../types/suggestions'
 import {renderIntoDocument, render} from './helpers/test-utils'
 
 beforeAll(() => {
@@ -188,41 +187,41 @@ test('escapes regular expressions in suggestion', () => {
   )
 
   expect(
-    (getSuggestedQuery(
+    getSuggestedQuery(
       container.querySelector('img') as HTMLImageElement,
       'get',
       'AltText',
-    ) as Suggestion).toString(),
+    )?.toString(),
   ).toEqual(`getByAltText(/the problem \\(picture of a question mark\\)/i)`)
 
   expect(
-    (getSuggestedQuery(
+    getSuggestedQuery(
       container.querySelector('p') as HTMLParagraphElement,
-    ) as Suggestion).toString(),
+    )?.toString(),
   ).toEqual(`getByText(/loading \\.\\.\\. \\(1\\)/i)`)
 
   expect(
-    (getSuggestedQuery(
+    getSuggestedQuery(
       container.querySelector('input') as HTMLInputElement,
       'get',
       'PlaceholderText',
-    ) as Suggestion).toString(),
+    )?.toString(),
   ).toEqual(`getByPlaceholderText(/should escape \\+\\-'\\(\\//i)`)
 
   expect(
-    (getSuggestedQuery(
+    getSuggestedQuery(
       container.querySelector('input') as HTMLInputElement,
       'get',
       'DisplayValue',
-    ) as Suggestion).toString(),
+    )?.toString(),
   ).toEqual(`getByDisplayValue(/my super string \\+\\-\\('\\{\\}\\^\\$\\)/i)`)
 
   expect(
-    (getSuggestedQuery(
+    getSuggestedQuery(
       container.querySelector('input') as HTMLInputElement,
       'get',
       'LabelText',
-    ) as Suggestion).toString(),
+    )?.toString(),
   ).toEqual(`getByLabelText(/inp\\-t lab\\^l w\\{th c\\+ars to esc\\\\pe/i)`)
 })
 
@@ -380,27 +379,19 @@ test('getSuggestedQuery handles `variant` and defaults to `get`', () => {
   const button = render(`<button>submit</button>`).container
     .firstChild as HTMLButtonElement
 
-  expect((getSuggestedQuery(button) as Suggestion).toString()).toMatch(
-    /getByRole/,
+  expect(getSuggestedQuery(button)?.toString()).toMatch(/getByRole/)
+  expect(getSuggestedQuery(button, 'get')?.toString()).toMatch(/getByRole/)
+  expect(getSuggestedQuery(button, 'getAll')?.toString()).toMatch(
+    /getAllByRole/,
   )
-  expect((getSuggestedQuery(button, 'get') as Suggestion).toString()).toMatch(
-    /getByRole/,
+  expect(getSuggestedQuery(button, 'query')?.toString()).toMatch(/queryByRole/)
+  expect(getSuggestedQuery(button, 'queryAll')?.toString()).toMatch(
+    /queryAllByRole/,
   )
-  expect(
-    (getSuggestedQuery(button, 'getAll') as Suggestion).toString(),
-  ).toMatch(/getAllByRole/)
-  expect((getSuggestedQuery(button, 'query') as Suggestion).toString()).toMatch(
-    /queryByRole/,
+  expect(getSuggestedQuery(button, 'find')?.toString()).toMatch(/findByRole/)
+  expect(getSuggestedQuery(button, 'findAll')?.toString()).toMatch(
+    /findAllByRole/,
   )
-  expect(
-    (getSuggestedQuery(button, 'queryAll') as Suggestion).toString(),
-  ).toMatch(/queryAllByRole/)
-  expect((getSuggestedQuery(button, 'find') as Suggestion).toString()).toMatch(
-    /findByRole/,
-  )
-  expect(
-    (getSuggestedQuery(button, 'findAll') as Suggestion).toString(),
-  ).toMatch(/findAllByRole/)
 })
 
 test('getSuggestedQuery returns rich data for tooling', () => {
@@ -414,7 +405,7 @@ test('getSuggestedQuery returns rich data for tooling', () => {
     variant: 'get',
   })
 
-  expect((getSuggestedQuery(button) as Suggestion).toString()).toEqual(
+  expect(getSuggestedQuery(button)?.toString()).toEqual(
     `getByRole('button', { name: /submit/i })`,
   )
 
@@ -427,9 +418,7 @@ test('getSuggestedQuery returns rich data for tooling', () => {
     variant: 'get',
   })
 
-  expect((getSuggestedQuery(div) as Suggestion).toString()).toEqual(
-    `getByText(/cancel/i)`,
-  )
+  expect(getSuggestedQuery(div)?.toString()).toEqual(`getByText(/cancel/i)`)
 })
 
 test('getSuggestedQuery can return specified methods in addition to the best', () => {
@@ -617,7 +606,7 @@ test('should suggest hidden option if element is not in the accessibility tree',
     container.querySelector('input') as HTMLInputElement,
     'get',
     'role',
-  ) as Suggestion
+  )
   expect(suggestion).toMatchObject({
     queryName: 'Role',
     queryMethod: 'getByRole',
@@ -627,7 +616,7 @@ test('should suggest hidden option if element is not in the accessibility tree',
     If you are using the aria-hidden prop, make sure this is the right choice for your case.
     `,
   })
-  suggestion.toString()
+  suggestion?.toString()
 
   expect((console.warn as jest.Mock).mock.calls).toMatchInlineSnapshot(`
     Array [
