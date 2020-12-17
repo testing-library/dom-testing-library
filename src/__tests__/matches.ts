@@ -3,7 +3,7 @@ import {fuzzyMatches, matches} from '../matches'
 // unit tests for text match utils
 
 const node = null
-const normalizer = str => str
+const normalizer = (text: string) => text
 
 test('matchers accept strings', () => {
   expect(matches('ABC', node, 'ABC', normalizer)).toBe(true)

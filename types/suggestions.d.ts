@@ -2,7 +2,7 @@ export interface QueryOptions {
   [key: string]: RegExp | boolean
 }
 
-export type QueryArgs = [string, QueryOptions?]
+export type QueryArgs = [string | RegExp, QueryOptions?]
 
 export interface Suggestion {
   queryName: string

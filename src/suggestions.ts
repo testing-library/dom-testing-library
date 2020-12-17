@@ -1,5 +1,11 @@
 import {computeAccessibleName} from 'dom-accessibility-api'
-import {Method, Variant} from '../types/suggestions'
+import {
+  Method,
+  Variant,
+  Suggestion,
+  QueryArgs,
+  QueryOptions,
+} from '../types/suggestions'
 import {getDefaultNormalizer} from './matches'
 import {getNodeText} from './get-node-text'
 import {DEFAULT_IGNORE_TAGS, getConfig} from './config'
@@ -11,16 +17,9 @@ type SuggestionOptions = {
   name?: string
 }
 
-type QueryOptions = {
-  name?: RegExp
-  hidden?: boolean
-}
-
 function isInput(element: Element): element is HTMLInputElement {
   return (element as Element & {value: unknown}).value !== undefined
 }
-
-type QueryArgs = [string | RegExp, QueryOptions?]
 
 const normalize = getDefaultNormalizer()
 
@@ -110,7 +109,7 @@ export function getSuggestedQuery(
   element: Element,
   variant: Variant = 'get',
   method?: Method,
-) {
+): Suggestion | undefined {
   // don't create suggestions for script and style elements
   if (element.matches(DEFAULT_IGNORE_TAGS)) {
     return undefined

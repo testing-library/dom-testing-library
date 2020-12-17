@@ -1,5 +1,6 @@
 import {configure} from '../config'
 import {screen, getSuggestedQuery} from '..'
+import {Suggestion} from '../../types/suggestions'
 import {renderIntoDocument, render} from './helpers/test-utils'
 
 beforeAll(() => {
@@ -8,7 +9,7 @@ beforeAll(() => {
 
 afterEach(() => {
   configure({testIdAttribute: 'data-testid'})
-  console.warn.mockClear()
+  ;(console.warn as jest.Mock).mockClear()
 })
 
 afterAll(() => {
@@ -187,39 +188,41 @@ test('escapes regular expressions in suggestion', () => {
   )
 
   expect(
-    getSuggestedQuery(
-      container.querySelector('img'),
+    (getSuggestedQuery(
+      container.querySelector('img') as HTMLImageElement,
       'get',
-      'altText',
-    ).toString(),
+      'AltText',
+    ) as Suggestion).toString(),
   ).toEqual(`getByAltText(/the problem \\(picture of a question mark\\)/i)`)
 
-  expect(getSuggestedQuery(container.querySelector('p')).toString()).toEqual(
-    `getByText(/loading \\.\\.\\. \\(1\\)/i)`,
-  )
+  expect(
+    (getSuggestedQuery(
+      container.querySelector('p') as HTMLParagraphElement,
+    ) as Suggestion).toString(),
+  ).toEqual(`getByText(/loading \\.\\.\\. \\(1\\)/i)`)
 
   expect(
-    getSuggestedQuery(
-      container.querySelector('input'),
+    (getSuggestedQuery(
+      container.querySelector('input') as HTMLInputElement,
       'get',
-      'placeholderText',
-    ).toString(),
+      'PlaceholderText',
+    ) as Suggestion).toString(),
   ).toEqual(`getByPlaceholderText(/should escape \\+\\-'\\(\\//i)`)
 
   expect(
-    getSuggestedQuery(
-      container.querySelector('input'),
+    (getSuggestedQuery(
+      container.querySelector('input') as HTMLInputElement,
       'get',
-      'displayValue',
-    ).toString(),
+      'DisplayValue',
+    ) as Suggestion).toString(),
   ).toEqual(`getByDisplayValue(/my super string \\+\\-\\('\\{\\}\\^\\$\\)/i)`)
 
   expect(
-    getSuggestedQuery(
-      container.querySelector('input'),
+    (getSuggestedQuery(
+      container.querySelector('input') as HTMLInputElement,
       'get',
-      'labelText',
-    ).toString(),
+      'LabelText',
+    ) as Suggestion).toString(),
   ).toEqual(`getByLabelText(/inp\\-t lab\\^l w\\{th c\\+ars to esc\\\\pe/i)`)
 })
 
@@ -238,7 +241,7 @@ it('should not suggest by label when using by label', async () => {
   )
 
   // if a suggestion is made, this call will throw, thus failing the test.
-  const password = await screen.findByLabelText(/bar/i)
+  const password = (await screen.findByLabelText(/bar/i)) as Element
   expect(password).toHaveAttribute('type', 'password')
 })
 
@@ -316,8 +319,7 @@ test(`should suggest getByDisplayValue`, () => {
   renderIntoDocument(
     `<input type="password" id="password" data-testid="password" />`,
   )
-
-  document.getElementById('password').value = 'Prine' // RIP John Prine
+  ;(document.getElementById('password') as HTMLInputElement).value = 'Prine' // RIP John Prine
 
   expect(() => screen.getByTestId('password')).toThrowError(
     /getByDisplayValue\(\/prine\/i\)/,
@@ -375,23 +377,35 @@ test(`should suggest getByTitle`, () => {
 })
 
 test('getSuggestedQuery handles `variant` and defaults to `get`', () => {
-  const button = render(`<button>submit</button>`).container.firstChild
+  const button = render(`<button>submit</button>`).container
+    .firstChild as HTMLButtonElement
 
-  expect(getSuggestedQuery(button).toString()).toMatch(/getByRole/)
-  expect(getSuggestedQuery(button, 'get').toString()).toMatch(/getByRole/)
-  expect(getSuggestedQuery(button, 'getAll').toString()).toMatch(/getAllByRole/)
-  expect(getSuggestedQuery(button, 'query').toString()).toMatch(/queryByRole/)
-  expect(getSuggestedQuery(button, 'queryAll').toString()).toMatch(
-    /queryAllByRole/,
+  expect((getSuggestedQuery(button) as Suggestion).toString()).toMatch(
+    /getByRole/,
   )
-  expect(getSuggestedQuery(button, 'find').toString()).toMatch(/findByRole/)
-  expect(getSuggestedQuery(button, 'findAll').toString()).toMatch(
-    /findAllByRole/,
+  expect((getSuggestedQuery(button, 'get') as Suggestion).toString()).toMatch(
+    /getByRole/,
   )
+  expect(
+    (getSuggestedQuery(button, 'getAll') as Suggestion).toString(),
+  ).toMatch(/getAllByRole/)
+  expect((getSuggestedQuery(button, 'query') as Suggestion).toString()).toMatch(
+    /queryByRole/,
+  )
+  expect(
+    (getSuggestedQuery(button, 'queryAll') as Suggestion).toString(),
+  ).toMatch(/queryAllByRole/)
+  expect((getSuggestedQuery(button, 'find') as Suggestion).toString()).toMatch(
+    /findByRole/,
+  )
+  expect(
+    (getSuggestedQuery(button, 'findAll') as Suggestion).toString(),
+  ).toMatch(/findAllByRole/)
 })
 
 test('getSuggestedQuery returns rich data for tooling', () => {
-  const button = render(`<button>submit</button>`).container.firstChild
+  const button = render(`<button>submit</button>`).container
+    .firstChild as HTMLButtonElement
 
   expect(getSuggestedQuery(button)).toMatchObject({
     queryName: 'Role',
@@ -400,11 +414,11 @@ test('getSuggestedQuery returns rich data for tooling', () => {
     variant: 'get',
   })
 
-  expect(getSuggestedQuery(button).toString()).toEqual(
+  expect((getSuggestedQuery(button) as Suggestion).toString()).toEqual(
     `getByRole('button', { name: /submit/i })`,
   )
 
-  const div = render(`<a>cancel</a>`).container.firstChild
+  const div = render(`<a>cancel</a>`).container.firstChild as HTMLDivElement
 
   expect(getSuggestedQuery(div)).toMatchObject({
     queryName: 'Text',
@@ -413,7 +427,9 @@ test('getSuggestedQuery returns rich data for tooling', () => {
     variant: 'get',
   })
 
-  expect(getSuggestedQuery(div).toString()).toEqual(`getByText(/cancel/i)`)
+  expect((getSuggestedQuery(div) as Suggestion).toString()).toEqual(
+    `getByText(/cancel/i)`,
+  )
 })
 
 test('getSuggestedQuery can return specified methods in addition to the best', () => {
@@ -432,8 +448,8 @@ test('getSuggestedQuery can return specified methods in addition to the best', (
     <button>button</button>
   `)
 
-  const input = container.querySelector('input')
-  const button = container.querySelector('button')
+  const input = container.querySelector('input') as HTMLInputElement
+  const button = container.querySelector('button') as HTMLButtonElement
 
   // this function should be insensitive for the method param.
   // Role and role should work the same
@@ -515,7 +531,7 @@ test('getSuggestedQuery works with custom testIdAttribute', () => {
     <button>button</button>
   `)
 
-  const input = container.querySelector('input')
+  const input = container.querySelector('input') as HTMLInputElement
 
   expect(getSuggestedQuery(input, 'get', 'TestId')).toMatchObject({
     queryName: 'TestId',
@@ -531,8 +547,8 @@ test('getSuggestedQuery does not create suggestions for script and style element
     <style data-testid="style"></style>
   `)
 
-  const script = container.querySelector('script')
-  const style = container.querySelector('style')
+  const script = container.querySelector('script') as HTMLScriptElement
+  const style = container.querySelector('style') as HTMLStyleElement
 
   expect(getSuggestedQuery(script, 'get', 'TestId')).toBeUndefined()
   expect(getSuggestedQuery(style, 'get', 'TestId')).toBeUndefined()
@@ -552,7 +568,11 @@ test('should get the first label with aria-labelledby contains multiple ids', ()
   `)
 
   expect(
-    getSuggestedQuery(container.querySelector('input'), 'get', 'labelText'),
+    getSuggestedQuery(
+      container.querySelector('input') as HTMLInputElement,
+      'get',
+      'LabelText',
+    ),
   ).toMatchObject({
     queryName: 'LabelText',
     queryMethod: 'getByLabelText',
@@ -562,7 +582,7 @@ test('should get the first label with aria-labelledby contains multiple ids', ()
 })
 
 test('should not suggest or warn about hidden element when suggested query is already used.', () => {
-  console.warn.mockImplementation(() => {})
+  ;(console.warn as jest.Mock).mockImplementation(() => {})
 
   renderIntoDocument(`
     <input type="text" aria-hidden=true />
@@ -572,7 +592,7 @@ test('should not suggest or warn about hidden element when suggested query is al
   expect(console.warn).not.toHaveBeenCalled()
 })
 test('should suggest and warn about if element is not in the accessibility tree', () => {
-  console.warn.mockImplementation(() => {})
+  ;(console.warn as jest.Mock).mockImplementation(() => {})
 
   renderIntoDocument(`
     <input type="text" data-testid="foo" aria-hidden=true />
@@ -587,17 +607,17 @@ test('should suggest and warn about if element is not in the accessibility tree'
 })
 
 test('should suggest hidden option if element is not in the accessibility tree', () => {
-  console.warn.mockImplementation(() => {})
+  ;(console.warn as jest.Mock).mockImplementation(() => {})
 
   const {container} = renderIntoDocument(`
     <input type="text" data-testid="foo" aria-hidden=true />
   `)
 
   const suggestion = getSuggestedQuery(
-    container.querySelector('input'),
+    container.querySelector('input') as HTMLInputElement,
     'get',
     'role',
-  )
+  ) as Suggestion
   expect(suggestion).toMatchObject({
     queryName: 'Role',
     queryMethod: 'getByRole',
@@ -609,7 +629,7 @@ test('should suggest hidden option if element is not in the accessibility tree',
   })
   suggestion.toString()
 
-  expect(console.warn.mock.calls).toMatchInlineSnapshot(`
+  expect((console.warn as jest.Mock).mock.calls).toMatchInlineSnapshot(`
     Array [
       Array [
         "Element is inaccessible. This means that the element and all its children are invisible to screen readers.
@@ -634,9 +654,9 @@ test('should find label text using the aria-labelledby', () => {
 
   expect(
     getSuggestedQuery(
-      container.querySelector('[id="sixth-id"]'),
+      container.querySelector('[id="sixth-id"]') as HTMLInputElement,
       'get',
-      'labelText',
+      'LabelText',
     ),
   ).toMatchInlineSnapshot(
     {
