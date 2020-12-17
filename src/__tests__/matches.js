@@ -39,3 +39,8 @@ test('matchers throw on invalid matcher inputs', () => {
     `"It looks like undefined was passed instead of a matcher. Did you do something like getByText(undefined)?"`,
   )
 })
+
+test('should use matchers with numbers', () => {
+  expect(matches('1234', node, 1234, normalizer)).toBe(true)
+  expect(fuzzyMatches('test1234', node, 1234, normalizer)).toBe(true)
+})
