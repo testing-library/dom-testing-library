@@ -1,5 +1,10 @@
 import {TEXT_NODE} from './helpers'
 
+export interface Label {
+  content: string | null
+  formControl: Element | null
+}
+
 const labelledNodeNames = [
   'button',
   'meter',
@@ -55,10 +60,10 @@ function isLabelable(element: Element) {
 }
 
 function getLabels(
-  container: Element,
+  container: Element | Document,
   element: Element,
   {selector = '*'} = {},
-) {
+): Label[] {
   const ariaLabelledBy = element.getAttribute('aria-labelledby')
   const labelsId = ariaLabelledBy ? ariaLabelledBy.split(' ') : []
   return labelsId.length
