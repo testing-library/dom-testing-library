@@ -28,6 +28,12 @@ function escapeRegExp(text: string) {
   return text.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
 
+function isDefinedOption(
+  value: [string, boolean | RegExp | undefined],
+): value is [string, boolean | RegExp] {
+  return value[1] !== undefined
+}
+
 function getRegExpMatcher(text: string) {
   return new RegExp(escapeRegExp(text.toLowerCase()), 'i')
 }
@@ -78,9 +84,8 @@ function makeSuggestion(
 
       const stringifiedOptions = options
         ? `, { ${Object.entries(options)
-            .map(([k, v]) => {
-              return v === undefined ? '' : `${k}: ${v.toString()}`
-            })
+            .filter<[string, boolean | RegExp]>(isDefinedOption)
+            .map(([k, v]) => `${k}: ${v.toString()}`)
             .join(', ')} }`
         : ''
 
