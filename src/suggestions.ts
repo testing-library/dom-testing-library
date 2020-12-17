@@ -1,24 +1,46 @@
 import {computeAccessibleName} from 'dom-accessibility-api'
+import {Method, Variant} from '../types/suggestions'
 import {getDefaultNormalizer} from './matches'
 import {getNodeText} from './get-node-text'
 import {DEFAULT_IGNORE_TAGS, getConfig} from './config'
 import {getImplicitAriaRoles, isInaccessible} from './role-helpers'
 import {getLabels} from './label-helpers'
 
+type SuggestionOptions = {
+  variant: Variant
+  name?: string
+}
+
+type QueryOptions = {
+  name?: RegExp
+  hidden?: boolean
+}
+
+function isInput(element: Element): element is HTMLInputElement {
+  return (element as Element & {value: unknown}).value !== undefined
+}
+
+type QueryArgs = [string | RegExp, QueryOptions?]
+
 const normalize = getDefaultNormalizer()
 
-function escapeRegExp(string) {
-  return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+function escapeRegExp(text: string) {
+  return text.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
 
-function getRegExpMatcher(string) {
-  return new RegExp(escapeRegExp(string.toLowerCase()), 'i')
+function getRegExpMatcher(text: string) {
+  return new RegExp(escapeRegExp(text.toLowerCase()), 'i')
 }
 
-function makeSuggestion(queryName, element, content, {variant, name}) {
+function makeSuggestion(
+  queryName: string,
+  element: Element,
+  content: string,
+  {variant, name}: SuggestionOptions,
+) {
   let warning = ''
-  const queryOptions = {}
-  const queryArgs = [
+  const queryOptions: QueryOptions = {}
+  const queryArgs: QueryArgs = [
     ['Role', 'TestId'].includes(queryName)
       ? content
       : getRegExpMatcher(content),
@@ -50,22 +72,28 @@ function makeSuggestion(queryName, element, content, {variant, name}) {
       if (warning) {
         console.warn(warning)
       }
-      let [text, options] = queryArgs
+      const [text, options] = queryArgs
 
-      text = typeof text === 'string' ? `'${text}'` : text
+      const normalizedText = typeof text === 'string' ? `'${text}'` : text
 
-      options = options
+      const stringifiedOptions = options
         ? `, { ${Object.entries(options)
-            .map(([k, v]) => `${k}: ${v}`)
+            .map(([k, v]) => {
+              return v === undefined ? '' : `${k}: ${v.toString()}`
+            })
             .join(', ')} }`
         : ''
 
-      return `${queryMethod}(${text}${options})`
+      return `${queryMethod}(${normalizedText.toString()}${stringifiedOptions})`
     },
   }
 }
 
-function canSuggest(currentMethod, requestedMethod, data) {
+function canSuggest(
+  currentMethod: string,
+  requestedMethod: string | undefined,
+  data: string | null,
+) {
   return (
     data &&
     (!requestedMethod ||
@@ -73,15 +101,20 @@ function canSuggest(currentMethod, requestedMethod, data) {
   )
 }
 
-export function getSuggestedQuery(element, variant = 'get', method) {
+export function getSuggestedQuery(
+  element: Element,
+  variant: Variant = 'get',
+  method?: Method,
+) {
   // don't create suggestions for script and style elements
   if (element.matches(DEFAULT_IGNORE_TAGS)) {
     return undefined
   }
 
   //We prefer to suggest something else if the role is generic
-  const role =
-    element.getAttribute('role') ?? getImplicitAriaRoles(element)?.[0]
+  const role: string =
+    element.getAttribute('role') ??
+    (getImplicitAriaRoles(element) as string[])[0]
   if (role !== 'generic' && canSuggest('Role', method, role)) {
     return makeSuggestion('Role', element, role, {
       variant,
@@ -101,9 +134,14 @@ export function getSuggestedQuery(element, variant = 'get', method) {
 
   const placeholderText = element.getAttribute('placeholder')
   if (canSuggest('PlaceholderText', method, placeholderText)) {
-    return makeSuggestion('PlaceholderText', element, placeholderText, {
-      variant,
-    })
+    return makeSuggestion(
+      'PlaceholderText',
+      element,
+      placeholderText as string,
+      {
+        variant,
+      },
+    )
   }
 
   const textContent = normalize(getNodeText(element))
@@ -111,7 +149,7 @@ export function getSuggestedQuery(element, variant = 'get', method) {
     return makeSuggestion('Text', element, textContent, {variant})
   }
 
-  if (canSuggest('DisplayValue', method, element.value)) {
+  if (isInput(element) && canSuggest('DisplayValue', method, element.value)) {
     return makeSuggestion('DisplayValue', element, normalize(element.value), {
       variant,
     })
@@ -119,17 +157,17 @@ export function getSuggestedQuery(element, variant = 'get', method) {
 
   const alt = element.getAttribute('alt')
   if (canSuggest('AltText', method, alt)) {
-    return makeSuggestion('AltText', element, alt, {variant})
+    return makeSuggestion('AltText', element, alt as string, {variant})
   }
 
   const title = element.getAttribute('title')
   if (canSuggest('Title', method, title)) {
-    return makeSuggestion('Title', element, title, {variant})
+    return makeSuggestion('Title', element, title as string, {variant})
   }
 
   const testId = element.getAttribute(getConfig().testIdAttribute)
   if (canSuggest('TestId', method, testId)) {
-    return makeSuggestion('TestId', element, testId, {variant})
+    return makeSuggestion('TestId', element, testId as string, {variant})
   }
 
   return undefined
