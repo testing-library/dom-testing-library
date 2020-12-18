@@ -41,7 +41,7 @@ function isSubtreeInaccessible(element: Element) {
   }
 
   const window = element.ownerDocument.defaultView
-  if (window && window.getComputedStyle(element).display === 'none') {
+  if (window?.getComputedStyle(element).display === 'none') {
     return true
   }
 
@@ -68,7 +68,7 @@ function isInaccessible(element: Element, options: InaccessibleOptions = {}) {
   } = options
   const window = element.ownerDocument.defaultView
   // since visibility is inherited we can exit early
-  if (window && window.getComputedStyle(element).visibility === 'hidden') {
+  if (window?.getComputedStyle(element).visibility === 'hidden') {
     return true
   }
 
