@@ -4,7 +4,7 @@ const globalObj = typeof window === 'undefined' ? global : window
 const TEXT_NODE = 3
 
 // Currently this fn only supports jest timers, but it could support other test runners in the future.
-function runWithRealTimers<T>(callback: () => T) {
+function runWithRealTimers<T>(callback: () => T): T {
   const fakeTimersType = getJestFakeTimersType()
   if (fakeTimersType) {
     jest.useRealTimers()
