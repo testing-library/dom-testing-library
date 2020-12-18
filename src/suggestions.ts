@@ -97,9 +97,10 @@ function canSuggest(
   currentMethod: string,
   requestedMethod: string | undefined,
   data: string | null,
-) {
+): data is string {
   return (
-    data &&
+    typeof data === 'string' &&
+    data.length > 0 &&
     (!requestedMethod ||
       requestedMethod.toLowerCase() === currentMethod.toLowerCase())
   )
@@ -137,14 +138,9 @@ export function getSuggestedQuery(
 
   const placeholderText = element.getAttribute('placeholder')
   if (canSuggest('PlaceholderText', method, placeholderText)) {
-    return makeSuggestion(
-      'PlaceholderText',
-      element,
-      placeholderText as string,
-      {
-        variant,
-      },
-    )
+    return makeSuggestion('PlaceholderText', element, placeholderText, {
+      variant,
+    })
   }
 
   const textContent = normalize(getNodeText(element))
@@ -160,17 +156,17 @@ export function getSuggestedQuery(
 
   const alt = element.getAttribute('alt')
   if (canSuggest('AltText', method, alt)) {
-    return makeSuggestion('AltText', element, alt as string, {variant})
+    return makeSuggestion('AltText', element, alt, {variant})
   }
 
   const title = element.getAttribute('title')
   if (canSuggest('Title', method, title)) {
-    return makeSuggestion('Title', element, title as string, {variant})
+    return makeSuggestion('Title', element, title, {variant})
   }
 
   const testId = element.getAttribute(getConfig().testIdAttribute)
   if (canSuggest('TestId', method, testId)) {
-    return makeSuggestion('TestId', element, testId as string, {variant})
+    return makeSuggestion('TestId', element, testId, {variant})
   }
 
   return undefined
