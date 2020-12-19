@@ -97,6 +97,33 @@ cases(
   },
 )
 
+test.each([['getByText'], ['getByLabelText']])(
+  '%s query will print the playground link when enabled in the config',
+  query => {
+    configure({printPlaygroundLink: true})
+    document.body.innerHTML = '<div>Hello</div>'
+    expect(() => screen[query]('TEST QUERY')).toThrow(/playground/i)
+  },
+)
+
+test.each([['getByText'], ['getByLabelText']])(
+  '%s query will NOT print the playground link when disabled in the config',
+  query => {
+    configure({printPlaygroundLink: false})
+    document.body.innerHTML = '<div>Hello</div>'
+    expect(() => screen[query]('TEST QUERY')).not.toThrowError(/playground/i)
+  },
+)
+
+test.each([['getByText'], ['getByLabelText']])(
+  '%s query will NOT print the playground link when element has no children',
+  query => {
+    configure({printPlaygroundLink: true})
+    document.body.innerHTML = ''
+    expect(() => screen[query]('TEST QUERY')).not.toThrowError(/playground/i)
+  },
+)
+
 describe('*ByDisplayValue queries throw an error when there are multiple elements returned', () => {
   test('getByDisplayValue', () => {
     const {getByDisplayValue} = render(

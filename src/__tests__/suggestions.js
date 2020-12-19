@@ -3,7 +3,7 @@ import {screen, getSuggestedQuery} from '..'
 import {renderIntoDocument, render} from './helpers/test-utils'
 
 beforeAll(() => {
-  configure({throwSuggestions: true})
+  configure({throwSuggestions: true, printPlaygroundLink: false})
 })
 
 afterEach(() => {
@@ -107,18 +107,18 @@ test('should suggest getByRole when used with getBy', () => {
   renderIntoDocument(`<button data-testid="foo">submit</button>`)
 
   expect(() => screen.getByTestId('foo')).toThrowErrorMatchingInlineSnapshot(`
-"A better query is available, try this:
-getByRole('button', { name: /submit/i })
+    "A better query is available, try this:
+    getByRole('button', { name: /submit/i })
 
 
-<body>
-  <button
-    data-testid="foo"
-  >
-    submit
-  </button>
-</body>"
-`)
+    <body>
+      <button
+        data-testid="foo"
+      >
+        submit
+      </button>
+    </body>"
+  `)
 })
 
 test('should suggest getAllByRole when used with getAllByTestId', () => {
@@ -128,27 +128,27 @@ test('should suggest getAllByRole when used with getAllByTestId', () => {
 
   expect(() => screen.getAllByTestId('foo'))
     .toThrowErrorMatchingInlineSnapshot(`
-"A better query is available, try this:
-getAllByRole('button', { name: /submit/i })
+    "A better query is available, try this:
+    getAllByRole('button', { name: /submit/i })
 
 
-<body>
-  
-    
-  <button
-    data-testid="foo"
-  >
-    submit
-  </button>
-  
-    
-  <button
-    data-testid="foo"
-  >
-    submit
-  </button>
-</body>"
-`)
+    <body>
+      
+        
+      <button
+        data-testid="foo"
+      >
+        submit
+      </button>
+      
+        
+      <button
+        data-testid="foo"
+      >
+        submit
+      </button>
+    </body>"
+  `)
 })
 test('should suggest findByRole when used with findByTestId', async () => {
   renderIntoDocument(`

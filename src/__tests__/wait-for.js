@@ -11,6 +11,10 @@ function deferred() {
   return {promise, resolve, reject}
 }
 
+beforeAll(() => {
+  configure({printPlaygroundLink: false})
+})
+
 test('waits callback to not throw an error', async () => {
   const spy = jest.fn()
   // we are using random timeout here to simulate a real-time example
