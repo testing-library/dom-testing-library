@@ -188,21 +188,19 @@ test('escapes regular expressions in suggestion', () => {
 
   expect(
     getSuggestedQuery(
-      container.querySelector('img') as HTMLImageElement,
+      container.querySelector('img')!,
       'get',
       'AltText',
     )?.toString(),
   ).toEqual(`getByAltText(/the problem \\(picture of a question mark\\)/i)`)
 
-  expect(
-    getSuggestedQuery(
-      container.querySelector('p') as HTMLParagraphElement,
-    )?.toString(),
-  ).toEqual(`getByText(/loading \\.\\.\\. \\(1\\)/i)`)
+  expect(getSuggestedQuery(container.querySelector('p')!)?.toString()).toEqual(
+    `getByText(/loading \\.\\.\\. \\(1\\)/i)`,
+  )
 
   expect(
     getSuggestedQuery(
-      container.querySelector('input') as HTMLInputElement,
+      container.querySelector('input')!,
       'get',
       'PlaceholderText',
     )?.toString(),
@@ -210,7 +208,7 @@ test('escapes regular expressions in suggestion', () => {
 
   expect(
     getSuggestedQuery(
-      container.querySelector('input') as HTMLInputElement,
+      container.querySelector('input')!,
       'get',
       'DisplayValue',
     )?.toString(),
@@ -218,7 +216,7 @@ test('escapes regular expressions in suggestion', () => {
 
   expect(
     getSuggestedQuery(
-      container.querySelector('input') as HTMLInputElement,
+      container.querySelector('input')!,
       'get',
       'LabelText',
     )?.toString(),
@@ -437,9 +435,8 @@ test('getSuggestedQuery can return specified methods in addition to the best', (
     <button>button</button>
   `)
 
-  const input = container.querySelector('input') as HTMLInputElement
-  const button = container.querySelector('button') as HTMLButtonElement
-
+  const input = container.querySelector('input')!
+  const button = container.querySelector('button')!
   // this function should be insensitive for the method param.
   // Role and role should work the same
   expect(getSuggestedQuery(input, 'get', 'role')).toMatchObject({
@@ -520,7 +517,7 @@ test('getSuggestedQuery works with custom testIdAttribute', () => {
     <button>button</button>
   `)
 
-  const input = container.querySelector('input') as HTMLInputElement
+  const input = container.querySelector('input')!
 
   expect(getSuggestedQuery(input, 'get', 'TestId')).toMatchObject({
     queryName: 'TestId',
@@ -536,8 +533,8 @@ test('getSuggestedQuery does not create suggestions for script and style element
     <style data-testid="style"></style>
   `)
 
-  const script = container.querySelector('script') as HTMLScriptElement
-  const style = container.querySelector('style') as HTMLStyleElement
+  const script = container.querySelector('script')!
+  const style = container.querySelector('style')!
 
   expect(getSuggestedQuery(script, 'get', 'TestId')).toBeUndefined()
   expect(getSuggestedQuery(style, 'get', 'TestId')).toBeUndefined()
@@ -557,11 +554,7 @@ test('should get the first label with aria-labelledby contains multiple ids', ()
   `)
 
   expect(
-    getSuggestedQuery(
-      container.querySelector('input') as HTMLInputElement,
-      'get',
-      'LabelText',
-    ),
+    getSuggestedQuery(container.querySelector('input')!, 'get', 'LabelText'),
   ).toMatchObject({
     queryName: 'LabelText',
     queryMethod: 'getByLabelText',
@@ -603,7 +596,7 @@ test('should suggest hidden option if element is not in the accessibility tree',
   `)
 
   const suggestion = getSuggestedQuery(
-    container.querySelector('input') as HTMLInputElement,
+    container.querySelector('input')!,
     'get',
     'role',
   )
@@ -643,7 +636,7 @@ test('should find label text using the aria-labelledby', () => {
 
   expect(
     getSuggestedQuery(
-      container.querySelector('[id="sixth-id"]') as HTMLInputElement,
+      container.querySelector('[id="sixth-id"]')!,
       'get',
       'LabelText',
     ),
