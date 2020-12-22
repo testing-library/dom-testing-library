@@ -31,8 +31,10 @@ function fuzzyMatches(
 
   const normalizedText = normalizer(textToMatch)
 
-  if (typeof matcher === 'string') {
-    return normalizedText.toLowerCase().includes(matcher.toLowerCase())
+  if (typeof matcher === 'string' || typeof matcher === 'number') {
+    return normalizedText
+      .toLowerCase()
+      .includes(matcher.toString().toLowerCase())
   } else if (typeof matcher === 'function') {
     return matcher(normalizedText, node)
   } else {
