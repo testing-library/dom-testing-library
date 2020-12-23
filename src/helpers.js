@@ -35,10 +35,7 @@ function getJestFakeTimersType() {
     return 'legacy'
   }
 
-  if (
-    typeof globalObj.setTimeout.clock !== 'undefined' &&
-    typeof jest.getRealSystemTime !== 'undefined'
-  ) {
+  if (typeof jest.getRealSystemTime !== 'undefined') {
     try {
       // jest.getRealSystemTime is only supported for Jest's `modern` fake timers and otherwise throws
       jest.getRealSystemTime()
