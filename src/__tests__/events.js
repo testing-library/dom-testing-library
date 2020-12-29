@@ -358,6 +358,22 @@ test('assigns clipboardData properties', () => {
   expect(clipboardData.getData('text')).toBe('example')
 })
 
+test('assigns TransitionEvent init properties', () => {
+  const node = document.createElement('div')
+  const spy = jest.fn()
+  node.addEventListener('transitionend', spy)
+  const transitionEventInit = {
+    propertyName: 'opacity',
+    elapsedTime: 100,
+    pseudoElement: '',
+  }
+  fireEvent.transitionEnd(node, transitionEventInit)
+  expect(spy).toHaveBeenCalledTimes(1)
+  expect(spy.mock.calls[0][0]).toEqual(
+    expect.objectContaining(transitionEventInit),
+  )
+})
+
 test('fires events on Window', () => {
   const messageSpy = jest.fn()
   window.addEventListener('message', messageSpy)
