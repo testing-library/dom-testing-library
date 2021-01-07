@@ -231,6 +231,10 @@ cases(
         <input id="username" />`,
       queryFn: 'queryAllByLabelText',
     },
+    queryAllByAriaLabelText: {
+      dom: `<div aria-label="User ${LRM}name"/>`,
+      queryFn: 'queryAllByLabelText',
+    },
     queryAllByPlaceholderText: {
       dom: `<input placeholder="User ${LRM}name" />`,
       queryFn: 'queryAllByPlaceholderText',
