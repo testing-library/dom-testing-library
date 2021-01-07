@@ -91,7 +91,12 @@ function queryAllByLabelText(
 
       return labelledElements
     }, [])
-    .concat(queryAllByAttribute('aria-label', container, text, {exact}))
+    .concat(
+      queryAllByAttribute('aria-label', container, text, {
+        exact,
+        normalizer: matchNormalizer,
+      }),
+    )
 
   return Array.from(new Set(matchingLabelledElements)).filter(element =>
     element.matches(selector),
