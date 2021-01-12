@@ -1311,6 +1311,15 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "nathanforce",
+      "name": "Nathan Force",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6694194?v=4",
+      "profile": "https://github.com/nathanforce",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
