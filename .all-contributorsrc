@@ -1301,6 +1301,16 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "AriPerkkio",
+      "name": "Ari Perkkiö",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/14806298?v=4",
+      "profile": "https://codepen.io/ariperkkio/",
+      "contributions": [
+        "bug",
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
