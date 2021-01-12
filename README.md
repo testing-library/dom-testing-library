@@ -302,6 +302,9 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/johnjesse"><img src="https://avatars1.githubusercontent.com/u/6839660?v=4?s=100" width="100px;" alt=""/><br /><sub><b>johnjessewood</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3Ajohnjesse" title="Bug reports">🐛</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=johnjesse" title="Code">💻</a></td>
     <td align="center"><a href="https://codepen.io/ariperkkio/"><img src="https://avatars2.githubusercontent.com/u/14806298?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ari Perkkiö</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3AAriPerkkio" title="Bug reports">🐛</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=AriPerkkio" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/nathanforce"><img src="https://avatars2.githubusercontent.com/u/6694194?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nathan Force</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=nathanforce" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
