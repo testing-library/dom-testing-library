@@ -96,3 +96,78 @@ test('byRole works without a global DOM', () => {
     </button>
   `)
 })
+
+test('findBy works without a global DOM', async () => {
+  const {window} = new JSDOM(`<div>
+    <div data-testid="test-id" aria-label="test-label">test text content</div>
+    <select><option>display value</option></select>
+    <input placeholder="placeholder" />
+    <img alt="test alt text" src="/lucy-ricardo.png" />
+    <span title="test title" />
+    <div role="dialog"></div>
+    <div role="meter progressbar"></div>
+    <header>header</header>
+    <input type="hidden" />
+  </div>`)
+
+  await expect(
+    dtl.findByLabelText(window.document, 'test-label'),
+  ).resolves.toBeTruthy()
+  await expect(
+    dtl.findAllByLabelText(window.document, 'test-label'),
+  ).resolves.toHaveLength(1)
+  await expect(
+    dtl.findByPlaceholderText(window.document, 'placeholder'),
+  ).resolves.toBeTruthy()
+  await expect(
+    dtl.findAllByPlaceholderText(window.document, 'placeholder'),
+  ).resolves.toHaveLength(1)
+  await expect(
+    dtl.findByText(window.document, 'test text content'),
+  ).resolves.toBeTruthy()
+  await expect(
+    dtl.findAllByText(window.document, 'test text content'),
+  ).resolves.toHaveLength(1)
+  await expect(
+    dtl.findByAltText(window.document, 'test alt text'),
+  ).resolves.toBeTruthy()
+  await expect(
+    dtl.findAllByAltText(window.document, 'test alt text'),
+  ).resolves.toHaveLength(1)
+  await expect(
+    dtl.findByTitle(window.document, 'test title'),
+  ).resolves.toBeTruthy()
+  await expect(
+    dtl.findAllByTitle(window.document, 'test title'),
+  ).resolves.toHaveLength(1)
+  await expect(
+    dtl.findByDisplayValue(window.document, 'display value'),
+  ).resolves.toBeTruthy()
+  await expect(
+    dtl.findAllByDisplayValue(window.document, 'display value'),
+  ).resolves.toHaveLength(1)
+  await expect(dtl.findByRole(window.document, 'dialog')).resolves.toBeTruthy()
+  await expect(
+    dtl.findAllByRole(window.document, 'dialog'),
+  ).resolves.toHaveLength(1)
+  await expect(dtl.findByRole(window.document, 'meter')).resolves.toBeTruthy()
+  await expect(
+    dtl.findAllByRole(window.document, 'meter'),
+  ).resolves.toHaveLength(1)
+  await expect(
+    dtl.findByRole(window.document, 'progressbar', {queryFallbacks: true}),
+  ).resolves.toBeTruthy()
+  await expect(
+    dtl.findAllByRole(window.document, 'progressbar', {queryFallbacks: true}),
+  ).resolves.toHaveLength(1)
+  await expect(dtl.findByRole(window.document, 'banner')).resolves.toBeTruthy()
+  await expect(
+    dtl.findAllByRole(window.document, 'banner'),
+  ).resolves.toHaveLength(1)
+  await expect(
+    dtl.findByTestId(window.document, 'test-id'),
+  ).resolves.toBeTruthy()
+  await expect(
+    dtl.findAllByTestId(window.document, 'test-id'),
+  ).resolves.toHaveLength(1)
+})
