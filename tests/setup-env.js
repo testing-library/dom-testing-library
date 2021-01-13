@@ -1,6 +1,8 @@
 import '@testing-library/jest-dom/extend-expect'
 import jestSerializerAnsi from 'jest-serializer-ansi'
 
+import {configure} from '../src/config'
+
 expect.addSnapshotSerializer(jestSerializerAnsi)
 // add serializer for MutationRecord
 expect.addSnapshotSerializer({
@@ -34,6 +36,10 @@ beforeAll(() => {
     }
     originalWarn(...args)
   })
+})
+
+beforeEach(() => {
+  configure({printPlaygroundLink: false})
 })
 
 afterEach(() => {

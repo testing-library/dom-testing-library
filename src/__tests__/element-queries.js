@@ -2,7 +2,6 @@ import {configure} from '../config'
 import {render, renderIntoDocument} from './helpers/test-utils'
 
 beforeEach(() => {
-  configure({printPlaygroundLink: false})
   document.defaultView.Cypress = null
 })
 

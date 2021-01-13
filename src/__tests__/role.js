@@ -2,10 +2,6 @@ import {configure, getConfig} from '../config'
 import {getQueriesForElement} from '../get-queries-for-element'
 import {render, renderIntoDocument} from './helpers/test-utils'
 
-beforeAll(() => {
-  configure({printPlaygroundLink: false})
-})
-
 test('by default logs accessible roles when it fails', () => {
   const {getByRole} = render(`<h1>Hi</h1>`)
   expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
