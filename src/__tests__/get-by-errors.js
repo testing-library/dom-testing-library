@@ -102,7 +102,7 @@ test.each([['getByText'], ['getByLabelText']])(
   query => {
     configure({printPlaygroundLink: true})
     document.body.innerHTML = '<div>Hello</div>'
-    expect(() => screen[query]('TEST QUERY')).toThrow(/playground/i)
+    expect(() => screen[query]('TEST QUERY')).toThrowErrorMatchingSnapshot()
   },
 )
 
