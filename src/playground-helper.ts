@@ -10,19 +10,13 @@ function encode(value: string) {
   return compressToEncodedURIComponent(unindent(value))
 }
 
-function getPlaygroundUrl(element: Element | null, logErrors = true) {
+function getPlaygroundUrl(element: Element | null) {
   if (!element || !('innerHTML' in element)) {
-    if (logErrors) {
-      console.log(`The element you're providing isn't a valid DOM element.`)
-    }
-    return null
+    throw new Error(`The element you're providing isn't a valid DOM element.`)
   }
 
   if (!element.innerHTML) {
-    if (logErrors) {
-      console.log(`The provided element doesn't have any children.`)
-    }
-    return null
+    throw new Error(`The provided element doesn't have any children.`)
   }
 
   return `https://testing-playground.com/#markup=${encode(element.innerHTML)}`

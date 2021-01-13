@@ -32,10 +32,17 @@ let config: InternalConfig = {
 
   // called when getBy* queries fail. (message, container) => Error
   getElementError(message, container) {
-    const playgroundUrl =
-      message &&
-      getConfig().printPlaygroundLink &&
-      getPlaygroundUrl(container, false)
+    const playgroundUrl = (() => {
+      try {
+        return (
+          message &&
+          getConfig().printPlaygroundLink &&
+          getPlaygroundUrl(container)
+        )
+      } catch {
+        return null
+      }
+    })()
 
     const error = new Error(
       [

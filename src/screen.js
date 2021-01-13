@@ -10,9 +10,11 @@ const debug = (element, maxLength, options) =>
     : logDOM(element, maxLength, options)
 
 const logTestingPlaygroundURL = (element = getDocument().body) => {
-  const url = getPlaygroundUrl(element)
-  if (url) {
+  try {
+    const url = getPlaygroundUrl(element)
     console.log(`Open this URL in your browser\n\n${url}`)
+  } catch (e) {
+    console.log(e.message)
   }
 }
 
