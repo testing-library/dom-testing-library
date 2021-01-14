@@ -1,8 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 import jestSerializerAnsi from 'jest-serializer-ansi'
 
-import {configure} from '../src/config'
-
 expect.addSnapshotSerializer(jestSerializerAnsi)
 // add serializer for MutationRecord
 expect.addSnapshotSerializer({
@@ -39,7 +37,10 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-  configure({printPlaygroundLink: false})
+  // Using require here instead of importing it at the top, because the import resulted in
+  // a function being used before a test had the chance to mock it.
+  // https://github.com/testing-library/dom-testing-library/pull/852#discussion_r557077851
+  require('../src/config').configure({printPlaygroundLink: false})
 })
 
 afterEach(() => {
