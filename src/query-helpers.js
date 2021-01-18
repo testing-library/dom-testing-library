@@ -90,10 +90,14 @@ function makeGetAllQuery(allQuery, getMissingError) {
 // this accepts a getter query function and returns a function which calls
 // waitFor and passing a function which invokes the getter.
 function makeFindQuery(getter) {
-  return (container, text, options, waitForOptions) =>
-    waitFor(() => {
-      return getter(container, text, options)
-    }, waitForOptions)
+  return (container, text, options, waitForOptions) => {
+    return waitFor(
+      () => {
+        return getter(container, text, options)
+      },
+      {container, ...waitForOptions},
+    )
+  }
 }
 
 const wrapSingleQueryWithSuggestion = (query, queryAllByName, variant) => (

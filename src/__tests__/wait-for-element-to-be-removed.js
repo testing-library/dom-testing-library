@@ -42,6 +42,20 @@ test('requires an element to exist first', () => {
   )
 })
 
+test("requires element's parent to exist first", () => {
+  const {getByTestId} = renderIntoDocument(`
+  <div data-testid="div">asd</div>
+`)
+  const div = getByTestId('div')
+  div.parentElement.removeChild(div)
+
+  return expect(
+    waitForElementToBeRemoved(div),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"The element(s) given to waitForElementToBeRemoved are already removed. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
+  )
+})
+
 test('requires an unempty array of elements to exist first', () => {
   return expect(
     waitForElementToBeRemoved([]),
