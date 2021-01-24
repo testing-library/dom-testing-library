@@ -16,7 +16,7 @@ export type Screen<Q extends Queries = typeof queries> = BoundFunctions<Q> & {
    * Convenience function for `Testing Playground` which logs URL that
    * can be opened in a browser
    */
-  logTestingPlaygroundURL: (element?: Element | HTMLDocument) => void
+  logTestingPlaygroundURL: (element?: Element) => void
 }
 
 export const screen: Screen
