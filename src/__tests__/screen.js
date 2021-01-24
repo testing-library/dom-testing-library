@@ -46,12 +46,6 @@ test('logs messsage when element is not a valid HTML', () => {
   expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(
     `"The element you're providing isn't a valid DOM element."`,
   )
-  console.log.mockClear()
-  screen.logTestingPlaygroundURL({})
-  expect(console.log).toHaveBeenCalledTimes(1)
-  expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(
-    `"The element you're providing isn't a valid DOM element."`,
-  )
 })
 
 test('logs Playground URL that are passed as element', () => {

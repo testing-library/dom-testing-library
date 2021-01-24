@@ -10,8 +10,9 @@ function encode(value: string) {
   return compressToEncodedURIComponent(unindent(value))
 }
 
-function getPlaygroundUrl(element: Element | null) {
-  if (!element || !('innerHTML' in element)) {
+function getPlaygroundUrl(element: Element) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (!element) {
     throw new Error(`The element you're providing isn't a valid DOM element.`)
   }
 
