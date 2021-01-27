@@ -4,7 +4,7 @@ import {configure, getConfig} from '../config'
 import {render} from './helpers/test-utils'
 
 const originalConfig = getConfig()
-beforeEach(() => {
+afterEach(() => {
   configure(originalConfig)
 })
 
