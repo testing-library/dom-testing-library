@@ -3,7 +3,9 @@ import {
   getWindowFromNode,
   checkContainerType,
   runWithRealTimers,
+  isInstanceOfElement,
 } from '../helpers'
+import {render} from './helpers/test-utils'
 
 const globalObj = typeof window === 'undefined' ? global : window
 
@@ -50,6 +52,90 @@ describe('query container validation throws when validation fails', () => {
     expect(() => checkContainerType({})).toThrowErrorMatchingInlineSnapshot(
       `"Expected container to be an Element, a Document or a DocumentFragment but got Object."`,
     )
+  })
+})
+
+describe('check element type per isInstanceOfElement', () => {
+  let defaultViewDescriptor, spanDescriptor
+  beforeAll(() => {
+    defaultViewDescriptor = Object.getOwnPropertyDescriptor(
+      Object.getPrototypeOf(global.document),
+      'defaultView',
+    )
+    spanDescriptor = Object.getOwnPropertyDescriptor(
+      global.window,
+      'HTMLSpanElement',
+    )
+  })
+  afterEach(() => {
+    Object.defineProperty(
+      Object.getPrototypeOf(global.document),
+      'defaultView',
+      defaultViewDescriptor,
+    )
+    Object.defineProperty(global.window, 'HTMLSpanElement', spanDescriptor)
+  })
+
+  test('check in regular jest environment', () => {
+    const {container} = render(`<span></span>`)
+
+    expect(container.firstChild.ownerDocument.defaultView).toEqual(
+      expect.objectContaining({
+        HTMLSpanElement: expect.any(Function),
+      }),
+    )
+
+    expect(isInstanceOfElement(container.firstChild, 'HTMLSpanElement')).toBe(
+      true,
+    )
+    expect(isInstanceOfElement(container.firstChild, 'HTMLDivElement')).toBe(
+      false,
+    )
+  })
+
+  test('check in detached document', () => {
+    const {container} = render(`<span></span>`)
+
+    Object.defineProperty(
+      Object.getPrototypeOf(container.ownerDocument),
+      'defaultView',
+      {value: null},
+    )
+
+    expect(container.firstChild.ownerDocument.defaultView).toBe(null)
+
+    expect(isInstanceOfElement(container.firstChild, 'HTMLSpanElement')).toBe(
+      true,
+    )
+    expect(isInstanceOfElement(container.firstChild, 'HTMLDivElement')).toBe(
+      false,
+    )
+  })
+
+  test('check in environment not providing constructors on window', () => {
+    const {container} = render(`<span></span>`)
+
+    delete global.window.HTMLSpanElement
+
+    expect(container.firstChild.ownerDocument.defaultView.HTMLSpanElement).toBe(
+      undefined,
+    )
+
+    expect(isInstanceOfElement(container.firstChild, 'HTMLSpanElement')).toBe(
+      true,
+    )
+    expect(isInstanceOfElement(container.firstChild, 'HTMLDivElement')).toBe(
+      false,
+    )
+  })
+
+  test('throw error if element is not created by HTML*Element constructor', () => {
+    const doc = new Document()
+
+    // constructor is global.Element
+    const element = doc.createElement('span')
+
+    expect(() => isInstanceOfElement(element, 'HTMLSpanElement')).toThrow()
   })
 })
 
