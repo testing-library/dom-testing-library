@@ -5,10 +5,6 @@ import {
   runWithRealTimers,
 } from '../helpers'
 
-const globalObj = typeof window === 'undefined' ? global : window
-
-afterEach(() => jest.useRealTimers())
-
 test('returns global document if exists', () => {
   expect(getDocument()).toBe(document)
 })
@@ -53,107 +49,44 @@ describe('query container validation throws when validation fails', () => {
   })
 })
 
-describe('analyze test leak', () => {
+describe('run with real timers', () => {
   const realSetTimeout = global.setTimeout
 
   afterEach(() => {
+    jest.useRealTimers()
     global.setTimeout = realSetTimeout
   })
 
-  test('jest.getRealSystemTime does not throw after modern timers have been used', () => {
-    expect(global.setTimeout).toBe(realSetTimeout)
-
-    expect(jest.getRealSystemTime).toThrow()
-
-    jest.useRealTimers()
-    expect(global.setTimeout).toBe(realSetTimeout)
-
-    jest.useFakeTimers('modern')
-    expect(jest.getRealSystemTime).not.toThrow()
-
-    jest.useRealTimers()
-    expect(global.setTimeout).toBe(realSetTimeout)
-
-    // current implementation assumes this throws
-    // see https://github.com/testing-library/dom-testing-library/blob/5bc93643f312d9ca4210b97681686c9aa8a902d7/src/helpers.js#L43-L45
-    expect(jest.getRealSystemTime).not.toThrow()
-
-    // jest.useRealTimers() is still no problem
-    jest.useRealTimers()
-    expect(global.setTimeout).toBe(realSetTimeout)
+  test('use real timers when timers are faked with jest.useFakeTimers(legacy)', () => {
+    // legacy timers use mocks and do not rely on a clock instance
+    jest.useFakeTimers('legacy')
+    runWithRealTimers(() => {
+      expect(global.setTimeout).toEqual(realSetTimeout)
+    })
+    expect(global.setTimeout._isMockFunction).toBe(true)
+    expect(global.setTimeout.clock).toBeUndefined()
   })
 
-  test('BUG: runWithRealTimers fakes timers after modern fake timers have been used', () => {
+  test('use real timers when timers are faked with jest.useFakeTimers(modern)', () => {
+    // modern timers use a clock instance instead of a mock
     jest.useFakeTimers('modern')
-    jest.useRealTimers()
+    runWithRealTimers(() => {
+      expect(global.setTimeout).toEqual(realSetTimeout)
+    })
+    expect(global.setTimeout._isMockFunction).toBeUndefined()
+    expect(global.setTimeout.clock).toBeDefined()
+  })
 
-    // modern fake timers have been used, but the current timeout is the real one
-    expect(global.setTimeout).toBe(realSetTimeout)
-
-    // repeat the test for the fake implementation
+  test('do not use real timers when timers are not faked with jest.useFakeTimers', () => {
+    // useFakeTimers is not used, timers are faked in some other way
     const fakedSetTimeout = callback => {
       callback()
     }
     fakedSetTimeout.clock = jest.fn()
     global.setTimeout = fakedSetTimeout
 
-    // runWithRealTimers assumes jest.getRealSystemTime() would throw, but it does not
-    // it calls jest.useRealTimers() before the callback - which does nothing because no fake is active
-    // it calls jest.useFakeTimers('modern') after the callback
     runWithRealTimers(() => {
-      expect(fakedSetTimeout).toEqual(globalObj.setTimeout)
+      expect(global.setTimeout).toEqual(fakedSetTimeout)
     })
-
-    // it should be fakedSetTimeout
-    expect(global.setTimeout).not.toBe(fakedSetTimeout)
-
-    // this line makes the bug hard to track down
-    // without it jest.useRealTimers() will restore fakedSetTimeout
-    // with it jest.useRealTimers() 'restores' setTimeout to undefined
-    global.setTimeout = realSetTimeout
-
-    // now useRealTimers is broken
-    jest.useRealTimers()
-    expect(global.setTimeout).not.toBe(realSetTimeout)
   })
-})
-
-test('should always use realTimers before using callback when timers are faked with useFakeTimers', () => {
-  const originalSetTimeout = globalObj.setTimeout
-
-  // legacy timers use mocks and do not rely on a clock instance
-  jest.useFakeTimers('legacy')
-  runWithRealTimers(() => {
-    expect(originalSetTimeout).toEqual(globalObj.setTimeout)
-  })
-  expect(globalObj.setTimeout._isMockFunction).toBe(true)
-  expect(globalObj.setTimeout.clock).toBeUndefined()
-
-  jest.useRealTimers()
-
-  // modern timers use a clock instance instead of a mock
-  jest.useFakeTimers('modern')
-  runWithRealTimers(() => {
-    expect(originalSetTimeout).toEqual(globalObj.setTimeout)
-  })
-  expect(globalObj.setTimeout._isMockFunction).toBeUndefined()
-  expect(globalObj.setTimeout.clock).toBeDefined()
-})
-
-test('should not use realTimers when timers are not faked with useFakeTimers', () => {
-  const originalSetTimeout = globalObj.setTimeout
-
-  // useFakeTimers is not used, timers are faked in some other way
-  const fakedSetTimeout = callback => {
-    callback()
-  }
-  fakedSetTimeout.clock = jest.fn()
-
-  globalObj.setTimeout = fakedSetTimeout
-
-  runWithRealTimers(() => {
-    expect(fakedSetTimeout).toEqual(globalObj.setTimeout)
-  })
-
-  globalObj.setTimeout = originalSetTimeout
 })
