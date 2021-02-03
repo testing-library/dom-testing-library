@@ -60,72 +60,60 @@ describe('analyze test leak', () => {
     global.setTimeout = realSetTimeout
   })
 
-  const testFake = () => {
-    const originalSetTimeout = globalObj.setTimeout
+  test('jest.getRealSystemTime does not throw after modern timers have been used', () => {
+    expect(global.setTimeout).toBe(realSetTimeout)
 
-    // useFakeTimers is not used, timers are faked in some other way
+    expect(jest.getRealSystemTime).toThrow()
+
+    jest.useRealTimers()
+    expect(global.setTimeout).toBe(realSetTimeout)
+
+    jest.useFakeTimers('modern')
+    expect(jest.getRealSystemTime).not.toThrow()
+
+    jest.useRealTimers()
+    expect(global.setTimeout).toBe(realSetTimeout)
+
+    // current implementation assumes this throws
+    // see https://github.com/testing-library/dom-testing-library/blob/5bc93643f312d9ca4210b97681686c9aa8a902d7/src/helpers.js#L43-L45
+    expect(jest.getRealSystemTime).not.toThrow()
+
+    // jest.useRealTimers() is still no problem
+    jest.useRealTimers()
+    expect(global.setTimeout).toBe(realSetTimeout)
+  })
+
+  test('BUG: runWithRealTimers fakes timers after modern fake timers have been used', () => {
+    jest.useFakeTimers('modern')
+    jest.useRealTimers()
+
+    // modern fake timers have been used, but the current timeout is the real one
+    expect(global.setTimeout).toBe(realSetTimeout)
+
+    // repeat the test for the fake implementation
     const fakedSetTimeout = callback => {
       callback()
     }
     fakedSetTimeout.clock = jest.fn()
+    global.setTimeout = fakedSetTimeout
 
-    globalObj.setTimeout = fakedSetTimeout
-
+    // runWithRealTimers assumes jest.getRealSystemTime() would throw, but it does not
+    // it calls jest.useRealTimers() before the callback - which does nothing because no fake is active
+    // it calls jest.useFakeTimers('modern') after the callback
     runWithRealTimers(() => {
       expect(fakedSetTimeout).toEqual(globalObj.setTimeout)
     })
 
-    globalObj.setTimeout = originalSetTimeout
-  }
+    // it should be fakedSetTimeout
+    expect(global.setTimeout).not.toBe(fakedSetTimeout)
 
-  test('jest.useRealTimers is safe to call after testFake code', () => {
-    expect(global.setTimeout).toBe(realSetTimeout)
+    // this line makes the bug hard to track down
+    // without it jest.useRealTimers() will restore fakedSetTimeout
+    // with it jest.useRealTimers() 'restores' setTimeout to undefined
+    global.setTimeout = realSetTimeout
 
-    testFake()
-    expect(global.setTimeout).toBe(realSetTimeout)
-
+    // now useRealTimers is broken
     jest.useRealTimers()
-    expect(global.setTimeout).toBe(realSetTimeout)
-  })
-
-  test('jest.useRealTimers is safe to call after legacy fake timer and testFake code', () => {
-    expect(global.setTimeout).toBe(realSetTimeout)
-
-    jest.useFakeTimers('legacy')
-    expect(global.setTimeout).not.toBe(realSetTimeout)
-
-    runWithRealTimers(() => {
-      expect(global.setTimeout).toBe(realSetTimeout)
-    })
-
-    jest.useRealTimers()
-    expect(global.setTimeout).toBe(realSetTimeout)
-
-    testFake()
-    expect(global.setTimeout).toBe(realSetTimeout)
-
-    jest.useRealTimers()
-    expect(global.setTimeout).toBe(realSetTimeout)
-  })
-
-  test('FAIL: jest.useRealTimers is safe to call after modern fake timers and testFake code', () => {
-    expect(global.setTimeout).toBe(realSetTimeout)
-
-    jest.useFakeTimers('modern')
-    expect(global.setTimeout).not.toBe(realSetTimeout)
-
-    runWithRealTimers(() => {
-      expect(global.setTimeout).toBe(realSetTimeout)
-    })
-
-    jest.useRealTimers()
-    expect(global.setTimeout).toBe(realSetTimeout)
-
-    testFake()
-    expect(global.setTimeout).toBe(realSetTimeout)
-
-    jest.useRealTimers()
-    // THIS SHOULD BE REAL - pre-commit-hook doesn't allow to commit failing tests :(
     expect(global.setTimeout).not.toBe(realSetTimeout)
   })
 })
