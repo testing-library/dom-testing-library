@@ -53,6 +53,87 @@ describe('query container validation throws when validation fails', () => {
   })
 })
 
+describe('analyze test leak', () => {
+  const realSetTimeout = global.setTimeout
+
+  afterEach(() => {
+    global.setTimeout = realSetTimeout
+  })
+
+  const testReal = () => {
+    const originalSetTimeout = globalObj.setTimeout
+
+    // legacy timers use mocks and do not rely on a clock instance
+    jest.useFakeTimers('legacy')
+    runWithRealTimers(() => {
+      expect(originalSetTimeout).toEqual(globalObj.setTimeout)
+    })
+    expect(globalObj.setTimeout._isMockFunction).toBe(true)
+    expect(globalObj.setTimeout.clock).toBeUndefined()
+
+    jest.useRealTimers()
+
+    // modern timers use a clock instance instead of a mock
+    jest.useFakeTimers('modern')
+    runWithRealTimers(() => {
+      expect(originalSetTimeout).toEqual(globalObj.setTimeout)
+    })
+    expect(globalObj.setTimeout._isMockFunction).toBeUndefined()
+    expect(globalObj.setTimeout.clock).toBeDefined()
+  }
+  const testFake = () => {
+    const originalSetTimeout = globalObj.setTimeout
+
+    // useFakeTimers is not used, timers are faked in some other way
+    const fakedSetTimeout = callback => {
+      callback()
+    }
+    fakedSetTimeout.clock = jest.fn()
+
+    globalObj.setTimeout = fakedSetTimeout
+
+    runWithRealTimers(() => {
+      expect(fakedSetTimeout).toEqual(globalObj.setTimeout)
+    })
+
+    globalObj.setTimeout = originalSetTimeout
+  }
+
+  test('jest.useRealTimers is safe to call', () => {
+    expect(global.setTimeout).toBe(realSetTimeout)
+
+    jest.useRealTimers()
+    expect(global.setTimeout).toBe(realSetTimeout)
+  })
+
+  test('jest.useRealTimers is safe to call after test code', () => {
+    expect(global.setTimeout).toBe(realSetTimeout)
+
+    testFake()
+    expect(global.setTimeout).toBe(realSetTimeout)
+
+    jest.useRealTimers()
+    expect(global.setTimeout).toBe(realSetTimeout)
+  })
+
+  test('jest.useRealTimers is not safe to call after both test codes', () => {
+    expect(global.setTimeout).toBe(realSetTimeout)
+
+    testReal()
+    expect(global.setTimeout).not.toBe(realSetTimeout)
+
+    jest.useRealTimers()
+    expect(global.setTimeout).toBe(realSetTimeout)
+
+    testFake()
+    expect(global.setTimeout).toBe(realSetTimeout)
+
+    jest.useRealTimers()
+    // THIS SHOULD BE REAL - pre-commit-hook doesn't allow to commit failing tests :(
+    expect(global.setTimeout).not.toBe(realSetTimeout)
+  })
+})
+
 test('should always use realTimers before using callback when timers are faked with useFakeTimers', () => {
   const originalSetTimeout = globalObj.setTimeout
 
