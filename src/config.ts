@@ -11,6 +11,7 @@ interface InternalConfig extends Config {
 // './queries' are query functions.
 let config: InternalConfig = {
   testIdAttribute: 'data-testid',
+  idAttribute: 'id',
   asyncUtilTimeout: 1000,
   // this is to support React's async `act` function.
   // forcing react-testing-library to wrap all async functions would've been

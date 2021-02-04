@@ -13,6 +13,14 @@ test('waits for element to appear in the document', async () => {
   expect(element).toBeInTheDocument()
 })
 
+test('waits for element to appear in the document when getting by id', async () => {
+  const {rerender, getById} = renderIntoDocument('<div />')
+  const promise = waitForElement(() => getById('div'))
+  setTimeout(() => rerender('<div id="div" />'))
+  const element = await promise
+  expect(element).toBeInTheDocument()
+})
+
 test('can time out', async () => {
   await expect(waitForElement(() => {}, {timeout: 1})).rejects.toThrow(
     /timed out/i,
@@ -23,6 +31,14 @@ test('waits for element to appear in a specified container', async () => {
   const {rerender, container, getByTestId} = render('<div />')
   const promise = waitForElement(() => getByTestId('div'), {container})
   setTimeout(() => rerender('<div data-testid="div" />'))
+  const element = await promise
+  expect(element).toBeTruthy()
+})
+
+test('waits for element to appear in a specified container when getting by id', async () => {
+  const {rerender, container, getById} = render('<div />')
+  const promise = waitForElement(() => getById('div'), {container})
+  setTimeout(() => rerender('<div id="div" />'))
   const element = await promise
   expect(element).toBeTruthy()
 })

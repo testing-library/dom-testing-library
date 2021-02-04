@@ -43,6 +43,10 @@ cases(
       query: /his/,
       html: `<div data-testid="his"></div><div data-testid="history"></div>`,
     },
+    getById: {
+      query: /his/,
+      html: `<div id="his"></div><div id="history"></div>`,
+    },
   },
 )
 

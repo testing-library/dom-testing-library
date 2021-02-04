@@ -193,3 +193,9 @@ export const queryByTestId: QueryByBoundAttribute
 export const queryAllByTestId: AllByBoundAttribute
 export const findByTestId: FindByBoundAttribute
 export const findAllByTestId: FindAllByBoundAttribute
+export const getById: GetByBoundAttribute
+export const getAllById: AllByBoundAttribute
+export const queryBytId: QueryByBoundAttribute
+export const queryAllById: AllByBoundAttribute
+export const findById: FindByBoundAttribute
+export const findAllById: FindAllByBoundAttribute

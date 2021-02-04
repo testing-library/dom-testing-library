@@ -34,6 +34,17 @@ test('resolves on mutation if callback throws an error', async () => {
   await waitForElementToBeRemoved(() => getByTestId('div'), {timeout: 100})
 })
 
+test('when getting by id resolves on mutation if callback throws an error', async () => {
+  const {getById} = renderIntoDocument(`
+  <div id="div"></div>
+`)
+  const div = getById('div')
+  setTimeout(() => {
+    div.parentElement.removeChild(div)
+  })
+  await waitForElementToBeRemoved(() => getById('div'), {timeout: 100})
+})
+
 test('requires an element to exist first', () => {
   return expect(
     waitForElementToBeRemoved(null),
@@ -47,6 +58,20 @@ test("requires element's parent to exist first", () => {
   <div data-testid="div">asd</div>
 `)
   const div = getByTestId('div')
+  div.parentElement.removeChild(div)
+
+  return expect(
+    waitForElementToBeRemoved(div),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"The element(s) given to waitForElementToBeRemoved are already removed. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal."`,
+  )
+})
+
+test("when getting by id requires element's parent to exist first", () => {
+  const {getById} = renderIntoDocument(`
+  <div id="div">asd</div>
+`)
+  const div = getById('div')
   div.parentElement.removeChild(div)
 
   return expect(
@@ -86,6 +111,18 @@ test('after successful removal, fullfills promise with empty value (undefined)',
 `)
   const div = getByTestId('div')
   const waitResult = waitForElementToBeRemoved(() => getByTestId('div'), {
+    timeout: 100,
+  })
+  div.parentElement.removeChild(div)
+  return expect(waitResult).resolves.toBeUndefined()
+})
+
+test('when getting by id after successful removal, fullfills promise with empty value (undefined)', () => {
+  const {getById} = renderIntoDocument(`
+  <div id="div"></div>
+`)
+  const div = getById('div')
+  const waitResult = waitForElementToBeRemoved(() => getById('div'), {
     timeout: 100,
   })
   div.parentElement.removeChild(div)

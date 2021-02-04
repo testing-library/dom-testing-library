@@ -8,6 +8,7 @@ beforeAll(() => {
 
 afterEach(() => {
   configure({testIdAttribute: 'data-testid'})
+  configure({idAttribute: 'id'})
   console.warn.mockClear()
 })
 
@@ -32,6 +33,15 @@ test('does not suggest for inline script, style', () => {
   expect(() => screen.getByTestId('style')).not.toThrow()
 })
 
+test('finding by id does not suggest for inline script, style', () => {
+  renderIntoDocument(
+    `<script id="script">alert('hello')</script><style id="style">.hsuHs{margin:auto}.wFncld{margin-top:3px;color:#9AA0A6;height:20px;width:20px}</style>`,
+  )
+
+  expect(() => screen.getById('script')).not.toThrow()
+  expect(() => screen.getById('style')).not.toThrow()
+})
+
 test('respects ignores', () => {
   renderIntoDocument(`<my-thing>foo</my-thing>`)
 
@@ -50,6 +60,18 @@ test('does not suggest query that would give a different element', () => {
   expect(() => screen.getByTestId('foo')).not.toThrowError()
   expect(() => screen.getByTestId('bar')).not.toThrowError()
   expect(() => screen.getByTestId('baz')).not.toThrowError()
+})
+
+test('finding by id does not suggest query that would give a different element', () => {
+  renderIntoDocument(`
+  <div id="foo"><img src="foo" /></div>
+  <div id="bar"><a href="/foo"><div role="figure"><img src="foo" /></div></a></div>
+  <a id="baz"><h1>link text</h1></a>
+  `)
+
+  expect(() => screen.getById('foo')).not.toThrowError()
+  expect(() => screen.getById('bar')).not.toThrowError()
+  expect(() => screen.getById('baz')).not.toThrowError()
 })
 
 test('does not suggest when using getByRole', () => {
@@ -107,18 +129,18 @@ test('should suggest getByRole when used with getBy', () => {
   renderIntoDocument(`<button data-testid="foo">submit</button>`)
 
   expect(() => screen.getByTestId('foo')).toThrowErrorMatchingInlineSnapshot(`
-"A better query is available, try this:
-getByRole('button', { name: /submit/i })
+    "A better query is available, try this:
+    getByRole('button', { name: /submit/i })
 
 
-<body>
-  <button
-    data-testid="foo"
-  >
-    submit
-  </button>
-</body>"
-`)
+    <body>
+      <button
+        data-testid="foo"
+      >
+        submit
+      </button>
+    </body>"
+  `)
 })
 
 test('should suggest getAllByRole when used with getAllByTestId', () => {
@@ -128,27 +150,27 @@ test('should suggest getAllByRole when used with getAllByTestId', () => {
 
   expect(() => screen.getAllByTestId('foo'))
     .toThrowErrorMatchingInlineSnapshot(`
-"A better query is available, try this:
-getAllByRole('button', { name: /submit/i })
+    "A better query is available, try this:
+    getAllByRole('button', { name: /submit/i })
 
 
-<body>
-  
-    
-  <button
-    data-testid="foo"
-  >
-    submit
-  </button>
-  
-    
-  <button
-    data-testid="foo"
-  >
-    submit
-  </button>
-</body>"
-`)
+    <body>
+      
+        
+      <button
+        data-testid="foo"
+      >
+        submit
+      </button>
+      
+        
+      <button
+        data-testid="foo"
+      >
+        submit
+      </button>
+    </body>"
+  `)
 })
 test('should suggest findByRole when used with findByTestId', async () => {
   renderIntoDocument(`
@@ -160,6 +182,82 @@ test('should suggest findByRole when used with findByTestId', async () => {
     /findByRole\('button', \{ name: \/submit\/i \}\)/,
   )
   await expect(screen.findAllByTestId(/foo/)).rejects.toThrowError(
+    /findAllByRole\('button', \{ name: \/submit\/i \}\)/,
+  )
+})
+
+test('should not suggest if there would be mixed suggestions when finding by id', () => {
+  renderIntoDocument(`
+  <button id="foo">submit</button>
+  <label for="foo">Username</label><input data-testid="foo" id="foo" />`)
+
+  expect(() => screen.getAllById('foo')).not.toThrowError()
+})
+
+test('should not suggest when suggest is turned off for a query when finding by id', () => {
+  renderIntoDocument(`
+  <button id="foo">submit</button>
+  <button id="foot">another</button>`)
+
+  expect(() => screen.getById('foo', {suggest: false})).not.toThrowError()
+  expect(() => screen.getAllById(/foo/, {suggest: false})).not.toThrowError()
+})
+
+test('should suggest getByRole when used with getById', () => {
+  renderIntoDocument(`<button id="foo">submit</button>`)
+
+  expect(() => screen.getById('foo')).toThrowErrorMatchingInlineSnapshot(`
+    "A better query is available, try this:
+    getByRole('button', { name: /submit/i })
+
+
+    <body>
+      <button
+        id="foo"
+      >
+        submit
+      </button>
+    </body>"
+  `)
+})
+
+test('should suggest getAllByRole when used with getAllById', () => {
+  renderIntoDocument(`
+    <button id="foo">submit</button>
+    <button id="foo">submit</button>`)
+
+  expect(() => screen.getAllByTestId('foo'))
+    .toThrowErrorMatchingInlineSnapshot(`
+    "Unable to find an element by: [data-testid="foo"]
+
+    <body>
+      
+        
+      <button
+        id="foo"
+      >
+        submit
+      </button>
+      
+        
+      <button
+        id="foo"
+      >
+        submit
+      </button>
+    </body>"
+  `)
+})
+test('should suggest findByRole when used with findById', async () => {
+  renderIntoDocument(`
+  <button id="foo">submit</button>
+  <button id="foot">submit</button>
+  `)
+
+  await expect(screen.findById('foo')).rejects.toThrowError(
+    /findByRole\('button', \{ name: \/submit\/i \}\)/,
+  )
+  await expect(screen.findAllById(/foo/)).rejects.toThrowError(
     /findAllByRole\('button', \{ name: \/submit\/i \}\)/,
   )
 })
@@ -372,6 +470,82 @@ test(`should suggest getByTitle`, () => {
   expect(() => screen.getByTestId('svg')).toThrowError(
     /getByText\(\/close\/i\)/,
   )
+})
+
+test(`should suggest getByPlaceholderText when finding by id`, () => {
+  renderIntoDocument(
+    `<input type="password" id="foo" placeholder="Password" />`,
+  )
+
+  expect(() => screen.getById('foo')).toThrowError(
+    /getByPlaceholderText\(\/password\/i\)/,
+  )
+})
+
+test(`should suggest getByText for simple elements when trying first for finding by id`, () => {
+  renderIntoDocument(`<div id="foo">hello there</div>`)
+
+  expect(() => screen.getById('foo')).toThrowError(
+    /getByText\(\/hello there\/i\)/,
+  )
+})
+
+test(`should suggest getByDisplayValue when trying getById`, () => {
+  renderIntoDocument(
+    `<input type="password" id="password" data-testid="password" />`,
+  )
+
+  document.getElementById('password').value = 'Prine' // RIP John Prine
+
+  expect(() => screen.getById('password')).toThrowError(
+    /getByDisplayValue\(\/prine\/i\)/,
+  )
+})
+
+test(`should suggest getByAltText when trying first for getById`, () => {
+  renderIntoDocument(`
+    <input type="password" id="input" alt="password" />
+    <map name="workmap">
+      <area id="area" shape="rect" coords="34,44,270,350" alt="Computer">
+    </map>
+    `)
+
+  expect(() => screen.getById('input')).toThrowError(
+    /getByAltText\(\/password\/i\)/,
+  )
+  expect(() => screen.getById('area')).toThrowError(
+    /getByAltText\(\/computer\/i\)/,
+  )
+})
+
+test(`should suggest getByTitle when trying first for getById`, () => {
+  renderIntoDocument(`
+  <span title="Delete" id="delete"></span>
+  <svg>
+    <title id="svg">Close</title>
+    <g><path /></g>
+  </svg>`)
+
+  expect(() => screen.getById('delete')).toThrowError(
+    /getByTitle\(\/delete\/i\)/,
+  )
+  expect(() => screen.getAllById('delete')).toThrowError(
+    /getAllByTitle\(\/delete\/i\)/,
+  )
+
+  expect(() => screen.queryAllById('delete')).toThrowError(
+    /queryAllByTitle\(\/delete\/i\)/,
+  )
+  expect(() => screen.queryAllById('delete')).toThrowError(
+    /queryAllByTitle\(\/delete\/i\)/,
+  )
+  expect(() => screen.queryAllById('delete')).toThrowError(
+    /queryAllByTitle\(\/delete\/i\)/,
+  )
+
+  // Since `ByTitle` and `ByText` will both return the <title> element
+  // `getByText` will always be the suggested query as it is higher up the list.
+  expect(() => screen.getById('svg')).toThrowError(/getByText\(\/close\/i\)/)
 })
 
 test('getSuggestedQuery handles `variant` and defaults to `get`', () => {

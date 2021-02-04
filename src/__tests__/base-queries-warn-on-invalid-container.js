@@ -47,6 +47,12 @@ import {
   queryByTestId,
   findByTestId,
   findAllByTestId,
+  getById,
+  getAllById,
+  queryAllById,
+  queryById,
+  findById,
+  findAllById,
 } from '..'
 
 describe('synchronous queries throw on invalid container type', () => {
@@ -83,6 +89,10 @@ describe('synchronous queries throw on invalid container type', () => {
     ['getAllByTestId', getAllByTestId],
     ['queryByTestId', queryByTestId],
     ['queryAllByTestId', queryAllByTestId],
+    ['getById', getById],
+    ['getAllById', getAllById],
+    ['queryById', queryById],
+    ['queryAllById', queryAllById],
   ])('%s', (_queryName, query) => {
     expect(() =>
       query('invalid type for container', 'irrelevant text'),
@@ -110,6 +120,8 @@ describe('asynchronous queries throw on invalid container type', () => {
     ['findAllByRole', findAllByRole],
     ['findByTestId', findByTestId],
     ['findAllByTestId', findAllByTestId],
+    ['findById', findById],
+    ['findAllById', findAllById],
   ])('%s', (_queryName, query) => {
     const queryOptions = {}
     const waitOptions = {timeout: 1, onTimeout: e => e}

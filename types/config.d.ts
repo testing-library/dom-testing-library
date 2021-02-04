@@ -1,5 +1,6 @@
 export interface Config {
   testIdAttribute: string
+  idAttribute: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   asyncWrapper(cb: (...args: any[]) => any): Promise<any>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
