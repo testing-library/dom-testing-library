@@ -350,6 +350,6 @@ Contributions of any kind welcome!
 [guiding-principle]: https://twitter.com/kentcdodds/status/977018512689455106
 [jest]: https://facebook.github.io/jest
 [discord-badge]: https://img.shields.io/discord/723559267868737556.svg?color=7389D8&labelColor=6A7EC2&logo=discord&logoColor=ffffff&style=flat-square
-[discord]: https://discord.gg/c6JN9fM
+[discord]: https://discord.gg/testing-library
 
 <!-- prettier-ignore-end -->
