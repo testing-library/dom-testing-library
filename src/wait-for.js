@@ -8,6 +8,7 @@ import {
   setImmediate,
   setTimeout,
   clearTimeout,
+  checkContainerType,
 } from './helpers'
 import {getConfig, runWithExpensiveErrorDiagnosticsDisabled} from './config'
 
@@ -89,6 +90,12 @@ function waitFor(
         await new Promise(r => setImmediate(r))
       }
     } else {
+      try {
+        checkContainerType(container)
+      } catch (e) {
+        reject(e)
+        return
+      }
       intervalId = setInterval(checkRealTimersCallback, interval)
       const {MutationObserver} = getWindowFromNode(container)
       observer = new MutationObserver(checkRealTimersCallback)
