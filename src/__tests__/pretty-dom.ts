@@ -9,7 +9,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  console.log.mockRestore()
+  ;(console.log as jest.Mock).mockRestore()
 })
 
 test('prettyDOM prints out the given DOM element tree', () => {
@@ -38,6 +38,7 @@ test('prettyDOM defaults to document.body', () => {
 `
   renderIntoDocument('<div>Hello World!</div>')
   expect(prettyDOM()).toMatchInlineSnapshot(defaultInlineSnapshot)
+  //@ts-expect-error js check, should print the document.body
   expect(prettyDOM(null)).toMatchInlineSnapshot(defaultInlineSnapshot)
 })
 
@@ -54,7 +55,8 @@ test('logDOM logs prettyDOM to the console', () => {
   const {container} = render('<div>Hello World!</div>')
   logDOM(container)
   expect(console.log).toHaveBeenCalledTimes(1)
-  expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
+  expect(((console.log as jest.Mock).mock.calls[0] as string[])[0])
+    .toMatchInlineSnapshot(`
     "<div>
       <div>
         Hello World!
@@ -64,7 +66,7 @@ test('logDOM logs prettyDOM to the console', () => {
 })
 
 test('logDOM logs prettyDOM with code frame to the console', () => {
-  getUserCodeFrame.mockImplementationOnce(
+  ;(getUserCodeFrame as jest.Mock).mockImplementationOnce(
     () => `"/home/john/projects/sample-error/error-example.js:7:14
       5 |         document.createTextNode('Hello World!')
       6 |       )
@@ -76,7 +78,8 @@ test('logDOM logs prettyDOM with code frame to the console', () => {
   const {container} = render('<div>Hello World!</div>')
   logDOM(container)
   expect(console.log).toHaveBeenCalledTimes(1)
-  expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
+  expect(((console.log as jest.Mock).mock.calls[0] as string[])[0])
+    .toMatchInlineSnapshot(`
     "<div>
       <div>
         Hello World!
@@ -95,16 +98,19 @@ test('logDOM logs prettyDOM with code frame to the console', () => {
 
 describe('prettyDOM fails with first parameter without outerHTML field', () => {
   test('with array', () => {
+    // @ts-expect-error use an array as arg
     expect(() => prettyDOM(['outerHTML'])).toThrowErrorMatchingInlineSnapshot(
       `"Expected an element or document but got Array"`,
     )
   })
   test('with number', () => {
+    // @ts-expect-error use a number as arg
     expect(() => prettyDOM(1)).toThrowErrorMatchingInlineSnapshot(
       `"Expected an element or document but got number"`,
     )
   })
   test('with object', () => {
+    // @ts-expect-error use an object as arg
     expect(() => prettyDOM({})).toThrowErrorMatchingInlineSnapshot(
       `"Expected an element or document but got Object"`,
     )

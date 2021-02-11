@@ -1,24 +1,51 @@
 import {computeAccessibleName} from 'dom-accessibility-api'
+import {
+  Method,
+  Variant,
+  Suggestion,
+  QueryArgs,
+  QueryOptions,
+} from '../types/suggestions'
 import {getDefaultNormalizer} from './matches'
 import {getNodeText} from './get-node-text'
 import {DEFAULT_IGNORE_TAGS, getConfig} from './config'
 import {getImplicitAriaRoles, isInaccessible} from './role-helpers'
 import {getLabels} from './label-helpers'
 
+type SuggestionOptions = {
+  variant: Variant
+  name?: string
+}
+
+function isInput(element: Element): element is HTMLInputElement {
+  return (element as Element & {value: unknown}).value !== undefined
+}
+
 const normalize = getDefaultNormalizer()
 
-function escapeRegExp(string) {
-  return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+function escapeRegExp(text: string) {
+  return text.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
 
-function getRegExpMatcher(string) {
-  return new RegExp(escapeRegExp(string.toLowerCase()), 'i')
+function isDefinedOption(
+  value: [string, boolean | RegExp | undefined],
+): value is [string, boolean | RegExp] {
+  return value[1] !== undefined
 }
 
-function makeSuggestion(queryName, element, content, {variant, name}) {
+function getRegExpMatcher(text: string) {
+  return new RegExp(escapeRegExp(text.toLowerCase()), 'i')
+}
+
+function makeSuggestion(
+  queryName: string,
+  element: Element,
+  content: string,
+  {variant, name}: SuggestionOptions,
+) {
   let warning = ''
-  const queryOptions = {}
-  const queryArgs = [
+  const queryOptions: QueryOptions = {}
+  const queryArgs: QueryArgs = [
     ['Role', 'TestId'].includes(queryName)
       ? content
       : getRegExpMatcher(content),
@@ -50,38 +77,48 @@ function makeSuggestion(queryName, element, content, {variant, name}) {
       if (warning) {
         console.warn(warning)
       }
-      let [text, options] = queryArgs
+      const [text, options] = queryArgs
 
-      text = typeof text === 'string' ? `'${text}'` : text
+      const normalizedText = typeof text === 'string' ? `'${text}'` : text
 
-      options = options
+      const stringifiedOptions = options
         ? `, { ${Object.entries(options)
-            .map(([k, v]) => `${k}: ${v}`)
+            .filter<[string, boolean | RegExp]>(isDefinedOption)
+            .map(([k, v]) => `${k}: ${v.toString()}`)
             .join(', ')} }`
         : ''
 
-      return `${queryMethod}(${text}${options})`
+      return `${queryMethod}(${normalizedText.toString()}${stringifiedOptions})`
     },
   }
 }
 
-function canSuggest(currentMethod, requestedMethod, data) {
+function canSuggest(
+  currentMethod: string,
+  requestedMethod: string | undefined,
+  data: string | null,
+): data is string {
   return (
-    data &&
+    typeof data === 'string' &&
+    data.length > 0 &&
     (!requestedMethod ||
       requestedMethod.toLowerCase() === currentMethod.toLowerCase())
   )
 }
 
-export function getSuggestedQuery(element, variant = 'get', method) {
+export function getSuggestedQuery(
+  element: Element,
+  variant: Variant = 'get',
+  method?: Method,
+): Suggestion | undefined {
   // don't create suggestions for script and style elements
   if (element.matches(DEFAULT_IGNORE_TAGS)) {
     return undefined
   }
 
   //We prefer to suggest something else if the role is generic
-  const role =
-    element.getAttribute('role') ?? getImplicitAriaRoles(element)?.[0]
+  const role: string =
+    element.getAttribute('role') ?? getImplicitAriaRoles(element)[0]
   if (role !== 'generic' && canSuggest('Role', method, role)) {
     return makeSuggestion('Role', element, role, {
       variant,
@@ -111,7 +148,7 @@ export function getSuggestedQuery(element, variant = 'get', method) {
     return makeSuggestion('Text', element, textContent, {variant})
   }
 
-  if (canSuggest('DisplayValue', method, element.value)) {
+  if (isInput(element) && canSuggest('DisplayValue', method, element.value)) {
     return makeSuggestion('DisplayValue', element, normalize(element.value), {
       variant,
     })
