@@ -18,9 +18,10 @@ function _runWithRealTimers(callback) {
     setTimeout,
   }
 
-  // istanbul ignore else
-  if (jest) {
+  try {
     jest.useRealTimers()
+  } catch (e) {
+    // not running in jest environment
   }
 
   const callbackReturnValue = callback()
