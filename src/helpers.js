@@ -18,17 +18,16 @@ function _runWithRealTimers(callback) {
     setTimeout,
   }
 
-  try {
+  // istanbul ignore else
+  if (typeof jest !== 'undefined') {
     jest.useRealTimers()
-  } catch (e) {
-    // not running in jest environment
   }
 
   const callbackReturnValue = callback()
 
-  const usedJestFakeTimers = Object.keys(timerAPI).filter(
-    k => timerAPI[k] !== globalObj[k],
-  ).length
+  const usedJestFakeTimers = Object.entries(timerAPI).some(
+    ([name, func]) => func !== globalObj[name],
+  )
 
   if (usedJestFakeTimers) {
     jest.useFakeTimers(timerAPI.setTimeout?.clock ? 'modern' : 'legacy')
