@@ -53,7 +53,9 @@ describe('run with real timers', () => {
   const realSetTimeout = global.setTimeout
 
   afterEach(() => {
+    // restore timers replaced by jest.useFakeTimers()
     jest.useRealTimers()
+    // restore setTimeout replaced by assignment
     global.setTimeout = realSetTimeout
   })
 
@@ -61,7 +63,7 @@ describe('run with real timers', () => {
     // legacy timers use mocks and do not rely on a clock instance
     jest.useFakeTimers('legacy')
     runWithRealTimers(() => {
-      expect(global.setTimeout).toEqual(realSetTimeout)
+      expect(global.setTimeout).toBe(realSetTimeout)
     })
     expect(global.setTimeout._isMockFunction).toBe(true)
     expect(global.setTimeout.clock).toBeUndefined()
@@ -71,7 +73,7 @@ describe('run with real timers', () => {
     // modern timers use a clock instance instead of a mock
     jest.useFakeTimers('modern')
     runWithRealTimers(() => {
-      expect(global.setTimeout).toEqual(realSetTimeout)
+      expect(global.setTimeout).toBe(realSetTimeout)
     })
     expect(global.setTimeout._isMockFunction).toBeUndefined()
     expect(global.setTimeout.clock).toBeDefined()
@@ -86,7 +88,8 @@ describe('run with real timers', () => {
     global.setTimeout = fakedSetTimeout
 
     runWithRealTimers(() => {
-      expect(global.setTimeout).toEqual(fakedSetTimeout)
+      expect(global.setTimeout).toBe(fakedSetTimeout)
     })
+    expect(global.setTimeout).toBe(fakedSetTimeout)
   })
 })
