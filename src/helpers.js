@@ -5,10 +5,16 @@ const TEXT_NODE = 3
 
 // Currently this fn only supports jest timers, but it could support other test runners in the future.
 function runWithRealTimers(callback) {
-  return _runWithRealTimers(callback).callbackReturnValue
+  // istanbul ignore else
+  if (typeof jest !== 'undefined') {
+    return runWithJestRealTimers(callback).callbackReturnValue
+  }
+
+  // istanbul ignore next
+  return callback()
 }
 
-function _runWithRealTimers(callback) {
+function runWithJestRealTimers(callback) {
   const timerAPI = {
     clearImmediate,
     clearInterval,
@@ -18,29 +24,33 @@ function _runWithRealTimers(callback) {
     setTimeout,
   }
 
-  // istanbul ignore else
-  if (typeof jest !== 'undefined') {
-    jest.useRealTimers()
-  }
+  jest.useRealTimers()
 
   const callbackReturnValue = callback()
 
-  const usedJestFakeTimers = Object.entries(timerAPI).some(
+  const usedFakeTimers = Object.entries(timerAPI).some(
     ([name, func]) => func !== globalObj[name],
   )
 
-  if (usedJestFakeTimers) {
+  if (usedFakeTimers) {
     jest.useFakeTimers(timerAPI.setTimeout?.clock ? 'modern' : 'legacy')
   }
 
   return {
     callbackReturnValue,
-    usedJestFakeTimers,
+    usedFakeTimers,
   }
 }
 
-const jestFakeTimersAreEnabled = () =>
-  Boolean(_runWithRealTimers(() => {}).usedJestFakeTimers)
+function jestFakeTimersAreEnabled() {
+  // istanbul ignore else
+  if (typeof jest !== 'undefined') {
+    return runWithJestRealTimers(() => {}).usedFakeTimers
+  }
+
+  // istanbul ignore next
+  return false
+}
 
 // we only run our tests in node, and setImmediate is supported in node.
 // istanbul ignore next
