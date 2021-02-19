@@ -41,8 +41,13 @@ function runWithJestRealTimers(callback) {
   }
 }
 
-const jestFakeTimersAreEnabled = () =>
-  typeof jest !== 'undefined' && runWithJestRealTimers(() => {}).usedFakeTimers
+function jestFakeTimersAreEnabled() {
+  // istanbul ignore else
+  if (typeof jest !== 'undefined') {
+    return runWithJestRealTimers(() => {}).usedFakeTimers
+  }
+  return false
+}
 
 // we only run our tests in node, and setImmediate is supported in node.
 // istanbul ignore next
