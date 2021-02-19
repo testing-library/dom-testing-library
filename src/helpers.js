@@ -5,52 +5,42 @@ const TEXT_NODE = 3
 
 // Currently this fn only supports jest timers, but it could support other test runners in the future.
 function runWithRealTimers(callback) {
-  const fakeTimersType = getJestFakeTimersType()
-  if (fakeTimersType) {
+  return _runWithRealTimers(callback).callbackReturnValue
+}
+
+function _runWithRealTimers(callback) {
+  const timerAPI = {
+    clearImmediate,
+    clearInterval,
+    clearTimeout,
+    setImmediate,
+    setInterval,
+    setTimeout,
+  }
+
+  // istanbul ignore else
+  if (typeof jest !== 'undefined') {
     jest.useRealTimers()
   }
 
   const callbackReturnValue = callback()
 
-  if (fakeTimersType) {
-    jest.useFakeTimers(fakeTimersType)
+  const usedJestFakeTimers = Object.entries(timerAPI).some(
+    ([name, func]) => func !== globalObj[name],
+  )
+
+  if (usedJestFakeTimers) {
+    jest.useFakeTimers(timerAPI.setTimeout?.clock ? 'modern' : 'legacy')
   }
 
-  return callbackReturnValue
+  return {
+    callbackReturnValue,
+    usedJestFakeTimers,
+  }
 }
 
-function getJestFakeTimersType() {
-  // istanbul ignore if
-  if (
-    typeof jest === 'undefined' ||
-    typeof globalObj.setTimeout === 'undefined'
-  ) {
-    return null
-  }
-
-  if (
-    typeof globalObj.setTimeout._isMockFunction !== 'undefined' &&
-    globalObj.setTimeout._isMockFunction
-  ) {
-    return 'legacy'
-  }
-
-  if (
-    typeof globalObj.setTimeout.clock !== 'undefined' &&
-    typeof jest.getRealSystemTime !== 'undefined'
-  ) {
-    try {
-      // jest.getRealSystemTime is only supported for Jest's `modern` fake timers and otherwise throws
-      jest.getRealSystemTime()
-      return 'modern'
-    } catch {
-      // not using Jest's modern fake timers
-    }
-  }
-  return null
-}
-
-const jestFakeTimersAreEnabled = () => Boolean(getJestFakeTimersType())
+const jestFakeTimersAreEnabled = () =>
+  Boolean(_runWithRealTimers(() => {}).usedJestFakeTimers)
 
 // we only run our tests in node, and setImmediate is supported in node.
 // istanbul ignore next
