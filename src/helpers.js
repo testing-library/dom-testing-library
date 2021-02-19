@@ -10,6 +10,7 @@ function runWithRealTimers(callback) {
     return runWithJestRealTimers(callback).callbackReturnValue
   }
 
+  // istanbul ignore next
   return callback()
 }
 
@@ -46,6 +47,8 @@ function jestFakeTimersAreEnabled() {
   if (typeof jest !== 'undefined') {
     return runWithJestRealTimers(() => {}).usedFakeTimers
   }
+
+  // istanbul ignore next
   return false
 }
 
