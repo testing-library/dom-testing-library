@@ -52,8 +52,8 @@ function waitFor(
 
     const overallTimeoutTimer = setTimeout(handleTimeout, timeout)
 
-    const usingFakeTimers = jestFakeTimersAreEnabled()
-    if (usingFakeTimers) {
+    const usingJestFakeTimers = jestFakeTimersAreEnabled()
+    if (usingJestFakeTimers) {
       checkCallback()
       // this is a dangerous rule to disable because it could lead to an
       // infinite loop. However, eslint isn't smart enough to know that we're
@@ -107,7 +107,7 @@ function waitFor(
       finished = true
       clearTimeout(overallTimeoutTimer)
 
-      if (!usingFakeTimers) {
+      if (!usingJestFakeTimers) {
         clearInterval(intervalId)
         observer.disconnect()
       }

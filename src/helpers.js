@@ -25,9 +25,9 @@ function _runWithRealTimers(callback) {
 
   const callbackReturnValue = callback()
 
-  const usedJestFakeTimers = Object.entries(timerAPI).some(
-    ([name, func]) => func !== globalObj[name],
-  )
+  const usedJestFakeTimers =
+    typeof jest !== 'undefined' &&
+    Object.entries(timerAPI).some(([name, func]) => func !== globalObj[name])
 
   if (usedJestFakeTimers) {
     jest.useFakeTimers(timerAPI.setTimeout?.clock ? 'modern' : 'legacy')
