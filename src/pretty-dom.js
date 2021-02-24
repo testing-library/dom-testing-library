@@ -23,7 +23,14 @@ const getMaxLength = dom =>
 
 const {DOMElement, DOMCollection} = prettyFormat.plugins
 
-function prettyDOM(dom, maxLength, options) {
+const COMMENT_NODE = 8
+
+// https://github.com/facebook/jest/blob/615084195ae1ae61ddd56162c62bbdda17587569/packages/pretty-format/src/plugins/DOMElement.ts#L50
+function filterCommentsAndScriptTags(value) {
+  return value.nodeType !== COMMENT_NODE && value.tagName !== 'SCRIPT'
+}
+
+function prettyDOM(dom, maxLength, options = {}) {
   if (!dom) {
     dom = getDocument().body
   }
@@ -51,11 +58,25 @@ function prettyDOM(dom, maxLength, options) {
     )
   }
 
+  const {
+    filterNode = filterCommentsAndScriptTags,
+    ...prettyFormatOptions
+  } = options
+
+  const DOMElementFilter = {
+    test(value) {
+      return DOMElement.test(value) && !filterNode(value)
+    },
+    serialize() {
+      return ''
+    },
+  }
+
   const debugContent = prettyFormat(dom, {
-    plugins: [DOMElement, DOMCollection],
+    plugins: [DOMElementFilter, DOMElement, DOMCollection],
     printFunctionName: false,
     highlight: inNode(),
-    ...options,
+    ...prettyFormatOptions,
   })
   return maxLength !== undefined && dom.outerHTML.length > maxLength
     ? `${debugContent.slice(0, maxLength)}...`

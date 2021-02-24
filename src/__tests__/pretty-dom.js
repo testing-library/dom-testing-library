@@ -118,6 +118,8 @@ test('prettyDOM ignores script elements and comments nodes by default', () => {
 
   expect(prettyDOM(container)).toMatchInlineSnapshot(`
     "<body>
+      
+      
       <p>
         Hello, Dave
       </p>
@@ -130,8 +132,9 @@ test('prettyDOM can include all elements with a custom filter', () => {
     '<body><script src="context.js"></script><!-- Some comment --><p>Hello, Dave</p></body>',
   )
 
-  expect(prettyDOM(container, Number.POSITIVE_INFINITY, {filter: () => true}))
-    .toMatchInlineSnapshot(`
+  expect(
+    prettyDOM(container, Number.POSITIVE_INFINITY, {filterNode: () => true}),
+  ).toMatchInlineSnapshot(`
     "<body>
       <script
         src="context.js"
