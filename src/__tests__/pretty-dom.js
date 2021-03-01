@@ -118,8 +118,6 @@ test('prettyDOM ignores script elements and comments nodes by default', () => {
 
   expect(prettyDOM(container)).toMatchInlineSnapshot(`
     "<body>
-      
-      
       <p>
         Hello, Dave
       </p>

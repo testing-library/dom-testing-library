@@ -1,0 +1,44 @@
+diff --git a/node_modules/pretty-format/build/plugins/lib/markup.js b/node_modules/pretty-format/build/plugins/lib/markup.js
+index d47b88f..f536a20 100644
+--- a/node_modules/pretty-format/build/plugins/lib/markup.js
++++ b/node_modules/pretty-format/build/plugins/lib/markup.js
+@@ -52,20 +52,31 @@ const printProps = (keys, props, config, indentation, depth, refs, printer) => {
+       );
+     })
+     .join('');
+-}; // Return empty string if children is empty.
++}; // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType#node_type_constants
+ 
+ exports.printProps = printProps;
++const NodeTypeTextNode = 3; // Return empty string if children is empty.
+ 
+ const printChildren = (children, config, indentation, depth, refs, printer) =>
+   children
+-    .map(
+-      child =>
+-        config.spacingOuter +
+-        indentation +
+-        (typeof child === 'string'
++    .map(child => {
++      const printedChild =
++        typeof child === 'string'
+           ? printText(child, config)
+-          : printer(child, config, indentation, depth, refs))
+-    )
++          : printer(child, config, indentation, depth, refs);
++
++      if (
++        printedChild === '' &&
++        typeof child === 'object' &&
++        child !== null &&
++        child.nodeType !== NodeTypeTextNode
++      ) {
++        // A plugin serialized this Node to '' meaning we should ignore it.
++        return '';
++      }
++
++      return config.spacingOuter + indentation + printedChild;
++    })
+     .join('');
+ 
+ exports.printChildren = printChildren;
