@@ -94,7 +94,7 @@ function getWindowFromNode(node) {
     )
   } else if (node instanceof Array) {
     throw new Error(
-      `It looks like you passed an Array object instead of a DOM node. Did you do something like \`fireEvent.click(screen.getAllBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`?`,
+      `It looks like you passed an Array instead of a DOM node. Did you do something like \`fireEvent.click(screen.getAllBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`?`,
     )
   } else {
     // The user passed something unusual to a calling function

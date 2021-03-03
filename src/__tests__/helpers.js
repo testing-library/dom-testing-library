@@ -19,7 +19,7 @@ describe('window retrieval throws when given something other than a node', () =>
   })
   test('Array as node', () => {
     expect(() => getWindowFromNode([])).toThrowErrorMatchingInlineSnapshot(
-      `"It looks like you passed an Array object instead of a DOM node. Did you do something like \`fireEvent.click(screen.getAllBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`?"`,
+      `"It looks like you passed an Array instead of a DOM node. Did you do something like \`fireEvent.click(screen.getAllBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`?"`,
     )
   })
   test('unknown as node', () => {
