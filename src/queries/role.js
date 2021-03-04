@@ -146,7 +146,7 @@ function queryAllByRole(
         return true
       }
 
-      return matches(
+      return matcher(
         computeAccessibleName(element, {
           computedStyleSupportsPseudoElements: getConfig()
             .computedStyleSupportsPseudoElements,

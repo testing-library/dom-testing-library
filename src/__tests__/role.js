@@ -271,6 +271,15 @@ test('accessible name filter implements TextMatch', () => {
   ).not.toBeNull()
 })
 
+test('accessible name obeys exact: false', () => {
+  const {getByRole} = render(
+    `<h1>Sign <em>up</em></h1><h2>Details</h2><h2>Your Signature</h2>`,
+  )
+
+  // subset using exact: false
+  expect(getByRole('heading', {name: 'gn u', exact: false})).not.toBeNull()
+});
+
 test('TextMatch serialization in error message', () => {
   const {getByRole} = render(`<h1>Sign <em>up</em></h1>`)
 
