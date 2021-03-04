@@ -153,7 +153,7 @@ function queryAllByRole(
         }),
         element,
         name,
-        text => text,
+        matchNormalizer,
       )
     })
 }
