@@ -17,6 +17,11 @@ describe('window retrieval throws when given something other than a node', () =>
       `"It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`, or await the findBy query \`fireEvent.click(await screen.findBy...\`?"`,
     )
   })
+  test('Array as node', () => {
+    expect(() => getWindowFromNode([])).toThrowErrorMatchingInlineSnapshot(
+      `"It looks like you passed an Array instead of a DOM node. Did you do something like \`fireEvent.click(screen.getAllBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`?"`,
+    )
+  })
   test('unknown as node', () => {
     expect(() => getWindowFromNode({})).toThrowErrorMatchingInlineSnapshot(
       `"Unable to find the \\"window\\" object for the given node. Please file an issue with the code that's causing you to see this error: https://github.com/testing-library/dom-testing-library/issues/new"`,

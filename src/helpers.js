@@ -92,6 +92,10 @@ function getWindowFromNode(node) {
     throw new Error(
       `It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`, or await the findBy query \`fireEvent.click(await screen.findBy...\`?`,
     )
+  } else if (Array.isArray(node)) {
+    throw new Error(
+      `It looks like you passed an Array instead of a DOM node. Did you do something like \`fireEvent.click(screen.getAllBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`?`,
+    )
   } else {
     // The user passed something unusual to a calling function
     throw new Error(
