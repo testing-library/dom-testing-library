@@ -5,52 +5,52 @@ const TEXT_NODE = 3
 
 // Currently this fn only supports jest timers, but it could support other test runners in the future.
 function runWithRealTimers(callback) {
-  const fakeTimersType = getJestFakeTimersType()
-  if (fakeTimersType) {
-    jest.useRealTimers()
+  // istanbul ignore else
+  if (typeof jest !== 'undefined') {
+    return runWithJestRealTimers(callback).callbackReturnValue
   }
+
+  // istanbul ignore next
+  return callback()
+}
+
+function runWithJestRealTimers(callback) {
+  const timerAPI = {
+    clearImmediate,
+    clearInterval,
+    clearTimeout,
+    setImmediate,
+    setInterval,
+    setTimeout,
+  }
+
+  jest.useRealTimers()
 
   const callbackReturnValue = callback()
 
-  if (fakeTimersType) {
-    jest.useFakeTimers(fakeTimersType)
+  const usedFakeTimers = Object.entries(timerAPI).some(
+    ([name, func]) => func !== globalObj[name],
+  )
+
+  if (usedFakeTimers) {
+    jest.useFakeTimers(timerAPI.setTimeout?.clock ? 'modern' : 'legacy')
   }
 
-  return callbackReturnValue
+  return {
+    callbackReturnValue,
+    usedFakeTimers,
+  }
 }
 
-function getJestFakeTimersType() {
-  // istanbul ignore if
-  if (
-    typeof jest === 'undefined' ||
-    typeof globalObj.setTimeout === 'undefined'
-  ) {
-    return null
+function jestFakeTimersAreEnabled() {
+  // istanbul ignore else
+  if (typeof jest !== 'undefined') {
+    return runWithJestRealTimers(() => {}).usedFakeTimers
   }
 
-  if (
-    typeof globalObj.setTimeout._isMockFunction !== 'undefined' &&
-    globalObj.setTimeout._isMockFunction
-  ) {
-    return 'legacy'
-  }
-
-  if (
-    typeof globalObj.setTimeout.clock !== 'undefined' &&
-    typeof jest.getRealSystemTime !== 'undefined'
-  ) {
-    try {
-      // jest.getRealSystemTime is only supported for Jest's `modern` fake timers and otherwise throws
-      jest.getRealSystemTime()
-      return 'modern'
-    } catch {
-      // not using Jest's modern fake timers
-    }
-  }
-  return null
+  // istanbul ignore next
+  return false
 }
-
-const jestFakeTimersAreEnabled = () => Boolean(getJestFakeTimersType())
 
 // we only run our tests in node, and setImmediate is supported in node.
 // istanbul ignore next
@@ -91,6 +91,10 @@ function getWindowFromNode(node) {
   } else if (node.then instanceof Function) {
     throw new Error(
       `It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`, or await the findBy query \`fireEvent.click(await screen.findBy...\`?`,
+    )
+  } else if (Array.isArray(node)) {
+    throw new Error(
+      `It looks like you passed an Array instead of a DOM node. Did you do something like \`fireEvent.click(screen.getAllBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`?`,
     )
   } else {
     // The user passed something unusual to a calling function

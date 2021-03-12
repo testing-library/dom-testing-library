@@ -26,6 +26,9 @@ jobs:
 
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v2
+        with:
+          # required by codecov/codecov-action
+          fetch-depth: 0
 
       - name: ⎔ Setup node
         uses: actions/setup-node@v1
@@ -42,6 +45,9 @@ jobs:
 
       - name: ⬆️ Upload coverage report
         uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
+          flags: node-${{ matrix.node }}
 
   release:
     needs: main

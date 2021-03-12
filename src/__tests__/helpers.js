@@ -5,10 +5,6 @@ import {
   runWithRealTimers,
 } from '../helpers'
 
-const globalObj = typeof window === 'undefined' ? global : window
-
-afterEach(() => jest.useRealTimers())
-
 test('returns global document if exists', () => {
   expect(getDocument()).toBe(document)
 })
@@ -19,6 +15,11 @@ describe('window retrieval throws when given something other than a node', () =>
       getWindowFromNode(new Promise(jest.fn())),
     ).toThrowErrorMatchingInlineSnapshot(
       `"It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`, or await the findBy query \`fireEvent.click(await screen.findBy...\`?"`,
+    )
+  })
+  test('Array as node', () => {
+    expect(() => getWindowFromNode([])).toThrowErrorMatchingInlineSnapshot(
+      `"It looks like you passed an Array instead of a DOM node. Did you do something like \`fireEvent.click(screen.getAllBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`?"`,
     )
   })
   test('unknown as node', () => {
@@ -53,42 +54,47 @@ describe('query container validation throws when validation fails', () => {
   })
 })
 
-test('should always use realTimers before using callback when timers are faked with useFakeTimers', () => {
-  const originalSetTimeout = globalObj.setTimeout
+describe('run with real timers', () => {
+  const realSetTimeout = global.setTimeout
 
-  // legacy timers use mocks and do not rely on a clock instance
-  jest.useFakeTimers('legacy')
-  runWithRealTimers(() => {
-    expect(originalSetTimeout).toEqual(globalObj.setTimeout)
-  })
-  expect(globalObj.setTimeout._isMockFunction).toBe(true)
-  expect(globalObj.setTimeout.clock).toBeUndefined()
-
-  jest.useRealTimers()
-
-  // modern timers use a clock instance instead of a mock
-  jest.useFakeTimers('modern')
-  runWithRealTimers(() => {
-    expect(originalSetTimeout).toEqual(globalObj.setTimeout)
-  })
-  expect(globalObj.setTimeout._isMockFunction).toBeUndefined()
-  expect(globalObj.setTimeout.clock).toBeDefined()
-})
-
-test('should not use realTimers when timers are not faked with useFakeTimers', () => {
-  const originalSetTimeout = globalObj.setTimeout
-
-  // useFakeTimers is not used, timers are faked in some other way
-  const fakedSetTimeout = callback => {
-    callback()
-  }
-  fakedSetTimeout.clock = jest.fn()
-
-  globalObj.setTimeout = fakedSetTimeout
-
-  runWithRealTimers(() => {
-    expect(fakedSetTimeout).toEqual(globalObj.setTimeout)
+  afterEach(() => {
+    // restore timers replaced by jest.useFakeTimers()
+    jest.useRealTimers()
+    // restore setTimeout replaced by assignment
+    global.setTimeout = realSetTimeout
   })
 
-  globalObj.setTimeout = originalSetTimeout
+  test('use real timers when timers are faked with jest.useFakeTimers(legacy)', () => {
+    // legacy timers use mocks and do not rely on a clock instance
+    jest.useFakeTimers('legacy')
+    runWithRealTimers(() => {
+      expect(global.setTimeout).toBe(realSetTimeout)
+    })
+    expect(global.setTimeout._isMockFunction).toBe(true)
+    expect(global.setTimeout.clock).toBeUndefined()
+  })
+
+  test('use real timers when timers are faked with jest.useFakeTimers(modern)', () => {
+    // modern timers use a clock instance instead of a mock
+    jest.useFakeTimers('modern')
+    runWithRealTimers(() => {
+      expect(global.setTimeout).toBe(realSetTimeout)
+    })
+    expect(global.setTimeout._isMockFunction).toBeUndefined()
+    expect(global.setTimeout.clock).toBeDefined()
+  })
+
+  test('do not use real timers when timers are not faked with jest.useFakeTimers', () => {
+    // useFakeTimers is not used, timers are faked in some other way
+    const fakedSetTimeout = callback => {
+      callback()
+    }
+    fakedSetTimeout.clock = jest.fn()
+    global.setTimeout = fakedSetTimeout
+
+    runWithRealTimers(() => {
+      expect(global.setTimeout).toBe(fakedSetTimeout)
+    })
+    expect(global.setTimeout).toBe(fakedSetTimeout)
+  })
 })
