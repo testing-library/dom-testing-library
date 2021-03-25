@@ -16,12 +16,19 @@ function runWithRealTimers(callback) {
 
 function runWithJestRealTimers(callback) {
   const timerAPI = {
-    clearImmediate,
     clearInterval,
     clearTimeout,
-    setImmediate,
     setInterval,
     setTimeout,
+  }
+
+  // For more on why we have the check here,
+  // checkout https://github.com/testing-library/dom-testing-library/issues/914
+  if (typeof setImmediate === 'function') {
+    timerAPI.setImmediate = setImmediate
+  }
+  if (typeof clearImmediate === 'function') {
+    timerAPI.clearImmediate = clearImmediate
   }
 
   jest.useRealTimers()
