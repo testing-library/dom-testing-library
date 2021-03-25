@@ -306,6 +306,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/nathanforce"><img src="https://avatars2.githubusercontent.com/u/6694194?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nathan Force</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=nathanforce" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/ph-fritsche"><img src="https://avatars.githubusercontent.com/u/39068198?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Philipp Fritsche</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=ph-fritsche" title="Code">💻</a></td>
     <td align="center"><a href="https://medium.com/@renatoalencar"><img src="https://avatars.githubusercontent.com/u/6964593?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Renato Alencar</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=renatoalencar" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=renatoalencar" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/SimenB"><img src="https://avatars.githubusercontent.com/u/1404810?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Simen Bekkhus</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3ASimenB" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
