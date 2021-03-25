@@ -1,7 +1,6 @@
 import {
   getWindowFromNode,
   getDocument,
-  setImmediate,
   setTimeout,
   clearTimeout,
   runWithRealTimers,
@@ -39,7 +38,7 @@ function waitForDomChange({
 
     function onDone(error, result) {
       clearTimeout(timer)
-      setImmediate(() => observer.disconnect())
+      setTimeout(() => observer.disconnect(), 0)
       if (error) {
         reject(error)
       } else {
