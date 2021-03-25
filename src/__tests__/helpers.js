@@ -97,4 +97,16 @@ describe('run with real timers', () => {
     })
     expect(global.setTimeout).toBe(fakedSetTimeout)
   })
+
+  test('safe check for setImmediate and clearImmediate', () => {
+    const setImeediate = global.setImmediate
+    const clearImmediate = global.clearImmediate
+    delete global.setImmediate
+    delete global.clearImmediate
+
+    expect(() => runWithRealTimers(() => {})).not.toThrow()
+
+    global.setImmediate = setImeediate
+    global.clearImmediate = clearImmediate
+  })
 })
