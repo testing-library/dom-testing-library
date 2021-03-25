@@ -1349,6 +1349,16 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "gaearon",
+      "name": "Dan Abramov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/810438?v=4",
+      "profile": "https://github.com/gaearon",
+      "contributions": [
+        "bug",
+        "review"
+      ]
     }
   ],
   "repoHost": "https://github.com"
