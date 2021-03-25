@@ -1330,6 +1330,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "renatoalencar",
+      "name": "Renato Alencar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6964593?v=4",
+      "profile": "https://medium.com/@renatoalencar",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
