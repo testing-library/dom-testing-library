@@ -3,6 +3,7 @@ import {waitForOptions} from './wait-for'
 
 export interface SelectorMatcherOptions extends MatcherOptions {
   selector?: string
+  ignore?: string | boolean
 }
 
 export type QueryByAttribute = (
