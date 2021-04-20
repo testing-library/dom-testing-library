@@ -44,7 +44,7 @@
     "aria-query": "^4.2.2",
     "chalk": "^4.1.0",
     "dom-accessibility-api": "^0.5.4",
-    "lz-string": "https://github.com/pieroxy/lz-string.git",
+    "lz-string": "https://github.com/pieroxy/lz-string.git#b2e0b270a9f3cf330b778b777385fcba384a1a02",
     "pretty-format": "^26.6.2"
   },
   "devDependencies": {
