@@ -5,13 +5,18 @@ const TEXT_NODE = 3
 
 // Currently this fn only supports jest timers, but it could support other test runners in the future.
 function runWithRealTimers(callback) {
-  // istanbul ignore else
-  if (typeof jest !== 'undefined') {
-    return runWithJestRealTimers(callback).callbackReturnValue
-  }
+  return hasJestTimers()
+    ? runWithJestRealTimers(callback).callbackReturnValue
+    : // istanbul ignore next
+      callback()
+}
 
-  // istanbul ignore next
-  return callback()
+function hasJestTimers() {
+  return (
+    typeof jest !== 'undefined' &&
+    jest !== null &&
+    typeof jest.useRealTimers === 'function'
+  )
 }
 
 function runWithJestRealTimers(callback) {
@@ -50,13 +55,10 @@ function runWithJestRealTimers(callback) {
 }
 
 function jestFakeTimersAreEnabled() {
-  // istanbul ignore else
-  if (typeof jest !== 'undefined') {
-    return runWithJestRealTimers(() => {}).usedFakeTimers
-  }
-
-  // istanbul ignore next
-  return false
+  return hasJestTimers()
+    ? runWithJestRealTimers(() => {}).usedFakeTimers
+    : // istanbul ignore next
+      false
 }
 
 // we only run our tests in node, and setImmediate is supported in node.
