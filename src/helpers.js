@@ -13,7 +13,7 @@ function runWithRealTimers(callback) {
 
 function hasJestTimers() {
   return (
-    jest !== undefined &&
+    typeof jest !== 'undefined' &&
     jest !== null &&
     typeof jest.useRealTimers === 'function'
   )
