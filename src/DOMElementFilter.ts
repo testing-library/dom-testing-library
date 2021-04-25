@@ -1,5 +1,5 @@
 /**
- * Source: https://github.com/facebook/jest/blob/master/packages/pretty-format/src/plugins/DOMElement.ts
+ * Source: https://github.com/facebook/jest/blob/e7bb6a1e26ffab90611b2593912df15b69315611/packages/pretty-format/src/plugins/DOMElement.ts
  */
 import type {Config, NewPlugin, Printer, Refs} from 'pretty-format'
 
