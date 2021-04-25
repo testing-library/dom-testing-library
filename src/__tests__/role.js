@@ -16,6 +16,7 @@ Here are the accessible roles:
 
   --------------------------------------------------
 
+Ignored nodes: comments, <script />, <style />
 <div>
   <h1>
     Hi
@@ -39,6 +40,7 @@ Here are the available roles:
 
   --------------------------------------------------
 
+Ignored nodes: comments, <script />, <style />
 <div>
   <div
     hidden=""
@@ -58,6 +60,7 @@ test('logs error when there are no accessible roles', () => {
 
 There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
+Ignored nodes: comments, <script />, <style />
 <div>
   <div />
 </div>"
@@ -72,6 +75,7 @@ test('logs a different error if inaccessible roles should be included', () => {
 
 There are no available roles.
 
+Ignored nodes: comments, <script />, <style />
 <div>
   <div />
 </div>"
@@ -86,6 +90,7 @@ test('by default excludes elements that have the html hidden attribute or any of
 
 There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
+Ignored nodes: comments, <script />, <style />
 <div>
   <div
     hidden=""
@@ -106,6 +111,7 @@ test('by default excludes elements which have display: none or any of their pare
 
 There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
+Ignored nodes: comments, <script />, <style />
 <div>
   <div
     style="display: none;"
@@ -128,6 +134,7 @@ test('by default excludes elements which have visibility hidden', () => {
 
 There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
+Ignored nodes: comments, <script />, <style />
 <div>
   <div>
     <ul
@@ -152,6 +159,7 @@ test('by default excludes elements which have aria-hidden="true" or any of their
 
 There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
+Ignored nodes: comments, <script />, <style />
 <div>
   <div
     aria-hidden="true"
@@ -241,6 +249,7 @@ Here are the accessible roles:
 
   --------------------------------------------------
 
+Ignored nodes: comments, <script />, <style />
 <div>
   <h1>
     Sign 
@@ -287,6 +296,7 @@ Here are the accessible roles:
 
   --------------------------------------------------
 
+Ignored nodes: comments, <script />, <style />
 <div>
   <h1>
     Sign 
@@ -310,6 +320,7 @@ Here are the accessible roles:
 
   --------------------------------------------------
 
+Ignored nodes: comments, <script />, <style />
 <div>
   <h1>
     Sign 
@@ -337,6 +348,7 @@ Here are the accessible roles:
 
   --------------------------------------------------
 
+Ignored nodes: comments, <script />, <style />
 <ul>
   <li />
 </ul>"
@@ -371,6 +383,7 @@ Here are the accessible roles:
 
   --------------------------------------------------
 
+Ignored nodes: comments, <script />, <style />
 <body>
   <button
     aria-label="my-tab"
@@ -394,20 +407,24 @@ test('accessible regex name in error message for multiple found', () => {
 
 Here are the matching elements:
 
+Ignored nodes: comments, <script />, <style />
 <button>
   Increment value
 </button>
 
+Ignored nodes: comments, <script />, <style />
 <button>
   Decrement value
 </button>
 
+Ignored nodes: comments, <script />, <style />
 <button>
   Reset value
 </button>
 
 (If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
 
+Ignored nodes: comments, <script />, <style />
 <div>
   <button>
     Increment value
@@ -436,20 +453,24 @@ test('accessible string name in error message for multiple found', () => {
 
 Here are the matching elements:
 
+Ignored nodes: comments, <script />, <style />
 <button>
   Submit
 </button>
 
+Ignored nodes: comments, <script />, <style />
 <button>
   Submit
 </button>
 
+Ignored nodes: comments, <script />, <style />
 <button>
   Submit
 </button>
 
 (If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
 
+Ignored nodes: comments, <script />, <style />
 <div>
   <button>
     Submit
@@ -479,16 +500,19 @@ test('matching elements in error for multiple found', () => {
 
 Here are the matching elements:
 
+Ignored nodes: comments, <script />, <style />
 <button>
   Increment value
 </button>
 
+Ignored nodes: comments, <script />, <style />
 <button>
   Reset value
 </button>
 
 (If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
 
+Ignored nodes: comments, <script />, <style />
 <div>
   <button>
     Increment value
