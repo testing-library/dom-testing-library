@@ -32,7 +32,9 @@ test('get throws a useful error message', () => {
     getByAltText,
     getByTitle,
     getByRole,
-  } = render('<div />')
+  } = render(
+    `<div></div><!-- Ignored comment --><style type="text/css">body {} </style><script type="text/javascript></script>`,
+  )
   expect(() => getByLabelText('LucyRicardo'))
     .toThrowErrorMatchingInlineSnapshot(`
     "Unable to find a label with the text of: LucyRicardo
