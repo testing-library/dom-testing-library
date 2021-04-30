@@ -1,20 +1,26 @@
 import {waitFor, waitForElementToBeRemoved} from '..'
 import {render} from './helpers/test-utils'
 
-async function runWaitFor({time = 300} = {}, options) {
+async function runWaitFor({time = 300, advanceTimers = true} = {}, options) {
   const response = 'data'
   const doAsyncThing = () =>
     new Promise(r => setTimeout(() => r(response), time))
   let result
   doAsyncThing().then(r => (result = r))
-
+  if (advanceTimers) {
+    jest.advanceTimersByTime(time)
+  }
   await waitFor(() => expect(result).toBe(response), options)
 }
+
+afterEach(() => {
+  jest.useRealTimers()
+})
 
 test('real timers', async () => {
   // the only difference when not using fake timers is this test will
   // have to wait the full length of the timeout
-  await runWaitFor()
+  await runWaitFor({advanceTimers: false})
 })
 
 test('legacy', async () => {
@@ -23,7 +29,7 @@ test('legacy', async () => {
 })
 
 test('modern', async () => {
-  jest.useFakeTimers()
+  jest.useFakeTimers('modern')
   await runWaitFor()
 })
 
