@@ -6,7 +6,7 @@
     height="80"
     width="80"
     alt="octopus"
-    src="https://raw.githubusercontent.com/testing-library/dom-testing-library/master/other/octopus.png"
+    src="https://raw.githubusercontent.com/testing-library/dom-testing-library/main/other/octopus.png"
   />
 </a>
 
@@ -41,7 +41,7 @@ practices.</p>
     <img
       width="500"
       alt="TestingJavaScript.com Learn the smart, efficient way to test any JavaScript application."
-      src="https://raw.githubusercontent.com/testing-library/dom-testing-library/master/other/testingjavascript.jpg"
+      src="https://raw.githubusercontent.com/testing-library/dom-testing-library/main/other/testingjavascript.jpg"
     />
   </a>
 </div>
@@ -338,11 +338,11 @@ Contributions of any kind welcome!
 [downloads-badge]: https://img.shields.io/npm/dm/@testing-library/dom.svg?style=flat-square
 [npmtrends]: http://www.npmtrends.com/@testing-library/dom
 [license-badge]: https://img.shields.io/npm/l/@testing-library/dom.svg?style=flat-square
-[license]: https://github.com/testing-library/dom-testing-library/blob/master/LICENSE
+[license]: https://github.com/testing-library/dom-testing-library/blob/main/LICENSE
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs]: http://makeapullrequest.com
 [coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
-[coc]: https://github.com/testing-library/dom-testing-library/blob/master/CODE_OF_CONDUCT.md
+[coc]: https://github.com/testing-library/dom-testing-library/blob/main/CODE_OF_CONDUCT.md
 [github-watch-badge]: https://img.shields.io/github/watchers/testing-library/dom-testing-library.svg?style=social
 [github-watch]: https://github.com/testing-library/dom-testing-library/watchers
 [github-star-badge]: https://img.shields.io/github/stars/testing-library/dom-testing-library.svg?style=social
