@@ -53,7 +53,7 @@ export function runWithExpensiveErrorDiagnosticsDisabled<T>(
   }
 }
 
-export function configure(newConfig: Partial<Config> | ConfigFn) {
+export function configure(newConfig: ConfigFn | Partial<Config>) {
   if (typeof newConfig === 'function') {
     // Pass the existing config out to the provided function
     // and accept a delta in return

@@ -309,6 +309,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/SimenB"><img src="https://avatars.githubusercontent.com/u/1404810?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Simen Bekkhus</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3ASimenB" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/gaearon"><img src="https://avatars.githubusercontent.com/u/810438?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dan Abramov</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3Agaearon" title="Bug reports">🐛</a> <a href="https://github.com/testing-library/dom-testing-library/pulls?q=is%3Apr+reviewed-by%3Agaearon" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://matan.io"><img src="https://avatars.githubusercontent.com/u/12711091?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matan Borenkraout</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=MatanBobi" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/simcha90"><img src="https://avatars.githubusercontent.com/u/56388545?v=4?s=100" width="100px;" alt=""/><br /><sub><b>simcha90</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=simcha90" title="Code">💻</a></td>
   </tr>
 </table>
 
