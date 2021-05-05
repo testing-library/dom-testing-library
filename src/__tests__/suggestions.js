@@ -620,6 +620,67 @@ test('should suggest hidden option if element is not in the accessibility tree',
   `)
 })
 
+describe('no accessibility warnings in case of silent mode in global config', () => {
+  // should be something like
+  // beforeAll(() => {
+  //   configure({silentA11yWarn: true})
+  // })
+
+  test('should suggest and warn about if element is not in the accessibility tree, but without console.warn', () => {
+    console.warn.mockImplementation(() => {})
+
+    renderIntoDocument(`
+    <input type="text" data-testid="foo" aria-hidden=true />
+  `)
+
+    expect(() => screen.getByTestId('foo', {hidden: true})).toThrowError(
+      /getByRole\('textbox', \{ hidden: true \}\)/,
+    )
+    // should be
+    // expect(console.warn).not.toHaveBeenCalled()
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining(`Element is inaccessible.`),
+    )
+  })
+
+  test('should suggest hidden option if element is not in the accessibility tree, but without console.warn', () => {
+    console.warn.mockImplementation(() => {})
+
+    const {container} = renderIntoDocument(`
+    <input type="text" data-testid="foo" aria-hidden=true />
+  `)
+
+    const suggestion = getSuggestedQuery(
+      container.querySelector('input'),
+      'get',
+      'role',
+    )
+    expect(suggestion).toMatchObject({
+      queryName: 'Role',
+      queryMethod: 'getByRole',
+      queryArgs: ['textbox', {hidden: true}],
+      variant: 'get',
+      warning: `Element is inaccessible. This means that the element and all its children are invisible to screen readers.
+    If you are using the aria-hidden prop, make sure this is the right choice for your case.
+    `,
+    })
+    suggestion.toString()
+
+    // should be
+    // expect(console.warn).not.toHaveBeenCalled()
+
+    expect(console.warn.mock.calls).toMatchInlineSnapshot(`
+    Array [
+      Array [
+        "Element is inaccessible. This means that the element and all its children are invisible to screen readers.
+        If you are using the aria-hidden prop, make sure this is the right choice for your case.
+        ",
+      ],
+    ]
+  `)
+  })
+})
+
 test('should find label text using the aria-labelledby', () => {
   const {container} = renderIntoDocument(`
   <div>
