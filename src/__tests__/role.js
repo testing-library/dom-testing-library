@@ -570,14 +570,14 @@ cases(
         <label for="username">User&nbsp;Name</label>
         <input id="username" />`,
       query: `User Name`,
-      length: 0,
+      length: 1,
     },
     'queryAllByByRole with nbsp at DOM and with `xa0` in query': {
       dom: `
         <label for="username">User&nbsp;Name</label>
         <input id="username" />`,
       query: `User\xa0Name`,
-      length: 1,
+      length: 0,
     },
   },
 )
