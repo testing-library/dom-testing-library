@@ -24,7 +24,7 @@ describe('window retrieval throws when given something other than a node', () =>
   })
   test('unknown as node', () => {
     expect(() => getWindowFromNode({})).toThrowErrorMatchingInlineSnapshot(
-      `"Unable to find the \\"window\\" object for the given node. Please file an issue with the code that's causing you to see this error: https://github.com/testing-library/dom-testing-library/issues/new"`,
+      `"The given node is not an HTMLElement."`,
     )
   })
 })
