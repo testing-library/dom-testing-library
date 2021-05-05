@@ -16,5 +16,5 @@ export interface ConfigFn {
   (existingConfig: Config): Partial<Config>
 }
 
-export function configure(configDelta: Partial<Config> | ConfigFn): void
+export function configure(configDelta: ConfigFn | Partial<Config>): void
 export function getConfig(): Config
