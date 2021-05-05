@@ -1,6 +1,7 @@
 import {getConfig} from '../config'
 import {checkContainerType} from '../helpers'
 import {getLabels, getRealLabels, getLabelContent} from '../label-helpers'
+import {AllByText, GetErrorFunction, Nullish} from '../../types'
 import {
   fuzzyMatches,
   matches,
@@ -12,19 +13,21 @@ import {
   wrapSingleQueryWithSuggestion,
 } from './all-utils'
 
-function queryAllLabels(container) {
-  return Array.from(container.querySelectorAll('label,input'))
+function queryAllLabels(
+  container: HTMLElement,
+): {textToMatch: Nullish<string>; node: HTMLElement}[] {
+  return Array.from(container.querySelectorAll<HTMLElement>('label,input'))
     .map(node => {
       return {node, textToMatch: getLabelContent(node)}
     })
     .filter(({textToMatch}) => textToMatch !== null)
 }
 
-function queryAllLabelsByText(
+const queryAllLabelsByText: AllByText = (
   container,
   text,
   {exact = true, trim, collapseWhitespace, normalizer} = {},
-) {
+) => {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
 
@@ -37,27 +40,32 @@ function queryAllLabelsByText(
     .map(({node}) => node)
 }
 
-function queryAllByLabelText(
+const queryAllByLabelText: AllByText = (
   container,
   text,
   {selector = '*', exact = true, collapseWhitespace, trim, normalizer} = {},
-) {
+) => {
   checkContainerType(container)
 
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-  const matchingLabelledElements = Array.from(container.querySelectorAll('*'))
+  const matchingLabelledElements = Array.from(
+    container.querySelectorAll<HTMLElement>('*'),
+  )
     .filter(element => {
       return (
         getRealLabels(element).length || element.hasAttribute('aria-labelledby')
       )
     })
-    .reduce((labelledElements, labelledElement) => {
+    .reduce<HTMLElement[]>((labelledElements, labelledElement) => {
       const labelList = getLabels(container, labelledElement, {selector})
       labelList
         .filter(label => Boolean(label.formControl))
         .forEach(label => {
-          if (matcher(label.content, label.formControl, text, matchNormalizer))
+          if (
+            matcher(label.content, label.formControl, text, matchNormalizer) &&
+            label.formControl
+          )
             labelledElements.push(label.formControl)
         })
       const labelsValue = labelList
@@ -92,6 +100,9 @@ function queryAllByLabelText(
       return labelledElements
     }, [])
     .concat(
+      // TODO: Remove ignore after `queryAllByAttribute` will be moved to TS
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       queryAllByAttribute('aria-label', container, text, {
         exact,
         normalizer: matchNormalizer,
@@ -110,7 +121,7 @@ function queryAllByLabelText(
 // )
 // however, we can give a more helpful error message than the generic one,
 // so we're writing this one out by hand.
-const getAllByLabelText = (container, text, ...rest) => {
+const getAllByLabelText: AllByText = (container, text, ...rest) => {
   const els = queryAllByLabelText(container, text, ...rest)
   if (!els.length) {
     const labels = queryAllLabelsByText(container, text, ...rest)
@@ -146,7 +157,10 @@ const getAllByLabelText = (container, text, ...rest) => {
   return els
 }
 
-function getTagNameOfElementAssociatedWithLabelViaFor(container, label) {
+function getTagNameOfElementAssociatedWithLabelViaFor(
+  container: Element,
+  label: Element,
+): Nullish<string> {
   const htmlFor = label.getAttribute('for')
   if (!htmlFor) {
     return null
@@ -157,7 +171,7 @@ function getTagNameOfElementAssociatedWithLabelViaFor(container, label) {
 }
 
 // the reason mentioned above is the same reason we're not using buildQueries
-const getMultipleError = (c, text) =>
+const getMultipleError: GetErrorFunction = (c, text) =>
   `Found multiple elements with the text of: ${text}`
 const queryByLabelText = wrapSingleQueryWithSuggestion(
   makeSingleQuery(queryAllByLabelText, getMultipleError),
