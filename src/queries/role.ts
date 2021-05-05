@@ -1,5 +1,9 @@
 import {computeAccessibleName} from 'dom-accessibility-api'
-import {roles as allRoles} from 'aria-query'
+import {
+  ARIAAbstractRole,
+  ARIARoleDefintionKey,
+  roles as allRoles,
+} from 'aria-query'
 import {
   computeAriaSelected,
   computeAriaChecked,
@@ -13,6 +17,7 @@ import {
 } from '../role-helpers'
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 import {checkContainerType} from '../helpers'
+import {AllByRole, ByRoleMatcher, ByRoleOptionsName, Nullish} from '../../types'
 import {
   buildQueries,
   fuzzyMatches,
@@ -21,7 +26,7 @@ import {
   matches,
 } from './all-utils'
 
-function queryAllByRole(
+const queryAllByRole: AllByRole = (
   container,
   role,
   {
@@ -38,28 +43,35 @@ function queryAllByRole(
     level,
     expanded,
   } = {},
-) {
+) => {
   checkContainerType(container)
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
 
   if (selected !== undefined) {
     // guard against unknown roles
-    if (allRoles.get(role)?.props['aria-selected'] === undefined) {
+    if (
+      allRoles.get(<ARIARoleDefintionKey>role)?.props['aria-selected'] ===
+      undefined
+    ) {
       throw new Error(`"aria-selected" is not supported on role "${role}".`)
     }
   }
 
   if (checked !== undefined) {
     // guard against unknown roles
-    if (allRoles.get(role)?.props['aria-checked'] === undefined) {
+    if (
+      allRoles.get(<ARIAAbstractRole>role)?.props['aria-checked'] === undefined
+    ) {
       throw new Error(`"aria-checked" is not supported on role "${role}".`)
     }
   }
 
   if (pressed !== undefined) {
     // guard against unknown roles
-    if (allRoles.get(role)?.props['aria-pressed'] === undefined) {
+    if (
+      allRoles.get(<ARIAAbstractRole>role)?.props['aria-pressed'] === undefined
+    ) {
       throw new Error(`"aria-pressed" is not supported on role "${role}".`)
     }
   }
@@ -73,13 +85,15 @@ function queryAllByRole(
 
   if (expanded !== undefined) {
     // guard against unknown roles
-    if (allRoles.get(role)?.props['aria-expanded'] === undefined) {
+    if (
+      allRoles.get(<ARIAAbstractRole>role)?.props['aria-expanded'] === undefined
+    ) {
       throw new Error(`"aria-expanded" is not supported on role "${role}".`)
     }
   }
 
   const subtreeIsInaccessibleCache = new WeakMap()
-  function cachedIsSubtreeInaccessible(element) {
+  function cachedIsSubtreeInaccessible(element: HTMLElement) {
     if (!subtreeIsInaccessibleCache.has(element)) {
       subtreeIsInaccessibleCache.set(element, isSubtreeInaccessible(element))
     }
@@ -87,12 +101,12 @@ function queryAllByRole(
     return subtreeIsInaccessibleCache.get(element)
   }
 
-  return Array.from(container.querySelectorAll('*'))
+  return Array.from(container.querySelectorAll<HTMLElement>('*'))
     .filter(node => {
       const isRoleSpecifiedExplicitly = node.hasAttribute('role')
 
       if (isRoleSpecifiedExplicitly) {
-        const roleValue = node.getAttribute('role')
+        const roleValue = node.getAttribute('role') ?? ''
         if (queryFallbacks) {
           return roleValue
             .split(' ')
@@ -108,7 +122,9 @@ function queryAllByRole(
         return matcher(firstWord, node, role, matchNormalizer)
       }
 
-      const implicitRoles = getImplicitAriaRoles(node)
+      // TODO: Remove ignore after `getImplicitAriaRoles` will be moved to TS
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const implicitRoles: Nullish<string>[] = getImplicitAriaRoles(node)
 
       return implicitRoles.some(implicitRole =>
         matcher(implicitRole, node, role, matchNormalizer),
@@ -134,11 +150,14 @@ function queryAllByRole(
       return true
     })
     .filter(element => {
-      return hidden === false
-        ? isInaccessible(element, {
+      return hidden
+        ? true
+        : !isInaccessible(element, {
+            // TODO: Remove ignore after `isInaccessible` will be moved to TS
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             isSubtreeInaccessible: cachedIsSubtreeInaccessible,
-          }) === false
-        : true
+          })
     })
     .filter(element => {
       if (name === undefined) {
@@ -158,7 +177,11 @@ function queryAllByRole(
     })
 }
 
-const getMultipleError = (c, role, {name} = {}) => {
+const getMultipleError = (
+  c: HTMLElement,
+  role: ByRoleMatcher,
+  {name}: {name?: ByRoleOptionsName} = {},
+): string => {
   let nameHint = ''
   if (name === undefined) {
     nameHint = ''
@@ -172,9 +195,12 @@ const getMultipleError = (c, role, {name} = {}) => {
 }
 
 const getMissingError = (
-  container,
-  role,
-  {hidden = getConfig().defaultHidden, name} = {},
+  container: HTMLElement,
+  role: string,
+  {
+    hidden = getConfig().defaultHidden,
+    name,
+  }: {hidden?: boolean; name?: ByRoleOptionsName} = {},
 ) => {
   if (getConfig()._disableExpensiveErrorDiagnostics) {
     return `Unable to find role="${role}"`
@@ -184,23 +210,26 @@ const getMissingError = (
   Array.from(container.children).forEach(childElement => {
     roles += prettyRoles(childElement, {
       hidden,
+      // TODO: Remove ignore after `prettyRoles` will be moved to TS
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       includeName: name !== undefined,
     })
   })
   let roleMessage
 
   if (roles.length === 0) {
-    if (hidden === false) {
+    if (hidden) {
+      roleMessage = 'There are no available roles.'
+    } else {
       roleMessage =
         'There are no accessible roles. But there might be some inaccessible roles. ' +
         'If you wish to access them, then set the `hidden` option to `true`. ' +
         'Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole'
-    } else {
-      roleMessage = 'There are no available roles.'
     }
   } else {
     roleMessage = `
-Here are the ${hidden === false ? 'accessible' : 'available'} roles:
+Here are the ${hidden ? 'available' : 'accessible'} roles:
 
   ${roles.replace(/\n/g, '\n  ').replace(/\n\s\s\n/g, '\n\n')}
 `.trim()
@@ -217,7 +246,7 @@ Here are the ${hidden === false ? 'accessible' : 'available'} roles:
 
   return `
 Unable to find an ${
-    hidden === false ? 'accessible ' : ''
+    hidden ? '' : 'accessible '
   }element with the role "${role}"${nameHint}
 
 ${roleMessage}`.trim()

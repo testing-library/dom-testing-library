@@ -66,6 +66,11 @@ export type FindByText = (
   waitForElementOptions?: waitForOptions,
 ) => Promise<HTMLElement>
 
+export type ByRoleOptionsName =
+  | RegExp
+  | string
+  | ((accessibleName: string, element: Nullish<Element>) => boolean)
+
 export interface ByRoleOptions extends MatcherOptions {
   /**
    * If true includes elements in the query set that are usually excluded from
@@ -107,10 +112,7 @@ export interface ByRoleOptions extends MatcherOptions {
   /**
    * Only considers  elements with the specified accessible name.
    */
-  name?:
-    | RegExp
-    | string
-    | ((accessibleName: string, element: Element) => boolean)
+  name?: ByRoleOptionsName
 }
 
 export type AllByRole = (
