@@ -90,6 +90,11 @@ export interface ByRoleOptions extends MatcherOptions {
   pressed?: boolean
   /**
    * If true only includes elements in the query set that are marked as
+   * current in the accessibility tree, i.e., `aria-current="true"`
+   */
+  current?: boolean
+  /**
+   * If true only includes elements in the query set that are marked as
    * expanded in the accessibility tree, i.e., `aria-expanded="true"`
    */
   expanded?: boolean

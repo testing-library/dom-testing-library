@@ -4,6 +4,7 @@ import {
   computeAriaSelected,
   computeAriaChecked,
   computeAriaPressed,
+  computeAriaCurrent,
   computeAriaExpanded,
   computeHeadingLevel,
   getImplicitAriaRoles,
@@ -35,6 +36,7 @@ function queryAllByRole(
     selected,
     checked,
     pressed,
+    current,
     level,
     expanded,
   } = {},
@@ -61,6 +63,13 @@ function queryAllByRole(
     // guard against unknown roles
     if (allRoles.get(role)?.props['aria-pressed'] === undefined) {
       throw new Error(`"aria-pressed" is not supported on role "${role}".`)
+    }
+  }
+
+  if (current !== undefined) {
+    // guard against unknown roles
+    if (allRoles.get(role)?.props['aria-current'] === undefined) {
+      throw new Error(`"aria-current" is not supported on role "${role}".`)
     }
   }
 
@@ -123,6 +132,9 @@ function queryAllByRole(
       }
       if (pressed !== undefined) {
         return pressed === computeAriaPressed(element)
+      }
+      if (current !== undefined) {
+        return current === computeAriaCurrent(element)
       }
       if (expanded !== undefined) {
         return expanded === computeAriaExpanded(element)

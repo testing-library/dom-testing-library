@@ -1,5 +1,7 @@
 import {render, renderIntoDocument} from './helpers/test-utils'
 
+import {ariaCurrentValues} from '../role-helpers'
+
 test('`selected` throws on unsupported roles', () => {
   const {getByRole} = render(`<input aria-selected="true" type="text">`)
   expect(() =>
@@ -16,6 +18,22 @@ test('`pressed` throws on unsupported roles', () => {
   ).toThrowErrorMatchingInlineSnapshot(
     `"\\"aria-pressed\\" is not supported on role \\"textbox\\"."`,
   )
+})
+
+test('`current` throws on unsupported value', () => {
+  const {getByRole} = render(`<a aria-pressed="invalid"  />`)
+  expect(() => getByRole('link', {current: true}))
+    .toThrowErrorMatchingInlineSnapshot(`
+    "Unable to find an accessible element with the role "link"
+
+    There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+    <div>
+      <a
+        aria-pressed="invalid"
+      />
+    </div>"
+  `)
 })
 
 test('`checked` throws on unsupported roles', () => {
@@ -176,6 +194,42 @@ test('`pressed: true|false` matches `pressed` elements with proper role', () => 
   expect(getByRole('button', {pressed: true})).toBeInTheDocument()
   expect(getByRole('button', {pressed: false})).toBeInTheDocument()
 })
+
+test('`current: true|false` matches `current` link', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <a href="#1" aria-current="true" />
+      <a href="#1" aria-current="false" />
+    </div>`,
+  )
+  expect(getByRole('link', {current: true})).toBeInTheDocument()
+  expect(getByRole('link', {current: false})).toBeInTheDocument()
+})
+
+test('`current: true|false` matches `current` elements with pzroper role', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <span role="link" aria-current="true">✔</span>
+      <span role="link" aria-current="false">𝒙</span>
+    </div>`,
+  )
+  expect(getByRole('link', {current: true})).toBeInTheDocument()
+  expect(getByRole('link', {current: false})).toBeInTheDocument()
+})
+
+test.each(ariaCurrentValues)(
+  '`current: %p values` matches `current` elements with proper role',
+  ariaCurrentValue => {
+    const {getByRole} = renderIntoDocument(
+      `<div>
+      <span role="link" aria-current="${ariaCurrentValue}">✔</span>
+      <span role="link" aria-current="false">𝒙</span>
+    </div>`,
+    )
+    expect(getByRole('link', {current: true})).toBeInTheDocument()
+    expect(getByRole('link', {current: false})).toBeInTheDocument()
+  },
+)
 
 test('`level` matches elements with `heading` role', () => {
   const {getAllByRole, queryByRole} = renderIntoDocument(

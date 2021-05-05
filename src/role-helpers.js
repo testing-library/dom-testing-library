@@ -3,6 +3,8 @@ import {computeAccessibleName} from 'dom-accessibility-api'
 import {prettyDOM} from './pretty-dom'
 import {getConfig} from './config'
 
+export const ariaCurrentValues = ['date', 'location', 'page', 'step', 'time']
+
 const elementRoleList = buildElementRoleList(elementRoles)
 
 /**
@@ -249,6 +251,21 @@ function computeAriaPressed(element) {
 
 /**
  * @param {Element} element -
+ * @returns {boolean | undefined} - false/true if (not)current, undefined if not current-able
+ */
+function computeAriaCurrent(element) {
+  // https://www.w3.org/TR/wai-aria-1.1/#aria-current
+  // explicit values
+  const attribute = 'aria-current'
+  const attributeValue = element.getAttribute(attribute)
+  if (ariaCurrentValues.includes(attributeValue)) {
+    return true
+  }
+  return checkBooleanAttribute(element, attribute)
+}
+
+/**
+ * @param {Element} element -
  * @returns {boolean | undefined} - false/true if (not)expanded, undefined if not expand-able
  */
 function computeAriaExpanded(element) {
@@ -301,6 +318,7 @@ export {
   computeAriaSelected,
   computeAriaChecked,
   computeAriaPressed,
+  computeAriaCurrent,
   computeAriaExpanded,
   computeHeadingLevel,
 }
