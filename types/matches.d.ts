@@ -1,10 +1,8 @@
 import {ARIARole} from 'aria-query'
 
-type Nullish<T> = T | null | undefined
-
 export type MatcherFunction = (
   content: string,
-  element: Nullish<Element>,
+  element: Element | null,
 ) => boolean
 export type Matcher = MatcherFunction | RegExp | number | string
 

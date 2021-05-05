@@ -1,7 +1,7 @@
 import {getConfig} from '../config'
 import {checkContainerType} from '../helpers'
 import {getLabels, getRealLabels, getLabelContent} from '../label-helpers'
-import {AllByText, GetErrorFunction, Nullish} from '../../types'
+import {AllByText, GetErrorFunction} from '../../types'
 import {
   fuzzyMatches,
   matches,
@@ -15,7 +15,7 @@ import {
 
 function queryAllLabels(
   container: HTMLElement,
-): {textToMatch: Nullish<string>; node: HTMLElement}[] {
+): {textToMatch: string | null; node: HTMLElement}[] {
   return Array.from(container.querySelectorAll<HTMLElement>('label,input'))
     .map(node => {
       return {node, textToMatch: getLabelContent(node)}
@@ -160,7 +160,7 @@ const getAllByLabelText: AllByText = (container, text, ...rest) => {
 function getTagNameOfElementAssociatedWithLabelViaFor(
   container: Element,
   label: Element,
-): Nullish<string> {
+): string | null {
   const htmlFor = label.getAttribute('for')
   if (!htmlFor) {
     return null
