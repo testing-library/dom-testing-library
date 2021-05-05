@@ -8,6 +8,7 @@ export interface Config {
   computedStyleSupportsPseudoElements: boolean
   defaultHidden: boolean
   showOriginalStackTrace: boolean
+  silentA11yWarn: boolean
   throwSuggestions: boolean
   getElementError: (message: string | null, container: Element) => Error
 }

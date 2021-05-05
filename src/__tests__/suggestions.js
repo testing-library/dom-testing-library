@@ -621,10 +621,9 @@ test('should suggest hidden option if element is not in the accessibility tree',
 })
 
 describe('no accessibility warnings in case of silent mode in global config', () => {
-  // should be something like
-  // beforeAll(() => {
-  //   configure({silentA11yWarn: true})
-  // })
+  beforeAll(() => {
+    configure({silentA11yWarn: true})
+  })
 
   test('should suggest and warn about if element is not in the accessibility tree, but without console.warn', () => {
     console.warn.mockImplementation(() => {})
@@ -636,11 +635,7 @@ describe('no accessibility warnings in case of silent mode in global config', ()
     expect(() => screen.getByTestId('foo', {hidden: true})).toThrowError(
       /getByRole\('textbox', \{ hidden: true \}\)/,
     )
-    // should be
-    // expect(console.warn).not.toHaveBeenCalled()
-    expect(console.warn).toHaveBeenCalledWith(
-      expect.stringContaining(`Element is inaccessible.`),
-    )
+    expect(console.warn).not.toHaveBeenCalled()
   })
 
   test('should suggest hidden option if element is not in the accessibility tree, but without console.warn', () => {
@@ -665,19 +660,7 @@ describe('no accessibility warnings in case of silent mode in global config', ()
     `,
     })
     suggestion.toString()
-
-    // should be
-    // expect(console.warn).not.toHaveBeenCalled()
-
-    expect(console.warn.mock.calls).toMatchInlineSnapshot(`
-    Array [
-      Array [
-        "Element is inaccessible. This means that the element and all its children are invisible to screen readers.
-        If you are using the aria-hidden prop, make sure this is the right choice for your case.
-        ",
-      ],
-    ]
-  `)
+    expect(console.warn).not.toHaveBeenCalled()
   })
 })
 

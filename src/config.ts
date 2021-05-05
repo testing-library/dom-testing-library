@@ -26,6 +26,10 @@ let config: InternalConfig = {
   // showOriginalStackTrace flag to show the full error stack traces for async errors
   showOriginalStackTrace: false,
 
+  // silentA11yWarn - don't output A11y warnings (can be useful for Chrome Extensions)
+  // https://github.com/testing-library/dom-testing-library/issues/785
+  silentA11yWarn: false,
+
   // throw errors w/ suggestions for better queries. Opt in so off by default.
   throwSuggestions: false,
 
