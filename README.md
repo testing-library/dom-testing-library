@@ -311,6 +311,9 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://matan.io"><img src="https://avatars.githubusercontent.com/u/12711091?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matan Borenkraout</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=MatanBobi" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/simcha90"><img src="https://avatars.githubusercontent.com/u/56388545?v=4?s=100" width="100px;" alt=""/><br /><sub><b>simcha90</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=simcha90" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/amitmiran137"><img src="https://avatars.githubusercontent.com/u/47772523?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Amit Miran</b></sub></a><br /><a href="#infra-amitmiran137" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
