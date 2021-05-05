@@ -22,6 +22,26 @@ test('query can return null', () => {
   expect(queryByAltText('LucyRicardo')).toBeNull()
 })
 
+test('query by text outside `aria-hidden` tags', () => {
+  const {queryByText} = render('<div><div>LucyRicardo</div></div>')
+  expect(queryByText('LucyRicardo')).not.toBeNull()
+  const {queryByText: queryByTextRoot} = render(
+    '<div aria-hidden="false">LucyRicardo</div>',
+  )
+  expect(queryByTextRoot('LucyRicardo')).not.toBeNull()
+})
+
+test('query by text inside `aria-hidden` tags', () => {
+  const {queryByText} = render(
+    '<div aria-hidden="true"><div>LucyRicardo</div></div>',
+  )
+  expect(queryByText('LucyRicardo')).toBeNull()
+  const {queryByText: queryByTextRoot} = render(
+    '<div aria-hidden="true">LucyRicardo</div>',
+  )
+  expect(queryByTextRoot('LucyRicardo')).toBeNull()
+})
+
 test('get throws a useful error message', () => {
   const {
     getByLabelText,

@@ -9,6 +9,31 @@ import {
   buildQueries,
 } from './all-utils'
 
+function ignoreHiddenElements(container, selector, baseArray) {
+  const hiddenElements = [
+    ...Array.from(container.querySelectorAll("[aria-hidden='true']")),
+  ]
+  baseArray.forEach(base => {
+    if (base.getAttribute('aria-hidden') === 'true') {
+      hiddenElements.push(base)
+    }
+  })
+  let foundHiddenChildren = [...hiddenElements]
+  hiddenElements.forEach(hiddenElement => {
+    foundHiddenChildren = [
+      ...foundHiddenChildren,
+      ...Array.from(hiddenElement.querySelectorAll(selector)),
+    ]
+  })
+  const findSameNode = foundElement =>
+    !foundHiddenChildren.find(foundHiddenElement =>
+      foundElement.isSameNode(foundHiddenElement),
+    )
+  return [...baseArray, ...container.querySelectorAll(selector)].filter(
+    findSameNode,
+  )
+}
+
 function queryAllByText(
   container,
   text,
@@ -28,7 +53,10 @@ function queryAllByText(
   if (typeof container.matches === 'function' && container.matches(selector)) {
     baseArray = [container]
   }
-  return [...baseArray, ...Array.from(container.querySelectorAll(selector))]
+
+  const foundElements = ignoreHiddenElements(container, selector, baseArray)
+
+  return foundElements
     .filter(node => !ignore || !node.matches(ignore))
     .filter(node => matcher(getNodeText(node), node, text, matchNormalizer))
 }
