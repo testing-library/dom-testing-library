@@ -5,16 +5,16 @@ import {render} from './helpers/test-utils'
 
 cases(
   'matches find case-sensitive full strings by default',
-  ({dom, query, queryFn}) => {
+  ({dom, query, queryFn, length = 1}) => {
     const queries = render(dom)
 
     const queryString = query
     const queryRegex = new RegExp(query)
     const queryFunc = text => text === query
 
-    expect(queries[queryFn](queryString)).toHaveLength(1)
-    expect(queries[queryFn](queryRegex)).toHaveLength(1)
-    expect(queries[queryFn](queryFunc)).toHaveLength(1)
+    expect(queries[queryFn](queryString)).toHaveLength(length)
+    expect(queries[queryFn](queryRegex)).toHaveLength(length)
+    expect(queries[queryFn](queryFunc)).toHaveLength(length)
 
     expect(queries[queryFn](query.toUpperCase())).toHaveLength(0) // case
     expect(queries[queryFn](query.slice(0, 1))).toHaveLength(0) // substring
@@ -59,6 +59,21 @@ cases(
         <input id="username" />`,
       query: `User Name`,
       queryFn: `queryAllByLabelText`,
+    },
+    'queryAllByLabelText with nbsp at DOM': {
+      dom: `
+        <label for="username">User&nbsp;Name</label>
+        <input id="username" />`,
+      query: `User Name`,
+      queryFn: `queryAllByLabelText`,
+    },
+    'queryAllByLabelText with nbsp at DOM and with `xa0` in query': {
+      dom: `
+        <label for="username">User&nbsp;Name</label>
+        <input id="username" />`,
+      query: `User\xa0Name`,
+      queryFn: `queryAllByLabelText`,
+      length: 0,
     },
   },
 )

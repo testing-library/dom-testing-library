@@ -1,3 +1,4 @@
+import cases from 'jest-in-case'
 import {configure, getConfig} from '../config'
 import {getQueriesForElement} from '../get-queries-for-element'
 import {render, renderIntoDocument} from './helpers/test-utils'
@@ -548,3 +549,35 @@ test('should find the input using type property instead of attribute', () => {
   const {getByRole} = render('<input type="124">')
   expect(getByRole('textbox')).not.toBeNull()
 })
+
+cases(
+  'searching ByRole with/without nbsp at DOM',
+  ({dom, query, length}) => {
+    const {queryAllByRole} = render(dom)
+
+    expect(queryAllByRole('textbox', {name: query})).toHaveLength(length)
+  },
+  {
+    queryAllByRole: {
+      dom: `
+        <label for="username">User Name</label>
+        <input id="username" />`,
+      query: `User Name`,
+      length: 1,
+    },
+    'queryAllByByRole with nbsp at DOM': {
+      dom: `
+        <label for="username">User&nbsp;Name</label>
+        <input id="username" />`,
+      query: `User Name`,
+      length: 0,
+    },
+    'queryAllByByRole with nbsp at DOM and with `xa0` in query': {
+      dom: `
+        <label for="username">User&nbsp;Name</label>
+        <input id="username" />`,
+      query: `User\xa0Name`,
+      length: 1,
+    },
+  },
+)
