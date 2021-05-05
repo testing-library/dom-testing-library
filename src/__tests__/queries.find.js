@@ -115,7 +115,13 @@ test('find rejects when something cannot be found', async () => {
   await expect(findAllByPlaceholderText('x', qo, wo)).rejects.toThrow('x')
 
   await expect(findByText('x', qo, wo)).rejects.toThrow('x')
-  await expect(findAllByText('x', qo, wo)).rejects.toThrow('x')
+  await expect(findByText(() => {}, qo, wo)).rejects.toThrow(
+    'Unable to find an element using the provided matcher',
+  )
+  await expect(findAllByText('x2', qo, wo)).rejects.toThrow('x')
+  await expect(findAllByText(() => {}, qo, wo)).rejects.toThrow(
+    'Unable to find an element using the provided matcher',
+  )
 
   await expect(findByAltText('x', qo, wo)).rejects.toThrow('x')
   await expect(findAllByAltText('x', qo, wo)).rejects.toThrow('x')

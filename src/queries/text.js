@@ -35,8 +35,14 @@ function queryAllByText(
 
 const getMultipleError = (c, text) =>
   `Found multiple elements with the text: ${text}`
-const getMissingError = (c, text) =>
-  `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`
+const getMissingError = (c, text) => {
+  const errorMsgBase = `Unable to find an element using the provided matcher.`
+  let errorMsgExtnd = ''
+  if (typeof text !== 'function') {
+    errorMsgExtnd = `The matcher is - ${text} This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`
+  }
+  return errorMsgBase.concat(errorMsgExtnd)
+}
 
 const queryAllByTextWithSuggestions = wrapAllByQueryWithSuggestion(
   queryAllByText,
