@@ -53,7 +53,7 @@ export async function testQueryHelpers() {
     content.split(/\s+/).some(id => id === automationId)
   const queryAllByAutomationId = (
     container: HTMLElement,
-    automationId: string | string[],
+    automationId: string[] | string,
     options?: MatcherOptions,
   ) =>
     queryAllByAttribute(

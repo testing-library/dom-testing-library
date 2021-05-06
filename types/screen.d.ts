@@ -8,7 +8,7 @@ export type Screen<Q extends Queries = typeof queries> = BoundFunctions<Q> & {
    * of elements
    */
   debug: (
-    element?: Element | HTMLDocument | Array<Element | HTMLDocument>,
+    element?: Array<Element | HTMLDocument> | Element | HTMLDocument,
     maxLength?: number,
     options?: OptionsReceived,
   ) => void
