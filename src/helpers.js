@@ -106,7 +106,7 @@ function getWindowFromNode(node) {
       `It looks like you passed an Array instead of a DOM node. Did you do something like \`fireEvent.click(screen.getAllBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`?`,
     )
   } else if (
-    node.debug instanceof Function &&
+    typeof node.debug === 'function' &&
     node.logTestingPlaygroundURL instanceof Function
   ) {
     throw new Error(
