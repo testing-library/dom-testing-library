@@ -20,7 +20,7 @@ async function waitForElementToBeRemoved(callback, options) {
     const elements = Array.isArray(callback) ? callback : [callback]
     const getRemainingElements = elements.map(element => {
       let parent = element.parentElement
-      if(parent === null) return () => null
+      if (parent === null) return () => null
       while (parent.parentElement) parent = parent.parentElement
       return () => (parent.contains(element) ? element : null)
     })
