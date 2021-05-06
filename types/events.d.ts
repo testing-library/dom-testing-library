@@ -1,25 +1,23 @@
+import {Nullish} from './matches'
+
 export type EventType =
-  | 'copy'
-  | 'cut'
-  | 'paste'
+  | 'abort'
+  | 'animationEnd'
+  | 'animationIteration'
+  | 'animationStart'
+  | 'blur'
+  | 'canPlay'
+  | 'canPlayThrough'
+  | 'change'
+  | 'click'
   | 'compositionEnd'
   | 'compositionStart'
   | 'compositionUpdate'
-  | 'keyDown'
-  | 'keyPress'
-  | 'keyUp'
-  | 'focus'
-  | 'blur'
-  | 'focusIn'
-  | 'focusOut'
-  | 'change'
-  | 'input'
-  | 'invalid'
-  | 'submit'
-  | 'reset'
-  | 'click'
   | 'contextMenu'
+  | 'copy'
+  | 'cut'
   | 'dblClick'
+  | 'doubleClick'
   | 'drag'
   | 'dragEnd'
   | 'dragEnter'
@@ -28,6 +26,25 @@ export type EventType =
   | 'dragOver'
   | 'dragStart'
   | 'drop'
+  | 'durationChange'
+  | 'emptied'
+  | 'encrypted'
+  | 'ended'
+  | 'error'
+  | 'focus'
+  | 'focusIn'
+  | 'focusOut'
+  | 'gotPointerCapture'
+  | 'input'
+  | 'invalid'
+  | 'keyDown'
+  | 'keyPress'
+  | 'keyUp'
+  | 'load'
+  | 'loadedData'
+  | 'loadedMetadata'
+  | 'loadStart'
+  | 'lostPointerCapture'
   | 'mouseDown'
   | 'mouseEnter'
   | 'mouseLeave'
@@ -35,76 +52,61 @@ export type EventType =
   | 'mouseOut'
   | 'mouseOver'
   | 'mouseUp'
+  | 'paste'
+  | 'pause'
+  | 'play'
+  | 'playing'
+  | 'pointerCancel'
+  | 'pointerDown'
+  | 'pointerEnter'
+  | 'pointerLeave'
+  | 'pointerMove'
+  | 'pointerOut'
+  | 'pointerOver'
+  | 'pointerUp'
   | 'popState'
+  | 'progress'
+  | 'rateChange'
+  | 'reset'
+  | 'scroll'
+  | 'seeked'
+  | 'seeking'
   | 'select'
+  | 'stalled'
+  | 'submit'
+  | 'suspend'
+  | 'timeUpdate'
   | 'touchCancel'
   | 'touchEnd'
   | 'touchMove'
   | 'touchStart'
-  | 'scroll'
-  | 'wheel'
-  | 'abort'
-  | 'canPlay'
-  | 'canPlayThrough'
-  | 'durationChange'
-  | 'emptied'
-  | 'encrypted'
-  | 'ended'
-  | 'loadedData'
-  | 'loadedMetadata'
-  | 'loadStart'
-  | 'pause'
-  | 'play'
-  | 'playing'
-  | 'progress'
-  | 'rateChange'
-  | 'seeked'
-  | 'seeking'
-  | 'stalled'
-  | 'suspend'
-  | 'timeUpdate'
+  | 'transitionEnd'
   | 'volumeChange'
   | 'waiting'
-  | 'load'
-  | 'error'
-  | 'animationStart'
-  | 'animationEnd'
-  | 'animationIteration'
-  | 'transitionEnd'
-  | 'doubleClick'
-  | 'pointerOver'
-  | 'pointerEnter'
-  | 'pointerDown'
-  | 'pointerMove'
-  | 'pointerUp'
-  | 'pointerCancel'
-  | 'pointerOut'
-  | 'pointerLeave'
-  | 'gotPointerCapture'
-  | 'lostPointerCapture'
+  | 'wheel'
 
 export type FireFunction = (
-  element: Document | Element | Window | Node,
-  event: Event,
+  element: Nullish<Document | Element | Node | Window>,
+  event: Nullish<Event>,
 ) => boolean
 export type FireObject = {
   [K in EventType]: (
-    element: Document | Element | Window | Node,
+    element: Document | Element | Node | Window,
     options?: {},
   ) => boolean
 }
 export type CreateFunction = (
   eventName: string,
-  node: Document | Element | Window | Node,
+  node: Nullish<Document | Element | Node | Window>,
   init?: {},
   options?: {EventType?: string; defaultInit?: {}},
 ) => Event
 export type CreateObject = {
   [K in EventType]: (
-    element: Document | Element | Window | Node,
+    element: Document | Element | Node | Window,
     options?: {},
   ) => Event
 }
 
-export const createEvent: CreateObject & CreateFunction
+export const createEvent: CreateFunction & CreateObject
 export const fireEvent: FireFunction & FireObject
