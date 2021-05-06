@@ -1,9 +1,11 @@
-import {Matcher, MatcherOptions} from './matches'
+import {Matcher, MatcherOptions, Nullish} from './matches'
 import {waitForOptions} from './wait-for'
+
+export type GetErrorFunction = (c: Nullish<Element>, alt: string) => string
 
 export interface SelectorMatcherOptions extends MatcherOptions {
   selector?: string
-  ignore?: string | boolean
+  ignore?: boolean | string
 }
 
 export type QueryByAttribute = (

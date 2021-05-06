@@ -14,30 +14,30 @@ export interface Suggestion {
 }
 
 export type Variant =
+  | 'find'
+  | 'findAll'
   | 'get'
   | 'getAll'
   | 'query'
   | 'queryAll'
-  | 'find'
-  | 'findAll'
 
 export type Method =
-  | 'Role'
-  | 'role'
+  | 'AltText'
+  | 'alttext'
+  | 'DisplayValue'
+  | 'displayvalue'
   | 'LabelText'
   | 'labeltext'
   | 'PlaceholderText'
   | 'placeholdertext'
-  | 'Text'
-  | 'text'
-  | 'DisplayValue'
-  | 'displayvalue'
-  | 'AltText'
-  | 'alttext'
-  | 'Title'
-  | 'title'
+  | 'Role'
+  | 'role'
   | 'TestId'
   | 'testid'
+  | 'Text'
+  | 'text'
+  | 'Title'
+  | 'title'
 
 export function getSuggestedQuery(
   element: HTMLElement,

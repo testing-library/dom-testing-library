@@ -1,23 +1,26 @@
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 import {checkContainerType} from '../helpers'
+import {AllByBoundAttribute, GetErrorFunction} from '../../types'
 import {matches, fuzzyMatches, makeNormalizer, buildQueries} from './all-utils'
 
-function queryAllByAltText(
+const queryAllByAltText: AllByBoundAttribute = (
   container,
   alt,
   {exact = true, collapseWhitespace, trim, normalizer} = {},
-) {
+) => {
   checkContainerType(container)
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-  return Array.from(container.querySelectorAll('img,input,area')).filter(node =>
+  return Array.from(
+    container.querySelectorAll<HTMLElement>('img,input,area'),
+  ).filter(node =>
     matcher(node.getAttribute('alt'), node, alt, matchNormalizer),
   )
 }
 
-const getMultipleError = (c, alt) =>
+const getMultipleError: GetErrorFunction = (c, alt) =>
   `Found multiple elements with the alt text: ${alt}`
-const getMissingError = (c, alt) =>
+const getMissingError: GetErrorFunction = (c, alt) =>
   `Unable to find an element with the alt text: ${alt}`
 
 const queryAllByAltTextWithSuggestions = wrapAllByQueryWithSuggestion(
