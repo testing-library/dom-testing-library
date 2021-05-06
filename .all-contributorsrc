@@ -1369,6 +1369,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "simcha90",
+      "name": "simcha90",
+      "avatar_url": "https://avatars.githubusercontent.com/u/56388545?v=4",
+      "profile": "https://github.com/simcha90",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "amitmiran137",
+      "name": "Amit Miran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/47772523?v=4",
+      "profile": "https://github.com/amitmiran137",
+      "contributions": [
+        "infra"
+      ]
     }
   ],
   "repoHost": "https://github.com"

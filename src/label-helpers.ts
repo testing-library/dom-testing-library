@@ -1,3 +1,4 @@
+import {Nullish} from '../types'
 import {TEXT_NODE} from './helpers'
 
 const labelledNodeNames = [
@@ -11,7 +12,7 @@ const labelledNodeNames = [
 ]
 
 function getTextContent(
-  node: Node | Element | HTMLInputElement,
+  node: Element | HTMLInputElement | Node,
 ): string | null {
   if (labelledNodeNames.includes(node.nodeName.toLowerCase())) {
     return ''
@@ -24,7 +25,7 @@ function getTextContent(
     .join('')
 }
 
-function getLabelContent(element: Element): string | null {
+function getLabelContent(element: Element): Nullish<string> {
   let textContent: string | null
   if (element.tagName.toLowerCase() === 'label') {
     textContent = getTextContent(element)
@@ -58,12 +59,14 @@ function getLabels(
   container: Element,
   element: Element,
   {selector = '*'} = {},
-) {
+): {content: Nullish<string>; formControl: Nullish<HTMLElement>}[] {
   const ariaLabelledBy = element.getAttribute('aria-labelledby')
   const labelsId = ariaLabelledBy ? ariaLabelledBy.split(' ') : []
   return labelsId.length
     ? labelsId.map(labelId => {
-        const labellingElement = container.querySelector(`[id="${labelId}"]`)
+        const labellingElement = container.querySelector<HTMLElement>(
+          `[id="${labelId}"]`,
+        )
         return labellingElement
           ? {content: getLabelContent(labellingElement), formControl: null}
           : {content: '', formControl: null}
@@ -73,7 +76,7 @@ function getLabels(
         const formControlSelector =
           'button, input, meter, output, progress, select, textarea'
         const labelledFormControl = Array.from(
-          label.querySelectorAll(formControlSelector),
+          label.querySelectorAll<HTMLElement>(formControlSelector),
         ).filter(formControlElement => formControlElement.matches(selector))[0]
         return {content: textToMatch, formControl: labelledFormControl}
       })
