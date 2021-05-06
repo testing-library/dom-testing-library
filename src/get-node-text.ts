@@ -1,8 +1,8 @@
 import {TEXT_NODE} from './helpers'
 
-function getNodeText(node) {
+function getNodeText(node: HTMLElement): string {
   if (node.matches('input[type=submit], input[type=button]')) {
-    return node.value
+    return (node as HTMLInputElement).value
   }
 
   return Array.from(node.childNodes)

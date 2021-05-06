@@ -108,8 +108,8 @@ export interface ByRoleOptions extends MatcherOptions {
    * Only considers  elements with the specified accessible name.
    */
   name?:
-    | string
     | RegExp
+    | string
     | ((accessibleName: string, element: Element) => boolean)
 }
 

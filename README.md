@@ -6,7 +6,7 @@
     height="80"
     width="80"
     alt="octopus"
-    src="https://raw.githubusercontent.com/testing-library/dom-testing-library/master/other/octopus.png"
+    src="https://raw.githubusercontent.com/testing-library/dom-testing-library/main/other/octopus.png"
   />
 </a>
 
@@ -41,7 +41,7 @@ practices.</p>
     <img
       width="500"
       alt="TestingJavaScript.com Learn the smart, efficient way to test any JavaScript application."
-      src="https://raw.githubusercontent.com/testing-library/dom-testing-library/master/other/testingjavascript.jpg"
+      src="https://raw.githubusercontent.com/testing-library/dom-testing-library/main/other/testingjavascript.jpg"
     />
   </a>
 </div>
@@ -309,6 +309,10 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/SimenB"><img src="https://avatars.githubusercontent.com/u/1404810?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Simen Bekkhus</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3ASimenB" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/gaearon"><img src="https://avatars.githubusercontent.com/u/810438?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dan Abramov</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3Agaearon" title="Bug reports">🐛</a> <a href="https://github.com/testing-library/dom-testing-library/pulls?q=is%3Apr+reviewed-by%3Agaearon" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://matan.io"><img src="https://avatars.githubusercontent.com/u/12711091?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matan Borenkraout</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=MatanBobi" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/simcha90"><img src="https://avatars.githubusercontent.com/u/56388545?v=4?s=100" width="100px;" alt=""/><br /><sub><b>simcha90</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=simcha90" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/amitmiran137"><img src="https://avatars.githubusercontent.com/u/47772523?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Amit Miran</b></sub></a><br /><a href="#infra-amitmiran137" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
   </tr>
 </table>
 
@@ -337,11 +341,11 @@ Contributions of any kind welcome!
 [downloads-badge]: https://img.shields.io/npm/dm/@testing-library/dom.svg?style=flat-square
 [npmtrends]: http://www.npmtrends.com/@testing-library/dom
 [license-badge]: https://img.shields.io/npm/l/@testing-library/dom.svg?style=flat-square
-[license]: https://github.com/testing-library/dom-testing-library/blob/master/LICENSE
+[license]: https://github.com/testing-library/dom-testing-library/blob/main/LICENSE
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs]: http://makeapullrequest.com
 [coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
-[coc]: https://github.com/testing-library/dom-testing-library/blob/master/CODE_OF_CONDUCT.md
+[coc]: https://github.com/testing-library/dom-testing-library/blob/main/CODE_OF_CONDUCT.md
 [github-watch-badge]: https://img.shields.io/github/watchers/testing-library/dom-testing-library.svg?style=social
 [github-watch]: https://github.com/testing-library/dom-testing-library/watchers
 [github-star-badge]: https://img.shields.io/github/stars/testing-library/dom-testing-library.svg?style=social
