@@ -1,7 +1,7 @@
-import {Matcher, MatcherOptions, Nullish} from './matches'
+import {Matcher, MatcherOptions} from './matches'
 import {waitForOptions} from './wait-for'
 
-export type GetErrorFunction = (c: Nullish<Element>, alt: string) => string
+export type GetErrorFunction = (c: Element | null, alt: string) => string
 
 export interface SelectorMatcherOptions extends MatcherOptions {
   selector?: string
