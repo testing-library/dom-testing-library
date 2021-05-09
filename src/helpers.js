@@ -107,7 +107,7 @@ function getWindowFromNode(node) {
     )
   } else if (
     typeof node.debug === 'function' &&
-    node.logTestingPlaygroundURL instanceof Function
+    typeof node.logTestingPlaygroundURL === 'function'
   ) {
     throw new Error(
       `It looks like you used 'screen' object instead of one of selectors from screen.selectMethod and it passed a 'screen' instead of a DOM node. Did you do something like \`fireEvent.click(screen, ...\` when you meant to use a \`fireEvent.click(screen.getBy..., \`?`,
