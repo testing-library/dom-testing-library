@@ -1,4 +1,3 @@
-import {Nullish} from '../types'
 import {TEXT_NODE} from './helpers'
 
 const labelledNodeNames = [
@@ -25,7 +24,7 @@ function getTextContent(
     .join('')
 }
 
-function getLabelContent(element: Element): Nullish<string> {
+function getLabelContent(element: Element): string | null {
   let textContent: string | null
   if (element.tagName.toLowerCase() === 'label') {
     textContent = getTextContent(element)
@@ -59,7 +58,7 @@ function getLabels(
   container: Element,
   element: Element,
   {selector = '*'} = {},
-): {content: Nullish<string>; formControl: Nullish<HTMLElement>}[] {
+): {content: string | null; formControl: HTMLElement | null}[] {
   const ariaLabelledBy = element.getAttribute('aria-labelledby')
   const labelsId = ariaLabelledBy ? ariaLabelledBy.split(' ') : []
   return labelsId.length
