@@ -5,8 +5,6 @@ import {
   DefaultNormalizerOptions,
 } from '../types'
 
-type Nullish<T> = T | null | undefined
-
 function assertNotNullOrUndefined<T>(
   matcher: T,
 ): asserts matcher is NonNullable<T> {
@@ -19,9 +17,9 @@ function assertNotNullOrUndefined<T>(
 }
 
 function fuzzyMatches(
-  textToMatch: Nullish<string>,
-  node: Nullish<Element>,
-  matcher: Nullish<Matcher>,
+  textToMatch: string | null,
+  node: Element | null,
+  matcher: Matcher | null,
   normalizer: NormalizerFn,
 ) {
   if (typeof textToMatch !== 'string') {
@@ -43,9 +41,9 @@ function fuzzyMatches(
 }
 
 function matches(
-  textToMatch: Nullish<string>,
-  node: Nullish<Element>,
-  matcher: Nullish<Matcher>,
+  textToMatch: string | null,
+  node: Element | null,
+  matcher: Matcher | null,
   normalizer: NormalizerFn,
 ) {
   if (typeof textToMatch !== 'string') {
