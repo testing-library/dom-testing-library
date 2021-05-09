@@ -110,7 +110,7 @@ function getWindowFromNode(node) {
     typeof node.logTestingPlaygroundURL === 'function'
   ) {
     throw new Error(
-      `It looks like you used 'screen' object instead of one of selectors from screen.selectMethod and it passed a 'screen' instead of a DOM node. Did you do something like \`fireEvent.click(screen, ...\` when you meant to use a \`fireEvent.click(screen.getBy..., \`?`,
+      `It looks like you passed a \`screen\` object. Did you do something like \`fireEvent.click(screen, ...\` when you meant to use a \`fireEvent.click(screen.getBy..., \`?`,
     )
   } else {
     // The user passed something unusual to a calling function
