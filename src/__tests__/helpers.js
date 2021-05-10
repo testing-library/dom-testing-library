@@ -15,7 +15,7 @@ describe('window retrieval throws when given something other than a node', () =>
   // actually here should be another more clear error output
   test('screen as node', () => {
     expect(() => getWindowFromNode(screen)).toThrowErrorMatchingInlineSnapshot(
-      `"It looks like you used 'screen' object instead of one of selectors from screen.selectMethod and it passed a 'screen' instead of a DOM node. Did you do something like \`fireEvent.click(screen, ...\` when you meant to use a \`fireEvent.click(screen.getBy..., \`?"`,
+      `"It looks like you used 'screen' object instead of one of selectors from screen.selectMethod and it passed a 'screen' instead of a DOM node. Did you do something like \`fireEvent.click(screen, ...\` when you meant to use a query, e.g. \`fireEvent.click(screen.getBy..., \`?"`,
     )
   })
   test('Promise as node', () => {
