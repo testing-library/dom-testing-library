@@ -1,3 +1,4 @@
+import {screen} from '../'
 import {
   getDocument,
   getWindowFromNode,
@@ -10,6 +11,13 @@ test('returns global document if exists', () => {
 })
 
 describe('window retrieval throws when given something other than a node', () => {
+  // we had an issue when user insert screen instead of query
+  // actually here should be another more clear error output
+  test('screen as node', () => {
+    expect(() => getWindowFromNode(screen)).toThrowErrorMatchingInlineSnapshot(
+      `"It looks like you passed a \`screen\` object. Did you do something like \`fireEvent.click(screen, ...\` when you meant to use a query, e.g. \`fireEvent.click(screen.getBy..., \`?"`,
+    )
+  })
   test('Promise as node', () => {
     expect(() =>
       getWindowFromNode(new Promise(jest.fn())),
