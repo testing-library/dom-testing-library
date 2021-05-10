@@ -38,6 +38,10 @@ jobs:
         with:
           useLockFile: false
 
+      # TODO: Can be removed if https://github.com/kentcdodds/kcd-scripts/pull/146 is released
+      - name: Verify format (`npm run format` committed?)
+        run: npm run format -- --check --no-write
+
       - name: ▶️ Run validate script
         run: npm run validate
 
