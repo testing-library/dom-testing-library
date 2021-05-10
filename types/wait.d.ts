@@ -4,9 +4,9 @@
  * Learn more: https://testing-library.com/docs/dom-testing-library/api-async#waitfor.
  */
 export function wait(
-    callback?: () => void,
-    options?: {
-        timeout?: number;
-        interval?: number;
-    },
-): Promise<void>;
+  callback?: () => void,
+  options?: {
+    timeout?: number
+    interval?: number
+  },
+): Promise<void>
