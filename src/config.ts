@@ -49,7 +49,7 @@ let config: InternalConfig = {
         message,
         prettyDOM(container),
         playgroundUrl &&
-          `Open this DOM in the Testing-Library Playground:\n${playgroundUrl}`,
+          `Open this markup in the Testing-Library Playground:\n${playgroundUrl}`,
       ]
         .filter(Boolean)
         .join('\n\n'),
