@@ -9,7 +9,7 @@ exports[`getByLabelText query will print the playground link when enabled in the
   </div>
 </body>
 
-Open this DOM in the Testing-Library Playground:
+Open this markup in the Testing-Library Playground:
 https://testing-playground.com/#markup=DwEwlgbgfAEgpgGwQe2AenNIA"
 `;
 
@@ -24,7 +24,7 @@ exports[`getByText query will print the playground link when enabled in the conf
   </div>
 </body>
 
-Open this DOM in the Testing-Library Playground:
+Open this markup in the Testing-Library Playground:
 https://testing-playground.com/#markup=DwEwlgbgfAEgpgGwQe2AenNIA"
 `;
 
