@@ -26,9 +26,9 @@ test('logs Playground URL that are attached to document.body', () => {
   screen.logTestingPlaygroundURL()
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
-    "Open this URL in your browser
+    Open this URL in your browser
 
-    https://testing-playground.com/#markup=DwEwlgbgfAFgpgGwQewAQHdkCcEmAenGiA"
+    https://testing-playground.com/#markup=DwEwlgbgfAFgpgGwQewAQHdkCcEmAenGiA
   `)
 })
 
@@ -36,7 +36,7 @@ test('logs messsage when element is empty', () => {
   screen.logTestingPlaygroundURL(document.createElement('div'))
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(
-    `"The provided element doesn't have any children."`,
+    `The provided element doesn't have any children.`,
   )
 })
 
@@ -44,13 +44,13 @@ test('logs messsage when element is not a valid HTML', () => {
   screen.logTestingPlaygroundURL(null)
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(
-    `"The element you're providing isn't a valid DOM element."`,
+    `The element you're providing isn't a valid DOM element.`,
   )
   console.log.mockClear()
   screen.logTestingPlaygroundURL({})
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(
-    `"The element you're providing isn't a valid DOM element."`,
+    `The element you're providing isn't a valid DOM element.`,
   )
 })
 
@@ -58,9 +58,9 @@ test('logs Playground URL that are passed as element', () => {
   screen.logTestingPlaygroundURL(render(`<h1>Sign <em>up</em></h1>`).container)
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
-    "Open this URL in your browser
+    Open this URL in your browser
 
-    https://testing-playground.com/#markup=DwCwjAfAyglg5gOwATAKYFsIFcAOwD0GEB4EQA"
+    https://testing-playground.com/#markup=DwCwjAfAyglg5gOwATAKYFsIFcAOwD0GEB4EQA
   `)
 })
 

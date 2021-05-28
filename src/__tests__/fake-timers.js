@@ -48,7 +48,7 @@ test('times out after 1000ms by default', async () => {
   await expect(
     waitForElementToBeRemoved(() => container, {onTimeout: e => e}),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"Timed out in waitForElementToBeRemoved."`,
+    `Timed out in waitForElementToBeRemoved.`,
   )
   // NOTE: this assertion ensures that the timeout runs in the declared (fake) clock
   // while in real time the time was only a fraction since the real clock is only bound by the CPU

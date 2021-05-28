@@ -151,7 +151,7 @@ test('should delegate to config.getElementError', async () => {
   ).catch(e => e)
 
   expect(getElementError).toBeCalledTimes(1)
-  expect(error.message).toMatchInlineSnapshot(`"Custom element error"`)
+  expect(error.message).toMatchInlineSnapshot(`Custom element error`)
   configure(originalConfig)
 })
 
@@ -205,7 +205,7 @@ test('if you switch from fake timers to real timers during the wait period you g
   const error = await waitForError
 
   expect(error.message).toMatchInlineSnapshot(
-    `"Changed from using fake timers to real timers while using waitFor. This is not allowed and will result in very strange behavior. Please ensure you're awaiting all async things your test is doing before changing to real timers. For more info, please go to https://github.com/testing-library/dom-testing-library/issues/830"`,
+    `Changed from using fake timers to real timers while using waitFor. This is not allowed and will result in very strange behavior. Please ensure you're awaiting all async things your test is doing before changing to real timers. For more info, please go to https://github.com/testing-library/dom-testing-library/issues/830`,
   )
   // stack trace has this file in it
   expect(error.stack).toMatch(__dirname)
@@ -221,7 +221,7 @@ test('if you switch from real timers to fake timers during the wait period you g
   const error = await waitForError
 
   expect(error.message).toMatchInlineSnapshot(
-    `"Changed from using real timers to fake timers while using waitFor. This is not allowed and will result in very strange behavior. Please ensure you're awaiting all async things your test is doing before changing to fake timers. For more info, please go to https://github.com/testing-library/dom-testing-library/issues/830"`,
+    `Changed from using real timers to fake timers while using waitFor. This is not allowed and will result in very strange behavior. Please ensure you're awaiting all async things your test is doing before changing to fake timers. For more info, please go to https://github.com/testing-library/dom-testing-library/issues/830`,
   )
   // stack trace has this file in it
   expect(error.stack).toMatch(__dirname)

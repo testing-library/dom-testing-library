@@ -96,17 +96,17 @@ test('logDOM logs prettyDOM with code frame to the console', () => {
 describe('prettyDOM fails with first parameter without outerHTML field', () => {
   test('with array', () => {
     expect(() => prettyDOM(['outerHTML'])).toThrowErrorMatchingInlineSnapshot(
-      `"Expected an element or document but got Array"`,
+      `Expected an element or document but got Array`,
     )
   })
   test('with number', () => {
     expect(() => prettyDOM(1)).toThrowErrorMatchingInlineSnapshot(
-      `"Expected an element or document but got number"`,
+      `Expected an element or document but got number`,
     )
   })
   test('with object', () => {
     expect(() => prettyDOM({})).toThrowErrorMatchingInlineSnapshot(
-      `"Expected an element or document but got Object"`,
+      `Expected an element or document but got Object`,
     )
   })
 })
