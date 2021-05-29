@@ -1,4 +1,4 @@
-import prettyFormat from 'pretty-format'
+import {format as prettyFormat, plugins} from 'pretty-format'
 import {getUserCodeFrame} from './get-user-code-frame'
 import {getDocument} from './helpers'
 
@@ -21,7 +21,7 @@ const getMaxLength = dom =>
     ? 0
     : (typeof process !== 'undefined' && process.env.DEBUG_PRINT_LIMIT) || 7000
 
-const {DOMElement, DOMCollection} = prettyFormat.plugins
+const {DOMElement, DOMCollection} = plugins
 
 function prettyDOM(dom, maxLength, options) {
   if (!dom) {
