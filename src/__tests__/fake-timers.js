@@ -68,7 +68,7 @@ test('recursive timers do not cause issues', async () => {
   }
 
   startTimer()
-  await runWaitFor({time: 800}, {timeout: 100})
+  await runWaitFor({time: 800}, {timeout: 900})
 
   recurse = false
 })

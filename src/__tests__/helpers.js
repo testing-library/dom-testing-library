@@ -1,10 +1,5 @@
 import {screen} from '../'
-import {
-  getDocument,
-  getWindowFromNode,
-  checkContainerType,
-  runWithRealTimers,
-} from '../helpers'
+import {getDocument, getWindowFromNode, checkContainerType} from '../helpers'
 
 test('returns global document if exists', () => {
   expect(getDocument()).toBe(document)
@@ -59,69 +54,5 @@ describe('query container validation throws when validation fails', () => {
     expect(() => checkContainerType({})).toThrowErrorMatchingInlineSnapshot(
       `"Expected container to be an Element, a Document or a DocumentFragment but got Object."`,
     )
-  })
-})
-
-describe('run with real timers', () => {
-  const realSetTimeout = global.setTimeout
-
-  afterEach(() => {
-    // restore timers replaced by jest.useFakeTimers()
-    jest.useRealTimers()
-    // restore setTimeout replaced by assignment
-    global.setTimeout = realSetTimeout
-  })
-
-  test('use real timers when timers are faked with jest.useFakeTimers(legacy)', () => {
-    // legacy timers use mocks and do not rely on a clock instance
-    jest.useFakeTimers('legacy')
-    runWithRealTimers(() => {
-      expect(global.setTimeout).toBe(realSetTimeout)
-    })
-    expect(global.setTimeout._isMockFunction).toBe(true)
-    expect(global.setTimeout.clock).toBeUndefined()
-  })
-
-  test('use real timers when timers are faked with jest.useFakeTimers(modern)', () => {
-    // modern timers use a clock instance instead of a mock
-    jest.useFakeTimers('modern')
-    runWithRealTimers(() => {
-      expect(global.setTimeout).toBe(realSetTimeout)
-    })
-    expect(global.setTimeout._isMockFunction).toBeUndefined()
-    expect(global.setTimeout.clock).toBeDefined()
-  })
-
-  test('do not use real timers when timers are not faked with jest.useFakeTimers', () => {
-    // useFakeTimers is not used, timers are faked in some other way
-    const fakedSetTimeout = callback => {
-      callback()
-    }
-    fakedSetTimeout.clock = jest.fn()
-    global.setTimeout = fakedSetTimeout
-
-    runWithRealTimers(() => {
-      expect(global.setTimeout).toBe(fakedSetTimeout)
-    })
-    expect(global.setTimeout).toBe(fakedSetTimeout)
-  })
-
-  describe('run with setImmediate and clearImmediate deleted', () => {
-    const setImmediate = global.setImmediate
-    const clearImmediate = global.clearImmediate
-
-    beforeEach(() => {
-      delete global.setImmediate
-      delete global.clearImmediate
-    })
-
-    afterEach(() => {
-      global.setImmediate = setImmediate
-      global.clearImmediate = clearImmediate
-    })
-
-    test('safe check for setImmediate and clearImmediate', () => {
-      expect(() => runWithRealTimers(() => {})).not.toThrow()
-    })
   })
 })

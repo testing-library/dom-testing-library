@@ -5,9 +5,6 @@ import {
   // We import these from the helpers rather than using the global version
   // because these will be *real* timers, regardless of whether we're in
   // an environment that's faked the timers out.
-  setImmediate,
-  setTimeout,
-  clearTimeout,
   checkContainerType,
 } from './helpers'
 import {getConfig, runWithExpensiveErrorDiagnosticsDisabled} from './config'
@@ -87,7 +84,10 @@ function waitFor(
         // of parallelization so we're fine.
         // https://stackoverflow.com/a/59243586/971592
         // eslint-disable-next-line no-await-in-loop
-        await new Promise(r => setImmediate(r))
+        await new Promise(r => {
+          setTimeout(r, 0)
+          jest.advanceTimersByTime(0)
+        })
       }
     } else {
       try {
@@ -187,23 +187,7 @@ function waitForWrapper(callback, options) {
   )
 }
 
-let hasWarned = false
-
-// deprecated... TODO: remove this method. We renamed this to `waitFor` so the
-// code people write reads more clearly.
-function wait(...args) {
-  // istanbul ignore next
-  const [first = () => {}, ...rest] = args
-  if (!hasWarned) {
-    hasWarned = true
-    console.warn(
-      `\`wait\` has been deprecated and replaced by \`waitFor\` instead. In most cases you should be able to find/replace \`wait\` with \`waitFor\`. Learn more: https://testing-library.com/docs/dom-testing-library/api-async#waitfor.`,
-    )
-  }
-  return waitForWrapper(first, ...rest)
-}
-
-export {waitForWrapper as waitFor, wait}
+export {waitForWrapper as waitFor}
 
 /*
 eslint
