@@ -50,11 +50,8 @@ test('times out after 1000ms by default', async () => {
   ).rejects.toThrowErrorMatchingInlineSnapshot(
     `Timed out in waitForElementToBeRemoved.`,
   )
-  // NOTE: this assertion ensures that the timeout runs in the declared (fake) clock
-  // while in real time the time was only a fraction since the real clock is only bound by the CPU
-  // So 10ms is really just an approximation on how long the CPU needs to execute our code.
-  // If people want to timeout in real time they should rely on their test runners.
-  expect(performance.now() - start).toBeLessThanOrEqual(10)
+  // NOTE: this assertion ensures that the timeout runs in the declared (fake) clock.
+  expect(performance.now() - start).toBeGreaterThanOrEqual(1000)
 })
 
 test('recursive timers do not cause issues', async () => {
