@@ -50,12 +50,11 @@ test('times out after 1000ms by default', async () => {
   ).rejects.toThrowErrorMatchingInlineSnapshot(
     `"Timed out in waitForElementToBeRemoved."`,
   )
-  // NOTE: this assertion ensures that even when we have fake timers, the
-  // timeout still takes the full 1000ms
-  // unfortunately, timeout clocks aren't super accurate, so we simply verify
-  // that it's greater than or equal to 900ms. That's enough to be confident
-  // that we're using real timers.
-  expect(performance.now() - start).toBeGreaterThanOrEqual(900)
+  // NOTE: this assertion ensures that the timeout runs in the declared (fake) clock
+  // while in real time the time was only a fraction since the real clock is only bound by the CPU
+  // So 10ms is really just an approximation on how long the CPU needs to execute our code.
+  // If people want to timeout in real time they should rely on their test runners.
+  expect(performance.now() - start).toBeLessThanOrEqual(10)
 })
 
 test('recursive timers do not cause issues', async () => {
@@ -68,7 +67,7 @@ test('recursive timers do not cause issues', async () => {
   }
 
   startTimer()
-  await runWaitFor({time: 800}, {timeout: 100})
+  await runWaitFor({time: 800}, {timeout: 900})
 
   recurse = false
 })

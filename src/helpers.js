@@ -1,84 +1,20 @@
-const globalObj = typeof window === 'undefined' ? global : window
 // Constant node.nodeType for text nodes, see:
 // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType#Node_type_constants
 const TEXT_NODE = 3
 
-// Currently this fn only supports jest timers, but it could support other test runners in the future.
-function runWithRealTimers(callback) {
-  return hasJestTimers()
-    ? runWithJestRealTimers(callback).callbackReturnValue
-    : // istanbul ignore next
-      callback()
-}
-
-function hasJestTimers() {
-  return (
-    typeof jest !== 'undefined' &&
-    jest !== null &&
-    typeof jest.useRealTimers === 'function'
-  )
-}
-
-function runWithJestRealTimers(callback) {
-  const timerAPI = {
-    clearInterval,
-    clearTimeout,
-    setInterval,
-    setTimeout,
-  }
-
-  // For more on why we have the check here,
-  // checkout https://github.com/testing-library/dom-testing-library/issues/914
-  if (typeof setImmediate === 'function') {
-    timerAPI.setImmediate = setImmediate
-  }
-  if (typeof clearImmediate === 'function') {
-    timerAPI.clearImmediate = clearImmediate
-  }
-
-  jest.useRealTimers()
-
-  const callbackReturnValue = callback()
-
-  const usedFakeTimers = Object.entries(timerAPI).some(
-    ([name, func]) => func !== globalObj[name],
-  )
-
-  if (usedFakeTimers) {
-    jest.useFakeTimers(timerAPI.setTimeout?.clock ? 'modern' : 'legacy')
-  }
-
-  return {
-    callbackReturnValue,
-    usedFakeTimers,
-  }
-}
-
 function jestFakeTimersAreEnabled() {
-  return hasJestTimers()
-    ? runWithJestRealTimers(() => {}).usedFakeTimers
-    : // istanbul ignore next
-      false
-}
-
-// we only run our tests in node, and setImmediate is supported in node.
-// istanbul ignore next
-function setImmediatePolyfill(fn) {
-  return globalObj.setTimeout(fn, 0)
-}
-
-function getTimeFunctions() {
-  // istanbul ignore next
-  return {
-    clearTimeoutFn: globalObj.clearTimeout,
-    setImmediateFn: globalObj.setImmediate || setImmediatePolyfill,
-    setTimeoutFn: globalObj.setTimeout,
+  /* istanbul ignore else */
+  if (typeof jest !== 'undefined' && jest !== null) {
+    return (
+      // legacy timers
+      setTimeout._isMockFunction === true ||
+      // modern timers
+      Object.prototype.hasOwnProperty.call(setTimeout, 'clock')
+    )
   }
+  // istanbul ignore next
+  return false
 }
-
-const {clearTimeoutFn, setImmediateFn, setTimeoutFn} = runWithRealTimers(
-  getTimeFunctions,
-)
 
 function getDocument() {
   /* istanbul ignore if */
@@ -144,10 +80,6 @@ function checkContainerType(container) {
 export {
   getWindowFromNode,
   getDocument,
-  clearTimeoutFn as clearTimeout,
-  setImmediateFn as setImmediate,
-  setTimeoutFn as setTimeout,
-  runWithRealTimers,
   checkContainerType,
   jestFakeTimersAreEnabled,
   TEXT_NODE,
