@@ -142,9 +142,9 @@ test('`selected: true` matches `aria-selected="true"` on supported roles', () =>
     'selected-listbox-option',
   ])
 
-  expect(
-    getAllByRole('rowheader', {selected: true}).map(({id}) => id),
-  ).toEqual(['selected-rowheader', 'selected-native-rowheader'])
+  expect(getAllByRole('rowheader', {selected: true}).map(({id}) => id)).toEqual(
+    ['selected-rowheader', 'selected-native-rowheader'],
+  )
 
   expect(getAllByRole('treeitem', {selected: true}).map(({id}) => id)).toEqual([
     'selected-treeitem',

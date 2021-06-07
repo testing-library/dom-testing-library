@@ -86,8 +86,8 @@ export function getSuggestedQuery(element, variant = 'get', method) {
     return makeSuggestion('Role', element, role, {
       variant,
       name: computeAccessibleName(element, {
-        computedStyleSupportsPseudoElements: getConfig()
-          .computedStyleSupportsPseudoElements,
+        computedStyleSupportsPseudoElements:
+          getConfig().computedStyleSupportsPseudoElements,
       }),
     })
   }

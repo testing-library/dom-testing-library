@@ -1099,11 +1099,8 @@ test('getByText ignores script tags by default', () => {
 })
 
 test('get/query input element by current value', () => {
-  const {
-    getByDisplayValue,
-    queryByDisplayValue,
-    getByTestId,
-  } = renderIntoDocument(`
+  const {getByDisplayValue, queryByDisplayValue, getByTestId} =
+    renderIntoDocument(`
     <div>
       <input placeholder="name" type="text" data-testid="name" value="Mercury" />
     </div>
@@ -1119,11 +1116,8 @@ test('get/query input element by current value', () => {
 })
 
 test('get/query select element by current value', () => {
-  const {
-    getByDisplayValue,
-    queryByDisplayValue,
-    getByTestId,
-  } = renderIntoDocument(`
+  const {getByDisplayValue, queryByDisplayValue, getByTestId} =
+    renderIntoDocument(`
     <select id="state-select" data-testid="state">
       <option value="">State</option>
       <option value="AL">Alabama</option>
@@ -1141,11 +1135,8 @@ test('get/query select element by current value', () => {
 })
 
 test('get/query textarea element by current value', () => {
-  const {
-    getByDisplayValue,
-    queryByDisplayValue,
-    getByTestId,
-  } = renderIntoDocument(`
+  const {getByDisplayValue, queryByDisplayValue, getByTestId} =
+    renderIntoDocument(`
     <textarea id="content-textarea" data-testid="content">
       Hello
     </textarea>
