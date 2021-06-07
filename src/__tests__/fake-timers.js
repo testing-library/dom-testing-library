@@ -11,6 +11,10 @@ async function runWaitFor({time = 300} = {}, options) {
   await waitFor(() => expect(result).toBe(response), options)
 }
 
+afterEach(() => {
+  jest.useRealTimers()
+})
+
 test('real timers', async () => {
   // the only difference when not using fake timers is this test will
   // have to wait the full length of the timeout
@@ -40,9 +44,10 @@ test('fake timer timeout', async () => {
 })
 
 test('times out after 1000ms by default', async () => {
+  const startReal = performance.now()
   jest.useFakeTimers()
   const {container} = render(`<div></div>`)
-  const start = performance.now()
+  const startFake = performance.now()
   // there's a bug with this rule here...
   // eslint-disable-next-line jest/valid-expect
   await expect(
@@ -51,7 +56,13 @@ test('times out after 1000ms by default', async () => {
     `Timed out in waitForElementToBeRemoved.`,
   )
   // NOTE: this assertion ensures that the timeout runs in the declared (fake) clock.
-  expect(performance.now() - start).toBeGreaterThanOrEqual(1000)
+  expect(performance.now() - startFake).toBeGreaterThanOrEqual(1000)
+  jest.useRealTimers()
+  // NOTE: this assertion ensures that the timeout runs in the declared (fake) clock
+  // while in real time the time was only a fraction since the real clock is only bound by the CPU.
+  // So 20ms is really just an approximation on how long the CPU needs to execute our code.
+  // If people want to timeout in real time they should rely on their test runners.
+  expect(performance.now() - startReal).toBeLessThanOrEqual(20)
 })
 
 test('recursive timers do not cause issues', async () => {
