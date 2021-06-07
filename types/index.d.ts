@@ -10,7 +10,6 @@ export {queries, queryHelpers, within}
 export * from './queries'
 export * from './query-helpers'
 export * from './screen'
-export * from './wait'
 export * from './wait-for'
 export * from './wait-for-element'
 export * from './wait-for-element-to-be-removed'
