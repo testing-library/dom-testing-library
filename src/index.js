@@ -4,7 +4,6 @@ import * as queryHelpers from './query-helpers'
 
 export * from './queries'
 export * from './wait-for'
-export * from './wait-for-element'
 export * from './wait-for-element-to-be-removed'
 export {getDefaultNormalizer} from './matches'
 export * from './get-node-text'
