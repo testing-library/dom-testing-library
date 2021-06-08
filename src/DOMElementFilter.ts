@@ -2,6 +2,7 @@
  * Source: https://github.com/facebook/jest/blob/e7bb6a1e26ffab90611b2593912df15b69315611/packages/pretty-format/src/plugins/DOMElement.ts
  */
 /* eslint-disable -- trying to stay as close to the original as possible */
+/* istanbul ignore file */
 import type {Config, NewPlugin, Printer, Refs} from 'pretty-format'
 
 function escapeHTML(str: string): string {
