@@ -1,4 +1,4 @@
-import prettyFormat from 'pretty-format'
+import * as prettyFormat from 'pretty-format'
 import createDOMElementFilter from './DOMElementFilter'
 import {getUserCodeFrame} from './get-user-code-frame'
 import {getDocument} from './helpers'
@@ -71,7 +71,7 @@ function prettyDOM(dom, maxLength, options = {}) {
     ...prettyFormatOptions
   } = options
 
-  const debugContent = prettyFormat(dom, {
+  const debugContent = prettyFormat.format(dom, {
     plugins: [createDOMElementFilter(filterNode), DOMCollection],
     printFunctionName: false,
     highlight: inNode(),
