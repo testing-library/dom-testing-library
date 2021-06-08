@@ -1,13 +1,21 @@
 import * as prettyFormat from 'pretty-format'
 
+export interface PrettyFormatOptions extends prettyFormat.OptionsReceived {
+  /**
+   * Given a `Node` return `false` if you whish to ignore that node in the output.
+   * By default, ignores `<style />`, `<script />` and comment nodes.
+   */
+  filterNode?: (node: Node) => boolean
+}
+
 export function prettyDOM(
   dom?: Element | HTMLDocument,
   maxLength?: number,
-  options?: prettyFormat.OptionsReceived,
+  options?: PrettyFormatOptions,
 ): string | false
 export function logDOM(
   dom?: Element | HTMLDocument,
   maxLength?: number,
-  options?: prettyFormat.OptionsReceived,
+  options?: PrettyFormatOptions,
 ): void
 export {prettyFormat}
