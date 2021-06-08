@@ -273,7 +273,7 @@ test('assigning a value to a target that cannot have a value throws an error', (
   expect(() =>
     fireEvent.change(node, {target: {value: 'a'}}),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"The given element does not have a value setter"`,
+    `The given element does not have a value setter`,
   )
 })
 

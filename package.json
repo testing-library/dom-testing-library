@@ -54,7 +54,7 @@
     "jest-serializer-ansi": "^1.0.3",
     "jest-watch-select-projects": "^2.0.0",
     "jsdom": "^16.4.0",
-    "kcd-scripts": "^7.5.3",
+    "kcd-scripts": "^11.0.0",
     "typescript": "^4.1.2"
   },
   "eslintConfig": {

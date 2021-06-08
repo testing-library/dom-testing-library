@@ -31,11 +31,11 @@ test('matchers throw on invalid matcher inputs', () => {
   expect(() =>
     matches('ABC', node, null, normalizer),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"It looks like null was passed instead of a matcher. Did you do something like getByText(null)?"`,
+    `It looks like null was passed instead of a matcher. Did you do something like getByText(null)?`,
   )
   expect(() =>
     fuzzyMatches('ABC', node, undefined, normalizer),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"It looks like undefined was passed instead of a matcher. Did you do something like getByText(undefined)?"`,
+    `It looks like undefined was passed instead of a matcher. Did you do something like getByText(undefined)?`,
   )
 })
