@@ -2,7 +2,7 @@ import * as prettyFormat from 'pretty-format'
 
 export interface PrettyFormatOptions extends prettyFormat.OptionsReceived {
   /**
-   * Given a `Node` return `false` if you whish to ignore that node in the output.
+   * Given a `Node` return `false` if you wish to ignore that node in the output.
    * By default, ignores `<style />`, `<script />` and comment nodes.
    */
   filterNode?: (node: Node) => boolean
