@@ -1280,3 +1280,34 @@ it(`should get element by it's label when there are elements with same text`, ()
   `)
   expect(getByLabelText('test 1')).toBeInTheDocument()
 })
+
+// TODO: undesired behavior. It should ignore the same element: https://github.com/testing-library/dom-testing-library/pull/907#pullrequestreview-678736288
+test('ByText error message ignores not the same elements as configured in `ignore`', () => {
+  const {getByText} = renderIntoDocument(`
+    <style>
+      .css-selector {
+        color: red;
+      }
+    </style>
+    <div class="css-selector"></div>
+  `)
+
+  expect(() =>
+    getByText('.css-selector', {selector: 'style', ignore: 'script'}),
+  ).toThrowErrorMatchingInlineSnapshot(`
+    "Unable to find an element with the text: .css-selector. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, <script />, <style />
+    <body>
+      
+        
+      
+        
+      <div
+        class="css-selector"
+      />
+      
+      
+    </body>"
+  `)
+})
