@@ -111,6 +111,7 @@ test('should suggest getByRole when used with getBy', () => {
 getByRole('button', { name: /submit/i })
 
 
+Ignored nodes: comments, <script />, <style />
 <body>
   <button
     data-testid="foo"
@@ -132,6 +133,7 @@ test('should suggest getAllByRole when used with getAllByTestId', () => {
 getAllByRole('button', { name: /submit/i })
 
 
+Ignored nodes: comments, <script />, <style />
 <body>
   
     

@@ -123,6 +123,7 @@ test('timeout logs a pretty DOM', async () => {
   expect(error.message).toMatchInlineSnapshot(`
     "always throws
 
+    Ignored nodes: comments, <script />, <style />
     <html>
       <head />
       <body>
@@ -186,6 +187,7 @@ test('when a promise is returned, if that is not resolved within the timeout, th
   expect((await waitForError).message).toMatchInlineSnapshot(`
     "Timed out in waitFor.
 
+    Ignored nodes: comments, <script />, <style />
     <html>
       <head />
       <body />

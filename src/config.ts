@@ -31,8 +31,18 @@ let config: InternalConfig = {
 
   // called when getBy* queries fail. (message, container) => Error
   getElementError(message, container) {
+    const prettifiedDOM = prettyDOM(container)
     const error = new Error(
-      [message, prettyDOM(container)].filter(Boolean).join('\n\n'),
+      [
+        message,
+        prettifiedDOM.length > 0
+          ? `Ignored nodes: comments, <script />, <style />\n${prettyDOM(
+              container,
+            )}`
+          : null,
+      ]
+        .filter(Boolean)
+        .join('\n\n'),
     )
     error.name = 'TestingLibraryElementError'
     return error
@@ -41,7 +51,6 @@ let config: InternalConfig = {
   computedStyleSupportsPseudoElements: false,
 }
 
-export const DEFAULT_IGNORE_TAGS = 'script, style'
 export function runWithExpensiveErrorDiagnosticsDisabled<T>(
   callback: Callback<T>,
 ) {
