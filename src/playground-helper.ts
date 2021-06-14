@@ -11,11 +11,6 @@ function encode(value: string) {
 }
 
 function getPlaygroundUrl(element: Element) {
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (!element) {
-    throw new Error(`The element you're providing isn't a valid DOM element.`)
-  }
-
   if (!element.innerHTML) {
     throw new Error(`The provided element doesn't have any children.`)
   }

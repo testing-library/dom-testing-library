@@ -10,6 +10,11 @@ const debug = (element, maxLength, options) =>
     : logDOM(element, maxLength, options)
 
 const logTestingPlaygroundURL = (element = getDocument().body) => {
+  if (!element || !('innerHTML' in element)) {
+    console.log(`The element you're providing isn't a valid DOM element.`)
+    return
+  }
+
   try {
     const url = getPlaygroundUrl(element)
     console.log(`Open this URL in your browser\n\n${url}`)
