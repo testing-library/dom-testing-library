@@ -36,6 +36,13 @@ beforeAll(() => {
   })
 })
 
+beforeEach(() => {
+  // Using require here instead of importing it at the top, because the import resulted in
+  // a function being used before a test had the chance to mock it.
+  // https://github.com/testing-library/dom-testing-library/pull/852#discussion_r557077851
+  require('../src/config').configure({printPlaygroundLink: false})
+})
+
 afterEach(() => {
   if (jest.isMockFunction(global.setTimeout)) {
     jest.useRealTimers()

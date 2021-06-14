@@ -10,6 +10,7 @@ export interface Config {
   showOriginalStackTrace: boolean
   throwSuggestions: boolean
   getElementError: (message: string | null, container: Element) => Error
+  printPlaygroundLink: boolean
 }
 
 export interface ConfigFn {

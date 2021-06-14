@@ -1,4 +1,5 @@
 import {Config, ConfigFn} from '../types/config'
+import {getPlaygroundUrl} from './playground-helper'
 import {prettyDOM} from './pretty-dom'
 
 type Callback<T> = () => T
@@ -31,14 +32,37 @@ let config: InternalConfig = {
 
   // called when getBy* queries fail. (message, container) => Error
   getElementError(message, container) {
+    const playgroundUrl = (() => {
+      try {
+        return (
+          message &&
+          getConfig().printPlaygroundLink &&
+          getPlaygroundUrl(container)
+        )
+      } catch {
+        return null
+      }
+    })()
+
     const error = new Error(
-      [message, prettyDOM(container)].filter(Boolean).join('\n\n'),
+      [
+        message,
+        prettyDOM(container),
+        playgroundUrl &&
+          `Open this markup in the Testing-Library Playground:\n${playgroundUrl}`,
+      ]
+        .filter(Boolean)
+        .join('\n\n'),
     )
+
     error.name = 'TestingLibraryElementError'
     return error
   },
   _disableExpensiveErrorDiagnostics: false,
   computedStyleSupportsPseudoElements: false,
+
+  // print a link to the playground when queries fail
+  printPlaygroundLink: true,
 }
 
 export const DEFAULT_IGNORE_TAGS = 'script, style'

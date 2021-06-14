@@ -4,7 +4,7 @@ import {configure, getConfig} from '../config'
 import {render} from './helpers/test-utils'
 
 const originalConfig = getConfig()
-beforeEach(() => {
+afterEach(() => {
   configure(originalConfig)
 })
 
@@ -94,6 +94,33 @@ cases(
       query: /his/,
       html: `<div data-testid="his"></div><div data-testid="history"></div>`,
     },
+  },
+)
+
+test.each([['getByText'], ['getByLabelText']])(
+  '%s query will print the playground link when enabled in the config',
+  query => {
+    configure({printPlaygroundLink: true})
+    document.body.innerHTML = '<div>Hello</div>'
+    expect(() => screen[query]('TEST QUERY')).toThrowErrorMatchingSnapshot()
+  },
+)
+
+test.each([['getByText'], ['getByLabelText']])(
+  '%s query will NOT print the playground link when disabled in the config',
+  query => {
+    configure({printPlaygroundLink: false})
+    document.body.innerHTML = '<div>Hello</div>'
+    expect(() => screen[query]('TEST QUERY')).not.toThrowError(/playground/i)
+  },
+)
+
+test.each([['getByText'], ['getByLabelText']])(
+  '%s query will NOT print the playground link when element has no children',
+  query => {
+    configure({printPlaygroundLink: true})
+    document.body.innerHTML = ''
+    expect(() => screen[query]('TEST QUERY')).not.toThrowError(/playground/i)
   },
 )
 

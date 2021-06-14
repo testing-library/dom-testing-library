@@ -2,7 +2,7 @@ import * as queryHelpers from '../query-helpers'
 import {configure, getConfig} from '../config'
 
 const originalConfig = getConfig()
-beforeEach(() => {
+afterEach(() => {
   configure(originalConfig)
 })
 
