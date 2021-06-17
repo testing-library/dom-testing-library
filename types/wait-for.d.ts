@@ -1,9 +1,10 @@
 export interface waitForOptions {
-  container?: HTMLElement
+  container?: Node
   timeout?: number
   interval?: number
   onTimeout?: (error: Error) => Error
   mutationObserverOptions?: MutationObserverInit
+  showOriginalStackTrace?: boolean
 }
 
 export function waitFor<T>(
