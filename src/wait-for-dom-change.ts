@@ -1,3 +1,4 @@
+import {waitForOptions} from '../types'
 import {
   getWindowFromNode,
   getDocument,
@@ -22,7 +23,7 @@ function waitForDomChange({
     attributes: true,
     characterData: true,
   },
-} = {}) {
+}: waitForOptions = {}) {
   if (!hasWarned) {
     hasWarned = true
     console.warn(
@@ -37,17 +38,19 @@ function waitForDomChange({
       observer.observe(container, mutationObserverOptions),
     )
 
-    function onDone(error, result) {
-      clearTimeout(timer)
+    function onDone(error: Error | null, result: MutationRecord[] | null) {
+      ;(clearTimeout as (t: NodeJS.Timeout | number) => void)(timer)
       setImmediate(() => observer.disconnect())
       if (error) {
         reject(error)
       } else {
-        resolve(result)
+        // either error or result is null, so if error is null then result is not
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        resolve(result!)
       }
     }
 
-    function onMutation(mutationsList) {
+    function onMutation(mutationsList: MutationRecord[]) {
       onDone(null, mutationsList)
     }
 
@@ -57,8 +60,8 @@ function waitForDomChange({
   })
 }
 
-function waitForDomChangeWrapper(...args) {
-  return getConfig().asyncWrapper(() => waitForDomChange(...args))
+function waitForDomChangeWrapper(options?: waitForOptions) {
+  return getConfig().asyncWrapper(() => waitForDomChange(options))
 }
 
 export {waitForDomChangeWrapper as waitForDomChange}
