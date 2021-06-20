@@ -1,6 +1,6 @@
 import * as prettyFormat from 'pretty-format'
 
-export interface PrettyFormatOptions extends prettyFormat.OptionsReceived {
+export interface PrettyDOMOptions extends prettyFormat.OptionsReceived {
   /**
    * Given a `Node` return `false` if you wish to ignore that node in the output.
    * By default, ignores `<style />`, `<script />` and comment nodes.
@@ -11,11 +11,11 @@ export interface PrettyFormatOptions extends prettyFormat.OptionsReceived {
 export function prettyDOM(
   dom?: Element | HTMLDocument,
   maxLength?: number,
-  options?: PrettyFormatOptions,
+  options?: PrettyDOMOptions,
 ): string | false
 export function logDOM(
   dom?: Element | HTMLDocument,
   maxLength?: number,
-  options?: PrettyFormatOptions,
+  options?: PrettyDOMOptions,
 ): void
 export {prettyFormat}
