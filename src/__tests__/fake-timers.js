@@ -80,8 +80,7 @@ test('recursive timers do not cause issues', async () => {
   recurse = false
 })
 
-// TODO: Should fail i.e. work the same as with "modern fake timers" once https://github.com/facebook/jest/pull/11567 is released.
-test('legacy fake timers do not waitFor requestAnimationFrame', async () => {
+test('legacy fake timers do waitFor requestAnimationFrame', async () => {
   jest.useFakeTimers('legacy')
 
   let exited = false
@@ -89,22 +88,9 @@ test('legacy fake timers do not waitFor requestAnimationFrame', async () => {
     exited = true
   })
 
-  await expect(async () => {
-    await waitFor(() => {
-      expect(exited).toBe(true)
-    })
-  }).rejects.toThrowErrorMatchingInlineSnapshot(`
-          "expect(received).toBe(expected) // Object.is equality
-
-          Expected: true
-          Received: false
-
-          Ignored nodes: comments, <script />, <style />
-          <html>
-            <head />
-            <body />
-          </html>"
-        `)
+  await waitFor(() => {
+    expect(exited).toBe(true)
+  })
 })
 
 test('modern fake timers do waitFor requestAnimationFrame', async () => {
