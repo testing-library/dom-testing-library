@@ -96,17 +96,51 @@ test('logDOM logs prettyDOM with code frame to the console', () => {
 describe('prettyDOM fails with first parameter without outerHTML field', () => {
   test('with array', () => {
     expect(() => prettyDOM(['outerHTML'])).toThrowErrorMatchingInlineSnapshot(
-      `"Expected an element or document but got Array"`,
+      `Expected an element or document but got Array`,
     )
   })
   test('with number', () => {
     expect(() => prettyDOM(1)).toThrowErrorMatchingInlineSnapshot(
-      `"Expected an element or document but got number"`,
+      `Expected an element or document but got number`,
     )
   })
   test('with object', () => {
     expect(() => prettyDOM({})).toThrowErrorMatchingInlineSnapshot(
-      `"Expected an element or document but got Object"`,
+      `Expected an element or document but got Object`,
     )
   })
+})
+
+test('prettyDOM ignores script elements and comments nodes by default', () => {
+  const {container} = renderIntoDocument(
+    '<body><script src="context.js"></script><!-- Some comment --><p>Hello, Dave</p></body>',
+  )
+
+  expect(prettyDOM(container)).toMatchInlineSnapshot(`
+    "<body>
+      <p>
+        Hello, Dave
+      </p>
+    </body>"
+  `)
+})
+
+test('prettyDOM can include all elements with a custom filter', () => {
+  const {container} = renderIntoDocument(
+    '<body><script src="context.js"></script><!-- Some comment --><p>Hello, Dave</p></body>',
+  )
+
+  expect(
+    prettyDOM(container, Number.POSITIVE_INFINITY, {filterNode: () => true}),
+  ).toMatchInlineSnapshot(`
+    "<body>
+      <script
+        src="context.js"
+      />
+      <!-- Some comment -->
+      <p>
+        Hello, Dave
+      </p>
+    </body>"
+  `)
 })

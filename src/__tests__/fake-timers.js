@@ -11,6 +11,10 @@ async function runWaitFor({time = 300} = {}, options) {
   await waitFor(() => expect(result).toBe(response), options)
 }
 
+afterEach(() => {
+  jest.useRealTimers()
+})
+
 test('real timers', async () => {
   // the only difference when not using fake timers is this test will
   // have to wait the full length of the timeout
@@ -40,22 +44,25 @@ test('fake timer timeout', async () => {
 })
 
 test('times out after 1000ms by default', async () => {
+  const startReal = performance.now()
   jest.useFakeTimers()
   const {container} = render(`<div></div>`)
-  const start = performance.now()
+  const startFake = performance.now()
   // there's a bug with this rule here...
   // eslint-disable-next-line jest/valid-expect
   await expect(
     waitForElementToBeRemoved(() => container, {onTimeout: e => e}),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"Timed out in waitForElementToBeRemoved."`,
+    `Timed out in waitForElementToBeRemoved.`,
   )
-  // NOTE: this assertion ensures that even when we have fake timers, the
-  // timeout still takes the full 1000ms
-  // unfortunately, timeout clocks aren't super accurate, so we simply verify
-  // that it's greater than or equal to 900ms. That's enough to be confident
-  // that we're using real timers.
-  expect(performance.now() - start).toBeGreaterThanOrEqual(900)
+  // NOTE: this assertion ensures that the timeout runs in the declared (fake) clock.
+  expect(performance.now() - startFake).toBeGreaterThanOrEqual(1000)
+  jest.useRealTimers()
+  // NOTE: this assertion ensures that the timeout runs in the declared (fake) clock
+  // while in real time the time was only a fraction since the real clock is only bound by the CPU.
+  // So 20ms is really just an approximation on how long the CPU needs to execute our code.
+  // If people want to timeout in real time they should rely on their test runners.
+  expect(performance.now() - startReal).toBeLessThanOrEqual(20)
 })
 
 test('recursive timers do not cause issues', async () => {
@@ -68,7 +75,47 @@ test('recursive timers do not cause issues', async () => {
   }
 
   startTimer()
-  await runWaitFor({time: 800}, {timeout: 100})
+  await runWaitFor({time: 800}, {timeout: 900})
 
   recurse = false
+})
+
+// TODO: Should fail i.e. work the same as with "modern fake timers" once https://github.com/facebook/jest/pull/11567 is released.
+test('legacy fake timers do not waitFor requestAnimationFrame', async () => {
+  jest.useFakeTimers('legacy')
+
+  let exited = false
+  requestAnimationFrame(() => {
+    exited = true
+  })
+
+  await expect(async () => {
+    await waitFor(() => {
+      expect(exited).toBe(true)
+    })
+  }).rejects.toThrowErrorMatchingInlineSnapshot(`
+          "expect(received).toBe(expected) // Object.is equality
+
+          Expected: true
+          Received: false
+
+          Ignored nodes: comments, <script />, <style />
+          <html>
+            <head />
+            <body />
+          </html>"
+        `)
+})
+
+test('modern fake timers do waitFor requestAnimationFrame', async () => {
+  jest.useFakeTimers('modern')
+
+  let exited = false
+  requestAnimationFrame(() => {
+    exited = true
+  })
+
+  await waitFor(() => {
+    expect(exited).toBe(true)
+  })
 })

@@ -66,13 +66,13 @@ test('works without a browser context on a dom node (JSDOM Fragment)', () => {
 
   expect(dtl.getByLabelText(container, /username/i)).toMatchInlineSnapshot(`
     <input
-      id="username"
+      id=username
     />
   `)
   expect(dtl.getByLabelText(container, /password/i)).toMatchInlineSnapshot(`
     <input
-      id="password"
-      type="password"
+      id=password
+      type=password
     />
   `)
 })
