@@ -41,6 +41,7 @@ export type EventType =
   | 'touchEnd'
   | 'touchMove'
   | 'touchStart'
+  | 'resize'
   | 'scroll'
   | 'wheel'
   | 'abort'

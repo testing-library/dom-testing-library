@@ -172,6 +172,10 @@ export const eventMap = {
     defaultInit: {bubbles: true, cancelable: true, composed: true},
   },
   // UI Events
+  resize: {
+    EventType: 'UIEvent',
+    defaultInit: {bubbles: false, cancelable: false},
+  },
   scroll: {
     EventType: 'UIEvent',
     defaultInit: {bubbles: false, cancelable: false},
