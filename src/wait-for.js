@@ -109,7 +109,7 @@ function waitFor(
 
       if (!usingJestFakeTimers) {
         clearInterval(intervalId)
-        observer.disconnect()
+        observer && observer.disconnect()
       }
 
       if (error) {
