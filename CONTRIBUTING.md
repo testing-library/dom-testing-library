@@ -8,7 +8,7 @@ series [How to Contribute to an Open Source Project on GitHub][egghead]
 ## Project setup
 
 1.  Fork and clone the repo
-2.  Run `npm run setup` to install dependencies and run validation
+2.  Run `npm run setup -s` to install dependencies and run validation
 3.  Create a branch for your PR with `git checkout -b pr/your-branch-name`
 
 > Tip: Keep your `main` branch pointing at the original repository and make pull
@@ -40,6 +40,5 @@ Also, please watch the repo and respond to questions/bug reports/feature
 requests! Thanks!
 
 [egghead]:
-  https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github
-[all-contributors]: https://github.com/all-contributors/all-contributors
+  https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github
 [issues]: https://github.com/testing-library/dom-testing-library/issues
