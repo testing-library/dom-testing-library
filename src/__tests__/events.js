@@ -167,6 +167,14 @@ eventTypes.forEach(({type, events, elementType}) => {
         expect(spy).toHaveBeenCalledTimes(1)
       })
     })
+
+    it('fires resize', () => {
+      const node = document.defaultView
+      const spy = jest.fn()
+      node.addEventListener('resize', spy, {once: true})
+      fireEvent.resize(node)
+      expect(spy).toHaveBeenCalledTimes(1)
+    })
   })
 })
 
@@ -273,7 +281,7 @@ test('assigning a value to a target that cannot have a value throws an error', (
   expect(() =>
     fireEvent.change(node, {target: {value: 'a'}}),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"The given element does not have a value setter"`,
+    `The given element does not have a value setter`,
   )
 })
 

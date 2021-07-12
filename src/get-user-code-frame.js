@@ -7,8 +7,10 @@ try {
   const nodeRequire = module && module.require
 
   readFileSync = nodeRequire.call(module, 'fs').readFileSync
-  codeFrameColumns = nodeRequire.call(module, '@babel/code-frame')
-    .codeFrameColumns
+  codeFrameColumns = nodeRequire.call(
+    module,
+    '@babel/code-frame',
+  ).codeFrameColumns
   chalk = nodeRequire.call(module, 'chalk')
 } catch {
   // We're in a browser environment

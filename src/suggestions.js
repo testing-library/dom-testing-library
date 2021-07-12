@@ -1,9 +1,10 @@
 import {computeAccessibleName} from 'dom-accessibility-api'
 import {getDefaultNormalizer} from './matches'
 import {getNodeText} from './get-node-text'
-import {DEFAULT_IGNORE_TAGS, getConfig} from './config'
+import {getConfig} from './config'
 import {getImplicitAriaRoles, isInaccessible} from './role-helpers'
 import {getLabels} from './label-helpers'
+import {DEFAULT_IGNORE_TAGS} from './shared'
 
 const normalize = getDefaultNormalizer()
 
@@ -86,8 +87,8 @@ export function getSuggestedQuery(element, variant = 'get', method) {
     return makeSuggestion('Role', element, role, {
       variant,
       name: computeAccessibleName(element, {
-        computedStyleSupportsPseudoElements: getConfig()
-          .computedStyleSupportsPseudoElements,
+        computedStyleSupportsPseudoElements:
+          getConfig().computedStyleSupportsPseudoElements,
       }),
     })
   }

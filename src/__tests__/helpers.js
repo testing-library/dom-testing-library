@@ -1,10 +1,5 @@
 import {screen} from '../'
-import {
-  getDocument,
-  getWindowFromNode,
-  checkContainerType,
-  runWithRealTimers,
-} from '../helpers'
+import {getDocument, getWindowFromNode, checkContainerType} from '../helpers'
 
 test('returns global document if exists', () => {
   expect(getDocument()).toBe(document)
@@ -15,24 +10,24 @@ describe('window retrieval throws when given something other than a node', () =>
   // actually here should be another more clear error output
   test('screen as node', () => {
     expect(() => getWindowFromNode(screen)).toThrowErrorMatchingInlineSnapshot(
-      `"It looks like you passed a \`screen\` object. Did you do something like \`fireEvent.click(screen, ...\` when you meant to use a query, e.g. \`fireEvent.click(screen.getBy..., \`?"`,
+      `It looks like you passed a \`screen\` object. Did you do something like \`fireEvent.click(screen, ...\` when you meant to use a query, e.g. \`fireEvent.click(screen.getBy..., \`?`,
     )
   })
   test('Promise as node', () => {
     expect(() =>
       getWindowFromNode(new Promise(jest.fn())),
     ).toThrowErrorMatchingInlineSnapshot(
-      `"It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`, or await the findBy query \`fireEvent.click(await screen.findBy...\`?"`,
+      `It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`, or await the findBy query \`fireEvent.click(await screen.findBy...\`?`,
     )
   })
   test('Array as node', () => {
     expect(() => getWindowFromNode([])).toThrowErrorMatchingInlineSnapshot(
-      `"It looks like you passed an Array instead of a DOM node. Did you do something like \`fireEvent.click(screen.getAllBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`?"`,
+      `It looks like you passed an Array instead of a DOM node. Did you do something like \`fireEvent.click(screen.getAllBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`?`,
     )
   })
   test('unknown as node', () => {
     expect(() => getWindowFromNode({})).toThrowErrorMatchingInlineSnapshot(
-      `"Unable to find the \\"window\\" object for the given node. Please file an issue with the code that's causing you to see this error: https://github.com/testing-library/dom-testing-library/issues/new"`,
+      `Unable to find the "window" object for the given node. Please file an issue with the code that's causing you to see this error: https://github.com/testing-library/dom-testing-library/issues/new`,
     )
   })
 })
@@ -42,86 +37,22 @@ describe('query container validation throws when validation fails', () => {
     expect(() =>
       checkContainerType(undefined),
     ).toThrowErrorMatchingInlineSnapshot(
-      `"Expected container to be an Element, a Document or a DocumentFragment but got undefined."`,
+      `Expected container to be an Element, a Document or a DocumentFragment but got undefined.`,
     )
   })
   test('null as container', () => {
     expect(() => checkContainerType(null)).toThrowErrorMatchingInlineSnapshot(
-      `"Expected container to be an Element, a Document or a DocumentFragment but got null."`,
+      `Expected container to be an Element, a Document or a DocumentFragment but got null.`,
     )
   })
   test('array as container', () => {
     expect(() => checkContainerType([])).toThrowErrorMatchingInlineSnapshot(
-      `"Expected container to be an Element, a Document or a DocumentFragment but got Array."`,
+      `Expected container to be an Element, a Document or a DocumentFragment but got Array.`,
     )
   })
   test('object as container', () => {
     expect(() => checkContainerType({})).toThrowErrorMatchingInlineSnapshot(
-      `"Expected container to be an Element, a Document or a DocumentFragment but got Object."`,
+      `Expected container to be an Element, a Document or a DocumentFragment but got Object.`,
     )
-  })
-})
-
-describe('run with real timers', () => {
-  const realSetTimeout = global.setTimeout
-
-  afterEach(() => {
-    // restore timers replaced by jest.useFakeTimers()
-    jest.useRealTimers()
-    // restore setTimeout replaced by assignment
-    global.setTimeout = realSetTimeout
-  })
-
-  test('use real timers when timers are faked with jest.useFakeTimers(legacy)', () => {
-    // legacy timers use mocks and do not rely on a clock instance
-    jest.useFakeTimers('legacy')
-    runWithRealTimers(() => {
-      expect(global.setTimeout).toBe(realSetTimeout)
-    })
-    expect(global.setTimeout._isMockFunction).toBe(true)
-    expect(global.setTimeout.clock).toBeUndefined()
-  })
-
-  test('use real timers when timers are faked with jest.useFakeTimers(modern)', () => {
-    // modern timers use a clock instance instead of a mock
-    jest.useFakeTimers('modern')
-    runWithRealTimers(() => {
-      expect(global.setTimeout).toBe(realSetTimeout)
-    })
-    expect(global.setTimeout._isMockFunction).toBeUndefined()
-    expect(global.setTimeout.clock).toBeDefined()
-  })
-
-  test('do not use real timers when timers are not faked with jest.useFakeTimers', () => {
-    // useFakeTimers is not used, timers are faked in some other way
-    const fakedSetTimeout = callback => {
-      callback()
-    }
-    fakedSetTimeout.clock = jest.fn()
-    global.setTimeout = fakedSetTimeout
-
-    runWithRealTimers(() => {
-      expect(global.setTimeout).toBe(fakedSetTimeout)
-    })
-    expect(global.setTimeout).toBe(fakedSetTimeout)
-  })
-
-  describe('run with setImmediate and clearImmediate deleted', () => {
-    const setImmediate = global.setImmediate
-    const clearImmediate = global.clearImmediate
-
-    beforeEach(() => {
-      delete global.setImmediate
-      delete global.clearImmediate
-    })
-
-    afterEach(() => {
-      global.setImmediate = setImmediate
-      global.clearImmediate = clearImmediate
-    })
-
-    test('safe check for setImmediate and clearImmediate', () => {
-      expect(() => runWithRealTimers(() => {})).not.toThrow()
-    })
   })
 })

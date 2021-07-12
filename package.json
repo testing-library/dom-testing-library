@@ -21,7 +21,7 @@
   "author": "Kent C. Dodds <me@kentcdodds.com> (https://kentcdodds.com)",
   "license": "MIT",
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "scripts": {
     "build": "kcd-scripts build  --no-ts-defs --ignore \"**/__tests__/**,**/__node_tests__/**,**/__mocks__/**\" && kcd-scripts build --no-ts-defs --bundle --no-clean",
@@ -46,7 +46,7 @@
     "chalk": "^4.1.0",
     "dom-accessibility-api": "^0.5.6",
     "lz-string": "^1.4.4",
-    "pretty-format": "^26.6.2"
+    "pretty-format": "^27.0.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.6",
@@ -54,7 +54,7 @@
     "jest-serializer-ansi": "^1.0.3",
     "jest-watch-select-projects": "^2.0.0",
     "jsdom": "^16.4.0",
-    "kcd-scripts": "^7.5.3",
+    "kcd-scripts": "^11.0.0",
     "typescript": "^4.1.2"
   },
   "eslintConfig": {
@@ -63,6 +63,7 @@
       "plugin:import/typescript"
     ],
     "rules": {
+      "@typescript-eslint/prefer-includes": "off",
       "import/prefer-default-export": "off",
       "import/no-unassigned-import": "off",
       "import/no-useless-path-segments": "off",

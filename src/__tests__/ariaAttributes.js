@@ -5,7 +5,7 @@ test('`selected` throws on unsupported roles', () => {
   expect(() =>
     getByRole('textbox', {selected: true}),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"\\"aria-selected\\" is not supported on role \\"textbox\\"."`,
+    `"aria-selected" is not supported on role "textbox".`,
   )
 })
 
@@ -14,7 +14,7 @@ test('`pressed` throws on unsupported roles', () => {
   expect(() =>
     getByRole('textbox', {pressed: true}),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"\\"aria-pressed\\" is not supported on role \\"textbox\\"."`,
+    `"aria-pressed" is not supported on role "textbox".`,
   )
 })
 
@@ -23,7 +23,7 @@ test('`checked` throws on unsupported roles', () => {
   expect(() =>
     getByRole('textbox', {checked: true}),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"\\"aria-checked\\" is not supported on role \\"textbox\\"."`,
+    `"aria-checked" is not supported on role "textbox".`,
   )
 })
 
@@ -32,7 +32,7 @@ test('`expanded` throws on unsupported roles', () => {
   expect(() =>
     getByRole('heading', {expanded: true}),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"\\"aria-expanded\\" is not supported on role \\"heading\\"."`,
+    `"aria-expanded" is not supported on role "heading".`,
   )
 })
 
@@ -142,9 +142,9 @@ test('`selected: true` matches `aria-selected="true"` on supported roles', () =>
     'selected-listbox-option',
   ])
 
-  expect(
-    getAllByRole('rowheader', {selected: true}).map(({id}) => id),
-  ).toEqual(['selected-rowheader', 'selected-native-rowheader'])
+  expect(getAllByRole('rowheader', {selected: true}).map(({id}) => id)).toEqual(
+    ['selected-rowheader', 'selected-native-rowheader'],
+  )
 
   expect(getAllByRole('treeitem', {selected: true}).map(({id}) => id)).toEqual([
     'selected-treeitem',
@@ -208,7 +208,7 @@ test('`level` throws on unsupported roles', () => {
   expect(() =>
     getByRole('button', {level: 3}),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"Role \\"button\\" cannot have \\"level\\" property."`,
+    `Role "button" cannot have "level" property.`,
   )
 })
 

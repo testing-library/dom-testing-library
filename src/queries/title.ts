@@ -42,13 +42,8 @@ const queryAllByTitleWithSuggestions = wrapAllByQueryWithSuggestion(
   'queryAll',
 )
 
-const [
-  queryByTitle,
-  getAllByTitle,
-  getByTitle,
-  findAllByTitle,
-  findByTitle,
-] = buildQueries(queryAllByTitle, getMultipleError, getMissingError)
+const [queryByTitle, getAllByTitle, getByTitle, findAllByTitle, findByTitle] =
+  buildQueries(queryAllByTitle, getMultipleError, getMissingError)
 
 export {
   queryByTitle,

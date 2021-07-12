@@ -111,6 +111,7 @@ test('should suggest getByRole when used with getBy', () => {
 getByRole('button', { name: /submit/i })
 
 
+Ignored nodes: comments, <script />, <style />
 <body>
   <button
     data-testid="foo"
@@ -132,6 +133,7 @@ test('should suggest getAllByRole when used with getAllByTestId', () => {
 getAllByRole('button', { name: /submit/i })
 
 
+Ignored nodes: comments, <script />, <style />
 <body>
   
     
@@ -612,9 +614,9 @@ test('should suggest hidden option if element is not in the accessibility tree',
   expect(console.warn.mock.calls).toMatchInlineSnapshot(`
     Array [
       Array [
-        "Element is inaccessible. This means that the element and all its children are invisible to screen readers.
+        Element is inaccessible. This means that the element and all its children are invisible to screen readers.
         If you are using the aria-hidden prop, make sure this is the right choice for your case.
-        ",
+        ,
       ],
     ]
   `)
@@ -648,14 +650,14 @@ test('should find label text using the aria-labelledby', () => {
     },
     `
     Object {
-      "queryArgs": Array [
+      queryArgs: Array [
         Object {},
       ],
-      "queryMethod": "getByLabelText",
-      "queryName": "LabelText",
-      "toString": [Function],
-      "variant": "get",
-      "warning": "",
+      queryMethod: getByLabelText,
+      queryName: LabelText,
+      toString: [Function],
+      variant: get,
+      warning: ,
     }
   `,
   )

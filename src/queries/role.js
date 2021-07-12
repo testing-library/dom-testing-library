@@ -148,8 +148,8 @@ function queryAllByRole(
 
       return matches(
         computeAccessibleName(element, {
-          computedStyleSupportsPseudoElements: getConfig()
-            .computedStyleSupportsPseudoElements,
+          computedStyleSupportsPseudoElements:
+            getConfig().computedStyleSupportsPseudoElements,
         }),
         element,
         name,
@@ -227,13 +227,8 @@ const queryAllByRoleWithSuggestions = wrapAllByQueryWithSuggestion(
   queryAllByRole.name,
   'queryAll',
 )
-const [
-  queryByRole,
-  getAllByRole,
-  getByRole,
-  findAllByRole,
-  findByRole,
-] = buildQueries(queryAllByRole, getMultipleError, getMissingError)
+const [queryByRole, getAllByRole, getByRole, findAllByRole, findByRole] =
+  buildQueries(queryAllByRole, getMultipleError, getMissingError)
 
 export {
   queryByRole,
