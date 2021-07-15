@@ -1387,6 +1387,15 @@
       "contributions": [
         "infra"
       ]
+    },
+    {
+      "login": "leschdom",
+      "name": "Dominik Lesch",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62334278?v=4",
+      "profile": "https://github.com/leschdom",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "repoHost": "https://github.com"
