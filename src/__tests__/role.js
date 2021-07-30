@@ -1,6 +1,7 @@
 import {configure, getConfig} from '../config'
 import {getQueriesForElement} from '../get-queries-for-element'
 import {render, renderIntoDocument} from './helpers/test-utils'
+import {CustomButton} from './helpers/CustomButton'
 
 test('by default logs accessible roles when it fails', () => {
   const {getByRole} = render(`<h1>Hi</h1>`)
@@ -571,4 +572,31 @@ describe('configuration', () => {
 test('should find the input using type property instead of attribute', () => {
   const {getByRole} = render('<input type="124">')
   expect(getByRole('textbox')).not.toBeNull()
+})
+
+describe('Web Component Custom Elements', () => {
+  beforeAll(() => {
+    customElements.define('custom-button', CustomButton)
+  })
+
+  test('should find accessible roles in elements that contain a shadowRoot', () => {
+    const {getByRole} = render(`<custom-button />`)
+    expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an accessible element with the role "article"
+
+Here are the accessible roles:
+
+  button:
+
+  Name "Button text":
+  <button />
+
+  --------------------------------------------------
+
+Ignored nodes: comments, <script />, <style />
+<div>
+  <custom-button />
+</div>"
+`)
+  })
 })

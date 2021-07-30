@@ -148,10 +148,9 @@ function getRoles(container, {hidden = false} = {}) {
   function flattenDOM(node) {
     return [
       node,
-      ...Array.from(node.children).reduce(
-        (acc, child) => [...acc, ...flattenDOM(child)],
-        [],
-      ),
+      ...Array.from(
+        node.shadowRoot ? node.shadowRoot.children : node.children,
+      ).reduce((acc, child) => [...acc, ...flattenDOM(child)], []),
     ]
   }
 
