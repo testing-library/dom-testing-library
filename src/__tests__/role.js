@@ -1,7 +1,6 @@
 import {configure, getConfig} from '../config'
 import {getQueriesForElement} from '../get-queries-for-element'
 import {render, renderIntoDocument} from './helpers/test-utils'
-import {CustomButton} from './helpers/CustomButton'
 
 test('by default logs accessible roles when it fails', () => {
   const {getByRole} = render(`<h1>Hi</h1>`)
@@ -576,7 +575,21 @@ test('should find the input using type property instead of attribute', () => {
 
 describe('Web Component Custom Elements', () => {
   beforeAll(() => {
-    customElements.define('custom-button', CustomButton)
+    customElements.define(
+      'custom-button',
+      class CustomButton extends HTMLElement {
+        constructor() {
+          super()
+
+          this.attachShadow({mode: 'open'})
+
+          const button = document.createElement('button')
+          button.innerHTML = 'Button text'
+
+          this.shadowRoot.append(button)
+        }
+      },
+    )
   })
 
   test('should find accessible roles in elements that contain a shadowRoot', () => {
