@@ -134,6 +134,7 @@ export function testA11yHelper() {
 
 export function eventTest() {
   fireEvent.popState(window, {
+    // @ts-expect-error I cannot explain the presence of `location` in this object, as it is not part of PopStateEvent
     location: 'http://www.example.com/?page=1',
     state: {page: 1},
   })
