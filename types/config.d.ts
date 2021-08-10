@@ -3,7 +3,7 @@ export interface Config {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   asyncWrapper(cb: (...args: any[]) => any): Promise<any>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  eventWrapper(cb: (...args: any[]) => any): void
+  eventWrapper(cb: (...args: any[]) => any): ReturnType<typeof cb>
   asyncUtilTimeout: number
   computedStyleSupportsPseudoElements: boolean
   defaultHidden: boolean
