@@ -347,8 +347,8 @@ export const eventMap = {
     EventType: 'PopStateEvent',
     defaultInit: {bubbles: true, cancelable: false},
   },
-}
+} as const;
 
 export const eventAliasMap = {
-  doubleClick: 'dblClick',
+  doubleClick: 'dblClick' as const,
 }
