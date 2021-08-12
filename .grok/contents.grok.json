@@ -1,0 +1,57 @@
+{
+  "569650b1-fed7-434f-8ff4-cbafe26f06b7": {
+    "filePath": ".grok/569650b1-fed7-434f-8ff4-cbafe26f06b7.grok.json",
+    "id": "569650b1-fed7-434f-8ff4-cbafe26f06b7",
+    "lastModifiedCommitHash": "458ef8738cb56de666899737d9b9aa94b32c9153",
+    "markers": [
+      {
+        "branch": "pr/ts/src/events",
+        "commitHash": "458ef8738cb56de666899737d9b9aa94b32c9153",
+        "file": "src/events.ts",
+        "location": [0, 0],
+        "repo": "dom-testing-library"
+      },
+      {
+        "branch": "pr/ts/src/events",
+        "commitHash": "458ef8738cb56de666899737d9b9aa94b32c9153",
+        "file": "src/events.ts",
+        "location": [0, 0],
+        "repo": "dom-testing-library"
+      },
+      {
+        "branch": "pr/ts/src/events",
+        "commitHash": "458ef8738cb56de666899737d9b9aa94b32c9153",
+        "file": "src/events.ts",
+        "location": [53, 53],
+        "repo": "dom-testing-library"
+      }
+    ],
+    "modifiedAt": 1628798017625,
+    "originalAuthor": "Rayat Rahman",
+    "text": "CreateEvent has a complex function signature if we try too hard to narrow the type of its `init` parameter or try to consider whether or not the environment its called in is IE11 (or otherwise doesn't define an Event-like class with the key `typeof eventType` in Window).\n\nIn general, I err on the side of assuming it's not invoked in IE11.",
+    "title": "The type of CreateEvent (as called as a function)",
+    "version": 1
+  },
+  "5ee5f316-1db9-4a19-9b28-b8a05b512a78": {
+    "filePath": ".grok/5ee5f316-1db9-4a19-9b28-b8a05b512a78.grok.json",
+    "id": "5ee5f316-1db9-4a19-9b28-b8a05b512a78",
+    "lastModifiedCommitHash": "458ef8738cb56de666899737d9b9aa94b32c9153",
+    "markers": [],
+    "modifiedAt": 1628799097645,
+    "originalAuthor": "Rayat Rahman",
+    "text": "For the definitions of both _createEvent and _fireEvent, converting from `function _creatEvent() {}` to `const _createEvent: CreateFunction = () => {}` (etc) allows us to explicitly check that the exported types (which are imported here and assigned to the functions)  match their written types/signatures. This also allows us to eventually export them as themselves, but `Required`. Eg: `export const createEvent = _createEvent as Required<typeof _createEvent>`, instead of a stronger, potentially more likely to be incorrect, cast of `_createEvent as CreateObject & CreateFunction`.\n\nThe downsides are:\n\n1. Loss of the explicit, quick designation as function that `function myFunc() {}` provides vs `const myFunc = () => {}`\n2. Unpredictable or different expectations for `this` when fireEvent or createEvent are invoked as methods, for example, as a result of becoming arrow functions\n3. A little uglier and slightly more mental overhead when reading/modifying this code in the future",
+    "title": "Function definition syntax signature to arrow syntax",
+    "version": 1
+  },
+  "bb22615c-5f7d-49f4-a543-76c931917d01": {
+    "filePath": ".grok/bb22615c-5f7d-49f4-a543-76c931917d01.grok.json",
+    "id": "bb22615c-5f7d-49f4-a543-76c931917d01",
+    "lastModifiedCommitHash": "84bf52f1b2b30f34e3a709e5bdd32e14623d6f60",
+    "markers": [],
+    "modifiedAt": 1628482259034,
+    "originalAuthor": "Rayat Rahman",
+    "text": "In the existing `events.d.ts` `EventType` is a manually defied union of string literals. Im this portentially redundant definitions it's the keys of the the `eventMap` objet, which I suspect serves as a better source of truth for `EventType`. Stlll, so as to not break anything that depended on the existing definition as distinct from its usage in parameters of `fireEvent`/`createEvent` (however un/common that might be), I've kept their defs distinct here.",
+    "title": "EventType in this file is partially redundant yet distinct from another similar type",
+    "version": 1
+  }
+}

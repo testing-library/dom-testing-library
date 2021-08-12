@@ -1,0 +1,260 @@
+{
+  "cells": [
+    {
+      "blockId": "10ecf944-1813-4dad-813a-4e3e3a9ce05e",
+      "data": {
+        "formatCode": false,
+        "isPreviewing": true,
+        "text": "This function's return type is tricky.<div><br></div><div>\r<div>If in IE11 or other environments where window/globalThis does not contain object properties for each type of DOM Event Class,\r <span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">it returns the value of window.document.createEvent(typeof eventType) &amp; init`. </span></div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\"><br></span></div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">In all other environments, it simply returns the Event or Event-like object constructed by `new window[typeof eventType]()` </span><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">I'm not sure how best to represent this in TS. For now, I will specify its return type as if it is invoked in the latter case.</span></div></div>"
+      },
+      "id": "10ecf944-1813-4dad-813a-4e3e3a9ce05e",
+      "type": "markdown"
+    },
+    {
+      "blockId": "22da9304-9908-4580-a3df-c1633c7be0c1",
+      "data": {
+        "contents": "File not found",
+        "file": "src/events.ts",
+        "range": {
+          "end": {
+            "character": 2147483647,
+            "line": 0
+          },
+          "start": {
+            "character": 0,
+            "line": 0
+          }
+        },
+        "scm": {
+          "authors": [],
+          "branch": "pr/ts/src/events",
+          "file": "src/events.ts",
+          "originalRange": {
+            "end": {
+              "character": 2147483647,
+              "line": 173
+            },
+            "start": {
+              "character": 0,
+              "line": 146
+            }
+          },
+          "remotes": [
+            {
+              "name": "origin",
+              "url": "github.com/riotrah/dom-testing-library"
+            },
+            {
+              "name": "upstream",
+              "url": "github.com/testing-library/dom-testing-library"
+            }
+          ],
+          "repoName": "dom-testing-library",
+          "revision": "458ef8738cb56de666899737d9b9aa94b32c9153",
+          "sameRepo": true
+        }
+      },
+      "id": "22da9304-9908-4580-a3df-c1633c7be0c1",
+      "type": "code",
+      "version": 1
+    },
+    {
+      "blockId": "3dd1f069-6d23-4bac-856d-2da380292acd",
+      "data": {
+        "contents": "File not found",
+        "file": "src/events.ts",
+        "range": {
+          "end": {
+            "character": 2147483647,
+            "line": 0
+          },
+          "start": {
+            "character": 0,
+            "line": 0
+          }
+        },
+        "scm": {
+          "authors": [],
+          "branch": "pr/ts/src/events",
+          "file": "src/events.ts",
+          "originalRange": {
+            "end": {
+              "character": 2147483647,
+              "line": 207
+            },
+            "start": {
+              "character": 0,
+              "line": 207
+            }
+          },
+          "remotes": [
+            {
+              "name": "origin",
+              "url": "github.com/riotrah/dom-testing-library"
+            },
+            {
+              "name": "upstream",
+              "url": "github.com/testing-library/dom-testing-library"
+            }
+          ],
+          "repoName": "dom-testing-library",
+          "revision": "458ef8738cb56de666899737d9b9aa94b32c9153",
+          "sameRepo": true
+        }
+      },
+      "id": "3dd1f069-6d23-4bac-856d-2da380292acd",
+      "type": "code",
+      "version": 1
+    },
+    {
+      "blockId": "603e6503-4d39-42df-a812-7786f5081c1f",
+      "data": {
+        "formatCode": false,
+        "isPreviewing": true,
+        "text": "<div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">The type of `init` is tricky. </span><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">If called in an environment that exposes an Event-extending class per Event type name in `window` or `globalThis`, </span><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">its type is that of the corresponding EventInit or EventInit-like interface. \n</span></div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\"><br></span></div><div>\r</div><div>Eg: If:\r</div><div>\r</div><div>    1. Aforemention environmental conditions are met\r </div><div>    2. And eventName extends keyof typeof window (eg eventName === \"MouseEvent\", etc)\r </div><div>    3. Then init will/should be (at least partially) MouseEventInit, as determined by the 2nd argument for the MouseEvent constructor, etc\r</div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\"><br></span></div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">However, if in an environment (eg IE11) where there does not exist such Event classes in window/globalThis, or if said property is not a Class, </span><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">`init` can be more correctly regarded as being of type Omit&lt; MyEvent , 'bubbles' | 'cancelable' | 'detail' &gt;, </span><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">where MyEvent is the actual Event derivative being created. That is, `init` is not so much an EventInit-like object so much as an Event-like one.\n</span></div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\"><br></span></div><div>Technically, whatever `init` is, in the IE11 case, its properties will be merged with the Event that gets created, so it could have any shape,\r <span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">including one that might violate any constraints that assumed the return of this function to be a \"legal\" DOM Event or derivative thereof. </span></div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\"><br></span></div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">Given that the IE11 case is the edge case, I have defined `init` somewhat broadly, but with preference given to its type as being that of an EventInit-like object.</span></div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\"><br></span></div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">In all cases, init may optionally define 'dataTransfer' and 'clipboardData' properties as well, </span><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">which are special cases for which the created Event object is explicity assigned as properties. </span><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">No attempt is made to verify whether those properties would reasonably exist on an Event of the created type.</span></div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\"><br></span></div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">In addition, `init` may also define a `target` property and a `detail` property.\n</span></div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\"><br></span></div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">`target`: should most probably take the shape of the same `node` that this Event is created against, </span><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">thus, eg. a click event's `target` prop should point to the element that was clicked on, </span><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">which should be the element passed as the first param to this function. However, </span><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">its usage implies the existence of a couple of optional properties - `files` and `value`, </span><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">whose types (taken from HTMLInputElement, their most likely containing object) I've explicitly intersected with their sole accesses below.\n</span></div><div><span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\"><br></span></div><div>\r</div><div>`detail`: is only correctly used in the first case from the above-mentioned environmental Event class considerations, where it is passed to the event constructor.\r <span style=\"color: var(--text-color); font-family: var(--font-family); font-size: var(--font-size); font-weight: var(--font-weight);\">In those cases its type is varied, and dependent on the Event in question.</span></div>"
+      },
+      "id": "603e6503-4d39-42df-a812-7786f5081c1f",
+      "type": "markdown"
+    },
+    {
+      "blockId": "170a3b9f-2e74-4693-8962-9468e85c7b25",
+      "data": {
+        "contents": "   *",
+        "file": "src/events.ts",
+        "range": {
+          "end": {
+            "character": 2147483647,
+            "line": 53
+          },
+          "start": {
+            "character": 0,
+            "line": 53
+          }
+        },
+        "scm": {
+          "authors": [],
+          "branch": "pr/ts/src/events",
+          "file": "src/events.ts",
+          "originalRange": {
+            "end": {
+              "character": 2147483647,
+              "line": 53
+            },
+            "start": {
+              "character": 0,
+              "line": 53
+            }
+          },
+          "remotes": [
+            {
+              "name": "origin",
+              "url": "github.com/riotrah/dom-testing-library"
+            },
+            {
+              "name": "upstream",
+              "url": "github.com/testing-library/dom-testing-library"
+            }
+          ],
+          "repoName": "dom-testing-library",
+          "revision": "458ef8738cb56de666899737d9b9aa94b32c9153",
+          "sameRepo": true
+        }
+      },
+      "id": "170a3b9f-2e74-4693-8962-9468e85c7b25",
+      "type": "code",
+      "version": 1
+    }
+  ],
+  "graphViewMetadata": {
+    "edges": [
+      {
+        "id": "10ecf944-1813-4dad-813a-4e3e3a9ce05e_bottom_22da9304-9908-4580-a3df-c1633c7be0c1_top_MTjQTiyqSlaHdlCxYvI-fQ",
+        "source": "10ecf944-1813-4dad-813a-4e3e3a9ce05e",
+        "sourceHandle": "bottom",
+        "target": "22da9304-9908-4580-a3df-c1633c7be0c1",
+        "targetHandle": "top"
+      },
+      {
+        "id": "3dd1f069-6d23-4bac-856d-2da380292acd_top_10ecf944-1813-4dad-813a-4e3e3a9ce05e_bottom_07DL6JvnROmfE-V0WNsDBQ",
+        "source": "3dd1f069-6d23-4bac-856d-2da380292acd",
+        "sourceHandle": "top",
+        "target": "10ecf944-1813-4dad-813a-4e3e3a9ce05e",
+        "targetHandle": "bottom"
+      },
+      {
+        "id": "603e6503-4d39-42df-a812-7786f5081c1f_left_22da9304-9908-4580-a3df-c1633c7be0c1_right_ZEEz4CigQxmMbyYnB2J4RA",
+        "source": "603e6503-4d39-42df-a812-7786f5081c1f",
+        "sourceHandle": "left",
+        "target": "22da9304-9908-4580-a3df-c1633c7be0c1",
+        "targetHandle": "right"
+      },
+      {
+        "id": "170a3b9f-2e74-4693-8962-9468e85c7b25_bottom_10ecf944-1813-4dad-813a-4e3e3a9ce05e_left_zuPisN4TQTmpQGeF-FVzLA",
+        "source": "170a3b9f-2e74-4693-8962-9468e85c7b25",
+        "sourceHandle": "bottom",
+        "target": "10ecf944-1813-4dad-813a-4e3e3a9ce05e",
+        "targetHandle": "left"
+      }
+    ],
+    "graph": {
+      "position": [257.09839600544933, 100.8498721136998],
+      "zoom": 1.0852293718818073
+    },
+    "nodes": [
+      {
+        "blockId": "10ecf944-1813-4dad-813a-4e3e3a9ce05e",
+        "dimensions": {
+          "height": 224,
+          "width": 577
+        },
+        "id": "dndnode_0",
+        "position": {
+          "x": 105,
+          "y": 45
+        }
+      },
+      {
+        "blockId": "22da9304-9908-4580-a3df-c1633c7be0c1",
+        "dimensions": {},
+        "id": "dndnode_1",
+        "position": {
+          "x": 270,
+          "y": 375
+        }
+      },
+      {
+        "blockId": "3dd1f069-6d23-4bac-856d-2da380292acd",
+        "dimensions": {},
+        "id": "dndnode_2",
+        "position": {
+          "x": -285,
+          "y": 375
+        }
+      },
+      {
+        "blockId": "603e6503-4d39-42df-a812-7786f5081c1f",
+        "dimensions": {
+          "height": 866,
+          "width": 537
+        },
+        "id": "dndnode_3",
+        "position": {
+          "x": 930,
+          "y": 45
+        }
+      },
+      {
+        "blockId": "170a3b9f-2e74-4693-8962-9468e85c7b25",
+        "dimensions": {},
+        "id": "dndnode_4",
+        "position": {
+          "x": -270,
+          "y": -90
+        }
+      }
+    ]
+  },
+  "text": "CreateEvent has a complex function signature if we try too hard to narrow the type of its `init` parameter or try to consider whether or not the environment its called in is IE11 (or otherwise doesn't define an Event-like class with the key `typeof eventType` in Window).\n\nIn general, I err on the side of assuming it's not invoked in IE11.",
+  "title": "The type of CreateEvent (as called as a function)",
+  "version": 1
+}

@@ -1,0 +1,14 @@
+{
+  "cells": [],
+  "graphViewMetadata": {
+    "edges": [],
+    "graph": {
+      "position": [1103.0797527512682, -472.6089894708548],
+      "zoom": 0.9421312739048091
+    },
+    "nodes": []
+  },
+  "text": "In the existing `events.d.ts` `EventType` is a manually defied union of string literals. Im this portentially redundant definitions it's the keys of the the `eventMap` objet, which I suspect serves as a better source of truth for `EventType`. Stlll, so as to not break anything that depended on the existing definition as distinct from its usage in parameters of `fireEvent`/`createEvent` (however un/common that might be), I've kept their defs distinct here.",
+  "title": "EventType in this file is partially redundant yet distinct from another similar type",
+  "version": 1
+}

@@ -1,0 +1,10 @@
+{
+  "cells": [],
+  "graphViewMetadata": {
+    "edges": [],
+    "nodes": []
+  },
+  "text": "For the definitions of both _createEvent and _fireEvent, converting from `function _creatEvent() {}` to `const _createEvent: CreateFunction = () => {}` (etc) allows us to explicitly check that the exported types (which are imported here and assigned to the functions)  match their written types/signatures. This also allows us to eventually export them as themselves, but `Required`. Eg: `export const createEvent = _createEvent as Required<typeof _createEvent>`, instead of a stronger, potentially more likely to be incorrect, cast of `_createEvent as CreateObject & CreateFunction`.\n\nThe downsides are:\n\n1. Loss of the explicit, quick designation as function that `function myFunc() {}` provides vs `const myFunc = () => {}`\n2. Unpredictable or different expectations for `this` when fireEvent or createEvent are invoked as methods, for example, as a result of becoming arrow functions\n3. A little uglier and slightly more mental overhead when reading/modifying this code in the future",
+  "title": "Function definition syntax signature to arrow syntax",
+  "version": 1
+}
