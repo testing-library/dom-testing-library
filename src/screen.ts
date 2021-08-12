@@ -44,22 +44,16 @@ const logTestingPlaygroundURL = (element = getDocument().body) => {
   )
 }
 
-const initialValue: {
-  [key in keyof typeof queries | 'debug' | 'logTestingPlaygroundURL']?: Function
-} = {debug, logTestingPlaygroundURL}
+const initialValue = {debug, logTestingPlaygroundURL}
 
 export const screen =
   typeof document !== 'undefined' && document.body // eslint-disable-line @typescript-eslint/no-unnecessary-condition
     ? getQueriesForElement(document.body, queries, initialValue)
-    : typedKeysOf(queries).reduce<typeof initialValue>((helpers, key) => {
-        helpers[key] = () => {
+    : Object.keys(queries).reduce((helpers, key) => {
+        helpers[key as keyof typeof initialValue] = () => {
           throw new TypeError(
             'For queries bound to document.body a global document has to be available... Learn more: https://testing-library.com/s/screen-global-error',
           )
         }
         return helpers
       }, initialValue)
-
-function typedKeysOf<O extends Object>(o: O) {
-  return Object.keys(o) as Array<keyof O>
-}
