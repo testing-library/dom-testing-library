@@ -50,6 +50,9 @@ export const screen =
   typeof document !== 'undefined' && document.body // eslint-disable-line @typescript-eslint/no-unnecessary-condition
     ? getQueriesForElement(document.body, queries, initialValue)
     : Object.keys(queries).reduce((helpers, key) => {
+        // `key` is for all intents and purposes the type of keyof `helpers`, which itself is the type of `initialValue` plus incoming properties from `queries`
+        // if `Object.keys(something)` returned Array<keyof typeof something> this explicit type assertion would not be necessary
+        // see https://stackoverflow.com/questions/55012174/why-doesnt-object-keys-return-a-keyof-type-in-typescript
         helpers[key as keyof typeof initialValue] = () => {
           throw new TypeError(
             'For queries bound to document.body a global document has to be available... Learn more: https://testing-library.com/s/screen-global-error',
