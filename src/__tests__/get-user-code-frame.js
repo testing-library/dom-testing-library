@@ -39,13 +39,13 @@ test('it returns only user code frame when code frames from node_modules are fir
   const userTrace = getUserCodeFrame(stack)
 
   expect(userTrace).toMatchInlineSnapshot(`
-    /sample-error/error-example.js:7:14
-      5 |         document.createTextNode('Hello world')
-      6 |       )
-    > 7 |       screen.debug()
-        |              ^
-    
-  `)
+"/sample-error/error-example.js:7:14
+  5 |         document.createTextNode('Hello world')
+  6 |       )
+> 7 |       screen.debug()
+    |              ^
+"
+`)
 })
 
 test('it returns only user code frame when node code frames are present afterwards', () => {
@@ -59,13 +59,13 @@ test('it returns only user code frame when node code frames are present afterwar
   const userTrace = getUserCodeFrame()
 
   expect(userTrace).toMatchInlineSnapshot(`
-    /sample-error/error-example.js:7:14
-      5 |         document.createTextNode('Hello world')
-      6 |       )
-    > 7 |       screen.debug()
-        |              ^
-    
-  `)
+"/sample-error/error-example.js:7:14
+  5 |         document.createTextNode('Hello world')
+  6 |       )
+> 7 |       screen.debug()
+    |              ^
+"
+`)
 })
 
 test("it returns empty string if file from code frame can't be read", () => {

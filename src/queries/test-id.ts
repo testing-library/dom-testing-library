@@ -7,9 +7,6 @@ const getTestIdAttribute = () => getConfig().testIdAttribute
 
 const queryAllByTestId: AllByBoundAttribute = (...args) => {
   checkContainerType(args[0])
-  // TODO: Remove ignore after `queryAllByAttribute` will be moved to TS
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   return queryAllByAttribute(getTestIdAttribute(), ...args)
 }
 

@@ -100,9 +100,6 @@ const queryAllByLabelText: AllByText = (
       return labelledElements
     }, [])
     .concat(
-      // TODO: Remove ignore after `queryAllByAttribute` will be moved to TS
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       queryAllByAttribute('aria-label', container, text, {
         exact,
         normalizer: matchNormalizer,
