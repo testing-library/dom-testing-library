@@ -111,6 +111,16 @@ export interface ByRoleOptions extends MatcherOptions {
     | RegExp
     | string
     | ((accessibleName: string, element: Element) => boolean)
+
+  /**
+   * Only considers elements with the specified text value.
+   * For example, *ByRole('button', {nodeText: 'Cancel'})` will find <button>Cancel</button>`.
+   * Generally the `name` option is preferred, however `nodeText` can be used if `name` is causing
+   * performance concerns.
+   *
+   * If `exact` is specified, casing will be considered.
+   */
+  nodeText?: Matcher
 }
 
 export type AllByRole = (
