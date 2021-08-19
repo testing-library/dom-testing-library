@@ -17,6 +17,7 @@ import {
   buildQueries,
   fuzzyMatches,
   getConfig,
+  getNodeText,
   makeNormalizer,
   matches,
 } from './all-utils'
@@ -37,6 +38,7 @@ function queryAllByRole(
     pressed,
     level,
     expanded,
+    nodeText,
   } = {},
 ) {
   checkContainerType(container)
@@ -141,6 +143,9 @@ function queryAllByRole(
         : true
     })
     .filter(element => {
+      if (nodeText !== undefined) {
+        return matches(getNodeText(element), element, name, text => text)
+      }
       if (name === undefined) {
         // Don't care
         return true
