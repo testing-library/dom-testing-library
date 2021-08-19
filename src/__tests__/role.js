@@ -572,3 +572,9 @@ test('should find the input using type property instead of attribute', () => {
   const {getByRole} = render('<input type="124">')
   expect(getByRole('textbox')).not.toBeNull()
 })
+
+test('can be filtered by text node', () => {})
+
+test('text node comparison is case sensitive', () => {})
+
+test('text node filter implements TextMatch', () => {})
