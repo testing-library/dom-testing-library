@@ -133,15 +133,17 @@ test('can get elements by matching their text across adjacent text nodes', () =>
   expect(queryByText('£24.99')).toBeTruthy()
 })
 
-test('can get input elements with type submit or button', () => {
+test('can get input elements with type submit, button, or reset', () => {
   const {queryByText} = render(`
     <div>
       <input type="submit" value="Send data"/>
+      <input type="reset" value="Clear EVERYTHING"/>
       <input type="button" value="Push me!"/>
       <input type="text" value="user data" />
     </div>
   `)
   expect(queryByText('Send data')).toBeTruthy()
+  expect(queryByText('Clear EVERYTHING')).toBeTruthy()
   expect(queryByText('Push me!')).toBeTruthy()
   expect(queryByText('user data')).toBeFalsy()
 })

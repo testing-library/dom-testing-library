@@ -111,10 +111,14 @@ function setNativeValue(element, value) {
     Object.getOwnPropertyDescriptor(prototype, 'value') || {}
   if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
     prototypeValueSetter.call(element, value)
-  } /* istanbul ignore next (I don't want to bother) */ else if (valueSetter) {
-    valueSetter.call(element, value)
   } else {
-    throw new Error('The given element does not have a value setter')
+    /* istanbul ignore if */
+    // eslint-disable-next-line no-lonely-if -- Can't be ignored by istanbul otherwise
+    if (valueSetter) {
+      valueSetter.call(element, value)
+    } else {
+      throw new Error('The given element does not have a value setter')
+    }
   }
 }
 
