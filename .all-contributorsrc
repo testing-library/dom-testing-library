@@ -1415,6 +1415,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "savcni01",
+      "name": "Nik Savchenko",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18025894?v=4",
+      "profile": "https://github.com/savcni01",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
