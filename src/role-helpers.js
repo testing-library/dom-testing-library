@@ -257,7 +257,8 @@ function computeAriaCurrent(element) {
   // https://www.w3.org/TR/wai-aria-1.1/#aria-current
   return (
     checkBooleanAttribute(element, 'aria-current') ??
-    element.getAttribute('aria-current')
+    element.getAttribute('aria-current') ??
+    false
   )
 }
 

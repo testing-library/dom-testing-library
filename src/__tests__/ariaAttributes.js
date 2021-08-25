@@ -195,6 +195,13 @@ test.each([
   },
 )
 
+test('Missing `aria-current` matches `current: true`', () => {
+  const {getByRole} = renderIntoDocument(
+    `<a aria-current="true" href="/">Start</a><a href="/about">About</a>`,
+  )
+  expect(getByRole('link', {current: false})).toBeInTheDocument()
+})
+
 test('`level` matches elements with `heading` role', () => {
   const {getAllByRole, queryByRole} = renderIntoDocument(
     `<div>
