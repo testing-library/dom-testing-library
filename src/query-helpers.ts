@@ -1,30 +1,18 @@
 import type {
-  AllByAttribute,
-  BuiltQueryMethods,
-  FindAllBy,
-  FindBy,
-  GetAllBy,
-  GetBy,
-  getElementError as GetElementError,
   GetErrorFunction,
   Matcher,
   MatcherOptions,
-  QueryBy,
-  QueryByAttribute,
-  Suggestion,
+  QueryMethod,
   Variant,
   waitForOptions as WaitForOptions,
   WithSuggest,
 } from '../types'
-import {getConfig} from './config'
-import {fuzzyMatches, makeNormalizer, matches} from './matches'
 import {getSuggestedQuery} from './suggestions'
+import {fuzzyMatches, matches, makeNormalizer} from './matches'
 import {waitFor} from './wait-for'
+import {getConfig} from './config'
 
-const getElementError: typeof GetElementError = (
-  message: string | null,
-  container: HTMLElement,
-): Error => {
+function getElementError(message: string | null, container: HTMLElement) {
   return getConfig().getElementError(message, container)
 }
 
@@ -38,13 +26,12 @@ function getMultipleElementsFoundError(
   )
 }
 
-const queryAllByAttribute: AllByAttribute = (
+function queryAllByAttribute(
   attribute: string,
   container: HTMLElement,
   text: Matcher,
-  options: MatcherOptions = {},
-): HTMLElement[] => {
-  const {exact = true, collapseWhitespace, trim, normalizer} = options
+  {exact = true, collapseWhitespace, trim, normalizer}: MatcherOptions = {},
+): HTMLElement[] {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(
@@ -54,12 +41,12 @@ const queryAllByAttribute: AllByAttribute = (
   )
 }
 
-const queryByAttribute: QueryByAttribute = (
+function queryByAttribute(
   attribute: string,
   container: HTMLElement,
   text: Matcher,
   options?: MatcherOptions,
-): HTMLElement => {
+) {
   const els = queryAllByAttribute(attribute, container, text, options)
   if (els.length > 1) {
     throw getMultipleElementsFoundError(
@@ -73,12 +60,8 @@ const queryByAttribute: QueryByAttribute = (
 // this accepts a query function and returns a function which throws an error
 // if more than one elements is returned, otherwise it returns the first
 // element or null
-// Arguments is a tuple of unknown params
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function makeSingleQuery<Arguments extends [...any, {}?]>(
-  allQuery: {
-    (container: HTMLElement, ...args: Arguments): HTMLElement[]
-  },
+function makeSingleQuery<Arguments extends unknown[]>(
+  allQuery: QueryMethod<Arguments, HTMLElement[]>,
   getMultipleError: GetErrorFunction<Arguments>,
 ) {
   return (container: HTMLElement, ...args: Arguments) => {
@@ -101,7 +84,10 @@ ${elementStrings}`,
   }
 }
 
-function getSuggestionError(suggestion: string, container: HTMLElement) {
+function getSuggestionError(
+  suggestion: {toString(): string},
+  container: HTMLElement,
+) {
   return getConfig().getElementError(
     `A better query is available, try this:
 ${suggestion.toString()}
@@ -112,12 +98,10 @@ ${suggestion.toString()}
 
 // this accepts a query function and returns a function which throws an error
 // if an empty list of elements is returned
-// Arguments is a tuple of unknown params
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function makeGetAllQuery<Arguments extends [...any, {}?]>(
-  allQuery: (arg0: HTMLElement, ...args: Arguments) => HTMLElement[],
+function makeGetAllQuery<Arguments extends unknown[]>(
+  allQuery: (container: HTMLElement, ...args: Arguments) => HTMLElement[],
   getMissingError: GetErrorFunction<Arguments>,
-): (container: HTMLElement, ...args: Arguments) => HTMLElement[] {
+) {
   return (container: HTMLElement, ...args: Arguments) => {
     const els = allQuery(container, ...args)
     if (!els.length) {
@@ -133,31 +117,21 @@ function makeGetAllQuery<Arguments extends [...any, {}?]>(
 
 // this accepts a getter query function and returns a function which calls
 // waitFor and passing a function which invokes the getter.
-// Arguments is a tuple of unknown params
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function makeFindQuery<Arguments extends [...any, {}?]>(
+function makeFindQuery<QueryFor>(
   getter: (
     container: HTMLElement,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ...args: Arguments
-  ) => HTMLElement[] | HTMLElement | undefined,
+    text: Matcher,
+    options: MatcherOptions,
+  ) => QueryFor,
 ) {
   return (
     container: HTMLElement,
-    text: Arguments[0],
-    options: Arguments[1],
-    waitForOptions?: WaitForOptions,
+    text: Matcher,
+    options: MatcherOptions,
+    waitForOptions: WaitForOptions,
   ) => {
     return waitFor(
       () => {
-        // Technically, this function receives a very general `getter` argument, whose signature
-        // may not match its usage in the next statement
-        // We could define getter more narrowly to accept the `text` and `options` params, but
-        // then that breaks this function's calls inside buildQueries,
-        // which pass functions with the general signatures alluded to above
-        // eslint-disable-next-line no-warning-comments
-        // FIXME: clarification from maintainers would be appreciated here
-        // @ts-expect-error explanation above
         return getter(container, text, options)
       },
       {container, ...waitForOptions},
@@ -166,25 +140,22 @@ function makeFindQuery<Arguments extends [...any, {}?]>(
 }
 
 const wrapSingleQueryWithSuggestion =
-  <Arguments extends [...any, {}?]>( // eslint-disable-line @typescript-eslint/no-explicit-any
-    query: {
-      (container: HTMLElement, ...args: Arguments): HTMLElement
-    },
+  <Arguments extends [...unknown[], WithSuggest]>(
+    query: (container: HTMLElement, ...args: Arguments) => HTMLElement | null,
     queryAllByName: string,
-    variant: Variant | undefined,
-  ): ((container: HTMLElement, ...args: Arguments) => HTMLElement) =>
+    variant: Variant,
+  ) =>
   (container: HTMLElement, ...args: Arguments) => {
     const element = query(container, ...args)
-    const [{suggest = getConfig().throwSuggestions} = {} as WithSuggest] =
-      args.slice(-1) as [WithSuggest]
-    if ((element as HTMLElement | undefined) && suggest) {
-      // eslint-disable-next-line no-warning-comments
-      // FIXME: When `src/suggestions.js` is converted to TS, remove this explicit type annotation, and the surrounding two eslint disable-lines
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      const suggestion = getSuggestedQuery(element, variant) as
-        | Suggestion
-        | undefined
-      if (suggestion && !queryAllByName.endsWith(suggestion.queryName)) {
+    const [{suggest = getConfig().throwSuggestions} = {}] = args.slice(-1) as [
+      WithSuggest,
+    ]
+    if (element && suggest) {
+      const suggestion = getSuggestedQuery(element, variant)
+      if (
+        suggestion &&
+        !queryAllByName.endsWith(suggestion.queryName as string)
+      ) {
         throw getSuggestionError(suggestion.toString(), container)
       }
     }
@@ -193,12 +164,10 @@ const wrapSingleQueryWithSuggestion =
   }
 
 const wrapAllByQueryWithSuggestion =
-  <Arguments extends [...any, {}?]>( // eslint-disable-line @typescript-eslint/no-explicit-any
-    query: {
-      (container: HTMLElement, ...args: Arguments): HTMLElement[]
-    },
+  <Options extends WithSuggest, Arguments extends [...unknown[], Options]>(
+    query: (container: HTMLElement, ...args: Arguments) => HTMLElement[],
     queryAllByName: string,
-    variant: Variant | undefined,
+    variant: Variant,
   ) =>
   (container: HTMLElement, ...args: Arguments) => {
     const els = query(container, ...args)
@@ -210,9 +179,10 @@ const wrapAllByQueryWithSuggestion =
       // get a unique list of all suggestion messages.  We are only going to make a suggestion if
       // all the suggestions are the same
       const uniqueSuggestionMessages = [
-        ...Array.from(
-          new Set(
-            els.map(element => getSuggestedQuery(element, variant)?.toString()),
+        ...new Set(
+          els.map(
+            element =>
+              getSuggestedQuery(element, variant)?.toString() as string,
           ),
         ),
       ]
@@ -220,70 +190,56 @@ const wrapAllByQueryWithSuggestion =
       if (
         // only want to suggest if all the els have the same suggestion.
         uniqueSuggestionMessages.length === 1 &&
-        // Is this actually nullish-safe? endsWith takes a string, but getSuggestedQuery() might return undefined
-        // So .queryName must be accessed via optional chain, and so itself might be undefined
-        // Is there a fallback that won't break the existing logic? Or can we be sure that it won't be undefined?
-        // eslint-disable-next-line no-warning-comments
-        // FIXME: clarification from maintainers would be appreciated here
         !queryAllByName.endsWith(
-          // @ts-expect-error explanation/question above
-          // eslint-disable-next-line no-warning-comments
-          // FIXME: remove this type assertion + eslint-disable once `src/suggestions.js` is converted to TS
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-          (getSuggestedQuery(els[0], variant) as Suggestion | undefined)
-            ?.queryName,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- TODO: Can this be null at runtime?
+          getSuggestedQuery(els[0], variant)!.queryName as string,
         )
       ) {
-        throw getSuggestionError(
-          uniqueSuggestionMessages[0] as string,
-          container,
-        )
+        throw getSuggestionError(uniqueSuggestionMessages[0], container)
       }
     }
 
     return els
   }
 
-// Arguments is a tuple of unknown params
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildQueries<Arguments extends [...any, {}?]>(
-  queryAllBy: GetAllBy<Arguments>,
-  getMultipleError: GetErrorFunction,
-  getMissingError: GetErrorFunction,
-): BuiltQueryMethods<Arguments> {
-  const queryBy: QueryBy<Arguments> = wrapSingleQueryWithSuggestion(
-    makeSingleQuery(
-      queryAllBy,
-      getMultipleError as unknown as GetErrorFunction<Arguments>,
-    ),
+// TODO: This deviates from the published declarations
+// However, the implementation always required a dyadic (after `container`) not variadic `queryAllBy` considering the implementation of `makeFindQuery`
+// This is at least statically true and can be verified by accepting `QueryMethod<Arguments, HTMLElement[]>`
+function buildQueries(
+  queryAllBy: QueryMethod<
+    [matcher: Matcher, options: MatcherOptions],
+    HTMLElement[]
+  >,
+  getMultipleError: GetErrorFunction<
+    [matcher: Matcher, options: MatcherOptions]
+  >,
+  getMissingError: GetErrorFunction<
+    [matcher: Matcher, options: MatcherOptions]
+  >,
+) {
+  const queryBy = wrapSingleQueryWithSuggestion(
+    makeSingleQuery(queryAllBy, getMultipleError),
     queryAllBy.name,
     'query',
   )
-  const getAllBy: GetAllBy<Arguments> = makeGetAllQuery(
-    queryAllBy,
-    getMissingError as unknown as GetErrorFunction<Arguments>,
-  )
+  const getAllBy = makeGetAllQuery(queryAllBy, getMissingError)
 
-  const getBy: GetBy<Arguments> = makeSingleQuery(
-    getAllBy,
-    getMultipleError as unknown as GetErrorFunction<Arguments>,
-  )
-  const getByWithSuggestions: GetBy<Arguments> = wrapSingleQueryWithSuggestion(
+  const getBy = makeSingleQuery(getAllBy, getMultipleError)
+  const getByWithSuggestions = wrapSingleQueryWithSuggestion(
     getBy,
     queryAllBy.name,
     'get',
   )
-  const getAllWithSuggestions: GetAllBy<Arguments> =
-    wrapAllByQueryWithSuggestion(
-      getAllBy,
-      queryAllBy.name.replace('query', 'get'),
-      'getAll',
-    )
+  const getAllWithSuggestions = wrapAllByQueryWithSuggestion(
+    getAllBy,
+    queryAllBy.name.replace('query', 'get'),
+    'getAll',
+  )
 
-  const findAllBy: FindAllBy<Arguments> = makeFindQuery(
+  const findAllBy = makeFindQuery(
     wrapAllByQueryWithSuggestion(getAllBy, queryAllBy.name, 'findAll'),
   )
-  const findBy: FindBy<Arguments> = makeFindQuery(
+  const findBy = makeFindQuery(
     wrapSingleQueryWithSuggestion(getBy, queryAllBy.name, 'find'),
   )
 
