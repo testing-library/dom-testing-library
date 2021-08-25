@@ -251,17 +251,14 @@ function computeAriaPressed(element) {
 
 /**
  * @param {Element} element -
- * @returns {boolean | undefined} - false/true if (not)current, undefined if not current-able
+ * @returns {boolean | string | null} -
  */
 function computeAriaCurrent(element) {
   // https://www.w3.org/TR/wai-aria-1.1/#aria-current
-  // explicit values
-  const attribute = 'aria-current'
-  const attributeValue = element.getAttribute(attribute)
-  if (ariaCurrentValues.includes(attributeValue)) {
-    return true
-  }
-  return checkBooleanAttribute(element, attribute)
+  return (
+    checkBooleanAttribute(element, 'aria-current') ??
+    element.getAttribute('aria-current')
+  )
 }
 
 /**

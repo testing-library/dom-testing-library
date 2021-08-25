@@ -1,7 +1,5 @@
 import {render, renderIntoDocument} from './helpers/test-utils'
 
-import {ariaCurrentValues} from '../role-helpers'
-
 test('`selected` throws on unsupported roles', () => {
   const {getByRole} = render(`<input aria-selected="true" type="text">`)
   expect(() =>
@@ -28,6 +26,7 @@ test('`current` throws on unsupported value', () => {
 
     There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
+    Ignored nodes: comments, <script />, <style />
     <div>
       <a
         aria-pressed="invalid"
@@ -217,17 +216,21 @@ test('`current: true|false` matches `current` elements with pzroper role', () =>
   expect(getByRole('link', {current: false})).toBeInTheDocument()
 })
 
-test.each(ariaCurrentValues)(
-  '`current: %p values` matches `current` elements with proper role',
-  ariaCurrentValue => {
+test.each([
+  ['true', true],
+  ['false', false],
+  ['date', 'date'],
+  ['location', 'location'],
+  ['page', 'page'],
+  ['step', 'step'],
+  ['time', 'time'],
+])(
+  '`aria-current="%s"` matches `current: %j` elements with proper role',
+  (ariaCurrentValue, filterByValue) => {
     const {getByRole} = renderIntoDocument(
-      `<div>
-      <span role="link" aria-current="${ariaCurrentValue}">✔</span>
-      <span role="link" aria-current="false">𝒙</span>
-    </div>`,
+      ` <a href="/" aria-current="${ariaCurrentValue}"></a>`,
     )
-    expect(getByRole('link', {current: true})).toBeInTheDocument()
-    expect(getByRole('link', {current: false})).toBeInTheDocument()
+    expect(getByRole('link', {current: filterByValue})).toBeInTheDocument()
   },
 )
 
