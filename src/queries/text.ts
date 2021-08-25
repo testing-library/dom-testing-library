@@ -1,6 +1,6 @@
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 import {checkContainerType} from '../helpers'
-import {DEFAULT_IGNORE_TAGS} from '../config'
+import {DEFAULT_IGNORE_TAGS} from '../shared'
 import {AllByText, GetErrorFunction} from '../../types'
 import {
   fuzzyMatches,
@@ -51,13 +51,8 @@ const queryAllByTextWithSuggestions = wrapAllByQueryWithSuggestion(
   'queryAll',
 )
 
-const [
-  queryByText,
-  getAllByText,
-  getByText,
-  findAllByText,
-  findByText,
-] = buildQueries(queryAllByText, getMultipleError, getMissingError)
+const [queryByText, getAllByText, getByText, findAllByText, findByText] =
+  buildQueries(queryAllByText, getMultipleError, getMissingError)
 
 export {
   queryByText,

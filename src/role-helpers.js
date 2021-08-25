@@ -190,8 +190,8 @@ function prettyRoles(dom, {hidden}) {
       const elementsString = elements
         .map(el => {
           const nameString = `Name "${computeAccessibleName(el, {
-            computedStyleSupportsPseudoElements: getConfig()
-              .computedStyleSupportsPseudoElements,
+            computedStyleSupportsPseudoElements:
+              getConfig().computedStyleSupportsPseudoElements,
           })}":\n`
           const domString = prettyDOM(el.cloneNode(false))
           return `${nameString}${domString}`

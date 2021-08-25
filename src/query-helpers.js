@@ -100,49 +100,47 @@ function makeFindQuery(getter) {
   }
 }
 
-const wrapSingleQueryWithSuggestion = (query, queryAllByName, variant) => (
-  container,
-  ...args
-) => {
-  const element = query(container, ...args)
-  const [{suggest = getConfig().throwSuggestions} = {}] = args.slice(-1)
-  if (element && suggest) {
-    const suggestion = getSuggestedQuery(element, variant)
-    if (suggestion && !queryAllByName.endsWith(suggestion.queryName)) {
-      throw getSuggestionError(suggestion.toString(), container)
+const wrapSingleQueryWithSuggestion =
+  (query, queryAllByName, variant) =>
+  (container, ...args) => {
+    const element = query(container, ...args)
+    const [{suggest = getConfig().throwSuggestions} = {}] = args.slice(-1)
+    if (element && suggest) {
+      const suggestion = getSuggestedQuery(element, variant)
+      if (suggestion && !queryAllByName.endsWith(suggestion.queryName)) {
+        throw getSuggestionError(suggestion.toString(), container)
+      }
     }
+
+    return element
   }
 
-  return element
-}
+const wrapAllByQueryWithSuggestion =
+  (query, queryAllByName, variant) =>
+  (container, ...args) => {
+    const els = query(container, ...args)
 
-const wrapAllByQueryWithSuggestion = (query, queryAllByName, variant) => (
-  container,
-  ...args
-) => {
-  const els = query(container, ...args)
+    const [{suggest = getConfig().throwSuggestions} = {}] = args.slice(-1)
+    if (els.length && suggest) {
+      // get a unique list of all suggestion messages.  We are only going to make a suggestion if
+      // all the suggestions are the same
+      const uniqueSuggestionMessages = [
+        ...new Set(
+          els.map(element => getSuggestedQuery(element, variant)?.toString()),
+        ),
+      ]
 
-  const [{suggest = getConfig().throwSuggestions} = {}] = args.slice(-1)
-  if (els.length && suggest) {
-    // get a unique list of all suggestion messages.  We are only going to make a suggestion if
-    // all the suggestions are the same
-    const uniqueSuggestionMessages = [
-      ...new Set(
-        els.map(element => getSuggestedQuery(element, variant)?.toString()),
-      ),
-    ]
-
-    if (
-      // only want to suggest if all the els have the same suggestion.
-      uniqueSuggestionMessages.length === 1 &&
-      !queryAllByName.endsWith(getSuggestedQuery(els[0], variant).queryName)
-    ) {
-      throw getSuggestionError(uniqueSuggestionMessages[0], container)
+      if (
+        // only want to suggest if all the els have the same suggestion.
+        uniqueSuggestionMessages.length === 1 &&
+        !queryAllByName.endsWith(getSuggestedQuery(els[0], variant).queryName)
+      ) {
+        throw getSuggestionError(uniqueSuggestionMessages[0], container)
+      }
     }
-  }
 
-  return els
-}
+    return els
+  }
 
 function buildQueries(queryAllBy, getMultipleError, getMissingError) {
   const queryBy = wrapSingleQueryWithSuggestion(

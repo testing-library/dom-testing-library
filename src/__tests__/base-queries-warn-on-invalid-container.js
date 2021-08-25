@@ -86,8 +86,8 @@ describe('synchronous queries throw on invalid container type', () => {
   ])('%s', (_queryName, query) => {
     expect(() =>
       query('invalid type for container', 'irrelevant text'),
-    ).toThrowErrorMatchingInlineSnapshot(
-      `"Expected container to be an Element, a Document or a DocumentFragment but got string."`,
+    ).toThrowError(
+      `Expected container to be an Element, a Document or a DocumentFragment but got string.`,
     )
   })
 })
@@ -120,8 +120,8 @@ describe('asynchronous queries throw on invalid container type', () => {
         queryOptions,
         waitOptions,
       ),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Expected container to be an Element, a Document or a DocumentFragment but got string."`,
+    ).rejects.toThrowError(
+      `Expected container to be an Element, a Document or a DocumentFragment but got string.`,
     )
   })
 })
