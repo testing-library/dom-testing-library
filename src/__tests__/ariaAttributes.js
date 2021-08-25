@@ -177,28 +177,6 @@ test('`pressed: true|false` matches `pressed` elements with proper role', () => 
   expect(getByRole('button', {pressed: false})).toBeInTheDocument()
 })
 
-test('`current: true|false` matches `current` link', () => {
-  const {getByRole} = renderIntoDocument(
-    `<div>
-      <a href="#1" aria-current="true" />
-      <a href="#1" aria-current="false" />
-    </div>`,
-  )
-  expect(getByRole('link', {current: true})).toBeInTheDocument()
-  expect(getByRole('link', {current: false})).toBeInTheDocument()
-})
-
-test('`current: true|false` matches `current` elements with pzroper role', () => {
-  const {getByRole} = renderIntoDocument(
-    `<div>
-      <span role="link" aria-current="true">✔</span>
-      <span role="link" aria-current="false">𝒙</span>
-    </div>`,
-  )
-  expect(getByRole('link', {current: true})).toBeInTheDocument()
-  expect(getByRole('link', {current: false})).toBeInTheDocument()
-})
-
 test.each([
   ['true', true],
   ['false', false],
