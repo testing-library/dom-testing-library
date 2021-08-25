@@ -3,8 +3,6 @@ import {computeAccessibleName} from 'dom-accessibility-api'
 import {prettyDOM} from './pretty-dom'
 import {getConfig} from './config'
 
-export const ariaCurrentValues = ['date', 'location', 'page', 'step', 'time']
-
 const elementRoleList = buildElementRoleList(elementRoles)
 
 /**
