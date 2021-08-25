@@ -315,6 +315,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/amitmiran137"><img src="https://avatars.githubusercontent.com/u/47772523?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Amit Miran</b></sub></a><br /><a href="#infra-amitmiran137" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
     <td align="center"><a href="https://github.com/leschdom"><img src="https://avatars.githubusercontent.com/u/62334278?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dominik Lesch</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=leschdom" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/G-Rath"><img src="https://avatars.githubusercontent.com/u/3151613?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Gareth Jones</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=G-Rath" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=G-Rath" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/riotrah"><img src="https://avatars.githubusercontent.com/u/22646419?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rayat Rahman</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=riotrah" title="Code">💻</a></td>
   </tr>
 </table>
 
