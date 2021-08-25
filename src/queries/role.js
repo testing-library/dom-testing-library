@@ -67,7 +67,10 @@ function queryAllByRole(
   }
 
   if (current !== undefined) {
+    /* istanbul ignore next */
     // guard against unknown roles
+    // All currently released ARIA versions support `aria-current` on all roles.
+    // Leaving this for symetry and forward compatibility
     if (allRoles.get(role)?.props['aria-current'] === undefined) {
       throw new Error(`"aria-current" is not supported on role "${role}".`)
     }

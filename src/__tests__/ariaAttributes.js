@@ -18,23 +18,6 @@ test('`pressed` throws on unsupported roles', () => {
   )
 })
 
-test('`current` throws on unsupported value', () => {
-  const {getByRole} = render(`<a aria-pressed="invalid"  />`)
-  expect(() => getByRole('link', {current: true}))
-    .toThrowErrorMatchingInlineSnapshot(`
-    "Unable to find an accessible element with the role "link"
-
-    There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
-
-    Ignored nodes: comments, <script />, <style />
-    <div>
-      <a
-        aria-pressed="invalid"
-      />
-    </div>"
-  `)
-})
-
 test('`checked` throws on unsupported roles', () => {
   const {getByRole} = render(`<input aria-checked="true" type="text">`)
   expect(() =>
