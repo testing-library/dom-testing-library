@@ -1396,6 +1396,25 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "G-Rath",
+      "name": "Gareth Jones",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3151613?v=4",
+      "profile": "https://github.com/G-Rath",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "riotrah",
+      "name": "Rayat Rahman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22646419?v=4",
+      "profile": "https://github.com/riotrah",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
