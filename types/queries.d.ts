@@ -89,6 +89,10 @@ export interface ByRoleOptions extends MatcherOptions {
    */
   pressed?: boolean
   /**
+   * Filters elements by their `aria-current` state. `true` and `false` match `aria-current="true"` and `aria-current="false"` (as well as a missing `aria-current` attribute) respectively.
+   */
+  current?: boolean | string
+  /**
    * If true only includes elements in the query set that are marked as
    * expanded in the accessibility tree, i.e., `aria-expanded="true"`
    */
