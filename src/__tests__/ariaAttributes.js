@@ -195,7 +195,7 @@ test.each([
   },
 )
 
-test('Missing `aria-current` matches `current: true`', () => {
+test('Missing `aria-current` matches `current: false`', () => {
   const {getByRole} = renderIntoDocument(
     `<a aria-current="true" href="/">Start</a><a href="/about">About</a>`,
   )
