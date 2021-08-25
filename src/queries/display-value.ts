@@ -1,6 +1,11 @@
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 import {checkContainerType} from '../helpers'
-import {AllByBoundAttribute, GetErrorFunction} from '../../types'
+import {
+  AllByBoundAttribute,
+  GetErrorFunction,
+  Matcher,
+  MatcherOptions,
+} from '../../types'
 import {
   getNodeText,
   matches,
@@ -38,16 +43,15 @@ const queryAllByDisplayValue: AllByBoundAttribute = (
   })
 }
 
-const getMultipleError: GetErrorFunction = (c, value) =>
+const getMultipleError: GetErrorFunction<[unknown]> = (c, value) =>
   `Found multiple elements with the display value: ${value}.`
-const getMissingError: GetErrorFunction = (c, value) =>
+const getMissingError: GetErrorFunction<[unknown]> = (c, value) =>
   `Unable to find an element with the display value: ${value}.`
 
-const queryAllByDisplayValueWithSuggestions = wrapAllByQueryWithSuggestion(
-  queryAllByDisplayValue,
-  queryAllByDisplayValue.name,
-  'queryAll',
-)
+const queryAllByDisplayValueWithSuggestions = wrapAllByQueryWithSuggestion<
+  // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
+  [value: Matcher, options?: MatcherOptions]
+>(queryAllByDisplayValue, queryAllByDisplayValue.name, 'queryAll')
 
 const [
   queryByDisplayValue,

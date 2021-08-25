@@ -40,16 +40,15 @@ const queryAllByText: AllByText = (
   )
 }
 
-const getMultipleError: GetErrorFunction = (c, text) =>
+const getMultipleError: GetErrorFunction<[unknown]> = (c, text) =>
   `Found multiple elements with the text: ${text}`
-const getMissingError: GetErrorFunction = (c, text) =>
+const getMissingError: GetErrorFunction<[unknown]> = (c, text) =>
   `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`
 
-const queryAllByTextWithSuggestions = wrapAllByQueryWithSuggestion(
-  queryAllByText,
-  queryAllByText.name,
-  'queryAll',
-)
+const queryAllByTextWithSuggestions = wrapAllByQueryWithSuggestion<
+  // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
+  [text: Matcher, options?: MatcherOptions]
+>(queryAllByText, queryAllByText.name, 'queryAll')
 
 const [queryByText, getAllByText, getByText, findAllByText, findByText] =
   buildQueries(queryAllByText, getMultipleError, getMissingError)

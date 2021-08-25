@@ -164,7 +164,11 @@ const wrapSingleQueryWithSuggestion =
   }
 
 const wrapAllByQueryWithSuggestion =
-  <Options extends WithSuggest, Arguments extends [...unknown[], Options]>(
+  <
+    // We actually want `Arguments extends [args: ...unknown[], options?: Options]`
+    // But that's not supported by TS so we have to `@ts-expect-error` every callsite
+    Arguments extends [...unknown[], WithSuggest],
+  >(
     query: (container: HTMLElement, ...args: Arguments) => HTMLElement[],
     queryAllByName: string,
     variant: Variant,
