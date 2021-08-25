@@ -20,10 +20,10 @@ function getPlaygroundUrl(markup: string) {
 }
 
 const debug = (
-  element: (Element | HTMLDocument)[],
+  element?: Array<Element | HTMLDocument> | Element | HTMLDocument,
   maxLength?: number,
   options?: OptionsReceived,
-) =>
+): void =>
   Array.isArray(element)
     ? element.forEach(el => logDOM(el, maxLength, options))
     : logDOM(element, maxLength, options)
