@@ -4,24 +4,10 @@ import {getUserCodeFrame} from './get-user-code-frame'
 import {getDocument} from './helpers'
 import {DEFAULT_IGNORE_TAGS} from './shared'
 
-function inCypress(dom) {
-  const window =
-    (dom.ownerDocument && dom.ownerDocument.defaultView) || undefined
-  return (
-    (typeof global !== 'undefined' && global.Cypress) ||
-    (typeof window !== 'undefined' && window.Cypress)
-  )
-}
-
 const inNode = () =>
   typeof process !== 'undefined' &&
   process.versions !== undefined &&
   process.versions.node !== undefined
-
-const getMaxLength = dom =>
-  inCypress(dom)
-    ? 0
-    : (typeof process !== 'undefined' && process.env.DEBUG_PRINT_LIMIT) || 7000
 
 const {DOMCollection} = prettyFormat.plugins
 
@@ -43,7 +29,8 @@ function prettyDOM(dom, maxLength, options = {}) {
     dom = getDocument().body
   }
   if (typeof maxLength !== 'number') {
-    maxLength = getMaxLength(dom)
+    maxLength =
+      (typeof process !== 'undefined' && process.env.DEBUG_PRINT_LIMIT) || 7000
   }
 
   if (maxLength === 0) {

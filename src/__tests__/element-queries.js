@@ -1,10 +1,6 @@
 import {configure} from '../config'
 import {render, renderIntoDocument} from './helpers/test-utils'
 
-beforeEach(() => {
-  document.defaultView.Cypress = null
-})
-
 test('query can return null', () => {
   const {
     queryByLabelText,
@@ -1059,46 +1055,6 @@ test('the debug helper prints the dom state here', () => {
 
   //all good replacing it with old value
   process.env.DEBUG_PRINT_LIMIT = originalDebugPrintLimit
-})
-
-test('get throws a useful error message without DOM in Cypress', () => {
-  document.defaultView.Cypress = {}
-  const {
-    getByLabelText,
-    getByPlaceholderText,
-    getByText,
-    getByTestId,
-    getByAltText,
-    getByTitle,
-    getByDisplayValue,
-  } = render('<div />')
-  expect(() =>
-    getByLabelText('LucyRicardo'),
-  ).toThrowErrorMatchingInlineSnapshot(
-    `Unable to find a label with the text of: LucyRicardo`,
-  )
-  expect(() =>
-    getByPlaceholderText('LucyRicardo'),
-  ).toThrowErrorMatchingInlineSnapshot(
-    `Unable to find an element with the placeholder text of: LucyRicardo`,
-  )
-  expect(() => getByText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(
-    `Unable to find an element with the text: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`,
-  )
-  expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(
-    `Unable to find an element by: [data-testid="LucyRicardo"]`,
-  )
-  expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(
-    `Unable to find an element with the alt text: LucyRicardo`,
-  )
-  expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(
-    `Unable to find an element with the title: LucyRicardo.`,
-  )
-  expect(() =>
-    getByDisplayValue('LucyRicardo'),
-  ).toThrowErrorMatchingInlineSnapshot(
-    `Unable to find an element with the display value: LucyRicardo.`,
-  )
 })
 
 test('getByText ignores script tags by default', () => {
