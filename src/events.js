@@ -45,7 +45,16 @@ function createEvent(
       value: files,
     })
   }
-  Object.assign(node, targetProperties)
+
+  const modifiableProperties = {}
+  Object.keys(targetProperties).forEach(key => {
+    modifiableProperties[key] = {
+      value: targetProperties[key],
+      writable: true,
+    }
+  })
+  Object.defineProperties(node, modifiableProperties)
+
   const window = getWindowFromNode(node)
   const EventConstructor = window[EventType] || window.Event
   let event
