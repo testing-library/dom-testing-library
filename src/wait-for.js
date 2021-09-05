@@ -49,10 +49,10 @@ function waitFor(
 
     const overallTimeout = setTimeout(handleTimeout, timeout)
     const intervalId = setInterval(handleInterval, interval)
+    checkCallback()
 
     const wasUsingJestFakeTimers = jestFakeTimersAreEnabled()
     if (wasUsingJestFakeTimers) {
-      checkCallback()
       // this is a dangerous rule to disable because it could lead to an
       // infinite loop. However, eslint isn't smart enough to know that we're
       // setting finished inside `onDone` which will be called when we're done
@@ -93,7 +93,6 @@ function waitFor(
       const {MutationObserver} = getWindowFromNode(container)
       observer = new MutationObserver(handleInterval)
       observer.observe(container, mutationObserverOptions)
-      checkCallback()
     }
 
     function onDone(error, result) {
