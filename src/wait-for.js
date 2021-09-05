@@ -43,12 +43,23 @@ function waitFor(
   }
 
   return new Promise(async (resolve, reject) => {
-    let lastError, observer
+    let lastError
     let finished = false
     let promiseStatus = 'idle'
 
     const overallTimeout = setTimeout(handleTimeout, timeout)
     const intervalId = setInterval(handleInterval, interval)
+
+    try {
+      checkContainerType(container)
+    } catch (e) {
+      reject(e)
+      return
+    }
+    const {MutationObserver} = getWindowFromNode(container)
+    const observer = new MutationObserver(handleInterval)
+    observer.observe(container, mutationObserverOptions)
+
     checkCallback()
 
     const wasUsingJestFakeTimers = jestFakeTimersAreEnabled()
@@ -83,16 +94,6 @@ function waitFor(
           jest.advanceTimersByTime(0)
         })
       }
-    } else {
-      try {
-        checkContainerType(container)
-      } catch (e) {
-        reject(e)
-        return
-      }
-      const {MutationObserver} = getWindowFromNode(container)
-      observer = new MutationObserver(handleInterval)
-      observer.observe(container, mutationObserverOptions)
     }
 
     function onDone(error, result) {
@@ -100,9 +101,7 @@ function waitFor(
       clearTimeout(overallTimeout)
       clearInterval(intervalId)
 
-      if (observer !== undefined) {
-        observer.disconnect()
-      }
+      observer.disconnect()
 
       if (error) {
         reject(error)
