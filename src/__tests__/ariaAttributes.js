@@ -177,6 +177,31 @@ test('`pressed: true|false` matches `pressed` elements with proper role', () => 
   expect(getByRole('button', {pressed: false})).toBeInTheDocument()
 })
 
+test.each([
+  ['true', true],
+  ['false', false],
+  ['date', 'date'],
+  ['location', 'location'],
+  ['page', 'page'],
+  ['step', 'step'],
+  ['time', 'time'],
+])(
+  '`aria-current="%s"` matches `current: %j` elements with proper role',
+  (ariaCurrentValue, filterByValue) => {
+    const {getByRole} = renderIntoDocument(
+      ` <a href="/" aria-current="${ariaCurrentValue}"></a>`,
+    )
+    expect(getByRole('link', {current: filterByValue})).toBeInTheDocument()
+  },
+)
+
+test('Missing `aria-current` matches `current: false`', () => {
+  const {getByRole} = renderIntoDocument(
+    `<a aria-current="true" href="/">Start</a><a href="/about">About</a>`,
+  )
+  expect(getByRole('link', {current: false})).toBeInTheDocument()
+})
+
 test('`level` matches elements with `heading` role', () => {
   const {getAllByRole, queryByRole} = renderIntoDocument(
     `<div>

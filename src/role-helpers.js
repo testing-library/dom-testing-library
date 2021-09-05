@@ -249,6 +249,19 @@ function computeAriaPressed(element) {
 
 /**
  * @param {Element} element -
+ * @returns {boolean | string | null} -
+ */
+function computeAriaCurrent(element) {
+  // https://www.w3.org/TR/wai-aria-1.1/#aria-current
+  return (
+    checkBooleanAttribute(element, 'aria-current') ??
+    element.getAttribute('aria-current') ??
+    false
+  )
+}
+
+/**
+ * @param {Element} element -
  * @returns {boolean | undefined} - false/true if (not)expanded, undefined if not expand-able
  */
 function computeAriaExpanded(element) {
@@ -301,6 +314,7 @@ export {
   computeAriaSelected,
   computeAriaChecked,
   computeAriaPressed,
+  computeAriaCurrent,
   computeAriaExpanded,
   computeHeadingLevel,
 }
