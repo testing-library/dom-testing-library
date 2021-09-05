@@ -46,8 +46,6 @@ const queryAllByTitleWithSuggestions = wrapAllByQueryWithSuggestion<
   [title: Matcher, options?: MatcherOptions]
 >(queryAllByTitle, queryAllByTitle.name, 'queryAll')
 
-queryAllByTitleWithSuggestions(document.createElement('div'), 'foo')
-
 const [queryByTitle, getAllByTitle, getByTitle, findAllByTitle, findByTitle] =
   buildQueries(queryAllByTitle, getMultipleError, getMissingError)
 
