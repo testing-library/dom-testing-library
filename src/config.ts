@@ -4,7 +4,6 @@ import {prettyDOM} from './pretty-dom'
 type Callback<T> = () => T
 interface InternalConfig extends Config {
   _disableExpensiveErrorDiagnostics: boolean
-  advanceTimersWrapper(cb: (...args: unknown[]) => unknown): unknown
 }
 
 // It would be cleaner for this to live inside './queries', but
@@ -21,7 +20,7 @@ let config: InternalConfig = {
   // react-testing-library to use. For that reason, this feature will remain
   // undocumented.
   asyncWrapper: cb => cb(),
-  advanceTimersWrapper: cb => cb(),
+  unstable_advanceTimersWrapper: cb => cb(),
   eventWrapper: cb => cb(),
   // default value for the `hidden` option in `ByRole` queries
   defaultHidden: false,

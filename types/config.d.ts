@@ -1,5 +1,10 @@
 export interface Config {
   testIdAttribute: string
+  /**
+   * WARNING: `unstable` prefix means this API may change in patch and minor releases.
+   * @param cb
+   */
+  unstable_advanceTimersWrapper(cb: (...args: unknown[]) => unknown): unknown
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   asyncWrapper(cb: (...args: any[]) => any): Promise<any>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
