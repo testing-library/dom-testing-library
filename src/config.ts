@@ -4,6 +4,7 @@ import {prettyDOM} from './pretty-dom'
 type Callback<T> = () => T
 interface InternalConfig extends Config {
   _disableExpensiveErrorDiagnostics: boolean
+  advanceTimersWrapper(cb: (...args: unknown[]) => unknown): unknown
 }
 
 // It would be cleaner for this to live inside './queries', but
@@ -12,7 +13,7 @@ interface InternalConfig extends Config {
 let config: InternalConfig = {
   testIdAttribute: 'data-testid',
   asyncUtilTimeout: 1000,
-  // this is to support React's async `act` function.
+  // asyncWrapper and advanceTimersWrapper is to support React's async `act` function.
   // forcing react-testing-library to wrap all async functions would've been
   // a total nightmare (consider wrapping every findBy* query and then also
   // updating `within` so those would be wrapped too. Total nightmare).
@@ -20,6 +21,7 @@ let config: InternalConfig = {
   // react-testing-library to use. For that reason, this feature will remain
   // undocumented.
   asyncWrapper: cb => cb(),
+  advanceTimersWrapper: cb => cb(),
   eventWrapper: cb => cb(),
   // default value for the `hidden` option in `ByRole` queries
   defaultHidden: false,

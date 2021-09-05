@@ -64,6 +64,8 @@ function waitFor(
 
     const wasUsingJestFakeTimers = jestFakeTimersAreEnabled()
     if (wasUsingJestFakeTimers) {
+      const {advanceTimersWrapper} = getConfig()
+
       // this is a dangerous rule to disable because it could lead to an
       // infinite loop. However, eslint isn't smart enough to know that we're
       // setting finished inside `onDone` which will be called when we're done
@@ -73,26 +75,31 @@ function waitFor(
         try {
           // jest.advanceTimersByTime will not throw if
           ensureInvariantTimers()
+
+          advanceTimersWrapper(() => {
+            // we *could* (maybe should?) use `advanceTimersToNextTimer` but it's
+            // possible that could make this loop go on forever if someone is using
+            // third party code that's setting up recursive timers so rapidly that
+            // the user's timer's don't get a chance to resolve. So we'll advance
+            // by an interval instead. (We have a test for this case).
+            jest.advanceTimersByTime(interval)
+          })
+
+          // In this rare case, we *need* to wait for in-flight promises
+          // to resolve before continuing. We don't need to take advantage
+          // of parallelization so we're fine.
+          // https://stackoverflow.com/a/59243586/971592
+          // eslint-disable-next-line no-await-in-loop
+          await advanceTimersWrapper(async () => {
+            await new Promise(r => {
+              setTimeout(r, 0)
+              jest.advanceTimersByTime(0)
+            })
+          })
         } catch (error) {
           reject(error)
           return
         }
-        // we *could* (maybe should?) use `advanceTimersToNextTimer` but it's
-        // possible that could make this loop go on forever if someone is using
-        // third party code that's setting up recursive timers so rapidly that
-        // the user's timer's don't get a chance to resolve. So we'll advance
-        // by an interval instead. (We have a test for this case).
-        jest.advanceTimersByTime(interval)
-
-        // In this rare case, we *need* to wait for in-flight promises
-        // to resolve before continuing. We don't need to take advantage
-        // of parallelization so we're fine.
-        // https://stackoverflow.com/a/59243586/971592
-        // eslint-disable-next-line no-await-in-loop
-        await new Promise(r => {
-          setTimeout(r, 0)
-          jest.advanceTimersByTime(0)
-        })
       }
     }
 
