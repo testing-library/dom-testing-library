@@ -43,72 +43,79 @@ function waitFor(
   }
 
   return new Promise(async (resolve, reject) => {
-    let lastError
+    let lastError, intervalId, observer
     let finished = false
     let promiseStatus = 'idle'
 
-    const overallTimeout = setTimeout(handleTimeout, timeout)
-    const intervalId = setInterval(handleInterval, interval)
+    const overallTimeoutTimer = setTimeout(handleTimeout, timeout)
 
-    try {
-      checkContainerType(container)
-    } catch (e) {
-      reject(e)
-      return
-    }
-    const {MutationObserver} = getWindowFromNode(container)
-    const observer = new MutationObserver(handleInterval)
-    observer.observe(container, mutationObserverOptions)
-
-    checkCallback()
-
-    const wasUsingJestFakeTimers = jestFakeTimersAreEnabled()
-    if (wasUsingJestFakeTimers) {
+    const usingJestFakeTimers = jestFakeTimersAreEnabled()
+    if (usingJestFakeTimers) {
       const {unstable_advanceTimersWrapper: advanceTimersWrapper} = getConfig()
-
+      checkCallback()
       // this is a dangerous rule to disable because it could lead to an
       // infinite loop. However, eslint isn't smart enough to know that we're
       // setting finished inside `onDone` which will be called when we're done
       // waiting or when we've timed out.
       // eslint-disable-next-line no-unmodified-loop-condition
       while (!finished) {
-        try {
-          // jest.advanceTimersByTime will not throw if
-          ensureInvariantTimers()
-
-          advanceTimersWrapper(() => {
-            // we *could* (maybe should?) use `advanceTimersToNextTimer` but it's
-            // possible that could make this loop go on forever if someone is using
-            // third party code that's setting up recursive timers so rapidly that
-            // the user's timer's don't get a chance to resolve. So we'll advance
-            // by an interval instead. (We have a test for this case).
-            jest.advanceTimersByTime(interval)
-          })
-
-          // In this rare case, we *need* to wait for in-flight promises
-          // to resolve before continuing. We don't need to take advantage
-          // of parallelization so we're fine.
-          // https://stackoverflow.com/a/59243586/971592
-          // eslint-disable-next-line no-await-in-loop
-          await advanceTimersWrapper(async () => {
-            await new Promise(r => {
-              setTimeout(r, 0)
-              jest.advanceTimersByTime(0)
-            })
-          })
-        } catch (error) {
+        if (!jestFakeTimersAreEnabled()) {
+          const error = new Error(
+            `Changed from using fake timers to real timers while using waitFor. This is not allowed and will result in very strange behavior. Please ensure you're awaiting all async things your test is doing before changing to real timers. For more info, please go to https://github.com/testing-library/dom-testing-library/issues/830`,
+          )
+          if (!showOriginalStackTrace) copyStackTrace(error, stackTraceError)
           reject(error)
           return
         }
+        // we *could* (maybe should?) use `advanceTimersToNextTimer` but it's
+        // possible that could make this loop go on forever if someone is using
+        // third party code that's setting up recursive timers so rapidly that
+        // the user's timer's don't get a chance to resolve. So we'll advance
+        // by an interval instead. (We have a test for this case).
+        advanceTimersWrapper(() => {
+          jest.advanceTimersByTime(interval)
+        })
+
+        // It's really important that checkCallback is run *before* we flush
+        // in-flight promises. To be honest, I'm not sure why, and I can't quite
+        // think of a way to reproduce the problem in a test, but I spent
+        // an entire day banging my head against a wall on this.
+        checkCallback()
+
+        // In this rare case, we *need* to wait for in-flight promises
+        // to resolve before continuing. We don't need to take advantage
+        // of parallelization so we're fine.
+        // https://stackoverflow.com/a/59243586/971592
+        // eslint-disable-next-line no-await-in-loop
+        await advanceTimersWrapper(async () => {
+          await new Promise(r => {
+            setTimeout(r, 0)
+            jest.advanceTimersByTime(0)
+          })
+        })
       }
+    } else {
+      try {
+        checkContainerType(container)
+      } catch (e) {
+        reject(e)
+        return
+      }
+      intervalId = setInterval(checkRealTimersCallback, interval)
+      const {MutationObserver} = getWindowFromNode(container)
+      observer = new MutationObserver(checkRealTimersCallback)
+      observer.observe(container, mutationObserverOptions)
+      checkCallback()
     }
 
     function onDone(error, result) {
       finished = true
-      clearTimeout(overallTimeout)
-      clearInterval(intervalId)
+      clearTimeout(overallTimeoutTimer)
 
-      observer.disconnect()
+      if (!usingJestFakeTimers) {
+        clearInterval(intervalId)
+        observer.disconnect()
+      }
 
       if (error) {
         reject(error)
@@ -117,27 +124,15 @@ function waitFor(
       }
     }
 
-    function ensureInvariantTimers() {
-      const isUsingJestFakeTimers = jestFakeTimersAreEnabled()
-      if (wasUsingJestFakeTimers !== isUsingJestFakeTimers) {
+    function checkRealTimersCallback() {
+      if (jestFakeTimersAreEnabled()) {
         const error = new Error(
-          `Changed from using ${
-            wasUsingJestFakeTimers ? 'fake timers' : 'real timers'
-          } to ${
-            isUsingJestFakeTimers ? 'fake timers' : 'real timers'
-          } while using waitFor. This is not allowed and will result in very strange behavior. Please ensure you're awaiting all async things your test is doing before changing what timers your test is using. For more info, please go to https://github.com/testing-library/dom-testing-library/issues/830`,
+          `Changed from using real timers to fake timers while using waitFor. This is not allowed and will result in very strange behavior. Please ensure you're awaiting all async things your test is doing before changing to fake timers. For more info, please go to https://github.com/testing-library/dom-testing-library/issues/830`,
         )
         if (!showOriginalStackTrace) copyStackTrace(error, stackTraceError)
-        throw error
-      }
-    }
-
-    function handleInterval() {
-      try {
-        ensureInvariantTimers()
-        return checkCallback()
-      } catch (error) {
         return reject(error)
+      } else {
+        return checkCallback()
       }
     }
 
