@@ -1424,6 +1424,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "istateside",
+      "name": "Kevin Fleischman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7245931?v=4",
+      "profile": "http://www.hawkeye.dog",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoHost": "https://github.com"
