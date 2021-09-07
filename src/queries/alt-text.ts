@@ -25,7 +25,7 @@ const getMissingError: GetErrorFunction<[unknown]> = (c, alt) =>
 
 const queryAllByAltTextWithSuggestions = wrapAllByQueryWithSuggestion<
   // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
-  [labelText: Matcher, options?: SelectorMatcherOptions]
+  [altText: Matcher, options?: SelectorMatcherOptions]
 >(queryAllByAltText, queryAllByAltText.name, 'queryAll')
 const [
   queryByAltText,

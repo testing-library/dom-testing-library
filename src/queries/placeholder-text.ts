@@ -14,7 +14,7 @@ const getMissingError: GetErrorFunction<[unknown]> = (c, text) =>
 
 const queryAllByPlaceholderTextWithSuggestions = wrapAllByQueryWithSuggestion<
   // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
-  [placeholder: Matcher, options?: MatcherOptions]
+  [placeholderText: Matcher, options?: MatcherOptions]
 >(queryAllByPlaceholderText, queryAllByPlaceholderText.name, 'queryAll')
 
 const [
