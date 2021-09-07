@@ -26,6 +26,14 @@ test('prettyDOM prints out the given DOM element tree', () => {
 test('prettyDOM supports truncating the output length', () => {
   const {container} = render('<div>Hello World!</div>')
   expect(prettyDOM(container, 5)).toMatch(/\.\.\./)
+  expect(prettyDOM(container, 0)).toMatch('')
+  expect(prettyDOM(container, Number.POSITIVE_INFINITY)).toMatchInlineSnapshot(`
+    "<div>
+      <div>
+        Hello World!
+      </div>
+    </div>"
+  `)
 })
 
 test('prettyDOM defaults to document.body', () => {
