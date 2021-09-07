@@ -18,16 +18,15 @@ const queryAllByAltText: AllByBoundAttribute = (
   )
 }
 
-const getMultipleError: GetErrorFunction = (c, alt) =>
+const getMultipleError: GetErrorFunction<[unknown]> = (c, alt) =>
   `Found multiple elements with the alt text: ${alt}`
-const getMissingError: GetErrorFunction = (c, alt) =>
+const getMissingError: GetErrorFunction<[unknown]> = (c, alt) =>
   `Unable to find an element with the alt text: ${alt}`
 
-const queryAllByAltTextWithSuggestions = wrapAllByQueryWithSuggestion(
-  queryAllByAltText,
-  queryAllByAltText.name,
-  'queryAll',
-)
+const queryAllByAltTextWithSuggestions = wrapAllByQueryWithSuggestion<
+  // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
+  [altText: Matcher, options?: SelectorMatcherOptions]
+>(queryAllByAltText, queryAllByAltText.name, 'queryAll')
 const [
   queryByAltText,
   getAllByAltText,

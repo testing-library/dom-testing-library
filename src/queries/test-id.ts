@@ -7,22 +7,18 @@ const getTestIdAttribute = () => getConfig().testIdAttribute
 
 const queryAllByTestId: AllByBoundAttribute = (...args) => {
   checkContainerType(args[0])
-  // TODO: Remove ignore after `queryAllByAttribute` will be moved to TS
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   return queryAllByAttribute(getTestIdAttribute(), ...args)
 }
 
-const getMultipleError: GetErrorFunction = (c, id) =>
+const getMultipleError: GetErrorFunction<[unknown]> = (c, id) =>
   `Found multiple elements by: [${getTestIdAttribute()}="${id}"]`
-const getMissingError: GetErrorFunction = (c, id) =>
+const getMissingError: GetErrorFunction<[unknown]> = (c, id) =>
   `Unable to find an element by: [${getTestIdAttribute()}="${id}"]`
 
-const queryAllByTestIdWithSuggestions = wrapAllByQueryWithSuggestion(
-  queryAllByTestId,
-  queryAllByTestId.name,
-  'queryAll',
-)
+const queryAllByTestIdWithSuggestions = wrapAllByQueryWithSuggestion<
+  // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
+  [testId: Matcher, options?: MatcherOptions]
+>(queryAllByTestId, queryAllByTestId.name, 'queryAll')
 
 const [
   queryByTestId,

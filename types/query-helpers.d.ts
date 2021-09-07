@@ -1,7 +1,12 @@
 import {Matcher, MatcherOptions} from './matches'
 import {waitForOptions} from './wait-for'
 
-export type GetErrorFunction = (c: Element | null, alt: string) => string
+export type WithSuggest = {suggest?: boolean}
+
+export type GetErrorFunction<Arguments extends any[] = [alt: string]> = (
+  c: Element | null,
+  ...args: Arguments
+) => string
 
 export interface SelectorMatcherOptions extends MatcherOptions {
   selector?: string
@@ -24,7 +29,10 @@ export type AllByAttribute = (
 
 export const queryByAttribute: QueryByAttribute
 export const queryAllByAttribute: AllByAttribute
-export function getElementError(message: string, container: HTMLElement): Error
+export function getElementError(
+  message: string | null,
+  container: HTMLElement,
+): Error
 
 /**
  * query methods have a common call signature. Only the return type differs.
@@ -58,8 +66,9 @@ export type BuiltQueryMethods<Arguments extends any[]> = [
   FindAllBy<Arguments>,
   FindBy<Arguments>,
 ]
+
 export function buildQueries<Arguments extends any[]>(
-  queryByAll: GetAllBy<Arguments>,
-  getMultipleError: (container: HTMLElement, ...args: Arguments) => string,
-  getMissingError: (container: HTMLElement, ...args: Arguments) => string,
+  queryAllBy: GetAllBy<Arguments>,
+  getMultipleError: GetErrorFunction,
+  getMissingError: GetErrorFunction,
 ): BuiltQueryMethods<Arguments>

@@ -1,7 +1,13 @@
 import {getConfig} from '../config'
 import {checkContainerType} from '../helpers'
 import {getLabels, getRealLabels, getLabelContent} from '../label-helpers'
-import {AllByText, GetErrorFunction} from '../../types'
+import {
+  AllByText,
+  GetErrorFunction,
+  Matcher,
+  MatcherOptions,
+  SelectorMatcherOptions,
+} from '../../types'
 import {
   fuzzyMatches,
   matches,
@@ -100,9 +106,6 @@ const queryAllByLabelText: AllByText = (
       return labelledElements
     }, [])
     .concat(
-      // TODO: Remove ignore after `queryAllByAttribute` will be moved to TS
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       queryAllByAttribute('aria-label', container, text, {
         exact,
         normalizer: matchNormalizer,
@@ -171,9 +174,12 @@ function getTagNameOfElementAssociatedWithLabelViaFor(
 }
 
 // the reason mentioned above is the same reason we're not using buildQueries
-const getMultipleError: GetErrorFunction = (c, text) =>
+const getMultipleError: GetErrorFunction<[unknown]> = (c, text) =>
   `Found multiple elements with the text of: ${text}`
-const queryByLabelText = wrapSingleQueryWithSuggestion(
+const queryByLabelText = wrapSingleQueryWithSuggestion<
+  // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
+  [labelText: Matcher, options?: SelectorMatcherOptions]
+>(
   makeSingleQuery(queryAllByLabelText, getMultipleError),
   queryAllByLabelText.name,
   'query',
@@ -181,32 +187,31 @@ const queryByLabelText = wrapSingleQueryWithSuggestion(
 const getByLabelText = makeSingleQuery(getAllByLabelText, getMultipleError)
 
 const findAllByLabelText = makeFindQuery(
-  wrapAllByQueryWithSuggestion(
-    getAllByLabelText,
-    getAllByLabelText.name,
-    'findAll',
-  ),
+  wrapAllByQueryWithSuggestion<
+    // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
+    [labelText: Matcher, options?: SelectorMatcherOptions]
+  >(getAllByLabelText, getAllByLabelText.name, 'findAll'),
 )
 const findByLabelText = makeFindQuery(
-  wrapSingleQueryWithSuggestion(getByLabelText, getAllByLabelText.name, 'find'),
+  wrapSingleQueryWithSuggestion<
+    // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
+    [labelText: Matcher, options?: SelectorMatcherOptions]
+  >(getByLabelText, getAllByLabelText.name, 'find'),
 )
 
-const getAllByLabelTextWithSuggestions = wrapAllByQueryWithSuggestion(
-  getAllByLabelText,
-  getAllByLabelText.name,
-  'getAll',
-)
-const getByLabelTextWithSuggestions = wrapSingleQueryWithSuggestion(
-  getByLabelText,
-  getAllByLabelText.name,
-  'get',
-)
+const getAllByLabelTextWithSuggestions = wrapAllByQueryWithSuggestion<
+  // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
+  [labelText: Matcher, options?: MatcherOptions]
+>(getAllByLabelText, getAllByLabelText.name, 'getAll')
+const getByLabelTextWithSuggestions = wrapSingleQueryWithSuggestion<
+  // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
+  [labelText: Matcher, options?: SelectorMatcherOptions]
+>(getByLabelText, getAllByLabelText.name, 'get')
 
-const queryAllByLabelTextWithSuggestions = wrapAllByQueryWithSuggestion(
-  queryAllByLabelText,
-  queryAllByLabelText.name,
-  'queryAll',
-)
+const queryAllByLabelTextWithSuggestions = wrapAllByQueryWithSuggestion<
+  // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
+  [labelText: Matcher, options?: SelectorMatcherOptions]
+>(queryAllByLabelText, queryAllByLabelText.name, 'queryAll')
 
 export {
   queryAllByLabelTextWithSuggestions as queryAllByLabelText,

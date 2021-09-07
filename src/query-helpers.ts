@@ -1,13 +1,25 @@
+import type {
+  GetErrorFunction,
+  Matcher,
+  MatcherOptions,
+  QueryMethod,
+  Variant,
+  waitForOptions as WaitForOptions,
+  WithSuggest,
+} from '../types'
 import {getSuggestedQuery} from './suggestions'
 import {fuzzyMatches, matches, makeNormalizer} from './matches'
 import {waitFor} from './wait-for'
 import {getConfig} from './config'
 
-function getElementError(message, container) {
+function getElementError(message: string | null, container: HTMLElement) {
   return getConfig().getElementError(message, container)
 }
 
-function getMultipleElementsFoundError(message, container) {
+function getMultipleElementsFoundError(
+  message: string,
+  container: HTMLElement,
+) {
   return getElementError(
     `${message}\n\n(If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).`,
     container,
@@ -15,20 +27,27 @@ function getMultipleElementsFoundError(message, container) {
 }
 
 function queryAllByAttribute(
-  attribute,
-  container,
-  text,
-  {exact = true, collapseWhitespace, trim, normalizer} = {},
-) {
+  attribute: string,
+  container: HTMLElement,
+  text: Matcher,
+  {exact = true, collapseWhitespace, trim, normalizer}: MatcherOptions = {},
+): HTMLElement[] {
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-  return Array.from(container.querySelectorAll(`[${attribute}]`)).filter(node =>
+  return Array.from(
+    container.querySelectorAll<HTMLElement>(`[${attribute}]`),
+  ).filter(node =>
     matcher(node.getAttribute(attribute), node, text, matchNormalizer),
   )
 }
 
-function queryByAttribute(attribute, container, text, ...args) {
-  const els = queryAllByAttribute(attribute, container, text, ...args)
+function queryByAttribute(
+  attribute: string,
+  container: HTMLElement,
+  text: Matcher,
+  options?: MatcherOptions,
+) {
+  const els = queryAllByAttribute(attribute, container, text, options)
   if (els.length > 1) {
     throw getMultipleElementsFoundError(
       `Found multiple elements by [${attribute}=${text}]`,
@@ -41,8 +60,11 @@ function queryByAttribute(attribute, container, text, ...args) {
 // this accepts a query function and returns a function which throws an error
 // if more than one elements is returned, otherwise it returns the first
 // element or null
-function makeSingleQuery(allQuery, getMultipleError) {
-  return (container, ...args) => {
+function makeSingleQuery<Arguments extends unknown[]>(
+  allQuery: QueryMethod<Arguments, HTMLElement[]>,
+  getMultipleError: GetErrorFunction<Arguments>,
+) {
+  return (container: HTMLElement, ...args: Arguments) => {
     const els = allQuery(container, ...args)
     if (els.length > 1) {
       const elementStrings = els
@@ -62,7 +84,10 @@ ${elementStrings}`,
   }
 }
 
-function getSuggestionError(suggestion, container) {
+function getSuggestionError(
+  suggestion: {toString(): string},
+  container: HTMLElement,
+) {
   return getConfig().getElementError(
     `A better query is available, try this:
 ${suggestion.toString()}
@@ -73,8 +98,11 @@ ${suggestion.toString()}
 
 // this accepts a query function and returns a function which throws an error
 // if an empty list of elements is returned
-function makeGetAllQuery(allQuery, getMissingError) {
-  return (container, ...args) => {
+function makeGetAllQuery<Arguments extends unknown[]>(
+  allQuery: (container: HTMLElement, ...args: Arguments) => HTMLElement[],
+  getMissingError: GetErrorFunction<Arguments>,
+) {
+  return (container: HTMLElement, ...args: Arguments) => {
     const els = allQuery(container, ...args)
     if (!els.length) {
       throw getConfig().getElementError(
@@ -89,8 +117,19 @@ function makeGetAllQuery(allQuery, getMissingError) {
 
 // this accepts a getter query function and returns a function which calls
 // waitFor and passing a function which invokes the getter.
-function makeFindQuery(getter) {
-  return (container, text, options, waitForOptions) => {
+function makeFindQuery<QueryFor>(
+  getter: (
+    container: HTMLElement,
+    text: Matcher,
+    options: MatcherOptions,
+  ) => QueryFor,
+) {
+  return (
+    container: HTMLElement,
+    text: Matcher,
+    options: MatcherOptions,
+    waitForOptions: WaitForOptions,
+  ) => {
     return waitFor(
       () => {
         return getter(container, text, options)
@@ -101,13 +140,22 @@ function makeFindQuery(getter) {
 }
 
 const wrapSingleQueryWithSuggestion =
-  (query, queryAllByName, variant) =>
-  (container, ...args) => {
+  <Arguments extends [...unknown[], WithSuggest]>(
+    query: (container: HTMLElement, ...args: Arguments) => HTMLElement | null,
+    queryAllByName: string,
+    variant: Variant,
+  ) =>
+  (container: HTMLElement, ...args: Arguments) => {
     const element = query(container, ...args)
-    const [{suggest = getConfig().throwSuggestions} = {}] = args.slice(-1)
+    const [{suggest = getConfig().throwSuggestions} = {}] = args.slice(-1) as [
+      WithSuggest,
+    ]
     if (element && suggest) {
       const suggestion = getSuggestedQuery(element, variant)
-      if (suggestion && !queryAllByName.endsWith(suggestion.queryName)) {
+      if (
+        suggestion &&
+        !queryAllByName.endsWith(suggestion.queryName as string)
+      ) {
         throw getSuggestionError(suggestion.toString(), container)
       }
     }
@@ -116,24 +164,40 @@ const wrapSingleQueryWithSuggestion =
   }
 
 const wrapAllByQueryWithSuggestion =
-  (query, queryAllByName, variant) =>
-  (container, ...args) => {
+  <
+    // We actually want `Arguments extends [args: ...unknown[], options?: Options]`
+    // But that's not supported by TS so we have to `@ts-expect-error` every callsite
+    Arguments extends [...unknown[], WithSuggest],
+  >(
+    query: (container: HTMLElement, ...args: Arguments) => HTMLElement[],
+    queryAllByName: string,
+    variant: Variant,
+  ) =>
+  (container: HTMLElement, ...args: Arguments) => {
     const els = query(container, ...args)
 
-    const [{suggest = getConfig().throwSuggestions} = {}] = args.slice(-1)
+    const [{suggest = getConfig().throwSuggestions} = {}] = args.slice(-1) as [
+      WithSuggest,
+    ]
     if (els.length && suggest) {
       // get a unique list of all suggestion messages.  We are only going to make a suggestion if
       // all the suggestions are the same
       const uniqueSuggestionMessages = [
         ...new Set(
-          els.map(element => getSuggestedQuery(element, variant)?.toString()),
+          els.map(
+            element =>
+              getSuggestedQuery(element, variant)?.toString() as string,
+          ),
         ),
       ]
 
       if (
         // only want to suggest if all the els have the same suggestion.
         uniqueSuggestionMessages.length === 1 &&
-        !queryAllByName.endsWith(getSuggestedQuery(els[0], variant).queryName)
+        !queryAllByName.endsWith(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- TODO: Can this be null at runtime?
+          getSuggestedQuery(els[0], variant)!.queryName as string,
+        )
       ) {
         throw getSuggestionError(uniqueSuggestionMessages[0], container)
       }
@@ -142,7 +206,21 @@ const wrapAllByQueryWithSuggestion =
     return els
   }
 
-function buildQueries(queryAllBy, getMultipleError, getMissingError) {
+// TODO: This deviates from the published declarations
+// However, the implementation always required a dyadic (after `container`) not variadic `queryAllBy` considering the implementation of `makeFindQuery`
+// This is at least statically true and can be verified by accepting `QueryMethod<Arguments, HTMLElement[]>`
+function buildQueries(
+  queryAllBy: QueryMethod<
+    [matcher: Matcher, options: MatcherOptions],
+    HTMLElement[]
+  >,
+  getMultipleError: GetErrorFunction<
+    [matcher: Matcher, options: MatcherOptions]
+  >,
+  getMissingError: GetErrorFunction<
+    [matcher: Matcher, options: MatcherOptions]
+  >,
+) {
   const queryBy = wrapSingleQueryWithSuggestion(
     makeSingleQuery(queryAllBy, getMultipleError),
     queryAllBy.name,

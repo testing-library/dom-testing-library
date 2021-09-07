@@ -5,21 +5,17 @@ import {queryAllByAttribute, buildQueries} from './all-utils'
 
 const queryAllByPlaceholderText: AllByBoundAttribute = (...args) => {
   checkContainerType(args[0])
-  // TODO: Remove ignore after `queryAllByAttribute` will be moved to TS
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   return queryAllByAttribute('placeholder', ...args)
 }
-const getMultipleError: GetErrorFunction = (c, text) =>
+const getMultipleError: GetErrorFunction<[unknown]> = (c, text) =>
   `Found multiple elements with the placeholder text of: ${text}`
-const getMissingError: GetErrorFunction = (c, text) =>
+const getMissingError: GetErrorFunction<[unknown]> = (c, text) =>
   `Unable to find an element with the placeholder text of: ${text}`
 
-const queryAllByPlaceholderTextWithSuggestions = wrapAllByQueryWithSuggestion(
-  queryAllByPlaceholderText,
-  queryAllByPlaceholderText.name,
-  'queryAll',
-)
+const queryAllByPlaceholderTextWithSuggestions = wrapAllByQueryWithSuggestion<
+  // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
+  [placeholderText: Matcher, options?: MatcherOptions]
+>(queryAllByPlaceholderText, queryAllByPlaceholderText.name, 'queryAll')
 
 const [
   queryByPlaceholderText,

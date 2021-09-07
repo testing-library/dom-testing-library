@@ -1,6 +1,11 @@
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 import {checkContainerType} from '../helpers'
-import {AllByBoundAttribute, GetErrorFunction} from '../../types'
+import {
+  AllByBoundAttribute,
+  GetErrorFunction,
+  Matcher,
+  MatcherOptions,
+} from '../../types'
 import {
   fuzzyMatches,
   matches,
@@ -31,16 +36,15 @@ const queryAllByTitle: AllByBoundAttribute = (
   )
 }
 
-const getMultipleError: GetErrorFunction = (c, title) =>
+const getMultipleError: GetErrorFunction<[unknown]> = (c, title) =>
   `Found multiple elements with the title: ${title}.`
-const getMissingError: GetErrorFunction = (c, title) =>
+const getMissingError: GetErrorFunction<[unknown]> = (c, title) =>
   `Unable to find an element with the title: ${title}.`
 
-const queryAllByTitleWithSuggestions = wrapAllByQueryWithSuggestion(
-  queryAllByTitle,
-  queryAllByTitle.name,
-  'queryAll',
-)
+const queryAllByTitleWithSuggestions = wrapAllByQueryWithSuggestion<
+  // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
+  [title: Matcher, options?: MatcherOptions]
+>(queryAllByTitle, queryAllByTitle.name, 'queryAll')
 
 const [queryByTitle, getAllByTitle, getByTitle, findAllByTitle, findByTitle] =
   buildQueries(queryAllByTitle, getMultipleError, getMissingError)
