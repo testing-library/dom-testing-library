@@ -1,70 +1,70 @@
-import {Matcher, MatcherOptions, ByRoleMatcher} from './matches'
+import {ByRoleMatcher, Matcher, MatcherOptions} from './matches'
 import {SelectorMatcherOptions} from './query-helpers'
 import {waitForOptions} from './wait-for'
 
-export type QueryByBoundAttribute = (
+export type QueryByBoundAttribute<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
-) => HTMLElement | null
+) => T | null
 
-export type AllByBoundAttribute = (
+export type AllByBoundAttribute<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
-) => HTMLElement[]
+) => T[]
 
-export type FindAllByBoundAttribute = (
-  container: HTMLElement,
-  id: Matcher,
-  options?: MatcherOptions,
-  waitForElementOptions?: waitForOptions,
-) => Promise<HTMLElement[]>
-
-export type GetByBoundAttribute = (
-  container: HTMLElement,
-  id: Matcher,
-  options?: MatcherOptions,
-) => HTMLElement
-
-export type FindByBoundAttribute = (
+export type FindAllByBoundAttribute<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
   waitForElementOptions?: waitForOptions,
-) => Promise<HTMLElement>
+) => Promise<T[]>
 
-export type QueryByText = (
+export type GetByBoundAttribute<T extends HTMLElement = HTMLElement> = (
+  container: HTMLElement,
+  id: Matcher,
+  options?: MatcherOptions,
+) => T
+
+export type FindByBoundAttribute<T extends HTMLElement = HTMLElement> = (
+  container: HTMLElement,
+  id: Matcher,
+  options?: MatcherOptions,
+  waitForElementOptions?: waitForOptions,
+) => Promise<T>
+
+export type QueryByText<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
   options?: SelectorMatcherOptions,
-) => HTMLElement | null
+) => T | null
 
-export type AllByText = (
+export type AllByText<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
   options?: SelectorMatcherOptions,
-) => HTMLElement[]
+) => T[]
 
-export type FindAllByText = (
+export type FindAllByText<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
   options?: SelectorMatcherOptions,
   waitForElementOptions?: waitForOptions,
-) => Promise<HTMLElement[]>
+) => Promise<T[]>
 
-export type GetByText = (
+export type GetByText<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
   options?: SelectorMatcherOptions,
-) => HTMLElement
+) => T
 
-export type FindByText = (
+export type FindByText<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
   options?: SelectorMatcherOptions,
   waitForElementOptions?: waitForOptions,
-) => Promise<HTMLElement>
+) => Promise<T>
 
 export interface ByRoleOptions extends MatcherOptions {
   /**
@@ -117,83 +117,179 @@ export interface ByRoleOptions extends MatcherOptions {
     | ((accessibleName: string, element: Element) => boolean)
 }
 
-export type AllByRole = (
+export type AllByRole<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   role: ByRoleMatcher,
   options?: ByRoleOptions,
-) => HTMLElement[]
+) => T[]
 
-export type GetByRole = (
+export type GetByRole<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   role: ByRoleMatcher,
   options?: ByRoleOptions,
-) => HTMLElement
+) => T
 
-export type QueryByRole = (
+export type QueryByRole<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   role: ByRoleMatcher,
   options?: ByRoleOptions,
-) => HTMLElement | null
+) => T | null
 
-export type FindByRole = (
-  container: HTMLElement,
-  role: ByRoleMatcher,
-  options?: ByRoleOptions,
-  waitForElementOptions?: waitForOptions,
-) => Promise<HTMLElement>
-
-export type FindAllByRole = (
+export type FindByRole<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   role: ByRoleMatcher,
   options?: ByRoleOptions,
   waitForElementOptions?: waitForOptions,
-) => Promise<HTMLElement[]>
+) => Promise<T>
 
-export const getByLabelText: GetByText
-export const getAllByLabelText: AllByText
-export const queryByLabelText: QueryByText
-export const queryAllByLabelText: AllByText
-export const findByLabelText: FindByText
-export const findAllByLabelText: FindAllByText
-export const getByPlaceholderText: GetByBoundAttribute
-export const getAllByPlaceholderText: AllByBoundAttribute
-export const queryByPlaceholderText: QueryByBoundAttribute
-export const queryAllByPlaceholderText: AllByBoundAttribute
-export const findByPlaceholderText: FindByBoundAttribute
-export const findAllByPlaceholderText: FindAllByBoundAttribute
-export const getByText: GetByText
-export const getAllByText: AllByText
-export const queryByText: QueryByText
-export const queryAllByText: AllByText
-export const findByText: FindByText
-export const findAllByText: FindAllByText
-export const getByAltText: GetByBoundAttribute
-export const getAllByAltText: AllByBoundAttribute
-export const queryByAltText: QueryByBoundAttribute
-export const queryAllByAltText: AllByBoundAttribute
-export const findByAltText: FindByBoundAttribute
-export const findAllByAltText: FindAllByBoundAttribute
-export const getByTitle: GetByBoundAttribute
-export const getAllByTitle: AllByBoundAttribute
-export const queryByTitle: QueryByBoundAttribute
-export const queryAllByTitle: AllByBoundAttribute
-export const findByTitle: FindByBoundAttribute
-export const findAllByTitle: FindAllByBoundAttribute
-export const getByDisplayValue: GetByBoundAttribute
-export const getAllByDisplayValue: AllByBoundAttribute
-export const queryByDisplayValue: QueryByBoundAttribute
-export const queryAllByDisplayValue: AllByBoundAttribute
-export const findByDisplayValue: FindByBoundAttribute
-export const findAllByDisplayValue: FindAllByBoundAttribute
-export const getByRole: GetByRole
-export const getAllByRole: AllByRole
-export const queryByRole: QueryByRole
-export const queryAllByRole: AllByRole
-export const findByRole: FindByRole
-export const findAllByRole: FindAllByRole
-export const getByTestId: GetByBoundAttribute
-export const getAllByTestId: AllByBoundAttribute
-export const queryByTestId: QueryByBoundAttribute
-export const queryAllByTestId: AllByBoundAttribute
-export const findByTestId: FindByBoundAttribute
-export const findAllByTestId: FindAllByBoundAttribute
+export type FindAllByRole<T extends HTMLElement = HTMLElement> = (
+  container: HTMLElement,
+  role: ByRoleMatcher,
+  options?: ByRoleOptions,
+  waitForElementOptions?: waitForOptions,
+) => Promise<T[]>
+
+export function getByLabelText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<GetByText<T>>
+): ReturnType<GetByText<T>>
+export function getAllByLabelText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByText<T>>
+): ReturnType<AllByText<T>>
+export function queryByLabelText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<QueryByText<T>>
+): ReturnType<QueryByText<T>>
+export function queryAllByLabelText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByText<T>>
+): ReturnType<AllByText<T>>
+export function findByLabelText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindByText<T>>
+): ReturnType<FindByText<T>>
+export function findAllByLabelText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindAllByText<T>>
+): ReturnType<FindAllByText<T>>
+export function getByPlaceholderText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<GetByBoundAttribute<T>>
+): ReturnType<GetByBoundAttribute<T>>
+export function getAllByPlaceholderText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByBoundAttribute<T>>
+): ReturnType<AllByBoundAttribute<T>>
+export function queryByPlaceholderText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<QueryByBoundAttribute<T>>
+): ReturnType<QueryByBoundAttribute<T>>
+export function queryAllByPlaceholderText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByBoundAttribute<T>>
+): ReturnType<AllByBoundAttribute<T>>
+export function findByPlaceholderText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindByBoundAttribute<T>>
+): ReturnType<FindByBoundAttribute<T>>
+export function findAllByPlaceholderText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindAllByBoundAttribute<T>>
+): ReturnType<FindAllByBoundAttribute<T>>
+export function getByText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<GetByText<T>>
+): ReturnType<GetByText<T>>
+export function getAllByText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByText<T>>
+): ReturnType<AllByText<T>>
+export function queryByText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<QueryByText<T>>
+): ReturnType<QueryByText<T>>
+export function queryAllByText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByText<T>>
+): ReturnType<AllByText<T>>
+export function findByText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindByText<T>>
+): ReturnType<FindByText<T>>
+export function findAllByText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindAllByText<T>>
+): ReturnType<FindAllByText<T>>
+export function getByAltText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<GetByBoundAttribute<T>>
+): ReturnType<GetByBoundAttribute<T>>
+export function getAllByAltText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByBoundAttribute<T>>
+): ReturnType<AllByBoundAttribute<T>>
+export function queryByAltText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<QueryByBoundAttribute<T>>
+): ReturnType<QueryByBoundAttribute<T>>
+export function queryAllByAltText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByBoundAttribute<T>>
+): ReturnType<AllByBoundAttribute<T>>
+export function findByAltText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindByBoundAttribute<T>>
+): ReturnType<FindByBoundAttribute<T>>
+export function findAllByAltText<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindAllByBoundAttribute<T>>
+): ReturnType<FindAllByBoundAttribute<T>>
+export function getByTitle<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<GetByBoundAttribute<T>>
+): ReturnType<GetByBoundAttribute<T>>
+export function getAllByTitle<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByBoundAttribute<T>>
+): ReturnType<AllByBoundAttribute<T>>
+export function queryByTitle<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<QueryByBoundAttribute<T>>
+): ReturnType<QueryByBoundAttribute<T>>
+export function queryAllByTitle<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByBoundAttribute<T>>
+): ReturnType<AllByBoundAttribute<T>>
+export function findByTitle<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindByBoundAttribute<T>>
+): ReturnType<FindByBoundAttribute<T>>
+export function findAllByTitle<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindAllByBoundAttribute<T>>
+): ReturnType<FindAllByBoundAttribute<T>>
+export function getByDisplayValue<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<GetByBoundAttribute<T>>
+): ReturnType<GetByBoundAttribute<T>>
+export function getAllByDisplayValue<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByBoundAttribute<T>>
+): ReturnType<AllByBoundAttribute<T>>
+export function queryByDisplayValue<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<QueryByBoundAttribute<T>>
+): ReturnType<QueryByBoundAttribute<T>>
+export function queryAllByDisplayValue<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByBoundAttribute<T>>
+): ReturnType<AllByBoundAttribute<T>>
+export function findByDisplayValue<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindByBoundAttribute<T>>
+): ReturnType<FindByBoundAttribute<T>>
+export function findAllByDisplayValue<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindAllByBoundAttribute<T>>
+): ReturnType<FindAllByBoundAttribute<T>>
+export function getByRole<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<GetByRole<T>>
+): ReturnType<GetByRole<T>>
+export function getAllByRole<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByRole<T>>
+): ReturnType<AllByRole<T>>
+export function queryByRole<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<QueryByRole<T>>
+): ReturnType<QueryByRole<T>>
+export function queryAllByRole<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByRole<T>>
+): ReturnType<AllByRole<T>>
+export function findByRole<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindByRole<T>>
+): ReturnType<FindByRole<T>>
+export function findAllByRole<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindAllByRole<T>>
+): ReturnType<FindAllByRole<T>>
+export function getByTestId<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<GetByBoundAttribute<T>>
+): ReturnType<GetByBoundAttribute<T>>
+export function getAllByTestId<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByBoundAttribute<T>>
+): ReturnType<AllByBoundAttribute<T>>
+export function queryByTestId<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<QueryByBoundAttribute<T>>
+): ReturnType<QueryByBoundAttribute<T>>
+export function queryAllByTestId<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<AllByBoundAttribute<T>>
+): ReturnType<AllByBoundAttribute<T>>
+export function findByTestId<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindByBoundAttribute<T>>
+): ReturnType<FindByBoundAttribute<T>>
+export function findAllByTestId<T extends HTMLElement = HTMLElement>(
+  ...args: Parameters<FindAllByBoundAttribute<T>>
+): ReturnType<FindAllByBoundAttribute<T>>
