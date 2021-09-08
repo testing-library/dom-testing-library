@@ -35,11 +35,7 @@ let config: InternalConfig = {
     const error = new Error(
       [
         message,
-        prettifiedDOM.length > 0
-          ? `Ignored nodes: comments, <script />, <style />\n${prettyDOM(
-              container,
-            )}`
-          : null,
+        `Ignored nodes: comments, <script />, <style />\n${prettifiedDOM}`,
       ]
         .filter(Boolean)
         .join('\n\n'),
