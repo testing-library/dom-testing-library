@@ -15,6 +15,8 @@ jobs:
     # ignore all-contributors PRs
     if: ${{ !contains(github.head_ref, 'all-contributors') }}
     strategy:
+      # Otherwise we would not know if the problem is tied to the Node.js version
+      fail-fast: false
       matrix:
         node: [12, 14, 16]
     runs-on: ubuntu-latest
