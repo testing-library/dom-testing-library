@@ -3,7 +3,7 @@ import {waitForOptions} from './wait-for'
 
 export type WithSuggest = {suggest?: boolean}
 
-export type GetErrorFunction<Arguments extends any[] = [alt: string]> = (
+export type GetErrorFunction<Arguments extends any[] = [string]> = (
   c: Element | null,
   ...args: Arguments
 ) => string
