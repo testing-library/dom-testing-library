@@ -51,6 +51,7 @@ function waitFor(
 
     const usingJestFakeTimers = jestFakeTimersAreEnabled()
     if (usingJestFakeTimers) {
+      const {unstable_advanceTimersWrapper: advanceTimersWrapper} = getConfig()
       checkCallback()
       // this is a dangerous rule to disable because it could lead to an
       // infinite loop. However, eslint isn't smart enough to know that we're
@@ -71,7 +72,9 @@ function waitFor(
         // third party code that's setting up recursive timers so rapidly that
         // the user's timer's don't get a chance to resolve. So we'll advance
         // by an interval instead. (We have a test for this case).
-        jest.advanceTimersByTime(interval)
+        advanceTimersWrapper(() => {
+          jest.advanceTimersByTime(interval)
+        })
 
         // It's really important that checkCallback is run *before* we flush
         // in-flight promises. To be honest, I'm not sure why, and I can't quite
@@ -84,9 +87,11 @@ function waitFor(
         // of parallelization so we're fine.
         // https://stackoverflow.com/a/59243586/971592
         // eslint-disable-next-line no-await-in-loop
-        await new Promise(r => {
-          setTimeout(r, 0)
-          jest.advanceTimersByTime(0)
+        await advanceTimersWrapper(async () => {
+          await new Promise(r => {
+            setTimeout(r, 0)
+            jest.advanceTimersByTime(0)
+          })
         })
       }
     } else {
