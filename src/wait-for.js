@@ -15,6 +15,15 @@ function copyStackTrace(target, source) {
   target.stack = source.stack.replace(source.message, target.message)
 }
 
+// `requestIdleCallback` is not available in Node/JSDOM environments,
+// so we fallback to setTimeout instead with a little bit of timeout
+// to allow non-test async tasks to run.
+const requestIdleCallback =
+  // eslint-disable-next-line no-undef
+  globalThis.requestIdleCallback ?? (fn => setTimeout(fn, 5))
+// eslint-disable-next-line no-undef
+const cancelIdleCallback = globalThis.cancelIdleCallback ?? clearTimeout
+
 function waitFor(
   callback,
   {
@@ -43,7 +52,7 @@ function waitFor(
   }
 
   return new Promise(async (resolve, reject) => {
-    let lastError, intervalId, observer
+    let lastError, intervalId, observer, idleCallbackId
     let finished = false
     let promiseStatus = 'idle'
 
@@ -101,9 +110,15 @@ function waitFor(
         reject(e)
         return
       }
-      intervalId = setInterval(checkRealTimersCallback, interval)
       const {MutationObserver} = getWindowFromNode(container)
-      observer = new MutationObserver(checkRealTimersCallback)
+      observer = new MutationObserver(() => {
+        // It's not unlikely for multiple async tasks to generate multiple DOM mutations in quick successions,
+        // so we run the check when idle to give async tasks enough room to run to completion.
+        // If each async tasks has to wait for an expensive `waitFor` check to complete, it can lead to timeouts.
+        if (idleCallbackId === undefined) {
+          idleCallbackId = requestIdleCallback(checkRealTimersCallback)
+        }
+      })
       observer.observe(container, mutationObserverOptions)
       checkCallback()
     }
@@ -113,7 +128,8 @@ function waitFor(
       clearTimeout(overallTimeoutTimer)
 
       if (!usingJestFakeTimers) {
-        clearInterval(intervalId)
+        clearTimeout(intervalId)
+        cancelIdleCallback(idleCallbackId)
         observer.disconnect()
       }
 
@@ -125,6 +141,10 @@ function waitFor(
     }
 
     function checkRealTimersCallback() {
+      clearTimeout(intervalId)
+      cancelIdleCallback(idleCallbackId)
+      idleCallbackId = undefined
+
       if (jestFakeTimersAreEnabled()) {
         const error = new Error(
           `Changed from using real timers to fake timers while using waitFor. This is not allowed and will result in very strange behavior. Please ensure you're awaiting all async things your test is doing before changing to fake timers. For more info, please go to https://github.com/testing-library/dom-testing-library/issues/830`,
@@ -150,6 +170,9 @@ function waitFor(
             rejectedValue => {
               promiseStatus = 'rejected'
               lastError = rejectedValue
+              if (!usingJestFakeTimers) {
+                intervalId = setTimeout(checkRealTimersCallback, interval)
+              }
             },
           )
         } else {
@@ -159,6 +182,9 @@ function waitFor(
       } catch (error) {
         // Save the most recent callback error to reject the promise with it in the event of a timeout
         lastError = error
+        if (!usingJestFakeTimers) {
+          intervalId = setTimeout(checkRealTimersCallback, interval)
+        }
       }
     }
 

@@ -255,3 +255,27 @@ test('the real timers => fake timers error shows the original stack trace when c
 
   expect((await waitForError).stack).not.toMatch(__dirname)
 })
+
+test('allow further async tasks to complete after the MutationObserver callback fired', async () => {
+  jest.useRealTimers()
+  renderIntoDocument(`<div id="async">a</div>`)
+  let waitForCount = 0
+  const el = document.getElementById('async')
+  const update = () => {
+    setTimeout(() => {
+      el.textContent += 'a'
+    }, 1)
+  }
+
+  update()
+  update()
+  update()
+
+  await waitFor(() => {
+    waitForCount++
+    expect(el).toHaveTextContent('aaaa')
+  })
+
+  // initial sync check + mutation check
+  expect(waitForCount).toBe(2)
+})
