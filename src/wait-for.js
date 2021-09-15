@@ -52,7 +52,7 @@ function waitFor(
   }
 
   return new Promise(async (resolve, reject) => {
-    let lastError, intervalId, observer, idleCallbackId
+    let lastError, timerId, observer, idleCallbackId
     let finished = false
     let promiseStatus = 'idle'
 
@@ -128,7 +128,7 @@ function waitFor(
       clearTimeout(overallTimeoutTimer)
 
       if (!usingJestFakeTimers) {
-        clearTimeout(intervalId)
+        clearTimeout(timerId)
         cancelIdleCallback(idleCallbackId)
         observer.disconnect()
       }
@@ -141,7 +141,7 @@ function waitFor(
     }
 
     function checkRealTimersCallback() {
-      clearTimeout(intervalId)
+      clearTimeout(timerId)
       cancelIdleCallback(idleCallbackId)
       idleCallbackId = undefined
 
@@ -169,10 +169,7 @@ function waitFor(
             },
             rejectedValue => {
               promiseStatus = 'rejected'
-              lastError = rejectedValue
-              if (!usingJestFakeTimers) {
-                intervalId = setTimeout(checkRealTimersCallback, interval)
-              }
+              handleError(rejectedValue)
             },
           )
         } else {
@@ -181,10 +178,14 @@ function waitFor(
         // If `callback` throws, wait for the next mutation, interval, or timeout.
       } catch (error) {
         // Save the most recent callback error to reject the promise with it in the event of a timeout
-        lastError = error
-        if (!usingJestFakeTimers) {
-          intervalId = setTimeout(checkRealTimersCallback, interval)
-        }
+        handleError(error)
+      }
+    }
+
+    function handleError(error) {
+      lastError = error
+      if (!usingJestFakeTimers) {
+        timerId = setTimeout(checkRealTimersCallback, interval)
       }
     }
 
