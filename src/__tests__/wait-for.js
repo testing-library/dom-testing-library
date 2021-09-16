@@ -280,14 +280,18 @@ test('allow further async tasks to complete after the MutationObserver callback 
   expect(waitForCount).toBe(2)
 })
 
-test('avoid running the next check when the previous check is still pending', async () => {
-  jest.useFakeTimers()
+test('avoid running the next check when the current check is still pending', async () => {
+  jest.useRealTimers()
   let currentlyRunningCount = 0
+
+  setTimeout(() => {
+    renderIntoDocument(`<div></div>`)
+  }, 1)
 
   await waitFor(async () => {
     currentlyRunningCount++
     await new Promise(resolve => {
-      setTimeout(resolve, 1)
+      setTimeout(resolve, 55)
     })
     currentlyRunningCount--
   })
