@@ -9,6 +9,7 @@ import {
   waitFor,
   waitForElementToBeRemoved,
   MatcherOptions,
+  BoundFunctions,
 } from '@testing-library/dom'
 
 const {
@@ -38,12 +39,14 @@ export async function testQueries() {
 
   // screen queries
   screen.getByText('foo')
+  screen.getByText<HTMLDivElement>('foo')
   screen.queryByText('foo')
   await screen.findByText('foo')
   await screen.findByText('foo', undefined, {timeout: 10})
   screen.debug(screen.getAllByText('bar'))
   screen.queryAllByText('bar')
   await screen.findAllByText('bar')
+  await screen.findAllByRole<HTMLButtonElement>('button', {name: 'submit'})
   await screen.findAllByText('bar', undefined, {timeout: 10})
 }
 
@@ -86,6 +89,22 @@ export async function testQueryHelpers() {
   await findByAutomationId(element, 'id', {})
   await findAllByAutomationId(element, 'id')
   await findByAutomationId(element, 'id')
+}
+
+export function testBoundFunctions() {
+  const boundfunctions = {} as BoundFunctions<{
+    customQueryOne: (container: HTMLElement, text: string) => HTMLElement
+    customQueryTwo: (
+      container: HTMLElement,
+      text: string,
+      text2: string,
+    ) => HTMLElement
+    customQueryThree: (container: HTMLElement, number: number) => HTMLElement
+  }>
+
+  boundfunctions.customQueryOne('one')
+  boundfunctions.customQueryTwo('one', 'two')
+  boundfunctions.customQueryThree(3)
 }
 
 export async function testByRole() {
