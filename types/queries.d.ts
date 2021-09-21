@@ -2,6 +2,8 @@ import {ByRoleMatcher, Matcher, MatcherOptions} from './matches'
 import {SelectorMatcherOptions} from './query-helpers'
 import {waitForOptions} from './wait-for'
 
+type NonEmptyArray<T> = [T, ...T[]]
+
 export type QueryByBoundAttribute<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
@@ -12,14 +14,14 @@ export type AllByBoundAttribute<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
-) => T[]
+) => NonEmptyArray<T>
 
 export type FindAllByBoundAttribute<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
   options?: MatcherOptions,
   waitForElementOptions?: waitForOptions,
-) => Promise<T[]>
+) => Promise<NonEmptyArray<T>>
 
 export type GetByBoundAttribute<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
@@ -44,14 +46,14 @@ export type AllByText<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
   options?: SelectorMatcherOptions,
-) => T[]
+) => NonEmptyArray<T>
 
 export type FindAllByText<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
   options?: SelectorMatcherOptions,
   waitForElementOptions?: waitForOptions,
-) => Promise<T[]>
+) => Promise<NonEmptyArray<T>>
 
 export type GetByText<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
@@ -147,7 +149,7 @@ export type FindAllByRole<T extends HTMLElement = HTMLElement> = (
   role: ByRoleMatcher,
   options?: ByRoleOptions,
   waitForElementOptions?: waitForOptions,
-) => Promise<T[]>
+) => Promise<NonEmptyArray<T>>
 
 export function getByLabelText<T extends HTMLElement = HTMLElement>(
   ...args: Parameters<GetByText<T>>
