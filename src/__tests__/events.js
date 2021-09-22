@@ -117,7 +117,12 @@ const eventTypes = [
   },
   {
     type: 'Transition',
-    events: ['transitionEnd'],
+    events: [
+      'transitionCancel',
+      'transitionEnd',
+      'transitionRun',
+      'transitionStart',
+    ],
     elementType: 'div',
   },
   {
