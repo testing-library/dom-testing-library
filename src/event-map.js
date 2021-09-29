@@ -297,9 +297,21 @@ export const eventMap = {
     defaultInit: {bubbles: true, cancelable: false},
   },
   // Transition Events
+  transitionCancel: {
+    EventType: 'TransitionEvent',
+    defaultInit: {bubbles: true, cancelable: false},
+  },
   transitionEnd: {
     EventType: 'TransitionEvent',
     defaultInit: {bubbles: true, cancelable: true},
+  },
+  transitionRun: {
+    EventType: 'TransitionEvent',
+    defaultInit: {bubbles: true, cancelable: false},
+  },
+  transitionStart: {
+    EventType: 'TransitionEvent',
+    defaultInit: {bubbles: true, cancelable: false},
   },
   // pointer events
   pointerOver: {
