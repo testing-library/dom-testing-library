@@ -69,6 +69,6 @@ export type BuiltQueryMethods<Arguments extends any[]> = [
 
 export function buildQueries<Arguments extends any[]>(
   queryAllBy: GetAllBy<Arguments>,
-  getMultipleError: GetErrorFunction,
-  getMissingError: GetErrorFunction,
+  getMultipleError: GetErrorFunction<Arguments>,
+  getMissingError: GetErrorFunction<Arguments>,
 ): BuiltQueryMethods<Arguments>
