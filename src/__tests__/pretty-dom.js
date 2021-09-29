@@ -38,33 +38,15 @@ test('prettyDOM supports truncating the output length', () => {
 
 test('prettyDOM defaults to document.body', () => {
   const defaultInlineSnapshot = `
-  "<body>
+  <body>
     <div>
       Hello World!
     </div>
-  </body>"
+  </body>
 `
   renderIntoDocument('<div>Hello World!</div>')
-  expect(prettyDOM()).toMatchInlineSnapshot(
-    defaultInlineSnapshot,
-    `
-    <body>
-      <div>
-        Hello World!
-      </div>
-    </body>
-  `,
-  )
-  expect(prettyDOM(null)).toMatchInlineSnapshot(
-    defaultInlineSnapshot,
-    `
-    <body>
-      <div>
-        Hello World!
-      </div>
-    </body>
-  `,
-  )
+  expect(prettyDOM()).toMatchInlineSnapshot(defaultInlineSnapshot)
+  expect(prettyDOM(null)).toMatchInlineSnapshot(defaultInlineSnapshot)
 })
 
 test('prettyDOM supports receiving the document element', () => {
