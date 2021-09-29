@@ -33,72 +33,72 @@ test('get throws a useful error message', () => {
   )
   expect(() => getByLabelText('LucyRicardo'))
     .toThrowErrorMatchingInlineSnapshot(`
-    "Unable to find a label with the text of: LucyRicardo
+    Unable to find a label with the text of: LucyRicardo
 
     Ignored nodes: comments, <script />, <style />
     <div>
       <div />
-    </div>"
+    </div>
   `)
   expect(() => getByPlaceholderText('LucyRicardo'))
     .toThrowErrorMatchingInlineSnapshot(`
-    "Unable to find an element with the placeholder text of: LucyRicardo
+    Unable to find an element with the placeholder text of: LucyRicardo
 
     Ignored nodes: comments, <script />, <style />
     <div>
       <div />
-    </div>"
+    </div>
   `)
   expect(() => getByText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
-    "Unable to find an element with the text: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+    Unable to find an element with the text: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
     Ignored nodes: comments, <script />, <style />
     <div>
       <div />
-    </div>"
+    </div>
   `)
   expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
-    "Unable to find an element by: [data-testid="LucyRicardo"]
+    Unable to find an element by: [data-testid="LucyRicardo"]
 
     Ignored nodes: comments, <script />, <style />
     <div>
       <div />
-    </div>"
+    </div>
   `)
   expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
-    "Unable to find an element with the alt text: LucyRicardo
+    Unable to find an element with the alt text: LucyRicardo
 
     Ignored nodes: comments, <script />, <style />
     <div>
       <div />
-    </div>"
+    </div>
   `)
   expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
-    "Unable to find an element with the title: LucyRicardo.
+    Unable to find an element with the title: LucyRicardo.
 
     Ignored nodes: comments, <script />, <style />
     <div>
       <div />
-    </div>"
+    </div>
   `)
   expect(() => getByDisplayValue('LucyRicardo'))
     .toThrowErrorMatchingInlineSnapshot(`
-    "Unable to find an element with the display value: LucyRicardo.
+    Unable to find an element with the display value: LucyRicardo.
 
     Ignored nodes: comments, <script />, <style />
     <div>
       <div />
-    </div>"
+    </div>
   `)
   expect(() => getByRole('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
-    "Unable to find an accessible element with the role "LucyRicardo"
+    Unable to find an accessible element with the role "LucyRicardo"
 
     There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
     Ignored nodes: comments, <script />, <style />
     <div>
       <div />
-    </div>"
+    </div>
   `)
 })
 
@@ -360,14 +360,14 @@ test('label with no form control', () => {
   const {getByLabelText, queryByLabelText} = render(`<label>All alone</label>`)
   expect(queryByLabelText(/alone/)).toBeNull()
   expect(() => getByLabelText(/alone/)).toThrowErrorMatchingInlineSnapshot(`
-    "Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
+    Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
 
     Ignored nodes: comments, <script />, <style />
     <div>
       <label>
         All alone
       </label>
-    </div>"
+    </div>
   `)
 })
 
@@ -378,7 +378,7 @@ test('label with "for" attribute but no form control and fuzzy matcher', () => {
   expect(queryByLabelText('alone', {exact: false})).toBeNull()
   expect(() => getByLabelText('alone', {exact: false}))
     .toThrowErrorMatchingInlineSnapshot(`
-    "Found a label with the text of: alone, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
+    Found a label with the text of: alone, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
 
     Ignored nodes: comments, <script />, <style />
     <div>
@@ -387,7 +387,7 @@ test('label with "for" attribute but no form control and fuzzy matcher', () => {
       >
         All alone label
       </label>
-    </div>"
+    </div>
   `)
 })
 
@@ -401,7 +401,7 @@ test('label with children with no form control', () => {
   expect(queryByLabelText(/alone/, {selector: 'input'})).toBeNull()
   expect(() => getByLabelText(/alone/, {selector: 'input'}))
     .toThrowErrorMatchingInlineSnapshot(`
-    "Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
+    Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
 
     Ignored nodes: comments, <script />, <style />
     <div>
@@ -426,7 +426,7 @@ test('label with children with no form control', () => {
         
       
       </label>
-    </div>"
+    </div>
   `)
 })
 
@@ -442,7 +442,7 @@ test('label with non-labellable element', () => {
 
   expect(queryByLabelText(/Label/)).toBeNull()
   expect(() => getByLabelText(/Label/)).toThrowErrorMatchingInlineSnapshot(`
-    "Found a label with the text of: /Label/, however the element associated with this label (<div />) is non-labellable [https://html.spec.whatwg.org/multipage/forms.html#category-label]. If you really need to label a <div />, you can use aria-label or aria-labelledby instead.
+    Found a label with the text of: /Label/, however the element associated with this label (<div />) is non-labellable [https://html.spec.whatwg.org/multipage/forms.html#category-label]. If you really need to label a <div />, you can use aria-label or aria-labelledby instead.
 
     Ignored nodes: comments, <script />, <style />
     <div>
@@ -470,7 +470,7 @@ test('label with non-labellable element', () => {
       </div>
       
       
-    </div>"
+    </div>
   `)
 })
 
@@ -490,7 +490,7 @@ test('multiple labels with non-labellable elements', () => {
 
   expect(queryAllByLabelText(/Label/)).toEqual([])
   expect(() => getAllByLabelText(/Label/)).toThrowErrorMatchingInlineSnapshot(`
-    "Found a label with the text of: /Label/, however the element associated with this label (<span />) is non-labellable [https://html.spec.whatwg.org/multipage/forms.html#category-label]. If you really need to label a <span />, you can use aria-label or aria-labelledby instead.
+    Found a label with the text of: /Label/, however the element associated with this label (<span />) is non-labellable [https://html.spec.whatwg.org/multipage/forms.html#category-label]. If you really need to label a <span />, you can use aria-label or aria-labelledby instead.
 
     Found a label with the text of: /Label/, however the element associated with this label (<p />) is non-labellable [https://html.spec.whatwg.org/multipage/forms.html#category-label]. If you really need to label a <p />, you can use aria-label or aria-labelledby instead.
 
@@ -536,7 +536,7 @@ test('multiple labels with non-labellable elements', () => {
       </div>
       
       
-    </div>"
+    </div>
   `)
 })
 
@@ -544,12 +544,12 @@ test('totally empty label', () => {
   const {getByLabelText, queryByLabelText} = render(`<label />`)
   expect(queryByLabelText('')).toBeNull()
   expect(() => getByLabelText('')).toThrowErrorMatchingInlineSnapshot(`
-    "Found a label with the text of: , however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
+    Found a label with the text of: , however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
 
     Ignored nodes: comments, <script />, <style />
     <div>
       <label />
-    </div>"
+    </div>
   `)
 })
 
@@ -1183,14 +1183,14 @@ test('return a proper error message when no label is found and there is an aria-
 
   expect(() => getByLabelText('LucyRicardo'))
     .toThrowErrorMatchingInlineSnapshot(`
-    "Unable to find a label with the text of: LucyRicardo
+    Unable to find a label with the text of: LucyRicardo
 
     Ignored nodes: comments, <script />, <style />
     <div>
       <input
         aria-labelledby="not-existing-label"
       />
-    </div>"
+    </div>
   `)
 })
 
@@ -1253,7 +1253,7 @@ test('ByText error message ignores not the same elements as configured in `ignor
   expect(() =>
     getByText('.css-selector', {selector: 'style', ignore: 'script'}),
   ).toThrowErrorMatchingInlineSnapshot(`
-    "Unable to find an element with the text: .css-selector. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+    Unable to find an element with the text: .css-selector. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
     Ignored nodes: comments, <script />, <style />
     <body>
@@ -1266,6 +1266,6 @@ test('ByText error message ignores not the same elements as configured in `ignor
       />
       
       
-    </body>"
+    </body>
   `)
 })

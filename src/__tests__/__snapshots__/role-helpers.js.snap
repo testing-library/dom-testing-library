@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`logRoles calls console.log with output from prettyRoles 1`] = `
-"region:
+region:
 
 Name "a region":
 <section
@@ -200,5 +200,5 @@ Name "":
   data-testid="a-textarea"
 />
 
---------------------------------------------------"
+--------------------------------------------------
 `;
