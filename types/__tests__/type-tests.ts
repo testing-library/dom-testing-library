@@ -68,6 +68,22 @@ export async function testQueryHelpers() {
           : includesAutomationId(content, automationId),
       options,
     )
+
+  const createIdRelatedErrorHandler =
+    (errorMessage: string, defaultErrorMessage: string) =>
+    <T>(container: Element | null, ...args: T[]) => {
+      const [key, value] = args
+      if (!container) {
+        return 'Container element not specified'
+      }
+      if (key && value) {
+        return errorMessage
+          .replace('[key]', String(key))
+          .replace('[value]', String(value))
+      }
+      return defaultErrorMessage
+    }
+
   const [
     queryByAutomationId,
     getAllByAutomationId,
@@ -76,8 +92,14 @@ export async function testQueryHelpers() {
     findByAutomationId,
   ] = buildQueries(
     queryAllByAutomationId,
-    () => 'Multiple Error',
-    () => 'Missing Error',
+    createIdRelatedErrorHandler(
+      `Found multiple with key [key] and value [value]`,
+      'Multiple error',
+    ),
+    createIdRelatedErrorHandler(
+      `Unable to find an element with the [key] attribute of: [value]`,
+      'Missing error',
+    ),
   )
   queryByAutomationId(element, 'id')
   getAllByAutomationId(element, 'id')
@@ -89,6 +111,11 @@ export async function testQueryHelpers() {
   await findByAutomationId(element, 'id', {})
   await findAllByAutomationId(element, 'id')
   await findByAutomationId(element, 'id')
+
+  await findAllByAutomationId(element, ['id', 'id'], {})
+  await findByAutomationId(element, ['id', 'id'], {})
+  await findAllByAutomationId(element, ['id', 'id'])
+  await findByAutomationId(element, ['id', 'id'])
 }
 
 export function testBoundFunctions() {
