@@ -72,40 +72,40 @@ test('exposes debug method', () => {
   screen.debug()
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
-    "<body>
-      <button>
-        test
-      </button>
-      <span>
-        multi-test
-      </span>
-      <div>
-        multi-test
-      </div>
-    </body>"
-  `)
+<body>
+  <button>
+    test
+  </button>
+  <span>
+    multi-test
+  </span>
+  <div>
+    multi-test
+  </div>
+</body>
+`)
   console.log.mockClear()
   // log single element
   screen.debug(screen.getByText('test', {selector: 'button'}))
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
-    "<button>
-      test
-    </button>"
-  `)
+<button>
+  test
+</button>
+`)
   console.log.mockClear()
   // log multiple elements
   screen.debug(screen.getAllByText('multi-test'))
   expect(console.log).toHaveBeenCalledTimes(2)
   expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
-    "<span>
-      multi-test
-    </span>"
-  `)
+<span>
+  multi-test
+</span>
+`)
   expect(console.log.mock.calls[1][0]).toMatchInlineSnapshot(`
-    "<div>
-      multi-test
-    </div>"
-  `)
+<div>
+  multi-test
+</div>
+`)
   console.log.mockClear()
 })

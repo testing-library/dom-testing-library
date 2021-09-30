@@ -5,100 +5,100 @@ import {render, renderIntoDocument} from './helpers/test-utils'
 test('by default logs accessible roles when it fails', () => {
   const {getByRole} = render(`<h1>Hi</h1>`)
   expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "article"
+    Unable to find an accessible element with the role "article"
 
-Here are the accessible roles:
+    Here are the accessible roles:
 
-  heading:
+      heading:
 
-  Name "Hi":
-  <h1 />
+      Name "Hi":
+      <h1 />
 
-  --------------------------------------------------
+      --------------------------------------------------
 
-Ignored nodes: comments, <script />, <style />
-<div>
-  <h1>
-    Hi
-  </h1>
-</div>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <h1>
+        Hi
+      </h1>
+    </div>
+  `)
 })
 
 test('when hidden: true logs available roles when it fails', () => {
   const {getByRole} = render(`<div hidden><h1>Hi</h1></div>`)
   expect(() => getByRole('article', {hidden: true}))
     .toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element with the role "article"
+    Unable to find an element with the role "article"
 
-Here are the available roles:
+    Here are the available roles:
 
-  heading:
+      heading:
 
-  Name "Hi":
-  <h1 />
+      Name "Hi":
+      <h1 />
 
-  --------------------------------------------------
+      --------------------------------------------------
 
-Ignored nodes: comments, <script />, <style />
-<div>
-  <div
-    hidden=""
-  >
-    <h1>
-      Hi
-    </h1>
-  </div>
-</div>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <div
+        hidden=""
+      >
+        <h1>
+          Hi
+        </h1>
+      </div>
+    </div>
+  `)
 })
 
 test('logs error when there are no accessible roles', () => {
   const {getByRole} = render('<div />')
   expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "article"
+    Unable to find an accessible element with the role "article"
 
-There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+    There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
-Ignored nodes: comments, <script />, <style />
-<div>
-  <div />
-</div>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <div />
+    </div>
+  `)
 })
 
 test('logs a different error if inaccessible roles should be included', () => {
   const {getByRole} = render('<div />')
   expect(() => getByRole('article', {hidden: true}))
     .toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an element with the role "article"
+    Unable to find an element with the role "article"
 
-There are no available roles.
+    There are no available roles.
 
-Ignored nodes: comments, <script />, <style />
-<div>
-  <div />
-</div>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <div />
+    </div>
+  `)
 })
 
 test('by default excludes elements that have the html hidden attribute or any of their parents', () => {
   const {getByRole} = render('<div hidden><ul /></div>')
 
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "list"
+    Unable to find an accessible element with the role "list"
 
-There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+    There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
-Ignored nodes: comments, <script />, <style />
-<div>
-  <div
-    hidden=""
-  >
-    <ul />
-  </div>
-</div>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <div
+        hidden=""
+      >
+        <ul />
+      </div>
+    </div>
+  `)
 })
 
 test('by default excludes elements which have display: none or any of their parents', () => {
@@ -107,21 +107,21 @@ test('by default excludes elements which have display: none or any of their pare
   )
 
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "list"
+    Unable to find an accessible element with the role "list"
 
-There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+    There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
-Ignored nodes: comments, <script />, <style />
-<div>
-  <div
-    style="display: none;"
-  >
-    <ul
-      style="display: block;"
-    />
-  </div>
-</div>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <div
+        style="display: none;"
+      >
+        <ul
+          style="display: block;"
+        />
+      </div>
+    </div>
+  `)
 })
 
 test('by default excludes elements which have visibility hidden', () => {
@@ -130,19 +130,19 @@ test('by default excludes elements which have visibility hidden', () => {
   const {getByRole} = render('<div><ul style="visibility: hidden;" /></div>')
 
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "list"
+    Unable to find an accessible element with the role "list"
 
-There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+    There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
-Ignored nodes: comments, <script />, <style />
-<div>
-  <div>
-    <ul
-      style="visibility: hidden;"
-    />
-  </div>
-</div>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <div>
+        <ul
+          style="visibility: hidden;"
+        />
+      </div>
+    </div>
+  `)
 })
 
 test('by default excludes elements which have aria-hidden="true" or any of their parents', () => {
@@ -155,21 +155,21 @@ test('by default excludes elements which have aria-hidden="true" or any of their
   )
 
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "list"
+    Unable to find an accessible element with the role "list"
 
-There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+    There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
-Ignored nodes: comments, <script />, <style />
-<div>
-  <div
-    aria-hidden="true"
-  >
-    <ul
-      aria-hidden="false"
-    />
-  </div>
-</div>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <div
+        aria-hidden="true"
+      >
+        <ul
+          aria-hidden="false"
+        />
+      </div>
+    </div>
+  `)
 })
 
 test('considers the computed visibility style not the parent', () => {
@@ -238,27 +238,27 @@ test('accessible name comparison is case sensitive', () => {
 
   expect(() => getByRole('heading', {name: 'something that does not match'}))
     .toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "heading" and name "something that does not match"
+    Unable to find an accessible element with the role "heading" and name "something that does not match"
 
-Here are the accessible roles:
+    Here are the accessible roles:
 
-  heading:
+      heading:
 
-  Name "Sign up":
-  <h1 />
+      Name "Sign up":
+      <h1 />
 
-  --------------------------------------------------
+      --------------------------------------------------
 
-Ignored nodes: comments, <script />, <style />
-<div>
-  <h1>
-    Sign 
-    <em>
-      up
-    </em>
-  </h1>
-</div>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <h1>
+        Sign 
+        <em>
+          up
+        </em>
+      </h1>
+    </div>
+  `)
 })
 
 test('accessible name filter implements TextMatch', () => {
@@ -285,51 +285,51 @@ test('TextMatch serialization in error message', () => {
 
   expect(() => getByRole('heading', {name: /something that does not match/}))
     .toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "heading" and name \`/something that does not match/\`
+    Unable to find an accessible element with the role "heading" and name \`/something that does not match/\`
 
-Here are the accessible roles:
+    Here are the accessible roles:
 
-  heading:
+      heading:
 
-  Name "Sign up":
-  <h1 />
+      Name "Sign up":
+      <h1 />
 
-  --------------------------------------------------
+      --------------------------------------------------
 
-Ignored nodes: comments, <script />, <style />
-<div>
-  <h1>
-    Sign 
-    <em>
-      up
-    </em>
-  </h1>
-</div>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <h1>
+        Sign 
+        <em>
+          up
+        </em>
+      </h1>
+    </div>
+  `)
 
   expect(() => getByRole('heading', {name: () => false}))
     .toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "heading" and name \`() => false\`
+    Unable to find an accessible element with the role "heading" and name \`() => false\`
 
-Here are the accessible roles:
+    Here are the accessible roles:
 
-  heading:
+      heading:
 
-  Name "Sign up":
-  <h1 />
+      Name "Sign up":
+      <h1 />
 
-  --------------------------------------------------
+      --------------------------------------------------
 
-Ignored nodes: comments, <script />, <style />
-<div>
-  <h1>
-    Sign 
-    <em>
-      up
-    </em>
-  </h1>
-</div>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <h1>
+        Sign 
+        <em>
+          up
+        </em>
+      </h1>
+    </div>
+  `)
 })
 
 test('does not include the container in the queryable roles', () => {
@@ -337,22 +337,22 @@ test('does not include the container in the queryable roles', () => {
     container: document.createElement('ul'),
   })
   expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "list"
+    Unable to find an accessible element with the role "list"
 
-Here are the accessible roles:
+    Here are the accessible roles:
 
-  listitem:
+      listitem:
 
-  Name "":
-  <li />
+      Name "":
+      <li />
 
-  --------------------------------------------------
+      --------------------------------------------------
 
-Ignored nodes: comments, <script />, <style />
-<ul>
-  <li />
-</ul>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <ul>
+      <li />
+    </ul>
+  `)
 })
 
 test('has no useful error message in findBy', async () => {
@@ -369,28 +369,28 @@ test('explicit role is most specific', () => {
   )
 
   expect(() => getByRole('button')).toThrowErrorMatchingInlineSnapshot(`
-"Unable to find an accessible element with the role "button"
+    Unable to find an accessible element with the role "button"
 
-Here are the accessible roles:
+    Here are the accessible roles:
 
-  tab:
+      tab:
 
-  Name "my-tab":
-  <button
-    aria-label="my-tab"
-    role="tab"
-  />
+      Name "my-tab":
+      <button
+        aria-label="my-tab"
+        role="tab"
+      />
 
-  --------------------------------------------------
+      --------------------------------------------------
 
-Ignored nodes: comments, <script />, <style />
-<body>
-  <button
-    aria-label="my-tab"
-    role="tab"
-  />
-</body>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <body>
+      <button
+        aria-label="my-tab"
+        role="tab"
+      />
+    </body>
+  `)
 })
 
 test('accessible regex name in error message for multiple found', () => {
@@ -403,40 +403,40 @@ test('accessible regex name in error message for multiple found', () => {
 
   expect(() => getByRole('button', {name: /value/i}))
     .toThrowErrorMatchingInlineSnapshot(`
-"Found multiple elements with the role "button" and name \`/value/i\`
+    Found multiple elements with the role "button" and name \`/value/i\`
 
-Here are the matching elements:
+    Here are the matching elements:
 
-Ignored nodes: comments, <script />, <style />
-<button>
-  Increment value
-</button>
+    Ignored nodes: comments, <script />, <style />
+    <button>
+      Increment value
+    </button>
 
-Ignored nodes: comments, <script />, <style />
-<button>
-  Decrement value
-</button>
+    Ignored nodes: comments, <script />, <style />
+    <button>
+      Decrement value
+    </button>
 
-Ignored nodes: comments, <script />, <style />
-<button>
-  Reset value
-</button>
+    Ignored nodes: comments, <script />, <style />
+    <button>
+      Reset value
+    </button>
 
-(If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
+    (If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
 
-Ignored nodes: comments, <script />, <style />
-<div>
-  <button>
-    Increment value
-  </button>
-  <button>
-    Decrement value
-  </button>
-  <button>
-    Reset value
-  </button>
-</div>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <button>
+        Increment value
+      </button>
+      <button>
+        Decrement value
+      </button>
+      <button>
+        Reset value
+      </button>
+    </div>
+  `)
 })
 
 test('accessible string name in error message for multiple found', () => {
@@ -449,40 +449,40 @@ test('accessible string name in error message for multiple found', () => {
 
   expect(() => getByRole('button', {name: 'Submit'}))
     .toThrowErrorMatchingInlineSnapshot(`
-"Found multiple elements with the role "button" and name "Submit"
+    Found multiple elements with the role "button" and name "Submit"
 
-Here are the matching elements:
+    Here are the matching elements:
 
-Ignored nodes: comments, <script />, <style />
-<button>
-  Submit
-</button>
+    Ignored nodes: comments, <script />, <style />
+    <button>
+      Submit
+    </button>
 
-Ignored nodes: comments, <script />, <style />
-<button>
-  Submit
-</button>
+    Ignored nodes: comments, <script />, <style />
+    <button>
+      Submit
+    </button>
 
-Ignored nodes: comments, <script />, <style />
-<button>
-  Submit
-</button>
+    Ignored nodes: comments, <script />, <style />
+    <button>
+      Submit
+    </button>
 
-(If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
+    (If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
 
-Ignored nodes: comments, <script />, <style />
-<div>
-  <button>
-    Submit
-  </button>
-  <button>
-    Submit
-  </button>
-  <button>
-    Submit
-  </button>
-</div>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <button>
+        Submit
+      </button>
+      <button>
+        Submit
+      </button>
+      <button>
+        Submit
+      </button>
+    </div>
+  `)
 })
 
 test('matching elements in error for multiple found', () => {
@@ -496,38 +496,38 @@ test('matching elements in error for multiple found', () => {
 
   expect(() => getByRole('button', {name: /value/i}))
     .toThrowErrorMatchingInlineSnapshot(`
-"Found multiple elements with the role "button" and name \`/value/i\`
+    Found multiple elements with the role "button" and name \`/value/i\`
 
-Here are the matching elements:
+    Here are the matching elements:
 
-Ignored nodes: comments, <script />, <style />
-<button>
-  Increment value
-</button>
+    Ignored nodes: comments, <script />, <style />
+    <button>
+      Increment value
+    </button>
 
-Ignored nodes: comments, <script />, <style />
-<button>
-  Reset value
-</button>
+    Ignored nodes: comments, <script />, <style />
+    <button>
+      Reset value
+    </button>
 
-(If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
+    (If this is intentional, then use the \`*AllBy*\` variant of the query (like \`queryAllByText\`, \`getAllByText\`, or \`findAllByText\`)).
 
-Ignored nodes: comments, <script />, <style />
-<div>
-  <button>
-    Increment value
-  </button>
-  <button>
-    Different label
-  </button>
-  <p>
-    Wrong role
-  </p>
-  <button>
-    Reset value
-  </button>
-</div>"
-`)
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <button>
+        Increment value
+      </button>
+      <button>
+        Different label
+      </button>
+      <p>
+        Wrong role
+      </p>
+      <button>
+        Reset value
+      </button>
+    </div>
+  `)
 })
 
 describe('configuration', () => {
