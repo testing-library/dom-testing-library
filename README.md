@@ -320,6 +320,9 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="http://www.hawkeye.dog"><img src="https://avatars.githubusercontent.com/u/7245931?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kevin Fleischman</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=istateside" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/commits?author=istateside" title="Tests">⚠️</a></td>
     <td align="center"><a href="http://dfdx.us"><img src="https://avatars.githubusercontent.com/u/3087358?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Beth Hitch</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=dfoverdx" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="http://www.jacklaurence.net"><img src="https://avatars.githubusercontent.com/u/12763356?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jack Laurence</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=jacklaurencegaray" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
