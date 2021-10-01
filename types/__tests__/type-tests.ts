@@ -230,15 +230,15 @@ export async function testWaitFors() {
 }
 
 export async function testWithin() {
-  const sut = within(document.body)
-  sut.queryAllByLabelText('Some label')
+  const container = within(document.body)
+  container.queryAllByLabelText('Some label')
 
-  sut.getByText('Click me')
-  sut.getByText<HTMLButtonElement>('Click me')
-  sut.getAllByText<HTMLButtonElement>('Click me')
+  container.getByText('Click me')
+  container.getByText<HTMLButtonElement>('Click me')
+  container.getAllByText<HTMLButtonElement>('Click me')
 
-  await sut.findByRole('button', {name: /click me/i})
-  sut.getByRole<HTMLButtonElement>('button', {name: /click me/i})
+  await container.findByRole('button', {name: /click me/i})
+  container.getByRole<HTMLButtonElement>('button', {name: /click me/i})
 }
 
 /*
