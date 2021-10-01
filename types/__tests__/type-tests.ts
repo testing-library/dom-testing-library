@@ -10,6 +10,7 @@ import {
   waitForElementToBeRemoved,
   MatcherOptions,
   BoundFunctions,
+  within,
 } from '@testing-library/dom'
 
 const {
@@ -226,6 +227,18 @@ export async function testWaitFors() {
   await waitForElementToBeRemoved(getAllByText(element, 'apple'))
 
   await waitFor(async () => {})
+}
+
+export async function testWithin() {
+  const container = within(document.body)
+  container.queryAllByLabelText('Some label')
+
+  container.getByText('Click me')
+  container.getByText<HTMLButtonElement>('Click me')
+  container.getAllByText<HTMLButtonElement>('Click me')
+
+  await container.findByRole('button', {name: /click me/i})
+  container.getByRole<HTMLButtonElement>('button', {name: /click me/i})
 }
 
 /*
