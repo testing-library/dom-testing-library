@@ -153,6 +153,8 @@ export type BoundFunctions<Q> = Q extends typeof queries
       findAllByTestId<T extends HTMLElement = HTMLElement>(
         ...args: Parameters<BoundFunction<queries.FindAllByBoundAttribute<T>>>
       ): ReturnType<queries.FindAllByBoundAttribute<T>>
+    } & {
+      [P in keyof Q]: BoundFunction<Q[P]>
     }
   : {
       [P in keyof Q]: BoundFunction<Q[P]>
