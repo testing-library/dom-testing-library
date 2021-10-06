@@ -31,6 +31,7 @@ test('find asynchronously finds elements', async () => {
       <select><option>display value</option></select>
       <input placeholder="placeholder" />
       <img alt="test alt text" src="/lucy-ricardo.png" />
+      <div alt="test alt text" />
       <span title="test title" />
       <div role="dialog"></div>
       <div role="meter progressbar"></div>
