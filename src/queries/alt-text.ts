@@ -10,13 +10,18 @@ import {
 } from '../../types'
 import {buildQueries} from './all-utils'
 
+// Valid tags are img, input, area and custom elements
+const VALID_TAG_REGEXP = /^(img|input|area|.+-.+)$/i
+
 const queryAllByAltText: AllByBoundAttribute = (
   container,
   alt,
   options: MatcherOptions = {},
 ) => {
   checkContainerType(container)
-  return queryAllByAttribute('alt', container, alt, options)
+  return queryAllByAttribute('alt', container, alt, options).filter(node =>
+    VALID_TAG_REGEXP.test(node.tagName),
+  )
 }
 
 const getMultipleError: GetErrorFunction<[unknown]> = (c, alt) =>
