@@ -109,7 +109,7 @@ export interface ByRoleOptions extends MatcherOptions {
    */
   queryFallbacks?: boolean
   /**
-   * Only considers  elements with the specified accessible name.
+   * Only considers elements with the specified accessible name.
    */
   name?:
     | RegExp
