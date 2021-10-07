@@ -117,6 +117,21 @@ export async function testQueryHelpers() {
   await findByAutomationId(element, ['id', 'id'], {})
   await findAllByAutomationId(element, ['id', 'id'])
   await findByAutomationId(element, ['id', 'id'])
+
+  const screenWithCustomQueries = within(document.body, {
+    ...queries,
+    queryByAutomationId,
+    getAllByAutomationId,
+    getByAutomationId,
+    findAllByAutomationId,
+    findByAutomationId,
+  })
+
+  screenWithCustomQueries.queryByAutomationId('id')
+  screenWithCustomQueries.getAllByAutomationId('id')
+  screenWithCustomQueries.getByAutomationId(['id', 'automationId'])
+  await screenWithCustomQueries.findAllByAutomationId('id', {}, {timeout: 1000})
+  await screenWithCustomQueries.findByAutomationId('id', {}, {timeout: 1000})
 }
 
 export function testBoundFunctions() {
