@@ -15,11 +15,11 @@ afterEach(() => {
 test('prettyDOM prints out the given DOM element tree', () => {
   const {container} = render('<div>Hello World!</div>')
   expect(prettyDOM(container)).toMatchInlineSnapshot(`
-    "<div>
+    <div>
       <div>
         Hello World!
       </div>
-    </div>"
+    </div>
   `)
 })
 
@@ -28,21 +28,21 @@ test('prettyDOM supports truncating the output length', () => {
   expect(prettyDOM(container, 5)).toMatch(/\.\.\./)
   expect(prettyDOM(container, 0)).toMatch('')
   expect(prettyDOM(container, Number.POSITIVE_INFINITY)).toMatchInlineSnapshot(`
-    "<div>
+    <div>
       <div>
         Hello World!
       </div>
-    </div>"
+    </div>
   `)
 })
 
 test('prettyDOM defaults to document.body', () => {
   const defaultInlineSnapshot = `
-  "<body>
+  <body>
     <div>
       Hello World!
     </div>
-  </body>"
+  </body>
 `
   renderIntoDocument('<div>Hello World!</div>')
   expect(prettyDOM()).toMatchInlineSnapshot(defaultInlineSnapshot)
@@ -51,10 +51,10 @@ test('prettyDOM defaults to document.body', () => {
 
 test('prettyDOM supports receiving the document element', () => {
   expect(prettyDOM(document)).toMatchInlineSnapshot(`
-    "<html>
+    <html>
       <head />
       <body />
-    </html>"
+    </html>
   `)
 })
 
@@ -63,11 +63,11 @@ test('logDOM logs prettyDOM to the console', () => {
   logDOM(container)
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
-    "<div>
+    <div>
       <div>
         Hello World!
       </div>
-    </div>"
+    </div>
   `)
 })
 
@@ -85,7 +85,7 @@ test('logDOM logs prettyDOM with code frame to the console', () => {
   logDOM(container)
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
-    "<div>
+    <div>
       <div>
         Hello World!
       </div>
@@ -97,7 +97,7 @@ test('logDOM logs prettyDOM with code frame to the console', () => {
         > 7 |       screen.debug()
             |              ^
         "
-      "
+      
   `)
 })
 
@@ -125,11 +125,11 @@ test('prettyDOM ignores script elements and comments nodes by default', () => {
   )
 
   expect(prettyDOM(container)).toMatchInlineSnapshot(`
-    "<body>
+    <body>
       <p>
         Hello, Dave
       </p>
-    </body>"
+    </body>
   `)
 })
 
@@ -141,7 +141,7 @@ test('prettyDOM can include all elements with a custom filter', () => {
   expect(
     prettyDOM(container, Number.POSITIVE_INFINITY, {filterNode: () => true}),
   ).toMatchInlineSnapshot(`
-    "<body>
+    <body>
       <script
         src="context.js"
       />
@@ -149,6 +149,6 @@ test('prettyDOM can include all elements with a custom filter', () => {
       <p>
         Hello, Dave
       </p>
-    </body>"
+    </body>
   `)
 })

@@ -34,6 +34,15 @@ cases(
       query: `Finding Nemo poster`,
       queryFn: `queryAllByAltText`,
     },
+    'queryAllByAltText (for amp-img)': {
+      dom: `
+        <amp-img
+          alt="Finding Nemo poster" 
+          src="/finding-nemo.png"
+        />`,
+      query: `Finding Nemo poster`,
+      queryFn: `queryAllByAltText`,
+    },
     queryAllByPlaceholderText: {
       dom: `<input placeholder="Dwayne 'The Rock' Johnson" />`,
       query: `Dwayne 'The Rock' Johnson`,
@@ -86,6 +95,16 @@ cases(
     queryAllByAltText: {
       dom: `
         <img
+          alt="
+            Finding Nemo poster " 
+          src="/finding-nemo.png"
+        />`,
+      query: /^Finding Nemo poster$/,
+      queryFn: `queryAllByAltText`,
+    },
+    'queryAllByAltText (for amp-img)': {
+      dom: `
+        <amp-img
           alt="
             Finding Nemo poster " 
           src="/finding-nemo.png"
@@ -198,6 +217,15 @@ cases(
       query: `Finding Nemo poster`,
       queryFn: `queryAllByAltText`,
     },
+    'queryAllByAltText (for amp-img)': {
+      dom: `
+        <amp-img
+          alt="Finding Nemo poster" 
+          src="/finding-nemo.png"
+        />`,
+      query: `Finding Nemo poster`,
+      queryFn: `queryAllByAltText`,
+    },
   },
 )
 
@@ -249,6 +277,10 @@ cases(
     },
     queryAllByAltText: {
       dom: `<img alt="User ${LRM}name" src="username.jpg" />`,
+      queryFn: 'queryAllByAltText',
+    },
+    'queryAllByAltText (for amp-img)': {
+      dom: `<amp-img alt="User ${LRM}name" src="username.jpg" />`,
       queryFn: 'queryAllByAltText',
     },
     queryAllByTitle: {

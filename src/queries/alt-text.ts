@@ -1,20 +1,26 @@
-import {wrapAllByQueryWithSuggestion} from '../query-helpers'
+import {
+  queryAllByAttribute,
+  wrapAllByQueryWithSuggestion,
+} from '../query-helpers'
 import {checkContainerType} from '../helpers'
-import {AllByBoundAttribute, GetErrorFunction} from '../../types'
-import {matches, fuzzyMatches, makeNormalizer, buildQueries} from './all-utils'
+import {
+  AllByBoundAttribute,
+  GetErrorFunction,
+  MatcherOptions,
+} from '../../types'
+import {buildQueries} from './all-utils'
+
+// Valid tags are img, input, area and custom elements
+const VALID_TAG_REGEXP = /^(img|input|area|.+-.+)$/i
 
 const queryAllByAltText: AllByBoundAttribute = (
   container,
   alt,
-  {exact = true, collapseWhitespace, trim, normalizer} = {},
+  options: MatcherOptions = {},
 ) => {
   checkContainerType(container)
-  const matcher = exact ? matches : fuzzyMatches
-  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-  return Array.from(
-    container.querySelectorAll<HTMLElement>('img,input,area'),
-  ).filter(node =>
-    matcher(node.getAttribute('alt'), node, alt, matchNormalizer),
+  return queryAllByAttribute('alt', container, alt, options).filter(node =>
+    VALID_TAG_REGEXP.test(node.tagName),
   )
 }
 

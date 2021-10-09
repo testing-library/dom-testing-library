@@ -1443,6 +1443,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "jacklaurencegaray",
+      "name": "Jack Laurence",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12763356?v=4",
+      "profile": "http://www.jacklaurence.net",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "SantoJambit",
+      "name": "SantoJambit",
+      "avatar_url": "https://avatars.githubusercontent.com/u/53570854?v=4",
+      "profile": "https://github.com/Lusito",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mittalyashu",
+      "name": "Yashu Mittal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29014463?v=4",
+      "profile": "https://github.com/mittalyashu",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "repoHost": "https://github.com"
