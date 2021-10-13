@@ -5,6 +5,7 @@ import {AllByText, GetErrorFunction} from '../../types'
 import {
   fuzzyMatches,
   matches,
+  getConfig,
   makeNormalizer,
   getNodeText,
   buildQueries,
@@ -32,7 +33,12 @@ const queryAllByText: AllByText = (
   return (
     [
       ...baseArray,
-      ...Array.from(container.querySelectorAll<HTMLElement>(selector)),
+      ...Array.from(
+        getConfig().queryAllElements<HTMLElement, HTMLElement>(
+          container,
+          selector,
+        ),
+      ),
     ]
       // TODO: `matches` according lib.dom.d.ts can get only `string` but according our code it can handle also boolean :)
       .filter(node => !ignore || !node.matches(ignore as string))

@@ -1,3 +1,4 @@
+import {configure} from '../config'
 import {JSDOM} from 'jsdom'
 import * as dtl from '../'
 
@@ -75,6 +76,52 @@ test('works without a browser context on a dom node (JSDOM Fragment)', () => {
       type=password
     />
   `)
+})
+
+test('works with a custom configured element query', () => {
+  const container = JSDOM.fragment(`
+    <html>
+      <body>
+        <form id="login-form">
+          <label for="username">Username</label>
+          <input id="username" />
+          <label for="password">Password</label>
+          <input id="password" type="password" />
+          <button type="submit">Submit</button>
+          <div id="data-container"></div>
+        </form>
+        <form id="other">
+          <label for="user_other">Username</label>
+          <input id="user_other" />
+          <label for="pass_other">Password</label>
+          <input id="pass_other" type="password" />
+          <button type="submit">Submit</button>
+          <div id="data-container"></div>
+        </form>
+      </body>
+    </html>
+  `)
+
+  configure({
+    queryAllElements: (element, query) =>
+      element.querySelectorAll(`#other ${query}`),
+  })
+
+  expect(dtl.getByLabelText(container, /username/i)).toMatchInlineSnapshot(`
+    <input
+      id=user_other
+    />
+  `)
+  expect(dtl.getByLabelText(container, /password/i)).toMatchInlineSnapshot(`
+    <input
+      id=pass_other
+      type=password
+    />
+  `)
+  // reset back to original config
+  configure({
+    queryAllElements: (element, query) => element.querySelectorAll(query),
+  })
 })
 
 test('byRole works without a global DOM', () => {

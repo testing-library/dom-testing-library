@@ -1,4 +1,3 @@
-import {getConfig} from '../config'
 import {checkContainerType} from '../helpers'
 import {getLabels, getRealLabels, getLabelContent} from '../label-helpers'
 import {
@@ -17,12 +16,18 @@ import {
   makeSingleQuery,
   wrapAllByQueryWithSuggestion,
   wrapSingleQueryWithSuggestion,
+  getConfig,
 } from './all-utils'
 
 function queryAllLabels(
   container: HTMLElement,
 ): {textToMatch: string | null; node: HTMLElement}[] {
-  return Array.from(container.querySelectorAll<HTMLElement>('label,input'))
+  return Array.from(
+    getConfig().queryAllElements<HTMLElement, HTMLElement>(
+      container,
+      'label,input',
+    ),
+  )
     .map(node => {
       return {node, textToMatch: getLabelContent(node)}
     })
@@ -56,7 +61,7 @@ const queryAllByLabelText: AllByText = (
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   const matchingLabelledElements = Array.from(
-    container.querySelectorAll<HTMLElement>('*'),
+    getConfig().queryAllElements<HTMLElement, HTMLElement>(container, '*'),
   )
     .filter(element => {
       return (
@@ -169,7 +174,7 @@ function getTagNameOfElementAssociatedWithLabelViaFor(
     return null
   }
 
-  const element = container.querySelector(`[id="${htmlFor}"]`)
+  const element = getConfig().queryElement(container, `[id="${htmlFor}"]`)
   return element ? element.tagName.toLowerCase() : null
 }
 

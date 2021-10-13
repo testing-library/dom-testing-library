@@ -40,14 +40,14 @@ export async function testQueries() {
 
   // screen queries
   screen.getByText('foo')
-  screen.getByText<HTMLDivElement>('foo')
+  screen.getByText('foo')
   screen.queryByText('foo')
   await screen.findByText('foo')
   await screen.findByText('foo', undefined, {timeout: 10})
   screen.debug(screen.getAllByText('bar'))
   screen.queryAllByText('bar')
   await screen.findAllByText('bar')
-  await screen.findAllByRole<HTMLButtonElement>('button', {name: 'submit'})
+  await screen.findAllByRole('button', {name: 'submit'})
   await screen.findAllByText('bar', undefined, {timeout: 10})
 }
 
@@ -249,11 +249,11 @@ export async function testWithin() {
   container.queryAllByLabelText('Some label')
 
   container.getByText('Click me')
-  container.getByText<HTMLButtonElement>('Click me')
-  container.getAllByText<HTMLButtonElement>('Click me')
+  container.getByText('Click me')
+  container.getAllByText('Click me')
 
   await container.findByRole('button', {name: /click me/i})
-  container.getByRole<HTMLButtonElement>('button', {name: /click me/i})
+  container.getByRole('button', {name: /click me/i})
 }
 
 /*

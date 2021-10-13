@@ -9,6 +9,7 @@ import {
 import {
   fuzzyMatches,
   matches,
+  getConfig,
   makeNormalizer,
   getNodeText,
   buildQueries,
@@ -27,7 +28,10 @@ const queryAllByTitle: AllByBoundAttribute = (
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(
-    container.querySelectorAll<HTMLElement>('[title], svg > title'),
+    getConfig().queryAllElements<HTMLElement, HTMLElement>(
+      container,
+      '[title], svg > title',
+    ),
   ).filter(
     node =>
       matcher(node.getAttribute('title'), node, text, matchNormalizer) ||
