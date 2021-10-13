@@ -1,5 +1,5 @@
 import {computeAccessibleName} from 'dom-accessibility-api'
-import {roles as allRoles} from 'aria-query'
+import {roles as allRoles, roleElements} from 'aria-query'
 import {
   computeAriaSelected,
   computeAriaChecked,
@@ -99,7 +99,12 @@ function queryAllByRole(
     return subtreeIsInaccessibleCache.get(element)
   }
 
-  return Array.from(container.querySelectorAll('*'))
+  return Array.from(
+    container.querySelectorAll(
+      // Only query elements that can be matched by the following filters
+      makeRoleSelector(role, exact, normalizer ? matchNormalizer : undefined),
+    ),
+  )
     .filter(node => {
       const isRoleSpecifiedExplicitly = node.hasAttribute('role')
 
@@ -171,6 +176,22 @@ function queryAllByRole(
         text => text,
       )
     })
+}
+
+function makeRoleSelector(role, exact, customNormalizer) {
+  if (typeof role !== 'string') {
+    // For non-string role parameters we can not determine the implicitRoleSelectors.
+    return '*'
+  }
+
+  const explicitRoleSelector =
+    exact && !customNormalizer ? `*[role~="${role}"]` : '*[role]'
+
+  const roleRelations = roleElements.get(role)
+  const implicitRoleSelectors =
+    roleRelations && new Set(Array.from(roleRelations).map(({name}) => name))
+
+  return [explicitRoleSelector, ...(implicitRoleSelectors ?? [])].join(',')
 }
 
 const getMultipleError = (c, role, {name} = {}) => {
