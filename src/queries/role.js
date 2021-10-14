@@ -187,11 +187,17 @@ function makeRoleSelector(role, exact, customNormalizer) {
   const explicitRoleSelector =
     exact && !customNormalizer ? `*[role~="${role}"]` : '*[role]'
 
-  const roleRelations = roleElements.get(role)
-  const implicitRoleSelectors =
-    roleRelations && new Set(Array.from(roleRelations).map(({name}) => name))
+  const roleRelations = roleElements.get(role) ?? new Set()
+  const implicitRoleSelectors = new Set(
+    Array.from(roleRelations).map(({name}) => name),
+  )
 
-  return [explicitRoleSelector, ...(implicitRoleSelectors ?? [])].join(',')
+  // Current transpilation config sometimes assumes `...` is always applied to arrays.
+  // `...` is equivalent to `Array.prototype.concat` for arrays.
+  // If you replace this code with `[explicitRoleSelector, ...implicitRoleSelectors]`, make sure every transpilation target retains the `...` in favor of `Array.prototype.concat`.
+  return [explicitRoleSelector]
+    .concat(Array.from(implicitRoleSelectors))
+    .join(',')
 }
 
 const getMultipleError = (c, role, {name} = {}) => {
