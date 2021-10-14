@@ -1,6 +1,13 @@
-import {configure} from '../config'
 import {JSDOM} from 'jsdom'
+import {configure} from '../config'
 import * as dtl from '../'
+
+beforeEach(() => {
+  // reset back to original config
+  configure({
+    queryAllElements: (element, query) => element.querySelectorAll(query),
+  })
+})
 
 test('works without a global dom', async () => {
   const container = new JSDOM(`
@@ -78,50 +85,87 @@ test('works without a browser context on a dom node (JSDOM Fragment)', () => {
   `)
 })
 
-test('works with a custom configured element query', () => {
-  const container = JSDOM.fragment(`
+test('works with a custom configured element query for shadow dom elements', async () => {
+  const window = new JSDOM(`
     <html>
       <body>
-        <form id="login-form">
-          <label for="username">Username</label>
-          <input id="username" />
-          <label for="password">Password</label>
-          <input id="password" type="password" />
-          <button type="submit">Submit</button>
-          <div id="data-container"></div>
-        </form>
-        <form id="other">
-          <label for="user_other">Username</label>
-          <input id="user_other" />
-          <label for="pass_other">Password</label>
-          <input id="pass_other" type="password" />
-          <button type="submit">Submit</button>
-          <div id="data-container"></div>
-        </form>
+        <example-input></example-input>
       </body>
     </html>
-  `)
+  `).window
+  const document = window.document
+  const container = document.body
 
+  // create custom element as system under test
+  window.customElements.define(
+    'example-input',
+    class extends window.HTMLElement {
+      constructor() {
+        super()
+        const shadow = this.attachShadow({mode: 'open'})
+
+        const div = document.createElement('div')
+        const label = document.createElement('label')
+        label.setAttribute('for', 'invisible-from-outer-dom')
+        label.innerHTML =
+          'Visible in browser, invisible for traditional queries'
+        const input = document.createElement('input')
+        input.setAttribute('id', 'invisible-from-outer-dom')
+        div.appendChild(label)
+        div.appendChild(input)
+        shadow.appendChild(div)
+      }
+    },
+  )
+
+  // Given the default configuration is used
+
+  // When querying for the label
+  // Then it is not in the document
+  expect(
+    dtl.queryByLabelText(
+      container,
+      /Visible in browser, invisible for traditional queries/i,
+    ),
+  ).not.toBeInTheDocument()
+
+  // Given I have a naive query that allows searching shadow dom
+  const queryMeAndChildrenAndShadow = (element, query) => [
+    ...element.querySelectorAll(query),
+    ...[...element.children].reduce(
+      (result, child) => [
+        ...result,
+        ...queryMeAndChildrenAndShadow(child, query),
+      ],
+      [],
+    ),
+    ...(element.shadowRoot?.querySelectorAll(query) ?? []),
+  ]
+
+  // When I configure the testing tools to use it
   configure({
-    queryAllElements: (element, query) =>
-      element.querySelectorAll(`#other ${query}`),
+    queryAllElements: queryMeAndChildrenAndShadow,
   })
 
-  expect(dtl.getByLabelText(container, /username/i)).toMatchInlineSnapshot(`
+  // Then it is part of the document
+  expect(
+    dtl.queryByLabelText(
+      container,
+      /Visible in browser, invisible for traditional queries/i,
+    ),
+  ).toBeInTheDocument()
+
+  // And it returns the expected item
+  expect(
+    dtl.getByLabelText(
+      container,
+      /Visible in browser, invisible for traditional queries/i,
+    ),
+  ).toMatchInlineSnapshot(`
     <input
-      id=user_other
+      id=invisible-from-outer-dom
     />
   `)
-  expect(dtl.getByLabelText(container, /password/i)).toMatchInlineSnapshot(`
-    <input
-      id=pass_other
-      type=password
-    />
-  `)
-  // reset back to original config
-  configure({
-    queryAllElements: (element, query) => element.querySelectorAll(query),
-  })
 })
 
 test('byRole works without a global DOM', () => {
