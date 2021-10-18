@@ -66,6 +66,10 @@ function setup() {
     <form data-testid="a-form" />
     <section data-testid="a-section" />
    </article>
+   <dl>
+    <dt data-testid="a-dt">Term</dt>
+    <dd data-testid="a-dd">Definition</dd>
+   </dl>
 </section>
   `)
 
@@ -99,6 +103,8 @@ function setup() {
     input: getByTestId('a-input-1'),
     input2: getByTestId('a-input-2'),
     textarea: getByTestId('a-textarea'),
+    dt: getByTestId('a-dt'),
+    dd: getByTestId('a-dd'),
   }
 }
 
@@ -131,6 +137,8 @@ test('getRoles returns expected roles for various dom nodes', () => {
     textarea,
     namedSection,
     namedForm,
+    dd,
+    dt,
   } = setup()
 
   expect(getRoles(namedSection)).toEqual({
@@ -150,6 +158,8 @@ test('getRoles returns expected roles for various dom nodes', () => {
     menuitem: [menuItem, menuItem2],
     form: [namedForm],
     region: [namedSection],
+    term: [dt],
+    definition: [dd],
   })
 })
 
