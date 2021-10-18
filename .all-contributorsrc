@@ -1470,6 +1470,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "jrnail23",
+      "name": "James Nail",
+      "avatar_url": "https://avatars.githubusercontent.com/u/392612?v=4",
+      "profile": "https://github.com/jrnail23",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoHost": "https://github.com"
