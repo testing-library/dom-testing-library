@@ -1470,6 +1470,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "IanVS",
+      "name": "Ian VanSchooten",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4616705?v=4",
+      "profile": "https://github.com/IanVS",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
