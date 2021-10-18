@@ -325,6 +325,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/Lusito"><img src="https://avatars.githubusercontent.com/u/53570854?v=4?s=100" width="100px;" alt=""/><br /><sub><b>SantoJambit</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=SantoJambit" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/mittalyashu"><img src="https://avatars.githubusercontent.com/u/29014463?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Yashu Mittal</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=mittalyashu" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/IanVS"><img src="https://avatars.githubusercontent.com/u/4616705?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ian VanSchooten</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=IanVS" title="Code">💻</a></td>
+    <td align="center"><a href="http://supervanya.com"><img src="https://avatars.githubusercontent.com/u/12336038?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Vanya Prokopovich</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3Asupervanya" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
