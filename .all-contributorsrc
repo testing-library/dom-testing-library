@@ -1470,6 +1470,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "supervanya",
+      "name": "Vanya Prokopovich",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12336038?v=4",
+      "profile": "http://supervanya.com",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoHost": "https://github.com"
