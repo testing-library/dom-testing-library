@@ -17,6 +17,7 @@ module.exports = {
     ...watchPlugins,
     require.resolve('jest-watch-select-projects'),
   ],
+  transformIgnorePatterns: ['node_modules/(?!(query-selector-shadow-dom)/)'],
   projects: [
     require.resolve('./tests/jest.config.dom.js'),
     require.resolve('./tests/jest.config.node.js'),

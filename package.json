@@ -46,7 +46,8 @@
     "chalk": "^4.1.0",
     "dom-accessibility-api": "^0.5.9",
     "lz-string": "^1.4.4",
-    "pretty-format": "^27.0.2"
+    "pretty-format": "^27.0.2",
+    "query-selector-shadow-dom": "^1.0.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.6",

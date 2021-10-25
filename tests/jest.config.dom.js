@@ -10,5 +10,6 @@ module.exports = {
     '/__tests__/',
     '/__node_tests__/',
   ],
+  transformIgnorePatterns: ['node_modules/(?!(query-selector-shadow-dom)/)'],
   testEnvironment: 'jest-environment-jsdom',
 }

@@ -1,6 +1,13 @@
 import {JSDOM} from 'jsdom'
 import * as dtl from '../'
 
+beforeEach(() => {
+  const dom = new JSDOM()
+  global.document = dom.window.document
+  global.window = dom.window
+  global.Node = dom.window.Node
+})
+
 test('works without a global dom', async () => {
   const container = new JSDOM(`
     <html>
@@ -73,6 +80,60 @@ test('works without a browser context on a dom node (JSDOM Fragment)', () => {
     <input
       id=password
       type=password
+    />
+  `)
+})
+
+test('works with a custom configured element query for shadow dom elements', async () => {
+  const window = new JSDOM(`
+    <html>
+      <body>
+        <example-input></example-input>
+      </body>
+    </html>
+  `).window
+  const document = window.document
+  const container = document.body
+
+  // Given I have defined a component with shadow dom
+  window.customElements.define(
+    'example-input',
+    class extends window.HTMLElement {
+      constructor() {
+        super()
+        const shadow = this.attachShadow({mode: 'open'})
+
+        const div = document.createElement('div')
+        const label = document.createElement('label')
+        label.setAttribute('for', 'invisible-from-outer-dom')
+        label.innerHTML =
+          'Visible in browser, invisible for traditional queries'
+        const input = document.createElement('input')
+        input.setAttribute('id', 'invisible-from-outer-dom')
+        div.appendChild(label)
+        div.appendChild(input)
+        shadow.appendChild(div)
+      }
+    },
+  )
+
+  // Then it is part of the document
+  expect(
+    dtl.queryByLabelText(
+      container,
+      /Visible in browser, invisible for traditional queries/i,
+    ),
+  ).toBeInTheDocument()
+
+  // And it returns the expected item
+  expect(
+    dtl.getByLabelText(
+      container,
+      /Visible in browser, invisible for traditional queries/i,
+    ),
+  ).toMatchInlineSnapshot(`
+    <input
+      id=invisible-from-outer-dom
     />
   `)
 })

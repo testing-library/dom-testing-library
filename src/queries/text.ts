@@ -3,6 +3,7 @@ import {checkContainerType} from '../helpers'
 import {DEFAULT_IGNORE_TAGS} from '../shared'
 import {AllByText, GetErrorFunction} from '../../types'
 import {
+  querySelectorAll,
   fuzzyMatches,
   matches,
   makeNormalizer,
@@ -32,7 +33,9 @@ const queryAllByText: AllByText = (
   return (
     [
       ...baseArray,
-      ...Array.from(container.querySelectorAll<HTMLElement>(selector)),
+      ...Array.from(
+        querySelectorAll<HTMLElement, HTMLElement>(container, selector),
+      ),
     ]
       // TODO: `matches` according lib.dom.d.ts can get only `string` but according our code it can handle also boolean :)
       .filter(node => !ignore || !node.matches(ignore as string))

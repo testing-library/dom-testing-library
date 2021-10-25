@@ -72,3 +72,27 @@ export function buildQueries<Arguments extends any[]>(
   getMultipleError: GetErrorFunction<Arguments>,
   getMissingError: GetErrorFunction<Arguments>,
 ): BuiltQueryMethods<Arguments>
+
+export type QueryElement = {
+  <T, K extends keyof HTMLElementTagNameMap>(container: T, selectors: K):
+    | HTMLElementTagNameMap[K]
+    | null
+  <T, K extends keyof SVGElementTagNameMap>(container: T, selectors: K):
+    | SVGElementTagNameMap[K]
+    | null
+  <T, E extends Element = Element>(container: T, selectors: string): E | null
+}
+export type QueryAllElements = {
+  <T, K extends keyof HTMLElementTagNameMap>(
+    container: T,
+    selectors: K,
+  ): NodeListOf<HTMLElementTagNameMap[K]>
+  <T, K extends keyof SVGElementTagNameMap>(
+    container: T,
+    selectors: K,
+  ): NodeListOf<SVGElementTagNameMap[K]>
+  <T, E extends Element = Element>(
+    container: T,
+    selectors: string,
+  ): NodeListOf<E>
+}

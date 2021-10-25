@@ -1,3 +1,4 @@
+import {querySelector, querySelectorAll} from './queries/all-utils'
 import {TEXT_NODE} from './helpers'
 
 const labelledNodeNames = [
@@ -43,7 +44,7 @@ function getRealLabels(element: Element) {
 
   if (!isLabelable(element)) return []
 
-  const labels = element.ownerDocument.querySelectorAll('label')
+  const labels = querySelectorAll(element.ownerDocument, 'label')
   return Array.from(labels).filter(label => label.control === element)
 }
 
@@ -63,7 +64,8 @@ function getLabels(
   const labelsId = ariaLabelledBy ? ariaLabelledBy.split(' ') : []
   return labelsId.length
     ? labelsId.map(labelId => {
-        const labellingElement = container.querySelector<HTMLElement>(
+        const labellingElement = querySelector<Element, HTMLElement>(
+          container,
           `[id="${labelId}"]`,
         )
         return labellingElement

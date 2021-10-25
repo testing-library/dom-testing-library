@@ -7,6 +7,7 @@ import {
   MatcherOptions,
 } from '../../types'
 import {
+  querySelectorAll,
   getNodeText,
   matches,
   fuzzyMatches,
@@ -23,7 +24,10 @@ const queryAllByDisplayValue: AllByBoundAttribute = (
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(
-    container.querySelectorAll<HTMLElement>(`input,textarea,select`),
+    querySelectorAll<HTMLElement, HTMLElement>(
+      container,
+      `input,textarea,select`,
+    ),
   ).filter(node => {
     if (node.tagName === 'SELECT') {
       const selectedOptions = Array.from(

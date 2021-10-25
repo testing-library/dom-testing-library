@@ -131,15 +131,15 @@ test('`selected: true` matches `aria-selected="true"` on supported roles', () =>
 
   expect(
     getAllByRole('columnheader', {selected: true}).map(({id}) => id),
-  ).toEqual(['selected-native-columnheader', 'selected-columnheader'])
+  ).toEqual(['selected-columnheader', 'selected-native-columnheader'])
 
   expect(getAllByRole('gridcell', {selected: true}).map(({id}) => id)).toEqual([
     'selected-gridcell',
   ])
 
   expect(getAllByRole('option', {selected: true}).map(({id}) => id)).toEqual([
-    'selected-native-option',
     'selected-listbox-option',
+    'selected-native-option',
   ])
 
   expect(getAllByRole('rowheader', {selected: true}).map(({id}) => id)).toEqual(
@@ -217,8 +217,8 @@ test('`level` matches elements with `heading` role', () => {
   ])
 
   expect(getAllByRole('heading', {level: 2}).map(({id}) => id)).toEqual([
-    'first-heading-two',
     'second-heading-two',
+    'first-heading-two',
   ])
 
   expect(getAllByRole('heading', {level: 3}).map(({id}) => id)).toEqual([

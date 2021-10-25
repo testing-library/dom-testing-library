@@ -2,6 +2,8 @@ import type {
   GetErrorFunction,
   Matcher,
   MatcherOptions,
+  QueryAllElements,
+  QueryElement,
   QueryMethod,
   Variant,
   waitForOptions as WaitForOptions,
@@ -11,6 +13,16 @@ import {getSuggestedQuery} from './suggestions'
 import {fuzzyMatches, matches, makeNormalizer} from './matches'
 import {waitFor} from './wait-for'
 import {getConfig} from './config'
+import * as querier from 'query-selector-shadow-dom'
+
+export const querySelector: QueryElement = <T extends Element>(
+  element: T,
+  selector: string,
+) => querier.querySelectorDeep(selector, element)
+export const querySelectorAll: QueryAllElements = <T extends Element>(
+  element: T,
+  selector: string,
+) => querier.querySelectorAllDeep(selector, element)
 
 function getElementError(message: string | null, container: HTMLElement) {
   return getConfig().getElementError(message, container)
@@ -35,7 +47,7 @@ function queryAllByAttribute(
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(
-    container.querySelectorAll<HTMLElement>(`[${attribute}]`),
+    querySelectorAll<HTMLElement, HTMLElement>(container, `[${attribute}]`),
   ).filter(node =>
     matcher(node.getAttribute(attribute), node, text, matchNormalizer),
   )

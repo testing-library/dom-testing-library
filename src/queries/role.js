@@ -20,6 +20,7 @@ import {
   getConfig,
   makeNormalizer,
   matches,
+  querySelectorAll,
 } from './all-utils'
 
 function queryAllByRole(
@@ -100,7 +101,8 @@ function queryAllByRole(
   }
 
   return Array.from(
-    container.querySelectorAll(
+    querySelectorAll(
+      container,
       // Only query elements that can be matched by the following filters
       makeRoleSelector(role, exact, normalizer ? matchNormalizer : undefined),
     ),

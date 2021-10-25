@@ -17,12 +17,16 @@ import {
   makeSingleQuery,
   wrapAllByQueryWithSuggestion,
   wrapSingleQueryWithSuggestion,
+  querySelectorAll,
+  querySelector,
 } from './all-utils'
 
 function queryAllLabels(
   container: HTMLElement,
 ): {textToMatch: string | null; node: HTMLElement}[] {
-  return Array.from(container.querySelectorAll<HTMLElement>('label,input'))
+  return Array.from(
+    querySelectorAll<HTMLElement, HTMLElement>(container, 'label,input'),
+  )
     .map(node => {
       return {node, textToMatch: getLabelContent(node)}
     })
@@ -56,7 +60,7 @@ const queryAllByLabelText: AllByText = (
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   const matchingLabelledElements = Array.from(
-    container.querySelectorAll<HTMLElement>('*'),
+    querySelectorAll<HTMLElement, HTMLElement>(container, '*'),
   )
     .filter(element => {
       return (
@@ -169,7 +173,10 @@ function getTagNameOfElementAssociatedWithLabelViaFor(
     return null
   }
 
-  const element = container.querySelector(`[id="${htmlFor}"]`)
+  const element = querySelector<Element, HTMLElement>(
+    container,
+    `[id="${htmlFor}"]`,
+  )
   return element ? element.tagName.toLowerCase() : null
 }
 
