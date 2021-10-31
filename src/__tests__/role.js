@@ -1,5 +1,6 @@
 import {configure, getConfig} from '../config'
 import {getQueriesForElement} from '../get-queries-for-element'
+import {waitFor} from '../wait-for'
 import {render, renderIntoDocument} from './helpers/test-utils'
 
 test('by default logs accessible roles when it fails', () => {
@@ -356,11 +357,11 @@ test('does not include the container in the queryable roles', () => {
 })
 
 test('has no useful error message in findBy', async () => {
-  const {findByRole} = render(`<li />`)
+  const {getByRole} = render(`<li />`)
 
-  await expect(findByRole('option', {timeout: 1})).rejects.toThrow(
-    'Unable to find role="option"',
-  )
+  await expect(
+    waitFor(() => getByRole('option'), {timeout: 1}),
+  ).rejects.toThrow('Unable to find role="option"')
 })
 
 test('explicit role is most specific', () => {

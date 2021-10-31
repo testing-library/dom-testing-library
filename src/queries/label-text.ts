@@ -191,12 +191,34 @@ const findAllByLabelText = makeFindQuery(
     // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
     [labelText: Matcher, options?: SelectorMatcherOptions]
   >(getAllByLabelText, getAllByLabelText.name, 'findAll'),
+  wrapAllByQueryWithSuggestion(
+    (container, text, options) => {
+      const elements = queryAllByLabelText(container, text, options)
+      if (elements.length === 0) {
+        throw new Error('no element found')
+      }
+      return elements
+    },
+    getAllByLabelText.name,
+    'findAll',
+  ),
 )
 const findByLabelText = makeFindQuery(
   wrapSingleQueryWithSuggestion<
     // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
     [labelText: Matcher, options?: SelectorMatcherOptions]
   >(getByLabelText, getAllByLabelText.name, 'find'),
+  wrapSingleQueryWithSuggestion(
+    (container, text, options) => {
+      const elements = queryAllByLabelText(container, text, options)
+      if (elements.length !== 1) {
+        throw new Error('no element or more than one elements found')
+      }
+      return elements[0]
+    },
+    getAllByLabelText.name,
+    'find',
+  ),
 )
 
 const getAllByLabelTextWithSuggestions = wrapAllByQueryWithSuggestion<
