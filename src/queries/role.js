@@ -154,13 +154,6 @@ function queryAllByRole(
       return true
     })
     .filter(element => {
-      return hidden === false
-        ? isInaccessible(element, {
-            isSubtreeInaccessible: cachedIsSubtreeInaccessible,
-          }) === false
-        : true
-    })
-    .filter(element => {
       if (name === undefined) {
         // Don't care
         return true
@@ -175,6 +168,13 @@ function queryAllByRole(
         name,
         text => text,
       )
+    })
+    .filter(element => {
+      return hidden === false
+        ? isInaccessible(element, {
+            isSubtreeInaccessible: cachedIsSubtreeInaccessible,
+          }) === false
+        : true
     })
 }
 
