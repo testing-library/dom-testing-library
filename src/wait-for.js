@@ -82,6 +82,10 @@ function waitFor(
         // an entire day banging my head against a wall on this.
         checkCallback()
 
+        if (finished) {
+          break
+        }
+
         // In this rare case, we *need* to wait for in-flight promises
         // to resolve before continuing. We don't need to take advantage
         // of parallelization so we're fine.

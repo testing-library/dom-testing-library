@@ -11,6 +11,17 @@ function deferred() {
   return {promise, resolve, reject}
 }
 
+let originalConfig
+beforeEach(() => {
+  originalConfig = getConfig()
+})
+
+afterEach(() => {
+  configure(originalConfig)
+  // restore timers
+  jest.useRealTimers()
+})
+
 test('waits callback to not throw an error', async () => {
   const spy = jest.fn()
   // we are using random timeout here to simulate a real-time example
@@ -138,7 +149,6 @@ Ignored nodes: comments, <script />, <style />
 })
 
 test('should delegate to config.getElementError', async () => {
-  const originalConfig = getConfig()
   const elementError = new Error('Custom element error')
   const getElementError = jest.fn().mockImplementation(() => elementError)
   configure({getElementError})
@@ -153,7 +163,6 @@ test('should delegate to config.getElementError', async () => {
 
   expect(getElementError).toBeCalledTimes(1)
   expect(error.message).toMatchInlineSnapshot(`Custom element error`)
-  configure(originalConfig)
 })
 
 test('when a promise is returned, it does not call the callback again until that promise rejects', async () => {
@@ -254,4 +263,72 @@ test('the real timers => fake timers error shows the original stack trace when c
   jest.useFakeTimers()
 
   expect((await waitForError).stack).not.toMatch(__dirname)
+})
+
+test('does not work after it resolves', async () => {
+  jest.useFakeTimers('modern')
+  let context = 'initial'
+  configure({
+    // @testing-library/react usage to ensure `IS_REACT_ACT_ENVIRONMENT` is set when acting.
+    unstable_advanceTimersWrapper: callback => {
+      const originalContext = context
+      context = 'act'
+      try {
+        const result = callback()
+        // eslint-disable-next-line jest/no-if
+        if (typeof result?.then === 'function') {
+          const thenable = result
+          return {
+            then: (resolve, reject) => {
+              thenable.then(
+                returnValue => {
+                  context = originalContext
+                  resolve(returnValue)
+                },
+                error => {
+                  context = originalContext
+                  reject(error)
+                },
+              )
+            },
+          }
+        } else {
+          context = originalContext
+          return undefined
+        }
+      } catch {
+        context = originalContext
+        return undefined
+      }
+    },
+    asyncWrapper: async callback => {
+      const originalContext = context
+      context = 'no-act'
+      try {
+        await callback()
+      } finally {
+        context = originalContext
+      }
+    },
+  })
+
+  let data = null
+  setTimeout(() => {
+    data = 'resolved'
+  }, 100)
+
+  await waitFor(
+    () => {
+      if (data === null) {
+        throw new Error('not found')
+      }
+    },
+    {interval: 50},
+  )
+
+  expect(context).toEqual('initial')
+
+  await Promise.resolve()
+
+  expect(context).toEqual('initial')
 })
