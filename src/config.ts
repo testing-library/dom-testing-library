@@ -14,14 +14,6 @@ const queryElementAll: QueryAllElements = <T extends Element>(
 
 interface InternalConfig extends Config {
   _disableExpensiveErrorDiagnostics: boolean
-  /**
-   * Returns the first element that is a descendant of node that matches selectors.
-   */
-  queryElement: QueryElement
-  /**
-   * Returns all element descendants of node that match selectors.
-   */
-  queryAllElements: QueryAllElements
 }
 
 // It would be cleaner for this to live inside './queries', but

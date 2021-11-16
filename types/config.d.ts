@@ -41,11 +41,11 @@ export interface Config {
   /**
    * Returns the first element that is a descendant of node that matches selectors.
    */
-  queryElement?: QueryElement
+  queryElement: QueryElement
   /**
    * Returns all element descendants of node that match selectors.
    */
-  queryAllElements?: QueryAllElements
+  queryAllElements: QueryAllElements
   getElementError: (message: string | null, container: Element) => Error
 }
 
