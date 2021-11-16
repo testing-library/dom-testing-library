@@ -131,7 +131,7 @@ test('works with a custom configured element query for shadow dom elements', asy
 
   // Given I have a naive query that allows searching shadow dom
   const queryMeAndChildrenAndShadow = (element, query) => [
-    ...element.querySelectorAll(query),
+    ...element.querySelectorAll(`:scope > ${query}`),
     ...[...element.children].reduce(
       (result, child) => [
         ...result,
