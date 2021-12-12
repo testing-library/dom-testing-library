@@ -254,6 +254,10 @@ export async function testWithin() {
 
   await container.findByRole('button', {name: /click me/i})
   container.getByRole<HTMLButtonElement>('button', {name: /click me/i})
+
+  let withinQueries = within(document.body)
+  withinQueries = within(document.body)
+  withinQueries.getByRole<HTMLButtonElement>('button', {name: /click me/i})
 }
 
 /*
