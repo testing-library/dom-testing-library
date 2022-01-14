@@ -102,27 +102,40 @@ function buildElementRoleList(elementRolesMap) {
   }
 
   function match(element) {
+    let {attributes = []} = element
+    const {name} = element
+    const upperCasedTagName = name && name.toUpperCase()
+
+    // https://github.com/testing-library/dom-testing-library/issues/814
+    const typeTextIndex = attributes.findIndex(
+      attribute =>
+        attribute.value &&
+        attribute.name === 'type' &&
+        attribute.value === 'text',
+    )
+
+    if (typeTextIndex >= 0) {
+      // not using splice to not mutate the attributes array
+      attributes = [
+        ...attributes.slice(0, typeTextIndex),
+        ...attributes.slice(typeTextIndex + 1),
+      ]
+    }
+
+    const selector = makeElementSelector({...element, attributes})
+
     return node => {
-      let {attributes = []} = element
-      // https://github.com/testing-library/dom-testing-library/issues/814
-      const typeTextIndex = attributes.findIndex(
-        attribute =>
-          attribute.value &&
-          attribute.name === 'type' &&
-          attribute.value === 'text',
-      )
-      if (typeTextIndex >= 0) {
-        // not using splice to not mutate the attributes array
-        attributes = [
-          ...attributes.slice(0, typeTextIndex),
-          ...attributes.slice(typeTextIndex + 1),
-        ]
-        if (node.type !== 'text') {
-          return false
-        }
+      if (upperCasedTagName && node.tagName !== upperCasedTagName) {
+        // Short-circuit if tag name does not match,
+        // because this code runs in a tight loop over many nodes and many roles.
+        return false
       }
 
-      return node.matches(makeElementSelector({...element, attributes}))
+      if (typeTextIndex >= 0 && node.type !== 'text') {
+        return false
+      }
+
+      return node.matches(selector)
     }
   }
 
