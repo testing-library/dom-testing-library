@@ -176,6 +176,7 @@ export interface Queries {
 }
 
 export function getQueriesForElement<
-  T extends Queries = typeof queries,
-  K extends T = T,
->(element: HTMLElement, queriesToBind?: K): BoundFunctions<K>
+  QueriesToBind extends Queries = typeof queries,
+  // Extra type parameter required for reassignment.
+  T extends QueriesToBind = QueriesToBind,
+>(element: HTMLElement, queriesToBind?: T): BoundFunctions<T>
