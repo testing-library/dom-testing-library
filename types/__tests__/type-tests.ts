@@ -258,6 +258,8 @@ export async function testWithin() {
   let withinQueries = within(document.body)
   withinQueries = within(document.body)
   withinQueries.getByRole<HTMLButtonElement>('button', {name: /click me/i})
+  withinQueries = within(document.body)
+  withinQueries.getByRole<HTMLButtonElement>('button', {name: /click me/i})
 }
 
 /*
