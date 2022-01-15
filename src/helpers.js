@@ -48,10 +48,15 @@ function getWindowFromNode(node) {
     throw new Error(
       `It looks like you passed a \`screen\` object. Did you do something like \`fireEvent.click(screen, ...\` when you meant to use a query, e.g. \`fireEvent.click(screen.getBy..., \`?`,
     )
-  } else {
+  } else if (node instanceof HTMLElement) {
     // The user passed something unusual to a calling function
     throw new Error(
       `Unable to find the "window" object for the given node. Please file an issue with the code that's causing you to see this error: https://github.com/testing-library/dom-testing-library/issues/new`,
+    )
+  } else {
+    // The user passed something unusual to a calling function
+    throw new Error(
+      `The given node is not an HTMLElement, the node type is: ${typeof node}`,
     )
   }
 }
