@@ -3,6 +3,7 @@ import {
   logRoles,
   getImplicitAriaRoles,
   isInaccessible,
+  computeAriaLevel,
 } from '../role-helpers'
 import {render} from './helpers/test-utils'
 
@@ -72,6 +73,28 @@ function setup() {
     <dd data-testid="a-dd">Definition</dd>
    </dl>
 </section>
+
+    <ul role="tree" data-testid="a-tree">
+      <li role="treeitem" aria-expanded="false" tabIndex="0">
+        <span className="">Projects</span>
+        <ul role="group">
+          <li role="treeitem" className="doc" tabIndex="-1">
+            project-1.docx
+          </li>
+          <li role="treeitem" className="doc" tabIndex="-1">
+            project-2.docx
+          </li>
+          <li role="treeitem" aria-expanded="true" tabIndex="-1" data-testid="level2-treeitem">
+            <span className="">Project 3</span>
+            <ul role="group">
+              <li role="treeitem" className="doc" tabIndex="-1" data-testid="level3-treeitem">
+                project-3A.docx
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
   `)
 
   return {
@@ -107,6 +130,9 @@ function setup() {
     dt: getByTestId('a-dt'),
     dd: getByTestId('a-dd'),
     header: getByTestId('a-header'),
+    tree: getByTestId('a-tree'),
+    treeItem2: getByTestId('level2-treeitem'),
+    treeItem3: getByTestId('level3-treeitem'),
   }
 }
 
@@ -199,4 +225,10 @@ test.each([
   container.firstChild.appendChild(document.createElement('button'))
 
   expect(isInaccessible(container.querySelector('button'))).toBe(expected)
+})
+
+test('computeAriaLevel', () => {
+  const {treeItem2, treeItem3} = setup()
+  expect(computeAriaLevel(treeItem2)).toBe(2)
+  expect(computeAriaLevel(treeItem3)).toBe(3)
 })
