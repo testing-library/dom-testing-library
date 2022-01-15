@@ -228,7 +228,10 @@ test.each([
 })
 
 test('computeAriaLevel', () => {
-  const {treeItem2, treeItem3} = setup()
+  const {treeItem2, treeItem3, h1, h2, h3} = setup()
   expect(computeAriaLevel(treeItem2)).toBe(2)
   expect(computeAriaLevel(treeItem3)).toBe(3)
+  expect(computeAriaLevel(h1)).toBe(1)
+  expect(computeAriaLevel(h2)).toBe(2)
+  expect(computeAriaLevel(h3)).toBe(3)
 })
