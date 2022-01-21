@@ -80,6 +80,17 @@ test('requires an unempty array of elements to exist first (function form)', () 
   )
 })
 
+test('requires a getBy* query to not throw first', () => {
+  const {getByTestId} = renderIntoDocument(`
+  <div data-testid="div"></div>
+`)
+  return expect(
+    waitForElementToBeRemoved(() => getByTestId('non-existing-testid')),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `The element(s) given to waitForElementToBeRemoved are already removed. waitForElementToBeRemoved requires that the element(s) exist(s) before waiting for removal.`,
+  )
+})
+
 test('after successful removal, fullfills promise with empty value (undefined)', () => {
   const {getByTestId} = renderIntoDocument(`
   <div data-testid="div"></div>
