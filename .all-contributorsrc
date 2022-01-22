@@ -1497,6 +1497,24 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "robcaldecott",
+      "name": "Rob Caldecott",
+      "avatar_url": "https://avatars.githubusercontent.com/u/796702?v=4",
+      "profile": "https://github.com/robcaldecott",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "Dennis273",
+      "name": "Dennis273",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19815164?v=4",
+      "profile": "https://github.com/Dennis273",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"

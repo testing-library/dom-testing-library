@@ -327,6 +327,10 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://github.com/IanVS"><img src="https://avatars.githubusercontent.com/u/4616705?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ian VanSchooten</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=IanVS" title="Code">💻</a></td>
     <td align="center"><a href="http://supervanya.com"><img src="https://avatars.githubusercontent.com/u/12336038?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Vanya Prokopovich</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3Asupervanya" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/jrnail23"><img src="https://avatars.githubusercontent.com/u/392612?v=4?s=100" width="100px;" alt=""/><br /><sub><b>James Nail</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3Ajrnail23" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/robcaldecott"><img src="https://avatars.githubusercontent.com/u/796702?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rob Caldecott</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3Arobcaldecott" title="Bug reports">🐛</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/Dennis273"><img src="https://avatars.githubusercontent.com/u/19815164?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dennis273</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=Dennis273" title="Code">💻</a></td>
   </tr>
 </table>
 
