@@ -25,22 +25,22 @@ describe('window retrieval throws when given something other than a node', () =>
       `It looks like you passed an Array instead of a DOM node. Did you do something like \`fireEvent.click(screen.getAllBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`?`,
     )
   })
-  test('HTMLElement as node', () => {
+  test('window is not available for node', () => {
     const elem = document.createElement('div')
-    Object.defineProperty(elem, 'ownerDocument', {
+    Object.defineProperty(elem.ownerDocument, 'defaultView', {
       get: function get() {
         return null
       },
     })
 
     expect(() => getWindowFromNode(elem)).toThrowErrorMatchingInlineSnapshot(
-      `Unable to find the "window" object for the given node. Please file an issue with the code that's causing you to see this error: https://github.com/testing-library/dom-testing-library/issues/new`,
+      `It looks like the window object is not available for the provided node.`,
     )
   })
 
   test('unknown as node', () => {
     expect(() => getWindowFromNode({})).toThrowErrorMatchingInlineSnapshot(
-      `The given node is not an HTMLElement, the node type is: object`,
+      `The given node is not an Element, the node type is: object.`,
     )
   })
 })
