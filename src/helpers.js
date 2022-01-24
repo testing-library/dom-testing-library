@@ -33,7 +33,7 @@ function getWindowFromNode(node) {
   } else if (node.window) {
     // node is window
     return node.window
-  } else if (node.ownerDocument && !node.ownerDocument.defaultValue) {
+  } else if (node.ownerDocument && node.ownerDocument.defaultView === null) {
     throw new Error(
       `It looks like the window object is not available for the provided node.`,
     )
