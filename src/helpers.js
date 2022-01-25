@@ -33,6 +33,10 @@ function getWindowFromNode(node) {
   } else if (node.window) {
     // node is window
     return node.window
+  } else if (node.ownerDocument && node.ownerDocument.defaultView === null) {
+    throw new Error(
+      `It looks like the window object is not available for the provided node.`,
+    )
   } else if (node.then instanceof Function) {
     throw new Error(
       `It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`, or await the findBy query \`fireEvent.click(await screen.findBy...\`?`,
@@ -51,7 +55,7 @@ function getWindowFromNode(node) {
   } else {
     // The user passed something unusual to a calling function
     throw new Error(
-      `Unable to find the "window" object for the given node. Please file an issue with the code that's causing you to see this error: https://github.com/testing-library/dom-testing-library/issues/new`,
+      `The given node is not an Element, the node type is: ${typeof node}.`,
     )
   }
 }
