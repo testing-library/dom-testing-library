@@ -91,25 +91,24 @@ function makeNormalizer({
   collapseWhitespace,
   normalizer,
 }: NormalizerOptions) {
-  if (normalizer) {
-    // User has specified a custom normalizer
-    if (
-      typeof trim !== 'undefined' ||
-      typeof collapseWhitespace !== 'undefined'
-    ) {
-      // They've also specified a value for trim or collapseWhitespace
-      throw new Error(
-        'trim and collapseWhitespace are not supported with a normalizer. ' +
-          'If you want to use the default trim and collapseWhitespace logic in your normalizer, ' +
-          'use "getDefaultNormalizer({trim, collapseWhitespace})" and compose that into your normalizer',
-      )
-    }
-
-    return normalizer
-  } else {
+  if (!normalizer) {
     // No custom normalizer specified. Just use default.
-    return getDefaultNormalizer({trim, collapseWhitespace})
+    return getDefaultNormalizer({trim, collapseWhitespace})    
   }
+
+  if (
+    typeof trim !== 'undefined' ||
+    typeof collapseWhitespace !== 'undefined'
+  ) {
+    // They've also specified a value for trim or collapseWhitespace
+    throw new Error(
+      'trim and collapseWhitespace are not supported with a normalizer. ' +
+        'If you want to use the default trim and collapseWhitespace logic in your normalizer, ' +
+        'use "getDefaultNormalizer({trim, collapseWhitespace})" and compose that into your normalizer',
+    )
+  }
+
+  return normalizer
 }
 
 export {fuzzyMatches, matches, getDefaultNormalizer, makeNormalizer}
