@@ -93,7 +93,7 @@ function makeNormalizer({
 }: NormalizerOptions) {
   if (!normalizer) {
     // No custom normalizer specified. Just use default.
-    return getDefaultNormalizer({trim, collapseWhitespace})    
+    return getDefaultNormalizer({trim, collapseWhitespace})
   }
 
   if (
