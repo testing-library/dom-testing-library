@@ -340,6 +340,23 @@ test('assigning the files property on dataTransfer', () => {
   expect(spy.mock.calls[0][0]).toHaveProperty('dataTransfer.files', [file])
 })
 
+test('uses the supplied data transfer instance if passed in by the caller', () => {
+  function FakeDataTransfer() {}
+
+  window.DataTransfer = FakeDataTransfer
+
+  const node = document.createElement('div')
+  const spy = jest.fn()
+  node.addEventListener('drop', spy)
+
+  const dataTransfer = new FakeDataTransfer()
+
+  fireEvent.drop(node, {dataTransfer})
+  expect(spy).toHaveBeenCalledTimes(1)
+  expect(spy.mock.calls[0][0].dataTransfer).toEqual(dataTransfer)
+  delete window.DataTransfer
+})
+
 test('assigns clipboardData properties', () => {
   const node = document.createElement('div')
   const spy = jest.fn()
