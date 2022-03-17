@@ -18,21 +18,20 @@ jobs:
       # Otherwise we would not know if the problem is tied to the Node.js version
       fail-fast: false
       matrix:
-        # TODO: relax `'16.9.1'` to `16` once GitHub has 16.9.1 cached. 16.9.0 is broken due to https://github.com/nodejs/node/issues/40030
-        node: [12, 14, '16.9.1']
+        node: [12, 14, 16]
     runs-on: ubuntu-latest
     steps:
       - name: 🛑 Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.0
 
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           # required by codecov/codecov-action
           fetch-depth: 0
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
 
@@ -66,10 +65,10 @@ jobs:
         uses: styfle/cancel-workflow-action@0.9.0
 
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 14
 
