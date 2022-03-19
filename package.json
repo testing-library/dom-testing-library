@@ -26,6 +26,7 @@
   "scripts": {
     "build": "kcd-scripts build  --no-ts-defs --ignore \"**/__tests__/**,**/__node_tests__/**,**/__mocks__/**\" && kcd-scripts build --no-ts-defs --bundle --no-clean",
     "format": "kcd-scripts format",
+    "install:csb": "npm install",
     "lint": "kcd-scripts lint",
     "setup": "npm install && npm run validate -s",
     "test": "kcd-scripts test",
