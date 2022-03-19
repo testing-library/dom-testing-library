@@ -331,6 +331,7 @@ Thanks goes to these people ([emoji key][emojis]):
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/Dennis273"><img src="https://avatars.githubusercontent.com/u/19815164?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dennis273</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=Dennis273" title="Code">💻</a></td>
+    <td align="center"><a href="https://www.jacksonhardaker.dev"><img src="https://avatars.githubusercontent.com/u/7596320?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jackson Hardaker</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=jacksonhardaker" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
