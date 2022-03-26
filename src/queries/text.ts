@@ -1,7 +1,12 @@
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 import {checkContainerType} from '../helpers'
 import {DEFAULT_IGNORE_TAGS} from '../shared'
-import {AllByText, GetErrorFunction} from '../../types'
+import {
+  AllByText,
+  GetErrorFunction,
+  SelectorMatcherOptions,
+  Matcher,
+} from '../../types'
 import {
   fuzzyMatches,
   matches,
@@ -42,8 +47,21 @@ const queryAllByText: AllByText = (
 
 const getMultipleError: GetErrorFunction<[unknown]> = (c, text) =>
   `Found multiple elements with the text: ${text}`
-const getMissingError: GetErrorFunction<[unknown]> = (c, text) =>
-  `Unable to find an element with the text: ${text}. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`
+const getMissingError: GetErrorFunction<[Matcher, SelectorMatcherOptions]> = (
+  c,
+  text,
+  options = {},
+) => {
+  const {collapseWhitespace, trim, normalizer} = options
+  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
+  const normalizedText = matchNormalizer(text.toString())
+  const isNormalizedDifferent = normalizedText !== text.toString()
+  return `Unable to find an element with the text: ${
+    isNormalizedDifferent
+      ? `${normalizedText} (normalized from '${text}')`
+      : text
+  }. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`
+}
 
 const queryAllByTextWithSuggestions = wrapAllByQueryWithSuggestion<
   // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
