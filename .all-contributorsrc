@@ -637,7 +637,8 @@
         "code",
         "test",
         "doc",
-        "infra"
+        "infra",
+        "review"
       ]
     },
     {
