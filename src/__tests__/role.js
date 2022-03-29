@@ -572,3 +572,44 @@ test('should find the input using type property instead of attribute', () => {
   const {getByRole} = render('<input type="124">')
   expect(getByRole('textbox')).not.toBeNull()
 })
+
+describe('Web Component Custom Elements', () => {
+  beforeAll(() => {
+    customElements.define(
+      'custom-button',
+      class CustomButton extends HTMLElement {
+        constructor() {
+          super()
+
+          this.attachShadow({mode: 'open'})
+
+          const button = document.createElement('button')
+          button.innerHTML = 'Button text'
+
+          this.shadowRoot.append(button)
+        }
+      },
+    )
+  })
+
+  test('should find accessible roles in elements that contain a shadowRoot', () => {
+    const {getByRole} = render(`<custom-button />`)
+    expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
+"Unable to find an accessible element with the role "article"
+
+Here are the accessible roles:
+
+  button:
+
+  Name "Button text":
+  <button />
+
+  --------------------------------------------------
+
+Ignored nodes: comments, <script />, <style />
+<div>
+  <custom-button />
+</div>"
+`)
+  })
+})
