@@ -172,15 +172,15 @@ eventTypes.forEach(({type, events, elementType}) => {
         expect(spy).toHaveBeenCalledTimes(1)
       })
     })
-
-    it('fires resize', () => {
-      const node = document.defaultView
-      const spy = jest.fn()
-      node.addEventListener('resize', spy, {once: true})
-      fireEvent.resize(node)
-      expect(spy).toHaveBeenCalledTimes(1)
-    })
   })
+})
+
+it('fires resize', () => {
+  const node = document.defaultView
+  const spy = jest.fn()
+  node.addEventListener('resize', spy, {once: true})
+  fireEvent.resize(node)
+  expect(spy).toHaveBeenCalledTimes(1)
 })
 
 describe(`Bubbling Events`, () => {

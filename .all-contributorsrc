@@ -195,13 +195,14 @@
       ]
     },
     {
-      "login": "tdeschryver",
+      "login": "timdeschryver",
       "name": "Tim Deschryver",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/28659384?v=4",
-      "profile": "https://github.com/tdeschryver",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28659384?v=4",
+      "profile": "http://timdeschryver.dev",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "review"
       ]
     },
     {
@@ -637,7 +638,8 @@
         "code",
         "test",
         "doc",
-        "infra"
+        "infra",
+        "review"
       ]
     },
     {
@@ -1514,6 +1516,15 @@
       "profile": "https://github.com/Dennis273",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "jacksonhardaker",
+      "name": "Jackson Hardaker",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7596320?v=4",
+      "profile": "https://www.jacksonhardaker.dev",
+      "contributions": [
+        "test"
       ]
     }
   ],
