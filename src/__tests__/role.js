@@ -572,3 +572,177 @@ test('should find the input using type property instead of attribute', () => {
   const {getByRole} = render('<input type="124">')
   expect(getByRole('textbox')).not.toBeNull()
 })
+
+test('can be filtered by accessible description', () => {
+  const targetedNotificationMessage = 'Your session is about to expire!'
+  const {getByRole} = renderIntoDocument(
+    `
+<ul>
+  <li role="alertdialog" aria-describedby="notification-id-1">
+    <div><button>Close</button></div>
+    <div id="notification-id-1">You have unread emails</div>
+  </li>
+  <li role="alertdialog" aria-describedby="notification-id-2">
+    <div><button>Close</button></div>
+    <div id="notification-id-2">${targetedNotificationMessage}</div>
+  </li>
+</ul>`,
+  )
+
+  const notification = getByRole('alertdialog', {
+    description: targetedNotificationMessage,
+  })
+
+  expect(notification).not.toBeNull()
+  expect(notification).toHaveTextContent(targetedNotificationMessage)
+
+  expect(
+    getQueriesForElement(notification).getByRole('button', {name: 'Close'}),
+  ).not.toBeNull()
+})
+
+test('error should include description when filtering and no results are found', () => {
+  const targetedNotificationMessage = 'Your session is about to expire!'
+  const {getByRole} = renderIntoDocument(
+    `<div role="dialog" aria-describedby="some-id"><div><button>Close</button></div><div id="some-id">${targetedNotificationMessage}</div></div>`,
+  )
+
+  expect(() =>
+    getByRole('alertdialog', {description: targetedNotificationMessage}),
+  ).toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an accessible element with the role "alertdialog" and description "Your session is about to expire!"
+
+    Here are the accessible roles:
+
+      dialog:
+
+      Name "":
+      Description "Your session is about to expire!":
+      <div
+        aria-describedby="some-id"
+        role="dialog"
+      />
+
+      --------------------------------------------------
+      button:
+
+      Name "Close":
+      Description "":
+      <button />
+
+      --------------------------------------------------
+
+    Ignored nodes: comments, <script />, <style />
+    <body>
+      <div
+        aria-describedby="some-id"
+        role="dialog"
+      >
+        <div>
+          <button>
+            Close
+          </button>
+        </div>
+        <div
+          id="some-id"
+        >
+          Your session is about to expire!
+        </div>
+      </div>
+    </body>
+  `)
+})
+
+test('TextMatch serialization for description filter in error message', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div role="alertdialog" aria-describedby="some-id"><div><button>Close</button></div><div id="some-id">Your session is about to expire!</div></div>`,
+  )
+
+  expect(() => getByRole('alertdialog', {description: /unknown description/}))
+    .toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an accessible element with the role "alertdialog" and description \`/unknown description/\`
+
+    Here are the accessible roles:
+
+      alertdialog:
+
+      Name "":
+      Description "Your session is about to expire!":
+      <div
+        aria-describedby="some-id"
+        role="alertdialog"
+      />
+
+      --------------------------------------------------
+      button:
+
+      Name "Close":
+      Description "":
+      <button />
+
+      --------------------------------------------------
+
+    Ignored nodes: comments, <script />, <style />
+    <body>
+      <div
+        aria-describedby="some-id"
+        role="alertdialog"
+      >
+        <div>
+          <button>
+            Close
+          </button>
+        </div>
+        <div
+          id="some-id"
+        >
+          Your session is about to expire!
+        </div>
+      </div>
+    </body>
+  `)
+
+  expect(() => getByRole('alertdialog', {description: () => false}))
+    .toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an accessible element with the role "alertdialog" and description \`() => false\`
+
+    Here are the accessible roles:
+
+      alertdialog:
+
+      Name "":
+      Description "Your session is about to expire!":
+      <div
+        aria-describedby="some-id"
+        role="alertdialog"
+      />
+
+      --------------------------------------------------
+      button:
+
+      Name "Close":
+      Description "":
+      <button />
+
+      --------------------------------------------------
+
+    Ignored nodes: comments, <script />, <style />
+    <body>
+      <div
+        aria-describedby="some-id"
+        role="alertdialog"
+      >
+        <div>
+          <button>
+            Close
+          </button>
+        </div>
+        <div
+          id="some-id"
+        >
+          Your session is about to expire!
+        </div>
+      </div>
+    </body>
+  `)
+})

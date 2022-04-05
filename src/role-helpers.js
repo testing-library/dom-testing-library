@@ -1,5 +1,8 @@
 import {elementRoles} from 'aria-query'
-import {computeAccessibleName} from 'dom-accessibility-api'
+import {
+  computeAccessibleDescription,
+  computeAccessibleName,
+} from 'dom-accessibility-api'
 import {prettyDOM} from './pretty-dom'
 import {getConfig} from './config'
 
@@ -178,7 +181,7 @@ function getRoles(container, {hidden = false} = {}) {
     }, {})
 }
 
-function prettyRoles(dom, {hidden}) {
+function prettyRoles(dom, {hidden, includeDescription}) {
   const roles = getRoles(dom, {hidden})
   // We prefer to skip generic role, we don't recommend it
   return Object.entries(roles)
@@ -191,7 +194,20 @@ function prettyRoles(dom, {hidden}) {
             computedStyleSupportsPseudoElements:
               getConfig().computedStyleSupportsPseudoElements,
           })}":\n`
+
           const domString = prettyDOM(el.cloneNode(false))
+
+          if (includeDescription) {
+            const descriptionString = `Description "${computeAccessibleDescription(
+              el,
+              {
+                computedStyleSupportsPseudoElements:
+                  getConfig().computedStyleSupportsPseudoElements,
+              },
+            )}":\n`
+            return `${nameString}${descriptionString}${domString}`
+          }
+
           return `${nameString}${domString}`
         })
         .join('\n\n')
