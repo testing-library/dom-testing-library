@@ -601,7 +601,7 @@ test('can be filtered by accessible description', () => {
   ).not.toBeNull()
 })
 
-test('error should include description when filtering a no results are found', () => {
+test('error should include description when filtering and no results are found', () => {
   const targetedNotificationMessage = 'Your session is about to expire!'
   const {getByRole} = renderIntoDocument(
     `<div role="dialog" aria-describedby="some-id"><div><button>Close</button></div><div id="some-id">${targetedNotificationMessage}</div></div>`,
