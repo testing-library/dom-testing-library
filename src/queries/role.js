@@ -246,7 +246,6 @@ const getMissingError = (
   Array.from(container.children).forEach(childElement => {
     roles += prettyRoles(childElement, {
       hidden,
-      includeName: name !== undefined,
       includeDescription: description !== undefined,
     })
   })
