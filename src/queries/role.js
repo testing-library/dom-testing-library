@@ -1,4 +1,7 @@
-import {computeAccessibleName} from 'dom-accessibility-api'
+import {
+  computeAccessibleDescription,
+  computeAccessibleName,
+} from 'dom-accessibility-api'
 import {roles as allRoles, roleElements} from 'aria-query'
 import {
   computeAriaSelected,
@@ -30,6 +33,7 @@ function queryAllByRole(
     collapseWhitespace,
     hidden = getConfig().defaultHidden,
     name,
+    description,
     trim,
     normalizer,
     queryFallbacks = false,
@@ -171,6 +175,22 @@ function queryAllByRole(
       )
     })
     .filter(element => {
+      if (description === undefined) {
+        // Don't care
+        return true
+      }
+
+      return matches(
+        computeAccessibleDescription(element, {
+          computedStyleSupportsPseudoElements:
+            getConfig().computedStyleSupportsPseudoElements,
+        }),
+        element,
+        description,
+        text => text,
+      )
+    })
+    .filter(element => {
       return hidden === false
         ? isInaccessible(element, {
             isSubtreeInaccessible: cachedIsSubtreeInaccessible,
@@ -217,7 +237,7 @@ const getMultipleError = (c, role, {name} = {}) => {
 const getMissingError = (
   container,
   role,
-  {hidden = getConfig().defaultHidden, name} = {},
+  {hidden = getConfig().defaultHidden, name, description} = {},
 ) => {
   if (getConfig()._disableExpensiveErrorDiagnostics) {
     return `Unable to find role="${role}"`
@@ -227,7 +247,7 @@ const getMissingError = (
   Array.from(container.children).forEach(childElement => {
     roles += prettyRoles(childElement, {
       hidden,
-      includeName: name !== undefined,
+      includeDescription: description !== undefined,
     })
   })
   let roleMessage
@@ -258,10 +278,19 @@ Here are the ${hidden === false ? 'accessible' : 'available'} roles:
     nameHint = ` and name \`${name}\``
   }
 
+  let descriptionHint = ''
+  if (description === undefined) {
+    descriptionHint = ''
+  } else if (typeof description === 'string') {
+    descriptionHint = ` and description "${description}"`
+  } else {
+    descriptionHint = ` and description \`${description}\``
+  }
+
   return `
 Unable to find an ${
     hidden === false ? 'accessible ' : ''
-  }element with the role "${role}"${nameHint}
+  }element with the role "${role}"${nameHint}${descriptionHint}
 
 ${roleMessage}`.trim()
 }

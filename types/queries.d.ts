@@ -115,6 +115,13 @@ export interface ByRoleOptions extends MatcherOptions {
     | RegExp
     | string
     | ((accessibleName: string, element: Element) => boolean)
+  /**
+   * Only considers elements with the specified accessible description.
+   */
+  description?:
+    | RegExp
+    | string
+    | ((accessibleDescription: string, element: Element) => boolean)
 }
 
 export type AllByRole<T extends HTMLElement = HTMLElement> = (
