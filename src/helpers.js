@@ -9,6 +9,8 @@ function jestFakeTimersAreEnabled() {
       // legacy timers
       setTimeout._isMockFunction === true ||
       // modern timers
+      // Disabling linting rule - hasOwn is not available in Node 12/14
+      // eslint-disable-next-line prefer-object-has-own
       Object.prototype.hasOwnProperty.call(setTimeout, 'clock')
     )
   }

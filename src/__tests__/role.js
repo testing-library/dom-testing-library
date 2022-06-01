@@ -274,6 +274,7 @@ test('accessible name filter implements TextMatch', () => {
   expect(
     getByRole('heading', {
       name: (name, element) => {
+        // eslint-disable-next-line jest/no-conditional-in-test
         return element.nodeName === 'H2' && name === 'Your Signature'
       },
     }),
