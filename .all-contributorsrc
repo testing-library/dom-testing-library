@@ -1526,6 +1526,15 @@
       "contributions": [
         "test"
       ]
+    },
+    {
+      "login": "robin-drexler",
+      "name": "Robin Drexler",
+      "avatar_url": "https://avatars.githubusercontent.com/u/474248?v=4",
+      "profile": "https://www.robin-drexler.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"
