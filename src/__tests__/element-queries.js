@@ -1080,6 +1080,18 @@ test('getByText ignores script tags by default', () => {
   expect(getAllByText(/hello/i, {ignore: false})).toHaveLength(3)
 })
 
+test('the default value for `ignore` can be configured', () => {
+  configure({defaultIgnore: 'style'})
+
+  const {getAllByText} = render(
+    '<script>Hello</script><div>Hello</div><style>.Hello{}</style>',
+  )
+  const noStyle = getAllByText(/hello/i)
+  expect(noStyle).toHaveLength(2)
+  expect(noStyle[0].tagName).toBe('SCRIPT')
+  expect(noStyle[1].tagName).toBe('DIV')
+})
+
 test('get/query input element by current value', () => {
   const {getByDisplayValue, queryByDisplayValue, getByTestId} =
     renderIntoDocument(`

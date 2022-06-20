@@ -1,6 +1,5 @@
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 import {checkContainerType} from '../helpers'
-import {DEFAULT_IGNORE_TAGS} from '../shared'
 import {
   AllByText,
   GetErrorFunction,
@@ -13,6 +12,7 @@ import {
   makeNormalizer,
   getNodeText,
   buildQueries,
+  getConfig,
 } from './all-utils'
 
 const queryAllByText: AllByText = (
@@ -23,7 +23,7 @@ const queryAllByText: AllByText = (
     exact = true,
     collapseWhitespace,
     trim,
-    ignore = DEFAULT_IGNORE_TAGS,
+    ignore = getConfig().defaultIgnore,
     normalizer,
   } = {},
 ) => {
