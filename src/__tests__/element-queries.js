@@ -1,5 +1,15 @@
-import {configure} from '../config'
+import {configure, getConfig} from '../config'
 import {render, renderIntoDocument} from './helpers/test-utils'
+
+// set original config
+let originalConfig
+beforeAll(() => {
+  originalConfig = getConfig()
+})
+
+afterEach(() => {
+  configure(originalConfig)
+})
 
 test('query can return null', () => {
   const {
@@ -35,7 +45,7 @@ test('get throws a useful error message', () => {
     .toThrowErrorMatchingInlineSnapshot(`
     Unable to find a label with the text of: LucyRicardo
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       <div />
     </div>
@@ -44,7 +54,7 @@ test('get throws a useful error message', () => {
     .toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the placeholder text of: LucyRicardo
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       <div />
     </div>
@@ -52,7 +62,7 @@ test('get throws a useful error message', () => {
   expect(() => getByText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the text: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       <div />
     </div>
@@ -61,7 +71,7 @@ test('get throws a useful error message', () => {
     .toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the text: Lucy Ricardo (normalized from 'Lucy      Ricardo'). This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       <div />
     </div>
@@ -69,7 +79,7 @@ test('get throws a useful error message', () => {
   expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element by: [data-testid="LucyRicardo"]
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       <div />
     </div>
@@ -77,7 +87,7 @@ test('get throws a useful error message', () => {
   expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the alt text: LucyRicardo
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       <div />
     </div>
@@ -85,7 +95,7 @@ test('get throws a useful error message', () => {
   expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the title: LucyRicardo.
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       <div />
     </div>
@@ -94,7 +104,7 @@ test('get throws a useful error message', () => {
     .toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the display value: LucyRicardo.
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       <div />
     </div>
@@ -104,7 +114,7 @@ test('get throws a useful error message', () => {
 
     There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       <div />
     </div>
@@ -371,7 +381,7 @@ test('label with no form control', () => {
   expect(() => getByLabelText(/alone/)).toThrowErrorMatchingInlineSnapshot(`
     Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       <label>
         All alone
@@ -389,7 +399,7 @@ test('label with "for" attribute but no form control and fuzzy matcher', () => {
     .toThrowErrorMatchingInlineSnapshot(`
     Found a label with the text of: alone, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       <label
         for="foo"
@@ -412,7 +422,7 @@ test('label with children with no form control', () => {
     .toThrowErrorMatchingInlineSnapshot(`
     Found a label with the text of: /alone/, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       
       
@@ -453,7 +463,7 @@ test('label with non-labellable element', () => {
   expect(() => getByLabelText(/Label/)).toThrowErrorMatchingInlineSnapshot(`
     Found a label with the text of: /Label/, however the element associated with this label (<div />) is non-labellable [https://html.spec.whatwg.org/multipage/forms.html#category-label]. If you really need to label a <div />, you can use aria-label or aria-labelledby instead.
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       
       
@@ -503,7 +513,7 @@ test('multiple labels with non-labellable elements', () => {
 
     Found a label with the text of: /Label/, however the element associated with this label (<p />) is non-labellable [https://html.spec.whatwg.org/multipage/forms.html#category-label]. If you really need to label a <p />, you can use aria-label or aria-labelledby instead.
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       
       
@@ -555,7 +565,7 @@ test('totally empty label', () => {
   expect(() => getByLabelText('')).toThrowErrorMatchingInlineSnapshot(`
     Found a label with the text of: , however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       <label />
     </div>
@@ -1092,6 +1102,19 @@ test('the default value for `ignore` can be configured', () => {
   expect(noStyle[1].tagName).toBe('DIV')
 })
 
+test('the default value for `ignore` is used in errors', () => {
+  configure({defaultIgnore: 'div'})
+
+  const {getByText} = render('<div>Hello</div>')
+
+  expect(() => getByText(/hello/i)).toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element with the text: /hello/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, div
+    <div />
+  `)
+})
+
 test('get/query input element by current value', () => {
   const {getByDisplayValue, queryByDisplayValue, getByTestId} =
     renderIntoDocument(`
@@ -1206,7 +1229,7 @@ test('return a proper error message when no label is found and there is an aria-
     .toThrowErrorMatchingInlineSnapshot(`
     Unable to find a label with the text of: LucyRicardo
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <div>
       <input
         aria-labelledby="not-existing-label"
@@ -1276,7 +1299,7 @@ test('ByText error message ignores not the same elements as configured in `ignor
   ).toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the text: .css-selector. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
-    Ignored nodes: comments, <script />, <style />
+    Ignored nodes: comments, script, style
     <body>
       
         
