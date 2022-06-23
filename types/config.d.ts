@@ -36,6 +36,8 @@ export interface Config {
   asyncUtilTimeout: number
   computedStyleSupportsPseudoElements: boolean
   defaultHidden: boolean
+  /** default value for the `ignore` option in `ByText` queries */
+  defaultIgnore: string
   showOriginalStackTrace: boolean
   throwSuggestions: boolean
   /**
