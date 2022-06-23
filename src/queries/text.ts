@@ -13,7 +13,6 @@ import {
   makeNormalizer,
   getNodeText,
   buildQueries,
-  getConfig,
 } from './all-utils'
 
 const queryAllByText: AllByText = (
