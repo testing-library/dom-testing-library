@@ -363,6 +363,14 @@ test('has no useful error message in findBy', async () => {
   )
 })
 
+test('findBy contains a name hint', async () => {
+  const {findByRole} = render(`<button>Click me</button>`)
+
+  await expect(findByRole('button', {name: 'Submit'})).rejects.toThrow(
+    'Unable to find role="button" and name "Submit"',
+  )
+})
+
 test('explicit role is most specific', () => {
   const {getByRole} = renderIntoDocument(
     `<button role="tab" aria-label="my-tab" />`,
