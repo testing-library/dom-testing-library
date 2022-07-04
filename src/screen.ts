@@ -42,6 +42,7 @@ const logTestingPlaygroundURL = (element = getDocument().body) => {
   console.log(
     `Open this URL in your browser\n\n${getPlaygroundUrl(element.innerHTML)}`,
   )
+  return getPlaygroundUrl(element.innerHTML)
 }
 
 const initialValue = {debug, logTestingPlaygroundURL}
