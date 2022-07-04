@@ -363,7 +363,7 @@ test('has no useful error message in findBy', async () => {
   )
 })
 
-test('findBy contains a name hint', async () => {
+test('findBy error message for missing elements contains a name hint', async () => {
   const {findByRole} = render(`<button>Click me</button>`)
 
   await expect(findByRole('button', {name: 'Submit'})).rejects.toThrow(
