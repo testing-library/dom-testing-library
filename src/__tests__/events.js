@@ -72,6 +72,16 @@ const eventTypes = [
     elementType: 'div',
   },
   {
+    type: '',
+    events: ['load', 'error'],
+    elementType: 'img',
+  },
+  {
+    type: '',
+    events: ['load', 'error'],
+    elementType: 'script',
+  },
+  {
     type: 'Wheel',
     events: ['wheel'],
     elementType: 'div',
@@ -104,11 +114,6 @@ const eventTypes = [
       'waiting',
     ],
     elementType: 'video',
-  },
-  {
-    type: 'Image',
-    events: ['load', 'error'],
-    elementType: 'img',
   },
   {
     type: 'Animation',
