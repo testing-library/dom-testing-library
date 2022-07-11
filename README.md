@@ -334,6 +334,7 @@ Thanks goes to these people ([emoji key][emojis]):
     <td align="center"><a href="https://www.jacksonhardaker.dev"><img src="https://avatars.githubusercontent.com/u/7596320?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jackson Hardaker</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=jacksonhardaker" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://www.robin-drexler.com/"><img src="https://avatars.githubusercontent.com/u/474248?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Robin Drexler</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=robin-drexler" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/dolevoper"><img src="https://avatars.githubusercontent.com/u/53278705?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Omer Dolev</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=dolevoper" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Lirlev48"><img src="https://avatars.githubusercontent.com/u/58209233?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lirlev48</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=Lirlev48" title="Code">💻</a></td>
   </tr>
 </table>
 
