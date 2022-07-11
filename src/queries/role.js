@@ -220,7 +220,7 @@ function makeRoleSelector(role, exact, customNormalizer) {
     .join(',')
 }
 
-const getMultipleError = (c, role, {name} = {}) => {
+const getNameHint = name => {
   let nameHint = ''
   if (name === undefined) {
     nameHint = ''
@@ -230,7 +230,11 @@ const getMultipleError = (c, role, {name} = {}) => {
     nameHint = ` and name \`${name}\``
   }
 
-  return `Found multiple elements with the role "${role}"${nameHint}`
+  return nameHint
+}
+
+const getMultipleError = (c, role, {name} = {}) => {
+  return `Found multiple elements with the role "${role}"${getNameHint(name)}`
 }
 
 const getMissingError = (
@@ -239,7 +243,7 @@ const getMissingError = (
   {hidden = getConfig().defaultHidden, name, description} = {},
 ) => {
   if (getConfig()._disableExpensiveErrorDiagnostics) {
-    return `Unable to find role="${role}"`
+    return `Unable to find role="${role}"${getNameHint(name)}`
   }
 
   let roles = ''
