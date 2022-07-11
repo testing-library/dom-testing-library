@@ -39,9 +39,9 @@ const logTestingPlaygroundURL = (element = getDocument().body) => {
     console.log(`The provided element doesn't have any children.`)
     return
   }
-  console.log(
-    `Open this URL in your browser\n\n${getPlaygroundUrl(element.innerHTML)}`,
-  )
+  const playgroundUrl = getPlaygroundUrl(element.innerHTML)
+  console.log(`Open this URL in your browser\n\n${playgroundUrl}`)
+  return playgroundUrl
 }
 
 const initialValue = {debug, logTestingPlaygroundURL}
