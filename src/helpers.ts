@@ -4,6 +4,7 @@ const TEXT_NODE = 3
 
 function jestFakeTimersAreEnabled() {
   /* istanbul ignore else */
+  // eslint-disable-next-line
   if (typeof jest !== 'undefined' && jest !== null) {
     return (
       // legacy timers
