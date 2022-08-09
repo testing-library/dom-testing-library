@@ -132,20 +132,20 @@ test('timeout logs a pretty DOM', async () => {
     {timeout: 1},
   ).catch(e => e)
   expect(error.message).toMatchInlineSnapshot(`
-always throws
+    always throws
 
-Ignored nodes: comments, <script />, <style />
-<html>
-  <head />
-  <body>
-    <div
-      id="pretty"
-    >
-      how pretty
-    </div>
-  </body>
-</html>
-`)
+    Ignored nodes: comments, script, style
+    <html>
+      <head />
+      <body>
+        <div
+          id="pretty"
+        >
+          how pretty
+        </div>
+      </body>
+    </html>
+  `)
 })
 
 test('should delegate to config.getElementError', async () => {
@@ -194,14 +194,14 @@ test('when a promise is returned, if that is not resolved within the timeout, th
   await sleep(5)
 
   expect((await waitForError).message).toMatchInlineSnapshot(`
-Timed out in waitFor.
+    Timed out in waitFor.
 
-Ignored nodes: comments, <script />, <style />
-<html>
-  <head />
-  <body />
-</html>
-`)
+    Ignored nodes: comments, script, style
+    <html>
+      <head />
+      <body />
+    </html>
+  `)
 })
 
 test('if you switch from fake timers to real timers during the wait period you get an error', async () => {
