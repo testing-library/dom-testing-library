@@ -38,7 +38,7 @@ let config: InternalConfig = {
     const error = new Error(
       [
         message,
-        `Ignored nodes: comments, ${this.defaultIgnore}\n${prettifiedDOM}`,
+        `Ignored nodes: comments, ${config.defaultIgnore}\n${prettifiedDOM}`,
       ]
         .filter(Boolean)
         .join('\n\n'),
