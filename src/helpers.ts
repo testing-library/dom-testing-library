@@ -7,7 +7,7 @@ function jestFakeTimersAreEnabled() {
   if (typeof jest !== 'undefined' && jest !== null) {
     return (
       // legacy timers
-      setTimeout._isMockFunction === true ||
+      (setTimeout as any)._isMockFunction === true ||
       // modern timers
       Object.prototype.hasOwnProperty.call(setTimeout, 'clock')
     )
@@ -23,7 +23,7 @@ function getDocument() {
   }
   return window.document
 }
-function getWindowFromNode(node) {
+function getWindowFromNode(node: any) {
   if (node.defaultView) {
     // node is document
     return node.defaultView
@@ -60,11 +60,11 @@ function getWindowFromNode(node) {
   }
 }
 
-function checkContainerType(container) {
+function checkContainerType(container: unknown) {
   if (
     !container ||
-    !(typeof container.querySelector === 'function') ||
-    !(typeof container.querySelectorAll === 'function')
+    !(typeof (container as any).querySelector === 'function') ||
+    !(typeof (container as any).querySelectorAll === 'function')
   ) {
     throw new TypeError(
       `Expected container to be an Element, a Document or a DocumentFragment but got ${getTypeName(
@@ -73,7 +73,7 @@ function checkContainerType(container) {
     )
   }
 
-  function getTypeName(object) {
+  function getTypeName(object: unknown) {
     if (typeof object === 'object') {
       return object === null ? 'null' : object.constructor.name
     }
