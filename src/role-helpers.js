@@ -106,8 +106,6 @@ function buildElementRoleList(elementRolesMap) {
 
   function match(element) {
     let {attributes = []} = element
-    const {name} = element
-    const upperCasedTagName = name && name.toUpperCase()
 
     // https://github.com/testing-library/dom-testing-library/issues/814
     const typeTextIndex = attributes.findIndex(
@@ -128,12 +126,6 @@ function buildElementRoleList(elementRolesMap) {
     const selector = makeElementSelector({...element, attributes})
 
     return node => {
-      if (upperCasedTagName && node.tagName !== upperCasedTagName) {
-        // Short-circuit if tag name does not match,
-        // because this code runs in a tight loop over many nodes and many roles.
-        return false
-      }
-
       if (typeTextIndex >= 0 && node.type !== 'text') {
         return false
       }
