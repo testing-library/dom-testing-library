@@ -72,6 +72,16 @@ const eventTypes = [
     elementType: 'div',
   },
   {
+    type: '',
+    events: ['load', 'error'],
+    elementType: 'img',
+  },
+  {
+    type: '',
+    events: ['load', 'error'],
+    elementType: 'script',
+  },
+  {
     type: 'Wheel',
     events: ['wheel'],
     elementType: 'div',
@@ -104,11 +114,6 @@ const eventTypes = [
       'waiting',
     ],
     elementType: 'video',
-  },
-  {
-    type: 'Image',
-    events: ['load', 'error'],
-    elementType: 'img',
   },
   {
     type: 'Animation',
@@ -172,15 +177,15 @@ eventTypes.forEach(({type, events, elementType}) => {
         expect(spy).toHaveBeenCalledTimes(1)
       })
     })
-
-    it('fires resize', () => {
-      const node = document.defaultView
-      const spy = jest.fn()
-      node.addEventListener('resize', spy, {once: true})
-      fireEvent.resize(node)
-      expect(spy).toHaveBeenCalledTimes(1)
-    })
   })
+})
+
+it('fires resize', () => {
+  const node = document.defaultView
+  const spy = jest.fn()
+  node.addEventListener('resize', spy, {once: true})
+  fireEvent.resize(node)
+  expect(spy).toHaveBeenCalledTimes(1)
 })
 
 describe(`Bubbling Events`, () => {

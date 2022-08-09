@@ -36,7 +36,7 @@ function fuzzyMatches(
   } else if (typeof matcher === 'function') {
     return matcher(normalizedText, node)
   } else {
-    return matcher.test(normalizedText)
+    return matchRegExp(matcher, normalizedText)
   }
 }
 
@@ -56,7 +56,7 @@ function matches(
   if (matcher instanceof Function) {
     return matcher(normalizedText, node)
   } else if (matcher instanceof RegExp) {
-    return matcher.test(normalizedText)
+    return matchRegExp(matcher, normalizedText)
   } else {
     return normalizedText === String(matcher)
   }
@@ -91,25 +91,35 @@ function makeNormalizer({
   collapseWhitespace,
   normalizer,
 }: NormalizerOptions) {
-  if (normalizer) {
-    // User has specified a custom normalizer
-    if (
-      typeof trim !== 'undefined' ||
-      typeof collapseWhitespace !== 'undefined'
-    ) {
-      // They've also specified a value for trim or collapseWhitespace
-      throw new Error(
-        'trim and collapseWhitespace are not supported with a normalizer. ' +
-          'If you want to use the default trim and collapseWhitespace logic in your normalizer, ' +
-          'use "getDefaultNormalizer({trim, collapseWhitespace})" and compose that into your normalizer',
-      )
-    }
-
-    return normalizer
-  } else {
+  if (!normalizer) {
     // No custom normalizer specified. Just use default.
     return getDefaultNormalizer({trim, collapseWhitespace})
   }
+
+  if (
+    typeof trim !== 'undefined' ||
+    typeof collapseWhitespace !== 'undefined'
+  ) {
+    // They've also specified a value for trim or collapseWhitespace
+    throw new Error(
+      'trim and collapseWhitespace are not supported with a normalizer. ' +
+        'If you want to use the default trim and collapseWhitespace logic in your normalizer, ' +
+        'use "getDefaultNormalizer({trim, collapseWhitespace})" and compose that into your normalizer',
+    )
+  }
+
+  return normalizer
+}
+
+function matchRegExp(matcher: RegExp, text: string) {
+  const match = matcher.test(text)
+  if (matcher.global && matcher.lastIndex !== 0) {
+    console.warn(
+      `To match all elements we had to reset the lastIndex of the RegExp because the global flag is enabled. We encourage to remove the global flag from the RegExp.`,
+    )
+    matcher.lastIndex = 0
+  }
+  return match
 }
 
 export {fuzzyMatches, matches, getDefaultNormalizer, makeNormalizer}

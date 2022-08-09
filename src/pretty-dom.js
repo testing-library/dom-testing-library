@@ -2,7 +2,7 @@ import * as prettyFormat from 'pretty-format'
 import createDOMElementFilter from './DOMElementFilter'
 import {getUserCodeFrame} from './get-user-code-frame'
 import {getDocument} from './helpers'
-import {DEFAULT_IGNORE_TAGS} from './shared'
+import {getConfig} from './config'
 
 const inNode = () =>
   typeof process !== 'undefined' &&
@@ -19,8 +19,8 @@ const COMMENT_NODE = 8
 function filterCommentsAndDefaultIgnoreTagsTags(value) {
   return (
     value.nodeType !== COMMENT_NODE &&
-    // value.nodeType === ELEMENT_NODE => !value.matches(DEFAULT_IGNORE_TAGS)
-    (value.nodeType !== ELEMENT_NODE || !value.matches(DEFAULT_IGNORE_TAGS))
+    (value.nodeType !== ELEMENT_NODE ||
+      !value.matches(getConfig().defaultIgnore))
   )
 }
 

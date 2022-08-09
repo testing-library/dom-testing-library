@@ -195,13 +195,14 @@
       ]
     },
     {
-      "login": "tdeschryver",
+      "login": "timdeschryver",
       "name": "Tim Deschryver",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/28659384?v=4",
-      "profile": "https://github.com/tdeschryver",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28659384?v=4",
+      "profile": "http://timdeschryver.dev",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "review"
       ]
     },
     {
@@ -637,7 +638,8 @@
         "code",
         "test",
         "doc",
-        "infra"
+        "infra",
+        "review"
       ]
     },
     {
@@ -1496,6 +1498,60 @@
       "profile": "https://github.com/jrnail23",
       "contributions": [
         "bug"
+      ]
+    },
+    {
+      "login": "robcaldecott",
+      "name": "Rob Caldecott",
+      "avatar_url": "https://avatars.githubusercontent.com/u/796702?v=4",
+      "profile": "https://github.com/robcaldecott",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "Dennis273",
+      "name": "Dennis273",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19815164?v=4",
+      "profile": "https://github.com/Dennis273",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jacksonhardaker",
+      "name": "Jackson Hardaker",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7596320?v=4",
+      "profile": "https://www.jacksonhardaker.dev",
+      "contributions": [
+        "test"
+      ]
+    },
+    {
+      "login": "robin-drexler",
+      "name": "Robin Drexler",
+      "avatar_url": "https://avatars.githubusercontent.com/u/474248?v=4",
+      "profile": "https://www.robin-drexler.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "dolevoper",
+      "name": "Omer Dolev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/53278705?v=4",
+      "profile": "https://github.com/dolevoper",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Lirlev48",
+      "name": "Lirlev48",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58209233?v=4",
+      "profile": "https://github.com/Lirlev48",
+      "contributions": [
+        "code"
       ]
     }
   ],

@@ -57,6 +57,15 @@ test('get throws a useful error message', () => {
       <div />
     </div>
   `)
+  expect(() => getByText('Lucy      Ricardo'))
+    .toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element with the text: Lucy Ricardo (normalized from 'Lucy      Ricardo'). This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, <script />, <style />
+    <div>
+      <div />
+    </div>
+  `)
   expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element by: [data-testid="LucyRicardo"]
 
@@ -1069,6 +1078,18 @@ test('getByText ignores script tags by default', () => {
   expect(noScript[1].tagName).toBe('STYLE')
   expect(noScript).toHaveLength(2)
   expect(getAllByText(/hello/i, {ignore: false})).toHaveLength(3)
+})
+
+test('the default value for `ignore` can be configured', () => {
+  configure({defaultIgnore: 'style'})
+
+  const {getAllByText} = render(
+    '<script>Hello</script><div>Hello</div><style>.Hello{}</style>',
+  )
+  const noStyle = getAllByText(/hello/i)
+  expect(noStyle).toHaveLength(2)
+  expect(noStyle[0].tagName).toBe('SCRIPT')
+  expect(noStyle[1].tagName).toBe('DIV')
 })
 
 test('get/query input element by current value', () => {

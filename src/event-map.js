@@ -274,9 +274,13 @@ export const eventMap = {
     EventType: 'Event',
     defaultInit: {bubbles: false, cancelable: false},
   },
-  // Image Events
+  // Events
   load: {
-    EventType: 'UIEvent',
+    // TODO: load events can be UIEvent or Event depending on what generated them
+    // This is were this abstraction breaks down.
+    // But the common targets are <img />, <script /> and window.
+    // Neither of these targets receive a UIEvent
+    EventType: 'Event',
     defaultInit: {bubbles: false, cancelable: false},
   },
   error: {

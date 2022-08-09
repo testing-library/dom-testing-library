@@ -4,7 +4,6 @@ import {getNodeText} from './get-node-text'
 import {getConfig} from './config'
 import {getImplicitAriaRoles, isInaccessible} from './role-helpers'
 import {getLabels} from './label-helpers'
-import {DEFAULT_IGNORE_TAGS} from './shared'
 
 const normalize = getDefaultNormalizer()
 
@@ -76,7 +75,7 @@ function canSuggest(currentMethod, requestedMethod, data) {
 
 export function getSuggestedQuery(element, variant = 'get', method) {
   // don't create suggestions for script and style elements
-  if (element.matches(DEFAULT_IGNORE_TAGS)) {
+  if (element.matches(getConfig().defaultIgnore)) {
     return undefined
   }
 
