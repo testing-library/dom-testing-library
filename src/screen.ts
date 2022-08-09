@@ -1,4 +1,6 @@
-import {compressToEncodedURIComponent} from 'lz-string'
+// WARNING: `lz-string` only has a default export but statically we assume named exports are allowd
+// TODO: Statically verify we don't rely on NodeJS implicit named imports.
+import lzString from 'lz-string'
 import type {OptionsReceived} from 'pretty-format'
 import {getQueriesForElement} from './get-queries-for-element'
 import {getDocument} from './helpers'
@@ -12,7 +14,7 @@ function unindent(string: string) {
 }
 
 function encode(value: string) {
-  return compressToEncodedURIComponent(unindent(value))
+  return lzString.compressToEncodedURIComponent(unindent(value))
 }
 
 function getPlaygroundUrl(markup: string) {
@@ -39,9 +41,9 @@ const logTestingPlaygroundURL = (element = getDocument().body) => {
     console.log(`The provided element doesn't have any children.`)
     return
   }
-  console.log(
-    `Open this URL in your browser\n\n${getPlaygroundUrl(element.innerHTML)}`,
-  )
+  const playgroundUrl = getPlaygroundUrl(element.innerHTML)
+  console.log(`Open this URL in your browser\n\n${playgroundUrl}`)
+  return playgroundUrl
 }
 
 const initialValue = {debug, logTestingPlaygroundURL}
