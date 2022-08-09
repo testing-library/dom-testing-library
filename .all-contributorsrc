@@ -1535,6 +1535,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "dolevoper",
+      "name": "Omer Dolev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/53278705?v=4",
+      "profile": "https://github.com/dolevoper",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Lirlev48",
+      "name": "Lirlev48",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58209233?v=4",
+      "profile": "https://github.com/Lirlev48",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kalmi",
+      "name": "Tarnay Kálmán",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54426?v=4",
+      "profile": "https://github.com/kalmi",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com"

@@ -64,6 +64,15 @@ test('logs Playground URL that are passed as element', () => {
   `)
 })
 
+test('returns Playground URL that are passed as element', () => {
+  const playGroundUrl = screen.logTestingPlaygroundURL(
+    render(`<h1>Sign <em>up</em></h1>`).container,
+  )
+  expect(playGroundUrl).toMatchInlineSnapshot(
+    'https://testing-playground.com/#markup=DwCwjAfAyglg5gOwATAKYFsIFcAOwD0GEB4EQA',
+  )
+})
+
 test('exposes debug method', () => {
   renderIntoDocument(
     `<button>test</button><span>multi-test</span><div>multi-test</div>`,
