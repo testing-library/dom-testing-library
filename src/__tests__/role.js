@@ -53,6 +53,55 @@ test('when hidden: true logs available roles when it fails', () => {
   `)
 })
 
+test('when hidden: logs elements with their names when it fails', () => {
+  const {getByRole} = render(
+    `<div><h1 hidden>Hi</h1><div hidden role="alertdialog" aria-label="My Dialog">Hello</div></div>`,
+  )
+  expect(() => getByRole('article', {hidden: true}))
+    .toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element with the role "article"
+
+    Here are the available roles:
+
+      heading:
+
+      Name "Hi":
+      <h1
+        hidden=""
+      />
+
+      --------------------------------------------------
+      alertdialog:
+
+      Name "My Dialog":
+      <div
+        aria-label="My Dialog"
+        hidden=""
+        role="alertdialog"
+      />
+
+      --------------------------------------------------
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div>
+        <h1
+          hidden=""
+        >
+          Hi
+        </h1>
+        <div
+          aria-label="My Dialog"
+          hidden=""
+          role="alertdialog"
+        >
+          Hello
+        </div>
+      </div>
+    </div>
+  `)
+})
+
 test('logs error when there are no accessible roles', () => {
   const {getByRole} = render('<div />')
   expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
