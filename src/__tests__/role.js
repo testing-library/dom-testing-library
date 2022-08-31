@@ -233,6 +233,44 @@ test('can be filtered by accessible name', () => {
   ).not.toBeNull()
 })
 
+test('when hidden can be filtered by accessible name', () => {
+  const {getByRole} = renderIntoDocument(
+    `
+<div>
+  <h1>Order</h1>
+  <h2>Delivery Adress</h2>
+  <form aria-label="Delivery Adress" aria-hidden="true">
+    <label>
+      <div>Street</div>
+      <input type="text" />
+    </label>
+    <input type="submit" />
+  </form>
+  <h2>Invoice Adress</h2>
+  <form aria-label="Invoice Adress">
+    <label>
+      <div>Street</div>
+      <input type="text" />
+    </label>
+    <input type="submit" />
+  </form>
+</div>`,
+  )
+
+  const deliveryForm = getByRole('form', {
+    name: 'Delivery Adress',
+    hidden: true,
+  })
+  expect(deliveryForm).not.toBeNull()
+
+  expect(
+    getQueriesForElement(deliveryForm).getByRole('button', {
+      name: 'Submit',
+      hidden: true,
+    }),
+  ).not.toBeNull()
+})
+
 test('accessible name comparison is case sensitive', () => {
   const {getByRole} = render(`<h1>Sign <em>up</em></h1>`)
 
@@ -606,6 +644,34 @@ test('can be filtered by accessible description', () => {
 
   expect(
     getQueriesForElement(notification).getByRole('button', {name: 'Close'}),
+  ).not.toBeNull()
+})
+
+test('when hidden can be filtered by accessible description', () => {
+  const targetedNotificationMessage = 'Your session is about to expire!'
+  const {getByRole} = renderIntoDocument(
+    `
+<ul>
+  <li role="alertdialog" aria-hidden="true" aria-describedby="notification-id-2">
+    <div><button>Close</button></div>
+    <div id="notification-id-2">${targetedNotificationMessage}</div>
+  </li>
+</ul>`,
+  )
+
+  const notification = getByRole('alertdialog', {
+    description: targetedNotificationMessage,
+    hidden: true,
+  })
+
+  expect(notification).not.toBeNull()
+  expect(notification).toHaveTextContent(targetedNotificationMessage)
+
+  expect(
+    getQueriesForElement(notification).getByRole('button', {
+      name: 'Close',
+      hidden: true,
+    }),
   ).not.toBeNull()
 })
 
