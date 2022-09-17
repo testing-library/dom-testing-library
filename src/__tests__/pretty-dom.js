@@ -152,3 +152,17 @@ test('prettyDOM can include all elements with a custom filter', () => {
     </body>
   `)
 })
+
+test('prettyDOM supports a COLORS environment variable', () => {
+  const {container} = render('<div>Hello World!</div>')
+
+  const noColors = prettyDOM(container, undefined, {highlight: false})
+  const withColors = prettyDOM(container, undefined, {highlight: true})
+
+  // process.env.COLORS is a string, so make sure we test it as such
+  process.env.COLORS = 'false'
+  expect(prettyDOM(container)).toEqual(noColors)
+
+  process.env.COLORS = 'true'
+  expect(prettyDOM(container)).toEqual(withColors)
+})
