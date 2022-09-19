@@ -23,6 +23,25 @@
   "engines": {
     "node": ">=12"
   },
+  "browserslist": [
+    "and_chr 103",
+    "and_ff 101",
+    "and_qq 10.4",
+    "and_uc 12.12",
+    "android 103",
+    "chrome 102",
+    "edge 102",
+    "firefox 91",
+    "ios_saf 12.2-12.5",
+    "kaios 2.5",
+    "op_mini all",
+    "op_mob 64",
+    "opera 88",
+    "safari 15.5",
+    "samsung 17.0",
+    "samsung 16.0",
+    "node 12.0"
+  ],
   "scripts": {
     "build": "kcd-scripts build  --no-ts-defs --ignore \"**/__tests__/**,**/__node_tests__/**,**/__mocks__/**\" && kcd-scripts build --no-ts-defs --bundle --no-clean",
     "format": "kcd-scripts format",
