@@ -5,6 +5,8 @@ const {
   watchPlugins,
 } = require('kcd-scripts/jest')
 
+console.log('empty')
+
 module.exports = {
   collectCoverageFrom,
   coveragePathIgnorePatterns: [
