@@ -383,6 +383,8 @@ test('assigns read-only target properties', () => {
 
   expect(node.scrollWidth).toBe(0)
   fireEvent.scroll(node, {target: {scrollWidth: 10}})
+
+  expect(spy).toHaveBeenCalledTimes(1)
   expect(node.scrollWidth).toBe(10)
 })
 

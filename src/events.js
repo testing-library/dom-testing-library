@@ -46,14 +46,13 @@ function createEvent(
     })
   }
 
-  const modifiableProperties = {}
+  // Make read-only properties of events specifiable for tests.
   Object.keys(targetProperties).forEach(key => {
-    modifiableProperties[key] = {
+    Object.defineProperty(node, key, {
       value: targetProperties[key],
       writable: true,
-    }
+    })
   })
-  Object.defineProperties(node, modifiableProperties)
 
   const window = getWindowFromNode(node)
   const EventConstructor = window[EventType] || window.Event
