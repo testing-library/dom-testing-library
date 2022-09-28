@@ -4,10 +4,27 @@ import {getUserCodeFrame} from './get-user-code-frame'
 import {getDocument} from './helpers'
 import {getConfig} from './config'
 
-const inNode = () =>
-  typeof process !== 'undefined' &&
-  process.versions !== undefined &&
-  process.versions.node !== undefined
+const shouldHighlight = () => {
+  let colors
+  try {
+    colors = JSON.parse(process?.env?.COLORS)
+  } catch (e) {
+    // If this throws, process?.env?.COLORS wasn't parsable. Since we only
+    // care about `true` or `false`, we can safely ignore the error.
+  }
+
+  if (typeof colors === 'boolean') {
+    // If `colors` is set explicitly (both `true` and `false`), use that value.
+    return colors
+  } else {
+    // If `colors` is not set, colorize if we're in node.
+    return (
+      typeof process !== 'undefined' &&
+      process.versions !== undefined &&
+      process.versions.node !== undefined
+    )
+  }
+}
 
 const {DOMCollection} = prettyFormat.plugins
 
@@ -61,7 +78,7 @@ function prettyDOM(dom, maxLength, options = {}) {
   const debugContent = prettyFormat.format(dom, {
     plugins: [createDOMElementFilter(filterNode), DOMCollection],
     printFunctionName: false,
-    highlight: inNode(),
+    highlight: shouldHighlight(),
     ...prettyFormatOptions,
   })
   return maxLength !== undefined && dom.outerHTML.length > maxLength
