@@ -76,6 +76,15 @@ test('get throws a useful error message', () => {
       <div />
     </div>
   `)
+  expect(() => getByText('LucyRicardo', {selector: 'span'}))
+    .toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element with the text: LucyRicardo, which matches selector 'span'. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
   expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element by: [data-testid="LucyRicardo"]
 
@@ -1297,7 +1306,7 @@ test('ByText error message ignores not the same elements as configured in `ignor
   expect(() =>
     getByText('.css-selector', {selector: 'style', ignore: 'script'}),
   ).toThrowErrorMatchingInlineSnapshot(`
-    Unable to find an element with the text: .css-selector. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+    Unable to find an element with the text: .css-selector, which matches selector 'style'. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
     Ignored nodes: comments, script, style
     <body>

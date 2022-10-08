@@ -52,14 +52,17 @@ const getMissingError: GetErrorFunction<[Matcher, SelectorMatcherOptions]> = (
   text,
   options = {},
 ) => {
-  const {collapseWhitespace, trim, normalizer} = options
+  const {collapseWhitespace, trim, normalizer, selector} = options
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   const normalizedText = matchNormalizer(text.toString())
   const isNormalizedDifferent = normalizedText !== text.toString()
+  const isCustomSelector = (selector ?? '*') !== '*'
   return `Unable to find an element with the text: ${
     isNormalizedDifferent
       ? `${normalizedText} (normalized from '${text}')`
       : text
+  }${
+    isCustomSelector ? `, which matches selector '${selector}'` : ''
   }. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`
 }
 
