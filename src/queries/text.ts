@@ -30,18 +30,29 @@ const queryAllByText: AllByText = (
   checkContainerType(container)
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-  let baseArray: HTMLElement[] = []
-  if (typeof container.matches === 'function' && container.matches(selector)) {
-    baseArray = [container]
+
+  function isMatch(node: HTMLElement) {
+    // TODO: `matches` according lib.dom.d.ts can get only `string` but according our code it can handle also boolean :)
+    return (
+      (!ignore || !node.matches(ignore as string)) &&
+      matcher(getNodeText(node), node, text, matchNormalizer)
+    )
   }
-  return (
-    [
-      ...baseArray,
-      ...Array.from(container.querySelectorAll<HTMLElement>(selector)),
-    ]
-      // TODO: `matches` according lib.dom.d.ts can get only `string` but according our code it can handle also boolean :)
-      .filter(node => !ignore || !node.matches(ignore as string))
-      .filter(node => matcher(getNodeText(node), node, text, matchNormalizer))
+
+  const nodeMatches: HTMLElement[] = []
+
+  if (
+    typeof container.matches === 'function' &&
+    container.matches(selector) &&
+    isMatch(container)
+  ) {
+    nodeMatches.push(container)
+  }
+
+  return nodeMatches.concat(
+    Array.from(container.querySelectorAll<HTMLElement>(selector)).filter(
+      isMatch,
+    ),
   )
 }
 
