@@ -28,7 +28,7 @@ test('query can return null', () => {
   expect(queryByAltText('LucyRicardo')).toBeNull()
 })
 
-test('get throws a useful error message - not found', () => {
+test('get throws a useful error message', () => {
   const {
     getByLabelText,
     getByDisplayValue,

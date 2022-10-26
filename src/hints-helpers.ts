@@ -2,9 +2,7 @@ import {Matcher} from '../types'
 
 function getMatcherHint(matcher: Matcher, prefixForRegex: string) {
   if (matcher instanceof RegExp) {
-    return `${
-      prefixForRegex ? `${prefixForRegex}` : 'that'
-    } match the regex: ${matcher}`
+    return `${prefixForRegex} match the regex: ${matcher}`
   }
 
   if (typeof matcher === 'function') {
@@ -19,9 +17,7 @@ function getMatcherHint(matcher: Matcher, prefixForRegex: string) {
       customMatcherText = matcher.name || '[anonymous function]'
     }
 
-    return `that match the custom matcher${
-      customMatcherText ? `: ${customMatcherText}` : ''
-    }`
+    return `that match the custom matcher: ${customMatcherText}`
   }
 }
 
