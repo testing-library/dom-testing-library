@@ -40,29 +40,37 @@ export type QueryByText<T extends HTMLElement = HTMLElement> = (
   options?: SelectorMatcherOptions,
 ) => T | null
 
+export interface ByTextOptions extends SelectorMatcherOptions {
+  /**
+   * If true exclude elements in the query set that are usually excluded from
+   * the accessibility tree.
+   */
+  excludeHidden?: boolean
+}
+
 export type AllByText<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
-  options?: SelectorMatcherOptions,
+  options?: ByTextOptions,
 ) => T[]
 
 export type FindAllByText<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
-  options?: SelectorMatcherOptions,
+  options?: ByTextOptions,
   waitForElementOptions?: waitForOptions,
 ) => Promise<T[]>
 
 export type GetByText<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
-  options?: SelectorMatcherOptions,
+  options?: ByTextOptions,
 ) => T
 
 export type FindByText<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
   id: Matcher,
-  options?: SelectorMatcherOptions,
+  options?: ByTextOptions,
   waitForElementOptions?: waitForOptions,
 ) => Promise<T>
 
