@@ -38,7 +38,7 @@ function getWindowFromNode(node: any) {
     throw new Error(
       `It looks like the window object is not available for the provided node.`,
     )
-  } else if (node.then instanceof Function) {
+  } else if (typeof node.then === 'function') {
     throw new Error(
       `It looks like you passed a Promise object instead of a DOM node. Did you do something like \`fireEvent.click(screen.findBy...\` when you meant to use a \`getBy\` query \`fireEvent.click(screen.getBy...\`, or await the findBy query \`fireEvent.click(await screen.findBy...\`?`,
     )

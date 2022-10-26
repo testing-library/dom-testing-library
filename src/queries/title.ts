@@ -6,6 +6,7 @@ import {
   Matcher,
   MatcherOptions,
 } from '../../types'
+import {getMatcherHint} from '../hints-helpers'
 import {
   fuzzyMatches,
   matches,
@@ -36,10 +37,38 @@ const queryAllByTitle: AllByBoundAttribute = (
   )
 }
 
-const getMultipleError: GetErrorFunction<[unknown]> = (c, title) =>
-  `Found multiple elements with the title: ${title}.`
-const getMissingError: GetErrorFunction<[unknown]> = (c, title) =>
-  `Unable to find an element with the title: ${title}.`
+const getMultipleError: GetErrorFunction<[Matcher, MatcherOptions]> = (
+  c,
+  title,
+  options = {},
+) => `Found multiple elements ${getMatcherHintOrDefault(title, options)}.`
+const getMissingError: GetErrorFunction<[Matcher, MatcherOptions]> = (
+  c,
+  title,
+  options = {},
+) => `Unable to find an element ${getMatcherHintOrDefault(title, options)}.`
+
+function getMatcherHintOrDefault(
+  matcher: Matcher,
+  options: MatcherOptions = {},
+) {
+  const matcherHint = getMatcherHint(matcher, 'that its title')
+
+  if (matcherHint) {
+    return matcherHint
+  }
+
+  const {normalizer} = options
+  const matchNormalizer = makeNormalizer({normalizer})
+  const normalizedText = matchNormalizer(matcher.toString())
+  const isNormalizedDifferent = normalizedText !== matcher.toString()
+
+  return `with the title: ${
+    isNormalizedDifferent
+      ? `${normalizedText} (normalized from '${matcher}')`
+      : matcher
+  }`
+}
 
 const queryAllByTitleWithSuggestions = wrapAllByQueryWithSuggestion<
   // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment

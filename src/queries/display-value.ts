@@ -6,6 +6,7 @@ import {
   Matcher,
   MatcherOptions,
 } from '../../types'
+import {getMatcherHint} from '../hints-helpers'
 import {
   getNodeText,
   matches,
@@ -43,10 +44,38 @@ const queryAllByDisplayValue: AllByBoundAttribute = (
   })
 }
 
-const getMultipleError: GetErrorFunction<[unknown]> = (c, value) =>
-  `Found multiple elements with the display value: ${value}.`
-const getMissingError: GetErrorFunction<[unknown]> = (c, value) =>
-  `Unable to find an element with the display value: ${value}.`
+const getMultipleError: GetErrorFunction<[Matcher, MatcherOptions]> = (
+  c,
+  value,
+  options = {},
+) => `Found multiple elements ${getMatcherHintOrDefault(value, options)}.`
+const getMissingError: GetErrorFunction<[Matcher, MatcherOptions]> = (
+  c,
+  value,
+  options = {},
+) => `Unable to find an element ${getMatcherHintOrDefault(value, options)}.`
+
+function getMatcherHintOrDefault(
+  matcher: Matcher,
+  options: MatcherOptions = {},
+) {
+  const matcherHint = getMatcherHint(matcher, 'that its display value')
+
+  if (matcherHint) {
+    return matcherHint
+  }
+
+  const {normalizer} = options
+  const matchNormalizer = makeNormalizer({normalizer})
+  const normalizedText = matchNormalizer(matcher.toString())
+  const isNormalizedDifferent = normalizedText !== matcher.toString()
+
+  return `with the display value: ${
+    isNormalizedDifferent
+      ? `${normalizedText} (normalized from '${matcher}')`
+      : matcher
+  }`
+}
 
 const queryAllByDisplayValueWithSuggestions = wrapAllByQueryWithSuggestion<
   // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment

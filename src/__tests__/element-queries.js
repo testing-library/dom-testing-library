@@ -28,7 +28,7 @@ test('query can return null', () => {
   expect(queryByAltText('LucyRicardo')).toBeNull()
 })
 
-test('get throws a useful error message', () => {
+test('get throws a useful error message - not found', () => {
   const {
     getByLabelText,
     getByDisplayValue,
@@ -70,6 +70,40 @@ test('get throws a useful error message', () => {
   expect(() => getByText('Lucy      Ricardo'))
     .toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the text: Lucy Ricardo (normalized from 'Lucy      Ricardo'). This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+  expect(() =>
+    getByText(function LucyRicardo() {
+      return false
+    }),
+  ).toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that match the custom matcher: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+  expect(() => getByText(() => false)).toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that match the custom matcher: [anonymous function]. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+
+  function something() {
+    return false
+  }
+  something.customMatcherText = 'Lucy and Ricardo'
+
+  expect(() => getByText(something)).toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that match the custom matcher: Lucy and Ricardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
     Ignored nodes: comments, script, style
     <div>
@@ -1117,7 +1151,7 @@ test('the default value for `ignore` is used in errors', () => {
   const {getByText} = render('<div>Hello</div>')
 
   expect(() => getByText(/hello/i)).toThrowErrorMatchingInlineSnapshot(`
-    Unable to find an element with the text: /hello/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+    Unable to find an element that its text match the regex: /hello/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
     Ignored nodes: comments, div
     <div />
