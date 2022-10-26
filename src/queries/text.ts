@@ -53,7 +53,7 @@ const queryAllByText: AllByText = (
           return true
         }
 
-        return isInaccessible(node, {
+        return !isInaccessible(node, {
           isSubtreeInaccessible: cachedIsSubtreeInaccessible,
         })
       })
