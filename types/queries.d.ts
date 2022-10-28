@@ -1,5 +1,5 @@
-import {ByRoleMatcher, Matcher, MatcherOptions} from './matches'
-import {SelectorMatcherOptions} from './query-helpers'
+import {ByRoleMatcher, Matcher, MatcherFunction, MatcherOptions} from './matches'
+import {QueryMethod, SelectorMatcherOptions} from './query-helpers'
 import {waitForOptions} from './wait-for'
 
 export type QueryByBoundAttribute<T extends HTMLElement = HTMLElement> = (
@@ -114,21 +114,20 @@ export interface ByRoleOptions extends MatcherOptions {
   name?:
     | RegExp
     | string
-    | ((accessibleName: string, element: Element) => boolean)
+    | MatcherFunction
   /**
    * Only considers elements with the specified accessible description.
    */
   description?:
     | RegExp
     | string
-    | ((accessibleDescription: string, element: Element) => boolean)
+    | MatcherFunction
 }
 
-export type AllByRole<T extends HTMLElement = HTMLElement> = (
-  container: HTMLElement,
-  role: ByRoleMatcher,
-  options?: ByRoleOptions,
-) => T[]
+export type AllByRole = QueryMethod<[
+  ByRoleMatcher,
+  ByRoleOptions | undeined
+], T[]>;
 
 export type GetByRole<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,

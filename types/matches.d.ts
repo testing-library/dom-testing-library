@@ -4,11 +4,13 @@ export type MatcherFunction = (
   content: string,
   element: Element | null,
 ) => boolean
-export type Matcher = MatcherFunction | RegExp | number | string
 
 // Get autocomplete for ARIARole union types, while still supporting another string
 // Ref: https://github.com/microsoft/TypeScript/issues/29729#issuecomment-505826972
-export type ByRoleMatcher = ARIARole | MatcherFunction | {}
+export type ByRoleMatcher = MatcherFunction | ARIARole
+
+export type Matcher = ByRoleMatcher | MatcherFunction | RegExp | number | string
+
 
 export type NormalizerFn = (text: string) => string
 

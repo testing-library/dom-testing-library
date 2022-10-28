@@ -1,4 +1,7 @@
 import {
+  type AllByRole,
+  type ByRoleMatcher,
+  type ByRoleOptions,
   type GetErrorFunction,
   type Matcher,
   type MatcherOptions,
@@ -210,16 +213,15 @@ const wrapAllByQueryWithSuggestion =
 // However, the implementation always required a dyadic (after `container`) not variadic `queryAllBy` considering the implementation of `makeFindQuery`
 // This is at least statically true and can be verified by accepting `QueryMethod<Arguments, HTMLElement[]>`
 function buildQueries(
-  queryAllBy: QueryMethod<
-    [matcher: Matcher, options: MatcherOptions],
-    HTMLElement[]
-  >,
-  getMultipleError: GetErrorFunction<
-    [matcher: Matcher, options: MatcherOptions]
-  >,
-  getMissingError: GetErrorFunction<
-    [matcher: Matcher, options: MatcherOptions]
-  >,
+  queryAllBy:
+    | AllByRole
+    | QueryMethod<[matcher: Matcher, options: MatcherOptions], HTMLElement[]>,
+  getMultipleError:
+    | GetErrorFunction<[matcher: ByRoleMatcher, options: ByRoleOptions]>
+    | GetErrorFunction<[matcher: Matcher, options: MatcherOptions]>,
+  getMissingError:
+    | GetErrorFunction<[matcher: ByRoleMatcher, options: ByRoleOptions]>
+    | GetErrorFunction<[matcher: Matcher, options: MatcherOptions]>,
 ) {
   const queryBy = wrapSingleQueryWithSuggestion(
     makeSingleQuery(queryAllBy, getMultipleError),
