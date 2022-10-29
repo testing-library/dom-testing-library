@@ -28,21 +28,20 @@ test('query can return null', () => {
   expect(queryByAltText('LucyRicardo')).toBeNull()
 })
 
-test('get throws a useful error message', () => {
-  const {
-    getByLabelText,
-    getByDisplayValue,
-    getByPlaceholderText,
-    getByText,
-    getByTestId,
-    getByAltText,
-    getByTitle,
-    getByRole,
-  } = render(
-    `<div></div><!-- Ignored comment --><style type="text/css">body {} </style><script type="text/javascript></script>`,
-  )
-  expect(() => getByLabelText('LucyRicardo'))
-    .toThrowErrorMatchingInlineSnapshot(`
+describe('get throws a useful error message', () => {
+  let renderResult
+
+  beforeEach(() => {
+    renderResult = render(
+      `<div></div><!-- Ignored comment --><style type="text/css">body {} </style><script type="text/javascript></script>`,
+    )
+  })
+
+  test('ByLabelText', () => {
+    const {getByLabelText} = renderResult
+
+    expect(() => getByLabelText('LucyRicardo'))
+      .toThrowErrorMatchingInlineSnapshot(`
     Unable to find a label with the text of: LucyRicardo
 
     Ignored nodes: comments, script, style
@@ -50,8 +49,13 @@ test('get throws a useful error message', () => {
       <div />
     </div>
   `)
-  expect(() => getByPlaceholderText('LucyRicardo'))
-    .toThrowErrorMatchingInlineSnapshot(`
+  })
+
+  test('ByPlaceholderText', () => {
+    const {getByPlaceholderText} = renderResult
+
+    expect(() => getByPlaceholderText('LucyRicardo'))
+      .toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the placeholder text of: LucyRicardo
 
     Ignored nodes: comments, script, style
@@ -59,7 +63,47 @@ test('get throws a useful error message', () => {
       <div />
     </div>
   `)
-  expect(() => getByText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
+
+    expect(() => getByPlaceholderText(/LucyRicardo/))
+      .toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that its placeholder text match the regex: /LucyRicardo/
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+
+    expect(() => getByPlaceholderText(() => false))
+      .toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that match the custom matcher: [anonymous function]
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+
+    function something() {
+      return false
+    }
+    something.customMatcherText = 'Lucy and Ricardo'
+
+    expect(() => getByPlaceholderText(something))
+      .toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that match the custom matcher: Lucy and Ricardo
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+  })
+
+  test('ByText', () => {
+    const {getByText} = renderResult
+
+    expect(() => getByText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the text: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
     Ignored nodes: comments, script, style
@@ -67,28 +111,27 @@ test('get throws a useful error message', () => {
       <div />
     </div>
   `)
-  expect(() => getByText('Lucy      Ricardo'))
-    .toThrowErrorMatchingInlineSnapshot(`
-    Unable to find an element with the text: Lucy Ricardo (normalized from 'Lucy      Ricardo'). This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    expect(() => getByText('LucyRicardo', {selector: 'span'}))
+      .toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element with the text: LucyRicardo, which matches selector 'span'. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
     Ignored nodes: comments, script, style
     <div>
       <div />
     </div>
   `)
-  expect(() =>
-    getByText(function LucyRicardo() {
-      return false
-    }),
-  ).toThrowErrorMatchingInlineSnapshot(`
-    Unable to find an element that match the custom matcher: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    expect(() => getByText(/LucyRicardo/)).toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that its text match the regex: /LucyRicardo/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
     Ignored nodes: comments, script, style
     <div>
       <div />
     </div>
   `)
-  expect(() => getByText(() => false)).toThrowErrorMatchingInlineSnapshot(`
+
+    expect(() => getByText(() => false)).toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element that match the custom matcher: [anonymous function]. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
     Ignored nodes: comments, script, style
@@ -97,12 +140,12 @@ test('get throws a useful error message', () => {
     </div>
   `)
 
-  function something() {
-    return false
-  }
-  something.customMatcherText = 'Lucy and Ricardo'
+    function something() {
+      return false
+    }
+    something.customMatcherText = 'Lucy and Ricardo'
 
-  expect(() => getByText(something)).toThrowErrorMatchingInlineSnapshot(`
+    expect(() => getByText(something)).toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element that match the custom matcher: Lucy and Ricardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
     Ignored nodes: comments, script, style
@@ -110,16 +153,13 @@ test('get throws a useful error message', () => {
       <div />
     </div>
   `)
-  expect(() => getByText('LucyRicardo', {selector: 'span'}))
-    .toThrowErrorMatchingInlineSnapshot(`
-    Unable to find an element with the text: LucyRicardo, which matches selector 'span'. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+  })
 
-    Ignored nodes: comments, script, style
-    <div>
-      <div />
-    </div>
-  `)
-  expect(() => getByTestId('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
+  test('ByTestId', () => {
+    const {getByTestId} = renderResult
+
+    expect(() => getByTestId('LucyRicardo'))
+      .toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element by: [data-testid="LucyRicardo"]
 
     Ignored nodes: comments, script, style
@@ -127,7 +167,13 @@ test('get throws a useful error message', () => {
       <div />
     </div>
   `)
-  expect(() => getByAltText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
+  })
+
+  test('ByAltText', () => {
+    const {getByAltText} = renderResult
+
+    expect(() => getByAltText('LucyRicardo'))
+      .toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the alt text: LucyRicardo
 
     Ignored nodes: comments, script, style
@@ -135,7 +181,45 @@ test('get throws a useful error message', () => {
       <div />
     </div>
   `)
-  expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
+
+    expect(() => getByAltText(/LucyRicardo/))
+      .toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that its alt text match the regex: /LucyRicardo/
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+
+    expect(() => getByAltText(() => false)).toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that match the custom matcher: [anonymous function]
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+
+    function something() {
+      return false
+    }
+    something.customMatcherText = 'Lucy and Ricardo'
+
+    expect(() => getByAltText(something)).toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that match the custom matcher: Lucy and Ricardo
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+  })
+
+  test('ByTitle', () => {
+    const {getByTitle} = renderResult
+
+    expect(() => getByTitle('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the title: LucyRicardo.
 
     Ignored nodes: comments, script, style
@@ -143,8 +227,45 @@ test('get throws a useful error message', () => {
       <div />
     </div>
   `)
-  expect(() => getByDisplayValue('LucyRicardo'))
-    .toThrowErrorMatchingInlineSnapshot(`
+
+    expect(() => getByTitle(/LucyRicardo/)).toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that its title match the regex: /LucyRicardo/.
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+
+    expect(() => getByTitle(() => false)).toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that match the custom matcher: [anonymous function].
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+
+    function something() {
+      return false
+    }
+    something.customMatcherText = 'Lucy and Ricardo'
+
+    expect(() => getByTitle(something)).toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that match the custom matcher: Lucy and Ricardo.
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+  })
+
+  test('ByDisplayValue', () => {
+    const {getByDisplayValue} = renderResult
+
+    expect(() => getByDisplayValue('LucyRicardo'))
+      .toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the display value: LucyRicardo.
 
     Ignored nodes: comments, script, style
@@ -152,7 +273,47 @@ test('get throws a useful error message', () => {
       <div />
     </div>
   `)
-  expect(() => getByRole('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
+
+    expect(() => getByDisplayValue(/LucyRicardo/))
+      .toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that its display value match the regex: /LucyRicardo/.
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+
+    expect(() => getByDisplayValue(() => false))
+      .toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that match the custom matcher: [anonymous function].
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+
+    function something() {
+      return false
+    }
+    something.customMatcherText = 'Lucy and Ricardo'
+
+    expect(() => getByDisplayValue(something))
+      .toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element that match the custom matcher: Lucy and Ricardo.
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div />
+    </div>
+  `)
+  })
+
+  test('ByRole', () => {
+    const {getByRole} = renderResult
+
+    expect(() => getByRole('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
     Unable to find an accessible element with the role "LucyRicardo"
 
     There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
@@ -162,6 +323,7 @@ test('get throws a useful error message', () => {
       <div />
     </div>
   `)
+  })
 })
 
 test('can get elements by matching their text content', () => {
