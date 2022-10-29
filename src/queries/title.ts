@@ -48,10 +48,7 @@ const getMissingError: GetErrorFunction<[Matcher, MatcherOptions]> = (
   options = {},
 ) => `Unable to find an element ${getMatcherHintOrDefault(title, options)}.`
 
-function getMatcherHintOrDefault(
-  matcher: Matcher,
-  options: MatcherOptions,
-) {
+function getMatcherHintOrDefault(matcher: Matcher, options: MatcherOptions) {
   const matcherHint = getMatcherHint(matcher, 'that its title')
 
   if (matcherHint) {

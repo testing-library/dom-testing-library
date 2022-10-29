@@ -29,7 +29,7 @@ test('query can return null', () => {
 })
 
 describe('get throws a useful error message', () => {
-  let missingRenderResult;
+  let missingRenderResult
 
   beforeEach(() => {
     missingRenderResult = render(
@@ -114,7 +114,8 @@ describe('get throws a useful error message', () => {
     test('Missing element', () => {
       const {getByText} = missingRenderResult
 
-      expect(() => getByText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`
+      expect(() => getByText('LucyRicardo'))
+        .toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the text: LucyRicardo. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
     Ignored nodes: comments, script, style
@@ -133,7 +134,8 @@ describe('get throws a useful error message', () => {
     </div>
   `)
 
-      expect(() => getByText('  LucyRicardo  ', {})).toThrowErrorMatchingInlineSnapshot(`
+      expect(() => getByText('  LucyRicardo  ', {}))
+        .toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the text: LucyRicardo (normalized from '  LucyRicardo  '). This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
     Ignored nodes: comments, script, style
@@ -142,7 +144,8 @@ describe('get throws a useful error message', () => {
     </div>
   `)
 
-      expect(() => getByText(/LucyRicardo/)).toThrowErrorMatchingInlineSnapshot(`
+      expect(() => getByText(/LucyRicardo/))
+        .toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element that its text match the regex: /LucyRicardo/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
 
     Ignored nodes: comments, script, style
@@ -173,14 +176,15 @@ describe('get throws a useful error message', () => {
       <div />
     </div>
   `)
-    });
+    })
 
     test('Multiple elements', () => {
       const {getByText} = render(
         `<div><span>LucyRicardo</span><span>LucyRicardo</span></div><!-- Ignored comment --><style type="text/css">body {} </style><script type="text/javascript></script>`,
-      );
+      )
 
-      expect(() => getByText('LucyRicardo')).toThrowErrorMatchingInlineSnapshot(`Found multiple elements with the text: LucyRicardo
+      expect(() => getByText('LucyRicardo'))
+        .toThrowErrorMatchingInlineSnapshot(`Found multiple elements with the text: LucyRicardo
 
 Here are the matching elements:
 
@@ -206,7 +210,7 @@ Ignored nodes: comments, script, style
       LucyRicardo
     </span>
   </div>
-</div>`);
+</div>`)
 
       expect(() => getByText('LucyRicardo', {selector: 'span'}))
         .toThrowErrorMatchingInlineSnapshot(`Found multiple elements with the text: LucyRicardo, which matches selector 'span'
@@ -236,8 +240,8 @@ Ignored nodes: comments, script, style
     </span>
   </div>
 </div>`)
-    });
-  });
+    })
+  })
 
   test('ByTestId', () => {
     const {getByTestId} = missingRenderResult
@@ -322,7 +326,8 @@ Ignored nodes: comments, script, style
     </div>
   `)
 
-    expect(() => getByTitle('  LucyRicardo  ')).toThrowErrorMatchingInlineSnapshot(`
+    expect(() => getByTitle('  LucyRicardo  '))
+      .toThrowErrorMatchingInlineSnapshot(`
     Unable to find an element with the title: LucyRicardo (normalized from '  LucyRicardo  ').
 
     Ignored nodes: comments, script, style
