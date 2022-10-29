@@ -73,7 +73,7 @@ const getMissingError: GetErrorFunction<[Matcher, SelectorMatcherOptions]> = (
 
 function getMatcherHintOrDefault(
   matcher: Matcher,
-  options: SelectorMatcherOptions = {},
+  options: SelectorMatcherOptions,
 ) {
   const matcherHint = getMatcherHint(matcher, 'that its text')
 

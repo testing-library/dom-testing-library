@@ -26,7 +26,7 @@ const getMissingError: GetErrorFunction<[Matcher, MatcherOptions]> = (
 
 function getMatcherHintOrDefault(
   matcher: Matcher,
-  options: MatcherOptions = {},
+  options: MatcherOptions,
 ) {
   const matcherHint = getMatcherHint(matcher, 'that its placeholder text')
 
