@@ -11,7 +11,6 @@ export type ByRoleMatcher = MatcherFunction | ARIARole
 
 export type Matcher = ByRoleMatcher | MatcherFunction | RegExp | number | string
 
-
 export type NormalizerFn = (text: string) => string
 
 export interface NormalizerOptions extends DefaultNormalizerOptions {

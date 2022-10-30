@@ -1,4 +1,9 @@
-import {ByRoleMatcher, Matcher, MatcherFunction, MatcherOptions} from './matches'
+import {
+  ByRoleMatcher,
+  Matcher,
+  MatcherFunction,
+  MatcherOptions,
+} from './matches'
 import {QueryMethod, SelectorMatcherOptions} from './query-helpers'
 import {waitForOptions} from './wait-for'
 
@@ -111,23 +116,17 @@ export interface ByRoleOptions extends MatcherOptions {
   /**
    * Only considers elements with the specified accessible name.
    */
-  name?:
-    | RegExp
-    | string
-    | MatcherFunction
+  name?: RegExp | string | MatcherFunction
   /**
    * Only considers elements with the specified accessible description.
    */
-  description?:
-    | RegExp
-    | string
-    | MatcherFunction
+  description?: RegExp | string | MatcherFunction
 }
 
-export type AllByRole = QueryMethod<[
-  ByRoleMatcher,
-  ByRoleOptions | undeined
-], T[]>;
+export type AllByRole = QueryMethod<
+  [ByRoleMatcher, ByRoleOptions | undeined],
+  T[]
+>
 
 export type GetByRole<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,

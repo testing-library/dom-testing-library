@@ -2,7 +2,12 @@ import {
   computeAccessibleDescription,
   computeAccessibleName,
 } from 'dom-accessibility-api'
-import {roles as allRoles, roleElements, ARIAPropertyMap, ARIARoleDefintionKey} from 'aria-query'
+import {
+  roles as allRoles,
+  roleElements,
+  ARIAPropertyMap,
+  ARIARoleDefintionKey,
+} from 'aria-query'
 import {
   computeAriaSelected,
   computeAriaChecked,
@@ -24,7 +29,14 @@ import {
   makeNormalizer,
   matches,
 } from './all-utils'
-import { AllByRole, ByRoleMatcher, ByRoleOptions, GetErrorFunction, MatcherOptions, NormalizerFn } from '../../types'
+import {
+  AllByRole,
+  ByRoleMatcher,
+  ByRoleOptions,
+  GetErrorFunction,
+  MatcherOptions,
+  NormalizerFn,
+} from '../../types'
 
 const queryAllByRole: AllByRole = (
   container,
@@ -52,21 +64,30 @@ const queryAllByRole: AllByRole = (
 
   if (selected !== undefined) {
     // guard against unknown roles
-    if (allRoles.get(role as ARIARoleDefintionKey)?.props['aria-selected'] === undefined) {
+    if (
+      allRoles.get(role as ARIARoleDefintionKey)?.props['aria-selected'] ===
+      undefined
+    ) {
       throw new Error(`"aria-selected" is not supported on role "${role}".`)
     }
   }
 
   if (checked !== undefined) {
     // guard against unknown roles
-    if (allRoles.get(role as ARIARoleDefintionKey)?.props['aria-checked'] === undefined) {
+    if (
+      allRoles.get(role as ARIARoleDefintionKey)?.props['aria-checked'] ===
+      undefined
+    ) {
       throw new Error(`"aria-checked" is not supported on role "${role}".`)
     }
   }
 
   if (pressed !== undefined) {
     // guard against unknown roles
-    if (allRoles.get(role as ARIARoleDefintionKey)?.props['aria-pressed'] === undefined) {
+    if (
+      allRoles.get(role as ARIARoleDefintionKey)?.props['aria-pressed'] ===
+      undefined
+    ) {
       throw new Error(`"aria-pressed" is not supported on role "${role}".`)
     }
   }
@@ -76,7 +97,10 @@ const queryAllByRole: AllByRole = (
     // guard against unknown roles
     // All currently released ARIA versions support `aria-current` on all roles.
     // Leaving this for symetry and forward compatibility
-    if (allRoles.get(role as ARIARoleDefintionKey)?.props['aria-current'] === undefined) {
+    if (
+      allRoles.get(role as ARIARoleDefintionKey)?.props['aria-current'] ===
+      undefined
+    ) {
       throw new Error(`"aria-current" is not supported on role "${role}".`)
     }
   }
@@ -88,7 +112,10 @@ const queryAllByRole: AllByRole = (
 
   if (expanded !== undefined) {
     // guard against unknown roles
-    if (allRoles.get(role as ARIARoleDefintionKey)?.props['aria-expanded'] === undefined) {
+    if (
+      allRoles.get(role as ARIARoleDefintionKey)?.props['aria-expanded'] ===
+      undefined
+    ) {
       throw new Error(`"aria-expanded" is not supported on role "${role}".`)
     }
   }
@@ -112,7 +139,7 @@ const queryAllByRole: AllByRole = (
       const isRoleSpecifiedExplicitly = node.hasAttribute('role')
 
       if (isRoleSpecifiedExplicitly) {
-        const roleValue = node.getAttribute('role') || ""
+        const roleValue = node.getAttribute('role') || ''
         if (queryFallbacks) {
           return roleValue
             .split(' ')
@@ -197,7 +224,11 @@ const queryAllByRole: AllByRole = (
     })
 }
 
-function makeRoleSelector(role: ByRoleMatcher, exact: boolean, customNormalizer?: NormalizerFn) {
+function makeRoleSelector(
+  role: ByRoleMatcher,
+  exact: boolean,
+  customNormalizer?: NormalizerFn,
+) {
   if (typeof role !== 'string') {
     // For non-string role parameters we can not determine the implicitRoleSelectors.
     return '*'
@@ -219,7 +250,7 @@ function makeRoleSelector(role: ByRoleMatcher, exact: boolean, customNormalizer?
     .join(',')
 }
 
-const getNameHint = (name: ByRoleOptions["name"]): string => {
+const getNameHint = (name: ByRoleOptions['name']): string => {
   let nameHint = ''
   if (name === undefined) {
     nameHint = ''
@@ -233,13 +264,13 @@ const getNameHint = (name: ByRoleOptions["name"]): string => {
 }
 
 const getMultipleError: GetErrorFunction<
-[matcher: ByRoleMatcher, options: ByRoleOptions]
+  [matcher: ByRoleMatcher, options: ByRoleOptions]
 > = (c, role, {name} = {}) => {
   return `Found multiple elements with the role "${role}"${getNameHint(name)}`
 }
 
 const getMissingError: GetErrorFunction<
-[matcher: ByRoleMatcher, options: ByRoleOptions]
+  [matcher: ByRoleMatcher, options: ByRoleOptions]
 > = (
   container,
   role,
@@ -301,13 +332,9 @@ Unable to find an ${
 ${roleMessage}`.trim()
 }
 const queryAllByRoleWithSuggestions = wrapAllByQueryWithSuggestion<
-// @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
-[labelText: Matcher, options?: MatcherOptions]
->(
-  queryAllByRole,
-  queryAllByRole.name,
-  'queryAll',
-)
+  // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
+  [labelText: Matcher, options?: MatcherOptions]
+>(queryAllByRole, queryAllByRole.name, 'queryAll')
 const [queryByRole, getAllByRole, getByRole, findAllByRole, findByRole] =
   buildQueries(queryAllByRole, getMultipleError, getMissingError)
 
