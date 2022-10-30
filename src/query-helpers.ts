@@ -4,6 +4,7 @@ import {
   type ByRoleOptions,
   type GetErrorFunction,
   type Matcher,
+  type MatcherFunction,
   type MatcherOptions,
   type QueryMethod,
   type Variant,
@@ -228,9 +229,9 @@ function buildQueries(
     queryAllBy.name,
     'query',
   )
-  const getAllBy = makeGetAllQuery(queryAllBy, getMissingError)
+  const getAllBy = makeGetAllQuery(queryAllBy, getMissingError) as any
 
-  const getBy = makeSingleQuery(getAllBy, getMultipleError)
+  const getBy = makeSingleQuery(getAllBy, getMultipleError) as any
   const getByWithSuggestions = wrapSingleQueryWithSuggestion(
     getBy,
     queryAllBy.name,
