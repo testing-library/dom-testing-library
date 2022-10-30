@@ -2,7 +2,7 @@ import {
   computeAccessibleDescription,
   computeAccessibleName,
 } from 'dom-accessibility-api'
-import {roles as allRoles, roleElements, ARIAPropertyMap} from 'aria-query'
+import {roles as allRoles, roleElements, ARIAPropertyMap, ARIARoleDefintionKey} from 'aria-query'
 import {
   computeAriaSelected,
   computeAriaChecked,
@@ -52,21 +52,21 @@ const queryAllByRole: AllByRole = (
 
   if (selected !== undefined) {
     // guard against unknown roles
-    if (getRoleModelFor(role).getProp('aria-selected') === undefined) {
+    if (allRoles.get(role as ARIARoleDefintionKey)?.props['aria-selected'] === undefined) {
       throw new Error(`"aria-selected" is not supported on role "${role}".`)
     }
   }
 
   if (checked !== undefined) {
     // guard against unknown roles
-    if (getRoleModelFor(role).getProp('aria-checked') === undefined) {
+    if (allRoles.get(role as ARIARoleDefintionKey)?.props['aria-checked'] === undefined) {
       throw new Error(`"aria-checked" is not supported on role "${role}".`)
     }
   }
 
   if (pressed !== undefined) {
     // guard against unknown roles
-    if (getRoleModelFor(role).getProp('aria-pressed') === undefined) {
+    if (allRoles.get(role as ARIARoleDefintionKey)?.props['aria-pressed'] === undefined) {
       throw new Error(`"aria-pressed" is not supported on role "${role}".`)
     }
   }
@@ -76,7 +76,7 @@ const queryAllByRole: AllByRole = (
     // guard against unknown roles
     // All currently released ARIA versions support `aria-current` on all roles.
     // Leaving this for symetry and forward compatibility
-    if (getRoleModelFor(role).getProp('aria-current') === undefined) {
+    if (allRoles.get(role as ARIARoleDefintionKey)?.props['aria-current'] === undefined) {
       throw new Error(`"aria-current" is not supported on role "${role}".`)
     }
   }
@@ -88,7 +88,7 @@ const queryAllByRole: AllByRole = (
 
   if (expanded !== undefined) {
     // guard against unknown roles
-    if (getRoleModelFor(role).getProp('aria-expanded') === undefined) {
+    if (allRoles.get(role as ARIARoleDefintionKey)?.props['aria-expanded'] === undefined) {
       throw new Error(`"aria-expanded" is not supported on role "${role}".`)
     }
   }
@@ -218,16 +218,6 @@ function makeRoleSelector(role: ByRoleMatcher, exact: boolean, customNormalizer?
     .concat(Array.from(implicitRoleSelectors))
     .join(',')
 }
-
-function getRoleModelFor (role: ByRoleMatcher) {
-  return {
-    getProp<N extends keyof ARIAPropertyMap>(propName: N) {
-      if(typeof role !== "string") return;
-      return allRoles.get(role)?.props?.[propName] as ARIAPropertyMap[N];
-    }
-  }
-}
-
 
 const getNameHint = (name: ByRoleOptions["name"]): string => {
   let nameHint = ''
