@@ -135,6 +135,7 @@ const queryAllByRole: AllByRole = (
       const isRoleSpecifiedExplicitly = node.hasAttribute('role')
 
       if (isRoleSpecifiedExplicitly) {
+        /* istanbul ignore next */
         const roleValue = node.getAttribute('role') ?? ''
         if (queryFallbacks) {
           return roleValue
@@ -277,7 +278,10 @@ const getMissingError: GetErrorFunction<
   }
 
   let roles = ''
-  Array.from(container?.children ?? []).forEach(childElement => {
+  Array.from(
+    /* istanbul ignore next */
+    container?.children ?? [],
+  ).forEach(childElement => {
     roles += prettyRoles(childElement, {
       hidden,
       includeDescription: description !== undefined,
