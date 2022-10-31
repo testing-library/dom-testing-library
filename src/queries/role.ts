@@ -2,12 +2,7 @@ import {
   computeAccessibleDescription,
   computeAccessibleName,
 } from 'dom-accessibility-api'
-import {
-  roles as allRoles,
-  roleElements,
-  ARIAPropertyMap,
-  ARIARoleDefintionKey,
-} from 'aria-query'
+import {roles as allRoles, roleElements, ARIARoleDefintionKey} from 'aria-query'
 import {
   computeAriaSelected,
   computeAriaChecked,
@@ -23,13 +18,6 @@ import {
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 import {checkContainerType} from '../helpers'
 import {
-  buildQueries,
-  fuzzyMatches,
-  getConfig,
-  makeNormalizer,
-  matches,
-} from './all-utils'
-import {
   AllByRole,
   ByRoleMatcher,
   ByRoleOptions,
@@ -37,6 +25,14 @@ import {
   MatcherOptions,
   NormalizerFn,
 } from '../../types'
+
+import {
+  buildQueries,
+  fuzzyMatches,
+  getConfig,
+  makeNormalizer,
+  matches,
+} from './all-utils'
 
 const queryAllByRole: AllByRole = (
   container,
@@ -139,7 +135,7 @@ const queryAllByRole: AllByRole = (
       const isRoleSpecifiedExplicitly = node.hasAttribute('role')
 
       if (isRoleSpecifiedExplicitly) {
-        const roleValue = node.getAttribute('role') || ''
+        const roleValue = node.getAttribute('role') ?? ''
         if (queryFallbacks) {
           return roleValue
             .split(' ')

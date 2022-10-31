@@ -124,7 +124,7 @@ export interface ByRoleOptions extends MatcherOptions {
 }
 
 export type AllByRole = QueryMethod<
-  [ByRoleMatcher, ByRoleOptions | undeined],
+  [ByRoleMatcher, ByRoleOptions | undefined],
   T[]
 >
 
