@@ -151,7 +151,7 @@ const queryAllByRole: AllByRole = (
         return matcher(firstWord, node, role, matchNormalizer)
       }
 
-      const implicitRoles = getImplicitAriaRoles(node)
+      const implicitRoles = getImplicitAriaRoles(node) as string[]
 
       return implicitRoles.some(implicitRole =>
         matcher(implicitRole, node, role, matchNormalizer),
@@ -277,7 +277,7 @@ const getMissingError: GetErrorFunction<
   }
 
   let roles = ''
-  Array.from(container?.children || []).forEach(childElement => {
+  Array.from(container?.children ?? []).forEach(childElement => {
     roles += prettyRoles(childElement, {
       hidden,
       includeDescription: description !== undefined,

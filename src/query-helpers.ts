@@ -1,10 +1,9 @@
-import {
+import  {
   type AllByRole,
   type ByRoleMatcher,
   type ByRoleOptions,
   type GetErrorFunction,
   type Matcher,
-  type MatcherFunction,
   type MatcherOptions,
   type QueryMethod,
   type Variant,
