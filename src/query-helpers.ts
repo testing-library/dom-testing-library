@@ -229,9 +229,9 @@ function buildQueries(
     queryAllBy.name,
     'query',
   )
-  const getAllBy = makeGetAllQuery(queryAllBy, getMissingError) as any
+  const getAllBy = makeGetAllQuery(queryAllBy, getMissingError)
 
-  const getBy = makeSingleQuery(getAllBy, getMultipleError) as any
+  const getBy = makeSingleQuery(getAllBy, getMultipleError)
   const getByWithSuggestions = wrapSingleQueryWithSuggestion(
     getBy,
     queryAllBy.name,
@@ -244,9 +244,11 @@ function buildQueries(
   )
 
   const findAllBy = makeFindQuery(
+    // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
     wrapAllByQueryWithSuggestion(getAllBy, queryAllBy.name, 'findAll'),
   )
   const findBy = makeFindQuery(
+    // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
     wrapSingleQueryWithSuggestion(getBy, queryAllBy.name, 'find'),
   )
 
