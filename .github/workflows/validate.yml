@@ -12,6 +12,11 @@ on:
       - 'alpha'
       - '!all-contributors/**'
   pull_request: {}
+
+permissions:
+  actions: write #  to cancel/stop running workflows (styfle/cancel-workflow-action)
+  contents: read #  to fetch code (actions/checkout)
+
 jobs:
   main:
     # ignore all-contributors PRs
@@ -56,6 +61,10 @@ jobs:
           flags: node-${{ matrix.node }}
 
   release:
+    permissions:
+      actions: write #  to cancel/stop running workflows (styfle/cancel-workflow-action)
+      contents: write #  to create release tags (cycjimmy/semantic-release-action)
+
     needs: main
     runs-on: ubuntu-latest
     if:
