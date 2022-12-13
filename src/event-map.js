@@ -277,7 +277,7 @@ export const eventMap = {
   // Events
   load: {
     // TODO: load events can be UIEvent or Event depending on what generated them
-    // This is were this abstraction breaks down.
+    // This is where this abstraction breaks down.
     // But the common targets are <img />, <script /> and window.
     // Neither of these targets receive a UIEvent
     EventType: 'Event',
