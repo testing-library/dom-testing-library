@@ -341,6 +341,7 @@ Thanks goes to these people ([emoji key][emojis]):
     </tr>
     <tr>
       <td align="center"><a href="https://github.com/raplemie"><img src="https://avatars.githubusercontent.com/u/1904889?v=4?s=100" width="100px;" alt="Raphaël LEMIEUX"/><br /><sub><b>Raphaël LEMIEUX</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=raplemie" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/arthurlvilasboas"><img src="https://avatars.githubusercontent.com/u/95368212?v=4?s=100" width="100px;" alt="Arthur Lauck Vilas Boas"/><br /><sub><b>Arthur Lauck Vilas Boas</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=arthurlvilasboas" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
