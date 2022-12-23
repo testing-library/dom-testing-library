@@ -61,7 +61,7 @@
   "dependencies": {
     "@babel/code-frame": "^7.10.4",
     "@babel/runtime": "^7.12.5",
-    "@types/aria-query": "^4.2.0",
+    "@types/aria-query": "^5.0.1",
     "aria-query": "^5.0.0",
     "chalk": "^4.1.0",
     "dom-accessibility-api": "^0.5.9",
