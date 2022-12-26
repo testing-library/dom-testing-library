@@ -305,6 +305,50 @@ function checkBooleanAttribute(element, attribute) {
  * @param {Element} element -
  * @returns {number | undefined} - number if implicit heading or aria-level present, otherwise undefined
  */
+function computeTreeItemLevel(element, level) {
+  // https://www.w3.org/TR/wai-aria-1.1/#treeitem
+  // https://www.w3.org/TR/wai-aria-1.1/#aria-level
+  if (element.getAttribute('role') === 'tree') {
+    return level
+  }
+
+  if (element.getAttribute('role') === 'treeitem') {
+    level += 1
+  }
+
+  if (element.parentElement) {
+    return computeTreeItemLevel(element.parentElement, level)
+  }
+
+  return undefined
+}
+
+/**
+ * @param {Element} element -
+ * @returns {number | undefined} - number if implicit aria-level can be inferred or aria-level present, otherwise undefined
+ */
+function computeAriaLevel(element) {
+  // implicit aria-level
+  if (element.getAttribute('role') === 'treeitem') {
+    return computeTreeItemLevel(element, 0)
+  }
+  if (getImplicitAriaRoles(element).includes('heading')) {
+    return computeHeadingLevel(element)
+  }
+
+  // explicit aria-level value
+  // https://www.w3.org/TR/wai-aria-1.2/#aria-level
+  const ariaLevelAttribute =
+    element.getAttribute('aria-level') &&
+    Number(element.getAttribute('aria-level'))
+
+  return ariaLevelAttribute
+}
+
+/**
+ * @param {Element} element -
+ * @returns {number | undefined} - number if implicit heading or aria-level present, otherwise undefined
+ */
 function computeHeadingLevel(element) {
   // https://w3c.github.io/html-aam/#el-h1-h6
   // https://w3c.github.io/html-aam/#el-h1-h6
@@ -316,13 +360,8 @@ function computeHeadingLevel(element) {
     H5: 5,
     H6: 6,
   }
-  // explicit aria-level value
-  // https://www.w3.org/TR/wai-aria-1.2/#aria-level
-  const ariaLevelAttribute =
-    element.getAttribute('aria-level') &&
-    Number(element.getAttribute('aria-level'))
 
-  return ariaLevelAttribute || implicitHeadingLevels[element.tagName]
+  return implicitHeadingLevels[element.tagName]
 }
 
 export {
@@ -337,5 +376,5 @@ export {
   computeAriaPressed,
   computeAriaCurrent,
   computeAriaExpanded,
-  computeHeadingLevel,
+  computeAriaLevel,
 }

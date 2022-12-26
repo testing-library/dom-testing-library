@@ -9,7 +9,7 @@ import {
   computeAriaPressed,
   computeAriaCurrent,
   computeAriaExpanded,
-  computeHeadingLevel,
+  computeAriaLevel,
   getImplicitAriaRoles,
   prettyRoles,
   isInaccessible,
@@ -152,7 +152,7 @@ function queryAllByRole(
         return expanded === computeAriaExpanded(element)
       }
       if (level !== undefined) {
-        return level === computeHeadingLevel(element)
+        return level === computeAriaLevel(element)
       }
       // don't care if aria attributes are unspecified
       return true
