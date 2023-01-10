@@ -2,7 +2,11 @@ import {
   computeAccessibleDescription,
   computeAccessibleName,
 } from 'dom-accessibility-api'
-import {roles as allRoles, roleElements, ARIARoleDefintionKey} from 'aria-query'
+import {
+  roles as allRoles,
+  roleElements,
+  ARIARoleDefinitionKey,
+} from 'aria-query'
 import {
   computeAriaSelected,
   computeAriaChecked,
@@ -61,7 +65,7 @@ const queryAllByRole: AllByRole = (
   if (selected !== undefined) {
     // guard against unknown roles
     if (
-      allRoles.get(role as ARIARoleDefintionKey)?.props['aria-selected'] ===
+      allRoles.get(role as ARIARoleDefinitionKey)?.props['aria-selected'] ===
       undefined
     ) {
       throw new Error(`"aria-selected" is not supported on role "${role}".`)
@@ -71,7 +75,7 @@ const queryAllByRole: AllByRole = (
   if (checked !== undefined) {
     // guard against unknown roles
     if (
-      allRoles.get(role as ARIARoleDefintionKey)?.props['aria-checked'] ===
+      allRoles.get(role as ARIARoleDefinitionKey)?.props['aria-checked'] ===
       undefined
     ) {
       throw new Error(`"aria-checked" is not supported on role "${role}".`)
@@ -81,7 +85,7 @@ const queryAllByRole: AllByRole = (
   if (pressed !== undefined) {
     // guard against unknown roles
     if (
-      allRoles.get(role as ARIARoleDefintionKey)?.props['aria-pressed'] ===
+      allRoles.get(role as ARIARoleDefinitionKey)?.props['aria-pressed'] ===
       undefined
     ) {
       throw new Error(`"aria-pressed" is not supported on role "${role}".`)
@@ -94,7 +98,7 @@ const queryAllByRole: AllByRole = (
     // All currently released ARIA versions support `aria-current` on all roles.
     // Leaving this for symetry and forward compatibility
     if (
-      allRoles.get(role as ARIARoleDefintionKey)?.props['aria-current'] ===
+      allRoles.get(role as ARIARoleDefinitionKey)?.props['aria-current'] ===
       undefined
     ) {
       throw new Error(`"aria-current" is not supported on role "${role}".`)
@@ -109,7 +113,7 @@ const queryAllByRole: AllByRole = (
   if (expanded !== undefined) {
     // guard against unknown roles
     if (
-      allRoles.get(role as ARIARoleDefintionKey)?.props['aria-expanded'] ===
+      allRoles.get(role as ARIARoleDefinitionKey)?.props['aria-expanded'] ===
       undefined
     ) {
       throw new Error(`"aria-expanded" is not supported on role "${role}".`)
