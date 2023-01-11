@@ -4,7 +4,7 @@ import {
   MatcherFunction,
   MatcherOptions,
 } from './matches'
-import {QueryMethod, SelectorMatcherOptions} from './query-helpers'
+import {SelectorMatcherOptions} from './query-helpers'
 import {waitForOptions} from './wait-for'
 
 export type QueryByBoundAttribute<T extends HTMLElement = HTMLElement> = (
@@ -123,10 +123,11 @@ export interface ByRoleOptions extends MatcherOptions {
   description?: RegExp | string | MatcherFunction
 }
 
-export type AllByRole = QueryMethod<
-  [ByRoleMatcher, ByRoleOptions | undefined],
-  T[]
->
+export type AllByRole<T extends HTMLElement = HTMLElement> = (
+  container: HTMLElement,
+  role: ByRoleMatcher,
+  options?: ByRoleOptions,
+) => T[]
 
 export type GetByRole<T extends HTMLElement = HTMLElement> = (
   container: HTMLElement,
