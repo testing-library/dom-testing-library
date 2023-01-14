@@ -26,6 +26,7 @@ import {
   ByRoleMatcher,
   ByRoleOptions,
   GetErrorFunction,
+  MatcherFunction,
   MatcherOptions,
   NormalizerFn,
 } from '../../types'
@@ -105,9 +106,11 @@ const queryAllByRole: AllByRole = (
     }
   }
 
-  // guard against using `level` option with any role other than `heading`
-  if (level !== undefined && role !== 'heading') {
-    throw new Error(`Role "${role}" cannot have "level" property.`)
+  if (level !== undefined) {
+    // guard against using `level` option with any role other than `heading`
+    if (role !== 'heading') {
+      throw new Error(`Role "${role}" cannot have "level" property.`)
+    }
   }
 
   if (expanded !== undefined) {
@@ -139,8 +142,8 @@ const queryAllByRole: AllByRole = (
       const isRoleSpecifiedExplicitly = node.hasAttribute('role')
 
       if (isRoleSpecifiedExplicitly) {
+        const roleValue = node.getAttribute('role')!
         /* istanbul ignore next */
-        const roleValue = node.getAttribute('role') ?? ''
         if (queryFallbacks) {
           return roleValue
             .split(' ')
@@ -156,7 +159,7 @@ const queryAllByRole: AllByRole = (
         return matcher(firstWord, node, role, matchNormalizer)
       }
 
-      const implicitRoles = getImplicitAriaRoles(node) as string[]
+      const implicitRoles = getImplicitAriaRoles(node)
 
       return implicitRoles.some(implicitRole =>
         matcher(implicitRole, node, role, matchNormalizer),
@@ -196,7 +199,7 @@ const queryAllByRole: AllByRole = (
             getConfig().computedStyleSupportsPseudoElements,
         }),
         element,
-        name,
+        name as MatcherFunction,
         text => text,
       )
     })
@@ -282,10 +285,7 @@ const getMissingError: GetErrorFunction<
   }
 
   let roles = ''
-  Array.from(
-    /* istanbul ignore next */
-    container?.children ?? [],
-  ).forEach(childElement => {
+  Array.from(container!.children).forEach(childElement => {
     roles += prettyRoles(childElement, {
       hidden,
       includeDescription: description !== undefined,
