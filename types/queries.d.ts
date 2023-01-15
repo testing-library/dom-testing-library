@@ -1,9 +1,4 @@
-import {
-  ByRoleMatcher,
-  Matcher,
-  MatcherFunction,
-  MatcherOptions,
-} from './matches'
+import {ByRoleMatcher, Matcher, MatcherOptions} from './matches'
 import {SelectorMatcherOptions} from './query-helpers'
 import {waitForOptions} from './wait-for'
 
