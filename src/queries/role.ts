@@ -124,13 +124,13 @@ const queryAllByRole: AllByRole = (
     }
   }
 
-  const subtreeIsInaccessibleCache = new WeakMap()
-  function cachedIsSubtreeInaccessible(element: Element) {
+  const subtreeIsInaccessibleCache = new WeakMap<HTMLElement, Boolean>()
+  function cachedIsSubtreeInaccessible(element: HTMLElement): Boolean {
     if (!subtreeIsInaccessibleCache.has(element)) {
       subtreeIsInaccessibleCache.set(element, isSubtreeInaccessible(element))
     }
 
-    return subtreeIsInaccessibleCache.get(element)
+    return subtreeIsInaccessibleCache.get(element) as Boolean
   }
 
   return Array.from(
@@ -143,7 +143,7 @@ const queryAllByRole: AllByRole = (
       const isRoleSpecifiedExplicitly = node.hasAttribute('role')
 
       if (isRoleSpecifiedExplicitly) {
-        const roleValue = node.getAttribute('role')!
+        const roleValue = node.getAttribute('role') as string
         if (queryFallbacks) {
           return roleValue
             .split(' ')
@@ -222,7 +222,7 @@ const queryAllByRole: AllByRole = (
     .filter(element => {
       return hidden === false
         ? isInaccessible(element, {
-            isSubtreeInaccessible: cachedIsSubtreeInaccessible,
+            isSubtreeInaccessible: cachedIsSubtreeInaccessible as any,
           }) === false
         : true
     })
@@ -241,7 +241,7 @@ function makeRoleSelector(
   const explicitRoleSelector =
     exact && !customNormalizer ? `*[role~="${role}"]` : '*[role]'
 
-  const roleRelations = roleElements.get(role as any) ?? new Set()
+  const roleRelations = roleElements.get(role) ?? new Set()
   const implicitRoleSelectors = new Set(
     Array.from(roleRelations).map(({name}) => name),
   )
@@ -285,7 +285,7 @@ const getMissingError: GetErrorFunction<
   }
 
   let roles = ''
-  Array.from(container!.children).forEach(childElement => {
+  Array.from((container as Element).children).forEach(childElement => {
     roles += prettyRoles(childElement, {
       hidden,
       includeDescription: description !== undefined,
