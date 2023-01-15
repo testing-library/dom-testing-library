@@ -26,6 +26,7 @@ import {
   ByRoleMatcher,
   ByRoleOptions,
   GetErrorFunction,
+  Matcher,
   MatcherFunction,
   MatcherOptions,
   NormalizerFn,
@@ -143,26 +144,25 @@ const queryAllByRole: AllByRole = (
 
       if (isRoleSpecifiedExplicitly) {
         const roleValue = node.getAttribute('role')!
-        /* istanbul ignore next */
         if (queryFallbacks) {
           return roleValue
             .split(' ')
             .filter(Boolean)
-            .some(text => matcher(text, node, role, matchNormalizer))
+            .some(text => matcher(text, node, role as Matcher, matchNormalizer))
         }
         // if a custom normalizer is passed then let normalizer handle the role value
         if (normalizer) {
-          return matcher(roleValue, node, role, matchNormalizer)
+          return matcher(roleValue, node, role as Matcher, matchNormalizer)
         }
         // other wise only send the first word to match
         const [firstWord] = roleValue.split(' ')
-        return matcher(firstWord, node, role, matchNormalizer)
+        return matcher(firstWord, node, role as Matcher, matchNormalizer)
       }
 
       const implicitRoles = getImplicitAriaRoles(node)
 
       return implicitRoles.some(implicitRole =>
-        matcher(implicitRole, node, role, matchNormalizer),
+        matcher(implicitRole, node, role as Matcher, matchNormalizer),
       )
     })
     .filter(element => {
@@ -215,7 +215,7 @@ const queryAllByRole: AllByRole = (
             getConfig().computedStyleSupportsPseudoElements,
         }),
         element,
-        description,
+        description as Matcher,
         text => text,
       )
     })
@@ -241,7 +241,7 @@ function makeRoleSelector(
   const explicitRoleSelector =
     exact && !customNormalizer ? `*[role~="${role}"]` : '*[role]'
 
-  const roleRelations = roleElements.get(role) ?? new Set()
+  const roleRelations = roleElements.get(role as any) ?? new Set()
   const implicitRoleSelectors = new Set(
     Array.from(roleRelations).map(({name}) => name),
   )
