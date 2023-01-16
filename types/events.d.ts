@@ -86,6 +86,8 @@ export type EventType =
   | 'pointerLeave'
   | 'gotPointerCapture'
   | 'lostPointerCapture'
+  | 'offline'
+  | 'online'
 
 export type FireFunction = (
   element: Document | Element | Window | Node,

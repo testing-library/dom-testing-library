@@ -78,6 +78,11 @@ const eventTypes = [
   },
   {
     type: '',
+    events: ['offline', 'online'],
+    elementType: 'window',
+  },
+  {
+    type: '',
     events: ['load', 'error'],
     elementType: 'script',
   },
