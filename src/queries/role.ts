@@ -159,7 +159,7 @@ const queryAllByRole: AllByRole = (
         return matcher(firstWord, node, role as Matcher, matchNormalizer)
       }
 
-      const implicitRoles = getImplicitAriaRoles(node)
+      const implicitRoles = getImplicitAriaRoles(node) as string[]
 
       return implicitRoles.some(implicitRole =>
         matcher(implicitRole, node, role as Matcher, matchNormalizer),

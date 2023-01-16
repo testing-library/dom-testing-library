@@ -243,11 +243,11 @@ function buildQueries(
   )
 
   const findAllBy = makeFindQuery(
-    // @ts-expect-error
+    // @ts-expect-error: ByRoleMatcher and ByRoleOptions are not compatible with Matcher and MatcherOptions respectible
     wrapAllByQueryWithSuggestion(getAllBy, queryAllBy.name, 'findAll'),
   )
   const findBy = makeFindQuery(
-    // @ts-expect-error
+    // @ts-expect-error: ByRoleMatcher and ByRoleOptions are not compatible with Matcher and MatcherOptions respectible
     wrapSingleQueryWithSuggestion(getBy, queryAllBy.name, 'find'),
   )
 
