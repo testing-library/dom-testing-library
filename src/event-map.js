@@ -363,6 +363,15 @@ export const eventMap = {
     EventType: 'PopStateEvent',
     defaultInit: {bubbles: true, cancelable: false},
   },
+  // window events
+  offline: {
+    EventType: 'Event',
+    defaultInit: {bubbles: false, cancelable: false},
+  },
+  online: {
+    EventType: 'Event',
+    defaultInit: {bubbles: false, cancelable: false},
+  },
 }
 
 export const eventAliasMap = {
