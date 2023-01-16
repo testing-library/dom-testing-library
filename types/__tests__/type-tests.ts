@@ -178,9 +178,18 @@ export async function testByRole() {
   console.assert(queryByRole(element, 'button', {name: /^Log/}) === null)
   console.assert(
     queryByRole(element, 'button', {
-      name: (name, el) => name === 'Login' && !!el?.hasAttribute('disabled'),
+      name: (name, el) => name === 'Login' && el.hasAttribute('disabled'),
     }) === null,
   )
+
+  // @ts-expect-error: allow to query for a role that isn't included in the types
+  console.assert(queryByRole(element, 'foo') === null)
+  // @ts-expect-error: allow to query for a role that isn't included in the types
+  console.assert(queryByRole(element, /foo/) === null)
+  // @ts-expect-error: allow to query for a role that isn't included in the types
+  console.assert(screen.queryByRole('foo') === null)
+  // @ts-expect-error: allow to query for a role that isn't included in the types
+  console.assert(screen.queryByRole(/foo/) === null)
 }
 
 export function testA11yHelper() {
