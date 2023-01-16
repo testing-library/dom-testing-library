@@ -243,11 +243,11 @@ function buildQueries(
   )
 
   const findAllBy = makeFindQuery(
-    /* @ts-ignore */
+    // @ts-expect-error
     wrapAllByQueryWithSuggestion(getAllBy, queryAllBy.name, 'findAll'),
   )
   const findBy = makeFindQuery(
-    /* @ts-ignore */
+    // @ts-expect-error
     wrapSingleQueryWithSuggestion(getBy, queryAllBy.name, 'find'),
   )
 
