@@ -6,6 +6,7 @@ import {
   SelectorMatcherOptions,
   Matcher,
 } from '../../types'
+import {getCachedIsSubtreeInaccessible, isInaccessible} from '../role-helpers'
 import {
   fuzzyMatches,
   matches,
@@ -25,6 +26,7 @@ const queryAllByText: AllByText = (
     trim,
     ignore = getConfig().defaultIgnore,
     normalizer,
+    excludeHidden = getConfig().defaultExcludeHiddenText,
   } = {},
 ) => {
   checkContainerType(container)
@@ -34,13 +36,27 @@ const queryAllByText: AllByText = (
   if (typeof container.matches === 'function' && container.matches(selector)) {
     baseArray = [container]
   }
+  const cachedIsSubtreeInaccessible = getCachedIsSubtreeInaccessible()
+
   return (
     [
       ...baseArray,
       ...Array.from(container.querySelectorAll<HTMLElement>(selector)),
     ]
       // TODO: `matches` according lib.dom.d.ts can get only `string` but according our code it can handle also boolean :)
-      .filter(node => !ignore || !node.matches(ignore as string))
+      .filter(node => {
+        if (ignore && node.matches(ignore as string)) {
+          return false
+        }
+
+        if (!excludeHidden) {
+          return true
+        }
+
+        return !isInaccessible(node, {
+          isSubtreeInaccessible: cachedIsSubtreeInaccessible,
+        })
+      })
       .filter(node => matcher(getNodeText(node), node, text, matchNormalizer))
   )
 }

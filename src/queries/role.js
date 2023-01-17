@@ -13,7 +13,7 @@ import {
   getImplicitAriaRoles,
   prettyRoles,
   isInaccessible,
-  isSubtreeInaccessible,
+  getCachedIsSubtreeInaccessible,
 } from '../role-helpers'
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 import {checkContainerType} from '../helpers'
@@ -94,14 +94,7 @@ function queryAllByRole(
     }
   }
 
-  const subtreeIsInaccessibleCache = new WeakMap()
-  function cachedIsSubtreeInaccessible(element) {
-    if (!subtreeIsInaccessibleCache.has(element)) {
-      subtreeIsInaccessibleCache.set(element, isSubtreeInaccessible(element))
-    }
-
-    return subtreeIsInaccessibleCache.get(element)
-  }
+  const cachedIsSubtreeInaccessible = getCachedIsSubtreeInaccessible()
 
   return Array.from(
     container.querySelectorAll(

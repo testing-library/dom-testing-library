@@ -30,6 +30,20 @@ function isSubtreeInaccessible(element) {
 }
 
 /**
+ * @returns {function (element: Element): boolean}
+ */
+function getCachedIsSubtreeInaccessible() {
+  const subtreeIsInaccessibleCache = new WeakMap()
+  return function cachedIsSubtreeInaccessible(element) {
+    if (!subtreeIsInaccessibleCache.has(element)) {
+      subtreeIsInaccessibleCache.set(element, isSubtreeInaccessible(element))
+    }
+
+    return subtreeIsInaccessibleCache.get(element)
+  }
+}
+
+/**
  * Partial implementation https://www.w3.org/TR/wai-aria-1.2/#tree_exclusion
  * which should only be used for elements with a non-presentational role i.e.
  * `role="none"` and `role="presentation"` will not be excluded.
@@ -330,6 +344,7 @@ export {
   logRoles,
   getImplicitAriaRoles,
   isSubtreeInaccessible,
+  getCachedIsSubtreeInaccessible,
   prettyRoles,
   isInaccessible,
   computeAriaSelected,
