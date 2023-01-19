@@ -196,6 +196,7 @@ function prettyRoles(dom, {hidden, includeDescription}) {
       const elementsString = elements
         .map(el => {
           const nameString = `Name "${computeAccessibleName(el, {
+            hidden,
             computedStyleSupportsPseudoElements:
               getConfig().computedStyleSupportsPseudoElements,
           })}":\n`
@@ -206,6 +207,7 @@ function prettyRoles(dom, {hidden, includeDescription}) {
             const descriptionString = `Description "${computeAccessibleDescription(
               el,
               {
+                hidden,
                 computedStyleSupportsPseudoElements:
                   getConfig().computedStyleSupportsPseudoElements,
               },

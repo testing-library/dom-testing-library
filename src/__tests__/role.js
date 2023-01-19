@@ -53,6 +53,55 @@ test('when hidden: true logs available roles when it fails', () => {
   `)
 })
 
+test('when hidden: logs elements with their names when it fails', () => {
+  const {getByRole} = render(
+    `<div><h1 hidden>Hi</h1><div hidden role="alertdialog" aria-label="My Dialog">Hello</div></div>`,
+  )
+  expect(() => getByRole('article', {hidden: true}))
+    .toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an element with the role "article"
+
+    Here are the available roles:
+
+      heading:
+
+      Name "Hi":
+      <h1
+        hidden=""
+      />
+
+      --------------------------------------------------
+      alertdialog:
+
+      Name "My Dialog":
+      <div
+        aria-label="My Dialog"
+        hidden=""
+        role="alertdialog"
+      />
+
+      --------------------------------------------------
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div>
+        <h1
+          hidden=""
+        >
+          Hi
+        </h1>
+        <div
+          aria-label="My Dialog"
+          hidden=""
+          role="alertdialog"
+        >
+          Hello
+        </div>
+      </div>
+    </div>
+  `)
+})
+
 test('logs error when there are no accessible roles', () => {
   const {getByRole} = render('<div />')
   expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`
@@ -230,6 +279,44 @@ test('can be filtered by accessible name', () => {
 
   expect(
     getQueriesForElement(invoiceForm).getByRole('textbox', {name: 'Street'}),
+  ).not.toBeNull()
+})
+
+test('when hidden can be filtered by accessible name', () => {
+  const {getByRole} = renderIntoDocument(
+    `
+<div>
+  <h1>Order</h1>
+  <h2>Delivery Adress</h2>
+  <form aria-label="Delivery Adress" aria-hidden="true">
+    <label>
+      <div>Street</div>
+      <input type="text" />
+    </label>
+    <input type="submit" />
+  </form>
+  <h2>Invoice Adress</h2>
+  <form aria-label="Invoice Adress">
+    <label>
+      <div>Street</div>
+      <input type="text" />
+    </label>
+    <input type="submit" />
+  </form>
+</div>`,
+  )
+
+  const deliveryForm = getByRole('form', {
+    name: 'Delivery Adress',
+    hidden: true,
+  })
+  expect(deliveryForm).not.toBeNull()
+
+  expect(
+    getQueriesForElement(deliveryForm).getByRole('button', {
+      name: 'Submit',
+      hidden: true,
+    }),
   ).not.toBeNull()
 })
 
@@ -606,6 +693,34 @@ test('can be filtered by accessible description', () => {
 
   expect(
     getQueriesForElement(notification).getByRole('button', {name: 'Close'}),
+  ).not.toBeNull()
+})
+
+test('when hidden can be filtered by accessible description', () => {
+  const targetedNotificationMessage = 'Your session is about to expire!'
+  const {getByRole} = renderIntoDocument(
+    `
+<ul>
+  <li role="alertdialog" aria-hidden="true" aria-describedby="notification-id-2">
+    <div><button>Close</button></div>
+    <div id="notification-id-2">${targetedNotificationMessage}</div>
+  </li>
+</ul>`,
+  )
+
+  const notification = getByRole('alertdialog', {
+    description: targetedNotificationMessage,
+    hidden: true,
+  })
+
+  expect(notification).not.toBeNull()
+  expect(notification).toHaveTextContent(targetedNotificationMessage)
+
+  expect(
+    getQueriesForElement(notification).getByRole('button', {
+      name: 'Close',
+      hidden: true,
+    }),
   ).not.toBeNull()
 })
 

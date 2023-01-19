@@ -165,6 +165,7 @@ function queryAllByRole(
 
       return matches(
         computeAccessibleName(element, {
+          hidden,
           computedStyleSupportsPseudoElements:
             getConfig().computedStyleSupportsPseudoElements,
         }),
@@ -181,6 +182,7 @@ function queryAllByRole(
 
       return matches(
         computeAccessibleDescription(element, {
+          hidden,
           computedStyleSupportsPseudoElements:
             getConfig().computedStyleSupportsPseudoElements,
         }),
