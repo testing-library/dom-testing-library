@@ -12,6 +12,7 @@ import {
   fuzzyMatches,
   makeNormalizer,
   buildQueries,
+  getConfig,
 } from './all-utils'
 
 const queryAllByDisplayValue: AllByBoundAttribute = (
@@ -23,7 +24,10 @@ const queryAllByDisplayValue: AllByBoundAttribute = (
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(
-    container.querySelectorAll<HTMLElement>(`input,textarea,select`),
+    getConfig().queryAllElements<HTMLElement, HTMLElement>(
+      container,
+      `input,textarea,select`,
+    ),
   ).filter(node => {
     if (node.tagName === 'SELECT') {
       const selectedOptions = Array.from(

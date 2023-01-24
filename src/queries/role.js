@@ -104,7 +104,8 @@ function queryAllByRole(
   }
 
   return Array.from(
-    container.querySelectorAll(
+    getConfig().queryAllElements(
+      container,
       // Only query elements that can be matched by the following filters
       makeRoleSelector(role, exact, normalizer ? matchNormalizer : undefined),
     ),

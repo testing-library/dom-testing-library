@@ -1,3 +1,27 @@
+export type QueryElement = {
+  <T, K extends keyof HTMLElementTagNameMap>(container: T, selectors: K):
+    | HTMLElementTagNameMap[K]
+    | null
+  <T, K extends keyof SVGElementTagNameMap>(container: T, selectors: K):
+    | SVGElementTagNameMap[K]
+    | null
+  <T, E extends Element = Element>(container: T, selectors: string): E | null
+}
+export type QueryAllElements = {
+  <T, K extends keyof HTMLElementTagNameMap>(
+    container: T,
+    selectors: K,
+  ): NodeListOf<HTMLElementTagNameMap[K]>
+  <T, K extends keyof SVGElementTagNameMap>(
+    container: T,
+    selectors: K,
+  ): NodeListOf<SVGElementTagNameMap[K]>
+  <T, E extends Element = Element>(
+    container: T,
+    selectors: string,
+  ): NodeListOf<E>
+}
+
 export interface Config {
   testIdAttribute: string
   /**
@@ -16,6 +40,14 @@ export interface Config {
   defaultIgnore: string
   showOriginalStackTrace: boolean
   throwSuggestions: boolean
+  /**
+   * Returns the first element that is a descendant of node that matches selectors.
+   */
+  queryElement: QueryElement
+  /**
+   * Returns all element descendants of node that match selectors.
+   */
+  queryAllElements: QueryAllElements
   getElementError: (message: string | null, container: Element) => Error
 }
 

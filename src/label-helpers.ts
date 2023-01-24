@@ -1,5 +1,7 @@
 import {TEXT_NODE} from './helpers'
 
+import {getConfig} from './config'
+
 const labelledNodeNames = [
   'button',
   'meter',
@@ -43,7 +45,7 @@ function getRealLabels(element: Element) {
 
   if (!isLabelable(element)) return []
 
-  const labels = element.ownerDocument.querySelectorAll('label')
+  const labels = getConfig().queryAllElements(element.ownerDocument, 'label')
   return Array.from(labels).filter(label => label.control === element)
 }
 
@@ -63,7 +65,8 @@ function getLabels(
   const labelsId = ariaLabelledBy ? ariaLabelledBy.split(' ') : []
   return labelsId.length
     ? labelsId.map(labelId => {
-        const labellingElement = container.querySelector<HTMLElement>(
+        const labellingElement = getConfig().queryElement(
+          container,
           `[id="${labelId}"]`,
         )
         return labellingElement
@@ -75,7 +78,10 @@ function getLabels(
         const formControlSelector =
           'button, input, meter, output, progress, select, textarea'
         const labelledFormControl = Array.from(
-          label.querySelectorAll<HTMLElement>(formControlSelector),
+          getConfig().queryAllElements<Element, HTMLElement>(
+            label,
+            formControlSelector,
+          ),
         ).filter(formControlElement => formControlElement.matches(selector))[0]
         return {content: textToMatch, formControl: labelledFormControl}
       })

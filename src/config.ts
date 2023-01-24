@@ -1,7 +1,17 @@
-import {Config, ConfigFn} from '../types/config'
+import {Config, ConfigFn, QueryAllElements, QueryElement} from '../types/config'
 import {prettyDOM} from './pretty-dom'
 
 type Callback<T> = () => T
+
+const queryElement: QueryElement = <T extends Element>(
+  element: T,
+  selector: string,
+) => element.querySelector(selector)
+const queryElementAll: QueryAllElements = <T extends Element>(
+  element: T,
+  selector: string,
+) => element.querySelectorAll(selector)
+
 interface InternalConfig extends Config {
   _disableExpensiveErrorDiagnostics: boolean
 }
@@ -48,6 +58,8 @@ let config: InternalConfig = {
   },
   _disableExpensiveErrorDiagnostics: false,
   computedStyleSupportsPseudoElements: false,
+  queryElement,
+  queryAllElements: queryElementAll,
 }
 
 export function runWithExpensiveErrorDiagnosticsDisabled<T>(

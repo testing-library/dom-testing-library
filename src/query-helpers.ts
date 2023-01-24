@@ -35,7 +35,10 @@ function queryAllByAttribute(
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(
-    container.querySelectorAll<HTMLElement>(`[${attribute}]`),
+    getConfig().queryAllElements<HTMLElement, HTMLElement>(
+      container,
+      `[${attribute}]`,
+    ),
   ).filter(node =>
     matcher(node.getAttribute(attribute), node, text, matchNormalizer),
   )
