@@ -83,6 +83,9 @@
       "./node_modules/kcd-scripts/eslint.js",
       "plugin:import/typescript"
     ],
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
     "rules": {
       "@typescript-eslint/prefer-optional-chain": "off",
       "@typescript-eslint/no-explicit-any": "off",

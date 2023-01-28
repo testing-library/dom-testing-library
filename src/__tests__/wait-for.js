@@ -275,7 +275,7 @@ test('does not work after it resolves', async () => {
       context = 'act'
       try {
         const result = callback()
-        // eslint-disable-next-line jest/no-if
+        // eslint-disable-next-line jest/no-if, jest/no-conditional-in-test -- false-positive
         if (typeof result?.then === 'function') {
           const thenable = result
           return {
@@ -319,6 +319,7 @@ test('does not work after it resolves', async () => {
 
   await waitFor(
     () => {
+      // eslint-disable-next-line jest/no-conditional-in-test -- false-positive
       if (data === null) {
         throw new Error('not found')
       }

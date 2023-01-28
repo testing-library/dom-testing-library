@@ -70,6 +70,7 @@ test('recursive timers do not cause issues', async () => {
   let recurse = true
   function startTimer() {
     setTimeout(() => {
+      // eslint-disable-next-line jest/no-conditional-in-test -- false-positive
       if (recurse) startTimer()
     }, 1)
   }

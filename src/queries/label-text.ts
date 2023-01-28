@@ -71,20 +71,23 @@ const queryAllByLabelText: AllByText = (
           if (
             matcher(label.content, label.formControl, text, matchNormalizer) &&
             label.formControl
-          )
+          ) {
             labelledElements.push(label.formControl)
+          }
         })
       const labelsValue = labelList
         .filter(label => Boolean(label.content))
         .map(label => label.content)
       if (
         matcher(labelsValue.join(' '), labelledElement, text, matchNormalizer)
-      )
+      ) {
         labelledElements.push(labelledElement)
+      }
       if (labelsValue.length > 1) {
         labelsValue.forEach((labelValue, index) => {
-          if (matcher(labelValue, labelledElement, text, matchNormalizer))
+          if (matcher(labelValue, labelledElement, text, matchNormalizer)) {
             labelledElements.push(labelledElement)
+          }
 
           const labelsFiltered = [...labelsValue]
           labelsFiltered.splice(index, 1)
@@ -97,8 +100,9 @@ const queryAllByLabelText: AllByText = (
                 text,
                 matchNormalizer,
               )
-            )
+            ) {
               labelledElements.push(labelledElement)
+            }
           }
         })
       }
