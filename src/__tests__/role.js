@@ -274,6 +274,7 @@ test('accessible name filter implements TextMatch', () => {
   expect(
     getByRole('heading', {
       name: (name, element) => {
+        // eslint-disable-next-line jest/no-conditional-in-test -- false-positive
         return element.nodeName === 'H2' && name === 'Your Signature'
       },
     }),
@@ -564,11 +565,11 @@ describe('configuration', () => {
       queryByRole('button', {name: 'Hello, Dave!'})
 
       expect(console.error).toHaveBeenCalledTimes(2)
-      expect(console.error.mock.calls[0][0]).toMatch(
-        'Error: Not implemented: window.computedStyle(elt, pseudoElt)',
+      expect(console.error.mock.calls[0][0].message).toMatch(
+        'Not implemented: window.computedStyle(elt, pseudoElt)',
       )
-      expect(console.error.mock.calls[1][0]).toMatch(
-        'Error: Not implemented: window.computedStyle(elt, pseudoElt)',
+      expect(console.error.mock.calls[1][0].message).toMatch(
+        'Not implemented: window.computedStyle(elt, pseudoElt)',
       )
     } finally {
       jest.restoreAllMocks()

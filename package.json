@@ -74,8 +74,8 @@
     "jest-in-case": "^1.0.2",
     "jest-snapshot-serializer-ansi": "^1.0.0",
     "jest-watch-select-projects": "^2.0.0",
-    "jsdom": "^16.4.0",
-    "kcd-scripts": "^11.0.0",
+    "jsdom": "19.0.0",
+    "kcd-scripts": "^12.3.0",
     "typescript": "^4.1.2"
   },
   "eslintConfig": {
@@ -83,6 +83,9 @@
       "./node_modules/kcd-scripts/eslint.js",
       "plugin:import/typescript"
     ],
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
     "rules": {
       "@typescript-eslint/prefer-optional-chain": "off",
       "@typescript-eslint/no-explicit-any": "off",

@@ -98,6 +98,7 @@ test('rethrows non-testing-lib errors', () => {
   const error = new Error('my own error')
   return expect(
     waitForElementToBeRemoved(() => {
+      // eslint-disable-next-line jest/no-conditional-in-test -- false-positive
       if (throwIt) {
         throw error
       }

@@ -11,12 +11,13 @@ describe('configuration API', () => {
       return {}
     })
   })
-  afterEach(() => {
-    configure(originalConfig)
-  })
 
   beforeEach(() => {
     configure({other: 123})
+  })
+
+  afterEach(() => {
+    configure(originalConfig)
   })
 
   describe('getConfig', () => {
