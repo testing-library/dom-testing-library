@@ -1,7 +1,7 @@
 // WARNING: `lz-string` only has a default export but statically we assume named exports are allowd
 // TODO: Statically verify we don't rely on NodeJS implicit named imports.
 import lzString from 'lz-string'
-import type {OptionsReceived} from 'pretty-format'
+import {type OptionsReceived} from 'pretty-format'
 import {getQueriesForElement} from './get-queries-for-element'
 import {getDocument} from './helpers'
 import {logDOM} from './pretty-dom'

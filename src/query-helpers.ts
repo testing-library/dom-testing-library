@@ -1,11 +1,11 @@
-import type {
-  GetErrorFunction,
-  Matcher,
-  MatcherOptions,
-  QueryMethod,
-  Variant,
-  waitForOptions as WaitForOptions,
-  WithSuggest,
+import {
+  type GetErrorFunction,
+  type Matcher,
+  type MatcherOptions,
+  type QueryMethod,
+  type Variant,
+  type waitForOptions as WaitForOptions,
+  type WithSuggest,
 } from '../types'
 import {getSuggestedQuery} from './suggestions'
 import {fuzzyMatches, matches, makeNormalizer} from './matches'
