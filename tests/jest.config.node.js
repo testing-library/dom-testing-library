@@ -1,7 +1,12 @@
 const path = require('path')
-const baseConfig = require('kcd-scripts/jest')
+const {
+  // global config options that would trigger warnings in project configs
+  collectCoverageFrom,
+  watchPlugins,
+  ...baseConfig
+} = require('kcd-scripts/jest')
 
-module.exports = {
+const projectConfig = {
   ...baseConfig,
   rootDir: path.join(__dirname, '..'),
   displayName: 'node',
@@ -13,3 +18,5 @@ module.exports = {
   ],
   testMatch: ['**/__node_tests__/**.js'],
 }
+
+module.exports = projectConfig
