@@ -612,8 +612,8 @@ test('should suggest hidden option if element is not in the accessibility tree',
   suggestion.toString()
 
   expect(console.warn.mock.calls).toMatchInlineSnapshot(`
-    Array [
-      Array [
+    [
+      [
         Element is inaccessible. This means that the element and all its children are invisible to screen readers.
         If you are using the aria-hidden prop, make sure this is the right choice for your case.
         ,
@@ -649,9 +649,9 @@ test('should find label text using the aria-labelledby', () => {
       warning: '',
     },
     `
-    Object {
-      queryArgs: Array [
-        Object {},
+    {
+      queryArgs: [
+        {},
       ],
       queryMethod: getByLabelText,
       queryName: LabelText,
