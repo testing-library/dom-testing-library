@@ -21,7 +21,7 @@
   "author": "Kent C. Dodds <me@kentcdodds.com> (https://kentcdodds.com)",
   "license": "MIT",
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "browserslist": [
     "and_chr 103",
@@ -40,7 +40,7 @@
     "safari 15.5",
     "samsung 17.0",
     "samsung 16.0",
-    "node 12.0"
+    "node 14.0"
   ],
   "scripts": {
     "build": "kcd-scripts build  --no-ts-defs --ignore \"**/__tests__/**,**/__node_tests__/**,**/__mocks__/**\" && kcd-scripts build --no-ts-defs --bundle --no-clean",
