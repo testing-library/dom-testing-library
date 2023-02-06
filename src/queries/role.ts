@@ -124,13 +124,13 @@ const queryAllByRole: AllByRole = (
     }
   }
 
-  const subtreeIsInaccessibleCache = new WeakMap<HTMLElement, Boolean>()
-  function cachedIsSubtreeInaccessible(element: HTMLElement): Boolean {
+  const subtreeIsInaccessibleCache = new WeakMap<Element, Boolean>()
+  function cachedIsSubtreeInaccessible(element: Element) {
     if (!subtreeIsInaccessibleCache.has(element)) {
       subtreeIsInaccessibleCache.set(element, isSubtreeInaccessible(element))
     }
 
-    return subtreeIsInaccessibleCache.get(element) as Boolean
+    return subtreeIsInaccessibleCache.get(element) as boolean
   }
 
   return Array.from(
@@ -222,7 +222,7 @@ const queryAllByRole: AllByRole = (
     .filter(element => {
       return hidden === false
         ? isInaccessible(element, {
-            isSubtreeInaccessible: cachedIsSubtreeInaccessible as any,
+            isSubtreeInaccessible: cachedIsSubtreeInaccessible,
           }) === false
         : true
     })
