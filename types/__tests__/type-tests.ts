@@ -183,9 +183,7 @@ export async function testByRole() {
   )
 
   console.assert(queryByRole(element, 'foo') === null)
-  console.assert(queryByRole(element, /foo/) === null)
   console.assert(screen.queryByRole('foo') === null)
-  console.assert(screen.queryByRole(/foo/) === null)
 }
 
 export function testA11yHelper() {
