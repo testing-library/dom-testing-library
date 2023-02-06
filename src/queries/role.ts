@@ -241,7 +241,8 @@ function makeRoleSelector(
   const explicitRoleSelector =
     exact && !customNormalizer ? `*[role~="${role}"]` : '*[role]'
 
-  const roleRelations = roleElements.get(role) ?? new Set()
+  const roleRelations =
+    roleElements.get(role as ARIARoleDefinitionKey) ?? new Set()
   const implicitRoleSelectors = new Set(
     Array.from(roleRelations).map(({name}) => name),
   )
