@@ -1589,6 +1589,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "DaniAcu",
+      "name": "Daniel Acuña",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26409015?v=4",
+      "profile": "https://github.com/DaniAcu",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com",
