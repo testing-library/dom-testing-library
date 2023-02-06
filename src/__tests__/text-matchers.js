@@ -291,10 +291,6 @@ cases(
       dom: `<input value="User ${LRM}name" />`,
       queryFn: 'queryAllByDisplayValue',
     },
-    queryAllByRole: {
-      dom: `<input role="User ${LRM}name" />`,
-      queryFn: 'queryAllByRole',
-    },
   },
 )
 

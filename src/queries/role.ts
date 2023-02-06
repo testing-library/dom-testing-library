@@ -29,28 +29,17 @@ import {
   Matcher,
   MatcherFunction,
   MatcherOptions,
-  NormalizerFn,
 } from '../../types'
 
-import {
-  buildQueries,
-  fuzzyMatches,
-  getConfig,
-  makeNormalizer,
-  matches,
-} from './all-utils'
+import {buildQueries, getConfig, matches} from './all-utils'
 
 const queryAllByRole: AllByRole = (
   container,
   role,
   {
-    exact = true,
-    collapseWhitespace,
     hidden = getConfig().defaultHidden,
     name,
     description,
-    trim,
-    normalizer,
     queryFallbacks = false,
     selected,
     checked,
@@ -61,8 +50,6 @@ const queryAllByRole: AllByRole = (
   } = {},
 ) => {
   checkContainerType(container)
-  const matcher = exact ? matches : fuzzyMatches
-  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
 
   if (selected !== undefined) {
     // guard against unknown roles
@@ -136,7 +123,7 @@ const queryAllByRole: AllByRole = (
   return Array.from(
     container.querySelectorAll<HTMLElement>(
       // Only query elements that can be matched by the following filters
-      makeRoleSelector(role, exact, normalizer ? matchNormalizer : undefined),
+      makeRoleSelector(role),
     ),
   )
     .filter(node => {
@@ -148,22 +135,18 @@ const queryAllByRole: AllByRole = (
           return roleValue
             .split(' ')
             .filter(Boolean)
-            .some(text => matcher(text, node, role as Matcher, matchNormalizer))
+            .some(roleAttributeToken => roleAttributeToken === role)
         }
-        // if a custom normalizer is passed then let normalizer handle the role value
-        if (normalizer) {
-          return matcher(roleValue, node, role as Matcher, matchNormalizer)
-        }
-        // other wise only send the first word to match
-        const [firstWord] = roleValue.split(' ')
-        return matcher(firstWord, node, role as Matcher, matchNormalizer)
+        // other wise only send the first token to match
+        const [firstRoleAttributeToken] = roleValue.split(' ')
+        return firstRoleAttributeToken === role
       }
 
       const implicitRoles = getImplicitAriaRoles(node) as string[]
 
-      return implicitRoles.some(implicitRole =>
-        matcher(implicitRole, node, role as Matcher, matchNormalizer),
-      )
+      return implicitRoles.some(implicitRole => {
+        return implicitRole === role
+      })
     })
     .filter(element => {
       if (selected !== undefined) {
@@ -228,18 +211,8 @@ const queryAllByRole: AllByRole = (
     })
 }
 
-function makeRoleSelector(
-  role: ByRoleMatcher,
-  exact: boolean,
-  customNormalizer?: NormalizerFn,
-) {
-  if (typeof role !== 'string') {
-    // For non-string role parameters we can not determine the implicitRoleSelectors.
-    return '*'
-  }
-
-  const explicitRoleSelector =
-    exact && !customNormalizer ? `*[role~="${role}"]` : '*[role]'
+function makeRoleSelector(role: ByRoleMatcher) {
+  const explicitRoleSelector = `*[role~="${role}"]`
 
   const roleRelations =
     roleElements.get(role as ARIARoleDefinitionKey) ?? new Set()

@@ -66,7 +66,9 @@ export type FindByText<T extends HTMLElement = HTMLElement> = (
   waitForElementOptions?: waitForOptions,
 ) => Promise<T>
 
-export interface ByRoleOptions extends MatcherOptions {
+export interface ByRoleOptions {
+  /** suppress suggestions for a specific query */
+  suggest?: boolean
   /**
    * If true includes elements in the query set that are usually excluded from
    * the accessibility tree. `role="none"` or `role="presentation"` are included

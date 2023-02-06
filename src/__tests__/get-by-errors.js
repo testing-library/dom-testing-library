@@ -35,10 +35,6 @@ cases(
       query: /his/,
       html: `<div title="his"></div><div title="history"></div>`,
     },
-    getByRole: {
-      query: /his/,
-      html: `<div role="his"></div><div role="history"></div>`,
-    },
     getByTestId: {
       query: /his/,
       html: `<div data-testid="his"></div><div data-testid="history"></div>`,
@@ -85,10 +81,6 @@ cases(
     queryByTitle: {
       query: /his/,
       html: `<div title="his"></div><div title="history"></div>`,
-    },
-    queryByRole: {
-      query: /his/,
-      html: `<div role="his"></div><div role="history"></div>`,
     },
     queryByTestId: {
       query: /his/,
