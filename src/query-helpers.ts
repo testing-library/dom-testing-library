@@ -1,7 +1,4 @@
-import  {
-  type AllByRole,
-  type ByRoleMatcher,
-  type ByRoleOptions,
+import {
   type GetErrorFunction,
   type Matcher,
   type MatcherOptions,
@@ -120,16 +117,16 @@ function makeGetAllQuery<Arguments extends unknown[]>(
 
 // this accepts a getter query function and returns a function which calls
 // waitFor and passing a function which invokes the getter.
-function makeFindQuery<QueryFor>(
+function makeFindQuery<QueryFor, QueryMatcher>(
   getter: (
     container: HTMLElement,
-    text: Matcher,
+    text: QueryMatcher,
     options: MatcherOptions,
   ) => QueryFor,
 ) {
   return (
     container: HTMLElement,
-    text: Matcher,
+    text: QueryMatcher,
     options: MatcherOptions,
     waitForOptions: WaitForOptions,
   ) => {
@@ -212,16 +209,17 @@ const wrapAllByQueryWithSuggestion =
 // TODO: This deviates from the published declarations
 // However, the implementation always required a dyadic (after `container`) not variadic `queryAllBy` considering the implementation of `makeFindQuery`
 // This is at least statically true and can be verified by accepting `QueryMethod<Arguments, HTMLElement[]>`
-function buildQueries(
-  queryAllBy:
-    | AllByRole
-    | QueryMethod<[matcher: Matcher, options: MatcherOptions], HTMLElement[]>,
-  getMultipleError:
-    | GetErrorFunction<[matcher: ByRoleMatcher, options: ByRoleOptions]>
-    | GetErrorFunction<[matcher: Matcher, options: MatcherOptions]>,
-  getMissingError:
-    | GetErrorFunction<[matcher: ByRoleMatcher, options: ByRoleOptions]>
-    | GetErrorFunction<[matcher: Matcher, options: MatcherOptions]>,
+function buildQueries<QueryMatcher>(
+  queryAllBy: QueryMethod<
+    [matcher: QueryMatcher, options: MatcherOptions],
+    HTMLElement[]
+  >,
+  getMultipleError: GetErrorFunction<
+    [matcher: QueryMatcher, options: MatcherOptions]
+  >,
+  getMissingError: GetErrorFunction<
+    [matcher: QueryMatcher, options: MatcherOptions]
+  >,
 ) {
   const queryBy = wrapSingleQueryWithSuggestion(
     makeSingleQuery(queryAllBy, getMultipleError),
@@ -243,11 +241,9 @@ function buildQueries(
   )
 
   const findAllBy = makeFindQuery(
-    // @ts-expect-error: ByRoleMatcher and ByRoleOptions are not compatible with Matcher and MatcherOptions respectible
     wrapAllByQueryWithSuggestion(getAllBy, queryAllBy.name, 'findAll'),
   )
   const findBy = makeFindQuery(
-    // @ts-expect-error: ByRoleMatcher and ByRoleOptions are not compatible with Matcher and MatcherOptions respectible
     wrapSingleQueryWithSuggestion(getBy, queryAllBy.name, 'find'),
   )
 
