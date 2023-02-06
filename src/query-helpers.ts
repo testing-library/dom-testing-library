@@ -117,16 +117,16 @@ function makeGetAllQuery<Arguments extends unknown[]>(
 
 // this accepts a getter query function and returns a function which calls
 // waitFor and passing a function which invokes the getter.
-function makeFindQuery<QueryFor>(
+function makeFindQuery<QueryFor, QueryMatcher>(
   getter: (
     container: HTMLElement,
-    text: Matcher,
+    text: QueryMatcher,
     options: MatcherOptions,
   ) => QueryFor,
 ) {
   return (
     container: HTMLElement,
-    text: Matcher,
+    text: QueryMatcher,
     options: MatcherOptions,
     waitForOptions: WaitForOptions,
   ) => {
@@ -209,16 +209,16 @@ const wrapAllByQueryWithSuggestion =
 // TODO: This deviates from the published declarations
 // However, the implementation always required a dyadic (after `container`) not variadic `queryAllBy` considering the implementation of `makeFindQuery`
 // This is at least statically true and can be verified by accepting `QueryMethod<Arguments, HTMLElement[]>`
-function buildQueries(
+function buildQueries<QueryMatcher>(
   queryAllBy: QueryMethod<
-    [matcher: Matcher, options: MatcherOptions],
+    [matcher: QueryMatcher, options: MatcherOptions],
     HTMLElement[]
   >,
   getMultipleError: GetErrorFunction<
-    [matcher: Matcher, options: MatcherOptions]
+    [matcher: QueryMatcher, options: MatcherOptions]
   >,
   getMissingError: GetErrorFunction<
-    [matcher: Matcher, options: MatcherOptions]
+    [matcher: QueryMatcher, options: MatcherOptions]
   >,
 ) {
   const queryBy = wrapSingleQueryWithSuggestion(
