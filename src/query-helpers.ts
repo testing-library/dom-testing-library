@@ -118,11 +118,16 @@ function makeGetAllQuery<Arguments extends unknown[]>(
 // this accepts a getter query function and returns a function which calls
 // waitFor and passing a function which invokes the getter.
 function makeFindQuery<QueryFor>(
-  getter: (
+  getterWithInformativeErrorMessage: (
     container: HTMLElement,
     text: Matcher,
     options: MatcherOptions,
   ) => QueryFor,
+  getterWithQuickToGenerateErrorMessage: (
+    container: HTMLElement,
+    text: Matcher,
+    options: MatcherOptions,
+  ) => QueryFor = getterWithInformativeErrorMessage,
 ) {
   return (
     container: HTMLElement,
@@ -132,9 +137,17 @@ function makeFindQuery<QueryFor>(
   ) => {
     return waitFor(
       () => {
-        return getter(container, text, options)
+        // Don't waste time generating an informative error message since they will be discarded
+        // anyway.
+        return getterWithQuickToGenerateErrorMessage(container, text, options)
       },
       {container, ...waitForOptions},
+    ).then(
+      x => x,
+      () => {
+        // Try one last time, this time generating an informative error message in case of failure
+        return getterWithInformativeErrorMessage(container, text, options)
+      },
     )
   }
 }
@@ -242,9 +255,31 @@ function buildQueries(
 
   const findAllBy = makeFindQuery(
     wrapAllByQueryWithSuggestion(getAllBy, queryAllBy.name, 'findAll'),
+    wrapAllByQueryWithSuggestion(
+      (container, text, options) => {
+        const elements = queryAllBy(container, text, options)
+        if (elements.length === 0) {
+          throw new Error('no element found')
+        }
+        return elements
+      },
+      queryAllBy.name,
+      'findAll',
+    ),
   )
   const findBy = makeFindQuery(
     wrapSingleQueryWithSuggestion(getBy, queryAllBy.name, 'find'),
+    wrapSingleQueryWithSuggestion(
+      (container, text, options) => {
+        const elements = queryAllBy(container, text, options)
+        if (elements.length !== 1) {
+          throw new Error('no element or more than one elements found')
+        }
+        return elements[0]
+      },
+      queryAllBy.name,
+      'find',
+    ),
   )
 
   return [
