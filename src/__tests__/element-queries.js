@@ -788,33 +788,26 @@ test('queryAllByRole returns semantic html elements', () => {
     </form>
   `)
 
-  expect(queryAllByRole(/table/i)).toHaveLength(1)
-  expect(queryAllByRole(/tabl/i, {exact: false})).toHaveLength(1)
-  expect(queryAllByRole(/columnheader/i)).toHaveLength(1)
-  expect(queryAllByRole(/rowheader/i)).toHaveLength(1)
-  expect(queryAllByRole(/grid/i)).toHaveLength(1)
-  expect(queryAllByRole(/form/i)).toHaveLength(0)
-  expect(queryAllByRole(/button/i)).toHaveLength(1)
-  expect(queryAllByRole(/heading/i)).toHaveLength(6)
+  expect(queryAllByRole('table')).toHaveLength(1)
+  expect(queryAllByRole('columnheader')).toHaveLength(1)
+  expect(queryAllByRole('rowheader')).toHaveLength(1)
+  expect(queryAllByRole('grid')).toHaveLength(1)
+  expect(queryAllByRole('form')).toHaveLength(0)
+  expect(queryAllByRole('button')).toHaveLength(1)
+  expect(queryAllByRole('heading')).toHaveLength(6)
   expect(queryAllByRole('list')).toHaveLength(2)
-  expect(queryAllByRole(/listitem/i)).toHaveLength(3)
-  expect(queryAllByRole(/textbox/i)).toHaveLength(2)
-  expect(queryAllByRole(/checkbox/i)).toHaveLength(1)
-  expect(queryAllByRole(/radio/i)).toHaveLength(1)
+  expect(queryAllByRole('listitem')).toHaveLength(3)
+  expect(queryAllByRole('textbox')).toHaveLength(2)
+  expect(queryAllByRole('checkbox')).toHaveLength(1)
+  expect(queryAllByRole('radio')).toHaveLength(1)
   expect(queryAllByRole('row')).toHaveLength(3)
-  expect(queryAllByRole(/rowgroup/i)).toHaveLength(2)
-  expect(queryAllByRole(/(table)|(textbox)/i)).toHaveLength(3)
-  expect(queryAllByRole(/img/i)).toHaveLength(1)
+  expect(queryAllByRole('rowgroup')).toHaveLength(2)
+  expect(queryAllByRole('img')).toHaveLength(1)
   expect(queryAllByRole('meter')).toHaveLength(1)
   expect(queryAllByRole('progressbar')).toHaveLength(0)
   expect(queryAllByRole('progressbar', {queryFallbacks: true})).toHaveLength(1)
   expect(queryAllByRole('combobox')).toHaveLength(1)
   expect(queryAllByRole('listbox')).toHaveLength(1)
-})
-
-test('queryByRole matches case with non-string matcher', () => {
-  const {queryByRole} = render(`<span role="1" />`)
-  expect(queryByRole(1)).toBeTruthy()
 })
 
 test('getAll* matchers return an array', () => {
@@ -827,7 +820,7 @@ test('getAll* matchers return an array', () => {
     getAllByText,
     getAllByRole,
   } = render(`
-    <div role="container">
+    <div role="section">
       <img
         data-testid="poster"
         alt="finding nemo poster"
@@ -864,7 +857,7 @@ test('getAll* matchers return an array', () => {
   expect(getAllByDisplayValue('Japanese cars')).toHaveLength(1)
   expect(getAllByDisplayValue(/cars$/)).toHaveLength(2)
   expect(getAllByText(/^where/i)).toHaveLength(1)
-  expect(getAllByRole(/container/i)).toHaveLength(1)
+  expect(getAllByRole('section')).toHaveLength(1)
   expect(getAllByRole('meter')).toHaveLength(1)
   expect(getAllByRole('progressbar', {queryFallbacks: true})).toHaveLength(1)
 })
@@ -879,7 +872,7 @@ test('getAll* matchers throw for 0 matches', () => {
     getAllByText,
     getAllByRole,
   } = render(`
-    <div role="container">
+    <div role="section">
       <label>No Matches Please</label>
     </div>,
   `)
