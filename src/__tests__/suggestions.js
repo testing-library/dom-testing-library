@@ -103,6 +103,16 @@ test('should not suggest when suggest is turned off for a query', () => {
   ).not.toThrowError()
 })
 
+test('should suggest when suggest is turned on for a specific query but disabled in config', () => {
+  configure({throwSuggestions: false})
+  renderIntoDocument(`
+  <button data-testid="foo">submit</button>
+  <button data-testid="foot">another</button>`)
+
+  expect(() => screen.getByTestId('foo', {suggest: true})).toThrowError()
+  configure({throwSuggestions: true})
+})
+
 test('should suggest getByRole when used with getBy', () => {
   renderIntoDocument(`<button data-testid="foo">submit</button>`)
 
