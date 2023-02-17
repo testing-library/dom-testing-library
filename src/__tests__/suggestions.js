@@ -7,7 +7,7 @@ beforeAll(() => {
 })
 
 afterEach(() => {
-  configure({testIdAttribute: 'data-testid'})
+  configure({testIdAttribute: 'data-testid', throwSuggestions: true})
   console.warn.mockClear()
 })
 
@@ -110,7 +110,6 @@ test('should suggest when suggest is turned on for a specific query but disabled
   <button data-testid="foot">another</button>`)
 
   expect(() => screen.getByTestId('foo', {suggest: true})).toThrowError()
-  configure({throwSuggestions: true})
 })
 
 test('should suggest getByRole when used with getBy', () => {
