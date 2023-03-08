@@ -6,7 +6,14 @@ beforeAll(() => {
   configure({throwSuggestions: true})
 })
 
+beforeEach(() => {
+  // We're testing suggestions of find* queries but we're not interested in their time-related behavior.
+  // Real timers would make the test suite slower for no reason.
+  jest.useFakeTimers()
+})
+
 afterEach(() => {
+  jest.useRealTimers()
   configure({testIdAttribute: 'data-testid', throwSuggestions: true})
   console.warn.mockClear()
 })
