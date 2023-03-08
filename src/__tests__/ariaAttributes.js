@@ -258,3 +258,57 @@ test('`expanded: true|false` matches `expanded` elements with proper role', () =
   expect(getByRole('button', {expanded: true})).toBeInTheDocument()
   expect(getByRole('button', {expanded: false})).toBeInTheDocument()
 })
+
+test('`disabled` throws on unsupported roles', () => {
+  const {getByRole} = render(
+    `<div role="alert" aria-disabled="true">Hello, Dave!</div>`,
+  )
+  expect(() =>
+    getByRole('alert', {disabled: true}),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"aria-disabled" is not supported on role "alert".`,
+  )
+})
+
+test('`disabled: true|false` matches `disabled` buttons', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <button disabled="true" />
+      <button />
+    </div>`,
+  )
+  expect(getByRole('button', {disabled: true})).toBeInTheDocument()
+  expect(getByRole('button', {disabled: false})).toBeInTheDocument()
+})
+
+test('`disabled: true|false` matches `aria-disabled` buttons', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <button aria-disabled="true" />
+      <button aria-disabled="false" />
+    </div>`,
+  )
+  expect(getByRole('button', {disabled: true})).toBeInTheDocument()
+  expect(getByRole('button', {disabled: false})).toBeInTheDocument()
+})
+
+test('`disabled` attributes overrides `aria-dsiabled`', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <button disabled="true" aria-disabled="false" />
+      <button />
+    </div>`,
+  )
+  expect(getByRole('button', {disabled: true})).toBeInTheDocument()
+})
+
+test('consider `disabled` attribute only if supported', () => {
+  const {getByRole, queryByRole} = renderIntoDocument(
+    `<div>
+      <button disabled="true" />
+      <div role="slider" disabled="true" />
+    </div>`,
+  )
+  expect(getByRole('button', {disabled: true})).toBeInTheDocument()
+  expect(queryByRole('slider', {disabled: true})).toBe(null)
+})

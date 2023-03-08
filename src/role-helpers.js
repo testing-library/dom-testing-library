@@ -281,6 +281,29 @@ function computeAriaCurrent(element) {
   )
 }
 
+const elementsSupportingDisabledAttribute = new Set([
+  'button',
+  'fieldset',
+  'input',
+  'optgroup',
+  'option',
+  'select',
+  'textarea',
+])
+
+/**
+ * @param {Element} element -
+ * @returns {boolean} -
+ */
+function computeAriaDisabled(element) {
+  return elementsSupportingDisabledAttribute.has(element.localName) &&
+    element.hasAttribute('disabled')
+    ? // https://www.w3.org/TR/html-aam-1.0/#html-attribute-state-and-property-mappings
+      true
+    : // https://www.w3.org/TR/wai-aria-1.1/#aria-disabled
+      element.getAttribute('aria-disabled') === 'true'
+}
+
 /**
  * @param {Element} element -
  * @returns {boolean | undefined} - false/true if (not)expanded, undefined if not expand-able
@@ -336,6 +359,7 @@ export {
   computeAriaChecked,
   computeAriaPressed,
   computeAriaCurrent,
+  computeAriaDisabled,
   computeAriaExpanded,
   computeHeadingLevel,
 }

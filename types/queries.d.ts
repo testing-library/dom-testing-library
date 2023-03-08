@@ -95,6 +95,11 @@ export interface ByRoleOptions {
    */
   current?: boolean | string
   /**
+   * If true only includes elements in the query set that are marked as 
+   * disabled in the accessibility tree, i.e., `aria-disabled="true"` or `disabled="true"`.
+   */
+  disabled?: boolean
+  /**
    * If true only includes elements in the query set that are marked as
    * expanded in the accessibility tree, i.e., `aria-expanded="true"`
    */
