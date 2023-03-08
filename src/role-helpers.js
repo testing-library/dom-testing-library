@@ -242,6 +242,15 @@ function computeAriaSelected(element) {
 
 /**
  * @param {Element} element -
+ * @returns {boolean} -
+ */
+function computeAriaBusy(element) {
+  // https://www.w3.org/TR/wai-aria-1.1/#aria-busy
+  return element.getAttribute('aria-busy') === 'true'
+}
+
+/**
+ * @param {Element} element -
  * @returns {boolean | undefined} - false/true if (not)checked, undefined if not checked-able
  */
 function computeAriaChecked(element) {
@@ -333,6 +342,7 @@ export {
   prettyRoles,
   isInaccessible,
   computeAriaSelected,
+  computeAriaBusy,
   computeAriaChecked,
   computeAriaPressed,
   computeAriaCurrent,

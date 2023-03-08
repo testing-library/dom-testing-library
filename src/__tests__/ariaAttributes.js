@@ -36,6 +36,28 @@ test('`expanded` throws on unsupported roles', () => {
   )
 })
 
+test('`busy` throws on unsupported roles', () => {
+  const {getByRole} = render(
+    `<div aria-busy="true" role="none">Hello, Dave!</div>`,
+  )
+  expect(() =>
+    getByRole('none', {busy: true}),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"aria-busy" is not supported on role "none".`,
+  )
+})
+
+test('`busy: true|false` matches `busy` regions', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <div role="log" aria-busy="true" />
+      <div role="log" aria-busy="false" />
+    </div>`,
+  )
+  expect(getByRole('log', {busy: true})).toBeInTheDocument()
+  expect(getByRole('log', {busy: false})).toBeInTheDocument()
+})
+
 test('`checked: true|false` matches `checked` checkboxes', () => {
   const {getByRole} = renderIntoDocument(
     `<div>
