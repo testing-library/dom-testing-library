@@ -109,7 +109,7 @@ test('should suggest when suggest is turned on for a specific query but disabled
   <button data-testid="foo">submit</button>
   <button data-testid="foot">another</button>`)
 
-  expect(() => screen.getByTestId('foo', {suggest: true})).toThrowError()
+  expect(() => screen.getByTestId('foo', {suggest: true})).toThrowError("try this:\ngetByRole('button', { name: /submit/i })")
 })
 
 test('should suggest getByRole when used with getBy', () => {
