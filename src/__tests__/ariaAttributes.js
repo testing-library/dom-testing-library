@@ -249,6 +249,7 @@ test('`value.now` throws on unsupported roles', () => {
 test('`value.now: number` matches `aria-valuenow` on widgets', () => {
   const {getByRole} = renderIntoDocument(
     `<div>
+      <button role="spinbutton" />
       <button role="spinbutton" aria-valuenow="5" />
       <button role="spinbutton" aria-valuenow="10" />
     </div>`,
@@ -269,6 +270,7 @@ test('`value.max` throws on unsupported roles', () => {
 test('`value.max: number` matches `aria-valuemax` on widgets', () => {
   const {getByRole} = renderIntoDocument(
     `<div>
+      <button role="spinbutton" />
       <button role="spinbutton" aria-valuemax="5" />
       <button role="spinbutton" aria-valuemax="10" />
     </div>`,
@@ -289,6 +291,7 @@ test('`value.min` throws on unsupported roles', () => {
 test('`value.min: number` matches `aria-valuemin` on widgets', () => {
   const {getByRole} = renderIntoDocument(
     `<div>
+      <button role="spinbutton" />
       <button role="spinbutton" aria-valuemin="5" />
       <button role="spinbutton" aria-valuemin="10" />
     </div>`,
@@ -309,6 +312,7 @@ test('`value.text` throws on unsupported roles', () => {
 test('`value.text: Matcher` matches `aria-valuetext` on widgets', () => {
   const {getAllByRole, getByRole} = renderIntoDocument(
     `<div>
+      <button role="spinbutton" />
       <button role="spinbutton" aria-valuetext="zero" />
       <button role="spinbutton" aria-valuetext="few" />
       <button role="spinbutton" aria-valuetext="many" />
