@@ -82,6 +82,11 @@ export interface ByRoleOptions {
   selected?: boolean
   /**
    * If true only includes elements in the query set that are marked as
+   * busy in the accessibility tree, i.e., `aria-busy="true"`
+   */
+  busy?: boolean
+  /**
+   * If true only includes elements in the query set that are marked as
    * checked in the accessibility tree, i.e., `aria-checked="true"`
    */
   checked?: boolean
