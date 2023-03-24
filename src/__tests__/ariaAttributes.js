@@ -292,7 +292,7 @@ test('`disabled: true|false` matches `aria-disabled` buttons', () => {
   expect(getByRole('button', {disabled: false})).toBeInTheDocument()
 })
 
-test('`disabled` attributes overrides `aria-dsiabled`', () => {
+test('`disabled` attributes overrides `aria-disabled`', () => {
   const {getByRole} = renderIntoDocument(
     `<div>
       <button disabled="true" aria-disabled="false" />
