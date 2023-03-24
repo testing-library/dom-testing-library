@@ -110,6 +110,12 @@ export interface ByRoleOptions {
    * the `aria-level` attribute.
    */
   level?: number
+  value?: {
+    now?: number
+    min?: number
+    max?: number
+    text?: Matcher
+  }
   /**
    * Includes every role used in the `role` attribute
    * For example *ByRole('progressbar', {queryFallbacks: true})` will find <div role="meter progressbar">`.
