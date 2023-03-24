@@ -10,6 +10,7 @@ import {
 } from 'aria-query'
 import {
   computeAriaSelected,
+  computeAriaBusy,
   computeAriaChecked,
   computeAriaPressed,
   computeAriaCurrent,
@@ -47,6 +48,7 @@ const queryAllByRole: AllByRole = (
     description,
     queryFallbacks = false,
     selected,
+    busy,
     checked,
     pressed,
     current,
@@ -69,6 +71,16 @@ const queryAllByRole: AllByRole = (
       undefined
     ) {
       throw new Error(`"aria-selected" is not supported on role "${role}".`)
+    }
+  }
+
+  if (busy !== undefined) {
+    // guard against unknown roles
+    if (
+      allRoles.get(role as ARIARoleDefinitionKey)?.props['aria-busy'] ===
+      undefined
+    ) {
+      throw new Error(`"aria-busy" is not supported on role "${role}".`)
     }
   }
 
@@ -202,6 +214,9 @@ const queryAllByRole: AllByRole = (
     .filter(element => {
       if (selected !== undefined) {
         return selected === computeAriaSelected(element)
+      }
+      if (busy !== undefined) {
+        return busy === computeAriaBusy(element)
       }
       if (checked !== undefined) {
         return checked === computeAriaChecked(element)
