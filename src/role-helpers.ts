@@ -1,4 +1,8 @@
-import {elementRoles} from 'aria-query'
+import {
+  ARIARoleDefinitionKey,
+  ARIARoleRelationConcept,
+  elementRoles,
+} from 'aria-query'
 import {
   computeAccessibleDescription,
   computeAccessibleName,
@@ -6,14 +10,17 @@ import {
 import {prettyDOM} from './pretty-dom'
 import {getConfig} from './config'
 
+type ElementRoles = typeof elementRoles
+
 const elementRoleList = buildElementRoleList(elementRoles)
 
 /**
  * @param {Element} element -
  * @returns {boolean} - `true` if `element` and its subtree are inaccessible
  */
-function isSubtreeInaccessible(element) {
-  if (element.hidden === true) {
+type IsSubtreeInaccessible = typeof isSubtreeInaccessible
+function isSubtreeInaccessible(element: Element) {
+  if (element.getAttribute('hidden') !== null) {
     return true
   }
 
@@ -21,7 +28,7 @@ function isSubtreeInaccessible(element) {
     return true
   }
 
-  const window = element.ownerDocument.defaultView
+  const window = element.ownerDocument.defaultView!
   if (window.getComputedStyle(element).display === 'none') {
     return true
   }
@@ -43,11 +50,12 @@ function isSubtreeInaccessible(element) {
  * can be used to return cached results from previous isSubtreeInaccessible calls
  * @returns {boolean} true if excluded, otherwise false
  */
-function isInaccessible(element, options = {}) {
+type IsInaccessibleOptions = {isSubtreeInaccessible?: IsSubtreeInaccessible}
+function isInaccessible(element: Element, options: IsInaccessibleOptions = {}) {
   const {
     isSubtreeInaccessible: isSubtreeInaccessibleImpl = isSubtreeInaccessible,
   } = options
-  const window = element.ownerDocument.defaultView
+  const window = element.ownerDocument.defaultView!
   // since visibility is inherited we can exit early
   if (window.getComputedStyle(element).visibility === 'hidden') {
     return true
@@ -59,13 +67,13 @@ function isInaccessible(element, options = {}) {
       return true
     }
 
-    currentElement = currentElement.parentElement
+    currentElement = currentElement.parentElement!
   }
 
   return false
 }
 
-function getImplicitAriaRoles(currentNode) {
+function getImplicitAriaRoles(currentNode: Element) {
   // eslint bug here:
   // eslint-disable-next-line no-unused-vars
   for (const {match, roles} of elementRoleList) {
@@ -76,12 +84,16 @@ function getImplicitAriaRoles(currentNode) {
 
   return []
 }
-
-function buildElementRoleList(elementRolesMap) {
-  function makeElementSelector({name, attributes}) {
-    return `${name}${attributes
+interface RoleList {
+  match: any
+  roles: ARIARoleDefinitionKey[]
+  specificity: number
+}
+function buildElementRoleList(elementRolesMap: ElementRoles) {
+  function makeElementSelector({name, attributes}: ARIARoleRelationConcept) {
+    return `${name}${attributes!
       .map(({name: attributeName, value, constraints = []}) => {
-        const shouldNotExist = constraints.indexOf('undefined') !== -1
+        const shouldNotExist = constraints.indexOf('undefined' as any) !== -1
         if (shouldNotExist) {
           return `:not([${attributeName}])`
         } else if (value) {
@@ -93,18 +105,18 @@ function buildElementRoleList(elementRolesMap) {
       .join('')}`
   }
 
-  function getSelectorSpecificity({attributes = []}) {
+  function getSelectorSpecificity({attributes = []}: ARIARoleRelationConcept) {
     return attributes.length
   }
 
   function bySelectorSpecificity(
-    {specificity: leftSpecificity},
-    {specificity: rightSpecificity},
+    {specificity: leftSpecificity}: RoleList,
+    {specificity: rightSpecificity}: RoleList,
   ) {
     return rightSpecificity - leftSpecificity
   }
 
-  function match(element) {
+  function match(element: ARIARoleRelationConcept) {
     let {attributes = []} = element
 
     // https://github.com/testing-library/dom-testing-library/issues/814
@@ -125,8 +137,8 @@ function buildElementRoleList(elementRolesMap) {
 
     const selector = makeElementSelector({...element, attributes})
 
-    return node => {
-      if (typeTextIndex >= 0 && node.type !== 'text') {
+    return (node: Element) => {
+      if (typeTextIndex >= 0 && (node as HTMLInputElement).type !== 'text') {
         return false
       }
 
@@ -134,7 +146,7 @@ function buildElementRoleList(elementRolesMap) {
     }
   }
 
-  let result = []
+  let result: RoleList[] = []
 
   // eslint bug here:
   // eslint-disable-next-line no-unused-vars
@@ -152,13 +164,13 @@ function buildElementRoleList(elementRolesMap) {
   return result.sort(bySelectorSpecificity)
 }
 
-function getRoles(container, {hidden = false} = {}) {
-  function flattenDOM(node) {
+function getRoles(container: Element, {hidden = false} = {}) {
+  function flattenDOM(node: Element): Element[] {
     return [
       node,
       ...Array.from(node.children).reduce(
         (acc, child) => [...acc, ...flattenDOM(child)],
-        [],
+        [] as Element[],
       ),
     ]
   }
@@ -171,7 +183,7 @@ function getRoles(container, {hidden = false} = {}) {
       let roles = []
       // TODO: This violates html-aria which does not allow any role on every element
       if (node.hasAttribute('role')) {
-        roles = node.getAttribute('role').split(' ').slice(0, 1)
+        roles = node.getAttribute('role')!.split(' ').slice(0, 1)
       } else {
         roles = getImplicitAriaRoles(node)
       }
@@ -181,12 +193,19 @@ function getRoles(container, {hidden = false} = {}) {
           Array.isArray(rolesAcc[role])
             ? {...rolesAcc, [role]: [...rolesAcc[role], node]}
             : {...rolesAcc, [role]: [node]},
-        acc,
+        acc as Record<string, Element[]>,
       )
-    }, {})
+    }, {} as Record<string, Element[]>)
 }
 
-function prettyRoles(dom, {hidden, includeDescription}) {
+interface PrettyRolesOptions {
+  hidden?: boolean
+  includeDescription?: boolean
+}
+function prettyRoles(
+  dom: Element,
+  {hidden, includeDescription}: PrettyRolesOptions,
+) {
   const roles = getRoles(dom, {hidden})
   // We prefer to skip generic role, we don't recommend it
   return Object.entries(roles)
@@ -222,14 +241,19 @@ function prettyRoles(dom, {hidden, includeDescription}) {
     .join('\n')
 }
 
-const logRoles = (dom, {hidden = false} = {}) =>
+interface LogRolesOptions {
+  hidden?: boolean
+}
+const logRoles = (dom: Element, {hidden = false}: LogRolesOptions = {}) =>
   console.log(prettyRoles(dom, {hidden}))
 
 /**
  * @param {Element} element -
  * @returns {boolean | undefined} - false/true if (not)selected, undefined if not selectable
  */
-function computeAriaSelected(element) {
+function computeAriaSelected(
+  element: Element & Partial<{selected: boolean}>,
+): boolean | undefined {
   // implicit value from html-aam mappings: https://www.w3.org/TR/html-aam-1.0/#html-attribute-state-and-property-mappings
   // https://www.w3.org/TR/html-aam-1.0/#details-id-97
   if (element.tagName === 'OPTION') {
@@ -244,7 +268,7 @@ function computeAriaSelected(element) {
  * @param {Element} element -
  * @returns {boolean} -
  */
-function computeAriaBusy(element) {
+function computeAriaBusy(element: Element): boolean {
   // https://www.w3.org/TR/wai-aria-1.1/#aria-busy
   return element.getAttribute('aria-busy') === 'true'
 }
@@ -253,7 +277,9 @@ function computeAriaBusy(element) {
  * @param {Element} element -
  * @returns {boolean | undefined} - false/true if (not)checked, undefined if not checked-able
  */
-function computeAriaChecked(element) {
+function computeAriaChecked(
+  element: Element & Partial<{checked: boolean; indeterminate: boolean}>,
+): boolean | undefined {
   // implicit value from html-aam mappings: https://www.w3.org/TR/html-aam-1.0/#html-attribute-state-and-property-mappings
   // https://www.w3.org/TR/html-aam-1.0/#details-id-56
   // https://www.w3.org/TR/html-aam-1.0/#details-id-67
@@ -272,7 +298,7 @@ function computeAriaChecked(element) {
  * @param {Element} element -
  * @returns {boolean | undefined} - false/true if (not)pressed, undefined if not press-able
  */
-function computeAriaPressed(element) {
+function computeAriaPressed(element: Element): boolean | undefined {
   // https://www.w3.org/TR/wai-aria-1.1/#aria-pressed
   return checkBooleanAttribute(element, 'aria-pressed')
 }
@@ -281,7 +307,7 @@ function computeAriaPressed(element) {
  * @param {Element} element -
  * @returns {boolean | string | null} -
  */
-function computeAriaCurrent(element) {
+function computeAriaCurrent(element: Element): boolean | string | null {
   // https://www.w3.org/TR/wai-aria-1.1/#aria-current
   return (
     checkBooleanAttribute(element, 'aria-current') ??
@@ -294,12 +320,15 @@ function computeAriaCurrent(element) {
  * @param {Element} element -
  * @returns {boolean | undefined} - false/true if (not)expanded, undefined if not expand-able
  */
-function computeAriaExpanded(element) {
+function computeAriaExpanded(element: Element): boolean | undefined {
   // https://www.w3.org/TR/wai-aria-1.1/#aria-expanded
   return checkBooleanAttribute(element, 'aria-expanded')
 }
 
-function checkBooleanAttribute(element, attribute) {
+function checkBooleanAttribute(
+  element: Element,
+  attribute: string,
+): boolean | undefined {
   const attributeValue = element.getAttribute(attribute)
   if (attributeValue === 'true') {
     return true
@@ -314,7 +343,7 @@ function checkBooleanAttribute(element, attribute) {
  * @param {Element} element -
  * @returns {number | undefined} - number if implicit heading or aria-level present, otherwise undefined
  */
-function computeHeadingLevel(element) {
+function computeHeadingLevel(element: Element): number | undefined {
   // https://w3c.github.io/html-aam/#el-h1-h6
   // https://w3c.github.io/html-aam/#el-h1-h6
   const implicitHeadingLevels = {
@@ -331,14 +360,16 @@ function computeHeadingLevel(element) {
     element.getAttribute('aria-level') &&
     Number(element.getAttribute('aria-level'))
 
-  return ariaLevelAttribute || implicitHeadingLevels[element.tagName]
+  const tagName = element.tagName as keyof typeof implicitHeadingLevels
+
+  return ariaLevelAttribute || implicitHeadingLevels[tagName]
 }
 
 /**
  * @param {Element} element -
  * @returns {number | undefined} -
  */
-function computeAriaValueNow(element) {
+function computeAriaValueNow(element: Element): number | undefined {
   const valueNow = element.getAttribute('aria-valuenow')
   return valueNow === null ? undefined : +valueNow
 }
@@ -347,7 +378,7 @@ function computeAriaValueNow(element) {
  * @param {Element} element -
  * @returns {number | undefined} -
  */
-function computeAriaValueMax(element) {
+function computeAriaValueMax(element: Element): number | undefined {
   const valueMax = element.getAttribute('aria-valuemax')
   return valueMax === null ? undefined : +valueMax
 }
@@ -356,7 +387,7 @@ function computeAriaValueMax(element) {
  * @param {Element} element -
  * @returns {number | undefined} -
  */
-function computeAriaValueMin(element) {
+function computeAriaValueMin(element: Element): number | undefined {
   const valueMin = element.getAttribute('aria-valuemin')
   return valueMin === null ? undefined : +valueMin
 }
@@ -365,7 +396,7 @@ function computeAriaValueMin(element) {
  * @param {Element} element -
  * @returns {string | undefined} -
  */
-function computeAriaValueText(element) {
+function computeAriaValueText(element: Element): string | undefined {
   const valueText = element.getAttribute('aria-valuetext')
   return valueText === null ? undefined : valueText
 }
