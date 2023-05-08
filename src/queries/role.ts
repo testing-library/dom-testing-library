@@ -20,6 +20,7 @@ import {
   computeAriaValueMin,
   computeAriaValueText,
   computeHeadingLevel,
+  computeDisabled,
   getImplicitAriaRoles,
   prettyRoles,
   isInaccessible,
@@ -53,6 +54,7 @@ const queryAllByRole: AllByRole = (
     pressed,
     current,
     level,
+    disabled,
     expanded,
     value: {
       now: valueNow,
@@ -232,6 +234,9 @@ const queryAllByRole: AllByRole = (
       }
       if (level !== undefined) {
         return level === computeHeadingLevel(element)
+      }
+      if (disabled !== undefined) {
+        return disabled === computeDisabled(element)
       }
       if (
         valueNow !== undefined ||

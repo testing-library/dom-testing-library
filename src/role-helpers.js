@@ -370,6 +370,14 @@ function computeAriaValueText(element) {
   return valueText === null ? undefined : valueText
 }
 
+/**
+ * @param {Element} element
+ * @returns {boolean | undefined}
+ */
+function computeDisabled(element) {
+  return element.disabled || element.getAttribute('aria-disabled') === 'true'
+}
+
 export {
   getRoles,
   logRoles,
@@ -387,5 +395,6 @@ export {
   computeAriaValueMax,
   computeAriaValueMin,
   computeAriaValueText,
+  computeDisabled,
   computeHeadingLevel,
 }

@@ -135,6 +135,7 @@ export interface ByRoleOptions {
     | RegExp
     | string
     | ((accessibleDescription: string, element: Element) => boolean)
+  disabled?: boolean
 }
 
 export type AllByRole<T extends HTMLElement = HTMLElement> = (

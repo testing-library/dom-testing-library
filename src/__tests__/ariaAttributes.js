@@ -379,3 +379,25 @@ test('`expanded: true|false` matches `expanded` elements with proper role', () =
   expect(getByRole('button', {expanded: true})).toBeInTheDocument()
   expect(getByRole('button', {expanded: false})).toBeInTheDocument()
 })
+
+test('`expected: true|false` matches `disabled` buttons', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <button disabled />
+      <button />
+    </div>`,
+  )
+  expect(getByRole('button', {disabled: true})).toBeInTheDocument()
+  expect(getByRole('button', {disabled: false})).toBeInTheDocument()
+})
+
+test('`expected: true|false` matches `aria-disabled` buttons', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <button aria-disabled="true" />
+      <button aria-disabled="false" />
+    </div>`,
+  )
+  expect(getByRole('button', {disabled: true})).toBeInTheDocument()
+  expect(getByRole('button', {disabled: false})).toBeInTheDocument()
+})
