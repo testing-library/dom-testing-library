@@ -67,12 +67,18 @@ function waitFor(
           reject(error)
           return
         }
-        // we *could* (maybe should?) use `advanceTimersToNextTimer` but it's
-        // possible that could make this loop go on forever if someone is using
-        // third party code that's setting up recursive timers so rapidly that
-        // the user's timer's don't get a chance to resolve. So we'll advance
-        // by an interval instead. (We have a test for this case).
-        advanceTimersWrapper(() => {
+
+        // In this rare case, we *need* to wait for in-flight promises
+        // to resolve before continuing. We don't need to take advantage
+        // of parallelization so we're fine.
+        // https://stackoverflow.com/a/59243586/971592
+        // eslint-disable-next-line no-await-in-loop
+        await advanceTimersWrapper(async () => {
+          // we *could* (maybe should?) use `advanceTimersToNextTimer` but it's
+          // possible that could make this loop go on forever if someone is using
+          // third party code that's setting up recursive timers so rapidly that
+          // the user's timer's don't get a chance to resolve. So we'll advance
+          // by an interval instead. (We have a test for this case).
           jest.advanceTimersByTime(interval)
         })
 
@@ -85,18 +91,6 @@ function waitFor(
         if (finished) {
           break
         }
-
-        // In this rare case, we *need* to wait for in-flight promises
-        // to resolve before continuing. We don't need to take advantage
-        // of parallelization so we're fine.
-        // https://stackoverflow.com/a/59243586/971592
-        // eslint-disable-next-line no-await-in-loop
-        await advanceTimersWrapper(async () => {
-          await new Promise(r => {
-            setTimeout(r, 0)
-            jest.advanceTimersByTime(0)
-          })
-        })
       }
     } else {
       try {
