@@ -11,14 +11,17 @@ on:
       - 'beta'
       - 'alpha'
       - '!all-contributors/**'
-  pull_request: {}
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions: {}
 
 jobs:
   main:
     permissions:
-      actions: write #  to cancel/stop running workflows (styfle/cancel-workflow-action)
       contents: read #  to fetch code (actions/checkout)
     # ignore all-contributors PRs
     if: ${{ !contains(github.head_ref, 'all-contributors') }}
@@ -29,9 +32,6 @@ jobs:
         node: [14, 16, 18]
     runs-on: ubuntu-latest
     steps:
-      - name: 🛑 Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
-
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v3
         with:
@@ -63,7 +63,6 @@ jobs:
 
   release:
     permissions:
-      actions: write #  to cancel/stop running workflows (styfle/cancel-workflow-action)
       contents: write #  to create release tags (cycjimmy/semantic-release-action)
       issues: write # to post release that resolves an issue
 
@@ -73,9 +72,6 @@ jobs:
       ${{ github.repository == 'testing-library/dom-testing-library' &&
       github.event_name == 'push' }}
     steps:
-      - name: 🛑 Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
-
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v3
 

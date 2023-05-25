@@ -36,6 +36,28 @@ test('`expanded` throws on unsupported roles', () => {
   )
 })
 
+test('`busy` throws on unsupported roles', () => {
+  const {getByRole} = render(
+    `<div aria-busy="true" role="none">Hello, Dave!</div>`,
+  )
+  expect(() =>
+    getByRole('none', {busy: true}),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"aria-busy" is not supported on role "none".`,
+  )
+})
+
+test('`busy: true|false` matches `busy` regions', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <div role="log" aria-busy="true" />
+      <div role="log" aria-busy="false" />
+    </div>`,
+  )
+  expect(getByRole('log', {busy: true})).toBeInTheDocument()
+  expect(getByRole('log', {busy: false})).toBeInTheDocument()
+})
+
 test('`checked: true|false` matches `checked` checkboxes', () => {
   const {getByRole} = renderIntoDocument(
     `<div>
@@ -235,6 +257,105 @@ test('`level` throws on unsupported roles', () => {
   ).toThrowErrorMatchingInlineSnapshot(
     `Role "button" cannot have "level" property.`,
   )
+})
+
+test('`value.now` throws on unsupported roles', () => {
+  const {getByRole} = render(`<button aria-valuenow="1">Button</button>`)
+  expect(() =>
+    getByRole('button', {value: {now: 1}}),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"aria-valuenow" is not supported on role "button".`,
+  )
+})
+
+test('`value.now: number` matches `aria-valuenow` on widgets', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <button role="spinbutton" />
+      <button role="spinbutton" aria-valuenow="5" />
+      <button role="spinbutton" aria-valuenow="10" />
+    </div>`,
+  )
+  expect(getByRole('spinbutton', {value: {now: 5}})).toBeInTheDocument()
+  expect(getByRole('spinbutton', {value: {now: 10}})).toBeInTheDocument()
+})
+
+test('`value.max` throws on unsupported roles', () => {
+  const {getByRole} = render(`<button aria-valuemax="1">Button</button>`)
+  expect(() =>
+    getByRole('button', {value: {max: 1}}),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"aria-valuemax" is not supported on role "button".`,
+  )
+})
+
+test('`value.max: number` matches `aria-valuemax` on widgets', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <button role="spinbutton" />
+      <button role="spinbutton" aria-valuemax="5" />
+      <button role="spinbutton" aria-valuemax="10" />
+    </div>`,
+  )
+  expect(getByRole('spinbutton', {value: {max: 5}})).toBeInTheDocument()
+  expect(getByRole('spinbutton', {value: {max: 10}})).toBeInTheDocument()
+})
+
+test('`value.min` throws on unsupported roles', () => {
+  const {getByRole} = render(`<button aria-valuemin="1">Button</button>`)
+  expect(() =>
+    getByRole('button', {value: {min: 1}}),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"aria-valuemin" is not supported on role "button".`,
+  )
+})
+
+test('`value.min: number` matches `aria-valuemin` on widgets', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <button role="spinbutton" />
+      <button role="spinbutton" aria-valuemin="5" />
+      <button role="spinbutton" aria-valuemin="10" />
+    </div>`,
+  )
+  expect(getByRole('spinbutton', {value: {min: 5}})).toBeInTheDocument()
+  expect(getByRole('spinbutton', {value: {min: 10}})).toBeInTheDocument()
+})
+
+test('`value.text` throws on unsupported roles', () => {
+  const {getByRole} = render(`<button aria-valuetext="one">Button</button>`)
+  expect(() =>
+    getByRole('button', {value: {text: 'one'}}),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"aria-valuetext" is not supported on role "button".`,
+  )
+})
+
+test('`value.text: Matcher` matches `aria-valuetext` on widgets', () => {
+  const {getAllByRole, getByRole} = renderIntoDocument(
+    `<div>
+      <button role="spinbutton" />
+      <button role="spinbutton" aria-valuetext="zero" />
+      <button role="spinbutton" aria-valuetext="few" />
+      <button role="spinbutton" aria-valuetext="many" />
+    </div>`,
+  )
+  expect(getByRole('spinbutton', {value: {text: 'zero'}})).toBeInTheDocument()
+  expect(getAllByRole('spinbutton', {value: {text: /few|many/}})).toHaveLength(
+    2,
+  )
+})
+
+test('`value.*` must all match if specified', () => {
+  const {getByRole} = renderIntoDocument(
+    `<div>
+      <button role="spinbutton" aria-valuemin="0" aria-valuenow="1" aria-valuemax="10" aria-valuetext="eins" />
+      <button role="spinbutton" aria-valuemin="0" aria-valuenow="1" aria-valuemax="10" aria-valuetext="one" />
+    </div>`,
+  )
+  expect(
+    getByRole('spinbutton', {value: {now: 1, text: 'one'}}),
+  ).toBeInTheDocument()
 })
 
 test('`expanded: true|false` matches `expanded` buttons', () => {
