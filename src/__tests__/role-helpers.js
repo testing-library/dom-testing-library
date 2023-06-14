@@ -18,6 +18,10 @@ function setup() {
   const {getByTestId} = render(`
 <header data-testid="a-header">Banner header</header>
 <section aria-label="a region" data-testid='named-section'>
+  <img src="http://imgsrc.com" alt="404" data-testid="img-alt" />
+  <img src="http://imgsrc.com" alt="" data-testid="img-empty-alt" />
+  <img src="http://imgsrc.com" data-testid="img-no-alt" />
+  
   <a href="http://whatever.com" data-testid="a-link">link</a>
   <a>invalid link</a>
 
@@ -77,6 +81,9 @@ function setup() {
   return {
     unnamedSection: getByTestId('a-section'),
     namedSection: getByTestId('named-section'),
+    imgAlt: getByTestId('img-alt'),
+    imgEmptyAlt: getByTestId('img-empty-alt'),
+    imgNoAlt: getByTestId('img-no-alt'),
     anchor: getByTestId('a-link'),
     h1: getByTestId('a-h1'),
     h2: getByTestId('a-h2'),
@@ -142,6 +149,9 @@ test('getRoles returns expected roles for various dom nodes', () => {
     dd,
     dt,
     header,
+    imgAlt,
+    imgEmptyAlt,
+    imgNoAlt,
   } = setup()
 
   expect(getRoles(namedSection)).toEqual({
@@ -163,6 +173,8 @@ test('getRoles returns expected roles for various dom nodes', () => {
     region: [namedSection],
     term: [dt],
     definition: [dd],
+    img: [imgAlt, imgNoAlt],
+    presentation: [imgEmptyAlt],
   })
   expect(getRoles(header)).toEqual({
     banner: [header],
@@ -177,9 +189,21 @@ test('logRoles calls console.log with output from prettyRoles', () => {
 })
 
 test('getImplicitAriaRoles returns expected roles for various dom nodes', () => {
-  const {namedSection, h1, unnamedForm, radio, input} = setup()
+  const {
+    namedSection,
+    imgAlt,
+    imgEmptyAlt,
+    imgNoAlt,
+    h1,
+    unnamedForm,
+    radio,
+    input,
+  } = setup()
 
   expect(getImplicitAriaRoles(namedSection)).toEqual(['region'])
+  expect(getImplicitAriaRoles(imgAlt)).toEqual(['img'])
+  expect(getImplicitAriaRoles(imgEmptyAlt)).toEqual(['presentation'])
+  expect(getImplicitAriaRoles(imgNoAlt)).toEqual(['img'])
   expect(getImplicitAriaRoles(h1)).toEqual(['heading'])
   expect(getImplicitAriaRoles(unnamedForm)).toEqual([])
   expect(getImplicitAriaRoles(radio)).toEqual(['radio'])

@@ -1,12 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`logRoles calls console.log with output from prettyRoles 1`] = `
-region:
+section:
 
 Name "a region":
 <section
   aria-label="a region"
   data-testid="named-section"
+/>
+
+--------------------------------------------------
+img:
+
+Name "404":
+<img
+  alt="404"
+  data-testid="img-alt"
+  src="http://imgsrc.com"
+/>
+
+Name "":
+<img
+  data-testid="img-no-alt"
+  src="http://imgsrc.com"
+/>
+
+--------------------------------------------------
+presentation:
+
+Name "":
+<img
+  alt=""
+  data-testid="img-empty-alt"
+  src="http://imgsrc.com"
 />
 
 --------------------------------------------------
@@ -50,32 +76,6 @@ article:
 Name "":
 <article
   data-testid="a-article"
-/>
-
---------------------------------------------------
-command:
-
-Name "":
-<menuitem
-  data-testid="a-menuitem-1"
-/>
-
-Name "":
-<menuitem
-  data-testid="a-menuitem-2"
-/>
-
---------------------------------------------------
-menuitem:
-
-Name "":
-<menuitem
-  data-testid="a-menuitem-1"
-/>
-
-Name "":
-<menuitem
-  data-testid="a-menuitem-2"
 />
 
 --------------------------------------------------

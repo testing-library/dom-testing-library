@@ -84,7 +84,7 @@ function buildElementRoleList(elementRolesMap) {
         const shouldNotExist = constraints.indexOf('undefined') !== -1
         if (shouldNotExist) {
           return `:not([${attributeName}])`
-        } else if (value) {
+        } else if (value || value === '') {
           return `[${attributeName}="${value}"]`
         } else {
           return `[${attributeName}]`
