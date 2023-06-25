@@ -53,32 +53,6 @@ Name "":
 />
 
 --------------------------------------------------
-command:
-
-Name "":
-<menuitem
-  data-testid="a-menuitem-1"
-/>
-
-Name "":
-<menuitem
-  data-testid="a-menuitem-2"
-/>
-
---------------------------------------------------
-menuitem:
-
-Name "":
-<menuitem
-  data-testid="a-menuitem-1"
-/>
-
-Name "":
-<menuitem
-  data-testid="a-menuitem-2"
-/>
-
---------------------------------------------------
 list:
 
 Name "":

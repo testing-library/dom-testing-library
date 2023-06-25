@@ -19,7 +19,7 @@ function setup() {
 <header data-testid="a-header">Banner header</header>
 <section aria-label="a region" data-testid='named-section'>
   <a href="http://whatever.com" data-testid="a-link">link</a>
-  <a>invalid link</a>
+  <a data-testid="invalid-link">invalid link</a>
 
   <nav data-testid='a-nav' />
   
@@ -28,14 +28,6 @@ function setup() {
   <h3 data-testid='a-h3'>Tertiary Heading</h3>
 
   <article data-testid='a-article'>
-    <!-- menuitem is currently deprecated, but is the only 
-         tag currently that aria-query returns multiple roles for
-         (roles: command, menuitem).
-         It's used here in case a future tag also has multiple 
-         roles -->
-    <menuitem data-testid='a-menuitem-1'>1</menuitem> 
-    <menuitem data-testid='a-menuitem-2'>2</menuitem>
-
     <ul data-testid='a-list'>
       <li data-testid='a-list-item-1'>Item 1</li>
       <li data-testid='a-list-item-2'>Item 2</li>
@@ -78,13 +70,12 @@ function setup() {
     unnamedSection: getByTestId('a-section'),
     namedSection: getByTestId('named-section'),
     anchor: getByTestId('a-link'),
+    invalidAnchor: getByTestId('invalid-link'),
     h1: getByTestId('a-h1'),
     h2: getByTestId('a-h2'),
     h3: getByTestId('a-h3'),
     nav: getByTestId('a-nav'),
     article: getByTestId('a-article'),
-    menuItem: getByTestId('a-menuitem-1'),
-    menuItem2: getByTestId('a-menuitem-2'),
     aUl: getByTestId('a-list'),
     aLi1: getByTestId('a-list-item-1'),
     aLi2: getByTestId('a-list-item-2'),
@@ -112,14 +103,14 @@ function setup() {
 
 test('getRoles returns expected roles for various dom nodes', () => {
   const {
+    unnamedSection,
     anchor,
+    invalidAnchor,
     h1,
     h2,
     h3,
     nav,
     article,
-    menuItem,
-    menuItem2,
     aUl,
     aLi1,
     aLi2,
@@ -146,6 +137,7 @@ test('getRoles returns expected roles for various dom nodes', () => {
 
   expect(getRoles(namedSection)).toEqual({
     link: [anchor],
+    generic: [invalidAnchor, unnamedSection],
     heading: [h1, h2, h3],
     navigation: [nav],
     radio: [radio, radio2],
@@ -157,8 +149,6 @@ test('getRoles returns expected roles for various dom nodes', () => {
     cell: [td1, td2, td3],
     textbox: [input, input2, textarea],
     rowgroup: [tbody],
-    command: [menuItem, menuItem2],
-    menuitem: [menuItem, menuItem2],
     form: [namedForm],
     region: [namedSection],
     term: [dt],
