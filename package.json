@@ -70,6 +70,8 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.6",
+    "browserslist": "4.21.8",
+    "caniuse-lite": "1.0.30001502",
     "jest-in-case": "^1.0.2",
     "jest-snapshot-serializer-ansi": "^1.0.0",
     "jest-watch-select-projects": "^2.0.0",
