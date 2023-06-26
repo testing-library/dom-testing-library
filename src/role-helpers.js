@@ -82,13 +82,18 @@ function buildElementRoleList(elementRolesMap) {
     return `${name}${attributes
       .map(({name: attributeName, value, constraints = []}) => {
         const shouldNotExist = constraints.indexOf('undefined') !== -1
-        if (shouldNotExist) {
-          return `:not([${attributeName}])`
-        } else if (value) {
+        const shouldBeNonEmpty = constraints.indexOf('set') !== -1
+        const hasExplicitValue = typeof value !== 'undefined'
+
+        if (hasExplicitValue) {
           return `[${attributeName}="${value}"]`
-        } else {
-          return `[${attributeName}]`
+        } else if (shouldNotExist) {
+          return `:not([${attributeName}])`
+        } else if (shouldBeNonEmpty) {
+          return `[${attributeName}]:not([${attributeName}=""])`
         }
+
+        return `[${attributeName}]`
       })
       .join('')}`
   }

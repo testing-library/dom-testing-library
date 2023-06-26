@@ -191,4 +191,30 @@ Name "":
 />
 
 --------------------------------------------------
+img:
+
+Name "":
+<img
+  data-testid="a-img-1"
+  src="http://example.com/image.png"
+/>
+
+Name "a meaningful description":
+<img
+  alt="a meaningful description"
+  data-testid="a-img-3"
+  src="http://example.com/image.png"
+/>
+
+--------------------------------------------------
+presentation:
+
+Name "":
+<img
+  alt=""
+  data-testid="a-img-2"
+  src="http://example.com/image.png"
+/>
+
+--------------------------------------------------
 `;

@@ -58,11 +58,15 @@ function setup() {
 
     <form data-testid="a-form" />
     <section data-testid="a-section" />
-   </article>
-   <dl>
+  </article>
+  <dl>
     <dt data-testid="a-dt">Term</dt>
     <dd data-testid="a-dd">Definition</dd>
-   </dl>
+  </dl>
+
+  <img src="http://example.com/image.png" data-testid='a-img-1'/>
+  <img alt="" src="http://example.com/image.png" data-testid='a-img-2'/>
+  <img alt="a meaningful description" src="http://example.com/image.png" data-testid='a-img-3'/>
 </section>
   `)
 
@@ -70,7 +74,6 @@ function setup() {
     unnamedSection: getByTestId('a-section'),
     namedSection: getByTestId('named-section'),
     anchor: getByTestId('a-link'),
-    invalidAnchor: getByTestId('invalid-link'),
     h1: getByTestId('a-h1'),
     h2: getByTestId('a-h2'),
     h3: getByTestId('a-h3'),
@@ -98,14 +101,16 @@ function setup() {
     dt: getByTestId('a-dt'),
     dd: getByTestId('a-dd'),
     header: getByTestId('a-header'),
+    invalidAnchor: getByTestId('invalid-link'),
+    unnamedImg: getByTestId('a-img-1'),
+    presentationImg: getByTestId('a-img-2'),
+    namedImg: getByTestId('a-img-3'),
   }
 }
 
 test('getRoles returns expected roles for various dom nodes', () => {
   const {
-    unnamedSection,
     anchor,
-    invalidAnchor,
     h1,
     h2,
     h3,
@@ -133,11 +138,15 @@ test('getRoles returns expected roles for various dom nodes', () => {
     dd,
     dt,
     header,
+    invalidAnchor,
+    unnamedSection,
+    unnamedImg,
+    presentationImg,
+    namedImg,
   } = setup()
 
   expect(getRoles(namedSection)).toEqual({
     link: [anchor],
-    generic: [invalidAnchor, unnamedSection],
     heading: [h1, h2, h3],
     navigation: [nav],
     radio: [radio, radio2],
@@ -153,6 +162,9 @@ test('getRoles returns expected roles for various dom nodes', () => {
     region: [namedSection],
     term: [dt],
     definition: [dd],
+    generic: [invalidAnchor, unnamedSection],
+    img: [unnamedImg, namedImg],
+    presentation: [presentationImg],
   })
   expect(getRoles(header)).toEqual({
     banner: [header],
