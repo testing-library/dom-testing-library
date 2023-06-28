@@ -1598,8 +1598,18 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "jlp-craigmorten",
+      "name": "Craig Morten",
+      "avatar_url": "https://avatars.githubusercontent.com/u/124147726?v=4",
+      "profile": "https://github.com/jlp-craigmorten",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com",
-  "commitConvention": "angular"
+  "commitConvention": "angular",
+  "commitType": "docs"
 }
