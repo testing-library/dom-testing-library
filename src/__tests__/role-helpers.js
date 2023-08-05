@@ -3,6 +3,7 @@ import {
   logRoles,
   getImplicitAriaRoles,
   isInaccessible,
+  prettyRoles,
 } from '../role-helpers'
 import {render} from './helpers/test-utils'
 
@@ -22,6 +23,15 @@ function setup() {
   <a>invalid link</a>
 
   <nav data-testid='a-nav' />
+  
+  <!-- div without an explicit role is given a "generic" role by default -->
+  <div aria-hidden="true" data-testid="a-hidden-div-with-a-generic-role">
+    <span>Some hidden content</span>
+  </div>
+  
+  <div aria-hidden="true" data-testid="a-hidden-div-without-a-generic-role" role="region">
+    <span>Some hidden content</span>
+  </div>
   
   <h1 data-testid='a-h1'>Main Heading</h1>
   <h2 data-testid='a-h2'>Sub Heading</h2>
@@ -107,6 +117,10 @@ function setup() {
     dt: getByTestId('a-dt'),
     dd: getByTestId('a-dd'),
     header: getByTestId('a-header'),
+    hiddenDivWithGenericRole: getByTestId('a-hidden-div-with-a-generic-role'),
+    hiddenDivWithoutGenericRole: getByTestId(
+      'a-hidden-div-without-a-generic-role',
+    ),
   }
 }
 
@@ -169,9 +183,22 @@ test('getRoles returns expected roles for various dom nodes', () => {
   })
 })
 
+test('prettyRoles ignores elements with a "generic" role', () => {
+  const {hiddenDivWithGenericRole} = setup()
+  expect(prettyRoles(hiddenDivWithGenericRole)).toEqual('')
+})
+
 test('logRoles calls console.log with output from prettyRoles', () => {
   const {namedSection} = setup()
   logRoles(namedSection)
+  expect(console.log).toHaveBeenCalledTimes(1)
+  expect(console.log.mock.calls[0][0]).toMatchSnapshot()
+})
+
+test('logRoles with hidden=true outputs all elements incl. hidden ones', () => {
+  const {namedSection} = setup()
+  logRoles(namedSection, {hidden: true})
+
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchSnapshot()
 })
