@@ -1,4 +1,7 @@
-export function logRoles(container: HTMLElement, options?: LogRolesOptions): string
+export function logRoles(
+  container: HTMLElement,
+  options?: LogRolesOptions,
+): string
 
 type LogRolesOptions = {
   hidden?: boolean
