@@ -33,6 +33,18 @@ function setup() {
     <span>Some hidden content</span>
   </div>
   
+  <div data-testid="a-hidden-div-without-a-generic-role-and-with-hidden-attribute" role="region" hidden>
+    <span>Some hidden content</span>
+  </div>
+  
+  <div data-testid="a-hidden-div-without-a-generic-role-and-with-display-none" role="region" style="display: none">
+    <span>Some hidden content</span>
+  </div>
+  
+  <div data-testid="a-hidden-div-without-a-generic-role-and-with-visibility-hidden" role="region" style="visibility: hidden">
+    <span>Some hidden content</span>
+  </div>
+  
   <h1 data-testid='a-h1'>Main Heading</h1>
   <h2 data-testid='a-h2'>Sub Heading</h2>
   <h3 data-testid='a-h3'>Tertiary Heading</h3>
@@ -120,6 +132,15 @@ function setup() {
     hiddenDivWithGenericRole: getByTestId('a-hidden-div-with-a-generic-role'),
     hiddenDivWithoutGenericRole: getByTestId(
       'a-hidden-div-without-a-generic-role',
+    ),
+    hiddenDivWithoutGenericRoleAndWithHiddenAttribute: getByTestId(
+      'a-hidden-div-without-a-generic-role-and-with-hidden-attribute',
+    ),
+    hiddenDivWithoutGenericRoleAndWithDisplayNone: getByTestId(
+      'a-hidden-div-without-a-generic-role-and-with-display-none',
+    ),
+    hiddenDivWithoutGenericRoleAndWithVisibilityHidden: getByTestId(
+      'a-hidden-div-without-a-generic-role-and-with-visibility-hidden',
     ),
   }
 }

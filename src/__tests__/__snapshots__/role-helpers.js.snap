@@ -235,6 +235,27 @@ Name "":
   role="region"
 />
 
+Name "":
+<div
+  data-testid="a-hidden-div-without-a-generic-role-and-with-hidden-attribute"
+  hidden=""
+  role="region"
+/>
+
+Name "":
+<div
+  data-testid="a-hidden-div-without-a-generic-role-and-with-display-none"
+  role="region"
+  style="display: none"
+/>
+
+Name "":
+<div
+  data-testid="a-hidden-div-without-a-generic-role-and-with-visibility-hidden"
+  role="region"
+  style="visibility: hidden"
+/>
+
 --------------------------------------------------
 link:
 
