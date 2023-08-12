@@ -24,7 +24,6 @@ function setup() {
 
   <nav data-testid='a-nav' />
   
-  <!-- div without an explicit role is given a "generic" role by default -->
   <div aria-hidden="true" data-testid="a-hidden-div-with-a-generic-role">
     <span>Some hidden content</span>
   </div>
