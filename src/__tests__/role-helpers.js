@@ -206,7 +206,7 @@ test('getRoles returns expected roles for various dom nodes', () => {
 
 test('prettyRoles ignores elements with a "generic" role', () => {
   const {hiddenDivWithGenericRole} = setup()
-  expect(prettyRoles(hiddenDivWithGenericRole)).toEqual('')
+  expect(prettyRoles(hiddenDivWithGenericRole, {})).toEqual('')
 })
 
 test('logRoles calls console.log with output from prettyRoles', () => {

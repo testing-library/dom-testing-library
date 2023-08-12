@@ -186,7 +186,7 @@ function getRoles(container, {hidden = false} = {}) {
     }, {})
 }
 
-function prettyRoles(dom, {hidden, includeDescription} = {}) {
+function prettyRoles(dom, {hidden, includeDescription}) {
   const roles = getRoles(dom, {hidden})
   // We prefer to skip generic role, we don't recommend it
   return Object.entries(roles)
