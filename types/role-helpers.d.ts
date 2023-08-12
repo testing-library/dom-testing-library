@@ -3,7 +3,7 @@ export function logRoles(
   options?: LogRolesOptions,
 ): string
 
-type LogRolesOptions = {
+interface LogRolesOptions {
   hidden?: boolean
 }
 
