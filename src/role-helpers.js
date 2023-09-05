@@ -242,6 +242,15 @@ function computeAriaSelected(element) {
 
 /**
  * @param {Element} element -
+ * @returns {boolean} -
+ */
+function computeAriaBusy(element) {
+  // https://www.w3.org/TR/wai-aria-1.1/#aria-busy
+  return element.getAttribute('aria-busy') === 'true'
+}
+
+/**
+ * @param {Element} element -
  * @returns {boolean | undefined} - false/true if (not)checked, undefined if not checked-able
  */
 function computeAriaChecked(element) {
@@ -325,6 +334,42 @@ function computeHeadingLevel(element) {
   return ariaLevelAttribute || implicitHeadingLevels[element.tagName]
 }
 
+/**
+ * @param {Element} element -
+ * @returns {number | undefined} -
+ */
+function computeAriaValueNow(element) {
+  const valueNow = element.getAttribute('aria-valuenow')
+  return valueNow === null ? undefined : +valueNow
+}
+
+/**
+ * @param {Element} element -
+ * @returns {number | undefined} -
+ */
+function computeAriaValueMax(element) {
+  const valueMax = element.getAttribute('aria-valuemax')
+  return valueMax === null ? undefined : +valueMax
+}
+
+/**
+ * @param {Element} element -
+ * @returns {number | undefined} -
+ */
+function computeAriaValueMin(element) {
+  const valueMin = element.getAttribute('aria-valuemin')
+  return valueMin === null ? undefined : +valueMin
+}
+
+/**
+ * @param {Element} element -
+ * @returns {string | undefined} -
+ */
+function computeAriaValueText(element) {
+  const valueText = element.getAttribute('aria-valuetext')
+  return valueText === null ? undefined : valueText
+}
+
 export {
   getRoles,
   logRoles,
@@ -333,9 +378,14 @@ export {
   prettyRoles,
   isInaccessible,
   computeAriaSelected,
+  computeAriaBusy,
   computeAriaChecked,
   computeAriaPressed,
   computeAriaCurrent,
   computeAriaExpanded,
+  computeAriaValueNow,
+  computeAriaValueMax,
+  computeAriaValueMin,
+  computeAriaValueText,
   computeHeadingLevel,
 }

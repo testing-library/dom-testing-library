@@ -6,8 +6,15 @@ beforeAll(() => {
   configure({throwSuggestions: true})
 })
 
+beforeEach(() => {
+  // We're testing suggestions of find* queries but we're not interested in their time-related behavior.
+  // Real timers would make the test suite slower for no reason.
+  jest.useFakeTimers()
+})
+
 afterEach(() => {
-  configure({testIdAttribute: 'data-testid'})
+  jest.useRealTimers()
+  configure({testIdAttribute: 'data-testid', throwSuggestions: true})
   console.warn.mockClear()
 })
 
@@ -101,6 +108,17 @@ test('should not suggest when suggest is turned off for a query', () => {
   expect(() =>
     screen.getAllByTestId(/foo/, {suggest: false}),
   ).not.toThrowError()
+})
+
+test('should suggest when suggest is turned on for a specific query but disabled in config', () => {
+  configure({throwSuggestions: false})
+  renderIntoDocument(`
+  <button data-testid="foo">submit</button>
+  <button data-testid="foot">another</button>`)
+
+  expect(() => screen.getByTestId('foo', {suggest: true})).toThrowError(
+    "try this:\ngetByRole('button', { name: /submit/i })",
+  )
 })
 
 test('should suggest getByRole when used with getBy', () => {
