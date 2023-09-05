@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import {
   computeAccessibleDescription,
   computeAccessibleName,
@@ -9,10 +10,15 @@ import {
 } from 'aria-query'
 import {
   computeAriaSelected,
+  computeAriaBusy,
   computeAriaChecked,
   computeAriaPressed,
   computeAriaCurrent,
   computeAriaExpanded,
+  computeAriaValueNow,
+  computeAriaValueMax,
+  computeAriaValueMin,
+  computeAriaValueText,
   computeHeadingLevel,
   getImplicitAriaRoles,
   prettyRoles,
@@ -42,11 +48,18 @@ const queryAllByRole: AllByRole = (
     description,
     queryFallbacks = false,
     selected,
+    busy,
     checked,
     pressed,
     current,
     level,
     expanded,
+    value: {
+      now: valueNow,
+      min: valueMin,
+      max: valueMax,
+      text: valueText,
+    } = {} as NonNullable<ByRoleOptions['value']>,
   } = {},
 ) => {
   checkContainerType(container)
@@ -58,6 +71,16 @@ const queryAllByRole: AllByRole = (
       undefined
     ) {
       throw new Error(`"aria-selected" is not supported on role "${role}".`)
+    }
+  }
+
+  if (busy !== undefined) {
+    // guard against unknown roles
+    if (
+      allRoles.get(role as ARIARoleDefinitionKey)?.props['aria-busy'] ===
+      undefined
+    ) {
+      throw new Error(`"aria-busy" is not supported on role "${role}".`)
     }
   }
 
@@ -98,6 +121,46 @@ const queryAllByRole: AllByRole = (
     // guard against using `level` option with any role other than `heading`
     if (role !== 'heading') {
       throw new Error(`Role "${role}" cannot have "level" property.`)
+    }
+  }
+
+  if (valueNow !== undefined) {
+    // guard against unknown roles
+    if (
+      allRoles.get(role as ARIARoleDefinitionKey)?.props['aria-valuenow'] ===
+      undefined
+    ) {
+      throw new Error(`"aria-valuenow" is not supported on role "${role}".`)
+    }
+  }
+
+  if (valueMax !== undefined) {
+    // guard against unknown roles
+    if (
+      allRoles.get(role as ARIARoleDefinitionKey)?.props['aria-valuemax'] ===
+      undefined
+    ) {
+      throw new Error(`"aria-valuemax" is not supported on role "${role}".`)
+    }
+  }
+
+  if (valueMin !== undefined) {
+    // guard against unknown roles
+    if (
+      allRoles.get(role as ARIARoleDefinitionKey)?.props['aria-valuemin'] ===
+      undefined
+    ) {
+      throw new Error(`"aria-valuemin" is not supported on role "${role}".`)
+    }
+  }
+
+  if (valueText !== undefined) {
+    // guard against unknown roles
+    if (
+      allRoles.get(role as ARIARoleDefinitionKey)?.props['aria-valuetext'] ===
+      undefined
+    ) {
+      throw new Error(`"aria-valuetext" is not supported on role "${role}".`)
     }
   }
 
@@ -152,6 +215,9 @@ const queryAllByRole: AllByRole = (
       if (selected !== undefined) {
         return selected === computeAriaSelected(element)
       }
+      if (busy !== undefined) {
+        return busy === computeAriaBusy(element)
+      }
       if (checked !== undefined) {
         return checked === computeAriaChecked(element)
       }
@@ -166,6 +232,33 @@ const queryAllByRole: AllByRole = (
       }
       if (level !== undefined) {
         return level === computeHeadingLevel(element)
+      }
+      if (
+        valueNow !== undefined ||
+        valueMax !== undefined ||
+        valueMin !== undefined ||
+        valueText !== undefined
+      ) {
+        let valueMatches = true
+        if (valueNow !== undefined) {
+          valueMatches &&= valueNow === computeAriaValueNow(element)
+        }
+        if (valueMax !== undefined) {
+          valueMatches &&= valueMax === computeAriaValueMax(element)
+        }
+        if (valueMin !== undefined) {
+          valueMatches &&= valueMin === computeAriaValueMin(element)
+        }
+        if (valueText !== undefined) {
+          valueMatches &&= matches(
+            computeAriaValueText(element) ?? null,
+            element,
+            valueText,
+            text => text,
+          )
+        }
+
+        return valueMatches
       }
       // don't care if aria attributes are unspecified
       return true
