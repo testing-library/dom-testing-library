@@ -17,6 +17,7 @@ export interface Config {
   showOriginalStackTrace: boolean
   throwSuggestions: boolean
   getElementError: (message: string | null, container: Element) => Error
+  reactStrictMode: boolean
 }
 
 export interface ConfigFn {

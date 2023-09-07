@@ -48,6 +48,11 @@ let config: InternalConfig = {
   },
   _disableExpensiveErrorDiagnostics: false,
   computedStyleSupportsPseudoElements: false,
+  // we have this config option that's really only intended for
+  // react-testing-library to use. For that reason, this feature will remain
+  // undocumented.
+  // see: https://github.com/testing-library/react-testing-library/issues/338
+  reactStrictMode: false,
 }
 
 export function runWithExpensiveErrorDiagnosticsDisabled<T>(
