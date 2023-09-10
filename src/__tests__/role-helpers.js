@@ -68,6 +68,7 @@ function setup() {
   <img alt="" src="http://example.com/image.png" data-testid='a-img-2'/>
   <img alt="a meaningful description" src="http://example.com/image.png" data-testid='a-img-3'/>
 </section>
+<footer data-testid="a-footer">Contentinfo footer</footer>
   `)
 
   return {
@@ -105,6 +106,7 @@ function setup() {
     unnamedImg: getByTestId('a-img-1'),
     presentationImg: getByTestId('a-img-2'),
     namedImg: getByTestId('a-img-3'),
+    footer: getByTestId('a-footer'),
   }
 }
 
@@ -143,6 +145,7 @@ test('getRoles returns expected roles for various dom nodes', () => {
     unnamedImg,
     presentationImg,
     namedImg,
+    footer,
   } = setup()
 
   expect(getRoles(namedSection)).toEqual({
@@ -168,6 +171,9 @@ test('getRoles returns expected roles for various dom nodes', () => {
   })
   expect(getRoles(header)).toEqual({
     banner: [header],
+  })
+  expect(getRoles(footer)).toEqual({
+    contentinfo: [footer],
   })
 })
 
