@@ -196,9 +196,9 @@ test('escapes regular expressions in suggestion', () => {
   const {container} = renderIntoDocument(`
       <label for="superInput">inp-t lab^l w{th c+ars to esc\\pe</label>
       <input id="superInput" type="text" value="my super string +-('{}^$)" placeholder="should escape +-'(/" />
-      <p>
+      <span>
         Loading ... (1)
-      </p>
+      </span>
       <img src="foo.png" alt="The Problem (picture of a question mark)" data-testid="foo" />
     `)
 
@@ -214,7 +214,7 @@ test('escapes regular expressions in suggestion', () => {
     ).toString(),
   ).toEqual(`getByAltText(/the problem \\(picture of a question mark\\)/i)`)
 
-  expect(getSuggestedQuery(container.querySelector('p')).toString()).toEqual(
+  expect(getSuggestedQuery(container.querySelector('span')).toString()).toEqual(
     `getByText(/loading \\.\\.\\. \\(1\\)/i)`,
   )
 
