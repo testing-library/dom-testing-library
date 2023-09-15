@@ -148,6 +148,31 @@ test('timeout logs a pretty DOM', async () => {
   `)
 })
 
+test("timeout doesn't error on DOMExceptions", async () => {
+  renderIntoDocument(`<div id="pretty">how pretty</div>`)
+  const error = await waitFor(
+    () => {
+      throw new DOMException('nooooooo!')
+    },
+    {timeout: 1},
+  ).catch(e => e)
+  expect(error.message).toMatchInlineSnapshot(`
+    nooooooo!
+
+    Ignored nodes: comments, script, style
+    <html>
+      <head />
+      <body>
+        <div
+          id="pretty"
+        >
+          how pretty
+        </div>
+      </body>
+    </html>
+  `)
+})
+
 test('should delegate to config.getElementError', async () => {
   const elementError = new Error('Custom element error')
   const getElementError = jest.fn().mockImplementation(() => elementError)

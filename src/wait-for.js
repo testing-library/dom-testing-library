@@ -24,10 +24,9 @@ function waitFor(
     stackTraceError,
     interval = 50,
     onTimeout = error => {
-      error.message = getConfig().getElementError(
-        error.message,
-        container,
-      ).message
+      Object.defineProperty(error, 'message', {
+        value: getConfig().getElementError(error.message, container).message,
+      })
       return error
     },
     mutationObserverOptions = {
