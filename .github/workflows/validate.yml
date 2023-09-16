@@ -65,6 +65,37 @@ jobs:
           fail_ci_if_error: true
           flags: node-${{ matrix.node }}
 
+  bun:
+    permissions:
+      contents: read #  to fetch code (actions/checkout)
+    # ignore all-contributors PRs
+    if: ${{ !contains(github.head_ref, 'all-contributors') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+        with:
+          # required by codecov/codecov-action
+          fetch-depth: 0
+
+      - name: ⎔ Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 1.0.2
+
+      # TODO: Can be removed if https://github.com/kentcdodds/kcd-scripts/pull/146 is released
+      - name: Verify format (`npm run format` committed?)
+        run: bun run format --check --no-write
+
+      - name: ▶️ Run validate script
+        run: bun run validate
+
+      - name: ⬆️ Upload coverage report
+        uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
+          flags: node-${{ matrix.node }}
+
   release:
     permissions:
       contents: write #  to create release tags (cycjimmy/semantic-release-action)
