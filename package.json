@@ -43,16 +43,16 @@
     "node 14.0"
   ],
   "scripts": {
-    "build": "kcd-scripts build  --no-ts-defs --ignore \"**/__tests__/**,**/__node_tests__/**,**/__mocks__/**\" && kcd-scripts build --no-ts-defs --bundle --no-clean",
-    "format": "kcd-scripts format",
+    "build": "bunx kcd-scripts build  --no-ts-defs --ignore \"**/__tests__/**,**/__node_tests__/**,**/__mocks__/**\" && kcd-scripts build --no-ts-defs --bundle --no-clean",
+    "format": "bunx kcd-scripts format",
     "install:csb": "npm install",
-    "lint": "kcd-scripts lint",
-    "setup": "npm install && npm run validate -s",
-    "test": "kcd-scripts test",
+    "lint": "bunx kcd-scripts lint",
+    "setup": "bun install && bun run validate -s",
+    "test": "bunx kcd-scripts test",
     "test:debug": "node --inspect-brk ./node_modules/.bin/jest --watch --runInBand",
-    "test:update": "npm test -- --updateSnapshot --coverage",
-    "validate": "kcd-scripts validate",
-    "typecheck": "kcd-scripts typecheck --build types"
+    "test:update": "bun run test -- --updateSnapshot --coverage",
+    "validate": "bunx kcd-scripts validate",
+    "typecheck": "bunx kcd-scripts typecheck --build types"
   },
   "files": [
     "dist",
