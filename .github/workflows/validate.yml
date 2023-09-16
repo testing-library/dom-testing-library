@@ -29,7 +29,7 @@ jobs:
       # Otherwise we would not know if the problem is tied to the Node.js version
       fail-fast: false
       matrix:
-        node: [14, 16, 18]
+        node: [14, 16, 18, 20]
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout repo
