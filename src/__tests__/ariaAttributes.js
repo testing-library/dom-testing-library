@@ -161,6 +161,7 @@ test('`selected: true` matches `aria-selected="true"` on supported roles', () =>
 
   expect(getAllByRole('option', {selected: true}).map(({id}) => id)).toEqual([
     'selected-native-option',
+    'unselected-native-option',
     'selected-listbox-option',
   ])
 
