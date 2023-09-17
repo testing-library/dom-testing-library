@@ -43,6 +43,10 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
+      # Ideally done by actions/setup-node: https://github.com/actions/setup-node/issues/213
+      - name: Setup package manager
+        run: npm install -g npm@9.2.0
+
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
         with:
@@ -79,6 +83,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 14
+
+      # Ideally done by actions/setup-node: https://github.com/actions/setup-node/issues/213
+      - name: Setup package manager
+        run: npm install -g npm@9.2.0
 
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
