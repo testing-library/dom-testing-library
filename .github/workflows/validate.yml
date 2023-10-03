@@ -29,7 +29,7 @@ jobs:
       # Otherwise we would not know if the problem is tied to the Node.js version
       fail-fast: false
       matrix:
-        node: [18, 20]
+        node: [14, 16, 18, 20]
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout repo
@@ -42,6 +42,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
+
+      # Ideally done by actions/setup-node: https://github.com/actions/setup-node/issues/213
+      - name: Setup package manager
+        run: npm install -g npm@9.2.0
 
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
@@ -79,6 +83,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+
+      # Ideally done by actions/setup-node: https://github.com/actions/setup-node/issues/213
+      - name: Setup package manager
+        run: npm install -g npm@9.2.0
 
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
