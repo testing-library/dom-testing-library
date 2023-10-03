@@ -106,6 +106,9 @@ function waitFor(
     }
 
     function onDone(error, result) {
+      if (finished) {
+        return
+      }
       finished = true
       clearTimeout(overallTimeoutTimer)
 
@@ -134,7 +137,7 @@ function waitFor(
     }
 
     function checkCallback() {
-      if (promiseStatus === 'pending') return
+      if (finished || promiseStatus === 'pending') return
       try {
         const result = runWithExpensiveErrorDiagnosticsDisabled(callback)
         if (typeof result?.then === 'function') {
@@ -160,6 +163,9 @@ function waitFor(
     }
 
     function handleTimeout() {
+      if (finished) {
+        return
+      }
       let error
       if (lastError) {
         error = lastError
