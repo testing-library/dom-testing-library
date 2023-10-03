@@ -25,7 +25,7 @@ function getDocument() {
   }
   return window.document
 }
-function getWindowFromNode(node: any) {
+function getWindowFromNode(node: any): typeof window {
   if (node.defaultView) {
     // node is document
     return node.defaultView

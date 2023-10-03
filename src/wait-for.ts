@@ -9,14 +9,28 @@ import {
 } from './helpers'
 import {getConfig, runWithExpensiveErrorDiagnosticsDisabled} from './config'
 
-// This is so the stack trace the developer sees is one that's
-// closer to their code (because async stack traces are hard to follow).
-function copyStackTrace(target, source) {
-  target.stack = source.stack.replace(source.message, target.message)
+export interface waitForOptions {
+  container?: Element | Document
+  timeout?: number
+  interval?: number
+  onTimeout?: (error: Error) => Error
+  mutationObserverOptions?: MutationObserverInit
+  showOriginalStackTrace?: boolean
 }
 
-function waitFor(
-  callback,
+interface waitForImplOptions extends waitForOptions {
+  stackTraceError: Error
+}
+
+// This is so the stack trace the developer sees is one that's
+// closer to their code (because async stack traces are hard to follow).
+function copyStackTrace(target: Error, source: Error) {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We never encountered environments where  stack is not set
+  target.stack = source.stack!.replace(source.message, target.message)
+}
+
+function waitFor<T>(
+  callback: () => Promise<T> | T,
   {
     container = getDocument(),
     timeout = getConfig().asyncUtilTimeout,
@@ -35,14 +49,16 @@ function waitFor(
       attributes: true,
       characterData: true,
     },
-  },
-) {
+  }: waitForImplOptions,
+): Promise<T> {
   if (typeof callback !== 'function') {
     throw new TypeError('Received `callback` arg must be a function')
   }
 
   return new Promise(async (resolve, reject) => {
-    let lastError, intervalId, observer
+    let lastError: Error | undefined,
+      intervalId: ReturnType<typeof setInterval>,
+      observer: MutationObserver
     let finished = false
     let promiseStatus = 'idle'
 
@@ -56,7 +72,7 @@ function waitFor(
       // infinite loop. However, eslint isn't smart enough to know that we're
       // setting finished inside `onDone` which will be called when we're done
       // waiting or when we've timed out.
-      // eslint-disable-next-line no-unmodified-loop-condition
+      // eslint-disable-next-line no-unmodified-loop-condition, @typescript-eslint/no-unnecessary-condition
       while (!finished) {
         if (!jestFakeTimersAreEnabled()) {
           const error = new Error(
@@ -87,6 +103,7 @@ function waitFor(
         // an entire day banging my head against a wall on this.
         checkCallback()
 
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (finished) {
           break
         }
@@ -94,7 +111,7 @@ function waitFor(
     } else {
       try {
         checkContainerType(container)
-      } catch (e) {
+      } catch (e: unknown) {
         reject(e)
         return
       }
@@ -105,7 +122,9 @@ function waitFor(
       checkCallback()
     }
 
-    function onDone(error, result) {
+    function onDone(error: Error, result: null): void
+    function onDone(error: null, result: T): void
+    function onDone(error: Error | null, result: T | null) {
       finished = true
       clearTimeout(overallTimeoutTimer)
 
@@ -117,7 +136,7 @@ function waitFor(
       if (error) {
         reject(error)
       } else {
-        resolve(result)
+        resolve(result as T)
       }
     }
 
@@ -137,30 +156,31 @@ function waitFor(
       if (promiseStatus === 'pending') return
       try {
         const result = runWithExpensiveErrorDiagnosticsDisabled(callback)
-        if (typeof result?.then === 'function') {
+        if (typeof (result as any)?.then === 'function') {
+          const thenable = result as PromiseLike<T>
           promiseStatus = 'pending'
-          result.then(
+          thenable.then(
             resolvedValue => {
               promiseStatus = 'resolved'
               onDone(null, resolvedValue)
             },
-            rejectedValue => {
+            (rejectedValue: Error) => {
               promiseStatus = 'rejected'
               lastError = rejectedValue
             },
           )
         } else {
-          onDone(null, result)
+          onDone(null, result as T)
         }
         // If `callback` throws, wait for the next mutation, interval, or timeout.
-      } catch (error) {
+      } catch (error: unknown) {
         // Save the most recent callback error to reject the promise with it in the event of a timeout
-        lastError = error
+        lastError = error as Error
       }
     }
 
     function handleTimeout() {
-      let error
+      let error: Error
       if (lastError) {
         error = lastError
         if (
@@ -180,7 +200,10 @@ function waitFor(
   })
 }
 
-function waitForWrapper(callback, options) {
+function waitForWrapper<T>(
+  callback: () => T | Promise<T>,
+  options?: waitForOptions,
+): Promise<T> {
   // create the error here so its stack trace is as close to the
   // calling code as possible
   const stackTraceError = new Error('STACK_TRACE_MESSAGE')

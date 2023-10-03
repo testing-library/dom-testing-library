@@ -4,7 +4,9 @@ export interface Config {
    * WARNING: `unstable` prefix means this API may change in patch and minor releases.
    * @param cb
    */
-  unstable_advanceTimersWrapper(cb: (...args: unknown[]) => unknown): unknown
+  unstable_advanceTimersWrapper: (
+    cb: (...args: unknown[]) => unknown,
+  ) => unknown
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   asyncWrapper(cb: (...args: any[]) => any): Promise<any>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -16,7 +18,10 @@ export interface Config {
   defaultIgnore: string
   showOriginalStackTrace: boolean
   throwSuggestions: boolean
-  getElementError: (message: string | null, container: Element) => Error
+  getElementError: (
+    message: string | null,
+    container: Element | Document,
+  ) => Error
 }
 
 export interface ConfigFn {
