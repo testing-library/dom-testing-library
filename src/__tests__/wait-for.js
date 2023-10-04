@@ -337,12 +337,14 @@ test('does not work after it resolves', async () => {
 
   let data = null
   setTimeout(() => {
+    contextStack.push('timeout')
     data = 'resolved'
   }, 100)
 
   contextStack.push('waitFor:start')
   await waitFor(
     () => {
+      contextStack.push('callback')
       // eslint-disable-next-line jest/no-conditional-in-test -- false-positive
       if (data === null) {
         throw new Error('not found')
@@ -352,27 +354,39 @@ test('does not work after it resolves', async () => {
   )
   contextStack.push('waitFor:end')
 
-  expect(contextStack).toEqual([
-    'waitFor:start',
-    'no-act:start',
-    'act:start',
-    'act:end',
-    'act:start',
-    'act:end',
-    'no-act:end',
-    'waitFor:end',
-  ])
+  expect(contextStack).toMatchInlineSnapshot(`
+    [
+      waitFor:start,
+      no-act:start,
+      callback,
+      act:start,
+      act:end,
+      callback,
+      act:start,
+      timeout,
+      act:end,
+      callback,
+      no-act:end,
+      waitFor:end,
+    ]
+  `)
 
   await Promise.resolve()
 
-  expect(contextStack).toEqual([
-    'waitFor:start',
-    'no-act:start',
-    'act:start',
-    'act:end',
-    'act:start',
-    'act:end',
-    'no-act:end',
-    'waitFor:end',
-  ])
+  expect(contextStack).toMatchInlineSnapshot(`
+    [
+      waitFor:start,
+      no-act:start,
+      callback,
+      act:start,
+      act:end,
+      callback,
+      act:start,
+      timeout,
+      act:end,
+      callback,
+      no-act:end,
+      waitFor:end,
+    ]
+  `)
 })
