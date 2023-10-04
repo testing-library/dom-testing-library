@@ -335,10 +335,10 @@ test('does not work after it resolves', async () => {
     },
   })
 
-  let data = null
+  let timeoutResolved = false
   setTimeout(() => {
     contextStack.push('timeout')
-    data = 'resolved'
+    timeoutResolved = true
   }, 100)
 
   contextStack.push('waitFor:start')
@@ -346,7 +346,7 @@ test('does not work after it resolves', async () => {
     () => {
       contextStack.push('callback')
       // eslint-disable-next-line jest/no-conditional-in-test -- false-positive
-      if (data === null) {
+      if (!timeoutResolved) {
         throw new Error('not found')
       }
     },
@@ -390,4 +390,65 @@ test('does not work after it resolves', async () => {
       waitFor:end,
     ]
   `)
+})
+
+test(`when fake timer is installed, on waitFor timeout, it doesn't call the callback afterward`, async () => {
+  jest.useFakeTimers('modern')
+
+  configure({
+    // @testing-library/react usage to ensure `IS_REACT_ACT_ENVIRONMENT` is set when acting.
+    unstable_advanceTimersWrapper: callback => {
+      try {
+        const result = callback()
+        // eslint-disable-next-line jest/no-if, jest/no-conditional-in-test -- false-positive
+        if (typeof result?.then === 'function') {
+          const thenable = result
+          return {
+            then: (resolve, reject) => {
+              thenable.then(
+                returnValue => {
+                  resolve(returnValue)
+                },
+                error => {
+                  reject(error)
+                },
+              )
+            },
+          }
+        } else {
+          return undefined
+        }
+      } catch {
+        return undefined
+      }
+    },
+    asyncWrapper: async callback => {
+      try {
+        await callback()
+      } finally {
+        /* eslint no-empty: "off" */
+      }
+    },
+  })
+
+  let waitForHasResolved = false
+  let callbackCalledAfterWaitForResolved = false
+
+  await expect(() =>
+    waitFor(
+      () => {
+        // eslint-disable-next-line jest/no-conditional-in-test -- false-positive
+        if (waitForHasResolved) {
+          callbackCalledAfterWaitForResolved = true
+        }
+        throw new Error('We want to timeout')
+      },
+      {interval: 50, timeout: 100},
+    ),
+  ).rejects.toThrow()
+  waitForHasResolved = true
+
+  await Promise.resolve()
+
+  expect(callbackCalledAfterWaitForResolved).toBe(false)
 })
