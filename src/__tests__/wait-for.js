@@ -373,6 +373,7 @@ test('does not work after it resolves', async () => {
 
   await Promise.resolve()
 
+  // The context call stack should not change
   expect(contextStack).toMatchInlineSnapshot(`
     [
       waitFor:start,
