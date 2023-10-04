@@ -292,12 +292,11 @@ test('the real timers => fake timers error shows the original stack trace when c
 
 test('does not work after it resolves', async () => {
   jest.useFakeTimers('modern')
-  let context = 'initial'
+  const contextStack = []
   configure({
     // @testing-library/react usage to ensure `IS_REACT_ACT_ENVIRONMENT` is set when acting.
     unstable_advanceTimersWrapper: callback => {
-      const originalContext = context
-      context = 'act'
+      contextStack.push('act:start')
       try {
         const result = callback()
         // eslint-disable-next-line jest/no-if, jest/no-conditional-in-test -- false-positive
@@ -307,32 +306,31 @@ test('does not work after it resolves', async () => {
             then: (resolve, reject) => {
               thenable.then(
                 returnValue => {
-                  context = originalContext
+                  contextStack.push('act:end')
                   resolve(returnValue)
                 },
                 error => {
-                  context = originalContext
+                  contextStack.push('act:end')
                   reject(error)
                 },
               )
             },
           }
         } else {
-          context = originalContext
+          contextStack.push('act:end')
           return undefined
         }
       } catch {
-        context = originalContext
+        contextStack.push('act:end')
         return undefined
       }
     },
     asyncWrapper: async callback => {
-      const originalContext = context
-      context = 'no-act'
+      contextStack.push('no-act:start')
       try {
         await callback()
       } finally {
-        context = originalContext
+        contextStack.push('no-act:end')
       }
     },
   })
@@ -342,6 +340,7 @@ test('does not work after it resolves', async () => {
     data = 'resolved'
   }, 100)
 
+  contextStack.push('waitFor:start')
   await waitFor(
     () => {
       // eslint-disable-next-line jest/no-conditional-in-test -- false-positive
@@ -351,10 +350,29 @@ test('does not work after it resolves', async () => {
     },
     {interval: 50},
   )
+  contextStack.push('waitFor:end')
 
-  expect(context).toEqual('initial')
+  expect(contextStack).toEqual([
+    'waitFor:start',
+    'no-act:start',
+    'act:start',
+    'act:end',
+    'act:start',
+    'act:end',
+    'no-act:end',
+    'waitFor:end',
+  ])
 
   await Promise.resolve()
 
-  expect(context).toEqual('initial')
+  expect(contextStack).toEqual([
+    'waitFor:start',
+    'no-act:start',
+    'act:start',
+    'act:end',
+    'act:start',
+    'act:end',
+    'no-act:end',
+    'waitFor:end',
+  ])
 })
