@@ -19,7 +19,7 @@ function setup() {
 <header data-testid="a-header">Banner header</header>
 <section aria-label="a region" data-testid='named-section'>
   <a href="http://whatever.com" data-testid="a-link">link</a>
-  <a>invalid link</a>
+  <a data-testid="invalid-link">invalid link</a>
 
   <nav data-testid='a-nav' />
   
@@ -28,14 +28,6 @@ function setup() {
   <h3 data-testid='a-h3'>Tertiary Heading</h3>
 
   <article data-testid='a-article'>
-    <!-- menuitem is currently deprecated, but is the only 
-         tag currently that aria-query returns multiple roles for
-         (roles: command, menuitem).
-         It's used here in case a future tag also has multiple 
-         roles -->
-    <menuitem data-testid='a-menuitem-1'>1</menuitem> 
-    <menuitem data-testid='a-menuitem-2'>2</menuitem>
-
     <ul data-testid='a-list'>
       <li data-testid='a-list-item-1'>Item 1</li>
       <li data-testid='a-list-item-2'>Item 2</li>
@@ -66,12 +58,17 @@ function setup() {
 
     <form data-testid="a-form" />
     <section data-testid="a-section" />
-   </article>
-   <dl>
+  </article>
+  <dl>
     <dt data-testid="a-dt">Term</dt>
     <dd data-testid="a-dd">Definition</dd>
-   </dl>
+  </dl>
+
+  <img src="http://example.com/image.png" data-testid='a-img-1'/>
+  <img alt="" src="http://example.com/image.png" data-testid='a-img-2'/>
+  <img alt="a meaningful description" src="http://example.com/image.png" data-testid='a-img-3'/>
 </section>
+<footer data-testid="a-footer">Contentinfo footer</footer>
   `)
 
   return {
@@ -83,8 +80,6 @@ function setup() {
     h3: getByTestId('a-h3'),
     nav: getByTestId('a-nav'),
     article: getByTestId('a-article'),
-    menuItem: getByTestId('a-menuitem-1'),
-    menuItem2: getByTestId('a-menuitem-2'),
     aUl: getByTestId('a-list'),
     aLi1: getByTestId('a-list-item-1'),
     aLi2: getByTestId('a-list-item-2'),
@@ -107,6 +102,11 @@ function setup() {
     dt: getByTestId('a-dt'),
     dd: getByTestId('a-dd'),
     header: getByTestId('a-header'),
+    invalidAnchor: getByTestId('invalid-link'),
+    unnamedImg: getByTestId('a-img-1'),
+    presentationImg: getByTestId('a-img-2'),
+    namedImg: getByTestId('a-img-3'),
+    footer: getByTestId('a-footer'),
   }
 }
 
@@ -118,8 +118,6 @@ test('getRoles returns expected roles for various dom nodes', () => {
     h3,
     nav,
     article,
-    menuItem,
-    menuItem2,
     aUl,
     aLi1,
     aLi2,
@@ -142,6 +140,12 @@ test('getRoles returns expected roles for various dom nodes', () => {
     dd,
     dt,
     header,
+    invalidAnchor,
+    unnamedSection,
+    unnamedImg,
+    presentationImg,
+    namedImg,
+    footer,
   } = setup()
 
   expect(getRoles(namedSection)).toEqual({
@@ -157,15 +161,19 @@ test('getRoles returns expected roles for various dom nodes', () => {
     cell: [td1, td2, td3],
     textbox: [input, input2, textarea],
     rowgroup: [tbody],
-    command: [menuItem, menuItem2],
-    menuitem: [menuItem, menuItem2],
     form: [namedForm],
     region: [namedSection],
     term: [dt],
     definition: [dd],
+    generic: [invalidAnchor, unnamedSection],
+    img: [unnamedImg, namedImg],
+    presentation: [presentationImg],
   })
   expect(getRoles(header)).toEqual({
     banner: [header],
+  })
+  expect(getRoles(footer)).toEqual({
+    contentinfo: [footer],
   })
 })
 
