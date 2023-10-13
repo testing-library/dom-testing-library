@@ -96,7 +96,9 @@ export interface ByRoleOptions {
    */
   pressed?: boolean
   /**
-   * Filters elements by their `aria-current` state. `true` and `false` match `aria-current="true"` and `aria-current="false"` (as well as a missing `aria-current` attribute) respectively.
+   * Filters elements by their `aria-current` state.
+   * Note that no `aria-current` attribute will match `current: false` since `false` is the default value for `aria-current`.
+   * https://www.w3.org/TR/wai-aria-1.2/#aria-current
    */
   current?: boolean | string
   /**
