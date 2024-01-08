@@ -292,12 +292,11 @@ test('the real timers => fake timers error shows the original stack trace when c
 
 test('does not work after it resolves', async () => {
   jest.useFakeTimers('modern')
-  let context = 'initial'
+  const contextStack = []
   configure({
     // @testing-library/react usage to ensure `IS_REACT_ACT_ENVIRONMENT` is set when acting.
     unstable_advanceTimersWrapper: callback => {
-      const originalContext = context
-      context = 'act'
+      contextStack.push('act:start')
       try {
         const result = callback()
         // eslint-disable-next-line jest/no-if, jest/no-conditional-in-test -- false-positive
@@ -307,54 +306,144 @@ test('does not work after it resolves', async () => {
             then: (resolve, reject) => {
               thenable.then(
                 returnValue => {
-                  context = originalContext
+                  contextStack.push('act:end')
                   resolve(returnValue)
                 },
                 error => {
-                  context = originalContext
+                  contextStack.push('act:end')
                   reject(error)
                 },
               )
             },
           }
         } else {
-          context = originalContext
+          contextStack.push('act:end')
           return undefined
         }
       } catch {
-        context = originalContext
+        contextStack.push('act:end')
         return undefined
       }
     },
     asyncWrapper: async callback => {
-      const originalContext = context
-      context = 'no-act'
+      contextStack.push('no-act:start')
       try {
         await callback()
       } finally {
-        context = originalContext
+        contextStack.push('no-act:end')
       }
     },
   })
 
-  let data = null
+  let timeoutResolved = false
   setTimeout(() => {
-    data = 'resolved'
+    contextStack.push('timeout')
+    timeoutResolved = true
   }, 100)
 
+  contextStack.push('waitFor:start')
   await waitFor(
     () => {
+      contextStack.push('callback')
       // eslint-disable-next-line jest/no-conditional-in-test -- false-positive
-      if (data === null) {
+      if (!timeoutResolved) {
         throw new Error('not found')
       }
     },
     {interval: 50},
   )
+  contextStack.push('waitFor:end')
 
-  expect(context).toEqual('initial')
+  expect(contextStack).toMatchInlineSnapshot(`
+    [
+      waitFor:start,
+      no-act:start,
+      callback,
+      act:start,
+      act:end,
+      callback,
+      act:start,
+      timeout,
+      act:end,
+      callback,
+      no-act:end,
+      waitFor:end,
+    ]
+  `)
 
   await Promise.resolve()
 
-  expect(context).toEqual('initial')
+  // The context call stack should not change
+  expect(contextStack).toMatchInlineSnapshot(`
+    [
+      waitFor:start,
+      no-act:start,
+      callback,
+      act:start,
+      act:end,
+      callback,
+      act:start,
+      timeout,
+      act:end,
+      callback,
+      no-act:end,
+      waitFor:end,
+    ]
+  `)
+})
+
+test(`when fake timer is installed, on waitFor timeout, it doesn't call the callback afterward`, async () => {
+  jest.useFakeTimers('modern')
+
+  configure({
+    // @testing-library/react usage to ensure `IS_REACT_ACT_ENVIRONMENT` is set when acting.
+    unstable_advanceTimersWrapper: callback => {
+      try {
+        const result = callback()
+        // eslint-disable-next-line jest/no-if, jest/no-conditional-in-test -- false-positive
+        if (typeof result?.then === 'function') {
+          const thenable = result
+          return {
+            then: (resolve, reject) => {
+              thenable.then(
+                returnValue => {
+                  resolve(returnValue)
+                },
+                error => {
+                  reject(error)
+                },
+              )
+            },
+          }
+        } else {
+          return undefined
+        }
+      } catch {
+        return undefined
+      }
+    },
+    asyncWrapper: async callback => {
+      try {
+        await callback()
+      } finally {
+        /* eslint no-empty: "off" */
+      }
+    },
+  })
+
+  const callback = jest.fn(() => {
+    throw new Error('We want to timeout')
+  })
+  const interval = 50
+
+  await expect(() =>
+    waitFor(callback, {interval, timeout: 100}),
+  ).rejects.toThrow()
+  expect(callback).toHaveBeenCalledWith()
+
+  callback.mockClear()
+
+  await jest.advanceTimersByTimeAsync(interval)
+
+  expect(callback).not.toHaveBeenCalledWith()
 })

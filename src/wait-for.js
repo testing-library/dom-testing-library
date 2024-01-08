@@ -81,15 +81,15 @@ function waitFor(
           jest.advanceTimersByTime(interval)
         })
 
+        // Could have timed-out
+        if (finished) {
+          break
+        }
         // It's really important that checkCallback is run *before* we flush
         // in-flight promises. To be honest, I'm not sure why, and I can't quite
         // think of a way to reproduce the problem in a test, but I spent
         // an entire day banging my head against a wall on this.
         checkCallback()
-
-        if (finished) {
-          break
-        }
       }
     } else {
       try {
