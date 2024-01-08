@@ -12,13 +12,28 @@ function initialCheck(elements) {
   }
 }
 
+function wrapFunctionCallback(callback) {
+  return () => {
+    try {
+      return callback()
+    } catch (error) {
+      if (error.name === 'TestingLibraryElementError') {
+        return null
+      }
+      throw error
+    }
+  }
+}
+
 async function waitForElementToBeRemoved(callback, options) {
   // created here so we get a nice stacktrace
   const timeoutError = new Error('Timed out in waitForElementToBeRemoved.')
-  if (typeof callback !== 'function') {
-    initialCheck(callback)
+  if (typeof callback === 'function') {
+    callback = wrapFunctionCallback(callback)
+  } else {
     const elements = Array.isArray(callback) ? callback : [callback]
     const getRemainingElements = elements.map(element => {
+      if (!element) return () => null
       let parent = element.parentElement
       if (parent === null) return () => null
       while (parent.parentElement) parent = parent.parentElement
@@ -30,15 +45,7 @@ async function waitForElementToBeRemoved(callback, options) {
   initialCheck(callback())
 
   return waitFor(() => {
-    let result
-    try {
-      result = callback()
-    } catch (error) {
-      if (error.name === 'TestingLibraryElementError') {
-        return undefined
-      }
-      throw error
-    }
+    const result = callback()
     if (!isRemoved(result)) {
       throw timeoutError
     }
