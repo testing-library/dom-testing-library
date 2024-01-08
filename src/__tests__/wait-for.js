@@ -431,24 +431,19 @@ test(`when fake timer is installed, on waitFor timeout, it doesn't call the call
     },
   })
 
-  let waitForHasResolved = false
-  let callbackCalledAfterWaitForResolved = false
+  const callback = jest.fn(() => {
+    throw new Error('We want to timeout')
+  })
+  const interval = 50
 
   await expect(() =>
-    waitFor(
-      () => {
-        // eslint-disable-next-line jest/no-conditional-in-test -- false-positive
-        if (waitForHasResolved) {
-          callbackCalledAfterWaitForResolved = true
-        }
-        throw new Error('We want to timeout')
-      },
-      {interval: 50, timeout: 100},
-    ),
+    waitFor(callback, {interval, timeout: 100}),
   ).rejects.toThrow()
-  waitForHasResolved = true
+  expect(callback).toHaveBeenCalledWith()
 
-  await Promise.resolve()
+  callback.mockClear()
 
-  expect(callbackCalledAfterWaitForResolved).toBe(false)
+  await jest.advanceTimersByTimeAsync(interval)
+
+  expect(callback).not.toHaveBeenCalledWith()
 })
