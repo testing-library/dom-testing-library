@@ -53,32 +53,6 @@ Name "":
 />
 
 --------------------------------------------------
-command:
-
-Name "":
-<menuitem
-  data-testid="a-menuitem-1"
-/>
-
-Name "":
-<menuitem
-  data-testid="a-menuitem-2"
-/>
-
---------------------------------------------------
-menuitem:
-
-Name "":
-<menuitem
-  data-testid="a-menuitem-1"
-/>
-
-Name "":
-<menuitem
-  data-testid="a-menuitem-2"
-/>
-
---------------------------------------------------
 list:
 
 Name "":
@@ -214,6 +188,32 @@ definition:
 Name "":
 <dd
   data-testid="a-dd"
+/>
+
+--------------------------------------------------
+img:
+
+Name "":
+<img
+  data-testid="a-img-1"
+  src="http://example.com/image.png"
+/>
+
+Name "a meaningful description":
+<img
+  alt="a meaningful description"
+  data-testid="a-img-3"
+  src="http://example.com/image.png"
+/>
+
+--------------------------------------------------
+presentation:
+
+Name "":
+<img
+  alt=""
+  data-testid="a-img-2"
+  src="http://example.com/image.png"
 />
 
 --------------------------------------------------

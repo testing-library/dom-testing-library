@@ -248,6 +248,12 @@ test('accessible name comparison is case sensitive', () => {
       <h1 />
 
       --------------------------------------------------
+      emphasis:
+
+      Name "":
+      <em />
+
+      --------------------------------------------------
 
     Ignored nodes: comments, script, style
     <div>
@@ -296,6 +302,12 @@ test('TextMatch serialization in error message', () => {
       <h1 />
 
       --------------------------------------------------
+      emphasis:
+
+      Name "":
+      <em />
+
+      --------------------------------------------------
 
     Ignored nodes: comments, script, style
     <div>
@@ -318,6 +330,12 @@ test('TextMatch serialization in error message', () => {
 
       Name "Sign up":
       <h1 />
+
+      --------------------------------------------------
+      emphasis:
+
+      Name "":
+      <em />
 
       --------------------------------------------------
 

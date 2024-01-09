@@ -82,7 +82,7 @@ jobs:
       - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 18
 
       # Ideally done by actions/setup-node: https://github.com/actions/setup-node/issues/213
       - name: Setup package manager
