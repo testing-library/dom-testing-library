@@ -14,6 +14,7 @@ import {
   computeAriaChecked,
   computeAriaPressed,
   computeAriaCurrent,
+  computeAriaDisabled,
   computeAriaExpanded,
   computeAriaValueNow,
   computeAriaValueMax,
@@ -52,6 +53,7 @@ const queryAllByRole: AllByRole = (
     checked,
     pressed,
     current,
+    disabled,
     level,
     expanded,
     value: {
@@ -174,6 +176,16 @@ const queryAllByRole: AllByRole = (
     }
   }
 
+  if (disabled !== undefined) {
+    // guard against unknown roles
+    if (
+      allRoles.get(role as ARIARoleDefinitionKey)?.props['aria-disabled'] ===
+      undefined
+    ) {
+      throw new Error(`"aria-disabled" is not supported on role "${role}".`)
+    }
+  }
+
   const subtreeIsInaccessibleCache = new WeakMap<Element, Boolean>()
   function cachedIsSubtreeInaccessible(element: Element) {
     if (!subtreeIsInaccessibleCache.has(element)) {
@@ -226,6 +238,9 @@ const queryAllByRole: AllByRole = (
       }
       if (current !== undefined) {
         return current === computeAriaCurrent(element)
+      }
+      if (disabled !== undefined) {
+        return disabled === computeAriaDisabled(element)
       }
       if (expanded !== undefined) {
         return expanded === computeAriaExpanded(element)
