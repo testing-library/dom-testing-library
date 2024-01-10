@@ -50,12 +50,12 @@ export type GetAllBy<Arguments extends any[]> = QueryMethod<
   HTMLElement[]
 >
 export type FindAllBy<Arguments extends any[]> = QueryMethod<
-  [Arguments[0], Arguments[1]?, waitForOptions?],
+  [...Arguments, waitForOptions?],
   Promise<HTMLElement[]>
 >
 export type GetBy<Arguments extends any[]> = QueryMethod<Arguments, HTMLElement>
 export type FindBy<Arguments extends any[]> = QueryMethod<
-  [Arguments[0], Arguments[1]?, waitForOptions?],
+  [...Arguments, waitForOptions?],
   Promise<HTMLElement>
 >
 
