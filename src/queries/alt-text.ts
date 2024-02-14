@@ -6,9 +6,12 @@ import {checkContainerType} from '../helpers'
 import {
   AllByBoundAttribute,
   GetErrorFunction,
+  Matcher,
   MatcherOptions,
+  SelectorMatcherOptions,
 } from '../../types'
-import {buildQueries} from './all-utils'
+import {getMatcherHint} from '../hints-helpers'
+import {buildQueries, makeNormalizer} from './all-utils'
 
 // Valid tags are img, input, area and custom elements
 const VALID_TAG_REGEXP = /^(img|input|area|.+-.+)$/i
@@ -24,10 +27,40 @@ const queryAllByAltText: AllByBoundAttribute = (
   )
 }
 
-const getMultipleError: GetErrorFunction<[unknown]> = (c, alt) =>
-  `Found multiple elements with the alt text: ${alt}`
-const getMissingError: GetErrorFunction<[unknown]> = (c, alt) =>
-  `Unable to find an element with the alt text: ${alt}`
+const getMultipleError: GetErrorFunction<[Matcher, MatcherOptions]> = (
+  c,
+  alt,
+  options,
+) => {
+  return `Found multiple elements ${getMatcherHintOrDefault(alt, options)}`
+}
+const getMissingError: GetErrorFunction<[Matcher, MatcherOptions]> = (
+  c,
+  alt,
+  options,
+) => `Unable to find an element ${getMatcherHintOrDefault(alt, options)}`
+
+function getMatcherHintOrDefault(
+  matcher: Matcher,
+  options: MatcherOptions = {},
+) {
+  const matcherHint = getMatcherHint(matcher, 'that its alt text')
+
+  if (matcherHint) {
+    return matcherHint
+  }
+
+  const {normalizer} = options
+  const matchNormalizer = makeNormalizer({normalizer})
+  const normalizedText = matchNormalizer(matcher.toString())
+  const isNormalizedDifferent = normalizedText !== matcher.toString()
+
+  return `with the alt text: ${
+    isNormalizedDifferent
+      ? `${normalizedText} (normalized from '${matcher}')`
+      : matcher
+  }`
+}
 
 const queryAllByAltTextWithSuggestions = wrapAllByQueryWithSuggestion<
   // @ts-expect-error -- See `wrapAllByQueryWithSuggestion` Argument constraint comment
