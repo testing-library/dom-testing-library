@@ -1626,6 +1626,16 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "KevinBon",
+      "name": "Kevin BON",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1910927?v=4",
+      "profile": "https://github.com/KevinBon",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "repoHost": "https://github.com",
