@@ -54,7 +54,7 @@ minimal amount of code possible.
 
 Repository template: https://github.com/testing-library/dom-testing-library-template
 
-Or if you can, try to reproduce the issue in Stackblitz. You can fork the one
+Or if you can, try to reproduce the issue in StackBlitz. You can fork the one
 here: https://testing-library.com/new-dtl
 -->
 
