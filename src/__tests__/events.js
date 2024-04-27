@@ -420,6 +420,18 @@ test('throws a useful error message when firing events on non-existent nodes (sh
   )
 })
 
+test('throws a useful error message when firing events on null', () => {
+  expect(() => fireEvent(null, new MouseEvent('click'))).toThrow(
+    'Unable to fire a "click" event - please provide a DOM element.',
+  )
+})
+
+test('throws a useful error message when firing events on null (shortcut)', () => {
+  expect(() => fireEvent.click(null)).toThrow(
+    'Unable to fire a "click" event - please provide a DOM element.',
+  )
+})
+
 test('throws a useful error message when firing non-events', () => {
   expect(() => fireEvent(document.createElement('div'), undefined)).toThrow(
     'Unable to fire an event - please provide an event object.',

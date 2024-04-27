@@ -213,6 +213,10 @@ export function eventTest() {
   // Custom event
   const customEvent = createEvent('customEvent', element)
   fireEvent(element, customEvent)
+
+  // null returned by Document.getElementById()
+  const button = document.getElementById('my-button')
+  fireEvent.click(button)
 }
 
 export async function testWaitFors() {

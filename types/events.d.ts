@@ -90,24 +90,24 @@ export type EventType =
   | 'online'
 
 export type FireFunction = (
-  element: Document | Element | Window | Node,
+  element: Document | Element | Window | Node | null,
   event: Event,
 ) => boolean
 export type FireObject = {
   [K in EventType]: (
-    element: Document | Element | Window | Node,
+    element: Document | Element | Window | Node | null,
     options?: {},
   ) => boolean
 }
 export type CreateFunction = (
   eventName: string,
-  node: Document | Element | Window | Node,
+  node: Document | Element | Window | Node | null,
   init?: {},
   options?: {EventType?: string; defaultInit?: {}},
 ) => Event
 export type CreateObject = {
   [K in EventType]: (
-    element: Document | Element | Window | Node,
+    element: Document | Element | Window | Node | null,
     options?: {},
   ) => Event
 }
