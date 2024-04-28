@@ -118,3 +118,12 @@ test('exposes debug method', () => {
 `)
   console.log.mockClear()
 })
+
+test('queries after replaceWith', async () => {
+  const newBody = document.createElement('body')
+  newBody.innerHTML = '<div>replaceWith element</div>'
+  document.body.replaceWith(newBody)
+  screen.getByText('replaceWith element')
+  await screen.findByText('replaceWith element')
+  expect(screen.queryByText('replaceWith element')).not.toBeNull()
+})
