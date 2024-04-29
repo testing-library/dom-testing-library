@@ -88,6 +88,8 @@ export type EventType =
   | 'lostPointerCapture'
   | 'offline'
   | 'online'
+  | 'pageHide'
+  | 'pageShow'
 
 export type FireFunction = (
   element: Document | Element | Window | Node,

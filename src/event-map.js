@@ -372,6 +372,14 @@ export const eventMap = {
     EventType: 'Event',
     defaultInit: {bubbles: false, cancelable: false},
   },
+  pageHide: {
+    EventType: 'PageTransitionEvent',
+    defaultInit: {bubbles: true, cancelable: true},
+  },
+  pageShow: {
+    EventType: 'PageTransitionEvent',
+    defaultInit: {bubbles: true, cancelable: true},
+  },
 }
 
 export const eventAliasMap = {
