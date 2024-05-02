@@ -103,7 +103,7 @@ describe('*ByDisplayValue queries throw an error when there are multiple element
       `<input value="his" /><select><option value="history">history</option></select>`,
     )
     expect(() => getByDisplayValue(/his/)).toThrow(
-      /multiple elements with the display value:/i,
+      /multiple elements that its display value match the regex:/i,
     )
   })
   test('queryByDisplayValue', () => {
@@ -111,7 +111,7 @@ describe('*ByDisplayValue queries throw an error when there are multiple element
       `<input value="his" /><select><option value="history">history</option></select>`,
     )
     expect(() => queryByDisplayValue(/his/)).toThrow(
-      /multiple elements with the display value:/i,
+      /multiple elements that its display value match the regex:/i,
     )
   })
 })

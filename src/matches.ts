@@ -53,7 +53,7 @@ function matches(
   assertNotNullOrUndefined(matcher)
 
   const normalizedText = normalizer(textToMatch)
-  if (matcher instanceof Function) {
+  if (typeof matcher === 'function') {
     return matcher(normalizedText, node)
   } else if (matcher instanceof RegExp) {
     return matchRegExp(matcher, normalizedText)
