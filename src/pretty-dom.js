@@ -79,6 +79,7 @@ function prettyDOM(dom, maxLength, options = {}) {
     plugins: [createDOMElementFilter(filterNode), DOMCollection],
     printFunctionName: false,
     highlight: shouldHighlight(),
+    callToJSON: false,
     ...prettyFormatOptions,
   })
   return maxLength !== undefined && dom.outerHTML.length > maxLength
