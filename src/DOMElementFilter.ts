@@ -158,16 +158,22 @@ const FRAGMENT_NODE = 11
 
 const ELEMENT_REGEXP = /^((HTML|SVG)\w*)?Element$/
 
+const isCustomElement = (val: any) => {
+  const {tagName} = val
+  return Boolean(
+    (typeof tagName === 'string' && tagName.includes('-')) ||
+      (typeof val.hasAttribute === 'function' && val.hasAttribute('is')),
+  )
+}
+
 const testNode = (val: any) => {
   const constructorName = val.constructor.name
-  const {nodeType, tagName} = val
-  const isCustomElement =
-    (typeof tagName === 'string' && tagName.includes('-')) ||
-    (typeof val.hasAttribute === 'function' && val.hasAttribute('is'))
+
+  const {nodeType} = val
 
   return (
     (nodeType === ELEMENT_NODE &&
-      (ELEMENT_REGEXP.test(constructorName) || isCustomElement)) ||
+      (ELEMENT_REGEXP.test(constructorName) || isCustomElement(val))) ||
     (nodeType === TEXT_NODE && constructorName === 'Text') ||
     (nodeType === COMMENT_NODE && constructorName === 'Comment') ||
     (nodeType === FRAGMENT_NODE && constructorName === 'DocumentFragment')
@@ -175,7 +181,7 @@ const testNode = (val: any) => {
 }
 
 export const test: NewPlugin['test'] = (val: any) =>
-  val?.constructor?.name && testNode(val)
+  (val?.constructor?.name || isCustomElement(val)) && testNode(val)
 
 type HandledType = Element | Text | Comment | DocumentFragment
 
@@ -195,7 +201,8 @@ export default function createDOMElementFilter(
   filterNode: (node: Node) => boolean,
 ): NewPlugin {
   return {
-    test: (val: any) => val?.constructor?.name && testNode(val),
+    test: (val: any) =>
+      (val?.constructor?.name || isCustomElement(val)) && testNode(val),
     serialize: (
       node: HandledType,
       config: Config,

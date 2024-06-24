@@ -166,3 +166,34 @@ test('prettyDOM supports a COLORS environment variable', () => {
   process.env.COLORS = 'true'
   expect(prettyDOM(container)).toEqual(withColors)
 })
+
+test('prettyDOM supports named custom elements', () => {
+  window.customElements.define(
+    'my-element-1',
+    class MyElement extends HTMLElement {},
+  )
+
+  const {container} = render('<my-element-1>Hello World!</my-element-1>')
+
+  expect(prettyDOM(container)).toMatchInlineSnapshot(`
+    <div>
+      <my-element-1>
+        Hello World!
+      </my-element-1>
+    </div>
+  `)
+})
+
+test('prettyDOM supports anonymous custom elements', () => {
+  window.customElements.define('my-element-2', class extends HTMLElement {})
+
+  const {container} = render('<my-element-2>Hello World!</my-element-2>')
+
+  expect(prettyDOM(container)).toMatchInlineSnapshot(`
+    <div>
+      <my-element-2>
+        Hello World!
+      </my-element-2>
+    </div>
+  `)
+})
