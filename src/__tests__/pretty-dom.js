@@ -155,7 +155,6 @@ test('prettyDOM can include all elements with a custom filter', () => {
 
 test('prettyDOM supports a COLORS environment variable', () => {
   const {container} = render('<div>Hello World!</div>')
-
   const noColors = prettyDOM(container, undefined, {highlight: false})
   const withColors = prettyDOM(container, undefined, {highlight: true})
 
@@ -165,6 +164,48 @@ test('prettyDOM supports a COLORS environment variable', () => {
 
   process.env.COLORS = 'true'
   expect(prettyDOM(container)).toEqual(withColors)
+})
+
+test('prettyDOM handles a COLORS env variable of unexpected object type by colorizing for node', () => {
+  const {container} = render('<div>Hello World!</div>')
+  const noColors = prettyDOM(container, undefined, {highlight: false})
+  const withColors = prettyDOM(container, undefined, {highlight: true})
+
+  const originalNodeVersion = process.versions.node
+  process.env.COLORS = '{}'
+  delete process.versions.node
+  expect(prettyDOM(container)).toEqual(noColors)
+  process.versions.node = '1.2.3'
+  expect(prettyDOM(container)).toEqual(withColors)
+  process.versions.node = originalNodeVersion
+})
+
+test('prettyDOM handles a COLORS env variable of undefined by colorizing for node', () => {
+  const {container} = render('<div>Hello World!</div>')
+  const noColors = prettyDOM(container, undefined, {highlight: false})
+  const withColors = prettyDOM(container, undefined, {highlight: true})
+
+  const originalNodeVersion = process.versions.node
+  process.env.COLORS = undefined
+  delete process.versions.node
+  expect(prettyDOM(container)).toEqual(noColors)
+  process.versions.node = '1.2.3'
+  expect(prettyDOM(container)).toEqual(withColors)
+  process.versions.node = originalNodeVersion
+})
+
+test('prettyDOM handles a COLORS env variable of empty string by colorizing for node', () => {
+  const {container} = render('<div>Hello World!</div>')
+  const noColors = prettyDOM(container, undefined, {highlight: false})
+  const withColors = prettyDOM(container, undefined, {highlight: true})
+
+  const originalNodeVersion = process.versions.node
+  process.env.COLORS = ''
+  delete process.versions.node
+  expect(prettyDOM(container)).toEqual(noColors)
+  process.versions.node = '1.2.3'
+  expect(prettyDOM(container)).toEqual(withColors)
+  process.versions.node = originalNodeVersion
 })
 
 test('prettyDOM supports named custom elements', () => {
