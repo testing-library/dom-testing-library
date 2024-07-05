@@ -12,20 +12,20 @@ afterEach(() => {
   console.log.mockRestore()
 })
 
-test('logDOM logs prettyDOM to the console', () => {
+test('logDOM logs highlighted prettyDOM to the console', () => {
   const {container} = render('<div>Hello World!</div>')
   logDOM(container)
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
-    <div>
-      <div>
-        Hello World!
-      </div>
-    </div>
+    [36m<div>[39m
+      [36m<div>[39m
+        [0mHello World![0m
+      [36m</div>[39m
+    [36m</div>[39m
   `)
 })
 
-test('logDOM logs prettyDOM with code frame to the console', () => {
+test('logDOM logs highlighted prettyDOM with code frame to the console', () => {
   getUserCodeFrame.mockImplementationOnce(
     () => `"/home/john/projects/sample-error/error-example.js:7:14
       5 |         document.createTextNode('Hello World!')
@@ -39,11 +39,11 @@ test('logDOM logs prettyDOM with code frame to the console', () => {
   logDOM(container)
   expect(console.log).toHaveBeenCalledTimes(1)
   expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
-    <div>
-      <div>
-        Hello World!
-      </div>
-    </div>
+    [36m<div>[39m
+      [36m<div>[39m
+        [0mHello World![0m
+      [36m</div>[39m
+    [36m</div>[39m
 
     "/home/john/projects/sample-error/error-example.js:7:14
           5 |         document.createTextNode('Hello World!')

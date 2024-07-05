@@ -1,5 +1,22 @@
-import {prettyDOM} from '../pretty-dom'
+import {prettyDOM as prettyDOMImpl} from '../pretty-dom'
 import {render, renderIntoDocument} from './helpers/test-utils'
+
+function prettyDOM(...args) {
+  let originalProcess
+  // this shouldn't be defined in this environment in the first place
+  if (typeof process !== 'undefined') {
+    originalProcess = process
+    delete globalThis.process
+  } else {
+    throw new Error('process is no longer defined. Remove this setup code.')
+  }
+
+  try {
+    return prettyDOMImpl(...args)
+  } finally {
+    globalThis.process = originalProcess
+  }
+}
 
 test('prettyDOM prints out the given DOM element tree', () => {
   const {container} = render('<div>Hello World!</div>')
@@ -97,20 +114,6 @@ test('prettyDOM can include all elements with a custom filter', () => {
       </p>
     </body>
   `)
-})
-
-test('prettyDOM supports a COLORS environment variable', () => {
-  const {container} = render('<div>Hello World!</div>')
-
-  const noColors = prettyDOM(container, undefined, {highlight: false})
-  const withColors = prettyDOM(container, undefined, {highlight: true})
-
-  // process.env.COLORS is a string, so make sure we test it as such
-  process.env.COLORS = 'false'
-  expect(prettyDOM(container)).toEqual(noColors)
-
-  process.env.COLORS = 'true'
-  expect(prettyDOM(container)).toEqual(withColors)
 })
 
 test('prettyDOM supports named custom elements', () => {
