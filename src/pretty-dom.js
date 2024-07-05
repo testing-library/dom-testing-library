@@ -5,20 +5,25 @@ import {getDocument} from './helpers'
 import {getConfig} from './config'
 
 const shouldHighlight = () => {
-  // Try to safely parse env COLORS: We will default behavior if any step fails.
+  let colors
   try {
-    const colors = process?.env?.COLORS
-    if (colors) {
-      const b = JSON.parse(colors)
-      if (typeof b === 'boolean') return b
-    }
-  } catch {
-    // Ignore (non-critical) - Make a defaulting choice below.
+    colors = JSON.parse(process?.env?.COLORS)
+  } catch (e) {
+    // If this throws, process?.env?.COLORS wasn't parsable. Since we only
+    // care about `true` or `false`, we can safely ignore the error.
   }
 
-  // In all other cases, whether COLORS was a weird type, or the attempt threw:
-  // Fall back to colorizing if we are running in node.
-  return !!process?.versions?.node
+  if (typeof colors === 'boolean') {
+    // If `colors` is set explicitly (both `true` and `false`), use that value.
+    return colors
+  } else {
+    // If `colors` is not set, colorize if we're in node.
+    return (
+      typeof process !== 'undefined' &&
+      process.versions !== undefined &&
+      process.versions.node !== undefined
+    )
+  }
 }
 
 const {DOMCollection} = prettyFormat.plugins
