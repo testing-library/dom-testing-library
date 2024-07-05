@@ -1,14 +1,15 @@
+/* global globalThis */
 import {prettyDOM as prettyDOMImpl} from '../pretty-dom'
 import {render, renderIntoDocument} from './helpers/test-utils'
 
 function prettyDOM(...args) {
   let originalProcess
   // this shouldn't be defined in this environment in the first place
-  if (typeof process !== 'undefined') {
+  if (typeof process === 'undefined') {
+    throw new Error('process is no longer defined. Remove this setup code.')
+  } else {
     originalProcess = process
     delete globalThis.process
-  } else {
-    throw new Error('process is no longer defined. Remove this setup code.')
   }
 
   try {
