@@ -1,4 +1,4 @@
-import {waitFor, waitForElementToBeRemoved} from '..'
+import {configure, getConfig, waitFor, waitForElementToBeRemoved} from '..'
 import {render} from './helpers/test-utils'
 
 async function runWaitFor({time = 300} = {}, options) {
@@ -11,8 +11,14 @@ async function runWaitFor({time = 300} = {}, options) {
   await waitFor(() => expect(result).toBe(response), options)
 }
 
+let originalConfig
+beforeAll(() => {
+  originalConfig = getConfig()
+})
+
 afterEach(() => {
   jest.useRealTimers()
+  configure(originalConfig)
 })
 
 test('real timers', async () => {
@@ -41,6 +47,23 @@ test('fake timer timeout', async () => {
       {timeout: 10, onTimeout: e => e},
     ),
   ).rejects.toMatchInlineSnapshot(`[Error: always throws]`)
+})
+
+test('fake timer timeout uses default ontimeout', async () => {
+  configure({
+    defaultOnTimeout: _ => {
+      return Error('Test Error')
+    },
+  })
+  jest.useFakeTimers()
+  await expect(
+    waitFor(
+      () => {
+        throw new Error('always throws')
+      },
+      {timeout: 10},
+    ),
+  ).rejects.toMatchInlineSnapshot(`[Error: Test Error]`)
 })
 
 test('times out after 1000ms by default', async () => {
