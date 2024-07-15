@@ -1637,6 +1637,15 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "sieem",
+      "name": "sieem",
+      "avatar_url": "https://avatars.githubusercontent.com/u/36861085?v=4",
+      "profile": "https://github.com/sieem",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoHost": "https://github.com",
