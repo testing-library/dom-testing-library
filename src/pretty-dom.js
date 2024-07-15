@@ -47,7 +47,10 @@ function prettyDOM(dom, maxLength, options = {}) {
   }
   if (typeof maxLength !== 'number') {
     maxLength =
-      (typeof process !== 'undefined' && process.env.DEBUG_PRINT_LIMIT) || 7000
+      (typeof process !== 'undefined' &&
+        typeof process.env !== 'undefined' &&
+        process.env.DEBUG_PRINT_LIMIT) ||
+      7000
   }
 
   if (maxLength === 0) {
