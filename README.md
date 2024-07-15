@@ -348,6 +348,9 @@ Thanks goes to these people ([emoji key][emojis]):
       <td align="center" valign="top" width="14.28%"><a href="http://everlong.org/"><img src="https://avatars.githubusercontent.com/u/454175?v=4?s=100" width="100px;" alt="Julien Wajsberg"/><br /><sub><b>Julien Wajsberg</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=julienw" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3Ajulienw" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/KevinBon"><img src="https://avatars.githubusercontent.com/u/1910927?v=4?s=100" width="100px;" alt="Kevin BON"/><br /><sub><b>Kevin BON</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=KevinBon" title="Code">💻</a> <a href="https://github.com/testing-library/dom-testing-library/issues?q=author%3AKevinBon" title="Bug reports">🐛</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sieem"><img src="https://avatars.githubusercontent.com/u/36861085?v=4?s=100" width="100px;" alt="sieem"/><br /><sub><b>sieem</b></sub></a><br /><a href="https://github.com/testing-library/dom-testing-library/commits?author=sieem" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 
