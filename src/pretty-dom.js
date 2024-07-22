@@ -5,11 +5,19 @@ import {getDocument} from './helpers'
 import {getConfig} from './config'
 
 const shouldHighlight = () => {
+  if (typeof process === 'undefined') {
+    // Don't colorize in non-node environments (e.g. Browsers)
+    return false
+  }
   let colors
+  // Try to safely parse env COLORS: We will default behavior if any step fails.
   try {
-    colors = JSON.parse(process?.env?.COLORS)
-  } catch (e) {
-    // If this throws, process?.env?.COLORS wasn't parsable. Since we only
+    const colorsJSON = process.env?.COLORS
+    if (colorsJSON) {
+      colors = JSON.parse(colorsJSON)
+    }
+  } catch {
+    // If this throws, process.env?.COLORS wasn't parsable. Since we only
     // care about `true` or `false`, we can safely ignore the error.
   }
 
@@ -18,11 +26,7 @@ const shouldHighlight = () => {
     return colors
   } else {
     // If `colors` is not set, colorize if we're in node.
-    return (
-      typeof process !== 'undefined' &&
-      process.versions !== undefined &&
-      process.versions.node !== undefined
-    )
+    return process.versions !== undefined && process.versions.node !== undefined
   }
 }
 
