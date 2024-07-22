@@ -1,3 +1,4 @@
+import jestSnapshotSerializerAnsi from 'jest-snapshot-serializer-ansi'
 import {
   getRoles,
   logRoles,
@@ -5,6 +6,8 @@ import {
   isInaccessible,
 } from '../role-helpers'
 import {render} from './helpers/test-utils'
+
+expect.addSnapshotSerializer(jestSnapshotSerializerAnsi)
 
 beforeEach(() => {
   jest.spyOn(console, 'log').mockImplementation(() => {})

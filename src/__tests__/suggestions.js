@@ -1,6 +1,9 @@
+import jestSnapshotSerializerAnsi from 'jest-snapshot-serializer-ansi'
 import {configure} from '../config'
 import {screen, getSuggestedQuery} from '..'
 import {renderIntoDocument, render} from './helpers/test-utils'
+
+expect.addSnapshotSerializer(jestSnapshotSerializerAnsi)
 
 beforeAll(() => {
   configure({throwSuggestions: true})

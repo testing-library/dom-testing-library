@@ -1,6 +1,9 @@
+import jestSnapshotSerializerAnsi from 'jest-snapshot-serializer-ansi'
 import {configure, getConfig} from '../config'
 import {getQueriesForElement} from '../get-queries-for-element'
 import {render, renderIntoDocument} from './helpers/test-utils'
+
+expect.addSnapshotSerializer(jestSnapshotSerializerAnsi)
 
 test('by default logs accessible roles when it fails', () => {
   const {getByRole} = render(`<h1>Hi</h1>`)

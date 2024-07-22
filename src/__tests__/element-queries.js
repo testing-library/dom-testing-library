@@ -1,5 +1,8 @@
+import jestSnapshotSerializerAnsi from 'jest-snapshot-serializer-ansi'
 import {configure, getConfig} from '../config'
 import {render, renderIntoDocument} from './helpers/test-utils'
+
+expect.addSnapshotSerializer(jestSnapshotSerializerAnsi)
 
 // set original config
 let originalConfig
