@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import _ from 'lodash'
+import {valiateByAttr} from './life-cycle'
 export const eventMap = {
   // Clipboard Events
   copy: {
@@ -112,10 +115,24 @@ export const eventMap = {
   dragOver: {
     EventType: 'DragEvent',
     defaultInit: {bubbles: true, cancelable: true, composed: true},
+    cond: conditionObj => {
+      const shouldTrueAttrArr = ['dragover']
+      const shouldFalseAttrArr = ['defaultprevented']
+      if (valiateByAttr(conditionObj, [], shouldFalseAttrArr)) {
+        return true
+      }
+      if (valiateByAttr(conditionObj, shouldTrueAttrArr, [])) {
+        return true
+      }
+      return false
+    },
   },
   dragStart: {
     EventType: 'DragEvent',
     defaultInit: {bubbles: true, cancelable: true, composed: true},
+    before: (config = {}) => {
+      return _.pick(config, ['dragstart', 'defaultprevented'])
+    },
   },
   drop: {
     EventType: 'DragEvent',
