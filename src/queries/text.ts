@@ -6,6 +6,7 @@ import {
   SelectorMatcherOptions,
   Matcher,
 } from '../../types'
+import {getMatcherHint} from '../hints-helpers'
 import {
   fuzzyMatches,
   matches,
@@ -45,25 +46,51 @@ const queryAllByText: AllByText = (
   )
 }
 
-const getMultipleError: GetErrorFunction<[unknown]> = (c, text) =>
-  `Found multiple elements with the text: ${text}`
+const getMultipleError: GetErrorFunction<[Matcher, SelectorMatcherOptions]> = (
+  c,
+  text,
+  options = {},
+) => {
+  const {selector} = options
+  const isCustomSelector = (options.selector ?? '*') !== '*'
+
+  return `Found multiple elements ${getMatcherHintOrDefault(text, options)}${
+    isCustomSelector ? `, which matches selector '${selector}'` : ''
+  }`
+}
 const getMissingError: GetErrorFunction<[Matcher, SelectorMatcherOptions]> = (
   c,
   text,
   options = {},
 ) => {
-  const {collapseWhitespace, trim, normalizer, selector} = options
-  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-  const normalizedText = matchNormalizer(text.toString())
-  const isNormalizedDifferent = normalizedText !== text.toString()
-  const isCustomSelector = (selector ?? '*') !== '*'
-  return `Unable to find an element with the text: ${
-    isNormalizedDifferent
-      ? `${normalizedText} (normalized from '${text}')`
-      : text
-  }${
+  const {selector} = options
+  const isCustomSelector = (options.selector ?? '*') !== '*'
+
+  return `Unable to find an element ${getMatcherHintOrDefault(text, options)}${
     isCustomSelector ? `, which matches selector '${selector}'` : ''
   }. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.`
+}
+
+function getMatcherHintOrDefault(
+  matcher: Matcher,
+  options: SelectorMatcherOptions,
+) {
+  const matcherHint = getMatcherHint(matcher, 'that its text')
+
+  if (matcherHint) {
+    return matcherHint
+  }
+
+  const {collapseWhitespace, trim, normalizer} = options
+  const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
+  const normalizedText = matchNormalizer(matcher.toString())
+  const isNormalizedDifferent = normalizedText !== matcher.toString()
+
+  return `with the text: ${
+    isNormalizedDifferent
+      ? `${normalizedText} (normalized from '${matcher}')`
+      : matcher
+  }`
 }
 
 const queryAllByTextWithSuggestions = wrapAllByQueryWithSuggestion<
