@@ -813,6 +813,37 @@ test('queryAllByRole returns semantic html elements', () => {
   expect(queryAllByRole('listbox')).toHaveLength(1)
 })
 
+test('getAllByRole matchers with strictVisibility enabled and disabled', () => {
+  const {getAllByRole} = render(`
+    <div aria-hidden="true">
+      <button>Aria Hidden Button</button>
+    </div>
+    <div style="display: none;">
+      <button>Display None Button</button>
+    </div>
+    <div style="visibility: hidden;">
+      <button>Visibility Hidden Button</button>
+    </div>
+    <div style="visibility: hidden;">
+      <div>
+        <button>Deep Visibility Hidden Button</button>
+      </div>
+    </div>
+    <div>
+      <button>Visible Button</button>
+    </div>
+  `)
+
+  const defaultResults = getAllByRole('button')
+  expect(defaultResults).toHaveLength(1)
+
+  const strictResults = getAllByRole('button', {strictVisibilityCheck: true})
+  expect(strictResults).toHaveLength(1)
+
+  const looseResults = getAllByRole('button', {strictVisibilityCheck: false})
+  expect(looseResults).toHaveLength(1)
+})
+
 test('getAll* matchers return an array', () => {
   const {
     getAllByAltText,

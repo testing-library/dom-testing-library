@@ -65,6 +65,28 @@ function isInaccessible(element, options = {}) {
   return false
 }
 
+/**
+ * A fast check to see if an element is inaccessible.
+ * @param {Element} element
+ * @returns {boolean} true if exluded, otherwise false
+ */
+function isInaccessibleLoose(element) {
+  do {
+    const explictlyHidden =
+      element.style.visibility === 'hidden' || element.style.display === 'none'
+    if (explictlyHidden) {
+      return true
+    }
+
+    const ariaHidden = element.getAttribute('aria-hidden') === 'true'
+    if (ariaHidden) {
+      return true
+    }
+  } while ((element = element.parentElement))
+
+  return false
+}
+
 function getImplicitAriaRoles(currentNode) {
   // eslint bug here:
   // eslint-disable-next-line no-unused-vars
@@ -382,6 +404,7 @@ export {
   isSubtreeInaccessible,
   prettyRoles,
   isInaccessible,
+  isInaccessibleLoose,
   computeAriaSelected,
   computeAriaBusy,
   computeAriaChecked,

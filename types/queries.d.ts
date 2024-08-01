@@ -110,6 +110,17 @@ export interface ByRoleOptions {
    * the `aria-level` attribute.
    */
   level?: number
+
+  /**
+   * Whether or not to strictly check the visibliity of the element. Doing so
+   * can cause issues with the performance of tests, because it requires the DOM tree
+   * is traversed, and the `getComputedStyle` function is called on each element.
+   *
+   * If you're finding that your tests are slow, you may want to disable this option.
+   * @default true
+   */
+  strictVisibilityCheck?: boolean
+
   value?: {
     now?: number
     min?: number

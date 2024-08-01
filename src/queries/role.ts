@@ -24,6 +24,7 @@ import {
   prettyRoles,
   isInaccessible,
   isSubtreeInaccessible,
+  isInaccessibleLoose,
 } from '../role-helpers'
 import {wrapAllByQueryWithSuggestion} from '../query-helpers'
 import {checkContainerType} from '../helpers'
@@ -54,6 +55,7 @@ const queryAllByRole: AllByRole = (
     current,
     level,
     expanded,
+    strictVisibilityCheck = true,
     value: {
       now: valueNow,
       min: valueMin,
@@ -297,9 +299,11 @@ const queryAllByRole: AllByRole = (
     })
     .filter(element => {
       return hidden === false
-        ? isInaccessible(element, {
-            isSubtreeInaccessible: cachedIsSubtreeInaccessible,
-          }) === false
+        ? strictVisibilityCheck
+          ? isInaccessible(element, {
+              isSubtreeInaccessible: cachedIsSubtreeInaccessible,
+            }) === false
+          : isInaccessibleLoose(element) === false
         : true
     })
 }
