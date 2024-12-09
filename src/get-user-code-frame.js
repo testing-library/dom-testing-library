@@ -1,17 +1,17 @@
 // We try to load node dependencies
-let chalk = null
+let picocolors = null
 let readFileSync = null
 let codeFrameColumns = null
 
 try {
   const nodeRequire = module && module.require
 
+  picocolors = nodeRequire.call(module, 'picocolors')
   readFileSync = nodeRequire.call(module, 'fs').readFileSync
   codeFrameColumns = nodeRequire.call(
     module,
     '@babel/code-frame',
   ).codeFrameColumns
-  chalk = nodeRequire.call(module, 'chalk')
 } catch {
   // We're in a browser environment
 }
@@ -46,7 +46,7 @@ function getCodeFrame(frame) {
       linesBelow: 0,
     },
   )
-  return `${chalk.dim(frameLocation)}\n${codeFrame}\n`
+  return `${picocolors.dim(frameLocation)}\n${codeFrame}\n`
 }
 
 function getUserCodeFrame() {
