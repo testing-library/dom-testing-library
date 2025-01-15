@@ -23,25 +23,6 @@
   "engines": {
     "node": ">=18"
   },
-  "browserslist": [
-    "and_chr 103",
-    "and_ff 101",
-    "and_qq 10.4",
-    "and_uc 12.12",
-    "android 103",
-    "chrome 102",
-    "edge 102",
-    "firefox 91",
-    "ios_saf 12.2-12.5",
-    "kaios 2.5",
-    "op_mini all",
-    "op_mob 64",
-    "opera 88",
-    "safari 15.5",
-    "samsung 17.0",
-    "samsung 16.0",
-    "node 18.0"
-  ],
   "scripts": {
     "build": "kcd-scripts build  --no-ts-defs --ignore \"**/__tests__/**,**/__node_tests__/**,**/__mocks__/**\" && kcd-scripts build --no-ts-defs --bundle --no-clean",
     "format": "kcd-scripts format",
@@ -70,18 +51,12 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.6",
-    "browserslist": "4.21.8",
-    "caniuse-lite": "1.0.30001502",
     "jest-in-case": "^1.0.2",
     "jest-snapshot-serializer-ansi": "^1.0.0",
     "jest-watch-select-projects": "^2.0.0",
     "jsdom": "20.0.0",
     "kcd-scripts": "^13.0.0",
     "typescript": "^4.1.2"
-  },
-  "overrides": {
-    "browserslist": "4.21.8",
-    "caniuse-lite": "1.0.30001502"
   },
   "eslintConfig": {
     "extends": [
