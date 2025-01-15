@@ -65,6 +65,11 @@ function createEvent(
   // DataTransfer is not supported in jsdom: https://github.com/jsdom/jsdom/issues/1568
   const dataTransferProperties = ['dataTransfer', 'clipboardData']
   dataTransferProperties.forEach(dataTransferKey => {
+    if (event[dataTransferKey]) {
+      // not a jsdom environment, workaround not needed
+      return;
+    }
+
     const dataTransferValue = eventInit[dataTransferKey]
 
     if (typeof dataTransferValue === 'object') {
