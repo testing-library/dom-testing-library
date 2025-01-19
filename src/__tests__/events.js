@@ -77,8 +77,8 @@ const eventTypes = [
     elementType: 'img',
   },
   {
-    type: '',
-    events: ['offline', 'online'],
+    type: 'Window',
+    events: ['offline', 'online', 'pageHide', 'pageShow'],
     elementType: 'window',
   },
   {

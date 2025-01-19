@@ -108,7 +108,7 @@ const queryAllByRole: AllByRole = (
     /* istanbul ignore next */
     // guard against unknown roles
     // All currently released ARIA versions support `aria-current` on all roles.
-    // Leaving this for symetry and forward compatibility
+    // Leaving this for symmetry and forward compatibility
     if (
       allRoles.get(role as ARIARoleDefinitionKey)?.props['aria-current'] ===
       undefined

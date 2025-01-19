@@ -1,5 +1,8 @@
+import jestSnapshotSerializerAnsi from 'jest-snapshot-serializer-ansi'
 import {screen} from '..'
 import {render, renderIntoDocument} from './helpers/test-utils'
+
+expect.addSnapshotSerializer(jestSnapshotSerializerAnsi)
 
 // Since screen.debug internally calls getUserCodeFrame, we mock it so it doesn't affect these tests
 jest.mock('../get-user-code-frame', () => ({

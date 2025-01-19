@@ -1,5 +1,8 @@
 import fs from 'fs'
+import jestSnapshotSerializerAnsi from 'jest-snapshot-serializer-ansi'
 import {getUserCodeFrame} from '../get-user-code-frame'
+
+expect.addSnapshotSerializer(jestSnapshotSerializerAnsi)
 
 jest.mock('fs', () => ({
   // We setup the contents of a sample file

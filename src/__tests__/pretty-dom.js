@@ -1,16 +1,23 @@
-import {prettyDOM, logDOM} from '../pretty-dom'
-import {getUserCodeFrame} from '../get-user-code-frame'
+/* global globalThis */
+import {prettyDOM as prettyDOMImpl} from '../pretty-dom'
 import {render, renderIntoDocument} from './helpers/test-utils'
 
-jest.mock('../get-user-code-frame')
+function prettyDOM(...args) {
+  let originalProcess
+  // this shouldn't be defined in this environment in the first place
+  if (typeof process === 'undefined') {
+    throw new Error('process is no longer defined. Remove this setup code.')
+  } else {
+    originalProcess = process
+    delete globalThis.process
+  }
 
-beforeEach(() => {
-  jest.spyOn(console, 'log').mockImplementation(() => {})
-})
-
-afterEach(() => {
-  console.log.mockRestore()
-})
+  try {
+    return prettyDOMImpl(...args)
+  } finally {
+    globalThis.process = originalProcess
+  }
+}
 
 test('prettyDOM prints out the given DOM element tree', () => {
   const {container} = render('<div>Hello World!</div>')
@@ -55,49 +62,6 @@ test('prettyDOM supports receiving the document element', () => {
       <head />
       <body />
     </html>
-  `)
-})
-
-test('logDOM logs prettyDOM to the console', () => {
-  const {container} = render('<div>Hello World!</div>')
-  logDOM(container)
-  expect(console.log).toHaveBeenCalledTimes(1)
-  expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
-    <div>
-      <div>
-        Hello World!
-      </div>
-    </div>
-  `)
-})
-
-test('logDOM logs prettyDOM with code frame to the console', () => {
-  getUserCodeFrame.mockImplementationOnce(
-    () => `"/home/john/projects/sample-error/error-example.js:7:14
-      5 |         document.createTextNode('Hello World!')
-      6 |       )
-    > 7 |       screen.debug()
-        |              ^
-    "
-  `,
-  )
-  const {container} = render('<div>Hello World!</div>')
-  logDOM(container)
-  expect(console.log).toHaveBeenCalledTimes(1)
-  expect(console.log.mock.calls[0][0]).toMatchInlineSnapshot(`
-    <div>
-      <div>
-        Hello World!
-      </div>
-    </div>
-
-    "/home/john/projects/sample-error/error-example.js:7:14
-          5 |         document.createTextNode('Hello World!')
-          6 |       )
-        > 7 |       screen.debug()
-            |              ^
-        "
-      
   `)
 })
 
@@ -153,16 +117,33 @@ test('prettyDOM can include all elements with a custom filter', () => {
   `)
 })
 
-test('prettyDOM supports a COLORS environment variable', () => {
-  const {container} = render('<div>Hello World!</div>')
+test('prettyDOM supports named custom elements', () => {
+  window.customElements.define(
+    'my-element-1',
+    class MyElement extends HTMLElement {},
+  )
 
-  const noColors = prettyDOM(container, undefined, {highlight: false})
-  const withColors = prettyDOM(container, undefined, {highlight: true})
+  const {container} = render('<my-element-1>Hello World!</my-element-1>')
 
-  // process.env.COLORS is a string, so make sure we test it as such
-  process.env.COLORS = 'false'
-  expect(prettyDOM(container)).toEqual(noColors)
+  expect(prettyDOM(container)).toMatchInlineSnapshot(`
+    <div>
+      <my-element-1>
+        Hello World!
+      </my-element-1>
+    </div>
+  `)
+})
 
-  process.env.COLORS = 'true'
-  expect(prettyDOM(container)).toEqual(withColors)
+test('prettyDOM supports anonymous custom elements', () => {
+  window.customElements.define('my-element-2', class extends HTMLElement {})
+
+  const {container} = render('<my-element-2>Hello World!</my-element-2>')
+
+  expect(prettyDOM(container)).toMatchInlineSnapshot(`
+    <div>
+      <my-element-2>
+        Hello World!
+      </my-element-2>
+    </div>
+  `)
 })

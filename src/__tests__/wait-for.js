@@ -1,6 +1,9 @@
+import jestSnapshotSerializerAnsi from 'jest-snapshot-serializer-ansi'
 import {waitFor} from '../'
 import {configure, getConfig} from '../config'
 import {renderIntoDocument} from './helpers/test-utils'
+
+expect.addSnapshotSerializer(jestSnapshotSerializerAnsi)
 
 function deferred() {
   let resolve, reject

@@ -1,4 +1,4 @@
-// WARNING: `lz-string` only has a default export but statically we assume named exports are allowd
+// WARNING: `lz-string` only has a default export but statically we assume named exports are allowed
 // TODO: Statically verify we don't rely on NodeJS implicit named imports.
 import lzString from 'lz-string'
 import {type OptionsReceived} from 'pretty-format'

@@ -1,6 +1,9 @@
+import jestSnapshotSerializerAnsi from 'jest-snapshot-serializer-ansi'
 import {configure, getConfig} from '../config'
 import {getQueriesForElement} from '../get-queries-for-element'
 import {render, renderIntoDocument} from './helpers/test-utils'
+
+expect.addSnapshotSerializer(jestSnapshotSerializerAnsi)
 
 test('by default logs accessible roles when it fails', () => {
   const {getByRole} = render(`<h1>Hi</h1>`)
@@ -199,16 +202,16 @@ test('can be filtered by accessible name', () => {
     `
 <div>
   <h1>Order</h1>
-  <h2>Delivery Adress</h2>
-  <form aria-label="Delivery Adress">
+  <h2>Delivery Address</h2>
+  <form aria-label="Delivery Address">
     <label>
       <div>Street</div>
       <input type="text" />
     </label>
     <input type="submit" />
   </form>
-  <h2>Invoice Adress</h2>
-  <form aria-label="Invoice Adress">
+  <h2>Invoice Address</h2>
+  <form aria-label="Invoice Address">
     <label>
       <div>Street</div>
       <input type="text" />
@@ -218,14 +221,14 @@ test('can be filtered by accessible name', () => {
 </div>`,
   )
 
-  const deliveryForm = getByRole('form', {name: 'Delivery Adress'})
+  const deliveryForm = getByRole('form', {name: 'Delivery Address'})
   expect(deliveryForm).not.toBeNull()
 
   expect(
     getQueriesForElement(deliveryForm).getByRole('button', {name: 'Submit'}),
   ).not.toBeNull()
 
-  const invoiceForm = getByRole('form', {name: 'Delivery Adress'})
+  const invoiceForm = getByRole('form', {name: 'Delivery Address'})
   expect(invoiceForm).not.toBeNull()
 
   expect(

@@ -80,7 +80,7 @@ test('requires an unempty array of elements to exist first (function form)', () 
   )
 })
 
-test('after successful removal, fullfills promise with empty value (undefined)', () => {
+test('after successful removal, fulfills promise with empty value (undefined)', () => {
   const {getByTestId} = renderIntoDocument(`
   <div data-testid="div"></div>
 `)
