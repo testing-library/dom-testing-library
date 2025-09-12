@@ -4,6 +4,7 @@ import {
   logRoles,
   getImplicitAriaRoles,
   isInaccessible,
+  isSubtreeInaccessible,
 } from '../role-helpers'
 import {render} from './helpers/test-utils'
 
@@ -25,7 +26,7 @@ function setup() {
   <a data-testid="invalid-link">invalid link</a>
 
   <nav data-testid='a-nav' />
-  
+
   <h1 data-testid='a-h1'>Main Heading</h1>
   <h2 data-testid='a-h2'>Sub Heading</h2>
   <h3 data-testid='a-h3'>Tertiary Heading</h3>
@@ -210,4 +211,75 @@ test.each([
   container.firstChild.appendChild(document.createElement('button'))
 
   expect(isInaccessible(container.querySelector('button'))).toBe(expected)
+})
+
+describe('checkVisibility API integration', () => {
+  let originalCheckVisibility
+
+  beforeEach(() => {
+    // This may not exist depending on the environment
+    originalCheckVisibility = Element.prototype.checkVisibility
+  })
+
+  afterEach(() => {
+    if (originalCheckVisibility) {
+      Element.prototype.checkVisibility = originalCheckVisibility
+    } else {
+      delete Element.prototype.checkVisibility
+    }
+  })
+
+  test('uses checkVisibility when available', () => {
+    const mockCheckVisibility = jest.fn().mockReturnValue(false)
+    Element.prototype.checkVisibility = mockCheckVisibility
+
+    const {container} = render('<div><button>Test</button></div>')
+    const button = container.querySelector('button')
+
+    const result = isSubtreeInaccessible(button)
+
+    expect(mockCheckVisibility).toHaveBeenCalledWith({
+      visibilityProperty: true,
+      opacityProperty: false,
+    })
+    expect(result).toBe(true)
+  })
+
+  test('falls back to getComputedStyle when checkVisibility unavailable', () => {
+    // Remove checkVisibility to test fallback
+    delete Element.prototype.checkVisibility
+
+    const {container} = render('<button style="display: none;">Test</button>')
+    const button = container.querySelector('button')
+
+    expect(isSubtreeInaccessible(button)).toBe(true)
+  })
+
+  test('checkVisibility and fallback produce same results', () => {
+    const testCases = [
+      '<div><button>Visible</button></div>',
+      '<div style="display: none;"><button>Hidden</button></div>',
+      '<div style="visibility: hidden;"><button>Hidden</button></div>',
+      '<div hidden><button>Hidden</button></div>',
+      '<div aria-hidden="true"><button>Hidden</button></div>',
+    ]
+
+    testCases.forEach(html => {
+      const {container: container1} = render(html)
+      const button1 = container1.querySelector('button')
+
+      const resultWithAPI = isInaccessible(button1)
+
+      delete Element.prototype.checkVisibility
+      const {container: container2} = render(html)
+      const button2 = container2.querySelector('button')
+      const resultWithoutAPI = isInaccessible(button2)
+
+      expect(resultWithAPI).toBe(resultWithoutAPI)
+
+      if (originalCheckVisibility) {
+        Element.prototype.checkVisibility = originalCheckVisibility
+      }
+    })
+  })
 })
