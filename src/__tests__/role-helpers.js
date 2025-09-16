@@ -214,17 +214,8 @@ test.each([
 })
 
 describe('checkVisibility API integration', () => {
-  let originalCheckVisibility
-
   beforeEach(() => {
-    // This may not exist depending on the environment
-    originalCheckVisibility = Element.prototype.checkVisibility
-  })
-
-  afterEach(() => {
-    if (originalCheckVisibility) {
-      Element.prototype.checkVisibility = originalCheckVisibility
-    } else {
+    if (Element.prototype.checkVisibility) {
       delete Element.prototype.checkVisibility
     }
   })
@@ -246,9 +237,6 @@ describe('checkVisibility API integration', () => {
   })
 
   test('falls back to getComputedStyle when checkVisibility unavailable', () => {
-    // Remove checkVisibility to test fallback
-    delete Element.prototype.checkVisibility
-
     const {container} = render('<button style="display: none;">Test</button>')
     const button = container.querySelector('button')
 
@@ -276,10 +264,6 @@ describe('checkVisibility API integration', () => {
       const resultWithoutAPI = isInaccessible(button2)
 
       expect(resultWithAPI).toBe(resultWithoutAPI)
-
-      if (originalCheckVisibility) {
-        Element.prototype.checkVisibility = originalCheckVisibility
-      }
     })
   })
 })
