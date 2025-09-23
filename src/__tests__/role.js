@@ -175,6 +175,25 @@ test('by default excludes elements which have aria-hidden="true" or any of their
   `)
 })
 
+test('by default excludes elements which have inert attribute or any of their parents', () => {
+  const {getByRole} = render('<div inert><ul /></div>')
+
+  expect(() => getByRole('list')).toThrowErrorMatchingInlineSnapshot(`
+    Unable to find an accessible element with the role "list"
+
+    There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the \`hidden\` option to \`true\`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+    Ignored nodes: comments, script, style
+    <div>
+      <div
+        inert=""
+      >
+        <ul />
+      </div>
+    </div>
+  `)
+})
+
 test('considers the computed visibility style not the parent', () => {
   // this behavior deviates from the spec which includes "any descendant"
   // if visibility is hidden. However, chrome a11y tree and nvda will include

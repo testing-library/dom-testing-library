@@ -205,6 +205,7 @@ test.each([
   ['<div style="display: none;"/>', true],
   ['<div style="visibility: hidden;"/>', true],
   ['<div aria-hidden="true" />', true],
+  ['<div inert />', true],
 ])('shouldExcludeFromA11yTree for %s returns %p', (html, expected) => {
   const {container} = render(html)
   container.firstChild.appendChild(document.createElement('button'))

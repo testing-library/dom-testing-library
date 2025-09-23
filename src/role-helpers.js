@@ -21,6 +21,10 @@ function isSubtreeInaccessible(element) {
     return true
   }
 
+  if (element.hasAttribute('inert')) {
+    return true
+  }
+
   const window = element.ownerDocument.defaultView
   if (window.getComputedStyle(element).display === 'none') {
     return true
