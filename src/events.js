@@ -45,7 +45,15 @@ function createEvent(
       value: files,
     })
   }
-  Object.assign(node, targetProperties)
+
+  // Make read-only properties of events specifiable for tests.
+  Object.keys(targetProperties).forEach(key => {
+    Object.defineProperty(node, key, {
+      value: targetProperties[key],
+      writable: true,
+    })
+  })
+
   const window = getWindowFromNode(node)
   const EventConstructor = window[EventType] || window.Event
   let event

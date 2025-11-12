@@ -381,6 +381,18 @@ test('assigns clipboardData properties', () => {
   expect(clipboardData.getData('text')).toBe('example')
 })
 
+test('assigns read-only target properties', () => {
+  const node = document.createElement('div')
+  const spy = jest.fn()
+  node.addEventListener('scroll', spy)
+
+  expect(node.scrollWidth).toBe(0)
+  fireEvent.scroll(node, {target: {scrollWidth: 10}})
+
+  expect(spy).toHaveBeenCalledTimes(1)
+  expect(node.scrollWidth).toBe(10)
+})
+
 test('fires events on Window', () => {
   const messageSpy = jest.fn()
   window.addEventListener('message', messageSpy)
