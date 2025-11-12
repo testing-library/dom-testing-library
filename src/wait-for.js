@@ -184,8 +184,8 @@ function waitForWrapper(callback, options) {
   // create the error here so its stack trace is as close to the
   // calling code as possible
   const stackTraceError = new Error('STACK_TRACE_MESSAGE')
-  return getConfig().asyncWrapper(() =>
-    waitFor(callback, {stackTraceError, ...options}),
+  return getConfig().waitForWrapper(
+    waitFor.bind(null, callback, {stackTraceError, ...options}),
   )
 }
 
