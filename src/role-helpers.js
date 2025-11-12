@@ -8,6 +8,17 @@ import {getConfig} from './config'
 
 const elementRoleList = buildElementRoleList(elementRoles)
 
+const checkVisibilityOptions = {
+  visibilityProperty: true,
+  opacityProperty: false,
+}
+
+function supportsCheckVisibility() {
+  return (
+    typeof Element !== 'undefined' && 'checkVisibility' in Element.prototype
+  )
+}
+
 /**
  * @param {Element} element -
  * @returns {boolean} - `true` if `element` and its subtree are inaccessible
@@ -19,6 +30,10 @@ function isSubtreeInaccessible(element) {
 
   if (element.getAttribute('aria-hidden') === 'true') {
     return true
+  }
+
+  if (supportsCheckVisibility()) {
+    return !element.checkVisibility(checkVisibilityOptions)
   }
 
   const window = element.ownerDocument.defaultView
@@ -47,6 +62,27 @@ function isInaccessible(element, options = {}) {
   const {
     isSubtreeInaccessible: isSubtreeInaccessibleImpl = isSubtreeInaccessible,
   } = options
+
+  if (supportsCheckVisibility()) {
+    if (!element.checkVisibility(checkVisibilityOptions)) {
+      return true
+    }
+
+    // Still need to walk up the tree for aria-hidden and hidden attributes
+    let currentElement = element
+    while (currentElement) {
+      if (
+        currentElement.hidden === true ||
+        currentElement.getAttribute('aria-hidden') === 'true'
+      ) {
+        return true
+      }
+      currentElement = currentElement.parentElement
+    }
+
+    return false
+  }
+
   const window = element.ownerDocument.defaultView
   // since visibility is inherited we can exit early
   if (window.getComputedStyle(element).visibility === 'hidden') {
