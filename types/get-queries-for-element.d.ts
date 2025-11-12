@@ -179,4 +179,9 @@ export function getQueriesForElement<
   QueriesToBind extends Queries = typeof queries,
   // Extra type parameter required for reassignment.
   T extends QueriesToBind = QueriesToBind,
->(element: HTMLElement, queriesToBind?: T): BoundFunctions<T>
+  I extends Object = {},
+>(
+  element: HTMLElement,
+  queriesToBind?: T,
+  initialValue?: I,
+): BoundFunctions<T> & I
