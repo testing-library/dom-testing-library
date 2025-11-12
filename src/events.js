@@ -62,6 +62,23 @@ function createEvent(
     })
   }
 
+  // TransitionEvent is not supported in jsdom: https://github.com/jsdom/jsdom/issues/1781
+  if (
+    EventType === 'TransitionEvent' &&
+    typeof window.TransitionEvent !== 'function'
+  ) {
+    const transitionEventProperties = [
+      'propertyName',
+      'elapsedTime',
+      'pseudoElement',
+    ]
+    transitionEventProperties.forEach(property => {
+      Object.defineProperty(event, property, {
+        value: eventInit[property],
+      })
+    })
+  }
+
   // DataTransfer is not supported in jsdom: https://github.com/jsdom/jsdom/issues/1568
   const dataTransferProperties = ['dataTransfer', 'clipboardData']
   dataTransferProperties.forEach(dataTransferKey => {
