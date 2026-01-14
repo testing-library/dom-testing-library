@@ -273,6 +273,7 @@ const queryAllByRole: AllByRole = (
         computeAccessibleName(element, {
           computedStyleSupportsPseudoElements:
             getConfig().computedStyleSupportsPseudoElements,
+          hidden,
         }),
         element,
         name as MatcherFunction,
