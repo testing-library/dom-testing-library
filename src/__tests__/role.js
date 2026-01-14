@@ -197,6 +197,20 @@ test('can include inaccessible roles', () => {
   expect(getByRole('list', {hidden: true})).not.toBeNull()
 })
 
+test('can include inaccessible roles when searching by name', () => {
+  // this behavior deviates from the spec which includes "any descendant"
+  // if visibility is hidden. However, chrome a11y tree and nvda will include
+  // the following markup. This behavior might change depending on how
+  // https://github.com/w3c/aria/issues/1055 is resolved.
+  const {getByRole} = render(
+    '<button>hello <span hidden>hidden</span> world!</button>',
+  )
+
+  expect(
+    getByRole('button', {name: 'hello hidden world!', hidden: true}),
+  ).not.toBeNull()
+})
+
 test('can be filtered by accessible name', () => {
   const {getByRole} = renderIntoDocument(
     `
