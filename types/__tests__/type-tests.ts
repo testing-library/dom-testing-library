@@ -210,6 +210,11 @@ export function eventTest() {
   }
   fireEvent.click(element.firstChild)
 
+  // GlobalThis
+  fireEvent.click(globalThis)
+  const globalThisEvent = createEvent('customEvent', globalThis)
+  fireEvent(globalThis, globalThisEvent)
+
   // Custom event
   const customEvent = createEvent('customEvent', element)
   fireEvent(element, customEvent)

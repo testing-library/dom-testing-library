@@ -92,24 +92,24 @@ export type EventType =
   | 'pageShow'
 
 export type FireFunction = (
-  element: Document | Element | Window | Node,
+  element: Document | Element | Window | Node | GlobalThis,
   event: Event,
 ) => boolean
 export type FireObject = {
   [K in EventType]: (
-    element: Document | Element | Window | Node,
+    element: Document | Element | Window | Node | GlobalThis,
     options?: {},
   ) => boolean
 }
 export type CreateFunction = (
   eventName: string,
-  node: Document | Element | Window | Node,
+  node: Document | Element | Window | Node | GlobalThis,
   init?: {},
   options?: {EventType?: string; defaultInit?: {}},
 ) => Event
 export type CreateObject = {
   [K in EventType]: (
-    element: Document | Element | Window | Node,
+    element: Document | Element | Window | Node | GlobalThis,
     options?: {},
   ) => Event
 }
