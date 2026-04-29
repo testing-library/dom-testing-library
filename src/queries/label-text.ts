@@ -173,7 +173,7 @@ function getTagNameOfElementAssociatedWithLabelViaFor(
     return null
   }
 
-  const element = container.querySelector(`[id="${htmlFor}"]`)
+  const element = container.querySelector(`[id="${CSS.escape(htmlFor)}"]`)
   return element ? element.tagName.toLowerCase() : null
 }
 

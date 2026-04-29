@@ -64,7 +64,7 @@ function getLabels(
   return labelsId.length
     ? labelsId.map(labelId => {
         const labellingElement = container.querySelector<HTMLElement>(
-          `[id="${labelId}"]`,
+          `[id="${CSS.escape(labelId)}"]`,
         )
         return labellingElement
           ? {content: getLabelContent(labellingElement), formControl: null}
