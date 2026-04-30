@@ -21,6 +21,10 @@ function isSubtreeInaccessible(element) {
     return true
   }
 
+  if (element.hasAttribute('inert') || element.closest('[inert]')) {
+    return true
+  }
+
   const window = element.ownerDocument.defaultView
   if (window.getComputedStyle(element).display === 'none') {
     return true
@@ -72,6 +76,15 @@ function getImplicitAriaRoles(currentNode) {
     if (match(currentNode)) {
       return [...roles]
     }
+  }
+
+  // Handle elements not yet in aria-query's elementRoles map
+  // See: https://github.com/testing-library/dom-testing-library/issues/1359
+  // The <search> element has an implicit 'search' role per the HTML-ARIA spec
+  // but aria-query 5.3.0 does not include it in elementRoles.
+  // This can be removed once aria-query includes this mapping.
+  if (currentNode.tagName === 'SEARCH') {
+    return ['search']
   }
 
   return []

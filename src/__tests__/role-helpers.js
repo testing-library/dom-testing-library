@@ -197,6 +197,13 @@ test('getImplicitAriaRoles returns expected roles for various dom nodes', () => 
   expect(getImplicitAriaRoles(input)).toEqual(['textbox'])
 })
 
+test('getImplicitAriaRoles returns search role for <search> element', () => {
+  const {container} = render('<search>Search content</search>')
+  expect(getImplicitAriaRoles(container.querySelector('search'))).toEqual([
+    'search',
+  ])
+})
+
 test.each([
   ['<div />', false],
   ['<div aria-hidden="false" />', false],
@@ -205,9 +212,17 @@ test.each([
   ['<div style="display: none;"/>', true],
   ['<div style="visibility: hidden;"/>', true],
   ['<div aria-hidden="true" />', true],
+  ['<div inert />', true],
 ])('shouldExcludeFromA11yTree for %s returns %p', (html, expected) => {
   const {container} = render(html)
   container.firstChild.appendChild(document.createElement('button'))
 
   expect(isInaccessible(container.querySelector('button'))).toBe(expected)
+})
+
+test('elements nested in inert subtree are inaccessible', () => {
+  const {container} = render(
+    '<div inert><span><button>click me</button></span></div>',
+  )
+  expect(isInaccessible(container.querySelector('button'))).toBe(true)
 })
