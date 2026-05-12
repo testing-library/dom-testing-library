@@ -65,7 +65,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    if: ${{ github.repository == 'testing-library/dom-testing-library' && github.event_name == 'push' }}
+    if:
+      ${{ github.repository == 'testing-library/dom-testing-library' &&
+      github.event_name == 'push' }}
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v3
@@ -97,7 +99,9 @@ jobs:
       id-token: write
       issues: write
       pull-requests: write
-    if: ${{ github.repository == 'testing-library/dom-testing-library' && github.event_name == 'push' }}
+    if:
+      ${{ github.repository == 'testing-library/dom-testing-library' &&
+      github.event_name == 'push' }}
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v3
