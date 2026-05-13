@@ -48,10 +48,27 @@ function getRealLabels(element: Element) {
 }
 
 function isLabelable(element: Element) {
-  return (
+  if (
     /BUTTON|METER|OUTPUT|PROGRESS|SELECT|TEXTAREA/.test(element.tagName) ||
     (element.tagName === 'INPUT' && element.getAttribute('type') !== 'hidden')
-  )
+  ) {
+    return true
+  }
+
+  // Support form-associated custom elements
+  if (
+    element.tagName.includes('-') &&
+    typeof (element as any).attachInternals === 'function'
+  ) {
+    try {
+      const internals = (element as any).attachInternals()
+      return internals.formAssociated === true
+    } catch {
+      // Not a form-associated custom element or attachInternals not supported
+    }
+  }
+
+  return false
 }
 
 function getLabels(
