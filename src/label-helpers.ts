@@ -58,9 +58,11 @@ function isLabelable(element: Element) {
   // Support form-associated custom elements
   if (
     element.tagName.includes('-') &&
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     typeof (element as any).attachInternals === 'function'
   ) {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
       const internals = (element as any).attachInternals()
       return internals.formAssociated === true
     } catch {
