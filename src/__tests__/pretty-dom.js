@@ -117,6 +117,22 @@ test('prettyDOM can include all elements with a custom filter', () => {
   `)
 })
 
+test('prettyDOM calls filterNode with only the node argument', () => {
+  const {container} = renderIntoDocument(
+    '<body><p>Hello, Dave</p><span>Second</span></body>',
+  )
+
+  const filterNode = jest.fn(() => true)
+
+  prettyDOM(container, Number.POSITIVE_INFINITY, {filterNode})
+
+  expect(filterNode).toHaveBeenCalledWith(expect.any(Node))
+  filterNode.mock.calls.forEach(callArgs => {
+    expect(callArgs).toHaveLength(1)
+    expect(callArgs[0]).toBeInstanceOf(Node)
+  })
+})
+
 test('prettyDOM supports named custom elements', () => {
   window.customElements.define(
     'my-element-1',
