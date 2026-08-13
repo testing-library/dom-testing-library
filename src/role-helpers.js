@@ -74,6 +74,14 @@ function getImplicitAriaRoles(currentNode) {
     }
   }
 
+  // The `<search>` element has an implicit `search` role per the HTML-ARIA
+  // spec, but aria-query 5.3.0 does not include it in `elementRoles`, so it
+  // never matches above. This can be removed once aria-query maps `<search>`.
+  // https://github.com/testing-library/dom-testing-library/issues/1359
+  if (currentNode.tagName === 'SEARCH') {
+    return ['search']
+  }
+
   return []
 }
 
