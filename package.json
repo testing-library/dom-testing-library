@@ -81,6 +81,7 @@
   },
   "overrides": {
     "@babel/helper-compilation-targets": "7.24.7",
+    "@types/node": "20.14.0",
     "browserslist": "4.21.8",
     "caniuse-lite": "1.0.30001502"
   },
