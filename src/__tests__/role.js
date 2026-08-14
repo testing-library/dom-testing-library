@@ -56,6 +56,13 @@ test('when hidden: true logs available roles when it fails', () => {
   `)
 })
 
+test('can be found by its implicit role when using a <search> element', () => {
+  const {getByRole, container} = render(
+    '<search><input type="search" /></search>',
+  )
+  expect(getByRole('search')).toBe(container.querySelector('search'))
+})
+
 test('logs error when there are no accessible roles', () => {
   const {getByRole} = render('<div />')
   expect(() => getByRole('article')).toThrowErrorMatchingInlineSnapshot(`

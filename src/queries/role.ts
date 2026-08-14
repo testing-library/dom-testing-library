@@ -313,6 +313,15 @@ function makeRoleSelector(role: ByRoleMatcher) {
     Array.from(roleRelations).map(({name}) => name),
   )
 
+  // aria-query 5.3.0 does not map the `<search>` element to its implicit
+  // `search` role, so it is missing from `roleElements`. Add it here to keep
+  // the candidate selector in sync with `getImplicitAriaRoles`. This can be
+  // removed once aria-query maps `<search>`.
+  // https://github.com/testing-library/dom-testing-library/issues/1359
+  if (role === 'search') {
+    implicitRoleSelectors.add('search')
+  }
+
   // Current transpilation config sometimes assumes `...` is always applied to arrays.
   // `...` is equivalent to `Array.prototype.concat` for arrays.
   // If you replace this code with `[explicitRoleSelector, ...implicitRoleSelectors]`, make sure every transpilation target retains the `...` in favor of `Array.prototype.concat`.
