@@ -1192,6 +1192,16 @@ test('can get a select with options', () => {
   getByLabelText('Label')
 })
 
+test('can get a form-associated custom element by label', () => {
+  const {getByLabelText} = renderIntoDocument(`
+    <label for="custom-input">Custom Label</label>
+    <my-input id="custom-input"></my-input>
+  `)
+  const el = document.getElementById('custom-input')
+  el.formAssociated = true
+  expect(getByLabelText('Custom Label')).toBe(el)
+})
+
 test('can get an element with aria-labelledby when label has a child', () => {
   const {getByLabelText} = render(`
     <div>
