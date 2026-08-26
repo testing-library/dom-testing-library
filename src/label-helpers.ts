@@ -44,13 +44,23 @@ function getRealLabels(element: Element) {
   if (!isLabelable(element)) return []
 
   const labels = element.ownerDocument.querySelectorAll('label')
-  return Array.from(labels).filter(label => label.control === element)
+  const labelsForElement = Array.from(labels).filter(
+    label => label.control === element,
+  )
+  // label.control is null for form-associated custom elements in environments
+  // that don't implement it (e.g. jsdom). Fall back to matching by `for`/`id`.
+  if (!labelsForElement.length && element.id) {
+    return Array.from(labels).filter(label => label.htmlFor === element.id)
+  }
+  return labelsForElement
 }
 
 function isLabelable(element: Element) {
   return (
     /BUTTON|METER|OUTPUT|PROGRESS|SELECT|TEXTAREA/.test(element.tagName) ||
-    (element.tagName === 'INPUT' && element.getAttribute('type') !== 'hidden')
+    (element.tagName === 'INPUT' &&
+      element.getAttribute('type') !== 'hidden') ||
+    (element as HTMLElement).formAssociated === true
   )
 }
 
