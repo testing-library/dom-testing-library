@@ -70,7 +70,7 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.6",
-    "browserslist": "4.21.8",
+    "browserslist": "4.28.7",
     "caniuse-lite": "1.0.30001502",
     "jest-in-case": "^1.0.2",
     "jest-snapshot-serializer-ansi": "^1.0.0",
@@ -81,7 +81,7 @@
   },
   "overrides": {
     "@babel/helper-compilation-targets": "7.24.7",
-    "browserslist": "4.21.8",
+    "browserslist": "4.28.7",
     "caniuse-lite": "1.0.30001502"
   },
   "eslintConfig": {
