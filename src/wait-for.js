@@ -24,6 +24,9 @@ function waitFor(
     stackTraceError,
     interval = 50,
     onTimeout = error => {
+      if (getConfig().defaultOnTimeout) {
+        return getConfig().defaultOnTimeout(error)
+      }
       Object.defineProperty(error, 'message', {
         value: getConfig().getElementError(error.message, container).message,
       })
