@@ -132,6 +132,50 @@ export async function testQueryHelpers() {
   screenWithCustomQueries.getByAutomationId(['id', 'automationId'])
   await screenWithCustomQueries.findAllByAutomationId('id', {}, {timeout: 1000})
   await screenWithCustomQueries.findByAutomationId('id', {}, {timeout: 1000})
+
+  // contrived example of a custom query with no arguments beyond container
+  function queryAllByFoo(container: HTMLElement) {
+    return queryAllByText(container, 'Foo')
+  }
+
+  const [
+    queryByTextFoo,
+    getAllByTextFoo,
+    getByTextFoo,
+    findAllByTextFoo,
+    findByTextFoo,
+  ] = buildQueries(
+    queryAllByFoo,
+    createIdRelatedErrorHandler(
+      `Found multiple elements with text Foo`,
+      'Multiple error',
+    ),
+    createIdRelatedErrorHandler(
+      `Unable to find an element with text Foo`,
+      'Missing error',
+    ),
+  )
+
+  queryByTextFoo(element)
+  getAllByTextFoo(element)
+  getByTextFoo(element)
+  await findAllByTextFoo(element)
+  await findByTextFoo(element)
+
+  const screenWithCustomFooQueries = within(document.body, {
+    ...queries,
+    queryByTextFoo,
+    getAllByTextFoo,
+    getByTextFoo,
+    findAllByTextFoo,
+    findByTextFoo,
+  })
+
+  screenWithCustomFooQueries.queryByTextFoo()
+  screenWithCustomFooQueries.getAllByTextFoo()
+  screenWithCustomFooQueries.getByTextFoo()
+  await screenWithCustomFooQueries.findAllByTextFoo()
+  await screenWithCustomFooQueries.findByTextFoo()
 }
 
 export function testBoundFunctions() {
