@@ -19,7 +19,16 @@ let config: InternalConfig = {
   // so we have this config option that's really only intended for
   // react-testing-library to use. For that reason, this feature will remain
   // undocumented.
-  asyncWrapper: cb => cb(),
+  // Turns out other libraries did use that (user-event).
+  // Not actually used by DTL but rather by user-event which uses act() from RTL
+  /* istanbul ignore next */
+  asyncWrapper: /* istanbul ignore next */ cb =>
+    /* istanbul ignore next */ cb(),
+  // For compat with libraries that used asyncWrapper, we add a more specific
+  // "waitForWrapper" that makes it more clear that this is only meant for waitFor.
+  // RTL will use this instead to disable act() during that scope while user-event
+  // can keep relying on the semantics for asyncWrapper.
+  waitForWrapper: cb => cb(),
   unstable_advanceTimersWrapper: cb => cb(),
   eventWrapper: cb => cb(),
   // default value for the `hidden` option in `ByRole` queries

@@ -328,7 +328,7 @@ test('does not work after it resolves', async () => {
         return undefined
       }
     },
-    asyncWrapper: async callback => {
+    waitForWrapper: async callback => {
       contextStack.push('no-act:start')
       try {
         await callback()
