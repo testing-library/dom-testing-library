@@ -642,6 +642,23 @@ test('query/get title element of SVG', () => {
   expect(queryByTitle('Close').id).toEqual('svg-title')
 })
 
+test('query/get nested title element of SVG graphics element', () => {
+  const {getByTitle, queryByTitle} = render(`
+    <div>
+        <svg>
+            <g>
+              <path id="svg-path">
+                <title>Close</title>
+              </path>
+            </g>
+        </svg>
+    </div>
+  `)
+
+  expect(getByTitle('Close').id).toEqual('svg-path')
+  expect(queryByTitle('Close').id).toEqual('svg-path')
+})
+
 test('queryByTitle matches case with non-string matcher', () => {
   const {queryByTitle} = render(`<span title="1" />`)
   expect(queryByTitle(1)).toBeTruthy()

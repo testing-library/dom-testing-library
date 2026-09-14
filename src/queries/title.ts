@@ -14,9 +14,21 @@ import {
   buildQueries,
 } from './all-utils'
 
-const isSvgTitle = (node: HTMLElement) =>
-  node.tagName.toLowerCase() === 'title' &&
-  node.parentElement?.tagName.toLowerCase() === 'svg'
+const getSvgTitleOwner = (node: HTMLElement) => {
+  if (
+    node.tagName.toLowerCase() !== 'title' ||
+    node.namespaceURI !== 'http://www.w3.org/2000/svg'
+  ) {
+    return null
+  }
+
+  const parent = node.parentElement
+  if (!parent || parent.tagName.toLowerCase() === 'svg') {
+    return node
+  }
+
+  return parent
+}
 
 const queryAllByTitle: AllByBoundAttribute = (
   container,
@@ -26,14 +38,25 @@ const queryAllByTitle: AllByBoundAttribute = (
   checkContainerType(container)
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
-  return Array.from(
-    container.querySelectorAll<HTMLElement>('[title], svg > title'),
-  ).filter(
-    node =>
-      matcher(node.getAttribute('title'), node, text, matchNormalizer) ||
-      (isSvgTitle(node) &&
-        matcher(getNodeText(node), node, text, matchNormalizer)),
-  )
+  const results = new Set<HTMLElement>()
+
+  Array.from(
+    container.querySelectorAll<HTMLElement>('[title], svg title'),
+  ).forEach(node => {
+    if (matcher(node.getAttribute('title'), node, text, matchNormalizer)) {
+      results.add(node)
+    }
+
+    const svgTitleOwner = getSvgTitleOwner(node)
+    if (
+      svgTitleOwner &&
+      matcher(getNodeText(node), svgTitleOwner, text, matchNormalizer)
+    ) {
+      results.add(svgTitleOwner)
+    }
+  })
+
+  return Array.from(results)
 }
 
 const getMultipleError: GetErrorFunction<[unknown]> = (c, title) =>
