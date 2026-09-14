@@ -1,8 +1,17 @@
 import {getConfig} from './config'
 import {getWindowFromNode} from './helpers'
 import {eventMap, eventAliasMap} from './event-map'
+import {beforeFn} from './life-cycle'
+const NodeEventMap = new Map()
 
-function fireEvent(element, event) {
+function fireEvent(
+  element,
+  event,
+  cond = () => {
+    return true
+  },
+  before,
+) {
   return getConfig().eventWrapper(() => {
     if (!event) {
       throw new Error(
@@ -14,7 +23,21 @@ function fireEvent(element, event) {
         `Unable to fire a "${event.type}" event - please provide a DOM element.`,
       )
     }
-    return element.dispatchEvent(event)
+    const CloneConditionValue = NodeEventMap.get(element)
+    const condition = beforeFn(CloneConditionValue, event, before)
+    if (cond && typeof cond == 'function') {
+      if (cond(condition)) {
+        element.dispatchEvent(event)
+      }
+    }
+    if (event.defaultPrevented) {
+      condition.defaultprevented = true
+    }
+    NodeEventMap.set(element, condition)
+    if (event.cancelable && event.defaultPrevented) {
+      return false
+    }
+    return true
   })
 }
 
@@ -93,12 +116,14 @@ function createEvent(
 }
 
 Object.keys(eventMap).forEach(key => {
-  const {EventType, defaultInit} = eventMap[key]
+  const {EventType, defaultInit, cond, before} = eventMap[key]
   const eventName = key.toLowerCase()
 
   createEvent[key] = (node, init) =>
     createEvent(eventName, node, init, {EventType, defaultInit})
-  fireEvent[key] = (node, init) => fireEvent(node, createEvent[key](node, init))
+  fireEvent[key] = (node, init) => {
+    return fireEvent(node, createEvent[key](node, init), cond, before)
+  }
 })
 
 // function written after some investigation here:
