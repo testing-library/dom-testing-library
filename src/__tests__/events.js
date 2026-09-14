@@ -434,6 +434,35 @@ test('fires events on Document', () => {
   document.removeEventListener('keydown', keyDownSpy)
 })
 
+test('fires events on globalThis', () => {
+  /* eslint-disable no-undef */
+  const clickSpy = jest.fn()
+  globalThis.addEventListener('click', clickSpy)
+  fireEvent.click(globalThis)
+  expect(clickSpy).toHaveBeenCalledTimes(1)
+  globalThis.removeEventListener('click', clickSpy)
+  /* eslint-enable no-undef */
+})
+
+test('fires created events on globalThis', () => {
+  /* eslint-disable no-undef */
+  const spy = jest.fn()
+  globalThis.addEventListener('click', spy)
+  const event = createEvent.click(globalThis)
+  fireEvent(globalThis, event)
+  expect(spy).toHaveBeenCalledTimes(1)
+  expect(spy).toHaveBeenCalledWith(event)
+  globalThis.removeEventListener('click', spy)
+  /* eslint-enable no-undef */
+})
+
+test('creates events for globalThis', () => {
+  /* eslint-disable no-undef */
+  const event = createEvent.click(globalThis)
+  expect(event).toBeInstanceOf(MouseEvent)
+  /* eslint-enable no-undef */
+})
+
 test('can create generic events', () => {
   const el = document.createElement('div')
   const eventName = 'my-custom-event'
