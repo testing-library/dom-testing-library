@@ -1,9 +1,12 @@
 import {ARIARole} from 'aria-query'
 
-export type MatcherFunction = (
+export type MatcherFunction = ((
   content: string,
   element: Element | null,
-) => boolean
+) => boolean) & {
+  // Allowing the user to specify the matcher explanation
+  customMatcherText?: string
+}
 export type Matcher = MatcherFunction | RegExp | number | string
 
 // Get autocomplete for ARIARole union types, while still supporting another string
