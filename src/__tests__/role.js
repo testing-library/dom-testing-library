@@ -197,6 +197,16 @@ test('can include inaccessible roles', () => {
   expect(getByRole('list', {hidden: true})).not.toBeNull()
 })
 
+test('can include hidden elements when searching by accessible name', () => {
+  const {getByRole} = render(
+    '<button>hello <span hidden>hidden</span> world!</button>',
+  )
+
+  expect(
+    getByRole('button', {name: 'hello hidden world!', hidden: true}),
+  ).not.toBeNull()
+})
+
 test('can be filtered by accessible name', () => {
   const {getByRole} = renderIntoDocument(
     `
