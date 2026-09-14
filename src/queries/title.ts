@@ -15,8 +15,7 @@ import {
 } from './all-utils'
 
 const isSvgTitle = (node: HTMLElement) =>
-  node.tagName.toLowerCase() === 'title' &&
-  node.parentElement?.tagName.toLowerCase() === 'svg'
+  node.tagName.toLowerCase() === 'title' && node.closest('svg') !== null
 
 const queryAllByTitle: AllByBoundAttribute = (
   container,
@@ -27,7 +26,7 @@ const queryAllByTitle: AllByBoundAttribute = (
   const matcher = exact ? matches : fuzzyMatches
   const matchNormalizer = makeNormalizer({collapseWhitespace, trim, normalizer})
   return Array.from(
-    container.querySelectorAll<HTMLElement>('[title], svg > title'),
+    container.querySelectorAll<HTMLElement>('[title], svg title'),
   ).filter(
     node =>
       matcher(node.getAttribute('title'), node, text, matchNormalizer) ||
