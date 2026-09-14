@@ -253,7 +253,7 @@ export default function createDOMElementFilter(
         printChildren(
           Array.prototype.slice
             .call(node.childNodes || node.children)
-            .filter(filterNode),
+            .filter(child => filterNode(child)),
           config,
           indentation + config.indent,
           depth,
