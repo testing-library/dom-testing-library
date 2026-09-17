@@ -7,6 +7,15 @@ import {prettyDOM} from './pretty-dom'
 import {getConfig} from './config'
 
 const elementRoleList = buildElementRoleList(elementRoles)
+const elementRoleListsByTag = new Map()
+for (const entry of elementRoleList) {
+  const list = elementRoleListsByTag.get(entry.name)
+  if (list) {
+    list.push(entry)
+  } else {
+    elementRoleListsByTag.set(entry.name, [entry])
+  }
+}
 
 /**
  * @param {Element} element -
@@ -66,9 +75,12 @@ function isInaccessible(element, options = {}) {
 }
 
 function getImplicitAriaRoles(currentNode) {
+  const roleList =
+    elementRoleListsByTag.get(currentNode.localName.toLowerCase()) ?? []
+
   // eslint bug here:
   // eslint-disable-next-line no-unused-vars
-  for (const {match, roles} of elementRoleList) {
+  for (const {match, roles} of roleList) {
     if (match(currentNode)) {
       return [...roles]
     }
@@ -147,6 +159,7 @@ function buildElementRoleList(elementRolesMap) {
     result = [
       ...result,
       {
+        name: element.name,
         match: match(element),
         roles: Array.from(roles),
         specificity: getSelectorSpecificity(element),
