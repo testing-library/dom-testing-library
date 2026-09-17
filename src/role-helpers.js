@@ -75,11 +75,12 @@ function isInaccessible(element, options = {}) {
 }
 
 function getImplicitAriaRoles(currentNode) {
+  const roleList =
+    elementRoleListsByTag.get(currentNode.localName.toLowerCase()) ?? []
+
   // eslint bug here:
   // eslint-disable-next-line no-unused-vars
-  for (const {match, roles} of elementRoleListsByTag.get(
-    currentNode.localName.toLowerCase(),
-  ) ?? []) {
+  for (const {match, roles} of roleList) {
     if (match(currentNode)) {
       return [...roles]
     }
