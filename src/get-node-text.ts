@@ -8,10 +8,13 @@ function getNodeText(node: HTMLElement): string {
     return (node as HTMLInputElement).value
   }
 
-  return Array.from(node.childNodes)
-    .filter(child => child.nodeType === TEXT_NODE && Boolean(child.textContent))
-    .map(c => c.textContent)
-    .join('')
+  let text = ''
+  for (const child of node.childNodes) {
+    if (child.nodeType === TEXT_NODE) {
+      text += (child as Text).data
+    }
+  }
+  return text
 }
 
 export {getNodeText}
