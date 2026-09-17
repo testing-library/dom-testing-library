@@ -198,6 +198,47 @@ test('getImplicitAriaRoles returns expected roles for various dom nodes', () => 
 })
 
 test.each([
+  ['button', ['button']],
+  ['BUTTON', []],
+  ['p:button', ['button']],
+  ['custom-button', []],
+])('getImplicitAriaRoles preserves XML matching for %s', (name, roles) => {
+  const xml = document.implementation.createDocument(null, 'root')
+  const element = xml.createElementNS('http://www.w3.org/1999/xhtml', name)
+
+  expect(getImplicitAriaRoles(element)).toEqual(roles)
+})
+
+test('getImplicitAriaRoles keeps more specific rules for the same tag first', () => {
+  const image = document.createElement('img')
+  expect(getImplicitAriaRoles(image)).toEqual(['img'])
+
+  image.setAttribute('alt', '')
+  expect(getImplicitAriaRoles(image)).toEqual(['presentation'])
+
+  image.setAttribute('alt', 'description')
+  expect(getImplicitAriaRoles(image)).toEqual(['img'])
+})
+
+test('getImplicitAriaRoles reads changes to the input type', () => {
+  const input = document.createElement('input')
+  expect(getImplicitAriaRoles(input)).toEqual(['textbox'])
+
+  input.type = 'checkbox'
+  expect(getImplicitAriaRoles(input)).toEqual(['checkbox'])
+
+  input.type = 'invalid'
+  expect(getImplicitAriaRoles(input)).toEqual(['textbox'])
+})
+
+test('getImplicitAriaRoles returns an independent array', () => {
+  const button = document.createElement('button')
+  getImplicitAriaRoles(button).pop()
+
+  expect(getImplicitAriaRoles(button)).toEqual(['button'])
+})
+
+test.each([
   ['<div />', false],
   ['<div aria-hidden="false" />', false],
   ['<div style="visibility: visible" />', false],
