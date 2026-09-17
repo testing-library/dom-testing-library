@@ -34,15 +34,19 @@ const queryAllByText: AllByText = (
   if (typeof container.matches === 'function' && container.matches(selector)) {
     baseArray = [container]
   }
-  return (
-    [
-      ...baseArray,
-      ...Array.from(container.querySelectorAll<HTMLElement>(selector)),
-    ]
-      // TODO: `matches` according lib.dom.d.ts can get only `string` but according our code it can handle also boolean :)
-      .filter(node => !ignore || !node.matches(ignore as string))
-      .filter(node => matcher(getNodeText(node), node, text, matchNormalizer))
-  )
+  return [
+    ...baseArray,
+    ...Array.from(container.querySelectorAll<HTMLElement>(selector)),
+  ]
+    .filter(node => {
+      if (!ignore) return true
+      if (ignore === 'script, style') {
+        const tagName = node.localName.toLowerCase()
+        if (tagName !== 'script' && tagName !== 'style') return true
+      }
+      return !node.matches(ignore as string)
+    })
+    .filter(node => matcher(getNodeText(node), node, text, matchNormalizer))
 }
 
 const getMultipleError: GetErrorFunction<[unknown]> = (c, text) =>

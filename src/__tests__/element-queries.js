@@ -1095,6 +1095,31 @@ test('getByText ignores script tags by default', () => {
   expect(getAllByText(/hello/i, {ignore: false})).toHaveLength(3)
 })
 
+test('getByText ignores script and style elements in SVG', () => {
+  const {getAllByText} = render(
+    '<svg><script>Hello</script><style>.Hello{}</style><text>Hello</text></svg>',
+  )
+
+  expect(getAllByText(/hello/i).map(node => node.localName)).toEqual(['text'])
+  expect(getAllByText(/hello/i, {ignore: false})).toHaveLength(3)
+})
+
+test('getByText supports custom ignore selectors on other elements', () => {
+  const {getAllByText} = render(
+    '<div data-ignore>Hello</div><span>Hello</span>',
+  )
+
+  expect(
+    getAllByText('Hello', {ignore: '[data-ignore]'}).map(node => node.tagName),
+  ).toEqual(['SPAN'])
+})
+
+test('getByText rejects invalid ignore selectors', () => {
+  const {getAllByText} = render('<div>Hello</div>')
+
+  expect(() => getAllByText('Hello', {ignore: '['})).toThrow()
+})
+
 test('the default value for `ignore` can be configured', () => {
   configure({defaultIgnore: 'style'})
 
