@@ -175,6 +175,16 @@ test('by default excludes elements which have aria-hidden="true" or any of their
   `)
 })
 
+test('excludes inert elements by default but includes them with hidden: true', () => {
+  const {container, getByRole, queryByRole} = render(
+    '<div inert><button>Inert button</button></div>',
+  )
+  container.firstChild.inert = true
+
+  expect(queryByRole('button')).toBeNull()
+  expect(getByRole('button', {hidden: true})).not.toBeNull()
+})
+
 test('considers the computed visibility style not the parent', () => {
   // this behavior deviates from the spec which includes "any descendant"
   // if visibility is hidden. However, chrome a11y tree and nvda will include

@@ -17,6 +17,10 @@ function isSubtreeInaccessible(element) {
     return true
   }
 
+  if (typeof element.inert !== 'undefined' && element.inert) {
+    return true
+  }
+
   if (element.getAttribute('aria-hidden') === 'true') {
     return true
   }
