@@ -197,6 +197,14 @@ test('getImplicitAriaRoles returns expected roles for various dom nodes', () => 
   expect(getImplicitAriaRoles(input)).toEqual(['textbox'])
 })
 
+test('getImplicitAriaRoles returns search role for a <search> element', () => {
+  const {container} = render('<search>content</search>')
+
+  expect(getImplicitAriaRoles(container.querySelector('search'))).toEqual([
+    'search',
+  ])
+})
+
 test.each([
   ['<div />', false],
   ['<div aria-hidden="false" />', false],
