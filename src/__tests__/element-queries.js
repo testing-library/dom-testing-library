@@ -1318,3 +1318,28 @@ test('ByText error message ignores not the same elements as configured in `ignor
     </body>
   `)
 })
+
+test.each(['missing', 'missing another-missing', ''])(
+  'falls back to a wrapping label when aria-labelledby=%s has no valid IDREF',
+  ids => {
+    const {getByLabelText} = renderIntoDocument(
+      `<label>Name: <input id="target" aria-labelledby="${ids}"></label>`,
+    )
+    expect(getByLabelText('Name:').id).toBe('target')
+  },
+)
+
+test('falls back to an explicit label when aria-labelledby has no valid IDREF', () => {
+  const {getByLabelText} = renderIntoDocument(
+    '<label for="target">Name:</label><input id="target" aria-labelledby="missing">',
+  )
+  expect(getByLabelText('Name:').id).toBe('target')
+})
+
+test('keeps valid aria-labelledby references ahead of native labels', () => {
+  const {getByLabelText, queryByLabelText} = renderIntoDocument(
+    '<label for="target">Native name</label><span id="valid">ARIA name</span><input id="target" aria-labelledby="missing valid">',
+  )
+  expect(getByLabelText('ARIA name').id).toBe('target')
+  expect(queryByLabelText('Native name')).toBeNull()
+})

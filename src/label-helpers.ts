@@ -60,16 +60,19 @@ function getLabels(
   {selector = '*'} = {},
 ): {content: string | null; formControl: HTMLElement | null}[] {
   const ariaLabelledBy = element.getAttribute('aria-labelledby')
-  const labelsId = ariaLabelledBy ? ariaLabelledBy.split(' ') : []
-  return labelsId.length
-    ? labelsId.map(labelId => {
-        const labellingElement = container.querySelector<HTMLElement>(
-          `[id="${labelId}"]`,
+  const labellingElements = ariaLabelledBy
+    ? ariaLabelledBy
+        .split(' ')
+        .map(labelId =>
+          container.querySelector<HTMLElement>(`[id="${labelId}"]`),
         )
-        return labellingElement
-          ? {content: getLabelContent(labellingElement), formControl: null}
-          : {content: '', formControl: null}
-      })
+        .filter((label): label is HTMLElement => label !== null)
+    : []
+  return labellingElements.length
+    ? labellingElements.map(labellingElement => ({
+        content: getLabelContent(labellingElement),
+        formControl: null,
+      }))
     : Array.from(getRealLabels(element)).map(label => {
         const textToMatch = getLabelContent(label)
         const formControlSelector =
