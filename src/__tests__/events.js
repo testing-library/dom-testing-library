@@ -318,6 +318,41 @@ test('assigns dataTransfer properties', () => {
   expect(spy.mock.calls[0][0]).toHaveProperty('dataTransfer.dropEffect', 'move')
 })
 
+function nativeTransferEvent(key) {
+  return class extends Event {
+    constructor(eventName, init) {
+      if (init[key] && !(init[key] instanceof window.DataTransfer)) {
+        throw new TypeError('Expected a DataTransfer')
+      }
+      super(eventName, init)
+    }
+  }
+}
+
+test.each([
+  ['dragOver', 'DragEvent', 'dataTransfer'],
+  ['paste', 'ClipboardEvent', 'clipboardData'],
+])(
+  'accepts a plain %s transfer in native event constructors',
+  (name, type, key) => {
+    const originalEvent = window[type]
+    const originalTransfer = window.DataTransfer
+    window.DataTransfer = function DataTransfer() {}
+    window[type] = nativeTransferEvent(key)
+    try {
+      const node = document.createElement('div')
+      const spy = jest.fn()
+      node.addEventListener(name.toLowerCase(), spy)
+      fireEvent[name](node, {[key]: {files: ['example']}})
+      expect(spy).toHaveBeenCalledTimes(1)
+      expect(spy.mock.calls[0][0][key].files).toEqual(['example'])
+    } finally {
+      window[type] = originalEvent
+      window.DataTransfer = originalTransfer
+    }
+  },
+)
+
 test('assigns dataTransfer non-enumerable properties', () => {
   window.DataTransfer = function DataTransfer() {}
   const node = document.createElement('div')

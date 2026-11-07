@@ -51,7 +51,11 @@ function createEvent(
   let event
   /* istanbul ignore else  */
   if (typeof EventConstructor === 'function') {
-    event = new EventConstructor(eventName, eventInit)
+    // Transfer properties may be plain objects, which native constructors reject.
+    const constructorInit = {...eventInit}
+    delete constructorInit.dataTransfer
+    delete constructorInit.clipboardData
+    event = new EventConstructor(eventName, constructorInit)
   } else {
     // IE11 polyfill from https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
     event = window.document.createEvent(EventType)
