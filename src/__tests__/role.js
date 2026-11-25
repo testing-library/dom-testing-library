@@ -187,6 +187,12 @@ test('considers the computed visibility style not the parent', () => {
   expect(getByRole('list')).not.toBeNull()
 })
 
+test('finds the implicit deletion role of an s element', () => {
+  const {getByRole} = render('<s>Strikethrough Text</s>')
+
+  expect(getByRole('deletion')).toHaveTextContent('Strikethrough Text')
+})
+
 test('can include inaccessible roles', () => {
   // this behavior deviates from the spec which includes "any descendant"
   // if visibility is hidden. However, chrome a11y tree and nvda will include

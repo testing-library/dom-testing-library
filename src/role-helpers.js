@@ -6,7 +6,10 @@ import {
 import {prettyDOM} from './pretty-dom'
 import {getConfig} from './config'
 
-const elementRoleList = buildElementRoleList(elementRoles)
+const elementRolesWithHtmlAam = new Map(elementRoles)
+elementRolesWithHtmlAam.set({name: 's'}, ['deletion'])
+
+const elementRoleList = buildElementRoleList(elementRolesWithHtmlAam)
 
 /**
  * @param {Element} element -

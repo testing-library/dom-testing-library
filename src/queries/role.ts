@@ -307,8 +307,12 @@ const queryAllByRole: AllByRole = (
 function makeRoleSelector(role: ByRoleMatcher) {
   const explicitRoleSelector = `*[role~="${role}"]`
 
-  const roleRelations =
-    roleElements.get(role as ARIARoleDefinitionKey) ?? new Set()
+  const roleRelations = new Set(
+    roleElements.get(role as ARIARoleDefinitionKey) ?? [],
+  )
+  if (role === 'deletion') {
+    roleRelations.add({name: 's'})
+  }
   const implicitRoleSelectors = new Set(
     Array.from(roleRelations).map(({name}) => name),
   )
