@@ -2,6 +2,8 @@ import {
   createEvent,
   fireEvent,
   isInaccessible,
+  logDOM,
+  prettyDOM,
   queries,
   buildQueries,
   queryAllByAttribute,
@@ -24,6 +26,17 @@ const {
   queryByRole,
   findByRole,
 } = queries
+
+export function testDebugShadowRoot() {
+  const host = document.createElement('div')
+  const root = host.attachShadow({mode: 'open'})
+
+  prettyDOM(root)
+  logDOM(root)
+
+  screen.debug(root)
+  screen.debug([host, root])
+}
 
 export async function testQueries() {
   // element queries

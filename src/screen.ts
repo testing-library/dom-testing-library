@@ -1,7 +1,7 @@
 // WARNING: `lz-string` only has a default export but statically we assume named exports are allowed
 // TODO: Statically verify we don't rely on NodeJS implicit named imports.
 import lzString from 'lz-string'
-import {type OptionsReceived} from 'pretty-format'
+import {type Screen} from '../types/screen'
 import {getQueriesForElement} from './get-queries-for-element'
 import {getDocument} from './helpers'
 import {logDOM} from './pretty-dom'
@@ -21,11 +21,7 @@ function getPlaygroundUrl(markup: string) {
   return `https://testing-playground.com/#markup=${encode(markup)}`
 }
 
-const debug = (
-  element?: Array<Element | HTMLDocument> | Element | HTMLDocument,
-  maxLength?: number,
-  options?: OptionsReceived,
-): void =>
+const debug: Screen['debug'] = (element, maxLength, options) =>
   Array.isArray(element)
     ? element.forEach(el => logDOM(el, maxLength, options))
     : logDOM(element, maxLength, options)

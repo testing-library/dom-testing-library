@@ -156,6 +156,10 @@ const TEXT_NODE = 3
 const COMMENT_NODE = 8
 const FRAGMENT_NODE = 11
 
+export function isShadowRoot(node: Node | null): node is ShadowRoot {
+  return node?.nodeType === FRAGMENT_NODE && 'host' in node
+}
+
 const ELEMENT_REGEXP = /^((HTML|SVG)\w*)?Element$/
 
 const isCustomElement = (val: any) => {
@@ -176,7 +180,8 @@ const testNode = (val: any) => {
       (ELEMENT_REGEXP.test(constructorName) || isCustomElement(val))) ||
     (nodeType === TEXT_NODE && constructorName === 'Text') ||
     (nodeType === COMMENT_NODE && constructorName === 'Comment') ||
-    (nodeType === FRAGMENT_NODE && constructorName === 'DocumentFragment')
+    (nodeType === FRAGMENT_NODE && constructorName === 'DocumentFragment') ||
+    isShadowRoot(val)
   )
 }
 
@@ -199,6 +204,7 @@ function nodeIsFragment(node: HandledType): node is DocumentFragment {
 
 export default function createDOMElementFilter(
   filterNode: (node: Node) => boolean,
+  onShadowRoot: () => void,
 ): NewPlugin {
   return {
     test: (val: any) =>
@@ -223,8 +229,33 @@ export default function createDOMElementFilter(
         ? `DocumentFragment`
         : node.tagName.toLowerCase()
 
+      const shadowRoot = isShadowRoot(node)
+
+      if (shadowRoot) {
+        onShadowRoot()
+      }
+
       if (++depth > config.maxDepth) {
-        return printElementAsLeaf(type, config)
+        return shadowRoot ? '#shadow-root …' : printElementAsLeaf(type, config)
+      }
+
+      const children = Array.from<Node>(node.childNodes || node.children)
+
+      if (!nodeIsFragment(node) && isShadowRoot(node.shadowRoot)) {
+        children.push(node.shadowRoot)
+      }
+
+      const printedChildren = printChildren(
+        children.filter(filterNode),
+        config,
+        indentation + config.indent,
+        depth,
+        refs,
+        printer,
+      )
+
+      if (shadowRoot) {
+        return '#shadow-root' + printedChildren
       }
 
       return printElement(
@@ -250,16 +281,7 @@ export default function createDOMElementFilter(
           refs,
           printer,
         ),
-        printChildren(
-          Array.prototype.slice
-            .call(node.childNodes || node.children)
-            .filter(filterNode),
-          config,
-          indentation + config.indent,
-          depth,
-          refs,
-          printer,
-        ),
+        printedChildren,
         config,
         indentation,
       )

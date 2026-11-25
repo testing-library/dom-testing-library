@@ -1,5 +1,5 @@
 import * as prettyFormat from 'pretty-format'
-import createDOMElementFilter from './DOMElementFilter'
+import createDOMElementFilter, {isShadowRoot} from './DOMElementFilter'
 import {getUserCodeFrame} from './get-user-code-frame'
 import {getDocument} from './helpers'
 import {getConfig} from './config'
@@ -71,9 +71,10 @@ function prettyDOM(dom, maxLength, options = {}) {
     // To don't fall with `in` operator
     dom = {}
   }
-  if (!('outerHTML' in dom)) {
+  let includesShadowRoot = isShadowRoot(dom)
+  if (!('outerHTML' in dom) && !includesShadowRoot) {
     throw new TypeError(
-      `Expected an element or document but got ${domTypeName}`,
+      `Expected an element, document or shadow root but got ${domTypeName}`,
     )
   }
 
@@ -82,13 +83,18 @@ function prettyDOM(dom, maxLength, options = {}) {
     ...prettyFormatOptions
   } = options
 
+  const domPlugin = createDOMElementFilter(filterNode, () => {
+    includesShadowRoot = true
+  })
   const debugContent = prettyFormat.format(dom, {
-    plugins: [createDOMElementFilter(filterNode), DOMCollection],
+    plugins: [domPlugin, DOMCollection],
     printFunctionName: false,
     highlight: shouldHighlight(),
     ...prettyFormatOptions,
   })
-  return maxLength !== undefined && dom.outerHTML.length > maxLength
+  // outerHTML omits the contents of shadow roots.
+  const length = includesShadowRoot ? debugContent.length : dom.outerHTML.length
+  return length > maxLength
     ? `${debugContent.slice(0, maxLength)}...`
     : debugContent
 }

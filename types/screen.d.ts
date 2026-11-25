@@ -2,13 +2,15 @@ import {OptionsReceived} from 'pretty-format'
 import {BoundFunctions, Queries} from './get-queries-for-element'
 import * as queries from './queries'
 
+type DebugTarget = Element | HTMLDocument | ShadowRoot
+
 export type Screen<Q extends Queries = typeof queries> = BoundFunctions<Q> & {
   /**
    * Convenience function for `pretty-dom` which also allows an array
    * of elements
    */
   debug: (
-    element?: Array<Element | HTMLDocument> | Element | HTMLDocument,
+    element?: DebugTarget | DebugTarget[],
     maxLength?: number,
     options?: OptionsReceived,
   ) => void

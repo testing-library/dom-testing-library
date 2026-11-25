@@ -9,12 +9,12 @@ export interface PrettyDOMOptions extends prettyFormat.OptionsReceived {
 }
 
 export function prettyDOM(
-  dom?: Element | HTMLDocument,
+  dom?: Element | HTMLDocument | ShadowRoot,
   maxLength?: number,
   options?: PrettyDOMOptions,
 ): string | false
 export function logDOM(
-  dom?: Element | HTMLDocument,
+  dom?: Element | HTMLDocument | ShadowRoot,
   maxLength?: number,
   options?: PrettyDOMOptions,
 ): void
