@@ -65,20 +65,20 @@ test('prettyDOM supports receiving the document element', () => {
   `)
 })
 
-describe('prettyDOM fails with first parameter without outerHTML field', () => {
+describe('prettyDOM rejects invalid inputs', () => {
   test('with array', () => {
     expect(() => prettyDOM(['outerHTML'])).toThrowErrorMatchingInlineSnapshot(
-      `Expected an element or document but got Array`,
+      `Expected an element, document or shadow root but got Array`,
     )
   })
   test('with number', () => {
     expect(() => prettyDOM(1)).toThrowErrorMatchingInlineSnapshot(
-      `Expected an element or document but got number`,
+      `Expected an element, document or shadow root but got number`,
     )
   })
   test('with object', () => {
     expect(() => prettyDOM({})).toThrowErrorMatchingInlineSnapshot(
-      `Expected an element or document but got Object`,
+      `Expected an element, document or shadow root but got Object`,
     )
   })
 })
@@ -146,4 +146,81 @@ test('prettyDOM supports anonymous custom elements', () => {
       </my-element-2>
     </div>
   `)
+})
+
+describe('shadow DOM', () => {
+  test('prints nested open roots alongside their light DOM children', () => {
+    const host = document.createElement('article')
+    host.textContent = 'Slotted text'
+
+    const root = host.attachShadow({mode: 'open'})
+
+    root.innerHTML = '<slot></slot><section></section>'
+    root.querySelector('section').attachShadow({mode: 'open'}).textContent =
+      'Nested message'
+
+    expect(prettyDOM(host)).toMatchInlineSnapshot(`
+      <article>
+        Slotted text
+        #shadow-root
+          <slot />
+          <section>
+            #shadow-root
+              Nested message
+          </section>
+      </article>
+    `)
+  })
+
+  test('prints a shadow root directly and filters its children', () => {
+    const root = document.createElement('div').attachShadow({mode: 'open'})
+    root.innerHTML = '<style>p{color:red}</style><!-- comment --><p>Saved</p>'
+
+    expect(prettyDOM(root)).toMatchInlineSnapshot(`
+      #shadow-root
+        <p>
+          Saved
+        </p>
+    `)
+
+    expect(
+      prettyDOM(root, Infinity, {filterNode: node => node.nodeName !== 'P'}),
+    ).toMatchInlineSnapshot(`
+      #shadow-root
+        <style>
+          p{color:red}
+        </style>
+        <!-- comment -->
+    `)
+  })
+
+  test('includes the shadow tree in a failed query diagnostic', () => {
+    const {container, getByRole} = render(
+      '<application-status></application-status>',
+    )
+
+    container.firstChild.attachShadow({mode: 'open'}).innerHTML =
+      '<div role="status">Application saved</div>'
+
+    expect(() => getByRole('status')).toThrow('Application saved')
+  })
+
+  test('truncates long shadow content for both the host and the root', () => {
+    const host = document.createElement('div')
+    const root = host.attachShadow({mode: 'open'})
+
+    root.textContent = 'A long status message inside the shadow root'
+
+    for (const node of [host, root]) {
+      expect(prettyDOM(node, 30)).toBe(`${prettyDOM(node).slice(0, 30)}...`)
+    }
+  })
+
+  test('keeps a closed root private when printing its host', () => {
+    const host = document.createElement('article')
+
+    host.attachShadow({mode: 'closed'}).textContent = 'Private message'
+
+    expect(prettyDOM(host)).toBe('<article />')
+  })
 })
